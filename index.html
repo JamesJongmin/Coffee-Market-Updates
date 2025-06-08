@@ -359,77 +359,81 @@
             }
         ];
 
-        // GitHub API로 Reports 폴더에서 HTML 파일들을 자동으로 가져오기
-        async function loadReportsFromGitHub() {
+// GitHub API로 Reports 폴더에서 HTML 파일들을 자동으로 가져오기
+async function loadReportsFromGitHub() {
+    try {
+        const reports = [...defaultReports]; // 기존 데이터 유지
+        
+        // 현재 년도와 월만 스캔 (2025년 5~6월만)
+        const targetFolders = [
+            { year: 2025, month: 5 },
+            { year: 2025, month: 6 },
+            { year: 2025, month: 7 } // 미래 월도 포함
+        ];
+        
+        for (const {year, month} of targetFolders) {
+            const monthStr = month.toString().padStart(2, '0');
+            
             try {
-                const reports = [...defaultReports]; // 기존 데이터 유지
+                // GitHub API를 통해 각 월 폴더의 파일 목록 가져오기
+                const response = await fetch(
+                    `https://api.github.com/repos/jamesjongmin/Coffee-Market-Updates/contents/Reports/${year}/${monthStr}`
+                );
                 
-                // 년도별 폴더 스캔 (2024, 2025, 2026)
-                for (let year = 2024; year <= 2026; year++) {
-                    for (let month = 1; month <= 12; month++) {
-                        const monthStr = month.toString().padStart(2, '0');
+                if (response.ok) {
+                    const files = await response.json();
+                    
+                    // HTML 파일들만 필터링
+                    const htmlFiles = files.filter(file => 
+                        file.name.endsWith('.html') && file.type === 'file'
+                    );
+                    
+                    // 각 HTML 파일에 대한 보고서 정보 생성
+                    for (const file of htmlFiles) {
+                        const fileName = file.name.replace('.html', '');
+                        const dateMatch = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
                         
-                        try {
-                            // GitHub API를 통해 각 월 폴더의 파일 목록 가져오기
-                            const response = await fetch(
-                                `https://api.github.com/repos/jamesjongmin/Coffee-Market-Updates/contents/Reports/${year}/${monthStr}`
-                            );
+                        if (dateMatch) {
+                            const [, fileYear, fileMonth, fileDay] = dateMatch;
+                            const fileDate = `${fileYear}-${fileMonth}-${fileDay}`;
                             
-                            if (response.ok) {
-                                const files = await response.json();
-                                
-                                // HTML 파일들만 필터링
-                                const htmlFiles = files.filter(file => 
-                                    file.name.endsWith('.html') && file.type === 'file'
-                                );
-                                
-                                // 각 HTML 파일에 대한 보고서 정보 생성
-                                for (const file of htmlFiles) {
-                                    const fileName = file.name.replace('.html', '');
-                                    const dateMatch = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
-                                    
-                                    if (dateMatch) {
-                                        const [, fileYear, fileMonth, fileDay] = dateMatch;
-                                        const fileDate = `${fileYear}-${fileMonth}-${fileDay}`;
-                                        
-                                        // 기존 데이터에 없는 새로운 파일만 추가
-                                        const exists = reports.some(r => r.date === fileDate);
-                                        
-                                        if (!exists) {
-                                            reports.push({
-                                                date: fileDate,
-                                                displayDate: `${fileYear}년 ${parseInt(fileMonth)}월 ${parseInt(fileDay)}일`,
-                                                title: '커피 선물 시장 주간 동향',
-                                                subtitle: 'Coffee Futures Market Weekly Update',
-                                                summary: `${fileYear}년 ${parseInt(fileMonth)}월 ${parseInt(fileDay)}일 커피 시장 분석 보고서입니다.`,
-                                                tags: ['아라비카', '로부스타', '시장분석', '주간동향'],
-                                                link: file.path,
-                                                year: fileYear,
-                                                month: fileMonth,
-                                                fileName: file.name
-                                            });
-                                        }
-                                    }
-                                }
+                            // 기존 데이터에 없는 새로운 파일만 추가
+                            const exists = reports.some(r => r.date === fileDate);
+                            
+                            if (!exists) {
+                                reports.push({
+                                    date: fileDate,
+                                    displayDate: `${fileYear}년 ${parseInt(fileMonth)}월 ${parseInt(fileDay)}일`,
+                                    title: '커피 선물 시장 주간 동향',
+                                    subtitle: 'Coffee Futures Market Weekly Update',
+                                    summary: `${fileYear}년 ${parseInt(fileMonth)}월 ${parseInt(fileDay)}일 커피 시장 분석 보고서입니다.`,
+                                    tags: ['아라비카', '로부스타', '시장분석', '주간동향'],
+                                    link: file.path,
+                                    year: fileYear,
+                                    month: fileMonth,
+                                    fileName: file.name
+                                });
                             }
-                        } catch (error) {
-                            // 해당 년월 폴더가 없는 경우는 무시
-                            continue;
                         }
                     }
                 }
-                
-                // 날짜순으로 정렬 (최신이 먼저)
-                reports.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                return reports;
-                
             } catch (error) {
-                console.error('보고서 로딩 중 오류:', error);
-                // API 실패시 기본 데이터 반환
-                return defaultReports;
+                console.log(`폴더 ${year}/${monthStr} 스캔 실패:`, error);
+                continue;
             }
         }
+        
+        // 날짜순으로 정렬 (최신이 먼저)
+        reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        return reports;
+        
+    } catch (error) {
+        console.error('보고서 로딩 중 오류:', error);
+        // API 실패시 기본 데이터 반환
+        return defaultReports;
+    }
+}
 
         function renderReports(filteredReports = allReports) {
             const grid = document.getElementById('reportsGrid');
