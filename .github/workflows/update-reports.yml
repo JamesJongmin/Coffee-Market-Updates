@@ -1,0 +1,85 @@
+name: Update Reports List
+
+on:
+  push:
+    paths:
+      - 'Reports/**/*.html'
+  workflow_dispatch:
+
+jobs:
+  update-reports:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Generate reports.json
+      run: |
+        node -e "
+        const fs = require('fs');
+        const path = require('path');
+        
+        function findHtmlFiles(dir) {
+          const reports = [];
+          
+          function scanDir(currentDir) {
+            if (!fs.existsSync(currentDir)) return;
+            
+            const items = fs.readdirSync(currentDir);
+            
+            for (const item of items) {
+              const fullPath = path.join(currentDir, item);
+              const stat = fs.statSync(fullPath);
+              
+              if (stat.isDirectory()) {
+                scanDir(fullPath);
+              } else if (item.endsWith('.html')) {
+                const fileName = item.replace('.html', '');
+                const dateMatch = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
+                
+                if (dateMatch) {
+                  const [, year, month, day] = dateMatch;
+                  const relativePath = path.relative('.', fullPath).replace(/\\\\/g, '/');
+                  
+                  reports.push({
+                    date: \`\${year}-\${month}-\${day}\`,
+                    displayDate: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일\`,
+                    title: '커피 선물 시장 주간 동향',
+                    subtitle: 'Coffee Futures Market Weekly Update',
+                    summary: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일 커피 시장 분석 보고서입니다.\`,
+                    tags: ['아라비카', '로부스타', '시장분석', '주간동향'],
+                    link: relativePath,
+                    year: year,
+                    month: month
+                  });
+                }
+              }
+            }
+          }
+          
+          scanDir(dir);
+          return reports;
+        }
+        
+        const reports = findHtmlFiles('Reports');
+        reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        const output = { reports: reports };
+        fs.writeFileSync('reports.json', JSON.stringify(output, null, 2));
+        
+        console.log(\`Generated reports.json with \${reports.length} reports\`);
+        "
+        
+    - name: Commit and push if changed
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add reports.json
+        git diff --staged --quiet || git commit -m "Auto-update reports.json"
+        git push
