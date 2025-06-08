@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #8B4513;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <div class="subtitle">Coffee Futures Market Update</div>
+            <div style="font-size: 1em; margin: 10px 0; opacity: 0.8;">Published by Align Commodities</div>
+            <div class="date-stamp">2025년 5월 31일 기준</div>
+        </header>
+        
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #8B4513; margin-bottom: 20px; font-size: 1.6em;">주요 뉴스: 월간 하락세 연장, 7주 최저치 기록</h2>
+                <p style="margin-bottom: 15px;">커피 선물 시장이 지난 한 달간의 하락세를 연장하며 새로운 저점을 기록했습니다. 5월 30일(금) 7월 아라비카 커피 선물(KCN25)이 -5.95(-1.71%) 하락한 342.45센트로 7주 최저치를 기록했으며, 로부스타 커피도 -56(-1.23%) 하락했습니다.</p>
+                
+                <div class="highlight">
+                    <strong>핵심 요인:</strong> USDA의 글로벌 생산량 증가 전망, ICE 재고의 지속적 증가, 그리고 수요 우려가 복합적으로 작용하여 강한 하락 압력을 형성하고 있습니다.
+                </div>
+                
+                <p>특히 브라질의 2025/26 생산량이 0.5% 증가한 6,500만 포대, 베트남이 6.9% 증가한 3,100만 포대로 전망되면서 공급 과잉 우려가 심화되고 있습니다.</p>
+            </div>
+            
+            <div class="sidebar">
+                <div class="price-box">
+                    <div style="font-size: 1.1em; margin-bottom: 10px;">7월 아라비카 선물 (5/30)</div>
+                    <div class="price-value">342.45 cpp</div>
+                    <div style="font-size: 0.8em; margin-bottom: 10px; opacity: 0.9;">($7.55/kg)</div>
+                    <div class="price-change negative">-5.95 (-1.71%)</div>
+                    <div style="font-size: 0.9em;">7주 최저치 기록</div>
+                </div>
+                
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">주요 지표</h3>
+                    <div class="stat-item">
+                        <span>1일 수익률 (1D)</span>
+                        <span style="color: #ff6b6b;">-1.71%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>1주 수익률 (1W)</span>
+                        <span style="color: #ff6b6b;">-4.2%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>1개월 수익률 (1M)</span>
+                        <span style="color: #ff6b6b;">-8.5%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>3개월 수익률 (3M)</span>
+                        <span style="color: #ff6b6b;">-12.3%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>연초 대비 (YTD)</span>
+                        <span style="color: #51cf66;">+8.7%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>ICE 아라비카 재고</span>
+                        <span>892,468포대 (3.75개월 최고)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>ICE 로부스타 재고</span>
+                        <span>5,438로트 (8개월 최고)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">📉 최신 가격 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일 (금)</div>
+                    <div class="news-content">
+                        <strong>커피 선물 급락, 7주 최저치 기록</strong><br>
+                        7월 아라비카 커피가 342.45센트로 -1.71% 급락하며 7주 최저치를 기록했습니다. 로부스타 커피도 4,510달러로 -1.23% 하락하며 6.5개월 최저치를 나타냈습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일</div>
+                    <div class="news-content">
+                        <strong>월간 하락세 연장으로 시장 약세 지속</strong><br>
+                        커피 가격이 지난 한 달간의 하락세를 연장하면서 글로벌 공급 증가 전망에 대한 우려가 현실화되고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 최종 주</div>
+                    <div class="news-content">
+                        <strong>공급 과잉 우려 심화</strong><br>
+                        USDA 전망에 따르면 브라질과 베트남의 생산량 증가로 글로벌 커피 공급이 크게 늘어날 것으로 예상되어 가격 압박이 지속되고 있습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-section">
+                <h3 class="section-title">📊 재고 및 공급 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일</div>
+                    <div class="news-content">
+                        <strong>ICE 재고 다시 최고치 경신</strong><br>
+                        ICE 로부스타 재고가 8개월 최고치인 5,438로트를 기록했으며, 아라비카 재고도 3.75개월 최고치인 892,468포대에 달해 공급 과잉 우려를 증폭시키고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 27일</div>
+                    <div class="news-content">
+                        <strong>USDA 최종 생산량 전망 발표</strong><br>
+                        브라질 2025/26 생산량 6,500만 포대(+0.5%), 베트남 3,100만 포대(+6.9%) 증가 전망으로 공급 증가 압력이 가중되고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 9일</div>
+                    <div class="news-content">
+                        <strong>온두라스 생산량도 증가 전망</strong><br>
+                        중앙아메리카 최대 커피 생산국인 온두라스의 2025/26 생산량이 전년 대비 5.1% 증가한 580만 포대로 예상된다고 USDA가 발표했습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-section">
+                <h3 class="section-title">🌍 시장 분석</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일</div>
+                    <div class="news-content">
+                        <strong>수요 우려 확산</strong><br>
+                        스타벅스, 허쉬, 몬델리즈 등 글로벌 기업들이 미국의 10% 기본 관세로 인한 가격 상승과 판매량 감소 우려를 표명했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 12일</div>
+                    <div class="news-content">
+                        <strong>브라질 커피 수출 급감</strong><br>
+                        브라질의 4월 커피 수출이 전년 동기 대비 28% 감소한 305만 포대를 기록했으며, 1-4월 누적 수출도 15.5% 감소했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">최근</div>
+                    <div class="news-content">
+                        <strong>베트남 수출 부진 지속</strong><br>
+                        베트남의 2025년 1-4월 커피 수출이 전년 대비 9.8% 감소한 66.3만 톤을 기록하며 공급 부족 우려를 상쇄하고 있습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-section">
+                <h3 class="section-title">🌧️ 날씨 영향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 27일</div>
+                    <div class="news-content">
+                        <strong>브라질 가뭄 지속</strong><br>
+                        브라질 최대 아라비카 생산지인 미나스제라이스 주가 5월 24일 종료 주간에 역사적 평균의 4%에 불과한 0.3mm의 강수량을 기록했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">현재</div>
+                    <div class="news-content">
+                        <strong>기후 변화 영향 심화</strong><br>
+                        극한 기후 현상의 빈도 증가로 커피 나무들이 완전히 회복할 시간을 갖지 못하고 있어 장기적 생산성에 부정적 영향을 미치고 있습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="market-outlook">
+            <div class="outlook-title">주간 시장 전망</div>
+            <p style="margin-bottom: 20px;">커피 시장이 강한 하락 모멘텀을 보이며 월간 저점을 경신했습니다. 글로벌 생산량 증가 전망과 높은 재고 수준이 지속적인 가격 압박 요인으로 작용하고 있습니다. 브라질의 가뭄에도 불구하고 전체 생산량 증가 전망이 시장을 압도하고 있어 단기적으로 추가 하락 가능성이 높습니다.</p>
+            <p><strong>다음 주 주요 관전 포인트:</strong> ICE 재고 변화, 브라질 날씨 패턴, 베트남 수출 데이터, 340센트 기술적 지지선 유지 여부</p>
+        </div>
+        
+        <div class="tags">
+            <span class="tag">커피선물</span>
+            <span class="tag">아라비카</span>
+            <span class="tag">로부스타</span>
+            <span class="tag">브라질생산</span>
+            <span class="tag">베트남생산</span>
+            <span class="tag">기후변화</span>
+            <span class="tag">가격전망</span>
+            <span class="tag">USDA보고서</span>
+        </div>
+        
+        <footer>
+            <p>이 정보는 Barchart.com, Reuters, USDA 등 신뢰할 수 있는 출처를 바탕으로 작성되었습니다.<br>
+            투자 결정 시에는 반드시 실시간 데이터와 전문가 상담을 통해 신중하게 판단하시기 바랍니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
