@@ -1,2 +1,2 @@
 # Coffee-Market-Updates
-Weekly and monthly basis market updates for Coffee business
+Weekly and monthly coffee market updates for business intelligence
