@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Market Updates Archive</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+```
+    body {
+        font-family: 'Arial', 'Helvetica', sans-serif;
+        line-height: 1.7;
+        color: #2c3e50;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    header {
+        background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+        margin-bottom: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+        font-size: 2.8em;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .subtitle {
+        font-size: 1.3em;
+        opacity: 0.9;
+        font-weight: 300;
+        margin-bottom: 15px;
+    }
+    
+    .description {
+        font-size: 1.1em;
+        opacity: 0.8;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    
+    .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+    
+    .stat-box {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        border-left: 5px solid #8B4513;
+    }
+    
+    .stat-number {
+        font-size: 2.2em;
+        font-weight: 700;
+        color: #8B4513;
+        margin-bottom: 5px;
+    }
+    
+    .stat-label {
+        font-size: 0.95em;
+        color: #666;
+        font-weight: 500;
+    }
+    
+    .search-filter {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .filter-row {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .search-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 12px 15px;
+        border: 2px solid #eee;
+        border-radius: 10px;
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+    }
+    
+    .search-input:focus {
+        border-color: #8B4513;
+        outline: none;
+    }
+    
+    .filter-select {
+        padding: 12px 15px;
+        border: 2px solid #eee;
+        border-radius: 10px;
+        font-size: 1em;
+        background: white;
+        cursor: pointer;
+    }
+    
+    .reports-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+    
+    .report-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border-left: 5px solid #8B4513;
+        cursor: pointer;
+    }
+    
+    .report-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    
+    .report-date {
+        font-size: 0.9em;
+        color: #8B4513;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .report-title {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+    
+    .report-summary {
+        font-size: 0.95em;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    
+    .report-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .tag {
+        background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        font-weight: 500;
+    }
+    
+    .read-more {
+        display: inline-flex;
+        align-items: center;
+        color: #8B4513;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.95em;
+        transition: color 0.3s ease;
+    }
+    
+    .read-more:hover {
+        color: #A0522D;
+    }
+    
+    .read-more::after {
+        content: " →";
+        margin-left: 5px;
+        transition: margin-left 0.3s ease;
+    }
+    
+    .read-more:hover::after {
+        margin-left: 10px;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+        font-size: 1.1em;
+    }
+    
+    footer {
+        text-align: center;
+        padding: 30px 20px;
+        color: #666;
+        font-size: 0.9em;
+        border-top: 1px solid #eee;
+        margin-top: 40px;
+        background: white;
+        border-radius: 15px;
+    }
+    
+    .footer-links {
+        margin-top: 15px;
+    }
+    
+    .footer-links a {
+        color: #8B4513;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: 500;
+    }
+    
+    .footer-links a:hover {
+        text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+        
+        h1 {
+            font-size: 2.2em;
+        }
+        
+        .reports-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .filter-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .search-input {
+            min-width: auto;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Coffee Market Updates</h1>
+            <p class="subtitle">Weekly Coffee Futures Market Analysis & Reports</p>
+            <p class="description">
+                전문적인 커피 선물 시장 분석 보고서 아카이브입니다. 
+                주간 시장 동향, 가격 변동, 글로벌 공급 현황을 정기적으로 업데이트합니다.
+            </p>
+        </header>
+
+```
+    <div class="stats-bar">
+        <div class="stat-box">
+            <div class="stat-number" id="totalReports">1</div>
+            <div class="stat-label">총 보고서 수</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="latestDate">2025.06</div>
+            <div class="stat-label">최신 업데이트</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">주간</div>
+            <div class="stat-label">업데이트 주기</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">KR/EN</div>
+            <div class="stat-label">언어 지원</div>
+        </div>
+    </div>
+
+    <div class="search-filter">
+        <div class="filter-row">
+            <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
+            <select class="filter-select" id="yearFilter">
+                <option value="">전체 년도</option>
+                <option value="2025">2025년</option>
+            </select>
+            <select class="filter-select" id="monthFilter">
+                <option value="">전체 월</option>
+                <option value="06">6월</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="reports-grid" id="reportsGrid">
+        <!-- 보고서 카드들이 여기에 동적으로 추가됩니다 -->
+    </div>
+
+    <div class="no-results" id="noResults" style="display: none;">
+        <h3>검색 결과가 없습니다</h3>
+        <p>다른 검색어나 필터를 시도해보세요.</p>
+    </div>
+
+    <footer>
+        <p><strong>Published by Align Commodities</strong></p>
+        <p>전문적인 원자재 시장 분석과 투자 인사이트를 제공합니다.</p>
+        <div class="footer-links">
+            <a href="mailto:james.baek@aligncommodities.com">Contact</a>
+            <a href="https://github.com/jamesjongmin/Coffee-Market-Updates">GitHub</a>
+            <a href="#latest">Latest Report</a>
+        </div>
+        <p style="margin-top: 15px; font-size: 0.8em; opacity: 0.7;">
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.
+        </p>
+    </footer>
+</div>
+
+<script>
+    // 보고서 데이터 (실제로는 GitHub API나 별도 데이터 파일에서 로드)
+    const reports = [
+        {
+            date: '2025-06-08',
+            displayDate: '2025년 6월 8일',
+            title: '커피 선물 시장 주간 동향',
+            subtitle: 'Coffee Futures Market Weekly Update',
+            summary: '커피 선물이 5주간 연속 하락세를 지속하며 금요일 소폭 하락했습니다. 7월 아라비카 커피는 5.95포인트(-1.71%) 하락한 342.45센트로 마감했으며, 브라질 생산량 증가와 베트남 생산량 급증이 주요 하락 요인으로 작용했습니다.',
+            tags: ['아라비카', '로부스타', '브라질생산량', '베트남수출', 'ICE재고'],
+            link: 'Reports/2025/06/2025-06-08.html',
+            year: '2025',
+            month: '06'
+        }
+        // 추가 보고서들이 여기에 추가됩니다
+    ];
+
+    function renderReports(filteredReports = reports) {
+        const grid = document.getElementById('reportsGrid');
+        const noResults = document.getElementById('noResults');
+        
+        if (filteredReports.length === 0) {
+            grid.style.display = 'none';
+            noResults.style.display = 'block';
+            return;
+        }
+        
+        grid.style.display = 'grid';
+        noResults.style.display = 'none';
+        
+        grid.innerHTML = filteredReports.map(report => `
+            <div class="report-card" onclick="window.location.href='${report.link}'">
+                <div class="report-date">${report.displayDate}</div>
+                <h3 class="report-title">${report.title}</h3>
+                <p class="report-summary">${report.summary}</p>
+                <div class="report-tags">
+                    ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <a href="${report.link}" class="read-more">보고서 읽기</a>
+            </div>
+        `).join('');
+    }
+
+    function filterReports() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const yearFilter = document.getElementById('yearFilter').value;
+        const monthFilter = document.getElementById('monthFilter').value;
+        
+        const filtered = reports.filter(report => {
+            const matchesSearch = report.title.toLowerCase().includes(searchTerm) || 
+                                report.summary.toLowerCase().includes(searchTerm) ||
+                                report.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+            const matchesYear = !yearFilter || report.year === yearFilter;
+            const matchesMonth = !monthFilter || report.month === monthFilter;
+            
+            return matchesSearch && matchesYear && matchesMonth;
+        });
+        
+        renderReports(filtered);
+    }
+
+    // 이벤트 리스너 설정
+    document.getElementById('searchInput').addEventListener('input', filterReports);
+    document.getElementById('yearFilter').addEventListener('change', filterReports);
+    document.getElementById('monthFilter').addEventListener('change', filterReports);
+
+    // 초기 렌더링
+    renderReports();
+    
+    // 통계 업데이트
+    document.getElementById('totalReports').textContent = reports.length;
+    if (reports.length > 0) {
+        document.getElementById('latestDate').textContent = reports[0].displayDate.substring(0, 7);
+    }
+</script>
+```
+
+</body>
+</html>
