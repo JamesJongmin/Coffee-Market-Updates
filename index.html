@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -51,6 +53,87 @@
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.6;
+        }
+        
+        /* 차트 대시보드 스타일 */
+        .dashboard-section {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #8B4513;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #8B4513;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .chart-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .chart-source {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #8B4513;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .stats-bar {
@@ -247,6 +330,10 @@
                 font-size: 2.2em;
             }
             
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
             .reports-grid {
                 grid-template-columns: 1fr;
             }
@@ -266,12 +353,78 @@
     <div class="container">
         <header>
             <h1>Coffee Market Updates</h1>
-            <p class="subtitle">Coffee Futures Market Analysis</p>
+            <p class="subtitle">Coffee Futures Market Analysis & Dashboard</p>
             <p class="description">
-                커피 선물 시장 분석 보고서 아카이브입니다. <br/>
+                커피 선물 시장 분석 보고서 아카이브 및 실시간 시장 대시보드입니다. <br/>
                 주간 시장 동향, 가격 변동 및 글로벌 수급 현황을 정기적으로 업데이트합니다.
             </p>
         </header>
+
+        <!-- 차트 대시보드 섹션 -->
+        <div class="dashboard-section">
+            <h2 class="section-title">📊 Market Dashboard</h2>
+            <div class="charts-grid">
+                <!-- Coffee Futures Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">Coffee Futures</div>
+                        <div class="chart-source">출처: ICE</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="loading-spinner" id="loading-coffee">
+                            <div class="spinner"></div>
+                            데이터 로딩 중...
+                        </div>
+                        <canvas id="coffeeChart" style="display: none;"></canvas>
+                    </div>
+                </div>
+
+                <!-- USD/BRL Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">미국달러-브라질헤알 환율</div>
+                        <div class="chart-source">출처: LSEG</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="loading-spinner" id="loading-usd">
+                            <div class="spinner"></div>
+                            데이터 로딩 중...
+                        </div>
+                        <canvas id="usdChart" style="display: none;"></canvas>
+                    </div>
+                </div>
+
+                <!-- CFTC Positions Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
+                        <div class="chart-source">출처: LSEG</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="loading-spinner" id="loading-cftc">
+                            <div class="spinner"></div>
+                            데이터 로딩 중...
+                        </div>
+                        <canvas id="cftcChart" style="display: none;"></canvas>
+                    </div>
+                </div>
+
+                <!-- ICO Composite Index Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">ICO Composite Index</div>
+                        <div class="chart-source">출처: ICO</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="loading-spinner" id="loading-ico">
+                            <div class="spinner"></div>
+                            데이터 로딩 중...
+                        </div>
+                        <canvas id="icoChart" style="display: none;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="stats-bar">
             <div class="stat-box">
@@ -331,8 +484,281 @@
     </div>
 <script>
         let allReports = [];
-        
-        // reports.json 파일에서 데이터 로드
+        let charts = {};
+
+        // Excel 파일 읽기 함수
+        async function readExcelFile(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${filename}`);
+                }
+                
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer);
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                // 첫 번째 행은 헤더, 두 번째 행은 "Close" 등의 추가 헤더이므로 3번째 행부터 데이터
+                const dataRows = data.slice(2);
+                
+                return dataRows.map(row => ({
+                    date: row[0], // 첫 번째 컬럼은 항상 Date
+                    value: row[1] // 두 번째 컬럼은 해당 값
+                })).filter(row => row.date && row.value !== undefined && row.value !== null);
+                
+            } catch (error) {
+                console.error(`Error reading ${filename}:`, error);
+                return null;
+            }
+        }
+
+        // 날짜 변환 함수
+        function parseDate(dateValue) {
+            if (typeof dateValue === 'number') {
+                // Excel 날짜 시리얼 번호인 경우
+                const date = new Date((dateValue - 25569) * 86400 * 1000);
+                return date;
+            } else if (typeof dateValue === 'string') {
+                return new Date(dateValue);
+            }
+            return new Date(dateValue);
+        }
+
+        // 차트 생성 함수들
+        async function createCoffeeChart() {
+            const data = await readExcelFile('coffeefutures.xlsx');
+            const loadingElement = document.getElementById('loading-coffee');
+            const chartElement = document.getElementById('coffeeChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map(row => ({
+                x: parseDate(row.date),
+                y: parseFloat(row.value)
+            })).filter(point => !isNaN(point.y));
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.coffee = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Coffee Futures Price',
+                        data: chartData,
+                        borderColor: '#8B4513',
+                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (cents/lb)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createUSDChart() {
+            const data = await readExcelFile('usdbrl.xlsx');
+            const loadingElement = document.getElementById('loading-usd');
+            const chartElement = document.getElementById('usdChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map(row => ({
+                x: parseDate(row.date),
+                y: parseFloat(row.value)
+            })).filter(point => !isNaN(point.y));
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.usd = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'USD/BRL Rate',
+                        data: chartData,
+                        borderColor: '#2E8B57',
+                        backgroundColor: 'rgba(46, 139, 87, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'BRL per USD'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createCFTCChart() {
+            const data = await readExcelFile('cftcpositions.xlsx');
+            const loadingElement = document.getElementById('loading-cftc');
+            const chartElement = document.getElementById('cftcChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map(row => ({
+                x: parseDate(row.date),
+                y: parseInt(row.value)
+            })).filter(point => !isNaN(point.y));
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.cftc = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        label: 'Net Long Positions',
+                        data: chartData,
+                        backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
+                        borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Net Long Positions'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createICOChart() {
+            const data = await readExcelFile('icoicip.xlsx');
+            const loadingElement = document.getElementById('loading-ico');
+            const chartElement = document.getElementById('icoChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map(row => ({
+                x: parseDate(row.date),
+                y: parseFloat(row.value)
+            })).filter(point => !isNaN(point.y));
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.ico = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'ICO Composite Index',
+                        data: chartData,
+                        borderColor: '#9B59B6',
+                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'I-CIP (cents/lb)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // reports.json 파일에서 데이터 로드 (기존 코드 그대로 유지)
         async function loadReportsFromJSON() {
             try {
                 const response = await fetch('reports.json');
@@ -455,6 +881,15 @@
         // 초기화 함수
         async function init() {
             try {
+                // 차트들 병렬로 로드
+                Promise.all([
+                    createCoffeeChart(),
+                    createUSDChart(),
+                    createCFTCChart(),
+                    createICOChart()
+                ]);
+
+                // 보고서 데이터 로드 (기존 기능 유지)
                 allReports = await loadReportsFromJSON();
                 updateFilters();
                 updateStats();
