@@ -539,9 +539,10 @@
                 return;
             }
 
-            const chartData = data.map(row => ({
-                x: parseDate(row.date),
-                y: parseFloat(row.value)
+            const chartData = data.map((row, index) => ({
+                x: index, // 날짜 대신 인덱스 사용
+                y: parseFloat(row.value),
+                date: parseDate(row.date) // 툴팁용으로 날짜 보관
             })).filter(point => !isNaN(point.y));
 
             loadingElement.style.display = 'none';
@@ -571,9 +572,17 @@
                     },
                     scales: {
                         x: {
-                            type: 'time',
-                            time: {
-                                unit: 'month'
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const date = new Date(value);
+                                    return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+                                }
                             }
                         },
                         y: {
@@ -597,9 +606,10 @@
                 return;
             }
 
-            const chartData = data.map(row => ({
-                x: parseDate(row.date),
-                y: parseFloat(row.value)
+            const chartData = data.map((row, index) => ({
+                x: index, // 날짜 대신 인덱스 사용
+                y: parseFloat(row.value),
+                date: parseDate(row.date) // 툴팁용으로 날짜 보관
             })).filter(point => !isNaN(point.y));
 
             loadingElement.style.display = 'none';
@@ -629,9 +639,17 @@
                     },
                     scales: {
                         x: {
-                            type: 'time',
-                            time: {
-                                unit: 'month'
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const date = new Date(value);
+                                    return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+                                }
                             }
                         },
                         y: {
@@ -655,9 +673,10 @@
                 return;
             }
 
-            const chartData = data.map(row => ({
-                x: parseDate(row.date),
-                y: parseInt(row.value)
+            const chartData = data.map((row, index) => ({
+                x: index, // 날짜 대신 인덱스 사용
+                y: parseInt(row.value),
+                date: parseDate(row.date) // 툴팁용으로 날짜 보관
             })).filter(point => !isNaN(point.y));
 
             loadingElement.style.display = 'none';
@@ -685,9 +704,17 @@
                     },
                     scales: {
                         x: {
-                            type: 'time',
-                            time: {
-                                unit: 'month'
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const date = new Date(value);
+                                    return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+                                }
                             }
                         },
                         y: {
@@ -711,9 +738,10 @@
                 return;
             }
 
-            const chartData = data.map(row => ({
-                x: parseDate(row.date),
-                y: parseFloat(row.value)
+            const chartData = data.map((row, index) => ({
+                x: index, // 날짜 대신 인덱스 사용
+                y: parseFloat(row.value),
+                date: parseDate(row.date) // 툴팁용으로 날짜 보관
             })).filter(point => !isNaN(point.y));
 
             loadingElement.style.display = 'none';
@@ -743,9 +771,17 @@
                     },
                     scales: {
                         x: {
-                            type: 'time',
-                            time: {
-                                unit: 'month'
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const date = new Date(value);
+                                    return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+                                }
                             }
                         },
                         y: {
