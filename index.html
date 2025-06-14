@@ -502,31 +502,80 @@
         async function readExcelFile(filename) {
             try {
                 console.log(`Excel 파일 로딩 시도: ${filename}`);
-                const response = await fetch(filename);
+                
+                // 타임아웃 설정 (15초)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                
+                const response = await fetch(filename, {
+                    signal: controller.signal,
+                    cache: 'no-cache', // 캐시 무시
+                    headers: {
+                        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    }
+                });
+                
+                clearTimeout(timeoutId);
                 
                 if (!response.ok) {
                     console.error(`파일 로딩 실패: ${filename}, 상태: ${response.status}`);
                     throw new Error(`Failed to fetch ${filename} - Status: ${response.status}`);
                 }
                 
-                console.log(`${filename} 성공적으로 로드됨`);
+                console.log(`${filename} 성공적으로 로드됨, 크기: ${response.headers.get('content-length')} bytes`);
+                
                 const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer);
+                console.log(`${filename} ArrayBuffer 크기: ${arrayBuffer.byteLength} bytes`);
+                
+                if (arrayBuffer.byteLength === 0) {
+                    throw new Error(`${filename} 파일이 비어있습니다`);
+                }
+                
+                const workbook = XLSX.read(arrayBuffer, {
+                    type: 'array',
+                    cellDates: true,
+                    cellNF: false,
+                    cellText: false
+                });
+                
+                console.log(`${filename} 워크북 시트 목록:`, workbook.SheetNames);
+                
                 const firstSheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[firstSheetName];
                 
-                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                console.log(`${filename} 데이터 행 수:`, data.length);
+                const data = XLSX.utils.sheet_to_json(worksheet, { 
+                    header: 1,
+                    defval: null,
+                    raw: false
+                });
+                
+                console.log(`${filename} 원본 데이터 행 수:`, data.length);
+                console.log(`${filename} 첫 3행:`, data.slice(0, 3));
                 
                 // 첫 번째 행은 헤더, 두 번째 행은 "Close" 등의 추가 헤더이므로 3번째 행부터 데이터
                 const dataRows = data.slice(2);
                 
-                const processedData = dataRows.map(row => ({
-                    date: row[0], // 첫 번째 컬럼은 항상 Date
-                    value: row[1] // 두 번째 컬럼은 해당 값
-                })).filter(row => row.date && row.value !== undefined && row.value !== null);
+                const processedData = dataRows.map((row, index) => {
+                    const dateValue = row[0];
+                    const priceValue = row[1];
+                    
+                    if (!dateValue || priceValue === null || priceValue === undefined || priceValue === '') {
+                        return null;
+                    }
+                    
+                    return {
+                        date: dateValue,
+                        value: priceValue
+                    };
+                }).filter(row => row !== null);
                 
                 console.log(`${filename} 처리된 데이터 포인트:`, processedData.length);
+                console.log(`${filename} 처리된 첫 3개 데이터:`, processedData.slice(0, 3));
+                console.log(`${filename} 처리된 마지막 3개 데이터:`, processedData.slice(-3));
+                
+                if (processedData.length === 0) {
+                    throw new Error(`${filename}에서 유효한 데이터를 찾을 수 없습니다`);
+                }
                 
                 // 날짜순으로 정렬 (오래된 것 → 최신 순서로)
                 processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
@@ -534,8 +583,12 @@
                 return processedData;
                 
             } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.error(`${filename} 로딩 타임아웃 (15초 초과)`);
+                    throw new Error(`${filename} 로딩 타임아웃`);
+                }
                 console.error(`Error reading ${filename}:`, error);
-                return null;
+                throw error;
             }
         }
 
@@ -1031,26 +1084,44 @@
         // 초기화 함수
         async function init() {
             try {
-                // 차트들 병렬로 로드
-                Promise.all([
-                    createCoffeeChart(),
-                    createUSDChart(),
-                    createCFTCChart(),
-                    createICOChart()
-                ]);
+                console.log('=== 초기화 시작 ===');
+                
+                // Chart.js 로드 확인
+                if (typeof Chart === 'undefined') {
+                    console.error('Chart.js가 로드되지 않았습니다!');
+                    return;
+                }
+                console.log('Chart.js 로드 확인됨');
+                
+                // XLSX 라이브러리 확인
+                if (typeof XLSX === 'undefined') {
+                    console.error('XLSX 라이브러리가 로드되지 않았습니다!');
+                    return;
+                }
+                console.log('XLSX 라이브러리 로드 확인됨');
+
+                // 차트들 순차적으로 로드 (병렬 대신 순차)
+                console.log('=== 차트 로딩 시작 ===');
+                await createCoffeeChart();
+                await createUSDChart();
+                await createCFTCChart();
+                await createICOChart();
+                console.log('=== 차트 로딩 완료 ===');
 
                 // 보고서 데이터 로드 (동적 스캔 포함)
+                console.log('=== 보고서 로딩 시작 ===');
                 allReports = await loadReportsFromJSON();
                 updateFilters();
                 updateStats();
                 renderReports();
+                console.log('=== 보고서 로딩 완료 ===');
                 
                 // 이벤트 리스너 설정
                 document.getElementById('searchInput').addEventListener('input', filterReports);
                 document.getElementById('yearFilter').addEventListener('change', filterReports);
                 document.getElementById('monthFilter').addEventListener('change', filterReports);
                 
-                console.log('초기화 완료:', allReports.length, '개 보고서');
+                console.log('=== 초기화 완료 ===', allReports.length, '개 보고서');
                 
             } catch (error) {
                 console.error('초기화 중 오류:', error);
@@ -1061,7 +1132,34 @@
         }
 
         // 페이지 로드시 초기화 실행
-        init();
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM 로드 완료, 초기화 시작');
+            init();
+        });
+        
+        // 추가 로드 이벤트도 등록 (백업)
+        window.addEventListener('load', function() {
+            console.log('윈도우 로드 완료');
+            // DOM 이벤트가 실행되지 않은 경우에만 실행
+            if (!window.initStarted) {
+                window.initStarted = true;
+                init();
+            }
+        });
+        
+        // 즉시 테스트 함수 (개발자 도구에서 수동 실행용)
+        window.testExcelLoad = async function() {
+            console.log('=== 수동 Excel 테스트 ===');
+            try {
+                const data = await readExcelFile('coffeefutures.xlsx');
+                console.log('테스트 결과:', data ? `${data.length}개 데이터 포인트` : '실패');
+                return data;
+            } catch (error) {
+                console.error('테스트 실패:', error);
+                return null;
+            }
+        };
+
 
                             year: '2-digit', 
                             month: 'short' 
