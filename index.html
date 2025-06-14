@@ -429,11 +429,11 @@
 
         <div class="stats-bar">
             <div class="stat-box">
-                <div class="stat-number" id="totalReports">0</div>
+                <div class="stat-number" id="totalReports">1</div>
                 <div class="stat-label">총 보고서 수</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" id="latestDate">-</div>
+                <div class="stat-number" id="latestDate">2025.06</div>
                 <div class="stat-label">최신 업데이트</div>
             </div>
             <div class="stat-box">
@@ -451,9 +451,12 @@
                 <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
                 <select class="filter-select" id="yearFilter">
                     <option value="">전체 년도</option>
+                    <option value="2025">2025년</option>
                 </select>
                 <select class="filter-select" id="monthFilter">
                     <option value="">전체 월</option>
+                    <option value="05">5월</option>
+                    <option value="06">6월</option>
                 </select>
             </div>
         </div>
@@ -921,192 +924,44 @@
             });
         }
 
-        // HTML 파싱 함수 - 실제 리포트에서 제목과 요약 추출
-        function parseHTMLContent(htmlText) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(htmlText, 'text/html');
-            
-            // 제목 추출 - h1 태그에서 가져오기
-            let title = '';
-            const h1Elements = doc.querySelectorAll('h1');
-            if (h1Elements.length > 0) {
-                title = h1Elements[0].textContent.trim();
-            }
-            
-            // 요약 추출 - "주요 헤드라인" 또는 "핵심 요약" 섹션에서 가져오기
-            let summary = '';
-            const allElements = doc.querySelectorAll('*');
-            
-            for (let element of allElements) {
-                const text = element.textContent;
-                if (text.includes('주요 헤드라인') || text.includes('핵심 요약')) {
-                    // 해당 요소의 다음 형제 요소들에서 요약 찾기
-                    let nextElement = element.nextElementSibling;
-                    while (nextElement && summary.length < 200) {
-                        const nextText = nextElement.textContent.trim();
-                        if (nextText && !nextText.includes('##') && !nextText.includes('#')) {
-                            summary += nextText + ' ';
-                            break;
-                        }
-                        nextElement = nextElement.nextElementSibling;
-                    }
-                    
-                    // 만약 형제 요소에서 찾지 못했다면, 부모 요소의 다음 요소들 확인
-                    if (!summary && element.parentElement) {
-                        let parentNext = element.parentElement.nextElementSibling;
-                        while (parentNext && summary.length < 200) {
-                            const parentNextText = parentNext.textContent.trim();
-                            if (parentNextText && !parentNextText.includes('##') && !parentNextText.includes('#')) {
-                                summary += parentNextText + ' ';
-                                break;
-                            }
-                            parentNext = parentNext.nextElementSibling;
-                        }
-                    }
-                    break;
-                }
-            }
-            
-            // 요약이 너무 길면 자르기
-            if (summary.length > 150) {
-                summary = summary.substring(0, 150) + '...';
-            }
-            
-            return { title, summary };
-        }
-
-        // Reports 폴더 구조 스캔 및 HTML 파일 로드
-        async function scanReportsDirectory() {
-            const reports = [];
-            const currentYear = new Date().getFullYear();
-            const years = [currentYear, currentYear - 1]; // 현재 년도와 작년만 스캔
-            
-            for (const year of years) {
-                for (let month = 1; month <= 12; month++) {
-                    const monthStr = month.toString().padStart(2, '0');
-                    
-                    // 해당 월의 모든 날짜 확인 (1일부터 31일까지)
-                    for (let day = 1; day <= 31; day++) {
-                        const dayStr = day.toString().padStart(2, '0');
-                        const dateStr = `${year}-${monthStr}-${dayStr}`;
-                        const filePath = `Reports/${year}/${monthStr}/${dateStr}.html`;
-                        
-                        try {
-                            const response = await fetch(filePath);
-                            if (response.ok) {
-                                const htmlContent = await response.text();
-                                const { title, summary } = parseHTMLContent(htmlContent);
-                                
-                                // 기본값 설정
-                                const finalTitle = title || '커피 선물 시장 주간 동향';
-                                const finalSummary = summary || '커피 선물 시장 동향 분석';
-                                
-                                reports.push({
-                                    date: dateStr,
-                                    displayDate: new Date(dateStr).toLocaleDateString('ko-KR', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                    }),
-                                    title: finalTitle,
-                                    subtitle: 'Coffee Futures Market Weekly Update',
-                                    summary: finalSummary,
-                                    tags: extractTags(finalSummary), // 요약에서 태그 추출
-                                    link: filePath,
-                                    year: year.toString(),
-                                    month: monthStr
-                                });
-                            }
-                        } catch (error) {
-                            // 파일이 없는 경우 무시
-                            continue;
-                        }
-                    }
-                }
-            }
-            
-            // 날짜순으로 정렬 (최신이 먼저)
-            reports.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            return reports;
-        }
-
-        // 요약에서 태그 추출 함수
-        function extractTags(summary) {
-            const tags = [];
-            const keywords = {
-                '아라비카': ['아라비카', 'Arabica'],
-                '로부스타': ['로부스타', 'Robusta'],
-                '브라질': ['브라질', 'Brazil', '브라질생산'],
-                '베트남': ['베트남', 'Vietnam', '베트남수출'],
-                'ICE재고': ['ICE', 'ICE재고'],
-                '기후변화': ['기후', '날씨', '강우'],
-                'USDA': ['USDA', 'USDA보고서'],
-                '환율': ['달러', '헤알', 'USD', 'BRL'],
-                '선물가격': ['선물', '가격', 'futures']
-            };
-            
-            for (const [tag, keywords_list] of Object.entries(keywords)) {
-                if (keywords_list.some(keyword => summary.includes(keyword))) {
-                    tags.push(tag);
-                }
-            }
-            
-            // 기본 태그 추가
-            if (tags.length === 0) {
-                tags.push('시장동향');
-            }
-            
-            return tags;
-        }
-
-        // 기존 JSON 로드 함수는 fallback으로 유지
+        // reports.json 파일에서 데이터 로드 (기존 코드 그대로 유지)
         async function loadReportsFromJSON() {
             try {
                 const response = await fetch('reports.json');
                 if (response.ok) {
                     const data = await response.json();
                     return data.reports || [];
+                } else {
+                    // reports.json이 없으면 기본 데이터 사용
+                    return [
+                        {
+                            date: '2025-06-08',
+                            displayDate: '2025년 6월 8일',
+                            title: '커피 선물 시장 주간 동향',
+                            subtitle: 'Coffee Futures Market Weekly Update',
+                            summary: '커피 선물이 최근 1주일간 5.17% 상승하며 변동성이 지속되고 있습니다.',
+                            tags: ['아라비카', '로부스타', '브라질생산량', '베트남수출', 'ICE재고'],
+                            link: 'Reports/2025/06/2025-06-08.html',
+                            year: '2025',
+                            month: '06'
+                        },
+                        {
+                            date: '2025-05-31',
+                            displayDate: '2025년 5월 31일',
+                            title: '커피 선물 시장 주간 동향',
+                            subtitle: 'Coffee Futures Market Weekly Update',
+                            summary: '커피 선물 시장이 지난 한 달간의 하락세를 연장하며 새로운 저점을 기록했습니다.',
+                            tags: ['아라비카', '로부스타', '브라질생산', '시장동향', '베트남생산', '기후변화', 'USDA보고서'],
+                            link: 'Reports/2025/05/2025-05-31.html',
+                            year: '2025',
+                            month: '05'
+                        }
+                    ];
                 }
             } catch (error) {
-                console.error('reports.json 로딩 실패:', error);
+                console.error('보고서 로딩 중 오류:', error);
+                return [];
             }
-            return [];
-        }
-
-        // 메인 리포트 로딩 함수
-        async function loadReports() {
-            console.log('리포트 스캔 시작...');
-            
-            // 실제 HTML 파일들을 스캔
-            let reports = await scanReportsDirectory();
-            
-            // 만약 스캔한 리포트가 없으면 JSON에서 로드
-            if (reports.length === 0) {
-                console.log('HTML 파일을 찾을 수 없음. JSON에서 로드 시도...');
-                reports = await loadReportsFromJSON();
-            }
-            
-            // 여전히 없으면 기본 데이터 사용
-            if (reports.length === 0) {
-                console.log('기본 데이터 사용');
-                reports = [
-                    {
-                        date: '2025-06-08',
-                        displayDate: '2025년 6월 8일',
-                        title: '커피 선물 시장 주간 동향',
-                        subtitle: 'Coffee Futures Market Weekly Update',
-                        summary: '커피 선물이 최근 1주일간 5.17% 상승하며 변동성이 지속되고 있습니다.',
-                        tags: ['아라비카', '로부스타', '브라질생산량', '베트남수출', 'ICE재고'],
-                        link: 'Reports/2025/06/2025-06-08.html',
-                        year: '2025',
-                        month: '06'
-                    }
-                ];
-            }
-            
-            console.log(`총 ${reports.length}개의 리포트를 로드했습니다.`);
-            return reports;
         }
 
         function renderReports(filteredReports = allReports) {
@@ -1200,8 +1055,8 @@
                     createICOChart()
                 ]);
 
-                // 리포트 데이터 로드 (실제 HTML 파일에서)
-                allReports = await loadReports();
+                // 보고서 데이터 로드 (기존 기능 유지)
+                allReports = await loadReportsFromJSON();
                 updateFilters();
                 updateStats();
                 renderReports();
@@ -1216,6 +1071,8 @@
             }
         }
 
+        // 페이지 로드시 초기화 실행
+        init();
 </script>
 </body>
 </html>
