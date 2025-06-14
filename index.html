@@ -296,6 +296,16 @@
             font-size: 1.1em;
         }
         
+        .loading-status {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
         footer {
             text-align: center;
             padding: 30px 20px;
@@ -429,11 +439,11 @@
 
         <div class="stats-bar">
             <div class="stat-box">
-                <div class="stat-number" id="totalReports">1</div>
+                <div class="stat-number" id="totalReports">0</div>
                 <div class="stat-label">총 보고서 수</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" id="latestDate">2025.06</div>
+                <div class="stat-number" id="latestDate">-</div>
                 <div class="stat-label">최신 업데이트</div>
             </div>
             <div class="stat-box">
@@ -446,17 +456,18 @@
             </div>
         </div>
 
+        <div class="loading-status" id="loadingStatus">
+            📄 보고서 목록을 검색하고 제목을 로딩 중입니다...
+        </div>
+
         <div class="search-filter">
             <div class="filter-row">
                 <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
                 <select class="filter-select" id="yearFilter">
                     <option value="">전체 년도</option>
-                    <option value="2025">2025년</option>
                 </select>
                 <select class="filter-select" id="monthFilter">
                     <option value="">전체 월</option>
-                    <option value="05">5월</option>
-                    <option value="06">6월</option>
                 </select>
             </div>
         </div>
@@ -553,6 +564,366 @@
             // 날짜 라벨 생성 (3-6개월 간격)
             const dateLabels = [];
             const totalPoints = chartData.length;
+            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
+            
+            for (let i = 0; i < totalPoints; i += interval) {
+                if (chartData[i]) {
+                    const date = chartData[i].date;
+                    dateLabels.push({
+                        index: i,
+                        label: date.toLocaleDateString('ko-KR', { 
+                            year: '2-digit', 
+                            month: 'short' 
+                        })
+                    });
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.ico = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'ICO Composite Index',
+                        data: chartData,
+                        borderColor: '#9B59B6',
+                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = dateLabels.find(dl => dl.index === value);
+                                    return label ? label.label : '';
+                                },
+                                maxTicksLimit: 8
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'I-CIP (cents/lb)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // HTML 파일에서 제목 추출 함수
+        async function extractTitleFromHTML(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const html = await response.text();
+                
+                // <title> 태그에서 제목 추출
+                const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+                if (titleMatch && titleMatch[1]) {
+                    return titleMatch[1].trim();
+                }
+                
+                // <h1> 태그에서 제목 추출 (백업)
+                const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+                if (h1Match && h1Match[1]) {
+                    return h1Match[1].trim();
+                }
+                
+                // 헤더 섹션에서 제목 추출 (추가 백업)
+                const headerMatch = html.match(/<header[^>]*>[\s\S]*?<h1[^>]*>([^<]+)<\/h1>[\s\S]*?<\/header>/i);
+                if (headerMatch && headerMatch[1]) {
+                    return headerMatch[1].trim();
+                }
+                
+                return null;
+            } catch (error) {
+                console.error(`Error extracting title from ${url}:`, error);
+                return null;
+            }
+        }
+
+        // 디렉토리 구조에서 리포트 파일 자동 검색
+        async function discoverReportFiles() {
+            const reports = [];
+            const currentYear = new Date().getFullYear();
+            const years = [currentYear, currentYear - 1]; // 현재년도와 작년
+            const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+            
+            // 로딩 상태 업데이트
+            const loadingStatus = document.getElementById('loadingStatus');
+            let checkedFiles = 0;
+            let totalFiles = 0;
+            
+            // 총 체크할 파일 수 계산
+            for (const year of years) {
+                for (const month of months) {
+                    // 각 월마다 최대 31일까지 체크
+                    totalFiles += 31;
+                }
+            }
+            
+            for (const year of years) {
+                for (const month of months) {
+                    // 해당 월의 최대 일수 계산
+                    const daysInMonth = new Date(year, parseInt(month), 0).getDate();
+                    
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const dayString = day.toString().padStart(2, '0');
+                        const filename = `${year}-${month}-${dayString}.html`;
+                        const filepath = `Reports/${year}/${month}/${filename}`;
+                        
+                        checkedFiles++;
+                        
+                        // 진행률 업데이트
+                        if (checkedFiles % 10 === 0) {
+                            loadingStatus.textContent = `📄 보고서 검색 중... (${checkedFiles}/${totalFiles} 파일 확인됨)`;
+                        }
+                        
+                        try {
+                            const response = await fetch(filepath, { method: 'HEAD' });
+                            
+                            if (response.ok) {
+                                console.log(`Found report: ${filepath}`);
+                                
+                                // 제목 추출
+                                loadingStatus.textContent = `📄 "${filename}" 제목을 로딩 중...`;
+                                const title = await extractTitleFromHTML(filepath);
+                                
+                                const date = new Date(year, parseInt(month) - 1, day);
+                                const displayDate = date.toLocaleDateString('ko-KR', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+                                
+                                reports.push({
+                                    date: `${year}-${month}-${dayString}`,
+                                    displayDate: displayDate,
+                                    title: title || `커피 시장 분석 보고서 (${year}.${month}.${dayString})`,
+                                    subtitle: 'Coffee Futures Market Analysis',
+                                    summary: `${displayDate} 커피 선물 시장 분석 및 전망 보고서입니다.`,
+                                    tags: ['아라비카', '로부스타', '시장분석', '가격전망'],
+                                    link: filepath,
+                                    year: year.toString(),
+                                    month: month
+                                });
+                            }
+                        } catch (error) {
+                            // 파일이 없거나 접근할 수 없는 경우 무시
+                        }
+                    }
+                }
+            }
+            
+            // 날짜순으로 정렬 (최신순)
+            reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // 로딩 완료
+            loadingStatus.style.display = 'none';
+            
+            return reports;
+        }
+
+        // reports.json에서 데이터 로드 (기존 방식 - 백업용)
+        async function loadReportsFromJSON() {
+            try {
+                const response = await fetch('reports.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.reports || [];
+                }
+            } catch (error) {
+                console.error('reports.json 로딩 실패:', error);
+            }
+            return [];
+        }
+
+        // 통합 리포트 로딩 함수
+        async function loadAllReports() {
+            const loadingStatus = document.getElementById('loadingStatus');
+            
+            try {
+                // 1. 파일 시스템에서 자동 검색
+                loadingStatus.textContent = '📂 리포트 파일을 자동 검색 중...';
+                const discoveredReports = await discoverReportFiles();
+                
+                // 2. reports.json에서 추가 데이터 로드 (있다면)
+                const jsonReports = await loadReportsFromJSON();
+                
+                // 3. 중복 제거하면서 병합
+                const allReports = [...discoveredReports];
+                
+                // JSON에서 가져온 리포트 중 파일 시스템에서 찾지 못한 것들 추가
+                for (const jsonReport of jsonReports) {
+                    const exists = allReports.some(report => report.date === jsonReport.date);
+                    if (!exists) {
+                        allReports.push(jsonReport);
+                    }
+                }
+                
+                // 최종 정렬
+                allReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                return allReports;
+                
+            } catch (error) {
+                console.error('리포트 로딩 중 오류:', error);
+                loadingStatus.innerHTML = '<span style="color: #e74c3c;">⚠️ 리포트 로딩 중 오류가 발생했습니다.</span>';
+                return [];
+            }
+        }
+
+        function renderReports(filteredReports = allReports) {
+            const grid = document.getElementById('reportsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (filteredReports.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+            
+            grid.innerHTML = filteredReports.map(report => `
+                <div class="report-card" onclick="window.location.href='${report.link}'">
+                    <div class="report-date">${report.displayDate}</div>
+                    <h3 class="report-title">${report.title}</h3>
+                    <p class="report-summary">${report.summary}</p>
+                    <div class="report-tags">
+                        ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <a href="${report.link}" class="read-more">보고서 읽기</a>
+                </div>
+            `).join('');
+        }
+
+        function filterReports() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const yearFilter = document.getElementById('yearFilter').value;
+            const monthFilter = document.getElementById('monthFilter').value;
+            
+            const filtered = allReports.filter(report => {
+                const matchesSearch = report.title.toLowerCase().includes(searchTerm) || 
+                                    report.summary.toLowerCase().includes(searchTerm) ||
+                                    report.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                const matchesYear = !yearFilter || report.year === yearFilter;
+                const matchesMonth = !monthFilter || report.month === monthFilter;
+                
+                return matchesSearch && matchesYear && matchesMonth;
+            });
+            
+            renderReports(filtered);
+        }
+
+        function updateFilters() {
+            const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
+            const months = [...new Set(allReports.map(r => r.month))].sort();
+            
+            const yearSelect = document.getElementById('yearFilter');
+            const monthSelect = document.getElementById('monthFilter');
+            
+            if (yearSelect) {
+                yearSelect.innerHTML = '<option value="">전체 년도</option>';
+                years.forEach(year => {
+                    yearSelect.innerHTML += `<option value="${year}">${year}년</option>`;
+                });
+            }
+            
+            if (monthSelect) {
+                monthSelect.innerHTML = '<option value="">전체 월</option>';
+                months.forEach(month => {
+                    const monthName = parseInt(month) + '월';
+                    monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
+                });
+            }
+        }
+
+        function updateStats() {
+            const totalElement = document.getElementById('totalReports');
+            const latestElement = document.getElementById('latestDate');
+            
+            if (totalElement) {
+                totalElement.textContent = allReports.length;
+            }
+            
+            if (latestElement && allReports.length > 0) {
+                const latestDate = new Date(allReports[0].date);
+                latestElement.textContent = latestDate.toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit'
+                });
+            }
+        }
+
+        // 초기화 함수
+        async function init() {
+            try {
+                // 차트들 병렬로 로드
+                Promise.all([
+                    createCoffeeChart(),
+                    createUSDChart(),
+                    createCFTCChart(),
+                    createICOChart()
+                ]);
+
+                // 보고서 데이터 로드 (자동 검색 + JSON)
+                allReports = await loadAllReports();
+                updateFilters();
+                updateStats();
+                renderReports();
+                
+                // 이벤트 리스너 설정
+                document.getElementById('searchInput').addEventListener('input', filterReports);
+                document.getElementById('yearFilter').addEventListener('change', filterReports);
+                document.getElementById('monthFilter').addEventListener('change', filterReports);
+                
+            } catch (error) {
+                console.error('초기화 중 오류:', error);
+                const loadingStatus = document.getElementById('loadingStatus');
+                loadingStatus.innerHTML = '<span style="color: #e74c3c;">⚠️ 시스템 초기화 중 오류가 발생했습니다.</span>';
+            }
+        }
+
+        // 페이지 로드시 초기화 실행
+        init(); = chartData.length;
             const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
             
             for (let i = 0; i < totalPoints; i += interval) {
@@ -844,235 +1215,4 @@
 
             // 날짜 라벨 생성 (3-6개월 간격)
             const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.ico = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: 'ICO Composite Index',
-                        data: chartData,
-                        borderColor: '#9B59B6',
-                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 8
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'I-CIP (cents/lb)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // reports.json 파일에서 데이터 로드 (기존 코드 그대로 유지)
-        async function loadReportsFromJSON() {
-            try {
-                const response = await fetch('reports.json');
-                if (response.ok) {
-                    const data = await response.json();
-                    return data.reports || [];
-                } else {
-                    // reports.json이 없으면 기본 데이터 사용
-                    return [
-                        {
-                            date: '2025-06-08',
-                            displayDate: '2025년 6월 8일',
-                            title: '커피 선물 시장 주간 동향',
-                            subtitle: 'Coffee Futures Market Weekly Update',
-                            summary: '커피 선물이 최근 1주일간 5.17% 상승하며 변동성이 지속되고 있습니다.',
-                            tags: ['아라비카', '로부스타', '브라질생산량', '베트남수출', 'ICE재고'],
-                            link: 'Reports/2025/06/2025-06-08.html',
-                            year: '2025',
-                            month: '06'
-                        },
-                        {
-                            date: '2025-05-31',
-                            displayDate: '2025년 5월 31일',
-                            title: '커피 선물 시장 주간 동향',
-                            subtitle: 'Coffee Futures Market Weekly Update',
-                            summary: '커피 선물 시장이 지난 한 달간의 하락세를 연장하며 새로운 저점을 기록했습니다.',
-                            tags: ['아라비카', '로부스타', '브라질생산', '시장동향', '베트남생산', '기후변화', 'USDA보고서'],
-                            link: 'Reports/2025/05/2025-05-31.html',
-                            year: '2025',
-                            month: '05'
-                        }
-                    ];
-                }
-            } catch (error) {
-                console.error('보고서 로딩 중 오류:', error);
-                return [];
-            }
-        }
-
-        function renderReports(filteredReports = allReports) {
-            const grid = document.getElementById('reportsGrid');
-            const noResults = document.getElementById('noResults');
-            
-            if (filteredReports.length === 0) {
-                grid.style.display = 'none';
-                noResults.style.display = 'block';
-                return;
-            }
-            
-            grid.style.display = 'grid';
-            noResults.style.display = 'none';
-            
-            grid.innerHTML = filteredReports.map(report => `
-                <div class="report-card" onclick="window.location.href='${report.link}'">
-                    <div class="report-date">${report.displayDate}</div>
-                    <h3 class="report-title">${report.title}</h3>
-                    <p class="report-summary">${report.summary}</p>
-                    <div class="report-tags">
-                        ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                    <a href="${report.link}" class="read-more">보고서 읽기</a>
-                </div>
-            `).join('');
-        }
-
-        function filterReports() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const yearFilter = document.getElementById('yearFilter').value;
-            const monthFilter = document.getElementById('monthFilter').value;
-            
-            const filtered = allReports.filter(report => {
-                const matchesSearch = report.title.toLowerCase().includes(searchTerm) || 
-                                    report.summary.toLowerCase().includes(searchTerm) ||
-                                    report.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-                const matchesYear = !yearFilter || report.year === yearFilter;
-                const matchesMonth = !monthFilter || report.month === monthFilter;
-                
-                return matchesSearch && matchesYear && matchesMonth;
-            });
-            
-            renderReports(filtered);
-        }
-
-        function updateFilters() {
-            const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
-            const months = [...new Set(allReports.map(r => r.month))].sort();
-            
-            const yearSelect = document.getElementById('yearFilter');
-            const monthSelect = document.getElementById('monthFilter');
-            
-            if (yearSelect) {
-                yearSelect.innerHTML = '<option value="">전체 년도</option>';
-                years.forEach(year => {
-                    yearSelect.innerHTML += `<option value="${year}">${year}년</option>`;
-                });
-            }
-            
-            if (monthSelect) {
-                monthSelect.innerHTML = '<option value="">전체 월</option>';
-                months.forEach(month => {
-                    const monthName = parseInt(month) + '월';
-                    monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
-                });
-            }
-        }
-
-        function updateStats() {
-            const totalElement = document.getElementById('totalReports');
-            const latestElement = document.getElementById('latestDate');
-            
-            if (totalElement) {
-                totalElement.textContent = allReports.length;
-            }
-            
-            if (latestElement && allReports.length > 0) {
-                latestElement.textContent = allReports[0].displayDate.substring(0, 7);
-            }
-        }
-
-        // 초기화 함수
-        async function init() {
-            try {
-                // 차트들 병렬로 로드
-                Promise.all([
-                    createCoffeeChart(),
-                    createUSDChart(),
-                    createCFTCChart(),
-                    createICOChart()
-                ]);
-
-                // 보고서 데이터 로드 (기존 기능 유지)
-                allReports = await loadReportsFromJSON();
-                updateFilters();
-                updateStats();
-                renderReports();
-                
-                // 이벤트 리스너 설정
-                document.getElementById('searchInput').addEventListener('input', filterReports);
-                document.getElementById('yearFilter').addEventListener('change', filterReports);
-                document.getElementById('monthFilter').addEventListener('change', filterReports);
-                
-            } catch (error) {
-                console.error('초기화 중 오류:', error);
-            }
-        }
-
-        // 페이지 로드시 초기화 실행
-        init();
-</script>
-</body>
-</html>
+            const totalPoints
