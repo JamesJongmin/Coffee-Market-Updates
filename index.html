@@ -495,6 +495,17 @@
     </div>
 
 <script>
+        // 즉시 실행되는 테스트 코드 (맨 위에)
+        console.log('🚀 JavaScript 파일 로드됨!');
+        console.log('현재 시간:', new Date().toLocaleString());
+        
+        // 라이브러리 즉시 확인
+        setTimeout(() => {
+            console.log('📊 Chart.js 사용 가능:', typeof Chart !== 'undefined');
+            console.log('📈 XLSX 사용 가능:', typeof XLSX !== 'undefined');
+            console.log('🌐 DOM 준비 상태:', document.readyState);
+        }, 100);
+
         let allReports = [];
         let charts = {};
 
@@ -1131,21 +1142,37 @@
             }
         }
 
-        // 페이지 로드시 초기화 실행
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM 로드 완료, 초기화 시작');
-            init();
-        });
-        
-        // 추가 로드 이벤트도 등록 (백업)
-        window.addEventListener('load', function() {
-            console.log('윈도우 로드 완료');
-            // DOM 이벤트가 실행되지 않은 경우에만 실행
-            if (!window.initStarted) {
-                window.initStarted = true;
+        // 단순한 즉시 실행
+        (function() {
+            console.log('🔥 즉시 실행 함수 시작');
+            
+            // 3초 후 강제 초기화
+            setTimeout(() => {
+                console.log('⏰ 3초 후 강제 초기화 시작');
+                if (typeof init === 'function') {
+                    init();
+                } else {
+                    console.error('❌ init 함수를 찾을 수 없음');
+                }
+            }, 3000);
+            
+            // DOM 준비되면 즉시 실행
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    console.log('📄 DOMContentLoaded 이벤트');
+                    init();
+                });
+            } else {
+                console.log('📄 DOM 이미 준비됨, 즉시 실행');
                 init();
             }
-        });
+            
+            // 윈도우 로드 이벤트
+            window.addEventListener('load', () => {
+                console.log('🪟 Window load 이벤트');
+            });
+            
+        })();
         
         // 즉시 테스트 함수 (개발자 도구에서 수동 실행용)
         window.testExcelLoad = async function() {
