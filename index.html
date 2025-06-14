@@ -569,6 +569,298 @@
             chartElement.style.display = 'block';
 
             const ctx = chartElement.getContext('2d');
+            charts.coffee = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Coffee Futures Price',
+                        data: chartData,
+                        borderColor: '#8B4513',
+                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = dateLabels.find(dl => dl.index === value);
+                                    return label ? label.label : '';
+                                },
+                                maxTicksLimit: 8
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (cents/lb)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createUSDChart() {
+            const data = await readExcelFile('usdbrl.xlsx');
+            const loadingElement = document.getElementById('loading-usd');
+            const chartElement = document.getElementById('usdChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map((row, index) => ({
+                x: index,
+                y: parseFloat(row.value),
+                date: parseDate(row.date)
+            })).filter(point => !isNaN(point.y));
+
+            // 날짜 라벨 생성 (3-6개월 간격)
+            const dateLabels = [];
+            const totalPoints = chartData.length;
+            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
+            
+            for (let i = 0; i < totalPoints; i += interval) {
+                if (chartData[i]) {
+                    const date = chartData[i].date;
+                    dateLabels.push({
+                        index: i,
+                        label: date.toLocaleDateString('ko-KR', { 
+                            year: '2-digit', 
+                            month: 'short' 
+                        })
+                    });
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.usd = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'USD/BRL Rate',
+                        data: chartData,
+                        borderColor: '#2E8B57',
+                        backgroundColor: 'rgba(46, 139, 87, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = dateLabels.find(dl => dl.index === value);
+                                    return label ? label.label : '';
+                                },
+                                maxTicksLimit: 8
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'BRL per USD'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createCFTCChart() {
+            const data = await readExcelFile('cftcpositions.xlsx');
+            const loadingElement = document.getElementById('loading-cftc');
+            const chartElement = document.getElementById('cftcChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map((row, index) => ({
+                x: index,
+                y: parseInt(row.value),
+                date: parseDate(row.date)
+            })).filter(point => !isNaN(point.y));
+
+            // 날짜 라벨 생성 (3-6개월 간격)
+            const dateLabels = [];
+            const totalPoints = chartData.length;
+            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
+            
+            for (let i = 0; i < totalPoints; i += interval) {
+                if (chartData[i]) {
+                    const date = chartData[i].date;
+                    dateLabels.push({
+                        index: i,
+                        label: date.toLocaleDateString('ko-KR', { 
+                            year: '2-digit', 
+                            month: 'short' 
+                        })
+                    });
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.cftc = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        label: 'Net Long Positions',
+                        data: chartData,
+                        backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
+                        borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = dateLabels.find(dl => dl.index === value);
+                                    return label ? label.label : '';
+                                },
+                                maxTicksLimit: 8
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Net Long Positions'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createICOChart() {
+            const data = await readExcelFile('icoicip.xlsx');
+            const loadingElement = document.getElementById('loading-ico');
+            const chartElement = document.getElementById('icoChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map((row, index) => ({
+                x: index,
+                y: parseFloat(row.value),
+                date: parseDate(row.date)
+            })).filter(point => !isNaN(point.y));
+
+            // 날짜 라벨 생성 (3-6개월 간격)
+            const dateLabels = [];
+            const totalPoints = chartData.length;
+            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
+            
+            for (let i = 0; i < totalPoints; i += interval) {
+                if (chartData[i]) {
+                    const date = chartData[i].date;
+                    dateLabels.push({
+                        index: i,
+                        label: date.toLocaleDateString('ko-KR', { 
+                            year: '2-digit', 
+                            month: 'short' 
+                        })
+                    });
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
             charts.ico = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -926,296 +1218,4 @@
 
 </script>
 </body>
-</html> 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.coffee = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: 'Coffee Futures Price',
-                        data: chartData,
-                        borderColor: '#8B4513',
-                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 8
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Price (cents/lb)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        async function createUSDChart() {
-            const data = await readExcelFile('usdbrl.xlsx');
-            const loadingElement = document.getElementById('loading-usd');
-            const chartElement = document.getElementById('usdChart');
-            
-            if (!data) {
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-                return;
-            }
-
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseFloat(row.value),
-                date: parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (3-6개월 간격)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.usd = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: 'USD/BRL Rate',
-                        data: chartData,
-                        borderColor: '#2E8B57',
-                        backgroundColor: 'rgba(46, 139, 87, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 8
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'BRL per USD'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        async function createCFTCChart() {
-            const data = await readExcelFile('cftcpositions.xlsx');
-            const loadingElement = document.getElementById('loading-cftc');
-            const chartElement = document.getElementById('cftcChart');
-            
-            if (!data) {
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-                return;
-            }
-
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseInt(row.value),
-                date: parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (3-6개월 간격)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.cftc = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    datasets: [{
-                        label: 'Net Long Positions',
-                        data: chartData,
-                        backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
-                        borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 8
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Net Long Positions'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        async function createICOChart() {
-            const data = await readExcelFile('icoicip.xlsx');
-            const loadingElement = document.getElementById('loading-ico');
-            const chartElement = document.getElementById('icoChart');
-            
-            if (!data) {
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-                return;
-            }
-
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseFloat(row.value),
-                date: parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (3-6개월 간격)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-
-            loadingElement.style.display =
+</html>
