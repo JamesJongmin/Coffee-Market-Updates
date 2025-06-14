@@ -322,6 +322,14 @@
             text-decoration: underline;
         }
         
+        /* 로딩 상태 표시 */
+        .reports-loading {
+            text-align: center;
+            padding: 40px;
+            color: #8B4513;
+            font-size: 1.1em;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -429,11 +437,11 @@
 
         <div class="stats-bar">
             <div class="stat-box">
-                <div class="stat-number" id="totalReports">1</div>
+                <div class="stat-number" id="totalReports">-</div>
                 <div class="stat-label">총 보고서 수</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" id="latestDate">2025.06</div>
+                <div class="stat-number" id="latestDate">-</div>
                 <div class="stat-label">최신 업데이트</div>
             </div>
             <div class="stat-box">
@@ -451,17 +459,19 @@
                 <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
                 <select class="filter-select" id="yearFilter">
                     <option value="">전체 년도</option>
-                    <option value="2025">2025년</option>
                 </select>
                 <select class="filter-select" id="monthFilter">
                     <option value="">전체 월</option>
-                    <option value="05">5월</option>
-                    <option value="06">6월</option>
                 </select>
             </div>
         </div>
 
-        <div class="reports-grid" id="reportsGrid">
+        <div class="reports-loading" id="reportsLoading">
+            <div class="spinner" style="margin: 0 auto 15px;"></div>
+            보고서 목록을 불러오는 중...
+        </div>
+
+        <div class="reports-grid" id="reportsGrid" style="display: none;">
             <!-- 보고서 카드들이 여기에 동적으로 추가됩니다 -->
         </div>
 
@@ -483,6 +493,7 @@
             </p>
         </footer>
     </div>
+
 <script>
         let allReports = [];
         let charts = {};
@@ -533,303 +544,11 @@
             return new Date(dateValue);
         }
 
-        // 차트 생성 함수들
+        // 차트 생성 함수들 (기존 코드 유지)
         async function createCoffeeChart() {
             const data = await readExcelFile('coffeefutures.xlsx');
             const loadingElement = document.getElementById('loading-coffee');
             const chartElement = document.getElementById('coffeeChart');
-            
-            if (!data) {
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-                return;
-            }
-
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseFloat(row.value),
-                date: parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (3-6개월 간격)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.coffee = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: 'Coffee Futures Price',
-                        data: chartData,
-                        borderColor: '#8B4513',
-                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 8
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Price (cents/lb)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        async function createUSDChart() {
-            const data = await readExcelFile('usdbrl.xlsx');
-            const loadingElement = document.getElementById('loading-usd');
-            const chartElement = document.getElementById('usdChart');
-            
-            if (!data) {
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-                return;
-            }
-
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseFloat(row.value),
-                date: parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (3-6개월 간격)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.usd = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: 'USD/BRL Rate',
-                        data: chartData,
-                        borderColor: '#2E8B57',
-                        backgroundColor: 'rgba(46, 139, 87, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 8
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'BRL per USD'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        async function createCFTCChart() {
-            const data = await readExcelFile('cftcpositions.xlsx');
-            const loadingElement = document.getElementById('loading-cftc');
-            const chartElement = document.getElementById('cftcChart');
-            
-            if (!data) {
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-                return;
-            }
-
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseInt(row.value),
-                date: parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (3-6개월 간격)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.cftc = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    datasets: [{
-                        label: 'Net Long Positions',
-                        data: chartData,
-                        backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
-                        borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 8
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Net Long Positions'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        async function createICOChart() {
-            const data = await readExcelFile('icoicip.xlsx');
-            const loadingElement = document.getElementById('loading-ico');
-            const chartElement = document.getElementById('icoChart');
             
             if (!data) {
                 loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
@@ -924,49 +643,307 @@
             });
         }
 
-        // reports.json 파일에서 데이터 로드 (기존 코드 그대로 유지)
+        // 동적으로 Reports 폴더를 스캔하고 메타데이터를 추출하는 함수
+        async function scanReportsFolder() {
+            console.log('동적 보고서 스캔 시작...');
+            const reports = [];
+            
+            // 스캔할 폴더 패턴들 (최근 6개월)
+            const now = new Date();
+            const patterns = [];
+            
+            for (let monthOffset = 0; monthOffset < 6; monthOffset++) {
+                const targetDate = new Date(now.getFullYear(), now.getMonth() - monthOffset, 1);
+                const year = targetDate.getFullYear();
+                const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+                patterns.push(`Reports/${year}/${month}/`);
+            }
+            
+            for (const pattern of patterns) {
+                try {
+                    const files = await scanFolderForHTMLFiles(pattern);
+                    console.log(`${pattern}에서 ${files.length}개 파일 발견`);
+                    
+                    for (const file of files) {
+                        const metadata = await extractHTMLMetadata(file);
+                        if (metadata) {
+                            reports.push(metadata);
+                            console.log(`메타데이터 추출 완료: ${metadata.title}`);
+                        }
+                    }
+                } catch (error) {
+                    console.warn(`${pattern} 스캔 실패:`, error);
+                }
+            }
+            
+            return reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        // HTML 파일에서 메타데이터 추출
+        async function extractHTMLMetadata(filePath) {
+            try {
+                console.log(`메타데이터 추출 중: ${filePath}`);
+                const response = await fetch(filePath);
+                if (!response.ok) return null;
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // 제목 추출 (우선순위: h1 > title)
+                let title = doc.querySelector('h1')?.textContent?.trim();
+                if (!title) {
+                    title = doc.querySelector('title')?.textContent?.trim();
+                }
+                if (!title || title.includes('Coffee Market Updates')) {
+                    title = '커피 선물 시장 분석';
+                }
+                
+                // 부제목 추출
+                let subtitle = doc.querySelector('.subtitle')?.textContent?.trim();
+                if (!subtitle) {
+                    subtitle = doc.querySelector('h2')?.textContent?.trim() || '';
+                }
+                
+                // 요약 추출 (Executive Summary에서)
+                let summary = '';
+                const executiveSummary = doc.querySelector('.executive-summary p');
+                if (executiveSummary) {
+                    summary = executiveSummary.textContent.trim();
+                    // HTML 태그나 특수문자 제거
+                    summary = summary.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ');
+                } else {
+                    // 대체: 첫 번째 문단
+                    const firstP = doc.querySelector('p');
+                    if (firstP) {
+                        summary = firstP.textContent.trim();
+                        summary = summary.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ');
+                    }
+                }
+                
+                // 요약 길이 제한
+                if (summary.length > 200) {
+                    summary = summary.substring(0, 200) + '...';
+                }
+                
+                if (!summary) {
+                    summary = '커피 선물 시장의 최신 동향과 분석을 제공합니다.';
+                }
+                
+                // 스마트 태그 추출 시스템
+                const tags = await extractSmartTags(doc, filePath);
+                
+                // 파일명에서 날짜 추출
+                const fileNameMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})\.html/);
+                if (!fileNameMatch) return null;
+                
+                const [, year, month, day] = fileNameMatch;
+                const date = `${year}-${month}-${day}`;
+                const displayDate = `${year}년 ${parseInt(month)}월 ${parseInt(day)}일`;
+                
+                return {
+                    date,
+                    displayDate,
+                    title,
+                    subtitle,
+                    summary,
+                    tags: [...new Set(tags)].slice(0, 8), // 중복 제거 및 최대 8개
+                    link: filePath,
+                    year,
+                    month: month.padStart(2, '0')
+                };
+                
+            } catch (error) {
+                console.error(`메타데이터 추출 실패 ${filePath}:`, error);
+                return null;
+            }
+        }
+
+        // 스마트 태그 추출 시스템
+        async function extractSmartTags(doc, filePath) {
+            const tags = new Set();
+            
+            // 1. 기존 태그 우선 추출
+            const existingTags = doc.querySelectorAll('.tag, .tags span');
+            existingTags.forEach(el => {
+                const tagText = el.textContent.trim();
+                if (tagText && tagText.length < 20 && tagText.length > 1) {
+                    tags.add(tagText);
+                }
+            });
+            
+            // 2. 기존 태그가 충분하면 그대로 사용
+            if (tags.size >= 5) {
+                return Array.from(tags);
+            }
+            
+            // 3. 컨텐츠 기반 스마트 태그 생성
+            const bodyText = doc.body.textContent.toLowerCase();
+            const titleText = (doc.querySelector('h1')?.textContent || '').toLowerCase();
+            const summaryText = (doc.querySelector('.executive-summary p, .main-story p')?.textContent || '').toLowerCase();
+            
+            // 핵심 키워드 사전 (카테고리별)
+            const keywordCategories = {
+                '아라비카': ['아라비카', 'arabica', 'kcn25', 'kcn', '7월물'],
+                '로부스타': ['로부스타', 'robusta', 'rmn25', 'rmn', '런던'],
+                '브라질': ['브라질', 'brazil', '브라질리언', '미나스', '세하도', '헤알'],
+                '베트남': ['베트남', 'vietnam', '베트남산', '중부고원', '달랏'],
+                '생산량': ['생산량', '수확', '작황', '생산', 'harvest', 'crop'],
+                '가격분석': ['가격', '센트', '상승', '하락', '변동성', '급등', '급락'],
+                '수출입': ['수출', '수입', '무역', 'export', 'import', '수출량'],
+                '재고': ['재고', 'inventory', 'stock', 'ice재고', '인증재고'],
+                '기술적분석': ['기술적', '지지선', '저항선', '차트', '패턴', 'stochastic'],
+                '기상': ['기상', '날씨', '강우', '가뭄', '서리', '엘니뇨', '라니냐'],
+                '투기': ['투기', 'cftc', '포지션', '헤지펀드', '매수', '매도'],
+                '시장동향': ['시장', '동향', '전망', '분석', '업계', '트렌드'],
+                '기업': ['스타벅스', '네슬레', 'jde', 'peet', 'nestlé', 'sbux'],
+                '정책': ['정부', '정책', '관세', '보조금', '규제', 'usda'],
+                '지지저항': ['지지선', '저항선', '돌파', '이탈', '테스트'],
+                '공급수요': ['공급', '수요', '적자', '흑자', '부족', '과잉'],
+                '선물거래': ['선물', 'futures', 'ice', '거래량', '미결제약정']
+            };
+            
+            // 키워드 빈도 및 중요도 계산
+            const keywordScores = {};
+            
+            Object.entries(keywordCategories).forEach(([category, keywords]) => {
+                let score = 0;
+                keywords.forEach(keyword => {
+                    // 제목에서 발견시 가중치 3배
+                    if (titleText.includes(keyword)) score += 3;
+                    // 요약에서 발견시 가중치 2배  
+                    if (summaryText.includes(keyword)) score += 2;
+                    // 본문에서 발견시 기본 점수
+                    const bodyMatches = (bodyText.match(new RegExp(keyword, 'g')) || []).length;
+                    score += bodyMatches * 0.5;
+                });
+                
+                if (score > 0) {
+                    keywordScores[category] = score;
+                }
+            });
+            
+            // 파일명 기반 추가 태그
+            if (filePath.includes('2025-06-13')) {
+                keywordScores['전망분석'] = (keywordScores['전망분석'] || 0) + 2;
+                keywordScores['심층분석'] = (keywordScores['심층분석'] || 0) + 2;
+            }
+            
+            // 특별 패턴 감지
+            if (bodyText.includes('executive summary') || bodyText.includes('핵심 요약')) {
+                keywordScores['종합분석'] = (keywordScores['종합분석'] || 0) + 1;
+            }
+            
+            if (bodyText.includes('주간') || bodyText.includes('weekly')) {
+                keywordScores['주간동향'] = (keywordScores['주간동향'] || 0) + 2;
+            }
+            
+            if (bodyText.includes('단기') || bodyText.includes('short-term')) {
+                keywordScores['단기전망'] = (keywordScores['단기전망'] || 0) + 2;
+            }
+            
+            // 수치/통계 언급시
+            if (bodyText.match(/\d+%|\d+센트|\d+포인트/)) {
+                keywordScores['수치분석'] = (keywordScores['수치분석'] || 0) + 1;
+            }
+            
+            // 점수 기준 상위 태그 선택
+            const sortedTags = Object.entries(keywordScores)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 8)
+                .map(([tag,]) => tag);
+            
+            // 기존 태그와 새 태그 합치기
+            sortedTags.forEach(tag => tags.add(tag));
+            
+            // 최소 태그 보장
+            if (tags.size < 3) {
+                tags.add('커피선물');
+                tags.add('시장분석'); 
+                tags.add('글로벌동향');
+            }
+            
+            console.log(`${filePath} 태그 추출 완료:`, Array.from(tags));
+            return Array.from(tags);
+        }
+
+        // 폴더에서 HTML 파일 목록 가져오기
+        async function scanFolderForHTMLFiles(folderPath) {
+            const files = [];
+            
+            // 날짜 패턴으로 파일 존재 여부 확인 (1일부터 31일까지)
+            for (let day = 1; day <= 31; day++) {
+                const dayStr = String(day).padStart(2, '0');
+                
+                // 폴더 경로에서 연도/월 추출
+                const pathMatch = folderPath.match(/Reports\/(\d{4})\/(\d{2})\//);
+                if (!pathMatch) continue;
+                
+                const [, year, month] = pathMatch;
+                const fileName = `${year}-${month}-${dayStr}.html`;
+                const fullPath = `${folderPath}${fileName}`;
+                
+                try {
+                    const response = await fetch(fullPath, { method: 'HEAD' });
+                    if (response.ok) {
+                        files.push(fullPath);
+                    }
+                } catch (error) {
+                    // 파일이 없으면 무시
+                }
+            }
+            
+            return files;
+        }
+
+        // reports.json 로드 시도, 실패시 동적 스캔
         async function loadReportsFromJSON() {
             try {
+                console.log('reports.json 로딩 시도...');
                 const response = await fetch('reports.json');
                 if (response.ok) {
                     const data = await response.json();
-                    return data.reports || [];
-                } else {
-                    // reports.json이 없으면 기본 데이터 사용
-                    return [
-                        {
-                            date: '2025-06-08',
-                            displayDate: '2025년 6월 8일',
-                            title: '커피 선물 시장 주간 동향',
-                            subtitle: 'Coffee Futures Market Weekly Update',
-                            summary: '커피 선물이 최근 1주일간 5.17% 상승하며 변동성이 지속되고 있습니다.',
-                            tags: ['아라비카', '로부스타', '브라질생산량', '베트남수출', 'ICE재고'],
-                            link: 'Reports/2025/06/2025-06-08.html',
-                            year: '2025',
-                            month: '06'
-                        },
-                        {
-                            date: '2025-05-31',
-                            displayDate: '2025년 5월 31일',
-                            title: '커피 선물 시장 주간 동향',
-                            subtitle: 'Coffee Futures Market Weekly Update',
-                            summary: '커피 선물 시장이 지난 한 달간의 하락세를 연장하며 새로운 저점을 기록했습니다.',
-                            tags: ['아라비카', '로부스타', '브라질생산', '시장동향', '베트남생산', '기후변화', 'USDA보고서'],
-                            link: 'Reports/2025/05/2025-05-31.html',
-                            year: '2025',
-                            month: '05'
-                        }
-                    ];
+                    if (data.reports && data.reports.length > 0) {
+                        console.log(`reports.json에서 ${data.reports.length}개 보고서 로드됨`);
+                        return data.reports;
+                    }
                 }
             } catch (error) {
-                console.error('보고서 로딩 중 오류:', error);
-                return [];
+                console.warn('reports.json 로드 실패, 동적 스캔 시작:', error);
             }
+            
+            // reports.json이 없거나 비어있으면 동적 스캔
+            console.log('동적 보고서 폴더 스캔 시작...');
+            const scannedReports = await scanReportsFolder();
+            
+            if (scannedReports.length === 0) {
+                // 스캔 결과가 없으면 기본 데이터 반환
+                console.log('스캔 결과 없음, 기본 데이터 사용');
+                return [
+                    {
+                        date: '2025-06-13',
+                        displayDate: '2025년 6월 13일',
+                        title: '단기 커피 선물 가격 전망 및 방향성 점검',
+                        subtitle: 'Short-term Coffee Futures Price Forecast',
+                        summary: 'KCN25는 349.90센트로 +0.60% 상승하며 1차 지지선을 상회 회복했습니다. 단기적으로는 브라질 수확 진행과 투기적 숏 포지션이 하방 압력으로 작용하나, 구조적으로는 글로벌 아라비카 적자가 강세 요인으로 작용합니다.',
+                        tags: ['아라비카', '로부스타', '브라질수확', '투기포지션', '기술적분석'],
+                        link: 'Reports/2025/06/2025-06-13.html',
+                        year: '2025',
+                        month: '06'
+                    }
+                ];
+            }
+            
+            console.log(`동적 스캔 완료: ${scannedReports.length}개 보고서`);
+            return scannedReports;
         }
 
         function renderReports(filteredReports = allReports) {
             const grid = document.getElementById('reportsGrid');
             const noResults = document.getElementById('noResults');
+            const loading = document.getElementById('reportsLoading');
+            
+            loading.style.display = 'none';
             
             if (filteredReports.length === 0) {
                 grid.style.display = 'none';
@@ -1055,7 +1032,7 @@
                     createICOChart()
                 ]);
 
-                // 보고서 데이터 로드 (기존 기능 유지)
+                // 보고서 데이터 로드 (동적 스캔 포함)
                 allReports = await loadReportsFromJSON();
                 updateFilters();
                 updateStats();
@@ -1066,13 +1043,305 @@
                 document.getElementById('yearFilter').addEventListener('change', filterReports);
                 document.getElementById('monthFilter').addEventListener('change', filterReports);
                 
+                console.log('초기화 완료:', allReports.length, '개 보고서');
+                
             } catch (error) {
                 console.error('초기화 중 오류:', error);
+                // 오류 발생 시 로딩 화면 숨기기
+                document.getElementById('reportsLoading').style.display = 'none';
+                document.getElementById('noResults').style.display = 'block';
             }
         }
 
         // 페이지 로드시 초기화 실행
         init();
-</script>
-</body>
-</html>
+
+                            year: '2-digit', 
+                            month: 'short' 
+                        })
+                    });
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.coffee = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Coffee Futures Price',
+                        data: chartData,
+                        borderColor: '#8B4513',
+                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = dateLabels.find(dl => dl.index === value);
+                                    return label ? label.label : '';
+                                },
+                                maxTicksLimit: 8
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (cents/lb)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createUSDChart() {
+            const data = await readExcelFile('usdbrl.xlsx');
+            const loadingElement = document.getElementById('loading-usd');
+            const chartElement = document.getElementById('usdChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map((row, index) => ({
+                x: index,
+                y: parseFloat(row.value),
+                date: parseDate(row.date)
+            })).filter(point => !isNaN(point.y));
+
+            const dateLabels = [];
+            const totalPoints = chartData.length;
+            const interval = Math.max(1, Math.floor(totalPoints / 6));
+            
+            for (let i = 0; i < totalPoints; i += interval) {
+                if (chartData[i]) {
+                    const date = chartData[i].date;
+                    dateLabels.push({
+                        index: i,
+                        label: date.toLocaleDateString('ko-KR', { 
+                            year: '2-digit', 
+                            month: 'short' 
+                        })
+                    });
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.usd = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'USD/BRL Rate',
+                        data: chartData,
+                        borderColor: '#2E8B57',
+                        backgroundColor: 'rgba(46, 139, 87, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = dateLabels.find(dl => dl.index === value);
+                                    return label ? label.label : '';
+                                },
+                                maxTicksLimit: 8
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'BRL per USD'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createCFTCChart() {
+            const data = await readExcelFile('cftcpositions.xlsx');
+            const loadingElement = document.getElementById('loading-cftc');
+            const chartElement = document.getElementById('cftcChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map((row, index) => ({
+                x: index,
+                y: parseInt(row.value),
+                date: parseDate(row.date)
+            })).filter(point => !isNaN(point.y));
+
+            const dateLabels = [];
+            const totalPoints = chartData.length;
+            const interval = Math.max(1, Math.floor(totalPoints / 6));
+            
+            for (let i = 0; i < totalPoints; i += interval) {
+                if (chartData[i]) {
+                    const date = chartData[i].date;
+                    dateLabels.push({
+                        index: i,
+                        label: date.toLocaleDateString('ko-KR', { 
+                            year: '2-digit', 
+                            month: 'short' 
+                        })
+                    });
+                }
+            }
+
+            loadingElement.style.display = 'none';
+            chartElement.style.display = 'block';
+
+            const ctx = chartElement.getContext('2d');
+            charts.cftc = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        label: 'Net Long Positions',
+                        data: chartData,
+                        backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
+                        borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = dateLabels.find(dl => dl.index === value);
+                                    return label ? label.label : '';
+                                },
+                                maxTicksLimit: 8
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Net Long Positions'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function createICOChart() {
+            const data = await readExcelFile('icoicip.xlsx');
+            const loadingElement = document.getElementById('loading-ico');
+            const chartElement = document.getElementById('icoChart');
+            
+            if (!data) {
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
+                return;
+            }
+
+            const chartData = data.map((row, index) => ({
+                x: index,
+                y: parseFloat(row.value),
+                date: parseDate(row.date)
+            })).filter(point => !isNaN(point.y));
+
+            const dateLabels = [];
+            const totalPoints = chartData.length;
+            const interval = Math.max(1, Math.floor(totalPoints / 6));
+            
+            for (let i = 0; i < totalPoints; i += interval) {
+                if (chartData[i]) {
+                    const date = chartData[i].date;
+                    dateLabels.push({
+                        index: i,
+                        label: date.toLocaleDateString('ko-KR', {
