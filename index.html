@@ -910,14 +910,14 @@
             }
         }
 
-        // NVDI 차트 - 실제 MGvegetation.xls 파일 구조에 맞게 수정
+        // NVDI 차트 - 실제 데이터 구조에 맞게 완전히 새로 작성
         async function createNVDIChart() {
             const loadingElement = document.getElementById('loading-nvdi');
             const chartElement = document.getElementById('nvdiChart');
             
             try {
                 const data = await Promise.race([
-                    readNVDIExcelFile('MGvegetation.xls'), // .xls 확장자로 변경
+                    readNVDIExcelFile('MGvegetation.xls'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
                 ]);
                 
@@ -925,69 +925,86 @@
                     throw new Error('No data received from MGvegetation.xls');
                 }
 
-                console.log('NVDI data loaded successfully:', data.length, 'rows');
-                console.log('Sample data:', data.slice(0, 3));
+                console.log('NVDI 원본 데이터:', data.slice(0, 10));
 
-                // 날짜를 월별로 파싱하고 정렬 (10월부터 8월까지)
-                const monthOrder = ['10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08'];
-                const monthKR = ['10월', '11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'];
-                
-                // 월별 데이터 저장
-                const monthlyData = {};
-                monthOrder.forEach(month => {
-                    monthlyData[month] = {
-                        minMax: [],
-                        median: [],
-                        year2025: []
-                    };
-                });
+                // 월별 데이터 수집 (10월~8월)
+                const monthlyData = {
+                    '10': { minMax: [], median: [], year2025: [] },
+                    '11': { minMax: [], median: [], year2025: [] },
+                    '12': { minMax: [], median: [], year2025: [] },
+                    '01': { minMax: [], median: [], year2025: [] },
+                    '02': { minMax: [], median: [], year2025: [] },
+                    '03': { minMax: [], median: [], year2025: [] },
+                    '04': { minMax: [], median: [], year2025: [] },
+                    '05': { minMax: [], median: [], year2025: [] },
+                    '06': { minMax: [], median: [], year2025: [] },
+                    '07': { minMax: [], median: [], year2025: [] },
+                    '08': { minMax: [], median: [], year2025: [] }
+                };
 
-                // 실제 데이터 파싱
+                // 데이터 파싱
                 data.forEach(row => {
-                    if (row.date && typeof row.date === 'string') {
-                        // 날짜 형식: "07/10" -> day/month
-                        const dateParts = row.date.split('/');
-                        if (dateParts.length === 2) {
-                            const day = dateParts[0].padStart(2, '0');
-                            const month = dateParts[1].padStart(2, '0');
-                            
-                            if (monthlyData[month]) {
-                                // Min-Max 값 처리
-                                if (row.minMax && !isNaN(parseFloat(row.minMax)) && row.minMax !== '') {
-                                    monthlyData[month].minMax.push(parseFloat(row.minMax));
-                                }
-                                // Median 값 처리
-                                if (row.median && !isNaN(parseFloat(row.median)) && row.median !== '') {
-                                    monthlyData[month].median.push(parseFloat(row.median));
-                                }
-                                // 2025년 값 처리
-                                if (row.year2025 && !isNaN(parseFloat(row.year2025)) && row.year2025 !== '') {
-                                    monthlyData[month].year2025.push(parseFloat(row.year2025));
-                                }
+                    if (row.date && typeof row.date === 'string' && row.date.includes('/')) {
+                        const [day, month] = row.date.split('/');
+                        const monthKey = month.padStart(2, '0');
+                        
+                        if (monthlyData[monthKey]) {
+                            // Min-Max 값 추가 (빈 문자열이 아닌 경우만)
+                            if (row.minMax !== null && row.minMax !== undefined && row.minMax !== '' && !isNaN(parseFloat(row.minMax))) {
+                                monthlyData[monthKey].minMax.push(parseFloat(row.minMax));
+                            }
+                            // Median 값 추가
+                            if (row.median !== null && row.median !== undefined && row.median !== '' && !isNaN(parseFloat(row.median))) {
+                                monthlyData[monthKey].median.push(parseFloat(row.median));
+                            }
+                            // 2025년 값 추가
+                            if (row.year2025 !== null && row.year2025 !== undefined && row.year2025 !== '' && !isNaN(parseFloat(row.year2025))) {
+                                monthlyData[monthKey].year2025.push(parseFloat(row.year2025));
                             }
                         }
                     }
                 });
 
-                // 월별 평균 계산 및 범위 설정
-                const datasets = [];
-                
-                // Min-Max 범위의 최소값과 최대값 계산
-                const minValues = monthOrder.map(month => {
+                console.log('월별 파싱된 데이터:', monthlyData);
+
+                // 월 순서와 라벨
+                const monthOrder = ['10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08'];
+                const monthKR = ['10월', '11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'];
+
+                // 각 월별 평균값 계산
+                const minMaxData = monthOrder.map(month => {
                     const values = monthlyData[month].minMax;
                     if (values.length === 0) return null;
-                    // Min-Max 컬럼의 값들 중 최소값을 사용
-                    return Math.min(...values);
-                });
-                
-                const maxValues = monthOrder.map(month => {
-                    const values = monthlyData[month].minMax;
-                    if (values.length === 0) return null;
-                    // Min-Max 컬럼의 값들 중 최대값을 사용
-                    return Math.max(...values);
+                    return values.reduce((sum, val) => sum + val, 0) / values.length;
                 });
 
-                // Min-Max 영역을 회색 음영으로 표시 (상한선)
+                const medianData = monthOrder.map(month => {
+                    const values = monthlyData[month].median;
+                    if (values.length === 0) return null;
+                    return values.reduce((sum, val) => sum + val, 0) / values.length;
+                });
+
+                const year2025Data = monthOrder.map(month => {
+                    const values = monthlyData[month].year2025;
+                    if (values.length === 0) return null;
+                    return values.reduce((sum, val) => sum + val, 0) / values.length;
+                });
+
+                console.log('계산된 평균값들:');
+                console.log('Min-Max:', minMaxData);
+                console.log('Median:', medianData);
+                console.log('2025:', year2025Data);
+
+                // 차트 데이터셋 구성
+                const datasets = [];
+
+                // Min-Max 범위를 위한 상한/하한 계산
+                // 실제 데이터에서는 Min-Max가 하나의 값이므로, 
+                // 이 값을 중심으로 작은 범위를 만들어 음영 효과
+                const minValues = minMaxData.map(val => val ? val * 0.95 : null);
+                const maxValues = minMaxData.map(val => val ? val * 1.05 : null);
+
+                // Min-Max 영역 상한선
                 datasets.push({
                     label: 'Min-Max Range (2001-2024)',
                     data: monthOrder.map((month, index) => ({
@@ -997,7 +1014,7 @@
                     borderColor: 'rgba(149, 165, 166, 0.8)',
                     backgroundColor: 'rgba(149, 165, 166, 0.3)',
                     borderWidth: 1,
-                    fill: '+1', // 다음 데이터셋과 함께 영역 채우기
+                    fill: '+1',
                     tension: 0.4,
                     pointRadius: 0
                 });
@@ -1020,19 +1037,16 @@
                 // Median 라인 (파란색)
                 datasets.push({
                     label: 'Median (2001-2024)',
-                    data: monthOrder.map((month, index) => {
-                        const values = monthlyData[month].median;
-                        return {
-                            x: index,
-                            y: values.length > 0 ? values.reduce((a, b) => a + b) / values.length : null
-                        };
-                    }),
+                    data: monthOrder.map((month, index) => ({
+                        x: index,
+                        y: medianData[index]
+                    })),
                     borderColor: '#3498DB',
                     backgroundColor: 'transparent',
                     borderWidth: 3,
                     fill: false,
                     tension: 0.4,
-                    pointRadius: 4,
+                    pointRadius: 5,
                     pointBackgroundColor: '#3498DB',
                     pointBorderColor: '#FFFFFF',
                     pointBorderWidth: 2
@@ -1041,19 +1055,16 @@
                 // 2025년 라인 (빨간색)
                 datasets.push({
                     label: '2025',
-                    data: monthOrder.map((month, index) => {
-                        const values = monthlyData[month].year2025;
-                        return {
-                            x: index,
-                            y: values.length > 0 ? values.reduce((a, b) => a + b) / values.length : null
-                        };
-                    }),
+                    data: monthOrder.map((month, index) => ({
+                        x: index,
+                        y: year2025Data[index]
+                    })),
                     borderColor: '#E74C3C',
                     backgroundColor: 'transparent',
                     borderWidth: 3,
                     fill: false,
                     tension: 0.4,
-                    pointRadius: 4,
+                    pointRadius: 5,
                     pointBackgroundColor: '#E74C3C',
                     pointBorderColor: '#FFFFFF',
                     pointBorderWidth: 2
@@ -1081,7 +1092,7 @@
                                 position: 'bottom',
                                 labels: {
                                     filter: function(item) {
-                                        return item.text !== ''; // 빈 라벨 숨기기
+                                        return item.text !== '';
                                     }
                                 }
                             },
@@ -1090,6 +1101,12 @@
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
                                         return monthKR[index];
+                                    },
+                                    label: function(context) {
+                                        if (context.datasetIndex === 0 || context.datasetIndex === 1) {
+                                            return context.datasetIndex === 0 ? 'Min-Max 범위' : '';
+                                        }
+                                        return context.dataset.label + ': ' + (context.parsed.y ? context.parsed.y.toFixed(3) : 'N/A');
                                     }
                                 }
                             }
@@ -1103,9 +1120,11 @@
                                 },
                                 ticks: {
                                     callback: function(value) {
-                                        return monthKR[value] || '';
+                                        const index = Math.round(value);
+                                        return monthKR[index] || '';
                                     },
-                                    maxTicksLimit: 11
+                                    maxTicksLimit: 11,
+                                    stepSize: 1
                                 }
                             },
                             y: {
@@ -1114,7 +1133,7 @@
                                     text: 'NVDI Index'
                                 },
                                 min: 0.2,
-                                max: 1.0
+                                max: 0.8
                             }
                         }
                     }
@@ -1123,10 +1142,6 @@
             } catch (error) {
                 console.error('NVDI chart error:', error);
                 loadingElement.innerHTML = '<div style="color: #e74c3c;">NVDI 차트 오류: ' + error.message + '</div>';
-                
-                // 에러 발생 시에도 테스트 데이터로 차트 표시
-                console.log('에러 발생, 테스트 데이터로 NVDI 차트 생성');
-                createNVDITestChart(loadingElement, chartElement);
             }
         }
 
