@@ -550,10 +550,10 @@
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
 
-            // 날짜 라벨 생성 (3-6개월 간격)
+            // 날짜 라벨 생성 (분기별 표시)
             const dateLabels = [];
             const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
+            const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
             
             for (let i = 0; i < totalPoints; i += interval) {
                 if (chartData[i]) {
@@ -566,6 +566,19 @@
                         })
                     });
                 }
+            }
+            
+            // 마지막 포인트도 포함
+            if (chartData.length > 0) {
+                const lastIndex = chartData.length - 1;
+                const lastDate = chartData[lastIndex].date;
+                dateLabels.push({
+                    index: lastIndex,
+                    label: lastDate.toLocaleDateString('ko-KR', { 
+                        year: '2-digit', 
+                        month: 'short' 
+                    })
+                });
             }
 
             loadingElement.style.display = 'none';
@@ -632,7 +645,9 @@
                                     const label = dateLabels.find(dl => dl.index === value);
                                     return label ? label.label : '';
                                 },
-                                maxTicksLimit: 8
+                                maxTicksLimit: 12,
+                                maxRotation: 45,
+                                minRotation: 0
                             }
                         },
                         y: {
@@ -662,10 +677,10 @@
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
 
-            // 날짜 라벨 생성 (3-6개월 간격)
+            // 날짜 라벨 생성 (분기별 표시)
             const dateLabels = [];
             const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
+            const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
             
             for (let i = 0; i < totalPoints; i += interval) {
                 if (chartData[i]) {
@@ -678,6 +693,19 @@
                         })
                     });
                 }
+            }
+            
+            // 마지막 포인트도 포함
+            if (chartData.length > 0) {
+                const lastIndex = chartData.length - 1;
+                const lastDate = chartData[lastIndex].date;
+                dateLabels.push({
+                    index: lastIndex,
+                    label: lastDate.toLocaleDateString('ko-KR', { 
+                        year: '2-digit', 
+                        month: 'short' 
+                    })
+                });
             }
 
             loadingElement.style.display = 'none';
@@ -744,7 +772,9 @@
                                     const label = dateLabels.find(dl => dl.index === value);
                                     return label ? label.label : '';
                                 },
-                                maxTicksLimit: 8
+                                maxTicksLimit: 12,
+                                maxRotation: 45,
+                                minRotation: 0
                             }
                         },
                         y: {
@@ -774,10 +804,10 @@
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
 
-            // 날짜 라벨 생성 (3-6개월 간격)
+            // 날짜 라벨 생성 (분기별 표시)
             const dateLabels = [];
             const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 6)); // 약 6개 구간
+            const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
             
             for (let i = 0; i < totalPoints; i += interval) {
                 if (chartData[i]) {
@@ -790,6 +820,19 @@
                         })
                     });
                 }
+            }
+            
+            // 마지막 포인트도 포함
+            if (chartData.length > 0) {
+                const lastIndex = chartData.length - 1;
+                const lastDate = chartData[lastIndex].date;
+                dateLabels.push({
+                    index: lastIndex,
+                    label: lastDate.toLocaleDateString('ko-KR', { 
+                        year: '2-digit', 
+                        month: 'short' 
+                    })
+                });
             }
 
             loadingElement.style.display = 'none';
@@ -840,7 +883,9 @@
                                     const label = dateLabels.find(dl => dl.index === value);
                                     return label ? label.label : '';
                                 },
-                                maxTicksLimit: 8
+                                maxTicksLimit: 12,
+                                maxRotation: 45,
+                                minRotation: 0
                             }
                         },
                         y: {
