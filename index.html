@@ -924,23 +924,132 @@
             });
         }
 
-        // reports.json 파일에서 데이터 로드 (기존 코드 그대로 유지)
+        // 키워드 추출 함수
+        function extractKeywords(text) {
+            // 커피 관련 전문 용어 사전 (우선순위 높음)
+            const coffeeTerms = {
+                '아라비카': 3, '로부스타': 3, '커피': 2,
+                '브라질': 2, '베트남': 2, '콜롬비아': 2, '에티오피아': 2,
+                '생산': 2, '수출': 2, '수입': 2, '재고': 2,
+                'ICE': 2, 'NYSE': 2, 'LIFFE': 2,
+                '선물': 2, '현물': 2, '가격': 2,
+                '수확': 2, '작황': 2, '날씨': 2, '가뭄': 2, '강우': 2,
+                'USDA': 2, 'ICO': 2, 'CONAB': 2,
+                '투기': 1, '헤지': 1, '펀드': 1,
+                '상승': 1, '하락': 1, '변동성': 1,
+                '지지': 1, '저항': 1, '돌파': 1,
+                '톤': 1, '센트': 1, '달러': 1
+            };
+
+            // 텍스트 정제
+            const cleanText = text.toLowerCase()
+                .replace(/[^\w\s가-힣]/g, ' ')
+                .replace(/\s+/g, ' ');
+
+            // 단어 빈도 계산
+            const wordCount = {};
+            const words = cleanText.split(' ');
+            
+            words.forEach(word => {
+                if (word.length >= 2) {
+                    wordCount[word] = (wordCount[word] || 0) + 1;
+                }
+            });
+
+            // 점수 계산 (전문용어 가중치 + 빈도)
+            const wordScores = {};
+            Object.keys(wordCount).forEach(word => {
+                const baseScore = wordCount[word];
+                const termWeight = coffeeTerms[word] || 0;
+                wordScores[word] = baseScore + (termWeight * 2);
+            });
+
+            // 상위 키워드 선별
+            const sortedWords = Object.entries(wordScores)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 8)
+                .map(([word]) => word)
+                .filter(word => word.length >= 2);
+
+            return sortedWords;
+        }
+
+        // HTML 파일에서 텍스트 추출
+        async function extractTextFromHTML(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) return '';
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // script, style 태그 제거
+                const scripts = doc.querySelectorAll('script, style');
+                scripts.forEach(el => el.remove());
+                
+                // 본문 텍스트만 추출
+                const bodyText = doc.body ? doc.body.textContent : '';
+                return bodyText.replace(/\s+/g, ' ').trim();
+                
+            } catch (error) {
+                console.error(`텍스트 추출 실패 ${url}:`, error);
+                return '';
+            }
+        }
+
+        // 보고서에 자동 태그 추가
+        async function addAutoTags(reports) {
+            const updatedReports = [];
+            
+            for (const report of reports) {
+                try {
+                    const text = await extractTextFromHTML(report.link);
+                    if (text) {
+                        const autoTags = extractKeywords(text);
+                        
+                        updatedReports.push({
+                            ...report,
+                            tags: autoTags.slice(0, 6) // 최대 6개 태그, 순전히 자동 추출된 태그만 사용
+                        });
+                    } else {
+                        // 텍스트 추출 실패 시 빈 태그 배열
+                        updatedReports.push({
+                            ...report,
+                            tags: []
+                        });
+                    }
+                } catch (error) {
+                    console.error(`태그 추출 실패 ${report.link}:`, error);
+                    updatedReports.push({
+                        ...report,
+                        tags: []
+                    });
+                }
+            }
+            
+            return updatedReports;
+        }
+
+        // reports.json 파일에서 데이터 로드 및 자동 태그 추가
         async function loadReportsFromJSON() {
             try {
                 const response = await fetch('reports.json');
+                let reports = [];
+                
                 if (response.ok) {
                     const data = await response.json();
-                    return data.reports || [];
+                    reports = data.reports || [];
                 } else {
                     // reports.json이 없으면 기본 데이터 사용
-                    return [
+                    reports = [
                         {
                             date: '2025-06-14',
                             displayDate: '2025년 6월 14일',
-                            title: 'In-depth 단기 커피 선물 가격 전망 및 방향성 점검',
+                            title: '단기 커피 선물 가격 전망 및 방향성 점검',
                             subtitle: 'Short-term Coffee Futures Price Outlook & Direction Analysis',
-                            summary: '단기 공급 압력 vs 중장기 구조적 강세 전망',
-                            tags: ['아라비카', '로부스타', '브라질생산량', '베트남수출', 'ICE재고'],
+                            summary: '',
+                            tags: [],
                             link: 'Reports/2025/06/2025-06-14.html',
                             year: '2025',
                             month: '06'
@@ -951,7 +1060,7 @@
                             title: '커피 선물 시장 주간 동향',
                             subtitle: 'Coffee Futures Market Weekly Update',
                             summary: '커피 선물이 최근 1주일간 5.17% 상승하며 변동성이 지속되고 있습니다.',
-                            tags: ['아라비카', '로부스타', '브라질생산량', '베트남수출', 'ICE재고'],
+                            tags: [],
                             link: 'Reports/2025/06/2025-06-08.html',
                             year: '2025',
                             month: '06'
@@ -962,13 +1071,18 @@
                             title: '커피 선물 시장 주간 동향',
                             subtitle: 'Coffee Futures Market Weekly Update',
                             summary: '커피 선물 시장이 지난 한 달간의 하락세를 연장하며 새로운 저점을 기록했습니다.',
-                            tags: ['아라비카', '로부스타', '브라질생산', '시장동향', '베트남생산', '기후변화', 'USDA보고서'],
+                            tags: [],
                             link: 'Reports/2025/05/2025-05-31.html',
                             year: '2025',
                             month: '05'
                         }
                     ];
                 }
+                
+                // 자동 태그 추가
+                const reportsWithAutoTags = await addAutoTags(reports);
+                return reportsWithAutoTags;
+                
             } catch (error) {
                 console.error('보고서 로딩 중 오류:', error);
                 return [];
@@ -1066,7 +1180,7 @@
                     createICOChart()
                 ]);
 
-                // 보고서 데이터 로드 (기존 기능 유지)
+                // 보고서 데이터 로드 (자동 태그 추가 포함)
                 allReports = await loadReportsFromJSON();
                 updateFilters();
                 updateStats();
