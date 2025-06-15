@@ -429,7 +429,7 @@
 
         <div class="stats-bar">
             <div class="stat-box">
-                <div class="stat-number" id="totalReports">1</div>
+                <div class="stat-number" id="totalReports">5</div>
                 <div class="stat-label">총 보고서 수</div>
             </div>
             <div class="stat-box">
@@ -487,7 +487,7 @@
         let allReports = [];
         let charts = {};
 
-        // Excel 파일 읽기 함수
+        // 일반 Excel 파일 읽기 함수 (2컬럼: Date, Value)
         async function readExcelFile(filename) {
             try {
                 const response = await fetch(filename);
@@ -521,6 +521,39 @@
             }
         }
 
+        // NVDI Excel 파일 읽기 함수 (4컬럼: Date, Min-Max, Median, 2025)
+        async function readNVDIExcelFile(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${filename}`);
+                }
+                
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer);
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                // 첫 번째 행은 헤더이므로 2번째 행부터 데이터
+                const dataRows = data.slice(1);
+                
+                const processedData = dataRows.map(row => ({
+                    date: row[0],      // Date
+                    minMax: row[1],    // Min-Max (2001-2024)
+                    median: row[2],    // Median (2001-2024)
+                    year2025: row[3]   // 2025
+                })).filter(row => row.date);
+                
+                return processedData;
+                
+            } catch (error) {
+                console.error(`Error reading ${filename}:`, error);
+                return null;
+            }
+        }
+
         // 날짜 변환 함수
         function parseDate(dateValue) {
             if (typeof dateValue === 'number') {
@@ -533,7 +566,7 @@
             return new Date(dateValue);
         }
 
-        // 차트 생성 함수들
+        // Coffee Futures 차트
         async function createCoffeeChart() {
             const data = await readExcelFile('coffeefutures.xlsx');
             const loadingElement = document.getElementById('loading-coffee');
@@ -549,37 +582,6 @@
                 y: parseFloat(row.value),
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (3년 데이터에 맞게 분기별 표시)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 12)); // 3년 데이터에서 약 3개월 간격으로 표시
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-            
-            // 마지막 포인트도 포함
-            if (chartData.length > 0) {
-                const lastIndex = chartData.length - 1;
-                const lastDate = chartData[lastIndex].date;
-                dateLabels.push({
-                    index: lastIndex,
-                    label: lastDate.toLocaleDateString('ko-KR', { 
-                        year: '2-digit', 
-                        month: 'short' 
-                    })
-                });
-            }
 
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -641,11 +643,21 @@
                                 text: 'Date'
                             },
                             ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
+                                callback: function(value) {
+                                    const index = Math.round(value);
+                                    if (chartData[index]) {
+                                        const totalPoints = chartData.length;
+                                        const interval = Math.max(1, Math.floor(totalPoints / 8));
+                                        if (index % interval === 0 || index === totalPoints - 1) {
+                                            return chartData[index].date.toLocaleDateString('ko-KR', { 
+                                                year: '2-digit', 
+                                                month: 'short' 
+                                            });
+                                        }
+                                    }
+                                    return '';
                                 },
-                                maxTicksLimit: 15,
+                                maxTicksLimit: 12,
                                 maxRotation: 45,
                                 minRotation: 0
                             }
@@ -661,6 +673,7 @@
             });
         }
 
+        // USD/BRL 환율 차트
         async function createUSDChart() {
             const data = await readExcelFile('usdbrl.xlsx');
             const loadingElement = document.getElementById('loading-usd');
@@ -676,45 +689,6 @@
                 y: parseFloat(row.value),
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
-
-            // 디버깅: 데이터 확인
-            console.log('USD Chart Data length:', chartData.length);
-            console.log('USD Chart Sample data:', chartData.slice(0, 3));
-
-            // 날짜 라벨 생성 (분기별 표시)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
-            
-            console.log('USD Chart interval:', interval);
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-            
-            // 마지막 포인트도 포함
-            if (chartData.length > 0) {
-                const lastIndex = chartData.length - 1;
-                const lastDate = chartData[lastIndex].date;
-                dateLabels.push({
-                    index: lastIndex,
-                    label: lastDate.toLocaleDateString('ko-KR', { 
-                        year: '2-digit', 
-                        month: 'short' 
-                    })
-                });
-            }
-            
-            console.log('USD Chart dateLabels:', dateLabels);
 
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -776,15 +750,23 @@
                                 text: 'Date'
                             },
                             ticks: {
-                                callback: function(value, index, values) {
-                                    console.log('USD X-axis callback - value:', value, 'dateLabels:', dateLabels);
-                                    const label = dateLabels.find(dl => Math.abs(dl.index - value) < 0.5);
-                                    return label ? label.label : '';
+                                callback: function(value) {
+                                    const index = Math.round(value);
+                                    if (chartData[index]) {
+                                        const totalPoints = chartData.length;
+                                        const interval = Math.max(1, Math.floor(totalPoints / 8));
+                                        if (index % interval === 0 || index === totalPoints - 1) {
+                                            return chartData[index].date.toLocaleDateString('ko-KR', { 
+                                                year: '2-digit', 
+                                                month: 'short' 
+                                            });
+                                        }
+                                    }
+                                    return '';
                                 },
                                 maxTicksLimit: 12,
                                 maxRotation: 45,
-                                minRotation: 0,
-                                stepSize: Math.max(1, Math.floor(chartData.length / 10))
+                                minRotation: 0
                             }
                         },
                         y: {
@@ -798,6 +780,7 @@
             });
         }
 
+        // CFTC 포지션 차트
         async function createCFTCChart() {
             const data = await readExcelFile('cftcpositions.xlsx');
             const loadingElement = document.getElementById('loading-cftc');
@@ -813,37 +796,6 @@
                 y: parseInt(row.value),
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (분기별 표시)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
-            
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
-                }
-            }
-            
-            // 마지막 포인트도 포함
-            if (chartData.length > 0) {
-                const lastIndex = chartData.length - 1;
-                const lastDate = chartData[lastIndex].date;
-                dateLabels.push({
-                    index: lastIndex,
-                    label: lastDate.toLocaleDateString('ko-KR', { 
-                        year: '2-digit', 
-                        month: 'short' 
-                    })
-                });
-            }
 
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -887,432 +839,3 @@
                             title: {
                                 display: true,
                                 text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
-                                },
-                                maxTicksLimit: 12,
-                                maxRotation: 45,
-                                minRotation: 0
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Net Long Positions'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        async function createNVDIChart() {
-            const data = await readExcelFile('MGvegetation.xlsx');
-            const loadingElement = document.getElementById('loading-nvdi');
-            const chartElement = document.getElementById('nvdiChart');
-            
-            if (!data) {
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-                return;
-            }
-
-            // 월별 데이터 처리 (11월부터 8월까지)
-            const monthOrder = ['11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'];
-            
-            // 데이터를 월별로 그룹화
-            const processedData = {};
-            data.forEach(row => {
-                // 첫 번째 컬럼이 월 정보라고 가정
-                const month = row.date; // 또는 적절한 월 파싱 로직
-                const value = parseFloat(row.value);
-                
-                if (!processedData[month]) {
-                    processedData[month] = [];
-                }
-                processedData[month].push(value);
-            });
-
-            // 차트 데이터셋 준비 (여러 라인: Historical Range, 2024, 2025)
-            const datasets = [
-                {
-                    label: 'Historical Range (평균)',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: processedData[month] ? processedData[month][0] : null // 첫 번째 값을 historical로 가정
-                    })),
-                    borderColor: '#95A5A6',
-                    backgroundColor: 'rgba(149, 165, 166, 0.1)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                },
-                {
-                    label: '2024년',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: processedData[month] ? processedData[month][1] : null // 두 번째 값을 2024로 가정
-                    })),
-                    borderColor: '#3498DB',
-                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                },
-                {
-                    label: '2025년',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: processedData[month] ? processedData[month][2] : null // 세 번째 값을 2025로 가정
-                    })),
-                    borderColor: '#E74C3C',
-                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }
-            ];
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.nvdi = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    return monthOrder[index];
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: '월'
-                            },
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    return monthOrder[value] || '';
-                                },
-                                maxTicksLimit: 10,
-                                maxRotation: 45,
-                                minRotation: 0
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'NVDI 지수'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // 키워드 추출 함수
-        function extractKeywords(text) {
-            // 커피 관련 전문 용어 사전 (우선순위 높음)
-            const coffeeTerms = {
-                '아라비카': 3, '로부스타': 3, '커피': 2,
-                '브라질': 2, '베트남': 2, '콜롬비아': 2, '에티오피아': 2,
-                '생산': 2, '수출': 2, '수입': 2, '재고': 2,
-                'ICE': 2, 'NYSE': 2, 'LIFFE': 2,
-                '선물': 2, '현물': 2, '가격': 2,
-                '수확': 2, '작황': 2, '날씨': 2, '가뭄': 2, '강우': 2,
-                'USDA': 2, 'ICO': 2, 'CONAB': 2,
-                '투기': 1, '헤지': 1, '펀드': 1,
-                '상승': 1, '하락': 1, '변동성': 1,
-                '지지': 1, '저항': 1, '돌파': 1,
-                '톤': 1, '센트': 1, '달러': 1
-            };
-
-            // 텍스트 정제
-            const cleanText = text.toLowerCase()
-                .replace(/[^\w\s가-힣]/g, ' ')
-                .replace(/\s+/g, ' ');
-
-            // 단어 빈도 계산
-            const wordCount = {};
-            const words = cleanText.split(' ');
-            
-            words.forEach(word => {
-                if (word.length >= 2) {
-                    wordCount[word] = (wordCount[word] || 0) + 1;
-                }
-            });
-
-            // 점수 계산 (전문용어 가중치 + 빈도)
-            const wordScores = {};
-            Object.keys(wordCount).forEach(word => {
-                const baseScore = wordCount[word];
-                const termWeight = coffeeTerms[word] || 0;
-                wordScores[word] = baseScore + (termWeight * 2);
-            });
-
-            // 상위 키워드 선별
-            const sortedWords = Object.entries(wordScores)
-                .sort(([,a], [,b]) => b - a)
-                .slice(0, 8)
-                .map(([word]) => word)
-                .filter(word => word.length >= 2);
-
-            return sortedWords;
-        }
-
-        // HTML 파일에서 텍스트 추출
-        async function extractTextFromHTML(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) return '';
-                
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                // script, style 태그 제거
-                const scripts = doc.querySelectorAll('script, style');
-                scripts.forEach(el => el.remove());
-                
-                // 본문 텍스트만 추출
-                const bodyText = doc.body ? doc.body.textContent : '';
-                return bodyText.replace(/\s+/g, ' ').trim();
-                
-            } catch (error) {
-                console.error(`텍스트 추출 실패 ${url}:`, error);
-                return '';
-            }
-        }
-
-        // 보고서에 자동 태그 추가
-        async function addAutoTags(reports) {
-            const updatedReports = [];
-            
-            for (const report of reports) {
-                try {
-                    const text = await extractTextFromHTML(report.link);
-                    if (text) {
-                        const autoTags = extractKeywords(text);
-                        
-                        updatedReports.push({
-                            ...report,
-                            tags: autoTags.slice(0, 6) // 최대 6개 태그, 순전히 자동 추출된 태그만 사용
-                        });
-                    } else {
-                        // 텍스트 추출 실패 시 빈 태그 배열
-                        updatedReports.push({
-                            ...report,
-                            tags: []
-                        });
-                    }
-                } catch (error) {
-                    console.error(`태그 추출 실패 ${report.link}:`, error);
-                    updatedReports.push({
-                        ...report,
-                        tags: []
-                    });
-                }
-            }
-            
-            return updatedReports;
-        }
-
-        // reports.json 파일에서 데이터 로드 및 자동 태그 추가
-        async function loadReportsFromJSON() {
-            try {
-                const response = await fetch('reports.json');
-                let reports = [];
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    reports = data.reports || [];
-                } else {
-                    // reports.json이 없으면 기본 데이터 사용
-                    reports = [
-                        {
-                            date: '2025-06-14',
-                            displayDate: '2025년 6월 14일',
-                            title: '단기 커피 선물 가격 전망 및 방향성 점검',
-                            subtitle: 'Short-term Coffee Futures Price Outlook & Direction Analysis',
-                            summary: '',
-                            tags: [],
-                            link: 'Reports/2025/06/2025-06-14.html',
-                            year: '2025',
-                            month: '06'
-                        },
-                        {
-                            date: '2025-06-08',
-                            displayDate: '2025년 6월 8일',
-                            title: '커피 선물 시장 주간 동향',
-                            subtitle: 'Coffee Futures Market Weekly Update',
-                            summary: '커피 선물이 최근 1주일간 5.17% 상승하며 변동성이 지속되고 있습니다.',
-                            tags: [],
-                            link: 'Reports/2025/06/2025-06-08.html',
-                            year: '2025',
-                            month: '06'
-                        },
-                        {
-                            date: '2025-05-31',
-                            displayDate: '2025년 5월 31일',
-                            title: '커피 선물 시장 주간 동향',
-                            subtitle: 'Coffee Futures Market Weekly Update',
-                            summary: '커피 선물 시장이 지난 한 달간의 하락세를 연장하며 새로운 저점을 기록했습니다.',
-                            tags: [],
-                            link: 'Reports/2025/05/2025-05-31.html',
-                            year: '2025',
-                            month: '05'
-                        }
-                    ];
-                }
-                
-                // 자동 태그 추가
-                const reportsWithAutoTags = await addAutoTags(reports);
-                return reportsWithAutoTags;
-                
-            } catch (error) {
-                console.error('보고서 로딩 중 오류:', error);
-                return [];
-            }
-        }
-
-        function renderReports(filteredReports = allReports) {
-            const grid = document.getElementById('reportsGrid');
-            const noResults = document.getElementById('noResults');
-            
-            if (filteredReports.length === 0) {
-                grid.style.display = 'none';
-                noResults.style.display = 'block';
-                return;
-            }
-            
-            grid.style.display = 'grid';
-            noResults.style.display = 'none';
-            
-            grid.innerHTML = filteredReports.map(report => `
-                <div class="report-card" onclick="window.location.href='${report.link}'">
-                    <div class="report-date">${report.displayDate}</div>
-                    <h3 class="report-title">${report.title}</h3>
-                    <p class="report-summary">${report.summary}</p>
-                    <div class="report-tags">
-                        ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                    <a href="${report.link}" class="read-more">보고서 읽기</a>
-                </div>
-            `).join('');
-        }
-
-        function filterReports() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const yearFilter = document.getElementById('yearFilter').value;
-            const monthFilter = document.getElementById('monthFilter').value;
-            
-            const filtered = allReports.filter(report => {
-                const matchesSearch = report.title.toLowerCase().includes(searchTerm) || 
-                                    report.summary.toLowerCase().includes(searchTerm) ||
-                                    report.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-                const matchesYear = !yearFilter || report.year === yearFilter;
-                const matchesMonth = !monthFilter || report.month === monthFilter;
-                
-                return matchesSearch && matchesYear && matchesMonth;
-            });
-            
-            renderReports(filtered);
-        }
-
-        function updateFilters() {
-            const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
-            const months = [...new Set(allReports.map(r => r.month))].sort();
-            
-            const yearSelect = document.getElementById('yearFilter');
-            const monthSelect = document.getElementById('monthFilter');
-            
-            if (yearSelect) {
-                yearSelect.innerHTML = '<option value="">전체 년도</option>';
-                years.forEach(year => {
-                    yearSelect.innerHTML += `<option value="${year}">${year}년</option>`;
-                });
-            }
-            
-            if (monthSelect) {
-                monthSelect.innerHTML = '<option value="">전체 월</option>';
-                months.forEach(month => {
-                    const monthName = parseInt(month) + '월';
-                    monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
-                });
-            }
-        }
-
-        function updateStats() {
-            const totalElement = document.getElementById('totalReports');
-            const latestElement = document.getElementById('latestDate');
-            
-            if (totalElement) {
-                totalElement.textContent = allReports.length;
-            }
-            
-            if (latestElement && allReports.length > 0) {
-                latestElement.textContent = allReports[0].displayDate.substring(0, 7);
-            }
-        }
-
-        // 초기화 함수
-        async function init() {
-            try {
-                // 차트들 병렬로 로드
-                Promise.all([
-                    createCoffeeChart(),
-                    createUSDChart(),
-                    createCFTCChart(),
-                    createNVDIChart()
-                ]);
-
-                // 보고서 데이터 로드 (자동 태그 추가 포함)
-                allReports = await loadReportsFromJSON();
-                updateFilters();
-                updateStats();
-                renderReports();
-                
-                // 이벤트 리스너 설정
-                document.getElementById('searchInput').addEventListener('input', filterReports);
-                document.getElementById('yearFilter').addEventListener('change', filterReports);
-                document.getElementById('monthFilter').addEventListener('change', filterReports);
-                
-            } catch (error) {
-                console.error('초기화 중 오류:', error);
-            }
-        }
-
-        // 페이지 로드시 초기화 실행
-        init();
-</script>
-</body>
-</html>
