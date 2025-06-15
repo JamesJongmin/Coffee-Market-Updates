@@ -677,10 +677,16 @@
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
 
+            // 디버깅: 데이터 확인
+            console.log('USD Chart Data length:', chartData.length);
+            console.log('USD Chart Sample data:', chartData.slice(0, 3));
+
             // 날짜 라벨 생성 (분기별 표시)
             const dateLabels = [];
             const totalPoints = chartData.length;
             const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
+            
+            console.log('USD Chart interval:', interval);
             
             for (let i = 0; i < totalPoints; i += interval) {
                 if (chartData[i]) {
@@ -707,6 +713,8 @@
                     })
                 });
             }
+            
+            console.log('USD Chart dateLabels:', dateLabels);
 
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -769,12 +777,14 @@
                             },
                             ticks: {
                                 callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
+                                    console.log('USD X-axis callback - value:', value, 'dateLabels:', dateLabels);
+                                    const label = dateLabels.find(dl => Math.abs(dl.index - value) < 0.5);
                                     return label ? label.label : '';
                                 },
                                 maxTicksLimit: 12,
                                 maxRotation: 45,
-                                minRotation: 0
+                                minRotation: 0,
+                                stepSize: Math.max(1, Math.floor(chartData.length / 10))
                             }
                         },
                         y: {
