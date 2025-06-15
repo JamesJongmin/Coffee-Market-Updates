@@ -410,18 +410,18 @@
                     </div>
                 </div>
 
-                <!-- ICO Composite Index Chart -->
+                <!-- NVDI Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
-                        <div class="chart-title">ICO Composite Index</div>
-                        <div class="chart-source">출처: ICO</div>
+                        <div class="chart-title">브라질 남동부 NVDI (식물활력도)</div>
+                        <div class="chart-source">출처: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="loading-spinner" id="loading-ico">
+                        <div class="loading-spinner" id="loading-nvdi">
                             <div class="spinner"></div>
                             데이터 로딩 중...
                         </div>
-                        <canvas id="icoChart" style="display: none;"></canvas>
+                        <canvas id="nvdiChart" style="display: none;"></canvas>
                     </div>
                 </div>
             </div>
@@ -550,10 +550,10 @@
                 date: parseDate(row.date)
             })).filter(point => !isNaN(point.y));
 
-            // 날짜 라벨 생성 (분기별 표시)
+            // 날짜 라벨 생성 (3년 데이터에 맞게 분기별 표시)
             const dateLabels = [];
             const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
+            const interval = Math.max(1, Math.floor(totalPoints / 12)); // 3년 데이터에서 약 3개월 간격으로 표시
             
             for (let i = 0; i < totalPoints; i += interval) {
                 if (chartData[i]) {
@@ -645,7 +645,7 @@
                                     const label = dateLabels.find(dl => dl.index === value);
                                     return label ? label.label : '';
                                 },
-                                maxTicksLimit: 12,
+                                maxTicksLimit: 15,
                                 maxRotation: 45,
                                 minRotation: 0
                             }
@@ -909,83 +909,86 @@
             });
         }
 
-        async function createICOChart() {
-            const data = await readExcelFile('icoicip.xlsx');
-            const loadingElement = document.getElementById('loading-ico');
-            const chartElement = document.getElementById('icoChart');
+        async function createNVDIChart() {
+            const data = await readExcelFile('MGvegetation.xlsx');
+            const loadingElement = document.getElementById('loading-nvdi');
+            const chartElement = document.getElementById('nvdiChart');
             
             if (!data) {
                 loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
                 return;
             }
 
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseFloat(row.value),
-                date: parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            // 날짜 라벨 생성 (분기별 표시)
-            const dateLabels = [];
-            const totalPoints = chartData.length;
-            const interval = Math.max(1, Math.floor(totalPoints / 10)); // 약 10개 구간으로 더 자주 표시
+            // 월별 데이터 처리 (11월부터 8월까지)
+            const monthOrder = ['11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'];
             
-            for (let i = 0; i < totalPoints; i += interval) {
-                if (chartData[i]) {
-                    const date = chartData[i].date;
-                    dateLabels.push({
-                        index: i,
-                        label: date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short' 
-                        })
-                    });
+            // 데이터를 월별로 그룹화
+            const processedData = {};
+            data.forEach(row => {
+                // 첫 번째 컬럼이 월 정보라고 가정
+                const month = row.date; // 또는 적절한 월 파싱 로직
+                const value = parseFloat(row.value);
+                
+                if (!processedData[month]) {
+                    processedData[month] = [];
                 }
-            }
-            
-            // 마지막 포인트도 포함
-            if (chartData.length > 0) {
-                const lastIndex = chartData.length - 1;
-                const lastDate = chartData[lastIndex].date;
-                dateLabels.push({
-                    index: lastIndex,
-                    label: lastDate.toLocaleDateString('ko-KR', { 
-                        year: '2-digit', 
-                        month: 'short' 
-                    })
-                });
-            }
+                processedData[month].push(value);
+            });
+
+            // 차트 데이터셋 준비 (여러 라인: Historical Range, 2024, 2025)
+            const datasets = [
+                {
+                    label: 'Historical Range (평균)',
+                    data: monthOrder.map((month, index) => ({
+                        x: index,
+                        y: processedData[month] ? processedData[month][0] : null // 첫 번째 값을 historical로 가정
+                    })),
+                    borderColor: '#95A5A6',
+                    backgroundColor: 'rgba(149, 165, 166, 0.1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                },
+                {
+                    label: '2024년',
+                    data: monthOrder.map((month, index) => ({
+                        x: index,
+                        y: processedData[month] ? processedData[month][1] : null // 두 번째 값을 2024로 가정
+                    })),
+                    borderColor: '#3498DB',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                },
+                {
+                    label: '2025년',
+                    data: monthOrder.map((month, index) => ({
+                        x: index,
+                        y: processedData[month] ? processedData[month][2] : null // 세 번째 값을 2025로 가정
+                    })),
+                    borderColor: '#E74C3C',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }
+            ];
 
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
 
             const ctx = chartElement.getContext('2d');
-            charts.ico = new Chart(ctx, {
+            charts.nvdi = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    datasets: [{
-                        label: 'ICO Composite Index',
-                        data: chartData,
-                        borderColor: '#9B59B6',
-                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.2,
-                        pointRadius: 0,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: chartData.map((_, index) => 
-                            index === chartData.length - 1 ? '#9B59B6' : 'transparent'
-                        ),
-                        pointBorderColor: chartData.map((_, index) => 
-                            index === chartData.length - 1 ? '#FFFFFF' : 'transparent'
-                        ),
-                        pointBorderWidth: chartData.map((_, index) => 
-                            index === chartData.length - 1 ? 2 : 0
-                        ),
-                        pointRadius: chartData.map((_, index) => 
-                            index === chartData.length - 1 ? 4 : 0
-                        )
-                    }]
+                    datasets: datasets
                 },
                 options: {
                     responsive: true,
@@ -996,13 +999,14 @@
                     },
                     plugins: {
                         legend: {
-                            display: false
+                            display: true,
+                            position: 'top'
                         },
                         tooltip: {
                             callbacks: {
                                 title: function(tooltipItems) {
                                     const index = tooltipItems[0].dataIndex;
-                                    return chartData[index].date.toLocaleDateString('ko-KR');
+                                    return monthOrder[index];
                                 }
                             }
                         }
@@ -1013,14 +1017,13 @@
                             position: 'bottom',
                             title: {
                                 display: true,
-                                text: 'Date'
+                                text: '월'
                             },
                             ticks: {
                                 callback: function(value, index, values) {
-                                    const label = dateLabels.find(dl => dl.index === value);
-                                    return label ? label.label : '';
+                                    return monthOrder[value] || '';
                                 },
-                                maxTicksLimit: 12,
+                                maxTicksLimit: 10,
                                 maxRotation: 45,
                                 minRotation: 0
                             }
@@ -1028,7 +1031,7 @@
                         y: {
                             title: {
                                 display: true,
-                                text: 'I-CIP (cents/lb)'
+                                text: 'NVDI 지수'
                             }
                         }
                     }
@@ -1289,7 +1292,7 @@
                     createCoffeeChart(),
                     createUSDChart(),
                     createCFTCChart(),
-                    createICOChart()
+                    createNVDIChart()
                 ]);
 
                 // 보고서 데이터 로드 (자동 태그 추가 포함)
