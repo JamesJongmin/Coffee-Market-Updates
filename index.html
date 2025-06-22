@@ -39,6 +39,56 @@
             font-weight: 700;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .live-indicator {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.3em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+            animation: pulse-live 2s infinite;
+        }
+        
+        .live-indicator::before {
+            content: '●';
+            color: #fff;
+            font-size: 1.2em;
+            margin-right: 4px;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes pulse-live {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .date-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.35em;
+            font-weight: 500;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         .subtitle {
@@ -409,7 +459,11 @@
 <body>
     <div class="container">
         <header>
-            <h1>Coffee Market Updates</h1>
+            <h1>
+                Coffee Market Updates
+                <span class="live-indicator">Live</span>
+                <span class="date-badge" id="currentDate">2025년 6월 22일</span>
+            </h1>
             <p class="subtitle">Coffee Futures Market Analysis & Dashboard</p>
             <p class="description">
                 커피 선물 시장 분석 보고서 아카이브 및 실시간 시장 대시보드입니다. <br/>
@@ -1585,10 +1639,29 @@
             }
         }
 
+        // 현재 날짜 업데이트 함수
+        function updateCurrentDate() {
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                const now = new Date();
+                const options = { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    weekday: 'short'
+                };
+                const formattedDate = now.toLocaleDateString('ko-KR', options);
+                dateElement.textContent = formattedDate;
+            }
+        }
+
         // 초기화 함수
         async function init() {
             try {
                 console.log('초기화 시작...');
+                
+                // 현재 날짜 업데이트
+                updateCurrentDate();
                 
                 // 차트들 병렬로 로드
                 Promise.all([
