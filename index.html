@@ -1101,11 +1101,25 @@
                                     filter: function(item) {
                                         return item.text !== ''; // 빈 라벨 숨기기
                                     },
-                                    usePointStyle: true,
-                                    pointStyle: 'line',
+                                    usePointStyle: false, // 포인트 스타일 대신 라인 스타일 사용
                                     padding: 20,
                                     font: {
                                         size: 12
+                                    },
+                                    generateLabels: function(chart) {
+                                        const datasets = chart.data.datasets;
+                                        return datasets.map((dataset, i) => {
+                                            if (dataset.label && dataset.label !== '') {
+                                                return {
+                                                    text: dataset.label,
+                                                    fillStyle: dataset.borderColor,
+                                                    strokeStyle: dataset.borderColor,
+                                                    lineWidth: 3,
+                                                    hidden: !chart.isDatasetVisible(i),
+                                                    datasetIndex: i
+                                                };
+                                            }
+                                        }).filter(item => item); // undefined 항목 제거
                                     }
                                 }
                             },
