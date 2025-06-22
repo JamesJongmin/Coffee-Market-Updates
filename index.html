@@ -240,6 +240,39 @@
             color: #2c3e50;
             margin-bottom: 15px;
             line-height: 1.4;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .new-badge {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            font-size: 0.7em;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 8px rgba(231, 76, 60, 0.5);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            }
         }
         
         .report-summary {
@@ -1416,17 +1449,28 @@
             grid.style.display = 'grid';
             noResults.style.display = 'none';
             
-            grid.innerHTML = filteredReports.map(report => `
+            // 날짜순으로 정렬하여 가장 최근 보고서 찾기
+            const sortedReports = [...filteredReports].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const latestDate = sortedReports.length > 0 ? sortedReports[0].date : null;
+            
+            grid.innerHTML = filteredReports.map(report => {
+                const isLatest = report.date === latestDate;
+                
+                return `
                 <div class="report-card" onclick="window.location.href='${report.link}'">
                     <div class="report-date">${report.displayDate}</div>
-                    <h3 class="report-title">${report.title}</h3>
+                    <h3 class="report-title">
+                        <span>${report.title}</span>
+                        ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
+                    </h3>
                     <p class="report-summary">${report.summary}</p>
                     <div class="report-tags">
                         ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
                     <a href="${report.link}" class="read-more">보고서 읽기</a>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function filterReports() {
