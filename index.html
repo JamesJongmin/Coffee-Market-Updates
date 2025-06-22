@@ -521,7 +521,7 @@
             }
         }
 
-        // NVDI Excel 파일 읽기 함수 - 실제 구조에 맞게 수정
+        // NVDI Excel 파일 읽기 함수 - 실제 파일 구조에 맞게 완전히 새로 작성
         async function readNVDIExcelFile(filename) {
             try {
                 const response = await fetch(filename);
@@ -531,30 +531,88 @@
                 
                 const arrayBuffer = await response.arrayBuffer();
                 const workbook = XLSX.read(arrayBuffer);
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
                 
-                const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                // Data 시트에서 데이터 읽기
+                const dataSheetData = XLSX.utils.sheet_to_json(workbook.Sheets['Data'], { header: 1 });
                 
-                console.log('Raw Excel data (첫 10개):', data.slice(0, 10));
+                console.log('NVDI 데이터 로딩 완료. 총 행:', dataSheetData.length);
                 
-                // 헤더 확인
-                const headers = data[0];
-                console.log('Headers:', headers);
+                // 헤더에서 년도별 컬럼 인덱스 매핑
+                const headers = dataSheetData[0];
+                const yearColumns = {};
+                headers.forEach((header, index) => {
+                    if (index > 0) { // Date 컬럼 제외
+                        const year = parseInt(header.toString().trim());
+                        yearColumns[year] = index;
+                    }
+                });
                 
-                // 실제 데이터는 1번째 행부터 (헤더 제외)
-                const dataRows = data.slice(1);
+                // 월별 데이터 처리
+                const monthlyData = [];
                 
-                const processedData = dataRows.map(row => ({
-                    date: row[0],          // Date
-                    minMax: row[1],        // Min-Max (2001-2024)
-                    median: row[2],        // Median (2001-2024)
-                    year2024: row[3],      // 2024 (4번째 컬럼이 2024일 수 있음)
-                    year2025: row[4] || row[3]  // 2025 (5번째 컬럼이 있으면 사용, 없으면 4번째)
-                })).filter(row => row.date && row.date !== 'Last updated:');
+                for (let month = 1; month <= 12; month++) {
+                    const monthRows = [];
+                    
+                    // 해당 월의 모든 행 찾기
+                    for (let i = 1; i < dataSheetData.length; i++) {
+                        const row = dataSheetData[i];
+                        if (row && row[0]) {
+                            const dateStr = row[0].toString();
+                            const rowMonth = parseInt(dateStr.split('/')[1]);
+                            
+                            if (rowMonth === month) {
+                                monthRows.push(row);
+                            }
+                        }
+                    }
+                    
+                    if (monthRows.length > 0) {
+                        // 2010-2023년 데이터에서 min/max 계산
+                        const allValues = [];
+                        for (const row of monthRows) {
+                            for (let year = 2010; year <= 2023; year++) {
+                                const colIndex = yearColumns[year];
+                                if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
+                                    const value = parseFloat(row[colIndex]);
+                                    if (!isNaN(value)) {
+                                        allValues.push(value);
+                                    }
+                                }
+                            }
+                        }
+                        
+                        const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
+                        const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
+                        
+                        // 2024년과 2025년 데이터 (평균값 사용)
+                        let year2024Values = [];
+                        let year2025Values = [];
+                        
+                        for (const row of monthRows) {
+                            const val2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
+                            const val2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
+                            
+                            if (!isNaN(val2024)) year2024Values.push(val2024);
+                            if (!isNaN(val2025)) year2025Values.push(val2025);
+                        }
+                        
+                        const avg2024 = year2024Values.length > 0 ? 
+                            year2024Values.reduce((sum, val) => sum + val, 0) / year2024Values.length : null;
+                        const avg2025 = year2025Values.length > 0 ? 
+                            year2025Values.reduce((sum, val) => sum + val, 0) / year2025Values.length : null;
+                        
+                        monthlyData.push({
+                            month: month,
+                            minValue: minValue,
+                            maxValue: maxValue,
+                            year2024: avg2024,
+                            year2025: avg2025
+                        });
+                    }
+                }
                 
-                console.log('Processed data sample:', processedData.slice(0, 5));
-                return processedData;
+                console.log('월별 NVDI 데이터 처리 완료:', monthlyData.length, '개월');
+                return monthlyData;
                 
             } catch (error) {
                 console.error(`Error reading ${filename}:`, error);
@@ -915,44 +973,39 @@
             }
         }
 
-        // NVDI 차트 - 원본 차트 스타일에 맞게 재작성
+        // NVDI 차트 - 실제 Excel 파일 데이터를 사용하여 생성
         async function createNVDIChart() {
             const loadingElement = document.getElementById('loading-nvdi');
             const chartElement = document.getElementById('nvdiChart');
             
             try {
-                // 우선 테스트 데이터로 원본과 비슷한 차트 생성
-                console.log('원본 스타일과 동일한 NVDI 차트 생성');
+                // Excel 파일에서 데이터 읽기 (nvdi.xls 파일명 사용)
+                const nvdiData = await Promise.race([
+                    readNVDIExcelFile('nvdi.xls'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                ]);
                 
-                // 월 순서 (10월부터 8월까지, 연속적인 농업 사이클)
-                const monthOrder = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
-                const monthKR = ['10월', '11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'];
-                
-                // 원본 차트와 유사한 실제 데이터 패턴
-                const chartData = {
-                    // Min-Max 범위의 최소값
-                    minValues: [0.29, 0.37, 0.48, 0.68, 0.65, 0.60, 0.69, 0.62, 0.47, 0.38, 0.32],
-                    // Min-Max 범위의 최대값  
-                    maxValues: [0.42, 0.53, 0.71, 0.78, 0.76, 0.73, 0.78, 0.74, 0.58, 0.44, 0.37],
-                    // Median 라인 (파란색)
-                    median: [0.37, 0.47, 0.59, 0.73, 0.71, 0.67, 0.74, 0.68, 0.53, 0.41, 0.34],
-                    // 2024년 라인 (노란색)
-                    year2024: [0.35, 0.50, 0.63, 0.75, 0.73, 0.70, 0.76, 0.70, 0.55, 0.43, 0.36],
-                    // 2025년 라인 (빨간색)
-                    year2025: [0.30, 0.43, 0.63, 0.75, 0.72, 0.68, 0.72, 0.65, 0.48, 0.39, 0.32]
-                };
+                if (!nvdiData || nvdiData.length === 0) {
+                    throw new Error('NVDI 데이터를 읽을 수 없습니다');
+                }
+
+                // 한국어 월 이름
+                const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', 
+                               '7월', '8월', '9월', '10월', '11월', '12월'];
 
                 const datasets = [];
 
-                // 1. Min-Max 범위 음영 (회색 영역)
+                // 1. Min-Max 범위 상한선 (회색 영역 상단)
+                const maxData = nvdiData.map((item, index) => ({
+                    x: index,
+                    y: item.maxValue
+                })).filter(point => point.y !== null);
+
                 datasets.push({
-                    label: 'Min-Max (2001-2024)',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: chartData.maxValues[index]
-                    })),
+                    label: 'Historical Range (2010-2023)',
+                    data: maxData,
                     borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.4)',
+                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
                     borderWidth: 1,
                     fill: '+1', // 다음 데이터셋과 함께 영역 채우기
                     tension: 0.4,
@@ -960,15 +1013,17 @@
                     pointHoverRadius: 0
                 });
 
-                // 2. Min-Max 범위 하한선
+                // 2. Min-Max 범위 하한선 (회색 영역 하단)
+                const minData = nvdiData.map((item, index) => ({
+                    x: index,
+                    y: item.minValue
+                })).filter(point => point.y !== null);
+
                 datasets.push({
                     label: '',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: chartData.minValues[index]
-                    })),
+                    data: minData,
                     borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.4)',
+                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
                     borderWidth: 1,
                     fill: false,
                     tension: 0.4,
@@ -976,53 +1031,51 @@
                     pointHoverRadius: 0
                 });
 
-                // 3. Median 라인 (하늘색)
-                datasets.push({
-                    label: 'Median (2001-2024)',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: chartData.median[index]
-                    })),
-                    borderColor: '#5DADE2',
-                    backgroundColor: 'transparent',
-                    borderWidth: 3,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 5
-                });
+                // 3. 2024년 라인 (빨간색)
+                const data2024 = nvdiData.map((item, index) => ({
+                    x: index,
+                    y: item.year2024
+                })).filter(point => point.y !== null && !isNaN(point.y));
 
-                // 4. 2024년 라인 (노란색)
-                datasets.push({
-                    label: '2024',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: chartData.year2024[index]
-                    })),
-                    borderColor: '#F1C40F',
-                    backgroundColor: 'transparent',
-                    borderWidth: 3,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 5
-                });
+                if (data2024.length > 0) {
+                    datasets.push({
+                        label: '2024',
+                        data: data2024,
+                        borderColor: '#E74C3C',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#E74C3C',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2
+                    });
+                }
 
-                // 5. 2025년 라인 (빨간색)
-                datasets.push({
-                    label: '2025',
-                    data: monthOrder.map((month, index) => ({
-                        x: index,
-                        y: chartData.year2025[index]
-                    })),
-                    borderColor: '#E74C3C',
-                    backgroundColor: 'transparent',
-                    borderWidth: 3,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 5
-                });
+                // 4. 2025년 라인 (파란색) - 데이터가 있는 경우만
+                const data2025 = nvdiData.map((item, index) => ({
+                    x: index,
+                    y: item.year2025
+                })).filter(point => point.y !== null && !isNaN(point.y));
+
+                if (data2025.length > 0) {
+                    datasets.push({
+                        label: '2025',
+                        data: data2025,
+                        borderColor: '#3498DB',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#3498DB',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2
+                    });
+                }
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -1049,20 +1102,29 @@
                                         return item.text !== ''; // 빈 라벨 숨기기
                                     },
                                     usePointStyle: true,
-                                    pointStyle: 'line'
+                                    pointStyle: 'line',
+                                    padding: 20,
+                                    font: {
+                                        size: 12
+                                    }
                                 }
                             },
                             tooltip: {
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        return monthKR[index];
+                                        return monthKR[index] || `월 ${index + 1}`;
                                     },
                                     label: function(context) {
                                         if (context.datasetIndex === 0) {
-                                            return 'Min-Max 범위';
+                                            const index = context.dataIndex;
+                                            const dataPoint = nvdiData[index];
+                                            if (dataPoint) {
+                                                return `Range: ${dataPoint.minValue?.toFixed(3)} - ${dataPoint.maxValue?.toFixed(3)}`;
+                                            }
+                                            return 'Range data';
                                         } else if (context.datasetIndex === 1) {
-                                            return '';
+                                            return ''; // 하한선은 툴팁에서 숨김
                                         }
                                         return context.dataset.label + ': ' + (context.parsed.y ? context.parsed.y.toFixed(3) : 'N/A');
                                     }
@@ -1074,123 +1136,67 @@
                                 type: 'linear',
                                 position: 'bottom',
                                 title: {
-                                    display: false
+                                    display: true,
+                                    text: '월',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
                                 },
                                 ticks: {
                                     callback: function(value) {
                                         const index = Math.round(value);
                                         return monthKR[index] || '';
                                     },
-                                    maxTicksLimit: 11,
+                                    maxTicksLimit: 12,
                                     stepSize: 1
                                 },
+                                min: 0,
+                                max: 11,
                                 grid: {
                                     display: true,
-                                    color: 'rgba(255, 255, 255, 0.1)'
+                                    color: 'rgba(0, 0, 0, 0.1)'
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'NVDI Index'
-                                },
-                                min: 0.2,
-                                max: 0.9,
-                                ticks: {
-                                    stepSize: 0.1
+                                    text: 'NVDI Index',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
                                 },
                                 grid: {
                                     display: true,
-                                    color: 'rgba(255, 255, 255, 0.1)'
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toFixed(2);
+                                    }
                                 }
                             }
                         }
                     }
                 });
                 
+                console.log('NVDI 차트 생성 완료');
+                
             } catch (error) {
                 console.error('NVDI chart error:', error);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">NVDI 차트 오류: ' + error.message + '</div>';
+                
+                // 에러 발생 시 에러 메시지 표시
+                loadingElement.innerHTML = `
+                    <div style="color: #e74c3c; text-align: center;">
+                        <strong>NVDI 데이터 로딩 실패</strong><br>
+                        <small>${error.message}</small><br>
+                        <small style="margin-top: 10px; display: block;">
+                            nvdi.xls 파일이 존재하는지 확인해주세요.
+                        </small>
+                    </div>
+                `;
             }
-        }
-
-        // NVDI 테스트 차트 (에러 시 백업용)
-        function createNVDITestChart(loadingElement, chartElement) {
-            const monthKR = ['10월', '11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월'];
-            
-            const testData = {
-                minValues: [0.29, 0.37, 0.47, 0.68, 0.65, 0.60, 0.70, 0.62, 0.50, 0.40, 0.32],
-                maxValues: [0.42, 0.53, 0.71, 0.78, 0.75, 0.73, 0.78, 0.72, 0.60, 0.48, 0.40],
-                medianValues: [0.37, 0.46, 0.59, 0.73, 0.70, 0.67, 0.74, 0.67, 0.55, 0.44, 0.36],
-                year2025Values: [0.30, 0.42, 0.62, 0.75, 0.72, 0.69, 0.72, 0.65, 0.53, 0.42, 0.34]
-            };
-
-            const datasets = [
-                {
-                    label: 'Min-Max Range (2001-2024)',
-                    data: testData.maxValues.map((val, index) => ({ x: index, y: val })),
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                    borderWidth: 1,
-                    fill: '+1',
-                    tension: 0.4,
-                    pointRadius: 0
-                },
-                {
-                    label: '',
-                    data: testData.minValues.map((val, index) => ({ x: index, y: val })),
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                    borderWidth: 1,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0
-                },
-                {
-                    label: 'Median (2001-2024)',
-                    data: testData.medianValues.map((val, index) => ({ x: index, y: val })),
-                    borderColor: '#3498DB',
-                    backgroundColor: 'transparent',
-                    borderWidth: 3,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#3498DB'
-                },
-                {
-                    label: '2025',
-                    data: testData.year2025Values.map((val, index) => ({ x: index, y: val })),
-                    borderColor: '#E74C3C',
-                    backgroundColor: 'transparent',
-                    borderWidth: 3,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#E74C3C'
-                }
-            ];
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            charts.nvdi = new Chart(ctx, {
-                type: 'line',
-                data: { datasets: datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { intersect: false, mode: 'index' },
-                    plugins: {
-                        legend: { display: true, position: 'bottom', labels: { filter: function(item) { return item.text !== ''; } } },
-                        tooltip: { callbacks: { title: function(tooltipItems) { return monthKR[tooltipItems[0].dataIndex]; } } }
-                    },
-                    scales: {
-                        x: { type: 'linear', position: 'bottom', title: { display: false }, ticks: { callback: function(value) { return monthKR[value] || ''; }, maxTicksLimit: 11 } },
-                        y: { title: { display: true, text: 'NVDI Index' }, min: 0.2, max: 1.0 }
-                    }
-                }
-            });
         }
 
         // 키워드 추출 함수
