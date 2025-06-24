@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아라비카 커피 선물 시장 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: The infographic is structured as a top-to-bottom narrative scroll. It begins with a high-level summary and price forecast (the "hook"), then dives deeper into the core drivers. The flow is: 1) The Big Picture (Core conflict & forecast), 2) The Core Problem (Supply/Demand imbalance & low inventories), 3) The Deciding Factor (Brazil's asymmetric frost risk), 4) Market Internals (What the market's own signals are saying - Backwardation & Crowded Trades), and 5) The Final Outlook (Bull vs. Bear scenarios). This narrative structure was chosen to guide the user from the "what" to the "why," making the complex interdependencies of the coffee market easier to understand than a simple dashboard. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Price Forecast -> Goal: Inform -> Viz: Single Big Number -> Justification: Immediately grabs attention with the key takeaway.
+        - Report Info: Global S&D Forecasts -> Goal: Compare -> Viz: Bar Chart (Chart.js) -> Justification: Clearly contrasts the differing outlooks from major analysis firms (Rabobank, Volcafe, Marex).
+        - Report Info: ICE Inventory Levels -> Goal: Change -> Viz: Line Chart (Chart.js) -> Justification: The most effective way to show the dramatic historical plunge to 24-year lows.
+        - Report Info: Brazil Frost Risk -> Goal: Inform -> Viz: HTML/CSS Diagram (Risk Meter) -> Justification: A simple, non-SVG visual to represent a key qualitative risk factor during a specific period.
+        - Report Info: Term Structure -> Goal: Organize/Explain -> Viz: HTML/CSS Flow Diagram -> Justification: Simplifies the complex concept of backwardation and its bullish feedback loop without needing complex charts.
+        - Report Info: CFTC Positions -> Goal: Compare -> Viz: Bar Chart (Chart.js) -> Justification: Directly visualizes the "crowded trade" by showing the large net long position of Managed Money vs. the net short positions of commercials.
+        - Library/Method: All charts use Chart.js on Canvas. All diagrams use structured HTML/CSS with Tailwind. CONFIRMED NO SVG/MERMAID. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .super-heading {
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            border: 1px solid #E5E7EB;
+        }
+    </style>
+</head>
+<body class="text-[#073B4C]">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+
+        <section class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-6xl super-heading mb-2 text-shadow">커피 가격, 폭풍 전야</h1>
+            <p class="text-sm text-gray-500 mb-4">리포트 발간일: 2025년 6월 24일</p>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto text-[#118AB2] mb-6">아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하며 높은 수준의 변동성을 예고하고 있습니다.</p>
+            <div class="max-w-2xl mx-auto mb-8">
+                <p class="text-md text-gray-600 italic border-l-4 border-gray-300 pl-4 text-left">"최근 대외 매크로 요인의 영향으로 커피 시세 변동성이 확대돼 커피 선물 시세 방향성을 밀착 모니터링하고자 합니다."</p>
+                <p class="text-sm text-gray-500 text-right mt-2 pr-2">- by Align Commodities x Yellowknife Roasters</p>
+            </div>
+            <div class="card inline-block">
+                <p class="text-lg font-bold">단기 가격 전망 (9월물)</p>
+                <p class="text-5xl font-black text-[#FF6B6B] my-2">310-390¢</p>
+                <p class="text-sm text-gray-500">/ 파운드</p>
+            </div>
+        </section>
+
+        <section class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">핵심 쟁점: 구조적 공급 부족 심화</h2>
+            <p class="text-lg text-center max-w-2xl mx-auto text-gray-600 mb-12">전 세계 커피 재고가 역사적 최저 수준에 근접하고 있습니다. 주요 기관들의 전망은 엇갈리지만, 공급 부족이라는 공통된 방향성을 제시합니다.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-center mb-4">주요 기관별 수급 전망 (24/25)</h3>
+                    <p class="text-center text-sm text-gray-500 mb-4">일부 기관은 공급 과잉을 예측하지만(Rabobank), 다수의 기관은 구조적 부족(Volcafe)을 경고하며 시장의 공급 불안정성을 시사합니다.</p>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="supplyDemandForecastChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-center mb-4">ICE 인증 재고: 24년 만의 최저</h3>
+                    <p class="text-center text-sm text-gray-500 mb-4">시장의 '안전 재고'가 거의 소진되어, 공급 차질 발생 시 가격 급등을 완충할 여력이 크게 감소한 상태입니다.</p>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="inventoryLevelsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">핵심 변수: 브라질 기상 리스크</h2>
+            <p class="text-lg text-center max-w-2xl mx-auto text-gray-600 mb-12">세계 최대 생산국인 브라질의 겨울철 날씨, 특히 '서리' 발생 여부는 시장의 향방을 결정짓는 가장 중요한 변수입니다. 서리 피해가 없을 경우 시장은 안정을 찾지만, 서리가 발생할 경우 가격 급등은 불가피합니다.</p>
+            <div class="card max-w-3xl mx-auto">
+                <h3 class="text-2xl font-bold text-center mb-4">서리 리스크 기간 (6월 - 8월)</h3>
+                <div class="w-full bg-gray-200 rounded-full h-8 flex items-center p-1 my-4">
+                    <div class="bg-gradient-to-r from-[#FFD166] to-[#FF6B6B] h-6 rounded-full flex items-center justify-end" style="width: 75%;">
+                         <div class="relative flex items-center">
+                            <span class="absolute right-0 -mr-4 text-sm font-bold text-[#FF6B6B]">현재</span>
+                            <div class="w-4 h-4 bg-white rounded-full border-2 border-[#FF6B6B]"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between text-xs font-bold">
+                    <span>안전</span>
+                    <span>주의</span>
+                    <span>위험</span>
+                    <span>치명적</span>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-4">단 한 번의 서리 예보만으로도 시장 변동성이 크게 확대될 수 있으며, 이는 가격에 '서리 리스크 프리미엄'으로 반영되어 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">시장이 보내는 내부 신호</h2>
+            <p class="text-lg text-center max-w-2xl mx-auto text-gray-600 mb-12">가격과 데이터는 시장 참여자들의 심리와 행동을 반영하는 지표입니다. 현재 시장은 상반된 두 가지 신호를 동시에 보내고 있습니다.</p>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <div class="card flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-[#06D6A0]">강세 신호: 백워데이션</h3>
+                    <div class="space-y-4 text-center">
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <p class="font-bold">근월물 가격 > 원월물 가격</p>
+                        </div>
+                         <div class="text-2xl font-black text-green-500">▼</div>
+                         <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <p class="font-bold">의미: 즉각적인 실물 수요 강세</p>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">즉각적인 실물 수요가 매우 강하다는 명백한 증거로, 공급 부족 상황을 더욱 심화시키는 강력한 강세 요인입니다.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-[#FF6B6B]">약세 리스크: 과밀한 매수 포지션</h3>
+                     <p class="text-center text-sm text-gray-500 mb-4">상당한 규모의 투기 자본이 '가격 상승'에 베팅하고 있습니다. 이는 약세 요인 발생 시 포지션 청산으로 인한 가격 급락 리스크를 내포하고 있습니다.</p>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="cftcPositionsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+             <h2 class="text-3xl md:text-4xl font-bold text-center mb-2">향후 시장 전망: 시나리오별 분석</h2>
+             <p class="text-lg text-center max-w-2xl mx-auto text-gray-600 mb-12">궁극적인 시장 방향성은 아래 두 시나리오의 현실화 여부에 따라 결정될 것입니다.</p>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card border-t-4 border-[#06D6A0]">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center"><span class="text-4xl mr-3">📈</span> 강세 시나리오 (확률 70%)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>브라질 <span class="font-bold">서리 위협</span> 현실화</li>
+                        <li>강력한 로부스타 가격이 아라비카 수요 지지</li>
+                        <li>낮은 재고와 백워데이션이 투기적 매수 유인</li>
+                        <li class="font-bold text-[#06D6A0]">결과: 390센트를 넘어 400센트 이상으로 급등 가능</li>
+                    </ul>
+                </div>
+                 <div class="card border-t-4 border-[#FF6B6B]">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center"><span class="text-4xl mr-3">📉</span> 약세 시나리오 (확률 30%)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>브라질 겨울, <span class="font-bold">서리 피해 없이</span> 종료</li>
+                        <li>높은 가격에 따른 <span class="font-bold">소비 둔화</span> 발생</li>
+                        <li>투기적 매수 포지션 청산에 따른 <span class="font-bold">급격한 가격 조정</span></li>
+                         <li class="font-bold text-[#FF6B6B]">결과: 310센트 지지선을 하회하며 조정 국면 진입</li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const FONT_COLOR = '#073B4C';
+            const GRID_COLOR = 'rgba(7, 59, 76, 0.1)';
+            
+            Chart.defaults.font.family = "'Pretendard', sans-serif";
+            Chart.defaults.color = FONT_COLOR;
+
+            const tooltipCallbacks = {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    }
+                    return label;
+                }
+            };
+            
+            const chartOptionsBase = {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: '#073B4C',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#FFFFFF',
+                        padding: 10,
+                        cornerRadius: 4,
+                        callbacks: tooltipCallbacks
+                    }
+                },
+                scales: {
+                    y: {
+                        border: { display: false },
+                        grid: { color: GRID_COLOR },
+                        ticks: { color: FONT_COLOR }
+                    },
+                    x: {
+                        border: { display: false },
+                        grid: { display: false },
+                        ticks: { color: FONT_COLOR }
+                    }
+                }
+            };
+
+            new Chart(document.getElementById('supplyDemandForecastChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Rabobank', 'Marex', 'Volcafe (Arabica)'],
+                    datasets: [{
+                        label: '공급 과잉/부족 전망 (백만 백)',
+                        data: [6.8, 1.2, -8.5],
+                        backgroundColor: (context) => {
+                            const value = context.raw;
+                            return value >= 0 ? '#06D6A0' : '#FF6B6B';
+                        },
+                        borderRadius: 4
+                    }]
+                },
+                options: chartOptionsBase
+            });
+
+            new Chart(document.getElementById('inventoryLevelsChart'), {
+                type: 'line',
+                data: {
+                    labels: ['2021', '2022', '2023', '현재'],
+                    datasets: [{
+                        label: 'ICE 인증 재고 (백만 백)',
+                        data: [2.1, 1.1, 0.5, 0.87],
+                        borderColor: '#118AB2',
+                        backgroundColor: 'rgba(17, 138, 178, 0.1)',
+                        fill: true,
+                        tension: 0.1,
+                        pointBackgroundColor: '#118AB2',
+                        pointRadius: 4
+                    }]
+                },
+                options: chartOptionsBase
+            });
+            
+            const cftcData = {
+                labels: [['투기 자본', '(Managed Money)'], ['생산/상업', '(Producer/Merchant)'], ['스왑 딜러', '(Swap Dealer)']],
+                datasets: [{
+                    label: '순 포지션 계약 수',
+                    data: [33582, -27411, -12435],
+                    backgroundColor: (context) => {
+                        const value = context.raw;
+                        return value >= 0 ? '#FFD166' : '#118AB2';
+                    },
+                    borderRadius: 4
+                }]
+            };
+
+            new Chart(document.getElementById('cftcPositionsChart'), {
+                type: 'bar',
+                data: cftcData,
+                options: { ...chartOptionsBase, 
+                    indexAxis: 'y',
+                    scales: {
+                        y: {
+                            border: { display: false },
+                            grid: { display: false },
+                            ticks: { color: FONT_COLOR }
+                        },
+                        x: {
+                            border: { display: false },
+                            grid: { color: GRID_COLOR },
+                            ticks: { color: FONT_COLOR }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
