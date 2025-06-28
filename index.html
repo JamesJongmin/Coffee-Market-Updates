@@ -700,6 +700,34 @@
 
         // 기존 방식 폴백 (안전한 추출)
         function extractLegacyMetadata(htmlContent, filePath) {
+            // 특수 파일들을 위한 하드코딩된 메타데이터
+            const specialFiles = {
+                'Reports/2025/06/2025-06-13.html': {
+                    title: '단기 커피 선물 가격 전망 및 방향성 점검',
+                    summary: 'KCN25는 349.90센트로 +0.60% 상승하며 1차 지지선을 상회 회복했습니다. 단기적으로는 브라질 수확 진행과 투기적 숏 포지션이 하방 압력으로 작용하나, 구조적으로는 글로벌 아라비카 적자와 25년 만에 최저 재고가 강세 요인으로 작용합니다.',
+                    tags: ['단기전망', '기술적분석', '브라질수확', '아라비카적자', '투기포지션']
+                },
+                'Reports/2025/06/2025-06-24.html': {
+                    title: '커피 가격, 폭풍 전야 - 아라비카 시장 인포그래픽',
+                    summary: '아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하며 높은 변동성을 예고하고 있습니다. 단기 가격 전망은 310-390센트 범위이며, 브라질 서리 위험이 핵심 변수로 작용할 전망입니다.',
+                    tags: ['인포그래픽', '가격전망', '브라질서리', '공급부족', '변동성']
+                }
+            };
+
+            // 특수 파일인지 확인
+            if (specialFiles[filePath]) {
+                console.log(`특수 파일 처리: ${filePath}`);
+                const fileData = specialFiles[filePath];
+                const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
+                return {
+                    title: fileData.title,
+                    subtitle: '',
+                    date: dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0],
+                    summary: fileData.summary,
+                    tags: fileData.tags
+                };
+            }
+
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlContent, 'text/html');
             
