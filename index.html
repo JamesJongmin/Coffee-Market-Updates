@@ -923,175 +923,7 @@
             }
         }
 
-        // Google Sheets CSV 읽기 함수
-        async function readGoogleSheetsCSV(sheetUrl, sheetName = 'Unknown') {
-            try {
-                console.log(`Google Sheets 데이터 로딩 시작: ${sheetName}`);
-                
-                const response = await fetch(sheetUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const csvText = await response.text();
-                
-                // Papaparse로 CSV 파싱
-                const parsed = Papa.parse(csvText, {
-                    header: false,
-                    dynamicTyping: true,
-                    skipEmptyLines: true
-                });
-                
-                if (parsed.errors.length > 0) {
-                    console.warn(`CSV 파싱 경고 (${sheetName}):`, parsed.errors);
-                }
-                
-                const data = parsed.data;
-                console.log(`${sheetName} 데이터 로딩 완료:`, data.length, '행');
-                
-                // 첫 2개 행은 헤더로 스킵, 3번째 행부터 데이터
-                const dataRows = data.slice(2);
-                
-                const processedData = dataRows.map(row => ({
-                    date: row[0], // 첫 번째 컬럼: Date
-                    value: row[1] // 두 번째 컬럼: Value
-                })).filter(row => row.date && row.value !== undefined && row.value !== null);
-                
-                // 날짜순 정렬
-                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-                
-                console.log(`${sheetName} 처리 완료:`, processedData.length, '개 데이터 포인트');
-                return processedData;
-                
-            } catch (error) {
-                console.error(`Google Sheets 로딩 실패 (${sheetName}):`, error);
-                return null;
-            }
-        }
-
-        // Google Sheets NVDI 데이터 읽기 함수
-        async function readNVDIGoogleSheets(sheetUrl) {
-            try {
-                console.log('Google Sheets NVDI 데이터 로딩 시작');
-                
-                const response = await fetch(sheetUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const csvText = await response.text();
-                
-                const parsed = Papa.parse(csvText, {
-                    header: false,
-                    dynamicTyping: true,
-                    skipEmptyLines: true
-                });
-                
-                const data = parsed.data;
-                console.log('NVDI 원본 데이터:', data.length, '행');
-                
-                // 첫 번째 행: 헤더 (Date, 2010, 2011, ..., 2025)
-                const headers = data[0];
-                const yearColumns = {};
-                headers.forEach((header, index) => {
-                    if (index > 0) { // Date 컬럼 제외
-                        const year = parseInt(header.toString().trim());
-                        if (!isNaN(year)) {
-                            yearColumns[year] = index;
-                        }
-                    }
-                });
-                
-                console.log('인식된 년도 컬럼:', Object.keys(yearColumns));
-                
-                // 월별 데이터 처리
-                const monthlyData = [];
-                
-                for (let month = 1; month <= 12; month++) {
-                    const monthRows = [];
-                    
-                    // 해당 월의 모든 행 찾기
-                    for (let i = 1; i < data.length; i++) {
-                        const row = data[i];
-                        if (row && row[0]) {
-                            const dateStr = row[0].toString();
-                            const dateParts = dateStr.split('/');
-                            if (dateParts.length >= 2) {
-                                const rowMonth = parseInt(dateParts[1]);
-                                if (rowMonth === month) {
-                                    monthRows.push(row);
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (monthRows.length > 0) {
-                        // 2010-2023년 데이터에서 min/max 계산
-                        const allValues = [];
-                        for (const row of monthRows) {
-                            for (let year = 2010; year <= 2023; year++) {
-                                const colIndex = yearColumns[year];
-                                if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
-                                    const value = parseFloat(row[colIndex]);
-                                    if (!isNaN(value)) {
-                                        allValues.push(value);
-                                    }
-                                }
-                            }
-                        }
-                        
-                        const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
-                        const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
-                        
-                        // 2024년과 2025년 데이터 (평균값 사용)
-                        let year2024Values = [];
-                        let year2025Values = [];
-                        
-                        for (const row of monthRows) {
-                            const val2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
-                            const val2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
-                            
-                            if (!isNaN(val2024)) year2024Values.push(val2024);
-                            if (!isNaN(val2025)) year2025Values.push(val2025);
-                        }
-                        
-                        const avg2024 = year2024Values.length > 0 ? 
-                            year2024Values.reduce((sum, val) => sum + val, 0) / year2024Values.length : null;
-                        const avg2025 = year2025Values.length > 0 ? 
-                            year2025Values.reduce((sum, val) => sum + val, 0) / year2025Values.length : null;
-                        
-                        monthlyData.push({
-                            month: month,
-                            minValue: minValue,
-                            maxValue: maxValue,
-                            year2024: avg2024,
-                            year2025: avg2025
-                        });
-                    }
-                }
-                
-                console.log('NVDI 월별 데이터 처리 완료:', monthlyData.length, '개월');
-                return monthlyData;
-                
-            } catch (error) {
-                console.error('Google Sheets NVDI 로딩 실패:', error);
-                return null;
-            }
-        }
-
-        // 날짜 변환 함수
-        function parseDate(dateValue) {
-            if (typeof dateValue === 'number') {
-                // Excel 날짜 시리얼 번호인 경우
-                const date = new Date((dateValue - 25569) * 86400 * 1000);
-                return date;
-            } else if (typeof dateValue === 'string') {
-                return new Date(dateValue);
-            }
-            return new Date(dateValue);
-        }
-
-        // 일반 Excel 파일 읽기 함수 (폴백용)
+        // 일반 Excel 파일 읽기 함수 (2컬럼: Date, Value)
         async function readExcelFile(filename) {
             try {
                 const response = await fetch(filename);
@@ -1125,7 +957,7 @@
             }
         }
 
-        // NVDI Excel 파일 읽기 함수 (폴백용)
+        // NVDI Excel 파일 읽기 함수
         async function readNVDIExcelFile(filename) {
             try {
                 const response = await fetch(filename);
@@ -1223,42 +1055,17 @@
                 return null;
             }
         }
-        const GOOGLE_SHEETS_URLS = {
-            coffee: 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/export?format=csv&gid=COFFEE_SHEET_ID',
-            usdbrl: 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/export?format=csv&gid=USDBRL_SHEET_ID',
-            cftc: 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/export?format=csv&gid=CFTC_SHEET_ID',
-            nvdi: 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/export?format=csv&gid=NVDI_SHEET_ID'
-        };
 
-        // 데이터 소스 선택 (Google Sheets 우선, Excel 폴백)
-        async function loadChartData(type) {
-            const sheetUrl = GOOGLE_SHEETS_URLS[type];
-            
-            // NVDI는 항상 Excel 파일 사용
-            if (type === 'nvdi') {
-                console.log('NVDI - Excel 파일 사용');
-                return await readNVDIExcelFile('nvdi.xls');
+        // 날짜 변환 함수
+        function parseDate(dateValue) {
+            if (typeof dateValue === 'number') {
+                // Excel 날짜 시리얼 번호인 경우
+                const date = new Date((dateValue - 25569) * 86400 * 1000);
+                return date;
+            } else if (typeof dateValue === 'string') {
+                return new Date(dateValue);
             }
-            
-            // 다른 차트들은 Google Sheets 우선 시도
-            if (sheetUrl) {
-                console.log(`Google Sheets에서 ${type} 데이터 로드 시도`);
-                const data = await readGoogleSheetsCSV(sheetUrl, type);
-                if (data) {
-                    console.log(`Google Sheets ${type} 로드 성공`);
-                    return data;
-                }
-            }
-            
-            // Excel 파일 폴백
-            console.log(`Excel 파일로 ${type} 데이터 로드 시도`);
-            const fileMap = {
-                coffee: 'coffeefutures.xlsx',
-                usdbrl: 'usdbrl.xlsx', 
-                cftc: 'cftcpositions.xlsx'
-            };
-            
-            return await readExcelFile(fileMap[type]);
+            return new Date(dateValue);
         }
 
         // Coffee Futures 차트
@@ -1268,8 +1075,8 @@
             
             try {
                 const data = await Promise.race([
-                    loadChartData('coffee'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                    readExcelFile('coffeefutures.xlsx'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
                 ]);
                 
                 if (!data) {
@@ -1376,76 +1183,6 @@
                 console.error('Coffee chart error:', error);
                 loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
             }
-        } : 0
-                            ),
-                            pointRadius: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 4 : 0
-                            )
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: 'Date'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
-                                            const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 8));
-                                            
-                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
-                                            }
-                                        }
-                                        return '';
-                                    },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / 8)),
-                                    maxTicksLimit: 10,
-                                    maxRotation: 45,
-                                    minRotation: 0
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Price (cents/lb)'
-                                }
-                            }
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error('Coffee chart error:', error);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
-            }
         }
 
         // USD/BRL 환율 차트
@@ -1455,8 +1192,8 @@
             
             try {
                 const data = await Promise.race([
-                    loadChartData('usdbrl'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                    readExcelFile('usdbrl.xlsx'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
                 ]);
                 
                 if (!data) {
@@ -1572,8 +1309,8 @@
             
             try {
                 const data = await Promise.race([
-                    loadChartData('cftc'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                    readExcelFile('cftcpositions.xlsx'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
                 ]);
                 
                 if (!data) {
@@ -1673,8 +1410,8 @@
             
             try {
                 const nvdiData = await Promise.race([
-                    loadChartData('nvdi'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 15000))
+                    readNVDIExcelFile('nvdi.xls'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
                 
                 if (!nvdiData || nvdiData.length === 0) {
@@ -1895,93 +1632,12 @@
                         <strong>NVDI 데이터 로딩 실패</strong><br>
                         <small>${error.message}</small><br>
                         <small style="margin-top: 10px; display: block;">
-                            Google Sheets 또는 nvdi.xls 파일을 확인해주세요.
-                        </small>
-                    </div>
-                `;
-            }
-        }Point) {
-                                                return `Range: ${dataPoint.minValue?.toFixed(3)} - ${dataPoint.maxValue?.toFixed(3)}`;
-                                            }
-                                            return 'Range data';
-                                        } else if (context.datasetIndex === 1) {
-                                            return '';
-                                        }
-                                        return context.dataset.label + ': ' + (context.parsed.y ? context.parsed.y.toFixed(3) : 'N/A');
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: '월',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        return monthKR[index] || '';
-                                    },
-                                    maxTicksLimit: 12,
-                                    stepSize: 1
-                                },
-                                min: 0,
-                                max: 11,
-                                grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'NVDI Index',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                },
-                                grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toFixed(2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                console.log('NVDI 차트 생성 완료');
-                
-            } catch (error) {
-                console.error('NVDI chart error:', error);
-                loadingElement.innerHTML = `
-                    <div style="color: #e74c3c; text-align: center;">
-                        <strong>NVDI 데이터 로딩 실패</strong><br>
-                        <small>${error.message}</small><br>
-                        <small style="margin-top: 10px; display: block;">
                             nvdi.xls 파일이 존재하는지 확인해주세요.
                         </small>
                     </div>
                 `;
             }
         }
-
-        // Papaparse 라이브러리 추가 (Google Sheets CSV 파싱용)
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js';
-        document.head.appendChild(script);
 
         // 리포트 렌더링
         function renderReports(filteredReports = allReports) {
