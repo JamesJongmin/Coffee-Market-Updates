@@ -6,7 +6,6 @@
     <title>Coffee Market Updates Archive</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-date-fns/2.0.0/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -298,7 +297,6 @@
             font-size: 1.1em;
         }
         
-        /* 차트 대시보드 스타일 */
         .dashboard-section {
             margin-bottom: 50px;
         }
@@ -629,800 +627,762 @@
         </footer>
     </div>
 
-<script>
-let allReports = [];
-let charts = {};
+    <script>
+        // 전역 변수
+        let allReports = [];
+        let charts = {};
 
-// 구글 시트 URL 설정
-const GOOGLE_SHEETS_URLS = {
-    coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
-    usdbrl: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
-    cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
-    nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
-};
-
-// CSV 파싱 함수
-function parseCSV(csvText) {
-    const lines = csvText.split('\n');
-    const result = [];
-    
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line) {
-            const cells = line.split(',');
-            result.push(cells);
-        }
-    }
-    
-    return result;
-}
-
-// 구글 시트에서 데이터 읽기 함수 (2컬럼: Date, Value)
-async function readGoogleSheetData(sheetKey) {
-    try {
-        const url = GOOGLE_SHEETS_URLS[sheetKey];
-        if (!url) {
-            throw new Error(`Unknown sheet key: ${sheetKey}`);
-        }
-
-        console.log(`Fetching data from Google Sheets: ${sheetKey}`);
-        
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const csvText = await response.text();
-        const data = parseCSV(csvText);
-        
-        // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
-        const dataRows = data.slice(1);
-        
-        const processedData = dataRows.map(row => ({
-            date: row[0], // 첫 번째 컬럼은 항상 Date
-            value: row[1] // 두 번째 컬럼은 해당 값
-        })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
-        
-        // 날짜순으로 정렬 (오래된 것 → 최신 순서로)
-        processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-        
-        console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
-        return processedData;
-        
-    } catch (error) {
-        console.error(`Error reading Google Sheet ${sheetKey}:`, error);
-        return null;
-    }
-}
-
-// 구글 시트에서 NVDI 데이터 읽기 함수
-async function readNVDIGoogleSheetData() {
-    try {
-        const url = GOOGLE_SHEETS_URLS.nvdi;
-        console.log('Fetching NVDI data from Google Sheets...');
-        
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const csvText = await response.text();
-        const data = parseCSV(csvText);
-        
-        console.log('NVDI CSV 데이터 로딩 완료. 총 행:', data.length);
-        console.log('헤더:', data[0]);
-        console.log('샘플 데이터:', data.slice(1, 3));
-        
-        // 헤더 분석
-        const headers = data[0];
-        const monthlyData = [];
-        
-        // 데이터 구조 분석 및 처리
-        const dataRows = data.slice(1); // 헤더 제외
-        
-        if (headers.includes('Min_Historical') || headers.includes('Min') || headers.includes('min')) {
-            // 구조 1: 이미 계산된 Min/Max 값이 있는 경우
-            console.log('NVDI 구조 1: Min/Max 사전 계산된 데이터');
-            
-            for (const row of dataRows) {
-                if (row && row[0]) {
-                    const month = parseInt(row[0]);
-                    if (month >= 1 && month <= 12) {
-                        const minIndex = headers.findIndex(h => h.toLowerCase().includes('min'));
-                        const maxIndex = headers.findIndex(h => h.toLowerCase().includes('max'));
-                        const year2025Index = headers.findIndex(h => h.includes('2025'));
-                        
-                        monthlyData.push({
-                            month: month,
-                            minValue: minIndex >= 0 ? parseFloat(row[minIndex]) : null,
-                            maxValue: maxIndex >= 0 ? parseFloat(row[maxIndex]) : null,
-                            year2024: year2024Index >= 0 ? parseFloat(row[year2024Index]) : null,
-                            year2025: year2025Index >= 0 ? parseFloat(row[year2025Index]) : null
-                        });
-                    }
-                }
-            }
-        } else {
-            // 구조 2: 년도별 컬럼으로 되어 있는 경우
-            console.log('NVDI 구조 2: 년도별 컬럼 데이터');
-            
-            // 년도별 컬럼 인덱스 찾기
-            const yearColumns = {};
-            headers.forEach((header, index) => {
-                if (index > 0) { // Month 컬럼 제외
-                    const year = parseInt(header.toString().trim());
-                    if (year >= 2010 && year <= 2025) {
-                        yearColumns[year] = index;
-                    }
-                }
-            });
-            
-            console.log('발견된 년도 컬럼:', Object.keys(yearColumns));
-            
-            for (const row of dataRows) {
-                if (row && row[0]) {
-                    const month = parseInt(row[0]);
-                    if (month >= 1 && month <= 12) {
-                        // 2010-2023년 데이터에서 min/max 계산
-                        const allValues = [];
-                        for (let year = 2010; year <= 2023; year++) {
-                            const colIndex = yearColumns[year];
-                            if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
-                                const value = parseFloat(row[colIndex]);
-                                if (!isNaN(value)) {
-                                    allValues.push(value);
-                                }
-                            }
-                        }
-                        
-                        const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
-                        const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
-                        
-                        // 2024년과 2025년 데이터
-                        const year2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
-                        const year2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
-                        
-                        monthlyData.push({
-                            month: month,
-                            minValue: minValue,
-                            maxValue: maxValue,
-                            year2024: !isNaN(year2024) ? year2024 : null,
-                            year2025: !isNaN(year2025) ? year2025 : null
-                        });
-                    }
-                }
-            }
-        }
-        
-        console.log('월별 NVDI 데이터 처리 완료:', monthlyData.length, '개월');
-        return monthlyData;
-        
-    } catch (error) {
-        console.error('Error reading NVDI Google Sheet:', error);
-        return null;
-    }
-}
-
-// 리포트 관련 함수들
-async function loadReportsFromFiles() {
-    const reportFiles = [
-        'Reports/2025/06/2025-06-28.html',
-        'Reports/2025/06/2025-06-24.html', 
-        'Reports/2025/06/2025-06-21.html',
-        'Reports/2025/06/2025-06-14.html',
-        'Reports/2025/06/2025-06-13.html',
-        'Reports/2025/06/2025-06-09.html',
-        'Reports/2025/06/2025-06-08.html',
-        'Reports/2025/05/2025-05-31.html'
-    ];
-    
-    const reports = [];
-    
-    for (const filePath of reportFiles) {
-        try {
-            const response = await fetch(filePath);
-            if (!response.ok) {
-                console.log(`파일 없음: ${filePath}`);
-                continue;
-            }
-            
-            const htmlContent = await response.text();
-            const metadata = extractReportMetadata(htmlContent, filePath);
-            
-            if (metadata) {
-                reports.push({
-                    ...metadata,
-                    link: filePath,
-                    year: metadata.date.split('-')[0],
-                    month: metadata.date.split('-')[1],
-                    displayDate: formatKoreanDate(metadata.date)
-                });
-            }
-        } catch (error) {
-            console.error(`로딩 실패 ${filePath}:`, error);
-        }
-    }
-    
-    return reports.sort((a, b) => new Date(b.date) - new Date(a.date));
-}
-
-function extractReportMetadata(htmlContent, filePath) {
-    const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
-    
-    if (metaMatch) {
-        try {
-            const metadata = JSON.parse(metaMatch[1].trim());
-            return metadata;
-        } catch (error) {
-            console.error(`메타데이터 파싱 실패 ${filePath}:`, error);
-        }
-    }
-    
-    return extractLegacyMetadata(htmlContent, filePath);
-}
-
-function extractLegacyMetadata(htmlContent, filePath) {
-    const specialFiles = {
-        'Reports/2025/06/2025-06-14.html': {
-            title: '단기 커피 선물 가격 전망 및 방향성 점검',
-            summary: 'KCN25는 349.90센트로 +0.60% 상승하며 1차 지지선을 상회 회복했습니다.',
-            tags: ['단기전망', '기술적분석', '브라질수확']
-        },
-        'Reports/2025/06/2025-06-24.html': {
-            title: '커피 가격, 폭풍 전야 - 아라비카 시장 인포그래픽',
-            summary: '아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하고 있습니다.',
-            tags: ['인포그래픽', '가격전망', '브라질서리']
-        }
-    };
-
-    if (specialFiles[filePath]) {
-        const fileData = specialFiles[filePath];
-        const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
-        return {
-            title: fileData.title,
-            subtitle: '',
-            date: dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0],
-            summary: fileData.summary,
-            tags: fileData.tags
+        // 구글 시트 URL 설정
+        const GOOGLE_SHEETS_URLS = {
+            coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
+            usdbrl: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
+            cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
+            nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
         };
-    }
 
-    const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
-    return {
-        title: `커피 시장 동향 - ${dateMatch ? dateMatch[1] : 'Unknown'}`,
-        subtitle: '',
-        date: dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0],
-        summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-        tags: ['커피', '시장동향']
-    };
-}
-
-function formatKoreanDate(dateString) {
-    try {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    } catch (error) {
-        return dateString;
-    }
-}
-
-function getDefaultReports() {
-    return [
-        {
-            date: '2025-06-28',
-            displayDate: '2025년 6월 28일',
-            title: '커피 시장 동향 - 2025-06-28',
-            subtitle: 'Coffee Market Update',
-            summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-            tags: ['커피', '시장동향'],
-            link: 'Reports/2025/06/2025-06-28.html',
-            year: '2025',
-            month: '06'
-        }
-    ];
-}
-
-async function initializeReports() {
-    try {
-        let reports = await loadReportsFromFiles();
-        if (reports.length === 0) {
-            reports = getDefaultReports();
-        }
-        return reports;
-    } catch (error) {
-        console.error('리포트 초기화 중 오류:', error);
-        return getDefaultReports();
-    }
-}
-
-// 날짜 변환 함수
-function parseDate(dateValue) {
-    if (typeof dateValue === 'number') {
-        const date = new Date((dateValue - 25569) * 86400 * 1000);
-        return date;
-    } else if (typeof dateValue === 'string') {
-        return new Date(dateValue);
-    }
-    return new Date(dateValue);
-}
-
-// Coffee Futures 차트
-async function createCoffeeChart() {
-    const loadingElement = document.getElementById('loading-coffee');
-    const chartElement = document.getElementById('coffeeChart');
-    
-    try {
-        const data = await Promise.race([
-            readGoogleSheetData('coffeefutures'),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-        ]);
-        
-        if (!data) {
-            throw new Error('No data received');
+        // CSV 파싱 함수
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const result = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) {
+                    const cells = line.split(',');
+                    result.push(cells);
+                }
+            }
+            
+            return result;
         }
 
-        const chartData = data.map((row, index) => ({
-            x: index,
-            y: parseFloat(row.value),
-            date: parseDate(row.date)
-        })).filter(point => !isNaN(point.y));
+        // 날짜 변환 함수
+        function parseDate(dateValue) {
+            if (typeof dateValue === 'number') {
+                return new Date((dateValue - 25569) * 86400 * 1000);
+            } else if (typeof dateValue === 'string') {
+                return new Date(dateValue);
+            }
+            return new Date(dateValue);
+        }
 
-        loadingElement.style.display = 'none';
-        chartElement.style.display = 'block';
+        // 구글 시트에서 일반 데이터 읽기 (Date, Value 컬럼)
+        async function readGoogleSheetData(sheetKey) {
+            try {
+                const url = GOOGLE_SHEETS_URLS[sheetKey];
+                if (!url) {
+                    throw new Error(`Unknown sheet key: ${sheetKey}`);
+                }
 
-        const ctx = chartElement.getContext('2d');
-        charts.coffee = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: 'Coffee Futures Price',
-                    data: chartData,
-                    borderColor: '#8B4513',
-                    backgroundColor: 'rgba(139, 69, 19, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.2,
-                    pointRadius: 0,
-                    pointHoverRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            title: function(tooltipItems) {
-                                const index = tooltipItems[0].dataIndex;
-                                return chartData[index].date.toLocaleDateString('ko-KR');
+                console.log(`Fetching data from Google Sheets: ${sheetKey}`);
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                
+                const dataRows = data.slice(1); // 헤더 제외
+                
+                const processedData = dataRows.map(row => ({
+                    date: row[0],
+                    value: row[1]
+                })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
+                
+                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                
+                console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
+                return processedData;
+                
+            } catch (error) {
+                console.error(`Error reading Google Sheet ${sheetKey}:`, error);
+                return null;
+            }
+        }
+
+        // NVDI 데이터 읽기 (특별한 구조)
+        async function readNVDIData() {
+            try {
+                const url = GOOGLE_SHEETS_URLS.nvdi;
+                console.log('Fetching NVDI data from Google Sheets...');
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                
+                console.log('NVDI CSV 데이터 로딩 완료. 총 행:', data.length);
+                
+                const headers = data[0];
+                const monthlyData = [];
+                const dataRows = data.slice(1);
+                
+                // 두 가지 구조 지원
+                if (headers.some(h => h.toLowerCase().includes('min')) || headers.some(h => h.toLowerCase().includes('max'))) {
+                    // 구조 1: Min/Max 사전 계산된 데이터
+                    console.log('NVDI 구조 1: Min/Max 사전 계산된 데이터');
+                    
+                    for (const row of dataRows) {
+                        if (row && row[0]) {
+                            const month = parseInt(row[0]);
+                            if (month >= 1 && month <= 12) {
+                                const minIndex = headers.findIndex(h => h.toLowerCase().includes('min'));
+                                const maxIndex = headers.findIndex(h => h.toLowerCase().includes('max'));
+                                const year2024Index = headers.findIndex(h => h.includes('2024'));
+                                const year2025Index = headers.findIndex(h => h.includes('2025'));
+                                
+                                monthlyData.push({
+                                    month: month,
+                                    minValue: minIndex >= 0 ? parseFloat(row[minIndex]) : null,
+                                    maxValue: maxIndex >= 0 ? parseFloat(row[maxIndex]) : null,
+                                    year2024: year2024Index >= 0 ? parseFloat(row[year2024Index]) : null,
+                                    year2025: year2025Index >= 0 ? parseFloat(row[year2025Index]) : null
+                                });
                             }
                         }
                     }
-                },
-                scales: {
-                    x: {
-                        type: 'linear',
-                        title: { display: true, text: 'Date' },
-                        ticks: {
-                            callback: function(value) {
-                                const index = Math.round(value);
-                                if (chartData[index]) {
-                                    const totalPoints = chartData.length;
-                                    const step = Math.max(1, Math.floor(totalPoints / 8));
-                                    if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                        return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                            year: '2-digit', month: 'short' 
-                                        });
+                } else {
+                    // 구조 2: 년도별 컬럼 데이터
+                    console.log('NVDI 구조 2: 년도별 컬럼 데이터');
+                    
+                    const yearColumns = {};
+                    headers.forEach((header, index) => {
+                        if (index > 0) {
+                            const year = parseInt(header.toString().trim());
+                            if (year >= 2010 && year <= 2025) {
+                                yearColumns[year] = index;
+                            }
+                        }
+                    });
+                    
+                    for (const row of dataRows) {
+                        if (row && row[0]) {
+                            const month = parseInt(row[0]);
+                            if (month >= 1 && month <= 12) {
+                                const allValues = [];
+                                for (let year = 2010; year <= 2023; year++) {
+                                    const colIndex = yearColumns[year];
+                                    if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
+                                        const value = parseFloat(row[colIndex]);
+                                        if (!isNaN(value)) {
+                                            allValues.push(value);
+                                        }
                                     }
                                 }
-                                return '';
-                            }
-                        }
-                    },
-                    y: {
-                        title: { display: true, text: 'Price (cents/lb)' }
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('Coffee chart error:', error);
-        loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
-    }
-}
-
-// USD/BRL 환율 차트
-async function createUSDChart() {
-    const loadingElement = document.getElementById('loading-usd');
-    const chartElement = document.getElementById('usdChart');
-    
-    try {
-        const data = await readGoogleSheetData('usdbrl');
-        if (!data) throw new Error('No data received');
-
-        const chartData = data.map((row, index) => ({
-            x: index,
-            y: parseFloat(row.value),
-            date: parseDate(row.date)
-        })).filter(point => !isNaN(point.y));
-
-        loadingElement.style.display = 'none';
-        chartElement.style.display = 'block';
-
-        const ctx = chartElement.getContext('2d');
-        charts.usd = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [{
-                    label: 'USD/BRL Rate',
-                    data: chartData,
-                    borderColor: '#2E8B57',
-                    backgroundColor: 'rgba(46, 139, 87, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.2,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { type: 'linear', title: { display: true, text: 'Date' } },
-                    y: { title: { display: true, text: 'BRL per USD' } }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('USD chart error:', error);
-        loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-    }
-}
-
-// CFTC 포지션 차트
-async function createCFTCChart() {
-    const loadingElement = document.getElementById('loading-cftc');
-    const chartElement = document.getElementById('cftcChart');
-    
-    try {
-        const data = await readGoogleSheetData('cftcpositions');
-        if (!data) throw new Error('No data received');
-
-        const chartData = data.map((row, index) => ({
-            x: index,
-            y: parseInt(row.value),
-            date: parseDate(row.date)
-        })).filter(point => !isNaN(point.y));
-
-        loadingElement.style.display = 'none';
-        chartElement.style.display = 'block';
-
-        const ctx = chartElement.getContext('2d');
-        charts.cftc = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                datasets: [{
-                    label: 'Net Long Positions',
-                    data: chartData,
-                    backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
-                    borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { type: 'linear', title: { display: true, text: 'Date' } },
-                    y: { title: { display: true, text: 'Net Long Positions' } }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('CFTC chart error:', error);
-        loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패</div>';
-    }
-}
-
-// NVDI 차트
-async function createNVDIChart() {
-    const loadingElement = document.getElementById('loading-nvdi');
-    const chartElement = document.getElementById('nvdiChart');
-    
-    try {
-        const nvdiData = await readNVDIGoogleSheetData();
-        if (!nvdiData || nvdiData.length === 0) {
-            throw new Error('NVDI 데이터를 읽을 수 없습니다');
-        }
-
-        const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', 
-                       '7월', '8월', '9월', '10월', '11월', '12월'];
-
-        const datasets = [];
-
-        // Historical Range
-        const maxData = nvdiData.map((item, index) => ({
-            x: index, y: item.maxValue
-        })).filter(point => point.y !== null && !isNaN(point.y));
-
-        if (maxData.length > 0) {
-            datasets.push({
-                label: 'Historical Range (2010-2023)',
-                data: maxData,
-                borderColor: 'rgba(149, 165, 166, 0.8)',
-                backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                borderWidth: 1,
-                fill: '+1',
-                tension: 0.4,
-                pointRadius: 0
-            });
-
-            const minData = nvdiData.map((item, index) => ({
-                x: index, y: item.minValue
-            })).filter(point => point.y !== null && !isNaN(point.y));
-
-            datasets.push({
-                label: '',
-                data: minData,
-                borderColor: 'rgba(149, 165, 166, 0.8)',
-                backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                borderWidth: 1,
-                fill: false,
-                tension: 0.4,
-                pointRadius: 0
-            });
-        }
-
-        // 2024년 라인
-        const data2024 = nvdiData.map((item, index) => ({
-            x: index, y: item.year2024
-        })).filter(point => point.y !== null && !isNaN(point.y));
-
-        if (data2024.length > 0) {
-            datasets.push({
-                label: '2024',
-                data: data2024,
-                borderColor: '#E74C3C',
-                backgroundColor: 'transparent',
-                borderWidth: 3,
-                fill: false,
-                tension: 0.4,
-                pointRadius: 4,
-                pointBackgroundColor: '#E74C3C'
-            });
-        }
-
-        // 2025년 라인
-        const data2025 = nvdiData.map((item, index) => ({
-            x: index, y: item.year2025
-        })).filter(point => point.y !== null && !isNaN(point.y));
-
-        if (data2025.length > 0) {
-            datasets.push({
-                label: '2025',
-                data: data2025,
-                borderColor: '#3498DB',
-                backgroundColor: 'transparent',
-                borderWidth: 3,
-                fill: false,
-                tension: 0.4,
-                pointRadius: 4,
-                pointBackgroundColor: '#3498DB'
-            });
-        }
-
-        loadingElement.style.display = 'none';
-        chartElement.style.display = 'block';
-
-        const ctx = chartElement.getContext('2d');
-        charts.nvdi = new Chart(ctx, {
-            type: 'line',
-            data: { datasets: datasets },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            filter: item => item.text !== '',
-                            padding: 20
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            title: function(tooltipItems) {
-                                const index = tooltipItems[0].dataIndex;
-                                return monthKR[index] || `월 ${index + 1}`;
+                                
+                                const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
+                                const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
+                                
+                                const year2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
+                                const year2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
+                                
+                                monthlyData.push({
+                                    month: month,
+                                    minValue: minValue,
+                                    maxValue: maxValue,
+                                    year2024: !isNaN(year2024) ? year2024 : null,
+                                    year2025: !isNaN(year2025) ? year2025 : null
+                                });
                             }
                         }
                     }
-                },
-                scales: {
-                    x: {
-                        type: 'linear',
-                        title: { display: true, text: '월' },
-                        ticks: {
-                            callback: function(value) {
-                                const index = Math.round(value);
-                                return monthKR[index] || '';
-                            },
-                            stepSize: 1
+                }
+                
+                console.log('월별 NVDI 데이터 처리 완료:', monthlyData.length, '개월');
+                return monthlyData;
+                
+            } catch (error) {
+                console.error('Error reading NVDI data:', error);
+                return null;
+            }
+        }
+
+        // Coffee Futures 차트 생성
+        async function createCoffeeChart() {
+            const loadingElement = document.getElementById('loading-coffee');
+            const chartElement = document.getElementById('coffeeChart');
+            
+            try {
+                const data = await readGoogleSheetData('coffeefutures');
+                if (!data) throw new Error('데이터를 불러올 수 없습니다');
+
+                const chartData = data.map((row, index) => ({
+                    x: index,
+                    y: parseFloat(row.value),
+                    date: parseDate(row.date)
+                })).filter(point => !isNaN(point.y));
+
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+
+                const ctx = chartElement.getContext('2d');
+                charts.coffee = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            label: 'Coffee Futures Price',
+                            data: chartData,
+                            borderColor: '#8B4513',
+                            backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.2,
+                            pointRadius: 0,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        const index = tooltipItems[0].dataIndex;
+                                        return chartData[index].date.toLocaleDateString('ko-KR');
+                                    }
+                                }
+                            }
                         },
-                        min: 0,
-                        max: 11
-                    },
-                    y: {
-                        title: { display: true, text: 'NVDI Index' },
-                        ticks: {
-                            callback: function(value) {
-                                return value.toFixed(2);
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                title: { display: true, text: 'Date' },
+                                ticks: {
+                                    callback: function(value) {
+                                        const index = Math.round(value);
+                                        if (chartData[index] && index >= 0 && index < chartData.length) {
+                                            const totalPoints = chartData.length;
+                                            const step = Math.max(1, Math.floor(totalPoints / 8));
+                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
+                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
+                                                    year: '2-digit', month: 'short' 
+                                                });
+                                            }
+                                        }
+                                        return '';
+                                    }
+                                }
+                            },
+                            y: {
+                                title: { display: true, text: 'Price (cents/lb)' }
                             }
                         }
                     }
+                });
+            } catch (error) {
+                console.error('Coffee chart error:', error);
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
+            }
+        }
+
+        // USD/BRL 환율 차트 생성
+        async function createUSDChart() {
+            const loadingElement = document.getElementById('loading-usd');
+            const chartElement = document.getElementById('usdChart');
+            
+            try {
+                const data = await readGoogleSheetData('usdbrl');
+                if (!data) throw new Error('데이터를 불러올 수 없습니다');
+
+                const chartData = data.map((row, index) => ({
+                    x: index,
+                    y: parseFloat(row.value),
+                    date: parseDate(row.date)
+                })).filter(point => !isNaN(point.y));
+
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+
+                const ctx = chartElement.getContext('2d');
+                charts.usd = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            label: 'USD/BRL Rate',
+                            data: chartData,
+                            borderColor: '#2E8B57',
+                            backgroundColor: 'rgba(46, 139, 87, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.2,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { type: 'linear', title: { display: true, text: 'Date' } },
+                            y: { title: { display: true, text: 'BRL per USD' } }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('USD chart error:', error);
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
+            }
+        }
+
+        // CFTC 포지션 차트 생성
+        async function createCFTCChart() {
+            const loadingElement = document.getElementById('loading-cftc');
+            const chartElement = document.getElementById('cftcChart');
+            
+            try {
+                const data = await readGoogleSheetData('cftcpositions');
+                if (!data) throw new Error('데이터를 불러올 수 없습니다');
+
+                const chartData = data.map((row, index) => ({
+                    x: index,
+                    y: parseInt(row.value),
+                    date: parseDate(row.date)
+                })).filter(point => !isNaN(point.y));
+
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+
+                const ctx = chartElement.getContext('2d');
+                charts.cftc = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            label: 'Net Long Positions',
+                            data: chartData,
+                            backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
+                            borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { type: 'linear', title: { display: true, text: 'Date' } },
+                            y: { title: { display: true, text: 'Net Long Positions' } }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('CFTC chart error:', error);
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
+            }
+        }
+
+        // NVDI 차트 생성
+        async function createNVDIChart() {
+            const loadingElement = document.getElementById('loading-nvdi');
+            const chartElement = document.getElementById('nvdiChart');
+            
+            try {
+                const nvdiData = await readNVDIData();
+                if (!nvdiData || nvdiData.length === 0) {
+                    throw new Error('NVDI 데이터를 읽을 수 없습니다');
+                }
+
+                const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', 
+                               '7월', '8월', '9월', '10월', '11월', '12월'];
+
+                const datasets = [];
+
+                // Historical Range (Min-Max)
+                const maxData = nvdiData.map((item, index) => ({
+                    x: index, y: item.maxValue
+                })).filter(point => point.y !== null && !isNaN(point.y));
+
+                if (maxData.length > 0) {
+                    datasets.push({
+                        label: 'Historical Range (2010-2023)',
+                        data: maxData,
+                        borderColor: 'rgba(149, 165, 166, 0.8)',
+                        backgroundColor: 'rgba(149, 165, 166, 0.3)',
+                        borderWidth: 1,
+                        fill: '+1',
+                        tension: 0.4,
+                        pointRadius: 0
+                    });
+
+                    const minData = nvdiData.map((item, index) => ({
+                        x: index, y: item.minValue
+                    })).filter(point => point.y !== null && !isNaN(point.y));
+
+                    datasets.push({
+                        label: '',
+                        data: minData,
+                        borderColor: 'rgba(149, 165, 166, 0.8)',
+                        backgroundColor: 'rgba(149, 165, 166, 0.3)',
+                        borderWidth: 1,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0
+                    });
+                }
+
+                // 2024년 라인
+                const data2024 = nvdiData.map((item, index) => ({
+                    x: index, y: item.year2024
+                })).filter(point => point.y !== null && !isNaN(point.y));
+
+                if (data2024.length > 0) {
+                    datasets.push({
+                        label: '2024',
+                        data: data2024,
+                        borderColor: '#E74C3C',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#E74C3C',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2
+                    });
+                }
+
+                // 2025년 라인
+                const data2025 = nvdiData.map((item, index) => ({
+                    x: index, y: item.year2025
+                })).filter(point => point.y !== null && !isNaN(point.y));
+
+                if (data2025.length > 0) {
+                    datasets.push({
+                        label: '2025',
+                        data: data2025,
+                        borderColor: '#3498DB',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#3498DB',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2
+                    });
+                }
+
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+
+                const ctx = chartElement.getContext('2d');
+                charts.nvdi = new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets: datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    filter: item => item.text !== '',
+                                    padding: 20,
+                                    font: { size: 12 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        const index = tooltipItems[0].dataIndex;
+                                        return monthKR[index] || `월 ${index + 1}`;
+                                    },
+                                    label: function(context) {
+                                        if (context.datasetIndex === 0) {
+                                            const index = context.dataIndex;
+                                            const dataPoint = nvdiData[index];
+                                            if (dataPoint) {
+                                                return `Range: ${dataPoint.minValue?.toFixed(3)} - ${dataPoint.maxValue?.toFixed(3)}`;
+                                            }
+                                            return 'Range data';
+                                        } else if (context.datasetIndex === 1) {
+                                            return '';
+                                        }
+                                        return context.dataset.label + ': ' + (context.parsed.y ? context.parsed.y.toFixed(3) : 'N/A');
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                title: { display: true, text: '월' },
+                                ticks: {
+                                    callback: function(value) {
+                                        const index = Math.round(value);
+                                        return monthKR[index] || '';
+                                    },
+                                    stepSize: 1
+                                },
+                                min: 0,
+                                max: 11
+                            },
+                            y: {
+                                title: { display: true, text: 'NVDI Index' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('NVDI chart error:', error);
+                loadingElement.innerHTML = `
+                    <div style="color: #e74c3c; text-align: center;">
+                        <strong>NVDI 데이터 로딩 실패</strong><br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        // 리포트 관련 함수들
+        async function loadReportsFromFiles() {
+            const reportFiles = [
+                'Reports/2025/06/2025-06-28.html',
+                'Reports/2025/06/2025-06-24.html', 
+                'Reports/2025/06/2025-06-21.html',
+                'Reports/2025/06/2025-06-14.html',
+                'Reports/2025/06/2025-06-13.html',
+                'Reports/2025/06/2025-06-09.html',
+                'Reports/2025/06/2025-06-08.html',
+                'Reports/2025/05/2025-05-31.html'
+            ];
+            
+            const reports = [];
+            
+            for (const filePath of reportFiles) {
+                try {
+                    const response = await fetch(filePath);
+                    if (!response.ok) continue;
+                    
+                    const htmlContent = await response.text();
+                    const metadata = extractReportMetadata(htmlContent, filePath);
+                    
+                    if (metadata) {
+                        reports.push({
+                            ...metadata,
+                            link: filePath,
+                            year: metadata.date.split('-')[0],
+                            month: metadata.date.split('-')[1],
+                            displayDate: formatKoreanDate(metadata.date)
+                        });
+                    }
+                } catch (error) {
+                    console.error(`로딩 실패 ${filePath}:`, error);
                 }
             }
-        });
-        
-    } catch (error) {
-        console.error('NVDI chart error:', error);
-        loadingElement.innerHTML = `
-            <div style="color: #e74c3c; text-align: center;">
-                <strong>NVDI 구글 시트 로딩 실패</strong><br>
-                <small>${error.message}</small>
-            </div>
-        `;
-    }
-}
+            
+            return reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
 
-// UI 관련 함수들
-function renderReports(filteredReports = allReports) {
-    const grid = document.getElementById('reportsGrid');
-    const noResults = document.getElementById('noResults');
-    
-    if (filteredReports.length === 0) {
-        grid.style.display = 'none';
-        noResults.style.display = 'block';
-        return;
-    }
-    
-    grid.style.display = 'grid';
-    noResults.style.display = 'none';
-    
-    const sortedReports = [...filteredReports].sort((a, b) => new Date(b.date) - new Date(a.date));
-    const latestDate = sortedReports.length > 0 ? sortedReports[0].date : null;
-    
-    grid.innerHTML = filteredReports.map(report => {
-        const isLatest = report.date === latestDate;
-        return `
-        <div class="report-card" onclick="window.location.href='${report.link}'">
-            <div class="report-date">${report.displayDate}</div>
-            <h3 class="report-title">
-                <span>${report.title}</span>
-                ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
-            </h3>
-            <p class="report-summary">${report.summary}</p>
-            <div class="report-tags">
-                ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <a href="${report.link}" class="read-more">보고서 읽기</a>
-        </div>
-        `;
-    }).join('');
-}
+        function extractReportMetadata(htmlContent, filePath) {
+            const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
+            
+            if (metaMatch) {
+                try {
+                    return JSON.parse(metaMatch[1].trim());
+                } catch (error) {
+                    console.error(`메타데이터 파싱 실패 ${filePath}:`, error);
+                }
+            }
+            
+            // 기본 메타데이터
+            const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
+            return {
+                title: `커피 시장 동향 - ${dateMatch ? dateMatch[1] : 'Unknown'}`,
+                subtitle: '',
+                date: dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0],
+                summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
+                tags: ['커피', '시장동향']
+            };
+        }
 
-function filterReports() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const yearFilter = document.getElementById('yearFilter').value;
-    const monthFilter = document.getElementById('monthFilter').value;
-    
-    const filtered = allReports.filter(report => {
-        const matchesSearch = report.title.toLowerCase().includes(searchTerm) || 
-                            report.summary.toLowerCase().includes(searchTerm) ||
-                            report.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-        const matchesYear = !yearFilter || report.year === yearFilter;
-        const matchesMonth = !monthFilter || report.month === monthFilter;
-        
-        return matchesSearch && matchesYear && matchesMonth;
-    });
-    
-    renderReports(filtered);
-}
+        function formatKoreanDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return dateString;
+            }
+        }
 
-function updateFilters() {
-    const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
-    const months = [...new Set(allReports.map(r => r.month))].sort();
-    
-    const yearSelect = document.getElementById('yearFilter');
-    const monthSelect = document.getElementById('monthFilter');
-    
-    if (yearSelect) {
-        yearSelect.innerHTML = '<option value="">전체 년도</option>';
-        years.forEach(year => {
-            yearSelect.innerHTML += `<option value="${year}">${year}년</option>`;
-        });
-    }
-    
-    if (monthSelect) {
-        monthSelect.innerHTML = '<option value="">전체 월</option>';
-        months.forEach(month => {
-            const monthName = parseInt(month) + '월';
-            monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
-        });
-    }
-}
+        async function initializeReports() {
+            try {
+                const reports = await loadReportsFromFiles();
+                return reports.length > 0 ? reports : [
+                    {
+                        date: '2025-06-28',
+                        displayDate: '2025년 6월 28일',
+                        title: '커피 시장 동향 - 2025-06-28',
+                        summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
+                        tags: ['커피', '시장동향'],
+                        link: 'Reports/2025/06/2025-06-28.html',
+                        year: '2025',
+                        month: '06'
+                    }
+                ];
+            } catch (error) {
+                console.error('리포트 초기화 중 오류:', error);
+                return [];
+            }
+        }
 
-function updateStats() {
-    const totalElement = document.getElementById('totalReports');
-    const latestElement = document.getElementById('latestDate');
-    
-    if (totalElement) {
-        totalElement.textContent = allReports.length;
-    }
-    
-    if (latestElement && allReports.length > 0) {
-        latestElement.textContent = allReports[0].displayDate.substring(0, 7);
-    }
-}
+        // UI 관련 함수들
+        function renderReports(filteredReports = allReports) {
+            const grid = document.getElementById('reportsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (filteredReports.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+            
+            const sortedReports = [...filteredReports].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const latestDate = sortedReports.length > 0 ? sortedReports[0].date : null;
+            
+            grid.innerHTML = filteredReports.map(report => {
+                const isLatest = report.date === latestDate;
+                return `
+                <div class="report-card" onclick="window.location.href='${report.link}'">
+                    <div class="report-date">${report.displayDate}</div>
+                    <h3 class="report-title">
+                        <span>${report.title}</span>
+                        ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
+                    </h3>
+                    <p class="report-summary">${report.summary}</p>
+                    <div class="report-tags">
+                        ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <a href="${report.link}" class="read-more">보고서 읽기</a>
+                </div>
+                `;
+            }).join('');
+        }
 
-function updateCurrentDate() {
-    const dateElement = document.getElementById('currentDate');
-    if (dateElement) {
-        const now = new Date();
-        const options = { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric',
-            weekday: 'short'
-        };
-        const formattedDate = now.toLocaleDateString('ko-KR', options);
-        dateElement.textContent = formattedDate;
-    }
-}
+        function filterReports() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const yearFilter = document.getElementById('yearFilter').value;
+            const monthFilter = document.getElementById('monthFilter').value;
+            
+            const filtered = allReports.filter(report => {
+                const matchesSearch = report.title.toLowerCase().includes(searchTerm) || 
+                                    report.summary.toLowerCase().includes(searchTerm) ||
+                                    report.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                const matchesYear = !yearFilter || report.year === yearFilter;
+                const matchesMonth = !monthFilter || report.month === monthFilter;
+                
+                return matchesSearch && matchesYear && matchesMonth;
+            });
+            
+            renderReports(filtered);
+        }
 
-// 메인 초기화 함수
-async function init() {
-    try {
-        console.log('초기화 시작...');
-        
-        updateCurrentDate();
-        
-        // 차트들 병렬로 로드
-        Promise.all([
-            createCoffeeChart(),
-            createUSDChart(),
-            createCFTCChart(),
-            createNVDIChart()
-        ]);
+        function updateFilters() {
+            const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
+            const months = [...new Set(allReports.map(r => r.month))].sort();
+            
+            const yearSelect = document.getElementById('yearFilter');
+            const monthSelect = document.getElementById('monthFilter');
+            
+            if (yearSelect) {
+                yearSelect.innerHTML = '<option value="">전체 년도</option>';
+                years.forEach(year => {
+                    yearSelect.innerHTML += `<option value="${year}">${year}년</option>`;
+                });
+            }
+            
+            if (monthSelect) {
+                monthSelect.innerHTML = '<option value="">전체 월</option>';
+                months.forEach(month => {
+                    const monthName = parseInt(month) + '월';
+                    monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
+                });
+            }
+        }
 
-        allReports = await initializeReports();
-        updateFilters();
-        updateStats();
-        renderReports();
-        
-        // 이벤트 리스너 설정
-        document.getElementById('searchInput').addEventListener('input', filterReports);
-        document.getElementById('yearFilter').addEventListener('change', filterReports);
-        document.getElementById('monthFilter').addEventListener('change', filterReports);
-        
-        console.log('초기화 완료');
-        
-    } catch (error) {
-        console.error('초기화 중 오류:', error);
-    }
-}
+        function updateStats() {
+            const totalElement = document.getElementById('totalReports');
+            const latestElement = document.getElementById('latestDate');
+            
+            if (totalElement) {
+                totalElement.textContent = allReports.length;
+            }
+            
+            if (latestElement && allReports.length > 0) {
+                latestElement.textContent = allReports[0].displayDate.substring(0, 7);
+            }
+        }
 
-// 페이지 로드시 초기화 실행
-document.addEventListener('DOMContentLoaded', init);
-</script>
+        function updateCurrentDate() {
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                const now = new Date();
+                const formattedDate = now.toLocaleDateString('ko-KR', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    weekday: 'short'
+                });
+                dateElement.textContent = formattedDate;
+            }
+        }
+
+        // 메인 초기화 함수
+        async function init() {
+            try {
+                console.log('초기화 시작...');
+                
+                // 현재 날짜 업데이트
+                updateCurrentDate();
+                
+                // 차트들 병렬로 로드
+                Promise.all([
+                    createCoffeeChart(),
+                    createUSDChart(),
+                    createCFTCChart(),
+                    createNVDIChart()
+                ]);
+
+                // 리포트 초기화
+                allReports = await initializeReports();
+                updateFilters();
+                updateStats();
+                renderReports();
+                
+                // 이벤트 리스너 설정
+                document.getElementById('searchInput').addEventListener('input', filterReports);
+                document.getElementById('yearFilter').addEventListener('change', filterReports);
+                document.getElementById('monthFilter').addEventListener('change', filterReports);
+                
+                console.log('초기화 완료');
+                
+            } catch (error) {
+                console.error('초기화 중 오류:', error);
+            }
+        }
+
+        // 페이지 로드시 초기화 실행
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
-</html>2024Index = headers.findIndex(h => h.includes('2024'));
-                        const year
+</html>
