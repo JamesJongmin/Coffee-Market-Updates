@@ -1,4 +1,40 @@
-<!DOCTYPE html>
+// 구글 시트에서 데이터 읽기 함수 (2컬럼: Date, Value)
+        async function readGoogleSheetData(sheetKey) {
+            try {
+                const url = GOOGLE_SHEETS_URLS[sheetKey];
+                if (!url) {
+                    throw new Error(`Unknown sheet key: ${sheetKey}`);
+                }
+
+                console.log(`Fetching data from Google Sheets: ${sheetKey}`);
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                
+                // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
+                const dataRows = data.slice(1);
+                
+                const processedData = dataRows.map(row => ({
+                    date: row[0], // 첫 번째 컬럼은 항상 Date
+                    value: row[1] // 두 번째 컬럼은 해당 값
+                })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
+                
+                // 날짜순으로 정렬 (오래된 것 → 최신 순서로)
+                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                
+                console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
+                return processedData;
+                
+            } catch (error) {
+                console.error(`Error reading Google Sheet ${sheetKey}:`, error);
+                return null;
+            }
+        }<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -636,7 +672,8 @@
         const GOOGLE_SHEETS_URLS = {
             coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
             usdbrl: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
-            cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0'
+            cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
+            nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
         };
 
         // CSV 파싱 함수
@@ -655,8 +692,119 @@
             return result;
         }
 
-        // 구글 시트에서 데이터 읽기 함수 (2컬럼: Date, Value)
-        async function readGoogleSheetData(sheetKey) {
+        // 구글 시트에서 NVDI 데이터 읽기 함수
+        async function readNVDIGoogleSheetData() {
+            try {
+                const url = GOOGLE_SHEETS_URLS.nvdi;
+                console.log('Fetching NVDI data from Google Sheets...');
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                
+                console.log('NVDI CSV 데이터 로딩 완료. 총 행:', data.length);
+                console.log('헤더:', data[0]);
+                console.log('샘플 데이터:', data.slice(1, 3));
+                
+                // 헤더 분석
+                const headers = data[0];
+                const monthlyData = [];
+                
+                // 데이터 구조 분석 및 처리
+                // 두 가지 구조를 지원:
+                // 1) Month, Min_Historical, Max_Historical, Year_2024, Year_2025
+                // 2) Month, 2010, 2011, ..., 2023, 2024, 2025 (년도별 컬럼)
+                
+                const dataRows = data.slice(1); // 헤더 제외
+                
+                if (headers.includes('Min_Historical') || headers.includes('Min') || headers.includes('min')) {
+                    // 구조 1: 이미 계산된 Min/Max 값이 있는 경우
+                    console.log('NVDI 구조 1: Min/Max 사전 계산된 데이터');
+                    
+                    for (const row of dataRows) {
+                        if (row && row[0]) {
+                            const month = parseInt(row[0]);
+                            if (month >= 1 && month <= 12) {
+                                const minIndex = headers.findIndex(h => h.toLowerCase().includes('min'));
+                                const maxIndex = headers.findIndex(h => h.toLowerCase().includes('max'));
+                                const year2024Index = headers.findIndex(h => h.includes('2024'));
+                                const year2025Index = headers.findIndex(h => h.includes('2025'));
+                                
+                                monthlyData.push({
+                                    month: month,
+                                    minValue: minIndex >= 0 ? parseFloat(row[minIndex]) : null,
+                                    maxValue: maxIndex >= 0 ? parseFloat(row[maxIndex]) : null,
+                                    year2024: year2024Index >= 0 ? parseFloat(row[year2024Index]) : null,
+                                    year2025: year2025Index >= 0 ? parseFloat(row[year2025Index]) : null
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    // 구조 2: 년도별 컬럼으로 되어 있는 경우
+                    console.log('NVDI 구조 2: 년도별 컬럼 데이터');
+                    
+                    // 년도별 컬럼 인덱스 찾기
+                    const yearColumns = {};
+                    headers.forEach((header, index) => {
+                        if (index > 0) { // Month 컬럼 제외
+                            const year = parseInt(header.toString().trim());
+                            if (year >= 2010 && year <= 2025) {
+                                yearColumns[year] = index;
+                            }
+                        }
+                    });
+                    
+                    console.log('발견된 년도 컬럼:', Object.keys(yearColumns));
+                    
+                    for (const row of dataRows) {
+                        if (row && row[0]) {
+                            const month = parseInt(row[0]);
+                            if (month >= 1 && month <= 12) {
+                                // 2010-2023년 데이터에서 min/max 계산
+                                const allValues = [];
+                                for (let year = 2010; year <= 2023; year++) {
+                                    const colIndex = yearColumns[year];
+                                    if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
+                                        const value = parseFloat(row[colIndex]);
+                                        if (!isNaN(value)) {
+                                            allValues.push(value);
+                                        }
+                                    }
+                                }
+                                
+                                const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
+                                const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
+                                
+                                // 2024년과 2025년 데이터
+                                const year2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
+                                const year2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
+                                
+                                monthlyData.push({
+                                    month: month,
+                                    minValue: minValue,
+                                    maxValue: maxValue,
+                                    year2024: !isNaN(year2024) ? year2024 : null,
+                                    year2025: !isNaN(year2025) ? year2025 : null
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                console.log('월별 NVDI 데이터 처리 완료:', monthlyData.length, '개월');
+                console.log('샘플 처리된 데이터:', monthlyData.slice(0, 2));
+                return monthlyData;
+                
+            } catch (error) {
+                console.error('Error reading NVDI Google Sheet:', error);
+                return null;
+            }
+        }
             try {
                 const url = GOOGLE_SHEETS_URLS[sheetKey];
                 if (!url) {
@@ -697,7 +845,6 @@
         async function loadReportsFromFiles() {
             // 실제 리포트 파일 목록 (올바른 경로, 최신순 정렬)
             const reportFiles = [
-                'Reports/2025/06/2025-06-30.html',
                 'Reports/2025/06/2025-06-28.html',
                 'Reports/2025/06/2025-06-24.html', 
                 'Reports/2025/06/2025-06-21.html',
@@ -1332,16 +1479,15 @@
             }
         }
 
-        // NVDI 차트 (기존 엑셀 파일 유지)
+        // NVDI 차트 (구글 시트 연동)
         async function createNVDIChart() {
             const loadingElement = document.getElementById('loading-nvdi');
             const chartElement = document.getElementById('nvdiChart');
             
             try {
-                // NVDI는 여전히 엑셀 파일에서 읽기 (복잡한 구조 때문)
                 const nvdiData = await Promise.race([
-                    readNVDIExcelFile('nvdi.xls'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                    readNVDIGoogleSheetData(),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 15000))
                 ]);
                 
                 if (!nvdiData || nvdiData.length === 0) {
@@ -1357,37 +1503,39 @@
                 const maxData = nvdiData.map((item, index) => ({
                     x: index,
                     y: item.maxValue
-                })).filter(point => point.y !== null);
+                })).filter(point => point.y !== null && !isNaN(point.y));
 
-                datasets.push({
-                    label: 'Historical Range (2010-2023)',
-                    data: maxData,
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                    borderWidth: 1,
-                    fill: '+1',
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 0
-                });
+                if (maxData.length > 0) {
+                    datasets.push({
+                        label: 'Historical Range (2010-2023)',
+                        data: maxData,
+                        borderColor: 'rgba(149, 165, 166, 0.8)',
+                        backgroundColor: 'rgba(149, 165, 166, 0.3)',
+                        borderWidth: 1,
+                        fill: '+1',
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 0
+                    });
 
-                // Min-Max 범위 하한선
-                const minData = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.minValue
-                })).filter(point => point.y !== null);
+                    // Min-Max 범위 하한선
+                    const minData = nvdiData.map((item, index) => ({
+                        x: index,
+                        y: item.minValue
+                    })).filter(point => point.y !== null && !isNaN(point.y));
 
-                datasets.push({
-                    label: '',
-                    data: minData,
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                    borderWidth: 1,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 0
-                });
+                    datasets.push({
+                        label: '',
+                        data: minData,
+                        borderColor: 'rgba(149, 165, 166, 0.8)',
+                        backgroundColor: 'rgba(149, 165, 166, 0.3)',
+                        borderWidth: 1,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 0
+                    });
+                }
 
                 // 2024년 라인
                 const data2024 = nvdiData.map((item, index) => ({
@@ -1553,92 +1701,23 @@
                     }
                 });
                 
-                console.log('NVDI 차트 생성 완료');
+                console.log('NVDI 구글 시트 차트 생성 완료');
                 
             } catch (error) {
                 console.error('NVDI chart error:', error);
                 loadingElement.innerHTML = `
                     <div style="color: #e74c3c; text-align: center;">
-                        <strong>NVDI 데이터 로딩 실패</strong><br>
+                        <strong>NVDI 구글 시트 로딩 실패</strong><br>
                         <small>${error.message}</small><br>
                         <small style="margin-top: 10px; display: block;">
-                            nvdi.xls 파일이 존재하는지 확인해주세요.
+                            구글 시트가 공개 권한으로 설정되어 있는지 확인해주세요.
                         </small>
                     </div>
                 `;
             }
         }
 
-        // NVDI Excel 파일 읽기 함수 (기존 유지)
-        async function readNVDIExcelFile(filename) {
-            try {
-                const response = await fetch(filename);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch ${filename}`);
-                }
-                
-                const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer);
-                
-                // Data 시트에서 데이터 읽기
-                const dataSheetData = XLSX.utils.sheet_to_json(workbook.Sheets['Data'], { header: 1 });
-                
-                console.log('NVDI 데이터 로딩 완료. 총 행:', dataSheetData.length);
-                
-                // 헤더에서 년도별 컬럼 인덱스 매핑
-                const headers = dataSheetData[0];
-                const yearColumns = {};
-                headers.forEach((header, index) => {
-                    if (index > 0) { // Date 컬럼 제외
-                        const year = parseInt(header.toString().trim());
-                        yearColumns[year] = index;
-                    }
-                });
-                
-                // 월별 데이터 처리
-                const monthlyData = [];
-                
-                for (let month = 1; month <= 12; month++) {
-                    const monthRows = [];
-                    
-                    // 해당 월의 모든 행 찾기
-                    for (let i = 1; i < dataSheetData.length; i++) {
-                        const row = dataSheetData[i];
-                        if (row && row[0]) {
-                            const dateStr = row[0].toString();
-                            const rowMonth = parseInt(dateStr.split('/')[1]);
-                            
-                            if (rowMonth === month) {
-                                monthRows.push(row);
-                            }
-                        }
-                    }
-                    
-                    if (monthRows.length > 0) {
-                        // 2010-2023년 데이터에서 min/max 계산
-                        const allValues = [];
-                        for (const row of monthRows) {
-                            for (let year = 2010; year <= 2023; year++) {
-                                const colIndex = yearColumns[year];
-                                if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
-                                    const value = parseFloat(row[colIndex]);
-                                    if (!isNaN(value)) {
-                                        allValues.push(value);
-                                    }
-                                }
-                            }
-                        }
-                        
-                        const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
-                        const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
-                        
-                        // 2024년과 2025년 데이터 (평균값 사용)
-                        let year2024Values = [];
-                        let year2025Values = [];
-                        
-                        for (const row of monthRows) {
-                            const val2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
-                            const val2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
+ parseFloat(row[yearColumns[2025]]) : null;
                             
                             if (!isNaN(val2024)) year2024Values.push(val2024);
                             if (!isNaN(val2025)) year2025Values.push(val2025);
