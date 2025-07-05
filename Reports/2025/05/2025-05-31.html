@@ -29,6 +29,7 @@
             margin-bottom: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
         }
         
         h1 {
@@ -51,6 +52,38 @@
             display: inline-block;
             margin-top: 15px;
             font-weight: 500;
+        }
+
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
+
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
         }
         
         .news-grid {
@@ -224,12 +257,26 @@
             h1 {
                 font-size: 2em;
             }
+
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
             <h1>커피 선물 시장 주간 동향</h1>
             <div class="subtitle">Coffee Futures Market Update</div>
             <div style="font-size: 1em; margin: 10px 0; opacity: 0.8;">Published by Align Commodities</div>
