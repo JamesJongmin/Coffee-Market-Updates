@@ -29,6 +29,7 @@
             margin-bottom: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* Home 버튼 위치 지정을 위해 추가 */
         }
         
         h1 {
@@ -51,6 +52,26 @@
             display: inline-block;
             margin-top: 15px;
             font-weight: 500;
+        }
+
+        /* Home 버튼 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
         }
         
         .news-grid {
@@ -220,12 +241,18 @@
             h1 {
                 font-size: 2em;
             }
+
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">Home</a>
             <h1>커피 선물 시장 주간 동향</h1>
             <p class="subtitle">Coffee Futures Market Weekly Update</p>
             <div class="date-stamp">2025년 7월 4일 금요일</div>
