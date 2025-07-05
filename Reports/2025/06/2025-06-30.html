@@ -1,627 +1,627 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아라비카 커피 선물(KCU25)의 기로: 단기 공급 압력 대 기저 지지력 분석</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아라비카 커피 선물(KCU25)의 기로: 단기 공급 압력 대 기저 지지력 분석</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        body {
-            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.8;
-            color: #333;
-            background: #f8f9fa;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #2c1810 0%, #5c3420 100%);
-            color: white;
-            padding: 60px 40px;
-            text-align: center;
-            margin-bottom: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.3;
-        }
-        
-        .meta-info {
-            font-size: 1.1em;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-        
-        /* Home 버튼 (아이콘) 스타일 */
-        .home-button {
-            position: absolute;
-            top: 20px; /* 상단에서 20px 아래 */
-            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
-            background-color: #f4a261; /* 버튼 배경색 */
-            color: white;
-            padding: 10px 15px; /* 패딩 조정 */
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1em; /* 텍스트 크기 유지 */
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
-            align-items: center; /* 세로 중앙 정렬 */
-            justify-content: center; /* 가로 중앙 정렬 */
-            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
-            z-index: 1000; /* 다른 요소 위에 오도록 z-index 설정 */
-        }
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c1810 0%, #5c3420 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .meta-info {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+            z-index: 1000; /* 다른 요소 위에 오도록 z-index 설정 */
+        }
 
-        .home-button:hover {
-            background-color: #e76f51; /* 호버 시 색상 변경 */
-        }
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
 
-        /* SVG 아이콘 기본 스타일 */
-        .home-button svg {
-            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
-            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
-            height: 1.2em; /* 아이콘 높이 */
-            vertical-align: middle; /* 텍스트와 세로 정렬 */
-        }
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
+        }
 
-        /* 모바일 반응형 대응 (필요시 추가) */
-        @media (max-width: 768px) {
-            .home-button {
-                position: static; /* 모바일에서는 정적 위치로 변경 */
-                margin-bottom: 15px;
-                display: flex; /* 블록 요소로 변경 후 flex 유지 */
-                justify-content: center; /* 중앙 정렬 */
-                margin-left: auto;
-                margin-right: auto;
-                width: fit-content; /* 내용에 맞춰 너비 조정 */
-            }
-        }
-        
-        .section {
-            background: white;
-            padding: 40px;
-            margin-bottom: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-        
-        h2 {
-            font-size: 2em;
-            color: #2c1810;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #e9ecef;
-        }
-        
-        h3 {
-            font-size: 1.5em;
-            color: #5c3420;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-        
-        .highlight-box {
-            background: linear-gradient(135deg, #f8f4e6 0%, #f0e8d8 100%);
-            border-left: 5px solid #8B6F47;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 8px;
-        }
-        
-        .key-points {
-            background: #f1f3f5;
-            padding: 25px;
-            border-radius: 10px;
-            margin: 25px 0;
-        }
-        
-        .key-points h4 {
-            color: #2c1810;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        
-        .key-points ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        
-        .key-points li {
-            padding-left: 25px;
-            position: relative;
-            margin-bottom: 10px;
-        }
-        
-        .key-points li:before {
-            content: "▸";
-            position: absolute;
-            left: 0;
-            color: #8B6F47;
-            font-weight: bold;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            font-size: 0.95em;
-        }
-        
-        th {
-            background: #2c1810;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-        
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-        
-        .scenario-box {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 25px;
-            margin: 20px 0;
-        }
-        
-        .scenario-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #2c1810;
-            margin-bottom: 15px;
-        }
-        
-        .probability {
-            display: inline-block;
-            background: #8B6F47;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .footer-section {
-            background: #2c1810;
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            margin-top: 40px;
-            text-align: center;
-        }
-        
-        .conclusion {
-            background: linear-gradient(135deg, #fff5e1 0%, #ffe8cc 100%);
-            border: 2px solid #8B6F47;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-        }
-        
-        .warning {
-            background: #fee;
-            border-left: 5px solid #dc3545;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-size: 0.9em;
-        }
-        
-        strong {
-            color: #2c1810;
-            font-weight: 600;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .section {
-                padding: 25px 20px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            h2 {
-                font-size: 1.5em;
-            }
-            
-            table {
-                font-size: 0.85em;
-            }
-            
-            th, td {
-                padding: 8px;
-            }
+        /* 모바일 반응형 대응 (필요시 추가) */
+        @media (max-width: 768px) {
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
+        }
+        
+        .section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        h2 {
+            font-size: 2em;
+            color: #2c1810;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #e9ecef;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            color: #5c3420;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #f8f4e6 0%, #f0e8d8 100%);
+            border-left: 5px solid #8B6F47;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        .key-points {
+            background: #f1f3f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        
+        .key-points h4 {
+            color: #2c1810;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .key-points li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .key-points li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #8B6F47;
+            font-weight: bold;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+        }
+        
+        th {
+            background: #2c1810;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .scenario-box {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .scenario-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c1810;
+            margin-bottom: 15px;
+        }
+        
+        .probability {
+            display: inline-block;
+            background: #8B6F47;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .footer-section {
+            background: #2c1810;
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .conclusion {
+            background: linear-gradient(135deg, #fff5e1 0%, #ffe8cc 100%);
+            border: 2px solid #8B6F47;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .warning {
+            background: #fee;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        strong {
+            color: #2c1810;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            table {
+                font-size: 0.85em;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
 
-            .home-button {
-                position: static; /* 모바일에서는 정적 위치로 변경 */
-                margin-bottom: 15px;
-                display: flex; /* 블록 요소로 변경 후 flex 유지 */
-                justify-content: center; /* 중앙 정렬 */
-                margin-left: auto;
-                margin-right: auto;
-                width: fit-content; /* 내용에 맞춰 너비 조정 */
-            }
-        }
-    </style>
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                Home
-            </a>
-            <h1>아라비카 커피 선물(KCU25)의 기로:<br>단기 공급 압력 대 기저 지지력 분석</h1>
-            <div class="meta-info">날짜: 2025년 6월 29일</div>
-            <div class="meta-info">Coffee Market Intelligence Report</div>
-        </header>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>아라비카 커피 선물(KCU25)의 기로:<br>단기 공급 압력 대 기저 지지력 분석</h1>
+            <div class="meta-info">날짜: 2025년 6월 29일</div>
+            <div class="meta-info">Coffee Market Intelligence Report</div>
+        </header>
 
-        <div class="section">
-            <h2>서론: 300센트의 공방</h2>
-            <p>아라비카 커피 선물 시장(ICE KCU25)은 현재 심리적, 기술적으로 중요한 분기점에 도달했으며, 가격은 파운드당 300센트 저항선 부근에서 치열한 공방을 벌이고 있습니다. 이러한 가격 움직임은 시장을 지배하는 두 개의 강력하고 상충하는 내러티브 간의 깊은 긴장감을 반영합니다.</p>
-            
-            <div class="highlight-box">
-                <p><strong>한편으로</strong>, 시장은 현재 진행 중인 브라질 수확이라는 즉각적이고 가시적인 부담에 직면해 있습니다. 이는 새로운 공급의 유입을 의미하며, 연초 파운드당 400센트를 상회했던 가격을 끌어내린 주요 동력이었습니다.</p>
-                <p><strong>다른 한편으로는</strong> 구조적으로 빠듯한 글로벌 수급 균형, 다른 주요 산지의 생산 차질, 그리고 시장 참여자 포지션의 의미 있는 변화 등 강세 반전의 기반이 형성되고 있음을 시사하는 지속적인 저류가 존재합니다.</p>
-            </div>
-            
-            <p>본 보고서는 이러한 상충하는 요인들에 대한 철저하고 다각적인 분석을 제공할 것입니다. 단기 공급 측면의 압력을 해부하고, 기저의 펀더멘털 지지력을 평가하며, 기술적 및 포지션 데이터를 통해 시장 심리를 해독하고, 마지막으로 주요 거시경제 및 물류 변수의 영향을 평가할 것입니다.</p>
-            
-            <p>본 보고서의 목표는 표면적인 뉴스를 넘어 아라비카 커피 선물의 단기 방향성에 대한 미묘하고 확률적인 전망을 제공하고, 시장이 수확 압력에 굴복할지 아니면 견고한 바닥을 다질지를 결정할 핵심 신호들을 식별하는 데 있습니다.</p>
-        </div>
+        <div class="section">
+            <h2>서론: 300센트의 공방</h2>
+            <p>아라비카 커피 선물 시장(ICE KCU25)은 현재 심리적, 기술적으로 중요한 분기점에 도달했으며, 가격은 파운드당 300센트 저항선 부근에서 치열한 공방을 벌이고 있습니다. 이러한 가격 움직임은 시장을 지배하는 두 개의 강력하고 상충하는 내러티브 간의 깊은 긴장감을 반영합니다.</p>
+            
+            <div class="highlight-box">
+                <p><strong>한편으로</strong>, 시장은 현재 진행 중인 브라질 수확이라는 즉각적이고 가시적인 부담에 직면해 있습니다. 이는 새로운 공급의 유입을 의미하며, 연초 파운드당 400센트를 상회했던 가격을 끌어내린 주요 동력이었습니다.</p>
+                <p><strong>다른 한편으로는</strong> 구조적으로 빠듯한 글로벌 수급 균형, 다른 주요 산지의 생산 차질, 그리고 시장 참여자 포지션의 의미 있는 변화 등 강세 반전의 기반이 형성되고 있음을 시사하는 지속적인 저류가 존재합니다.</p>
+            </div>
+            
+            <p>본 보고서는 이러한 상충하는 요인들에 대한 철저하고 다각적인 분석을 제공할 것입니다. 단기 공급 측면의 압력을 해부하고, 기저의 펀더멘털 지지력을 평가하며, 기술적 및 포지션 데이터를 통해 시장 심리를 해독하고, 마지막으로 주요 거시경제 및 물류 변수의 영향을 평가할 것입니다.</p>
+            
+            <p>본 보고서의 목표는 표면적인 뉴스를 넘어 아라비카 커피 선물의 단기 방향성에 대한 미묘하고 확률적인 전망을 제공하고, 시장이 수확 압력에 굴복할지 아니면 견고한 바닥을 다질지를 결정할 핵심 신호들을 식별하는 데 있습니다.</p>
+        </div>
 
-        <div class="section">
-            <h2>섹션 1: 약세론 – 수확의 압도적인 무게</h2>
-            <p>단기적 약세에 대한 주장은 간단하고 설득력이 있습니다. 상당한 양의 신규 작물이 시장에 유입되면서, 가격을 수년래 최고치로 끌어올렸던 극심한 공급 부족 현상이 완화되고 있다는 것입니다. 이 섹션에서는 약세론의 핵심 기둥들을 분석합니다.</p>
-            
-            <h3>1.1. 브라질 2025/26 시즌 수확: 진행 상황, 전망, 그리고 인식</h3>
-            
-            <div class="key-points">
-                <h4>수확 진행 상황</h4>
-                <ul>
-                    <li>브라질의 2025/26 시즌 수확이 본격적으로 진행 중이며, 이는 계절적으로 실제 원두가 수출 가능해짐에 따라 가격에 하방 압력을 가하는 요인입니다.</li>
-                    <li>6월 중순 기준으로, Safras & Mercado는 수확이 35% 완료되어 5년 평균과 비슷한 수준이라고 보고했습니다.</li>
-                    <li>세계 최대 커피 협동조합인 Cooxupe는 6월 20일 기준으로 회원들의 수확이 24.3% 완료되었다고 발표했습니다.</li>
-                </ul>
-            </div>
-            
-            <p><strong>상향 조정된 생산 전망:</strong> 약세론의 핵심 동력 중 하나는 브라질 국영 공급회사(Conab)가 2025년 작물 전망치를 상향 조정한 것입니다. Conab은 지난 5월, 1월 전망치보다 7.5% 증가한 5570만 자루로 생산량을 상향 조정했으며, 이는 2024년 작물 대비 2.7% 증가한 수치입니다. 이러한 상향 조정은 예상보다 양호한 로부스타 수확량에 기인한 것으로, 시장에 놀라움을 안겨주었고 이전의 가뭄 피해에 대한 우려가 과장되었을 수 있음을 시사했습니다.</p>
-            
-            <h3>1.2. 로부스타 요인: 아라비카 상승의 한계</h3>
-            
-            <p><strong>기록적인 코닐론 작물:</strong> 브라질 2025년 수확의 가장 두드러진 특징은 기록적인 로부스타(코닐론) 작물입니다. Conab은 1870만 자루(전년 대비 +27.9%)를 예측했으며, 라보뱅크는 무려 2470만 자루(전년 대비 +7.3%)를 전망했습니다. 이러한 급증은 주요 생산지인 이스피리투산투(Espírito Santo) 주의 양호한 날씨와 농부들의 투자 확대에 기인합니다.</p>
-            
-            <p><strong>대체 압력:</strong> 로부스타의 공급 과잉은 아라비카와의 상당한 가격 격차를 만들어냈습니다. 라보뱅크는 5월에 아라비카가 코닐론보다 자루당 900 브라질 헤알의 프리미엄에 거래되고 있다고 언급했으며, 이는 특히 브라질의 거대한 내수 시장과 전 세계 인스턴트 커피 제조업체들이 블렌드에서 로부스타의 비율을 높이도록 하는 강력한 유인을 제공합니다.</p>
-            
-            <h3>1.3. 양호한 수확기 날씨와 서리 위험 감소</h3>
-            
-            <div class="highlight-box">
-                <p><strong>이상적인 건조 조건:</strong> 브라질의 수확 및 건조 시기(통상 6월-8월)에는 건조한 날씨가 필수적입니다. 최근 6월 말 보고서에 따르면 미나스제라이스(Minas Gerais)와 같은 주요 재배 지역에는 비가 거의 내리지 않았으며, 이는 수확 진행과 품질 보존에 이상적인 조건입니다.</p>
-                <p><strong>'날씨 프리미엄'의 소멸:</strong> 지난 몇 달간의 가격 급등의 상당 부분은 브라질 겨울(7월-8월) 동안의 파괴적인 서리 발생 위험을 가격에 반영한 '날씨 프리미엄'에 기인했습니다. 최근 장기 기상 예보에서는 이 위험이 지속적으로 감소했으며, 6월 말 모델들은 주요 커피 재배 지역에 서리가 도달할 확률이 낮다고 예측했습니다.</p>
-            </div>
-            
-            <h3>1.4. 재고 재축적: 공급 압박 완화</h3>
-            
-            <p><strong>ICE 인증 재고:</strong> 2023년 말 24년 만의 최저치를 기록했던 ICE(대륙간거래소) 감독 아라비카 인증 재고는 꾸준히 재축적되고 있습니다. 재고는 5월 말 892,468 자루로 4개월 만에 최고치를 기록했으며, 그 수준을 유지하고 있습니다. 주로 중앙아메리카산 원두의 유입으로 인한 이러한 증가는 실제 공급이 선물 시장에 더 많이 유입되고 있음을 시사합니다.</p>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>기관/분석가</th>
-                        <th>브라질 (전체)</th>
-                        <th>브라질 (아라비카)</th>
-                        <th>브라질 (로부스타)</th>
-                        <th>콜롬비아</th>
-                        <th>베트남</th>
-                        <th>글로벌 수급 밸런스 (25/26)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>USDA FAS</td>
-                        <td>65.0</td>
-                        <td>40.9</td>
-                        <td>24.1</td>
-                        <td>12.5</td>
-                        <td>31.0</td>
-                        <td>+140만 자루 (잉여)</td>
-                    </tr>
-                    <tr>
-                        <td>Conab (25년 5월)</td>
-                        <td>55.7</td>
-                        <td>37.0</td>
-                        <td>18.7</td>
-                        <td>해당 없음</td>
-                        <td>해당 없음</td>
-                        <td>해당 없음</td>
-                    </tr>
-                    <tr>
-                        <td>라보뱅크</td>
-                        <td>62.8</td>
-                        <td>38.1</td>
-                        <td>24.7</td>
-                        <td>해당 없음</td>
-                        <td>해당 없음</td>
-                        <td>+140만 자루 (잉여)</td>
-                    </tr>
-                    <tr>
-                        <td>Safras & Mercado</td>
-                        <td>65.51</td>
-                        <td>약 40.0</td>
-                        <td>약 25.5</td>
-                        <td>해당 없음</td>
-                        <td>해당 없음</td>
-                        <td>해당 없음</td>
-                    </tr>
-                    <tr>
-                        <td>Volcafe</td>
-                        <td>34.4 (아라비카만)</td>
-                        <td>34.4</td>
-                        <td>해당 없음</td>
-                        <td>해당 없음</td>
-                        <td>해당 없음</td>
-                        <td>-850만 자루 (부족)</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p style="font-size: 0.9em; color: #666; text-align: center;">표 1: 2025/26 시즌 커피 생산량 전망 비교 (단위: 60kg 백만 자루)</p>
-        </div>
+        <div class="section">
+            <h2>섹션 1: 약세론 – 수확의 압도적인 무게</h2>
+            <p>단기적 약세에 대한 주장은 간단하고 설득력이 있습니다. 상당한 양의 신규 작물이 시장에 유입되면서, 가격을 수년래 최고치로 끌어올렸던 극심한 공급 부족 현상이 완화되고 있다는 것입니다. 이 섹션에서는 약세론의 핵심 기둥들을 분석합니다.</p>
+            
+            <h3>1.1. 브라질 2025/26 시즌 수확: 진행 상황, 전망, 그리고 인식</h3>
+            
+            <div class="key-points">
+                <h4>수확 진행 상황</h4>
+                <ul>
+                    <li>브라질의 2025/26 시즌 수확이 본격적으로 진행 중이며, 이는 계절적으로 실제 원두가 수출 가능해짐에 따라 가격에 하방 압력을 가하는 요인입니다.</li>
+                    <li>6월 중순 기준으로, Safras & Mercado는 수확이 35% 완료되어 5년 평균과 비슷한 수준이라고 보고했습니다.</li>
+                    <li>세계 최대 커피 협동조합인 Cooxupe는 6월 20일 기준으로 회원들의 수확이 24.3% 완료되었다고 발표했습니다.</li>
+                </ul>
+            </div>
+            
+            <p><strong>상향 조정된 생산 전망:</strong> 약세론의 핵심 동력 중 하나는 브라질 국영 공급회사(Conab)가 2025년 작물 전망치를 상향 조정한 것입니다. Conab은 지난 5월, 1월 전망치보다 7.5% 증가한 5570만 자루로 생산량을 상향 조정했으며, 이는 2024년 작물 대비 2.7% 증가한 수치입니다. 이러한 상향 조정은 예상보다 양호한 로부스타 수확량에 기인한 것으로, 시장에 놀라움을 안겨주었고 이전의 가뭄 피해에 대한 우려가 과장되었을 수 있음을 시사했습니다.</p>
+            
+            <h3>1.2. 로부스타 요인: 아라비카 상승의 한계</h3>
+            
+            <p><strong>기록적인 코닐론 작물:</strong> 브라질 2025년 수확의 가장 두드러진 특징은 기록적인 로부스타(코닐론) 작물입니다. Conab은 1870만 자루(전년 대비 +27.9%)를 예측했으며, 라보뱅크는 무려 2470만 자루(전년 대비 +7.3%)를 전망했습니다. 이러한 급증은 주요 생산지인 이스피리투산투(Espírito Santo) 주의 양호한 날씨와 농부들의 투자 확대에 기인합니다.</p>
+            
+            <p><strong>대체 압력:</strong> 로부스타의 공급 과잉은 아라비카와의 상당한 가격 격차를 만들어냈습니다. 라보뱅크는 5월에 아라비카가 코닐론보다 자루당 900 브라질 헤알의 프리미엄에 거래되고 있다고 언급했으며, 이는 특히 브라질의 거대한 내수 시장과 전 세계 인스턴트 커피 제조업체들이 블렌드에서 로부스타의 비율을 높이도록 하는 강력한 유인을 제공합니다.</p>
+            
+            <h3>1.3. 양호한 수확기 날씨와 서리 위험 감소</h3>
+            
+            <div class="highlight-box">
+                <p><strong>이상적인 건조 조건:</strong> 브라질의 수확 및 건조 시기(통상 6월-8월)에는 건조한 날씨가 필수적입니다. 최근 6월 말 보고서에 따르면 미나스제라이스(Minas Gerais)와 같은 주요 재배 지역에는 비가 거의 내리지 않았으며, 이는 수확 진행과 품질 보존에 이상적인 조건입니다.</p>
+                <p><strong>'날씨 프리미엄'의 소멸:</strong> 지난 몇 달간의 가격 급등의 상당 부분은 브라질 겨울(7월-8월) 동안의 파괴적인 서리 발생 위험을 가격에 반영한 '날씨 프리미엄'에 기인했습니다. 최근 장기 기상 예보에서는 이 위험이 지속적으로 감소했으며, 6월 말 모델들은 주요 커피 재배 지역에 서리가 도달할 확률이 낮다고 예측했습니다.</p>
+            </div>
+            
+            <h3>1.4. 재고 재축적: 공급 압박 완화</h3>
+            
+            <p><strong>ICE 인증 재고:</strong> 2023년 말 24년 만의 최저치를 기록했던 ICE(대륙간거래소) 감독 아라비카 인증 재고는 꾸준히 재축적되고 있습니다. 재고는 5월 말 892,468 자루로 4개월 만에 최고치를 기록했으며, 그 수준을 유지하고 있습니다. 주로 중앙아메리카산 원두의 유입으로 인한 이러한 증가는 실제 공급이 선물 시장에 더 많이 유입되고 있음을 시사합니다.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>기관/분석가</th>
+                        <th>브라질 (전체)</th>
+                        <th>브라질 (아라비카)</th>
+                        <th>브라질 (로부스타)</th>
+                        <th>콜롬비아</th>
+                        <th>베트남</th>
+                        <th>글로벌 수급 밸런스 (25/26)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>USDA FAS</td>
+                        <td>65.0</td>
+                        <td>40.9</td>
+                        <td>24.1</td>
+                        <td>12.5</td>
+                        <td>31.0</td>
+                        <td>+140만 자루 (잉여)</td>
+                    </tr>
+                    <tr>
+                        <td>Conab (25년 5월)</td>
+                        <td>55.7</td>
+                        <td>37.0</td>
+                        <td>18.7</td>
+                        <td>해당 없음</td>
+                        <td>해당 없음</td>
+                        <td>해당 없음</td>
+                    </tr>
+                    <tr>
+                        <td>라보뱅크</td>
+                        <td>62.8</td>
+                        <td>38.1</td>
+                        <td>24.7</td>
+                        <td>해당 없음</td>
+                        <td>해당 없음</td>
+                        <td>+140만 자루 (잉여)</td>
+                    </tr>
+                    <tr>
+                        <td>Safras & Mercado</td>
+                        <td>65.51</td>
+                        <td>약 40.0</td>
+                        <td>약 25.5</td>
+                        <td>해당 없음</td>
+                        <td>해당 없음</td>
+                        <td>해당 없음</td>
+                    </tr>
+                    <tr>
+                        <td>Volcafe</td>
+                        <td>34.4 (아라비카만)</td>
+                        <td>34.4</td>
+                        <td>해당 없음</td>
+                        <td>해당 없음</td>
+                        <td>해당 없음</td>
+                        <td>-850만 자루 (부족)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.9em; color: #666; text-align: center;">표 1: 2025/26 시즌 커피 생산량 전망 비교 (단위: 60kg 백만 자루)</p>
+        </div>
 
-        <div class="section">
-            <h2>섹션 2: 강세론 – 기반의 균열</h2>
-            <p>수확의 약세 압력에도 불구하고, 설득력 있는 반론이 존재합니다. 이 강세론은 구조적 부족, 현 작물의 특정 품질 문제, 그리고 다른 주요 생산국의 약세에 기반을 두고 있습니다. 이는 현재의 공급 완화가 일시적이며 다년간의 문제를 해결하기에는 불충분할 수 있음을 시사합니다.</p>
-            
-            <h3>2.1. 스트레스받는 브라질 아라비카 작물: 양과 질의 문제</h3>
-            
-            <div class="key-points">
-                <h4>주요 우려사항</h4>
-                <ul>
-                    <li><strong>격년 주기상의 비수기:</strong> 2025/26 시즌은 아라비카의 격년 생산 주기에서 '비수기(off-year)'에 해당하며, 이는 자연적으로 생산량이 높은 '성수기(on-year)' 이후 수확량이 감소하는 경향이 있습니다.</li>
-                    <li><strong>지속되는 기상 피해:</strong> 최근 날씨는 수확에 유리했지만, 작물의 잠재력은 몇 달 전에 결정되었습니다. 분석가들은 2024년의 장기 가뭄과 폭염이 현 아라비카 작물의 중요한 개화 및 결실 단계에 부정적인 영향을 미쳤다고 지적합니다.</li>
-                    <li><strong>품질 우려:</strong> 최근 브라질 현장 보고서는 위험 신호를 보내고 있습니다. 전문가들은 이전의 불규칙한 개화로 인해 상당수의 익은 체리가 땅에 떨어졌다고 지적합니다.</li>
-                </ul>
-            </div>
-            
-            <h3>2.2. 다른 주요 산지의 공급 차질</h3>
-            
-            <p><strong>콜롬비아 생산량 감소:</strong> USDA는 2025/26 시즌 콜롬비아 커피 생산량이 폭우로 인한 개화 손상으로 5.3% 감소한 1250만 자루에 그칠 것으로 예측합니다. 콜롬비아는 세계 최대의 고품질 워시드 마일드 아라비카 생산국으로, 많은 프리미엄 블렌드의 핵심 요소이며 종종 ICE 계약 규격을 충족하는 데 사용되기 때문에 콜롬비아 생산량 감소는 특히 중요합니다.</p>
-            
-            <p><strong>베트남의 제한적 영향:</strong> 베트남의 2025/26 시즌 작물은 반등할 것으로 예상되지만, 이는 거의 전적으로 로부스타입니다. 아라비카 수급 균형에 미치는 직접적인 영향은 앞서 논의한 대체 효과를 통해서이며, 아라비카 공급량을 늘리는 데는 기여하지 않습니다.</p>
-            
-            <h3>2.3. 지속되는 글로벌 부족 내러티브</h3>
-            
-            <div class="highlight-box">
-                <p><strong>다년간의 문제:</strong> 브라질의 작황 개선에도 불구하고, Volcafe와 같은 영향력 있는 무역상사들은 2025/26 시즌에도 전 세계적으로 850만 자루에 달하는 상당한 아라비카 부족을 계속 예측하며, 이는 5년 연속 부족을 의미합니다.</p>
-                <p><strong>역사적으로 낮은 재고-소비 비율:</strong> USDA의 자체 데이터 역시 2025/26 시즌에 소폭의 잉여를 예상하면서도, 2024/25 시즌의 전 세계 기말 재고가 25년 만에 최저 수준으로 떨어졌음을 확인시켜 줍니다.</p>
-            </div>
-            
-            <h3>2.4. 견고한 글로벌 수요</h3>
-            
-            <p><strong>핵심 시장의 가격 비탄력성:</strong> 학술 연구 및 시장 분석에 따르면 미국 및 유럽과 같은 주요 소비 지역의 커피 수요는 가격에 매우 비탄력적입니다. 소비자들은 커피를 일상 필수품으로 간주하며 소매 가격이 상승하더라도 소비량을 줄이는 것을 꺼립니다.</p>
-            
-            <p><strong>신흥 시장의 강력한 성장:</strong> 특히 중국과 아시아 태평양 지역을 중심으로 한 신흥 시장의 소비는 빠른 속도로 계속 성장하고 있습니다. 프리미엄 부문에서는 일부 가격 저항이 있을 수 있지만, 전반적인 소비 증가 추세는 글로벌 수요에 강력하고 구조적인 순풍을 제공하여 가용 공급을 흡수하는 데 도움이 됩니다.</p>
-        </div>
+        <div class="section">
+            <h2>섹션 2: 강세론 – 기반의 균열</h2>
+            <p>수확의 약세 압력에도 불구하고, 설득력 있는 반론이 존재합니다. 이 강세론은 구조적 부족, 현 작물의 특정 품질 문제, 그리고 다른 주요 생산국의 약세에 기반을 두고 있습니다. 이는 현재의 공급 완화가 일시적이며 다년간의 문제를 해결하기에는 불충분할 수 있음을 시사합니다.</p>
+            
+            <h3>2.1. 스트레스받는 브라질 아라비카 작물: 양과 질의 문제</h3>
+            
+            <div class="key-points">
+                <h4>주요 우려사항</h4>
+                <ul>
+                    <li><strong>격년 주기상의 비수기:</strong> 2025/26 시즌은 아라비카의 격년 생산 주기에서 '비수기(off-year)'에 해당하며, 이는 자연적으로 생산량이 높은 '성수기(on-year)' 이후 수확량이 감소하는 경향이 있습니다.</li>
+                    <li><strong>지속되는 기상 피해:</strong> 최근 날씨는 수확에 유리했지만, 작물의 잠재력은 몇 달 전에 결정되었습니다. 분석가들은 2024년의 장기 가뭄과 폭염이 현 아라비카 작물의 중요한 개화 및 결실 단계에 부정적인 영향을 미쳤다고 지적합니다.</li>
+                    <li><strong>품질 우려:</strong> 최근 브라질 현장 보고서는 위험 신호를 보내고 있습니다. 전문가들은 이전의 불규칙한 개화로 인해 상당수의 익은 체리가 땅에 떨어졌다고 지적합니다.</li>
+                </ul>
+            </div>
+            
+            <h3>2.2. 다른 주요 산지의 공급 차질</h3>
+            
+            <p><strong>콜롬비아 생산량 감소:</strong> USDA는 2025/26 시즌 콜롬비아 커피 생산량이 폭우로 인한 개화 손상으로 5.3% 감소한 1250만 자루에 그칠 것으로 예측합니다. 콜롬비아는 세계 최대의 고품질 워시드 마일드 아라비카 생산국으로, 많은 프리미엄 블렌드의 핵심 요소이며 종종 ICE 계약 규격을 충족하는 데 사용되기 때문에 콜롬비아 생산량 감소는 특히 중요합니다.</p>
+            
+            <p><strong>베트남의 제한적 영향:</strong> 베트남의 2025/26 시즌 작물은 반등할 것으로 예상되지만, 이는 거의 전적으로 로부스타입니다. 아라비카 수급 균형에 미치는 직접적인 영향은 앞서 논의한 대체 효과를 통해서이며, 아라비카 공급량을 늘리는 데는 기여하지 않습니다.</p>
+            
+            <h3>2.3. 지속되는 글로벌 부족 내러티브</h3>
+            
+            <div class="highlight-box">
+                <p><strong>다년간의 문제:</strong> 브라질의 작황 개선에도 불구하고, Volcafe와 같은 영향력 있는 무역상사들은 2025/26 시즌에도 전 세계적으로 850만 자루에 달하는 상당한 아라비카 부족을 계속 예측하며, 이는 5년 연속 부족을 의미합니다.</p>
+                <p><strong>역사적으로 낮은 재고-소비 비율:</strong> USDA의 자체 데이터 역시 2025/26 시즌에 소폭의 잉여를 예상하면서도, 2024/25 시즌의 전 세계 기말 재고가 25년 만에 최저 수준으로 떨어졌음을 확인시켜 줍니다.</p>
+            </div>
+            
+            <h3>2.4. 견고한 글로벌 수요</h3>
+            
+            <p><strong>핵심 시장의 가격 비탄력성:</strong> 학술 연구 및 시장 분석에 따르면 미국 및 유럽과 같은 주요 소비 지역의 커피 수요는 가격에 매우 비탄력적입니다. 소비자들은 커피를 일상 필수품으로 간주하며 소매 가격이 상승하더라도 소비량을 줄이는 것을 꺼립니다.</p>
+            
+            <p><strong>신흥 시장의 강력한 성장:</strong> 특히 중국과 아시아 태평양 지역을 중심으로 한 신흥 시장의 소비는 빠른 속도로 계속 성장하고 있습니다. 프리미엄 부문에서는 일부 가격 저항이 있을 수 있지만, 전반적인 소비 증가 추세는 글로벌 수요에 강력하고 구조적인 순풍을 제공하여 가용 공급을 흡수하는 데 도움이 됩니다.</p>
+        </div>
 
-        <div class="section">
-            <h2>섹션 3: 시장 구조와 참여자 행동</h2>
-            <p>펀더멘털 외에도 시장의 내부 역학은 그 건전성과 잠재적 방향에 대한 중요한 단서를 제공합니다. 기술적 분석은 핵심 가격 수준을 드러내고, 포지션 데이터는 가장 중요한 참여자들의 심리를 보여줍니다.</p>
-            
-            <h3>3.1. 기술적 분석: 변곡점에 선 시장</h3>
-            
-            <div class="key-points">
-                <h4>핵심 가격 수준</h4>
-                <ul>
-                    <li>KCU25 계약은 현재 300센트/파운드 수준에서 공방을 벌이고 있으며, 이는 중요한 심리적, 기술적 저항 영역입니다.</li>
-                    <li>주요 지지선은 280-290센트 범위에서 확인되며, 더 중요한 수요 구간은 220-250센트 사이입니다.</li>
-                    <li>반대로 320-325센트 이상을 회복하면 강세 신호로, 조정이 끝났음을 시사할 수 있습니다.</li>
-                </ul>
-            </div>
-            
-            <p><strong>거래량 및 미결제약정 분석:</strong> 최근의 가격 하락은 총 미결제약정 감소와 함께 나타났습니다. 이는 매우 중요한 관찰입니다. 미결제약정 감소와 함께 가격이 하락하는 것은, 공격적인 신규 매도 포지션 진입이 아니라 기존의 매수 포지션 청산(롱 포지션 보유자들이 매도)에 의해 움직임이 주도되고 있음을 시사합니다.</p>
-            
-            <p><strong>선물 곡선 구조 (백워데이션):</strong> 커피 선물 곡선은 근월물이 원월물보다 높은 가격에 거래되는 백워데이션 상태를 보여왔습니다. 이러한 구조는 실제 현물 시장이 타이트하다는 전형적인 신호입니다.</p>
-            
-            <h3>3.2. COT 보고서 해독: 의미 있는 괴리</h3>
-            
-            <p><strong>투기 자본 대 상업적 참여자:</strong> 최신 COT(Commitment of Traders) 데이터는 고전적이면서도 강력한 괴리를 보여줍니다. '관리 자금(Managed Money)'(헤지펀드 및 기타 대규모 투기 자본)은 연초 랠리를 주도했던 순매수 포지션을 줄여나가고 있습니다.</p>
-            
-            <p><strong>'스마트 머니' 신호:</strong> 동시에, '상업적 참여자(Commercials)'(생산자, 로스터, 무역상)들은 순매도 포지션을 상당량 줄이고 있습니다. 이는 커피를 실제로 생산하고 소비하는 주체들이 숏 헤지(short hedge) 포지션을 되사고 있다는 것을 의미합니다. 이는 강력한 강세 신호입니다.</p>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>트레이더 분류</th>
-                        <th>매수 포지션</th>
-                        <th>변화 (전주 대비)</th>
-                        <th>매도 포지션</th>
-                        <th>변화 (전주 대비)</th>
-                        <th>순포지션</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>생산자/무역상</td>
-                        <td>38,509</td>
-                        <td>+3,217</td>
-                        <td>61,248</td>
-                        <td>-1,216</td>
-                        <td>-22,739</td>
-                    </tr>
-                    <tr>
-                        <td>스왑 딜러</td>
-                        <td>20,482</td>
-                        <td>-120</td>
-                        <td>30,522</td>
-                        <td>-642</td>
-                        <td>-10,040</td>
-                    </tr>
-                    <tr>
-                        <td>관리 자금</td>
-                        <td>34,835</td>
-                        <td>-1,493</td>
-                        <td>8,459</td>
-                        <td>+2,970</td>
-                        <td>+26,376</td>
-                    </tr>
-                    <tr>
-                        <td>기타 보고대상</td>
-                        <td>10,632</td>
-                        <td>+241</td>
-                        <td>5,854</td>
-                        <td>+528</td>
-                        <td>+4,778</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p style="font-size: 0.9em; color: #666; text-align: center;">표 2: 세부 분류 COT 데이터 (커피 선물, KCU25) - 2025년 6월 24일자 Barchart 보고서 기준</p>
-            
-            <div class="highlight-box">
-                <p>시장은 투기적 거품이 제거되면서 '건전한 재조정'을 겪고 있으며, 동시에 시장의 상업적 기반은 견고해지는 신호를 보내고 있습니다. 이는 새로운 추세가 나타날 수 있는 더 안정적인 기반을 만듭니다.</p>
-            </div>
-        </div>
+        <div class="section">
+            <h2>섹션 3: 시장 구조와 참여자 행동</h2>
+            <p>펀더멘털 외에도 시장의 내부 역학은 그 건전성과 잠재적 방향에 대한 중요한 단서를 제공합니다. 기술적 분석은 핵심 가격 수준을 드러내고, 포지션 데이터는 가장 중요한 참여자들의 심리를 보여줍니다.</p>
+            
+            <h3>3.1. 기술적 분석: 변곡점에 선 시장</h3>
+            
+            <div class="key-points">
+                <h4>핵심 가격 수준</h4>
+                <ul>
+                    <li>KCU25 계약은 현재 300센트/파운드 수준에서 공방을 벌이고 있으며, 이는 중요한 심리적, 기술적 저항 영역입니다.</li>
+                    <li>주요 지지선은 280-290센트 범위에서 확인되며, 더 중요한 수요 구간은 220-250센트 사이입니다.</li>
+                    <li>반대로 320-325센트 이상을 회복하면 강세 신호로, 조정이 끝났음을 시사할 수 있습니다.</li>
+                </ul>
+            </div>
+            
+            <p><strong>거래량 및 미결제약정 분석:</strong> 최근의 가격 하락은 총 미결제약정 감소와 함께 나타났습니다. 이는 매우 중요한 관찰입니다. 미결제약정 감소와 함께 가격이 하락하는 것은, 공격적인 신규 매도 포지션 진입이 아니라 기존의 매수 포지션 청산(롱 포지션 보유자들이 매도)에 의해 움직임이 주도되고 있음을 시사합니다.</p>
+            
+            <p><strong>선물 곡선 구조 (백워데이션):</strong> 커피 선물 곡선은 근월물이 원월물보다 높은 가격에 거래되는 백워데이션 상태를 보여왔습니다. 이러한 구조는 실제 현물 시장이 타이트하다는 전형적인 신호입니다.</p>
+            
+            <h3>3.2. COT 보고서 해독: 의미 있는 괴리</h3>
+            
+            <p><strong>투기 자본 대 상업적 참여자:</strong> 최신 COT(Commitment of Traders) 데이터는 고전적이면서도 강력한 괴리를 보여줍니다. '관리 자금(Managed Money)'(헤지펀드 및 기타 대규모 투기 자본)은 연초 랠리를 주도했던 순매수 포지션을 줄여나가고 있습니다.</p>
+            
+            <p><strong>'스마트 머니' 신호:</strong> 동시에, '상업적 참여자(Commercials)'(생산자, 로스터, 무역상)들은 순매도 포지션을 상당량 줄이고 있습니다. 이는 커피를 실제로 생산하고 소비하는 주체들이 숏 헤지(short hedge) 포지션을 되사고 있다는 것을 의미합니다. 이는 강력한 강세 신호입니다.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>트레이더 분류</th>
+                        <th>매수 포지션</th>
+                        <th>변화 (전주 대비)</th>
+                        <th>매도 포지션</th>
+                        <th>변화 (전주 대비)</th>
+                        <th>순포지션</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>생산자/무역상</td>
+                        <td>38,509</td>
+                        <td>+3,217</td>
+                        <td>61,248</td>
+                        <td>-1,216</td>
+                        <td>-22,739</td>
+                    </tr>
+                    <tr>
+                        <td>스왑 딜러</td>
+                        <td>20,482</td>
+                        <td>-120</td>
+                        <td>30,522</td>
+                        <td>-642</td>
+                        <td>-10,040</td>
+                    </tr>
+                    <tr>
+                        <td>관리 자금</td>
+                        <td>34,835</td>
+                        <td>-1,493</td>
+                        <td>8,459</td>
+                        <td>+2,970</td>
+                        <td>+26,376</td>
+                    </tr>
+                    <tr>
+                        <td>기타 보고대상</td>
+                        <td>10,632</td>
+                        <td>+241</td>
+                        <td>5,854</td>
+                        <td>+528</td>
+                        <td>+4,778</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.9em; color: #666; text-align: center;">표 2: 세부 분류 COT 데이터 (커피 선물, KCU25) - 2025년 6월 24일자 Barchart 보고서 기준</p>
+            
+            <div class="highlight-box">
+                <p>시장은 투기적 거품이 제거되면서 '건전한 재조정'을 겪고 있으며, 동시에 시장의 상업적 기반은 견고해지는 신호를 보내고 있습니다. 이는 새로운 추세가 나타날 수 있는 더 안정적인 기반을 만듭니다.</p>
+            </div>
+        </div>
 
-        <div class="section">
-            <h2>섹션 4: 외부 변수와 시장의 와일드카드</h2>
-            <p>커피 가격은 진공 상태에서 결정되지 않습니다. 통화 변동에서부터 물류 병목 현상에 이르기까지 다양한 외부 요인들이 상당한 영향을 미칠 수 있으며, 전통적인 수급 역학을 압도하는 '와일드카드'로 작용할 수 있습니다.</p>
-            
-            <h3>4.1. USD/BRL 환율: 농부의 판매 신호</h3>
-            
-            <p><strong>역상관 관계:</strong> 미국 달러(USD) 대비 브라질 헤알(BRL)의 강세는 매우 중요한 변수입니다. 커피는 USD로 가격이 책정되지만, 브라질 농부들의 비용은 BRL로 발생합니다. 헤알화 강세(USD당 BRL 가치 상승)는 농부들의 현지 통화 수입을 감소시켜 USD 표시 커피 판매를 주저하게 만듭니다.</p>
-            
-            <p><strong>통화 정책의 영향:</strong> BRL의 가치는 브라질 중앙은행(BCB)의 조치에 큰 영향을 받습니다. 지난 6월 18일 회의에서 BCB는 지속적인 인플레이션에 대응하기 위해 기준금리(Selic)를 15.00%로 인상했습니다. 미국과의 큰 금리 격차를 유지하는 이러한 매파적 기조는 일반적으로 헤알화를 지지합니다.</p>
-            
-            <h3>4.2. 공급망 마찰: 물리적 시장의 병목 현상</h3>
-            
-            <div class="key-points">
-                <h4>주요 물류 문제</h4>
-                <ul>
-                    <li><strong>항만 혼잡:</strong> 브라질의 항구, 특히 핵심 커피 허브인 산투스(Santos) 항은 시스템적인 물류 병목 현상과 투자 부족으로 어려움을 겪고 있습니다. 2025년 3월 한 달 동안에만 이러한 문제로 인해 637,000 자루 이상의 커피 선적이 지연되었습니다.</li>
-                    <li><strong>정량화 가능한 비용:</strong> 이러한 지연은 단순한 불편을 넘어 직접적인 재정적 영향을 미칩니다. Cecafé는 보관, 체선료, 컨테이너 재배치 등 추가 비용으로 인해 수출업체들이 수백만 달러의 손실을 입었다고 보고했습니다.</li>
-                    <li><strong>대체 경로:</strong> '북부 아크(Northern Arc)' 항구와 같은 대체 경로에 대한 투자가 이루어지고 있지만, 이는 주로 곡물을 서비스하며 아직 커피 수출의 중요한 숨통을 트여주지 못하고 있습니다.</li>
-                </ul>
-            </div>
-            
-            <h3>4.3. EUDR이라는 미지수</h3>
-            
-            <p><strong>규제 준수 및 비용:</strong> 유럽 연합의 삼림 벌채 규제(EUDR)가 본격적으로 시행되면 EU 시장에 진입하는 모든 커피에 대해 엄격한 추적성이 요구될 것입니다. 브라질의 대규모, 조직화된 생산자들은 더 잘 준비되어 있을 수 있지만, 이 규제는 공급망에 비용과 복잡성을 더할 것입니다.</p>
-            
-            <p><strong>시장의 이원화:</strong> EUDR은 두 개의 계층으로 시장을 나눌 수 있습니다. 'EUDR 준수' 커피는 프리미엄을 받을 것이고, '비준수' 커피는 미국이나 아시아와 같은 다른 시장에 할인된 가격으로 판매되어야 할 것입니다.</p>
-            
-            <div class="highlight-box">
-                <p>현물 시장은 선물 가격에 완전히 반영되지 않은 상당한 '잠재적' 강세 위험을 내포하고 있습니다. 선물 시장은 상품 자체의 가격을 책정하지만, 이러한 외부 요인들은 해당 상품의 물류 및 규제 준수 비용을 책정합니다.</p>
-            </div>
-        </div>
+        <div class="section">
+            <h2>섹션 4: 외부 변수와 시장의 와일드카드</h2>
+            <p>커피 가격은 진공 상태에서 결정되지 않습니다. 통화 변동에서부터 물류 병목 현상에 이르기까지 다양한 외부 요인들이 상당한 영향을 미칠 수 있으며, 전통적인 수급 역학을 압도하는 '와일드카드'로 작용할 수 있습니다.</p>
+            
+            <h3>4.1. USD/BRL 환율: 농부의 판매 신호</h3>
+            
+            <p><strong>역상관 관계:</strong> 미국 달러(USD) 대비 브라질 헤알(BRL)의 강세는 매우 중요한 변수입니다. 커피는 USD로 가격이 책정되지만, 브라질 농부들의 비용은 BRL로 발생합니다. 헤알화 강세(USD당 BRL 가치 상승)는 농부들의 현지 통화 수입을 감소시켜 USD 표시 커피 판매를 주저하게 만듭니다.</p>
+            
+            <p><strong>통화 정책의 영향:</strong> BRL의 가치는 브라질 중앙은행(BCB)의 조치에 큰 영향을 받습니다. 지난 6월 18일 회의에서 BCB는 지속적인 인플레이션에 대응하기 위해 기준금리(Selic)를 15.00%로 인상했습니다. 미국과의 큰 금리 격차를 유지하는 이러한 매파적 기조는 일반적으로 헤알화를 지지합니다.</p>
+            
+            <h3>4.2. 공급망 마찰: 물리적 시장의 병목 현상</h3>
+            
+            <div class="key-points">
+                <h4>주요 물류 문제</h4>
+                <ul>
+                    <li><strong>항만 혼잡:</strong> 브라질의 항구, 특히 핵심 커피 허브인 산투스(Santos) 항은 시스템적인 물류 병목 현상과 투자 부족으로 어려움을 겪고 있습니다. 2025년 3월 한 달 동안에만 이러한 문제로 인해 637,000 자루 이상의 커피 선적이 지연되었습니다.</li>
+                    <li><strong>정량화 가능한 비용:</strong> 이러한 지연은 단순한 불편을 넘어 직접적인 재정적 영향을 미칩니다. Cecafé는 보관, 체선료, 컨테이너 재배치 등 추가 비용으로 인해 수출업체들이 수백만 달러의 손실을 입었다고 보고했습니다.</li>
+                    <li><strong>대체 경로:</strong> '북부 아크(Northern Arc)' 항구와 같은 대체 경로에 대한 투자가 이루어지고 있지만, 이는 주로 곡물을 서비스하며 아직 커피 수출의 중요한 숨통을 트여주지 못하고 있습니다.</li>
+                </ul>
+            </div>
+            
+            <h3>4.3. EUDR이라는 미지수</h3>
+            
+            <p><strong>규제 준수 및 비용:</strong> 유럽 연합의 삼림 벌채 규제(EUDR)가 본격적으로 시행되면 EU 시장에 진입하는 모든 커피에 대해 엄격한 추적성이 요구될 것입니다. 브라질의 대규모, 조직화된 생산자들은 더 잘 준비되어 있을 수 있지만, 이 규제는 공급망에 비용과 복잡성을 더할 것입니다.</p>
+            
+            <p><strong>시장의 이원화:</strong> EUDR은 두 개의 계층으로 시장을 나눌 수 있습니다. 'EUDR 준수' 커피는 프리미엄을 받을 것이고, '비준수' 커피는 미국이나 아시아와 같은 다른 시장에 할인된 가격으로 판매되어야 할 것입니다.</p>
+            
+            <div class="highlight-box">
+                <p>현물 시장은 선물 가격에 완전히 반영되지 않은 상당한 '잠재적' 강세 위험을 내포하고 있습니다. 선물 시장은 상품 자체의 가격을 책정하지만, 이러한 외부 요인들은 해당 상품의 물류 및 규제 준수 비용을 책정합니다.</p>
+            </div>
+        </div>
 
-        <div class="section">
-            <h2>섹션 5: 종합, 시나리오 및 전략적 전망</h2>
-            <p>수많은 상충되는 데이터 포인트를 종합해 보면, 시장은 섬세한 균형 상태에 있음을 알 수 있습니다. 브라질 수확에 의해 주도되는 단기적인 약세 모멘텀은 부인할 수 없습니다. 그러나 이는 무시할 수 없는 기저의 강세 요인들과 충돌하고 있습니다.</p>
-            
-            <h3>5.1. 증거의 저울질: 위태로운 균형</h3>
-            
-            <div class="key-points">
-                <h4>지배적인 약세 요인</h4>
-                <ul>
-                    <li>현재 진행 중인 브라질 수확</li>
-                    <li>상향 조정된 생산 전망</li>
-                    <li>대체 압력을 가하는 대규모 로부스타 작물</li>
-                    <li>감소하는 서리 위험</li>
-                </ul>
-                
-                <h4>견고한 강세 요인</h4>
-                <ul>
-                    <li>스트레스받는 브라질 아라비카 작황</li>
-                    <li>더 작은 콜롬비아 작물</li>
-                    <li>다년간의 글로벌 공급 부족</li>
-                    <li>견고한 수요</li>
-                    <li>상당한 물리적 시장 마찰(물류, EUDR)</li>
-                </ul>
-            </div>
-            
-            <h3>5.2. 시나리오 분석 및 주시해야 할 핵심 신호</h3>
-            
-            <div class="scenario-box">
-                <div class="scenario-title">주요 시나리오 (약세 통합 및 기반 다지기) <span class="probability">65% 확률</span></div>
-                <p><strong>가격 움직임:</strong> 시장은 300센트 수준을 유지하지 못하고 더 하락하여, 파운드당 280-290센트 사이의 핵심 지지 구간을 테스트할 것입니다. 이 영역은 상당한 상업적 매수세를 유인하여 수확 기간(7월-8월) 동안 새로운, 더 낮은 거래 범위를 형성할 가능성이 높습니다.</p>
-                
-                <p><strong>주시해야 할 핵심 신호:</strong></p>
-                <ul>
-                    <li>USD/BRL: 헤알화 약세(USD/BRL 상승)는 농부들의 판매를 가속화</li>
-                    <li>COT 보고서: 관리 자금의 매수 포지션 청산이 지속되지만 속도는 느려짐</li>
-                    <li>수확 뉴스: 브라질에서 순조롭고 중단 없는 수확 진행 보고</li>
-                </ul>
-            </div>
-            
-            <div class="scenario-box">
-                <div class="scenario-title">부차적 시나리오 (강세 반전 및 숏 스퀴즈) <span class="probability">35% 확률</span></div>
-                <p><strong>가격 움직임:</strong> 290-300센트 영역이 상업적 매수에 의해 방어되며 견고한 지지선으로 작용합니다. 강세 촉매제가 숏커버링 랠리를 유발하여 가격을 320센트 이상으로 밀어 올리고, 다음 저항대인 340-350센트/파운드를 목표로 할 것입니다.</p>
-                
-                <p><strong>주시해야 할 핵심 신호:</strong></p>
-                <ul>
-                    <li>USD/BRL: 헤알화의 급격한 강세(USD/BRL 하락)는 즉시 농부들의 판매를 억제</li>
-                    <li>날씨: 새로운 서리 위협이나 브라질의 수확을 방해하는 폭우 예보</li>
-                    <li>COT 보고서: 관리 자금 포지션이 순매도에서 순매수로 전환</li>
-                    <li>물류: 산투스 항에서 가시적인 수출 지연을 유발하는 주요 혼란</li>
-                </ul>
-            </div>
-            
-            <h3>5.3. 결론 및 전략적 전망</h3>
-            
-            <div class="conclusion">
-                <p>향후 2-4주간의 단기적인 경로에서 가장 저항이 적은 방향은 브라질 수확의 끊임없는 압력에 의해 횡보 또는 하락하는 것으로 보입니다. 시장은 공급 주도 국면에 있으며, 약세 내러티브가 지배적입니다. 따라서, 우리의 주요 기대는 280-290센트 지지 구간에 대한 테스트입니다.</p>
-                
-                <p>그러나 이 수준에서 지속적인 약세장에 대한 확신은 낮습니다. COT 보고서의 괴리는 시장이 펀더멘털 측면에서 저평가되고 있으며 투기적 거품이 제거되면서 '위험이 완화'되고 있다는 강력한 신호입니다. 물리적 시장은 물류 및 구조적 문제로 인해 여전히 타이트합니다.</p>
-                
-                <h4>전략적 시사점:</h4>
-                <ul>
-                    <li><strong>생산자/강세론자:</strong> 280-290센트 구간은 장기적인 매수 포지션을 시작하거나 추가하기에 잠재적으로 강력한 가치 영역이며, 주간 종가가 280센트 아래로 마감될 경우 손절매를 설정하는 것이 바람직합니다.</li>
-                    <li><strong>로스터/약세론자:</strong> 현재 환경은 단기적인 필요에 대한 헤지 기회를 제공합니다. 그러나 어떤 강세 뉴스에도 급격한 반전 가능성이 있기 때문에 이 수준에서 공격적으로 매도 포지션을 취하는 것은 위험합니다.</li>
-                    <li><strong>종합:</strong> 시장은 투기적, 추세 추종 국면에서 더 범위가 정해지고 펀더멘털에 의해 주도되는 국면으로 전환하고 있습니다. 변동성은 높게 유지될 가능성이 높지만, 3분기 말에 최대 수확 압력이 완화되면 하방 위험보다는 상방 잠재력이 더 커 보입니다.</li>
-                </ul>
-            </div>
-        </div>
+        <div class="section">
+            <h2>섹션 5: 종합, 시나리오 및 전략적 전망</h2>
+            <p>수많은 상충되는 데이터 포인트를 종합해 보면, 시장은 섬세한 균형 상태에 있음을 알 수 있습니다. 브라질 수확에 의해 주도되는 단기적인 약세 모멘텀은 부인할 수 없습니다. 그러나 이는 무시할 수 없는 기저의 강세 요인들과 충돌하고 있습니다.</p>
+            
+            <h3>5.1. 증거의 저울질: 위태로운 균형</h3>
+            
+            <div class="key-points">
+                <h4>지배적인 약세 요인</h4>
+                <ul>
+                    <li>현재 진행 중인 브라질 수확</li>
+                    <li>상향 조정된 생산 전망</li>
+                    <li>대체 압력을 가하는 대규모 로부스타 작물</li>
+                    <li>감소하는 서리 위험</li>
+                </ul>
+                
+                <h4>견고한 강세 요인</h4>
+                <ul>
+                    <li>스트레스받는 브라질 아라비카 작황</li>
+                    <li>더 작은 콜롬비아 작물</li>
+                    <li>다년간의 글로벌 공급 부족</li>
+                    <li>견고한 수요</li>
+                    <li>상당한 물리적 시장 마찰(물류, EUDR)</li>
+                </ul>
+            </div>
+            
+            <h3>5.2. 시나리오 분석 및 주시해야 할 핵심 신호</h3>
+            
+            <div class="scenario-box">
+                <div class="scenario-title">주요 시나리오 (약세 통합 및 기반 다지기) <span class="probability">65% 확률</span></div>
+                <p><strong>가격 움직임:</strong> 시장은 300센트 수준을 유지하지 못하고 더 하락하여, 파운드당 280-290센트 사이의 핵심 지지 구간을 테스트할 것입니다. 이 영역은 상당한 상업적 매수세를 유인하여 수확 기간(7월-8월) 동안 새로운, 더 낮은 거래 범위를 형성할 가능성이 높습니다.</p>
+                
+                <p><strong>주시해야 할 핵심 신호:</strong></p>
+                <ul>
+                    <li>USD/BRL: 헤알화 약세(USD/BRL 상승)는 농부들의 판매를 가속화</li>
+                    <li>COT 보고서: 관리 자금의 매수 포지션 청산이 지속되지만 속도는 느려짐</li>
+                    <li>수확 뉴스: 브라질에서 순조롭고 중단 없는 수확 진행 보고</li>
+                </ul>
+            </div>
+            
+            <div class="scenario-box">
+                <div class="scenario-title">부차적 시나리오 (강세 반전 및 숏 스퀴즈) <span class="probability">35% 확률</span></div>
+                <p><strong>가격 움직임:</strong> 290-300센트 영역이 상업적 매수에 의해 방어되며 견고한 지지선으로 작용합니다. 강세 촉매제가 숏커버링 랠리를 유발하여 가격을 320센트 이상으로 밀어 올리고, 다음 저항대인 340-350센트/파운드를 목표로 할 것입니다.</p>
+                
+                <p><strong>주시해야 할 핵심 신호:</strong></p>
+                <ul>
+                    <li>USD/BRL: 헤알화의 급격한 강세(USD/BRL 하락)는 즉시 농부들의 판매를 억제</li>
+                    <li>날씨: 새로운 서리 위협이나 브라질의 수확을 방해하는 폭우 예보</li>
+                    <li>COT 보고서: 관리 자금 포지션이 순매도에서 순매수로 전환</li>
+                    <li>물류: 산투스 항에서 가시적인 수출 지연을 유발하는 주요 혼란</li>
+                </ul>
+            </div>
+            
+            <h3>5.3. 결론 및 전략적 전망</h3>
+            
+            <div class="conclusion">
+                <p>향후 2-4주간의 단기적인 경로에서 가장 저항이 적은 방향은 브라질 수확의 끊임없는 압력에 의해 횡보 또는 하락하는 것으로 보입니다. 시장은 공급 주도 국면에 있으며, 약세 내러티브가 지배적입니다. 따라서, 우리의 주요 기대는 280-290센트 지지 구간에 대한 테스트입니다.</p>
+                
+                <p>그러나 이 수준에서 지속적인 약세장에 대한 확신은 낮습니다. COT 보고서의 괴리는 시장이 펀더멘털 측면에서 저평가되고 있으며 투기적 거품이 제거되면서 '위험이 완화'되고 있다는 강력한 신호입니다. 물리적 시장은 물류 및 구조적 문제로 인해 여전히 타이트합니다.</p>
+                
+                <h4>전략적 시사점:</h4>
+                <ul>
+                    <li><strong>생산자/강세론자:</strong> 280-290센트 구간은 장기적인 매수 포지션을 시작하거나 추가하기에 잠재적으로 강력한 가치 영역이며, 주간 종가가 280센트 아래로 마감될 경우 손절매를 설정하는 것이 바람직합니다.</li>
+                    <li><strong>로스터/약세론자:</strong> 현재 환경은 단기적인 필요에 대한 헤지 기회를 제공합니다. 그러나 어떤 강세 뉴스에도 급격한 반전 가능성이 있기 때문에 이 수준에서 공격적으로 매도 포지션을 취하는 것은 위험합니다.</li>
+                    <li><strong>종합:</strong> 시장은 투기적, 추세 추종 국면에서 더 범위가 정해지고 펀더멘털에 의해 주도되는 국면으로 전환하고 있습니다. 변동성은 높게 유지될 가능성이 높지만, 3분기 말에 최대 수확 압력이 완화되면 하방 위험보다는 상방 잠재력이 더 커 보입니다.</li>
+                </ul>
+            </div>
+        </div>
 
-        <div class="footer-section">
-            <h3>Coffee Market Intelligence Report</h3>
-            <p>본 보고서는 정보 제공 목적으로 작성되었으며, 투자 조언이 아닙니다.<br>
-            시장 상황은 빠르게 변할 수 있으므로 투자 결정 시 전문가와 상담하시기 바랍니다.</p>
-            <div class="warning">
-                <strong>주의:</strong> 본 보고서의 내용은 시장 분석을 위한 참고 자료이며, 실제 투자 결정은 개인의 판단과 책임 하에 이루어져야 합니다.
-            </div>
-        </div>
-    </div>
+        <div class="footer-section">
+            <h3>Coffee Market Intelligence Report</h3>
+            <p>본 보고서는 정보 제공 목적으로 작성되었으며, 투자 조언이 아닙니다.<br>
+            시장 상황은 빠르게 변할 수 있으므로 투자 결정 시 전문가와 상담하시기 바랍니다.</p>
+            <div class="warning">
+                <strong>주의:</strong> 본 보고서의 내용은 시장 분석을 위한 참고 자료이며, 실제 투자 결정은 개인의 판단과 책임 하에 이루어져야 합니다.
+            </div>
+        </div>
+    </div>
 </body>
 </html>
