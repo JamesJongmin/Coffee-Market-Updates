@@ -1,36 +1,17 @@
 <!DOCTYPE html>
-<!--REPORT_META
-{
-  "title": "커피 가격, 폭풍 전야 - 아라비카 시장 인포그래픽",
-  "subtitle": "Coffee Market Infographic Analysis",
-  "date": "2025-06-24",
-  "summary": "아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하며 높은 변동성을 예고하고 있습니다. 단기 가격 전망은 310-390센트 범위이며, 브라질 서리 위험이 핵심 변수로 작용할 전망입니다.",
-  "tags": ["인포그래픽", "가격전망", "브라질서리", "공급부족", "변동성"]
-}
-REPORT_META-->
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아라비카 커피 선물 시장 인포그래픽</title>
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-    <!-- Chosen Palette: Energetic & Playful -->
-    <!-- Application Structure Plan: The infographic is structured as a top-to-bottom narrative scroll. It begins with a high-level summary and price forecast (the "hook"), then dives deeper into the core drivers. The flow is: 1) The Big Picture (Core conflict & forecast), 2) The Core Problem (Supply/Demand imbalance & low inventories), 3) The Deciding Factor (Brazil's asymmetric frost risk), 4) Market Internals (What the market's own signals are saying - Backwardation & Crowded Trades), and 5) The Final Outlook (Bull vs. Bear scenarios). This narrative structure was chosen to guide the user from the "what" to the "why," making the complex interdependencies of the coffee market easier to understand than a simple dashboard. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: Price Forecast -> Goal: Inform -> Viz: Single Big Number -> Justification: Immediately grabs attention with the key takeaway.
-        - Report Info: Global S&D Forecasts -> Goal: Compare -> Viz: Bar Chart (Chart.js) -> Justification: Clearly contrasts the differing outlooks from major analysis firms (Rabobank, Volcafe, Marex).
-        - Report Info: ICE Inventory Levels -> Goal: Change -> Viz: Line Chart (Chart.js) -> Justification: The most effective way to show the dramatic historical plunge to 24-year lows.
-        - Report Info: Brazil Frost Risk -> Goal: Inform -> Viz: HTML/CSS Diagram (Risk Meter) -> Justification: A simple, non-SVG visual to represent a key qualitative risk factor during a specific period.
-        - Report Info: Term Structure -> Goal: Organize/Explain -> Viz: HTML/CSS Flow Diagram -> Justification: Simplifies the complex concept of backwardation and its bullish feedback loop without needing complex charts.
-        - Report Info: CFTC Positions -> Goal: Compare -> Viz: Bar Chart (Chart.js) -> Justification: Directly visualizes the "crowded trade" by showing the large net long position of Managed Money vs. the net short positions of commercials.
-        - Library/Method: All charts use Chart.js on Canvas. All diagrams use structured HTML/CSS with Tailwind. CONFIRMED NO SVG/MERMAID. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
             background-color: #F8F9FA;
+            color: #073B4C; /* 기본 텍스트 색상 추가 */
         }
         .chart-container {
             position: relative;
@@ -60,6 +41,56 @@ REPORT_META-->
             padding: 1.5rem;
             border: 1px solid #E5E7EB;
         }
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+            z-index: 1000; /* 다른 요소 위에 오도록 z-index 설정 */
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
+
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
+        }
+        
+        /* 모바일 반응형 대응 (필요시 추가) */
+        @media (max-width: 768px) {
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
+        }
+
+        /* 헤더 스타일 조정 (position: relative; 추가) */
+        header.infographic-header { /* 기존 header 스타일과 구분하기 위해 클래스 추가 */
+            position: relative; 
+        }
     </style>
 </head>
 <body class="text-[#073B4C]">
@@ -67,8 +98,14 @@ REPORT_META-->
     <div class="container mx-auto px-4 py-8 md:py-16">
 
         <section class="text-center mb-16 md:mb-24">
-            <h1 class="text-4xl md:text-6xl super-heading mb-2 text-shadow">커피 가격, 폭풍 전야</h1>
-            <p class="text-sm text-gray-500 mb-4">리포트 발간일: 2025년 6월 24일</p>
+            <header class="infographic-header" style="background: none; padding: 0; margin: 0; box-shadow: none;">
+                <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    Home
+                </a>
+                <h1 class="text-4xl md:text-6xl super-heading mb-2 text-shadow">커피 가격, 폭풍 전야</h1>
+                <p class="text-sm text-gray-500 mb-4">리포트 발간일: 2025년 6월 24일</p>
+            </header>
             <p class="text-xl md:text-2xl max-w-3xl mx-auto text-[#118AB2] mb-6">아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하며 높은 수준의 변동성을 예고하고 있습니다.</p>
             <div class="max-w-2xl mx-auto mb-8">
                 <p class="text-md text-gray-600 italic border-l-4 border-gray-300 pl-4 text-left">"최근 대외 매크로 요인의 영향으로 커피 시세 변동성이 확대돼 커피 선물 시세 방향성을 밀착 모니터링하고자 합니다."</p>
@@ -109,10 +146,10 @@ REPORT_META-->
                 <h3 class="text-2xl font-bold text-center mb-4">서리 리스크 기간 (6월 - 8월)</h3>
                 <div class="w-full bg-gray-200 rounded-full h-8 flex items-center p-1 my-4">
                     <div class="bg-gradient-to-r from-[#FFD166] to-[#FF6B6B] h-6 rounded-full flex items-center justify-end" style="width: 75%;">
-                         <div class="relative flex items-center">
-                            <span class="absolute right-0 -mr-4 text-sm font-bold text-[#FF6B6B]">현재</span>
-                            <div class="w-4 h-4 bg-white rounded-full border-2 border-[#FF6B6B]"></div>
-                        </div>
+                             <div class="relative flex items-center">
+                                 <span class="absolute right-0 -mr-4 text-sm font-bold text-[#FF6B6B]">현재</span>
+                                 <div class="w-4 h-4 bg-white rounded-full border-2 border-[#FF6B6B]"></div>
+                             </div>
                     </div>
                 </div>
                 <div class="flex justify-between text-xs font-bold">
