@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -30,6 +29,7 @@
             margin-bottom: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
         }
         
         h1 {
@@ -52,6 +52,38 @@
             display: inline-block;
             margin-top: 15px;
             font-weight: 500;
+        }
+
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
+
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
         }
         
         .news-grid {
@@ -225,12 +257,26 @@
             h1 {
                 font-size: 2em;
             }
+
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
             <h1>커피 선물 시장 주간 동향</h1>
             <p class="subtitle">Coffee Futures Market Weekly Update</p>
             <div class="date-stamp">2025년 6월 21일 토요일</div>
@@ -293,7 +339,6 @@
                 <div style="text-align: center;">
                     <h3 style="margin-bottom: 15px; color: #666;">아라비카 커피 선물 (KCN25)</h3>
                     <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
-                        <!-- Grid lines -->
                         <g stroke="#f0f0f0" stroke-width="1">
                             <line x1="40" y1="30" x2="40" y2="200"/>
                             <line x1="40" y1="200" x2="380" y2="200"/>
@@ -304,7 +349,6 @@
                             <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
                         </g>
                         
-                        <!-- Y-axis labels -->
                         <g font-size="10" fill="#666">
                             <text x="35" y="205" text-anchor="end">200</text>
                             <text x="35" y="175" text-anchor="end">250</text>
@@ -314,7 +358,6 @@
                             <text x="35" y="55" text-anchor="end">450</text>
                         </g>
                         
-                        <!-- X-axis labels -->
                         <g font-size="9" fill="#666">
                             <text x="40" y="215" text-anchor="middle">Jun'24</text>
                             <text x="100" y="215" text-anchor="middle">Sep'24</text>
@@ -324,15 +367,12 @@
                             <text x="340" y="215" text-anchor="middle">Jun'25</text>
                         </g>
                         
-                        <!-- Coffee price line - updated to show decline to 315 -->
                         <polyline fill="none" stroke="#8B4513" stroke-width="2.5"
                             points="40,170 60,165 80,155 100,145 120,130 140,115 160,105 180,70 200,50 220,55 240,65 260,80 280,95 300,105 320,115 340,125 360,145 380,157"/>
                         
-                        <!-- Current price dot -->
                         <circle cx="380" cy="157" r="4" fill="#8B4513"/>
                         <text x="385" y="154" font-size="11" fill="#8B4513" font-weight="bold">315.05</text>
                         
-                        <!-- Title -->
                         <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">센트/파운드</text>
                     </svg>
                     <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
@@ -344,7 +384,6 @@
                 <div style="text-align: center;">
                     <h3 style="margin-bottom: 15px; color: #666;">브라질 헤알/달러 (USD/BRL)</h3>
                     <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
-                        <!-- Grid lines -->
                         <g stroke="#f0f0f0" stroke-width="1">
                             <line x1="40" y1="30" x2="40" y2="200"/>
                             <line x1="40" y1="200" x2="380" y2="200"/>
@@ -355,7 +394,6 @@
                             <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
                         </g>
                         
-                        <!-- Y-axis labels -->
                         <g font-size="10" fill="#666">
                             <text x="35" y="205" text-anchor="end">5.4</text>
                             <text x="35" y="175" text-anchor="end">5.5</text>
@@ -366,7 +404,6 @@
                             <text x="35" y="30" text-anchor="end">6.0</text>
                         </g>
                         
-                        <!-- X-axis labels -->
                         <g font-size="9" fill="#666">
                             <text x="40" y="215" text-anchor="middle">Jun'24</text>
                             <text x="100" y="215" text-anchor="middle">Sep'24</text>
@@ -376,23 +413,18 @@
                             <text x="340" y="215" text-anchor="middle">Jun'25</text>
                         </g>
                         
-                        <!-- BRL historical line (solid) -->
                         <polyline fill="none" stroke="#667eea" stroke-width="2.5"
                             points="40,145 45,148 50,143 55,146 60,144 65,149 70,147 75,145 80,148 85,152 90,146 95,144 100,147 105,145 110,143 115,138 120,135 125,133 130,138 135,135 140,140 145,137 150,133 155,128 160,125 165,122 170,118 175,115 180,110 185,105 190,95 195,85 200,70 205,55 210,45 215,40 220,35 225,38 230,45 235,55 240,70 245,82 250,90 255,95 260,92 265,90 270,88 275,87 280,88 285,92 290,95 295,100 300,103 305,108 310,113 315,115 320,118 325,122 330,125 335,130 340,135 345,140 350,145 355,150 360,155 365,160 370,165 375,170 380,175"/>
                         
-                        <!-- Future projection line (dashed) - 전망선 추가 -->
                         <polyline fill="none" stroke="#667eea" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"
                             points="380,175 385,173 390,171 395,168 400,165"/>
                         
-                        <!-- Current price dot -->
                         <circle cx="380" cy="175" r="4" fill="#667eea"/>
                         <text x="375" y="172" font-size="11" fill="#667eea" font-weight="bold">5.51</text>
                         
-                        <!-- 미래 전망 표시 -->
                         <text x="390" y="160" font-size="9" fill="#667eea" opacity="0.7">5.75</text>
                         <text x="390" y="150" font-size="8" fill="#666" opacity="0.6">(전망)</text>
                         
-                        <!-- Title -->
                         <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">BRL/USD</text>
                     </svg>
                     <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
@@ -550,9 +582,9 @@
                 재고 수준을 고려할 때 $2.50 이하로의 급락 가능성은 제한적입니다.
                 <br><br>
                 <strong>커피 관련 기업들은 원재료 가격 하락의 수혜를 본격적으로 누릴 전망입니다.</strong>
-                JDE Peet's가 연초 대비 48.5% 급등하며 강세를 보이고 있고, 
-                네슬레도 21.3% 상승하며 견조한 흐름을 이어가고 있습니다. 
-                향후 원가 부담 완화로 마진 개선이 기대됩니다.
+                JDE Peet's는 강력한 실적과 자사주 매입으로 주가가 연초 대비 48.5% 상승했으며, 
+                네슬레도 안정적인 수익성을 바탕으로 21.3% 상승했습니다. 스타벅스는 구조조정 효과가 
+                가시화되면서 최근 반등세를 보이고 있어 주목됩니다.
             </p>
         </div>
 
