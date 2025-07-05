@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -8,558 +7,468 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-        font-family: 'Arial', 'Helvetica', sans-serif;
-        line-height: 1.7;
-        color: #2c3e50;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        min-height: 100vh;
-    }
-    
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    header {
-        background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-        color: white;
-        padding: 40px 0;
-        text-align: center;
-        margin-bottom: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-    
-    h1 {
-        font-size: 2.5em;
-        font-weight: 700;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .subtitle {
-        font-size: 1.2em;
-        opacity: 0.9;
-        font-weight: 300;
-    }
-    
-    .date-stamp {
-        background: rgba(255,255,255,0.1);
-        padding: 10px 20px;
-        border-radius: 25px;
-        display: inline-block;
-        margin-top: 15px;
-        font-weight: 500;
-    }
-    
-    .news-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 30px;
-        margin-bottom: 40px;
-    }
-    
-    .main-story {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        border-left: 5px solid #8B4513;
-    }
-    
-    .sidebar {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .price-box {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 25px;
-        border-radius: 15px;
-        text-align: center;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    .price-value {
-        font-size: 2.2em;
-        font-weight: 700;
-        margin-bottom: 5px;
-    }
-    
-    .price-change {
-        font-size: 1.1em;
-        margin-bottom: 10px;
-    }
-    
-    .price-change.negative { color: #ff6b6b; }
-    .price-change.positive { color: #51cf66; }
-    
-    .quick-stats {
-        background: white;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    }
-    
-    .stat-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .stat-item:last-child { border-bottom: none; }
-    
-    .news-sections {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 30px;
-        margin-bottom: 40px;
-    }
-    
-    .news-section {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-    }
-    
-    .news-section:hover {
-        transform: translateY(-5px);
-    }
-    
-    .section-title {
-        font-size: 1.4em;
-        font-weight: 700;
-        color: #8B4513;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-    
-    .news-item {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #f5f5f5;
-    }
-    
-    .news-item:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-        padding-bottom: 0;
-    }
-    
-    .news-date {
-        font-size: 0.9em;
-        color: #666;
-        margin-bottom: 5px;
-    }
-    
-    .news-content {
-        font-size: 0.95em;
-        line-height: 1.6;
-    }
-    
-    .highlight {
-        background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-        padding: 20px;
-        border-radius: 10px;
-        margin: 20px 0;
-        border-left: 4px solid #8B4513;
-    }
-    
-    .market-outlook {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 30px;
-        border-radius: 15px;
-        margin: 40px 0;
-        text-align: center;
-    }
-    
-    .outlook-title {
-        font-size: 1.8em;
-        font-weight: 700;
-        margin-bottom: 15px;
-    }
-    
-    .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 20px 0;
-    }
-    
-    .tag {
-        background: #8B4513;
-        color: white;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.85em;
-        font-weight: 500;
-    }
-    
-    footer {
-        text-align: center;
-        padding: 20px;
-        color: #666;
-        font-size: 0.9em;
-        border-top: 1px solid #eee;
-        margin-top: 40px;
-    }
-    
-    @media (max-width: 768px) {
-        .news-grid {
-            grid-template-columns: 1fr;
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
         
         .container {
-            padding: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
         }
         
         h1 {
-            font-size: 2em;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-    }
-</style>
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
+
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #8B4513;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
+        }
+    </style>
 
 
 </head>
 <body>
     <div class="container">
         <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
             <h1>커피 선물 시장 주간 동향</h1>
-            <p class="subtitle">Coffee Futures Market Weekly Update</p>
-            <div class="date-stamp">2025년 6월 7일 토요일</div>
+            <div class="subtitle">Coffee Futures Market Update</div>
+            <div style="font-size: 1em; margin: 10px 0; opacity: 0.8;">Published by Align Commodities</div>
+            <div class="date-stamp">2025년 5월 31일 기준</div>
         </header>
-
-
-    <div class="news-grid">
-        <div class="main-story">
-            <h2 style="color: #8B4513; margin-bottom: 20px;">주요 헤드라인: 주간 5.17% 상승하며 변동성 지속</h2>
-            <p style="margin-bottom: 15px;">
-                <strong>커피 선물이 최근 1주일간 5.17% 상승하며 변동성이 지속되고 있습니다.</strong> 
-                7월 아라비카 커피(KCN25)는 금요일 1.70포인트(-0.47%) 하락한 358.05센트로 마감했으나, 
-                주간 기준으로는 강한 상승세를 기록했습니다. 브라질 헤알화 강세와 공급 우려가 주요 상승 동력입니다.
-            </p>
-            
-            <div class="highlight">
-                <h3 style="margin-bottom: 10px;">핵심 시장 동향</h3>
-                <ul style="padding-left: 20px;">
-                    <li><strong>브라질 헤알화 강세:</strong> 목요일 브라질 헤알화가 달러 대비 7.5개월 최고치를 기록하며 공매도 청산 유발</li>
-                    <li><strong>글로벌 생산량 전망:</strong> 2025/26년 아라비카 생산량 감소 우려 vs 로부스타 생산량 증가 전망</li>
-                    <li><strong>베트남 생산 호조:</strong> 2025/26년 커피 생산량 3,100만 포대로 전년 대비 6.9% 증가 예상</li>
-                    <li><strong>가격 변동성 지속:</strong> ICO 5월 평균 가격 334.41센트/파운드로 4개월 최저치 기록</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="sidebar">
-            <div class="price-box">
-                <h3>7월 아라비카 (KCN25)</h3>
-                <div class="price-value">358.05</div>
-                <div class="price-change negative">-1.70 (-0.47%)</div>
-                <div style="font-size: 0.9em; opacity: 0.8;">센트/파운드 → $7.88/kg</div>
-            </div>
-
-            <div class="quick-stats">
-                <h3 style="margin-bottom: 15px; color: #8B4513;">수익률 현황 (1D, 1W, 1M, 3M, YTD, 1Y)</h3>
-                <div class="stat-item">
-                    <span><strong>커피 선물 (KCN25, ICE):</strong></span>
-                    <span style="font-size: 0.9em;"><span style="color: #ff6b6b;">-0.5%</span> / <span style="color: #51cf66;">+5.2%</span> / <span style="color: #ff6b6b;">-7.6%</span> / <span style="color: #ff6b6b;">-16.3%</span> / <span style="color: #ff6b6b;">-14.7%</span> / <span style="color: #51cf66;">+47.8%</span></span>
+        
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #8B4513; margin-bottom: 20px; font-size: 1.6em;">주요 뉴스: 월간 하락세 연장, 7주 최저치 기록</h2>
+                <p style="margin-bottom: 15px;">커피 선물 시장이 지난 한 달간의 하락세를 연장하며 새로운 저점을 기록했습니다. 5월 30일(금) 7월 아라비카 커피 선물(KCN25)이 -5.95(-1.71%) 하락한 342.45센트로 7주 최저치를 기록했으며, 로부스타 커피도 -56(-1.23%) 하락했습니다.</p>
+                
+                <div class="highlight">
+                    <strong>핵심 요인:</strong> USDA의 글로벌 생산량 증가 전망, ICE 재고의 지속적 증가, 그리고 수요 우려가 복합적으로 작용하여 강한 하락 압력을 형성하고 있습니다.
                 </div>
-                <div class="stat-item">
-                    <span><strong>스타벅스 (SBUX, NASDAQ):</strong></span>
-                    <span style="font-size: 0.9em;"><span style="color: #ff6b6b;">-0.6%</span> / <span style="color: #51cf66;">+3.5%</span> / <span style="color: #51cf66;">+8.2%</span> / <span style="color: #ff6b6b;">-25.2%</span> / <span style="color: #ff6b6b;">-7.3%</span> / <span style="color: #51cf66;">+9.0%</span></span>
-                </div>
-                <div class="stat-item">
-                    <span><strong>JDE Peet's (JDEP.AS):</strong></span>
-                    <span style="font-size: 0.9em;"><span style="color: #51cf66;">+0.4%</span> / <span style="color: #51cf66;">+4.4%</span> / <span style="color: #51cf66;">+11.5%</span> / <span style="color: #51cf66;">+28.5%</span> / <span style="color: #51cf66;">+39.4%</span> / <span style="color: #51cf66;">+7.1%</span></span>
-                </div>
-                <div class="stat-item">
-                    <span><strong>네슬레 (NESN.SW):</strong></span>
-                    <span style="font-size: 0.9em;"><span style="color: #ff6b6b;">-0.4%</span> / <span style="color: #ff6b6b;">-0.8%</span> / <span style="color: #51cf66;">+0.9%</span> / <span style="color: #51cf66;">+1.7%</span> / <span style="color: #51cf66;">+18.6%</span> / <span style="color: #ff6b6b;">-3.5%</span></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
-        <h2 style="color: #8B4513; margin-bottom: 20px; text-align: center;">커피 선물 vs 브라질 헤알화 (1년 차트)</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-            <div style="text-align: center;">
-                <h3 style="margin-bottom: 15px; color: #666;">아라비카 커피 선물 (KCN25)</h3>
-                <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
-                    <!-- Grid lines -->
-                    <g stroke="#f0f0f0" stroke-width="1">
-                        <line x1="40" y1="30" x2="40" y2="200"/>
-                        <line x1="40" y1="200" x2="380" y2="200"/>
-                        <line x1="40" y1="170" x2="380" y2="170" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="140" x2="380" y2="140" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="110" x2="380" y2="110" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="80" x2="380" y2="80" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
-                    </g>
-                    
-                    <!-- Y-axis labels -->
-                    <g font-size="10" fill="#666">
-                        <text x="35" y="205" text-anchor="end">200</text>
-                        <text x="35" y="175" text-anchor="end">250</text>
-                        <text x="35" y="145" text-anchor="end">300</text>
-                        <text x="35" y="115" text-anchor="end">350</text>
-                        <text x="35" y="85" text-anchor="end">400</text>
-                        <text x="35" y="55" text-anchor="end">450</text>
-                    </g>
-                    
-                    <!-- X-axis labels -->
-                    <g font-size="9" fill="#666">
-                        <text x="40" y="215" text-anchor="middle">Jun'24</text>
-                        <text x="100" y="215" text-anchor="middle">Sep'24</text>
-                        <text x="160" y="215" text-anchor="middle">Dec'24</text>
-                        <text x="220" y="215" text-anchor="middle">Feb'25</text>
-                        <text x="280" y="215" text-anchor="middle">Apr'25</text>
-                        <text x="340" y="215" text-anchor="middle">Jun'25</text>
-                    </g>
-                    
-                    <!-- Coffee price line -->
-                    <polyline fill="none" stroke="#8B4513" stroke-width="2.5"
-                        points="40,140 60,135 80,125 100,115 120,100 140,85 160,75 180,60 200,50 220,55 240,65 260,80 280,95 300,105 320,110 340,115 360,112 380,113"/>
-                    
-                    <!-- Current price dot -->
-                    <circle cx="380" cy="113" r="4" fill="#8B4513"/>
-                    <text x="385" y="110" font-size="11" fill="#8B4513" font-weight="bold">358.05</text>
-                    
-                    <!-- Title -->
-                    <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">센트/파운드</text>
-                </svg>
-                <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
-                    2024년 2월 고점 대비 -16.8% 하락<br>
-                    연초 대비 +11.6% 상승
-                </p>
+                
+                <p>특히 브라질의 2025/26 생산량이 0.5% 증가한 6,500만 포대, 베트남이 6.9% 증가한 3,100만 포대로 전망되면서 공급 과잉 우려가 심화되고 있습니다.</p>
             </div>
             
-            <div style="text-align: center;">
-                <h3 style="margin-bottom: 15px; color: #666;">브라질 헤알/달러 (USD/BRL)</h3>
-                <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
-                    <!-- Grid lines -->
-                    <g stroke="#f0f0f0" stroke-width="1">
-                        <line x1="40" y1="30" x2="40" y2="200"/>
-                        <line x1="40" y1="200" x2="380" y2="200"/>
-                        <line x1="40" y1="170" x2="380" y2="170" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="140" x2="380" y2="140" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="110" x2="380" y2="110" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="80" x2="380" y2="80" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
-                    </g>
-                    
-                    <!-- Y-axis labels -->
-                    <g font-size="10" fill="#666">
-                        <text x="35" y="205" text-anchor="end">4.8</text>
-                        <text x="35" y="175" text-anchor="end">5.0</text>
-                        <text x="35" y="145" text-anchor="end">5.2</text>
-                        <text x="35" y="115" text-anchor="end">5.4</text>
-                        <text x="35" y="85" text-anchor="end">5.6</text>
-                        <text x="35" y="55" text-anchor="end">5.8</text>
-                    </g>
-                    
-                    <!-- X-axis labels -->
-                    <g font-size="9" fill="#666">
-                        <text x="40" y="215" text-anchor="middle">Jun'24</text>
-                        <text x="100" y="215" text-anchor="middle">Sep'24</text>
-                        <text x="160" y="215" text-anchor="middle">Dec'24</text>
-                        <text x="220" y="215" text-anchor="middle">Feb'25</text>
-                        <text x="280" y="215" text-anchor="middle">Apr'25</text>
-                        <text x="340" y="215" text-anchor="middle">Jun'25</text>
-                    </g>
-                    
-                    <!-- BRL line -->
-                    <polyline fill="none" stroke="#667eea" stroke-width="2.5"
-                        points="40,180 60,175 80,165 100,155 120,150 140,140 160,130 180,120 200,110 220,100 240,90 260,85 280,80 300,75 320,80 340,90 360,100 380,105"/>
-                    
-                    <!-- Current price dot -->
-                    <circle cx="380" cy="105" r="4" fill="#667eea"/>
-                    <text x="385" y="102" font-size="11" fill="#667eea" font-weight="bold">5.43</text>
-                    
-                    <!-- Title -->
-                    <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">BRL/USD</text>
-                </svg>
-                <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
-                    7.5개월 최고치 기록<br>
-                    헤알화 강세가 커피 수출 억제
-                </p>
+            <div class="sidebar">
+                <div class="price-box">
+                    <div style="font-size: 1.1em; margin-bottom: 10px;">7월 아라비카 선물 (5/30)</div>
+                    <div class="price-value">342.45 cpp</div>
+                    <div style="font-size: 0.8em; margin-bottom: 10px; opacity: 0.9;">($7.55/kg)</div>
+                    <div class="price-change negative">-5.95 (-1.71%)</div>
+                    <div style="font-size: 0.9em;">7주 최저치 기록</div>
+                </div>
+                
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">주요 지표</h3>
+                    <div class="stat-item">
+                        <span>1일 수익률 (1D)</span>
+                        <span style="color: #ff6b6b;">-1.71%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>1주 수익률 (1W)</span>
+                        <span style="color: #ff6b6b;">-4.2%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>1개월 수익률 (1M)</span>
+                        <span style="color: #ff6b6b;">-8.5%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>3개월 수익률 (3M)</span>
+                        <span style="color: #ff6b6b;">-12.3%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>연초 대비 (YTD)</span>
+                        <span style="color: #51cf66;">+8.7%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>ICE 아라비카 재고</span>
+                        <span>892,468포대 (3.75개월 최고)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>ICE 로부스타 재고</span>
+                        <span>5,438로트 (8개월 최고)</span>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
-            <p style="font-size: 0.9em; color: #666; text-align: center; margin: 0;">
-                <strong>상관관계:</strong> 브라질 헤알화가 강세를 보일 때 커피 가격이 상승하는 경향. 
-                헤알화 강세 → 브라질 농부들의 수출 지연 → 공급 제한 → 가격 상승
-            </p>
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">📉 최신 가격 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일 (금)</div>
+                    <div class="news-content">
+                        <strong>커피 선물 급락, 7주 최저치 기록</strong><br>
+                        7월 아라비카 커피가 342.45센트로 -1.71% 급락하며 7주 최저치를 기록했습니다. 로부스타 커피도 4,510달러로 -1.23% 하락하며 6.5개월 최저치를 나타냈습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일</div>
+                    <div class="news-content">
+                        <strong>월간 하락세 연장으로 시장 약세 지속</strong><br>
+                        커피 가격이 지난 한 달간의 하락세를 연장하면서 글로벌 공급 증가 전망에 대한 우려가 현실화되고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 최종 주</div>
+                    <div class="news-content">
+                        <strong>공급 과잉 우려 심화</strong><br>
+                        USDA 전망에 따르면 브라질과 베트남의 생산량 증가로 글로벌 커피 공급이 크게 늘어날 것으로 예상되어 가격 압박이 지속되고 있습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-section">
+                <h3 class="section-title">📊 재고 및 공급 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일</div>
+                    <div class="news-content">
+                        <strong>ICE 재고 다시 최고치 경신</strong><br>
+                        ICE 로부스타 재고가 8개월 최고치인 5,438로트를 기록했으며, 아라비카 재고도 3.75개월 최고치인 892,468포대에 달해 공급 과잉 우려를 증폭시키고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 27일</div>
+                    <div class="news-content">
+                        <strong>USDA 최종 생산량 전망 발표</strong><br>
+                        브라질 2025/26 생산량 6,500만 포대(+0.5%), 베트남 3,100만 포대(+6.9%) 증가 전망으로 공급 증가 압력이 가중되고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 9일</div>
+                    <div class="news-content">
+                        <strong>온두라스 생산량도 증가 전망</strong><br>
+                        중앙아메리카 최대 커피 생산국인 온두라스의 2025/26 생산량이 전년 대비 5.1% 증가한 580만 포대로 예상된다고 USDA가 발표했습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-section">
+                <h3 class="section-title">🌍 시장 분석</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 30일</div>
+                    <div class="news-content">
+                        <strong>수요 우려 확산</strong><br>
+                        스타벅스, 허쉬, 몬델리즈 등 글로벌 기업들이 미국의 10% 기본 관세로 인한 가격 상승과 판매량 감소 우려를 표명했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 12일</div>
+                    <div class="news-content">
+                        <strong>브라질 커피 수출 급감</strong><br>
+                        브라질의 4월 커피 수출이 전년 동기 대비 28% 감소한 305만 포대를 기록했으며, 1-4월 누적 수출도 15.5% 감소했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">최근</div>
+                    <div class="news-content">
+                        <strong>베트남 수출 부진 지속</strong><br>
+                        베트남의 2025년 1-4월 커피 수출이 전년 대비 9.8% 감소한 66.3만 톤을 기록하며 공급 부족 우려를 상쇄하고 있습니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-section">
+                <h3 class="section-title">🌧️ 날씨 영향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">5월 27일</div>
+                    <div class="news-content">
+                        <strong>브라질 가뭄 지속</strong><br>
+                        브라질 최대 아라비카 생산지인 미나스제라이스 주가 5월 24일 종료 주간에 역사적 평균의 4%에 불과한 0.3mm의 강수량을 기록했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">현재</div>
+                    <div class="news-content">
+                        <strong>기후 변화 영향 심화</strong><br>
+                        극한 기후 현상의 빈도 증가로 커피 나무들이 완전히 회복할 시간을 갖지 못하고 있어 장기적 생산성에 부정적 영향을 미치고 있습니다.
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <div class="market-outlook">
+            <div class="outlook-title">주간 시장 전망</div>
+            <p style="margin-bottom: 20px;">커피 시장이 강한 하락 모멘텀을 보이며 월간 저점을 경신했습니다. 글로벌 생산량 증가 전망과 높은 재고 수준이 지속적인 가격 압박 요인으로 작용하고 있습니다. 브라질의 가뭄에도 불구하고 전체 생산량 증가 전망이 시장을 압도하고 있어 단기적으로 추가 하락 가능성이 높습니다.</p>
+            <p><strong>다음 주 주요 관전 포인트:</strong> ICE 재고 변화, 브라질 날씨 패턴, 베트남 수출 데이터, 340센트 기술적 지지선 유지 여부</p>
+        </div>
+        
+        <div class="tags">
+            <span class="tag">브라질헤알화</span>
+            <span class="tag">아라비카선물</span>
+            <span class="tag">베트남생산증가</span>
+            <span class="tag">ICO가격보고서</span>
+            <span class="tag">펀드포지션</span>
+            <span class="tag">JDE자사주매입</span>
+            <span class="tag">네슬레실적</span>
+            <span class="tag">스타벅스구조조정</span>
+            <span class="tag">기상리스크</span>
+        </div>
+        
+        <footer>
+            <p>이 정보는 Barchart.com, Reuters, USDA 등 신뢰할 수 있는 출처를 바탕으로 작성되었습니다.<br>
+            투자 결정 시에는 반드시 실시간 데이터와 전문가 상담을 통해 신중하게 판단하시기 바랍니다.</p>
+        </footer>
     </div>
-
-    <div class="news-sections">
-        <div class="news-section">
-            <h3 class="section-title">🌍 최신 시장 동향</h3>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.06</div>
-                <div class="news-content">
-                    <strong>커피 선물 1주일 최고치 기록:</strong> 브라질 헤알화가 달러 대비 3주 최고치로 
-                    상승하면서 커피 선물 가격이 급등. 아라비카는 1주일 최고치 기록하며 펀드들의 
-                    공매도 청산이 가속화되고 있음.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.05</div>
-                <div class="news-content">
-                    <strong>베트남 생산량 증가 전망:</strong> USDA가 베트남의 2025/26년 커피 생산량을 
-                    3,100만 포대로 예측. 로부스타 3,000만 포대, 아라비카 100만 포대 포함. 
-                    유리한 날씨와 높은 국제 가격이 생산 증가 견인.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.04</div>
-                <div class="news-content">
-                    <strong>글로벌 불확실성 증가:</strong> Comunicaffe 보고서에 따르면 2025/26년 
-                    글로벌 아라비카 생산량 감소 가능성 제기. 반면 로부스타는 베트남 200만 포대, 
-                    브라질 310만 포대 증가 등 긍정적 전망.
-                </div>
-            </div>
-        </div>
-
-        <div class="news-section">
-            <h3 class="section-title">📊 생산 및 공급 현황</h3>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.05</div>
-                <div class="news-content">
-                    <strong>브라질 2025/26 생산량 예측:</strong> Rabobank가 브라질 커피 생산량을 
-                    6,280만 포대로 전망, 전년 대비 6.4% 감소. 아라비카는 13.6% 감소한 3,800만 포대, 
-                    로부스타는 7.3% 증가한 2,470만 포대 예상.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.02</div>
-                <div class="news-content">
-                    <strong>아라비카 선물 거래 단위 변경:</strong> ICE가 2028년 3월부터 아라비카 선물을 
-                    파운드당 센트에서 톤당 달러로 가격 책정 방식 변경 발표. 런던 시장과의 정렬 및 
-                    글로벌 커피 무역 표준화 목적.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.05.30</div>
-                <div class="news-content">
-                    <strong>ICO 5월 가격 보고서:</strong> I-CIP가 5월 평균 334.41센트/파운드로 
-                    4개월 최저치 기록. 하락 추세가 한 달간 지속되었으며, 런던 인증 재고는 
-                    전월 대비 28.1% 증가한 92만 포대.
-                </div>
-            </div>
-        </div>
-
-        <div class="news-section">
-            <h3 class="section-title">🌤️ 기상 및 장기 전망</h3>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.06</div>
-                <div class="news-content">
-                    <strong>브라질 기상 우려 지속:</strong> 주요 생산지역의 강우 부족이 2025/26년 
-                    수확에 영향을 미칠 것으로 우려. 4월 이후 평년 이하의 강수량이 커피나무 개화에 
-                    부정적 영향을 미치고 있음.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.05</div>
-                <div class="news-content">
-                    <strong>베트남 국내 소비 증가:</strong> 2025/26년 베트남 국내 커피 소비량이 
-                    490만 포대로 증가 예상. 도시화 진행과 카페 산업 번창, 젊은 소비자들의 
-                    선호도 변화가 주요 요인.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.04</div>
-                <div class="news-content">
-                    <strong>USDA 공식 전망 예정:</strong> USDA가 6월 25일 "Coffee: World Markets 
-                    and Trade" 보고서 발표 예정. 2025/26년 커피 연도에 대한 초기 전망이 포함될 
-                    예정으로 시장 주목.
-                </div>
-            </div>
-        </div>
-
-        <div class="news-section">
-            <h3 class="section-title">📈 커피 관련 기업 동향</h3>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.06</div>
-                <div class="news-content">
-                    <strong>스타벅스 구조조정 지속:</strong> 스타벅스가 2분기 매출 2% 증가한 88억 달러 기록. 
-                    글로벌 동일매장 매출은 1% 감소했으나 "Back to Starbucks" 전략을 통한 
-                    턴어라운드에 대한 자신감 표명.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.06.02</div>
-                <div class="news-content">
-                    <strong>JDE Peet's 자사주 매입:</strong> JDE Peet's가 2억5천만 유로 규모의 
-                    자사주 매입 프로그램 진행 중. 6월 2일까지 6,860만 유로 상당의 366만8,535주 매입 완료. 
-                    평균 매입가는 주당 23.41유로.
-                </div>
-            </div>
-            
-            <div class="news-item">
-                <div class="news-date">2025.04.24</div>
-                <div class="news-content">
-                    <strong>네슬레 1분기 실적:</strong> 네슬레가 1분기 유기적 매출 성장률 2.8% 기록하며 
-                    예상치(2.5%) 상회. 가격 인상 2.1%, 판매량 0.7% 증가. 2025년 영업이익률은 
-                    16% 이상 전망하며 전년(17.2%)보다 하락 예상.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="market-outlook">
-        <h2 class="outlook-title">시장 전망 및 분석</h2>
-        <p style="font-size: 1.1em; line-height: 1.6;">
-            <strong>커피 선물 시장은 브라질 헤알화 강세와 생산량 불확실성 사이에서 변동성이 확대되고 있습니다.</strong> 
-            단기적으로는 브라질 통화 강세가 수출업자들의 판매를 억제하며 가격 상승 압력으로 작용하고 있으나, 
-            베트남의 생산량 증가와 로부스타 재고 확대는 가격 상승을 제한하는 요인입니다.
-            <br><br>
-            <strong>커피 관련 상장기업들은 원재료 가격 변동에도 불구하고 차별화된 성과를 보이고 있습니다.</strong>
-            JDE Peet's는 적극적인 자사주 매입과 함께 주가가 연초 대비 45.9% 상승했으며, 
-            네슬레는 안정적인 실적을 바탕으로 17.1% 상승했습니다. 반면 스타벅스는 구조조정 진행에도 
-            불구하고 연초 대비 8.3% 하락하며 부진한 모습을 보이고 있습니다.
-        </p>
-    </div>
-
-    <div class="tags">
-        <span class="tag">브라질헤알화</span>
-        <span class="tag">아라비카선물</span>
-        <span class="tag">베트남생산증가</span>
-        <span class="tag">ICO가격보고서</span>
-        <span class="tag">펀드포지션</span>
-        <span class="tag">JDE자사주매입</span>
-        <span class="tag">네슬레실적</span>
-        <span class="tag">스타벅스구조조정</span>
-        <span class="tag">기상리스크</span>
-    </div>
-
-    <footer>
-        <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: Comunicaffe, ICO, USDA, MarketScreener | 
-        본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
-    </footer>
-</div>
 
 
 </body>
