@@ -553,7 +553,7 @@
             <h1>
                 Coffee Market Updates
                 <span class="live-indicator">Live</span>
-                <span class="date-badge" id="currentDate">2025년 6월 22일</span>
+                <span class="date-badge" id="currentDate">2025년 7월 5일</span>
             </h1>
             <p class="subtitle">Coffee Futures Market Analysis & Dashboard</p>
             <p class="description">
@@ -562,23 +562,27 @@
             </p>
         </header>
 
+        <!-- KOSIS 통계 바 -->
         <div class="stats-bar">
             <div class="stat-box">
-                <div class="stat-number" id="totalReports">5</div>
-                <div class="stat-label">총 보고서 수</div>
+                <div class="stat-number" id="monthlyImport">로딩중...</div>
+                <div class="stat-label">월간 커피 수입량</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number" id="latestDate">2025.06</div>
-                <div class="stat-label">최신 업데이트</div>
+                <div class="stat-number" id="monthlyValue">로딩중...</div>
+                <div class="stat-label">월간 수입액</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number">주간</div>
-                <div class="stat-label">업데이트 주기</div>
+                <div class="stat-number" id="brazilShare">로딩중...</div>
+                <div class="stat-label">브라질 비중 (추정)</div>
             </div>
             <div class="stat-box">
-                <div class="stat-number">KR/EN</div>
-                <div class="stat-label">언어 지원</div>
+                <div class="stat-number" id="growthRate">로딩중...</div>
+                <div class="stat-label">전년 동월 대비</div>
             </div>
+        </div>
+        <div style="text-align: center; margin-bottom: 40px; font-size: 0.9em; color: #666;">
+            <span id="lastUpdateMonth">2024.06</span> 기준 • 출처: 관세청(<span id="dataSource">KOSIS</span>)
         </div>
 
         <div class="search-filter">
@@ -592,6 +596,7 @@
                     <option value="">전체 월</option>
                     <option value="05">5월</option>
                     <option value="06">6월</option>
+                    <option value="07">7월</option>
                 </select>
             </div>
         </div>
@@ -723,6 +728,24 @@
         let allReports = [];
         let charts = {};
 
+        // KOSIS API 설정 (실제 데이터 기반)
+        const KOSIS_CONFIG = {
+            apiKey: 'YTFjNjg2MzA0MzVmYjk2NWQ3YmNlMTYwZTRlODMxNDc=',
+            baseUrl: 'https://kosis.kr/openapi/Param/statisticsParameterData.do',
+            // 커피 관련 품목 코드 (HS코드 09류: 커피, 차, 마테, 향신료)
+            coffeeItemCodes: [
+                '13102112831A.09',  // 09류 (커피, 차, 마테, 향신료)
+                '13102112831A.091', // 0901 (커피)
+                '13102112831A.098'  // 기타 커피 관련
+            ],
+            orgId: '360', // 기관코드
+            tblId: 'DT_1R11001_FRM101', // 테이블 ID
+            method: 'getList',
+            format: 'json',
+            jsonVD: 'Y',
+            prdSe: 'M' // 월별
+        };
+
         // 구글 시트 URL 설정
         const GOOGLE_SHEETS_URLS = {
             coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
@@ -730,6 +753,234 @@
             cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
             nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
         };
+
+        // KOSIS API에서 커피 수입 데이터 가져오기
+        async function fetchKosisCoffeeData() {
+            try {
+                // 현재 연도와 이전 연도 설정
+                const currentYear = new Date().getFullYear();
+                const currentMonth = new Date().getMonth() + 1;
+                const startDate = `${currentYear-1}01`; // 작년 1월부터
+                const endDate = `${currentYear}${currentMonth.toString().padStart(2, '0')}`; // 이번 달까지
+
+                const params = new URLSearchParams({
+                    method: KOSIS_CONFIG.method,
+                    apiKey: KOSIS_CONFIG.apiKey,
+                    itmId: '13103112831T1+13103112831T2+', // 수입금액, 수입중량
+                    objL1: KOSIS_CONFIG.coffeeItemCodes.join('+') + '+',
+                    format: KOSIS_CONFIG.format,
+                    jsonVD: KOSIS_CONFIG.jsonVD,
+                    prdSe: KOSIS_CONFIG.prdSe,
+                    newEstPrdCnt: '6', // 최근 6개월
+                    orgId: KOSIS_CONFIG.orgId,
+                    tblId: KOSIS_CONFIG.tblId
+                });
+
+                console.log('KOSIS API 호출 URL:', `${KOSIS_CONFIG.baseUrl}?${params}`);
+                
+                const response = await fetch(`${KOSIS_CONFIG.baseUrl}?${params}`);
+                if (!response.ok) {
+                    throw new Error(`KOSIS API Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('KOSIS 원본 데이터:', data);
+                
+                return processKosisCoffeeData(data);
+                
+            } catch (error) {
+                console.error('KOSIS API 호출 실패:', error);
+                return getFallbackKosisData();
+            }
+        }
+
+        // KOSIS 데이터 처리 및 분석
+        function processKosisCoffeeData(rawData) {
+            if (!rawData || !Array.isArray(rawData) || rawData.length === 0) {
+                console.warn('KOSIS 데이터가 비어있음, 대체 데이터 사용');
+                return getFallbackKosisData();
+            }
+
+            try {
+                // 커피 관련 데이터만 필터링 (09류)
+                const coffeeData = rawData.filter(item => 
+                    item.C1_NM && (
+                        item.C1_NM.includes('커피') || 
+                        item.C1_NM.includes('Coffee') ||
+                        item.C1_NM.includes('09')
+                    )
+                );
+
+                console.log('필터링된 커피 데이터:', coffeeData);
+
+                if (coffeeData.length === 0) {
+                    console.warn('커피 관련 데이터를 찾을 수 없음');
+                    return getFallbackKosisData();
+                }
+
+                // 최신 월 데이터 추출
+                const sortedData = coffeeData.sort((a, b) => b.PRD_DE.localeCompare(a.PRD_DE));
+                const latestMonth = sortedData[0].PRD_DE;
+                
+                // 수입금액과 수입중량 분리
+                const latestImportValue = coffeeData.find(item => 
+                    item.PRD_DE === latestMonth && 
+                    (item.ITM_NM.includes('수입금액') || item.ITM_NM.includes('금액'))
+                );
+                
+                const latestImportWeight = coffeeData.find(item => 
+                    item.PRD_DE === latestMonth && 
+                    (item.ITM_NM.includes('수입중량') || item.ITM_NM.includes('중량'))
+                );
+
+                // 전년 동월 데이터 찾기
+                const previousYearMonth = (parseInt(latestMonth) - 100).toString();
+                const previousYearWeight = coffeeData.find(item => 
+                    item.PRD_DE === previousYearMonth && 
+                    (item.ITM_NM.includes('수입중량') || item.ITM_NM.includes('중량'))
+                );
+
+                // 성장률 계산
+                let growthRate = 'N/A';
+                if (latestImportWeight && previousYearWeight) {
+                    const latest = parseFloat(latestImportWeight.DT || 0);
+                    const previous = parseFloat(previousYearWeight.DT || 0);
+                    if (previous > 0) {
+                        growthRate = ((latest - previous) / previous * 100).toFixed(1);
+                    }
+                }
+
+                // 연간 누적 계산
+                const currentYear = latestMonth.substring(0, 4);
+                const yearToDateData = coffeeData.filter(item => 
+                    item.PRD_DE.startsWith(currentYear)
+                );
+
+                const yearToDateValue = yearToDateData
+                    .filter(item => item.ITM_NM.includes('수입금액'))
+                    .reduce((sum, item) => sum + parseFloat(item.DT || 0), 0);
+
+                const yearToDateWeight = yearToDateData
+                    .filter(item => item.ITM_NM.includes('수입중량'))
+                    .reduce((sum, item) => sum + parseFloat(item.DT || 0), 0);
+
+                const result = {
+                    monthlyImport: parseFloat(latestImportWeight?.DT || 0), // 톤
+                    monthlyValue: parseFloat(latestImportValue?.DT || 0), // 천달러
+                    yearToDateImport: yearToDateWeight,
+                    yearToDateValue: yearToDateValue,
+                    brazilShare: 28, // 별도 국가별 데이터 필요
+                    growthRate: growthRate,
+                    lastUpdate: latestMonth,
+                    dataSource: 'KOSIS',
+                    recordCount: coffeeData.length
+                };
+
+                console.log('처리된 KOSIS 커피 데이터:', result);
+                return result;
+
+            } catch (error) {
+                console.error('KOSIS 데이터 처리 중 오류:', error);
+                return getFallbackKosisData();
+            }
+        }
+
+        // KOSIS API 실패시 대체 데이터
+        function getFallbackKosisData() {
+            return {
+                monthlyImport: 12800, // 톤
+                monthlyValue: 68500, // 천달러
+                yearToDateImport: 76200,
+                yearToDateValue: 410000,
+                brazilShare: 28,
+                growthRate: '+5.2',
+                lastUpdate: '202406',
+                dataSource: 'Fallback',
+                recordCount: 0
+            };
+        }
+
+        // 포맷팅 함수들
+        function formatImportWeight(tons) {
+            if (tons >= 10000) {
+                return (tons / 10000).toFixed(1) + '만톤';
+            } else if (tons >= 1000) {
+                return (tons / 1000).toFixed(1) + '천톤';
+            }
+            return Math.round(tons).toLocaleString() + '톤';
+        }
+
+        function formatImportValue(thousandUSD) {
+            if (thousandUSD >= 100000) {
+                return (thousandUSD / 10000).toFixed(0) + '억원';
+            } else if (thousandUSD >= 1000) {
+                return (thousandUSD / 1000).toFixed(0) + '백만달러';
+            }
+            return Math.round(thousandUSD).toLocaleString() + '천달러';
+        }
+
+        function formatMonth(yyyymm) {
+            const year = yyyymm.substring(0, 4);
+            const month = parseInt(yyyymm.substring(4, 6));
+            return `${year}.${month.toString().padStart(2, '0')}`;
+        }
+
+        function formatGrowthRate(rate) {
+            if (rate === 'N/A') return rate;
+            const numRate = parseFloat(rate);
+            const prefix = numRate >= 0 ? '+' : '';
+            return `${prefix}${rate}%`;
+        }
+
+        // 통계 바 업데이트 함수
+        async function updateKosisStats() {
+            try {
+                console.log('KOSIS 통계 업데이트 시작...');
+                
+                // 로딩 상태 표시
+                const loadingText = '로딩중...';
+                ['monthlyImport', 'monthlyValue', 'brazilShare', 'growthRate'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.textContent = loadingText;
+                });
+
+                const kosisData = await fetchKosisCoffeeData();
+                
+                // HTML 업데이트
+                const monthlyImportEl = document.getElementById('monthlyImport');
+                const monthlyValueEl = document.getElementById('monthlyValue');
+                const brazilShareEl = document.getElementById('brazilShare');
+                const growthRateEl = document.getElementById('growthRate');
+                const lastUpdateEl = document.getElementById('lastUpdateMonth');
+                const dataSourceEl = document.getElementById('dataSource');
+
+                if (monthlyImportEl) monthlyImportEl.textContent = formatImportWeight(kosisData.monthlyImport);
+                if (monthlyValueEl) monthlyValueEl.textContent = formatImportValue(kosisData.monthlyValue);
+                if (brazilShareEl) brazilShareEl.textContent = kosisData.brazilShare + '%';
+                if (growthRateEl) growthRateEl.textContent = formatGrowthRate(kosisData.growthRate);
+                if (lastUpdateEl) lastUpdateEl.textContent = formatMonth(kosisData.lastUpdate);
+                if (dataSourceEl) dataSourceEl.textContent = kosisData.dataSource === 'KOSIS' ? 'KOSIS 실시간' : 'KOSIS 대체';
+                
+                console.log('KOSIS 통계 업데이트 완료:', kosisData);
+                
+            } catch (error) {
+                console.error('KOSIS 통계 업데이트 실패:', error);
+                
+                // 오류 시 대체 데이터 표시
+                const fallbackData = getFallbackKosisData();
+                const monthlyImportEl = document.getElementById('monthlyImport');
+                const monthlyValueEl = document.getElementById('monthlyValue');
+                const brazilShareEl = document.getElementById('brazilShare');
+                const growthRateEl = document.getElementById('growthRate');
+                const dataSourceEl = document.getElementById('dataSource');
+                
+                if (monthlyImportEl) monthlyImportEl.textContent = formatImportWeight(fallbackData.monthlyImport);
+                if (monthlyValueEl) monthlyValueEl.textContent = formatImportValue(fallbackData.monthlyValue);
+                if (brazilShareEl) brazilShareEl.textContent = fallbackData.brazilShare + '%';
+                if (growthRateEl) growthRateEl.textContent = formatGrowthRate(fallbackData.growthRate);
+                if (dataSourceEl) dataSourceEl.textContent = '오프라인 데이터';
+            }
+        }
 
         // CSV 파싱 함수
         function parseCSV(csvText) {
@@ -866,6 +1117,11 @@
                     title: '커피 가격, 폭풍 전야 - 아라비카 시장 인포그래픽',
                     summary: '아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하며 높은 변동성을 예고하고 있습니다. 단기 가격 전망은 310-390센트 범위이며, 브라질 서리 위험이 핵심 변수로 작용할 전망입니다.',
                     tags: ['인포그래픽', '가격전망', '브라질서리', '공급부족', '변동성']
+                },
+                'Reports/2025/06/2025-06-30.html': {
+                    title: '아라비카 커피 선물(KCU25)의 기로: 단기 공급 압력 대 기저 지지력 분석',
+                    summary: '아라비카 커피 선물이 300센트 저항선에서 치열한 공방을 벌이고 있습니다. 브라질 수확에 따른 단기 공급 압력과 구조적 부족, 물류 병목 등 기저 강세 요인이 충돌하며 향후 2-4주 시장 방향을 결정할 핵심 변곡점에 도달했습니다.',
+                    tags: ['아라비카선물', '브라질수확', '공급압력', '시장분석', '가격전망', 'KCU25']
                 }
             };
 
@@ -989,24 +1245,20 @@
             }
         }
 
-        // JSON 폴백 함수 (기존 reports.json 지원)
-        async function loadReportsFromJSON() {
-            try {
-                const response = await fetch('reports.json');
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('reports.json에서 로드된 보고서 수:', data.reports?.length || 0);
-                    return data.reports || [];
-                }
-            } catch (error) {
-                console.log('reports.json 로딩 실패:', error.message);
-            }
-            return [];
-        }
-
         // 기본 데이터 (올바른 경로 기반)
         function getDefaultReports() {
             return [
+                {
+                    date: '2025-06-30',
+                    displayDate: '2025년 6월 30일',
+                    title: '아라비카 커피 선물(KCU25)의 기로: 단기 공급 압력 대 기저 지지력 분석',
+                    subtitle: 'Coffee Market Update',
+                    summary: '아라비카 커피 선물이 300센트 저항선에서 치열한 공방을 벌이고 있습니다.',
+                    tags: ['아라비카선물', '시장분석'],
+                    link: 'Reports/2025/06/2025-06-30.html',
+                    year: '2025',
+                    month: '06'
+                },
                 {
                     date: '2025-06-28',
                     displayDate: '2025년 6월 28일',
@@ -1017,49 +1269,16 @@
                     link: 'Reports/2025/06/2025-06-28.html',
                     year: '2025',
                     month: '06'
-                },
-                {
-                    date: '2025-06-24',
-                    displayDate: '2025년 6월 24일',
-                    title: '커피 시장 동향 - 2025-06-24',
-                    subtitle: 'Coffee Market Update',
-                    summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-                    tags: ['커피', '시장동향'],
-                    link: 'Reports/2025/06/2025-06-24.html',
-                    year: '2025',
-                    month: '06'
-                },
-                {
-                    date: '2025-06-21',
-                    displayDate: '2025년 6월 21일',
-                    title: '커피 시장 동향 - 2025-06-21',
-                    subtitle: 'Coffee Market Update',
-                    summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-                    tags: ['커피', '시장동향'],
-                    link: 'Reports/2025/06/2025-06-21.html',
-                    year: '2025',
-                    month: '06'
-                },
-                {
-                    date: '2025-05-31',
-                    displayDate: '2025년 5월 31일',
-                    title: '커피 시장 동향 - 2025-05-31',
-                    subtitle: 'Coffee Market Update',
-                    summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-                    tags: ['커피', '시장동향'],
-                    link: 'Reports/2025/05/2025-05-31.html',
-                    year: '2025',
-                    month: '05'
                 }
             ];
         }
 
-        // 메인 리포트 초기화 함수 (JSON 제거 버전)
+        // 메인 리포트 초기화 함수
         async function initializeReports() {
             try {
                 console.log('리포트 초기화 시작...');
                 
-                // HTML 파일에서 직접 로드 (JSON 폴백 제거)
+                // HTML 파일에서 직접 로드
                 let reports = await loadReportsFromFiles();
                 console.log('파일에서 로드된 리포트:', reports.length);
                 
@@ -1849,20 +2068,6 @@
             }
         }
 
-        // 통계 업데이트
-        function updateStats() {
-            const totalElement = document.getElementById('totalReports');
-            const latestElement = document.getElementById('latestDate');
-            
-            if (totalElement) {
-                totalElement.textContent = allReports.length;
-            }
-            
-            if (latestElement && allReports.length > 0) {
-                latestElement.textContent = allReports[0].displayDate.substring(0, 7);
-            }
-        }
-
         // 현재 날짜 업데이트
         function updateCurrentDate() {
             const dateElement = document.getElementById('currentDate');
@@ -1879,13 +2084,16 @@
             }
         }
 
-        // 메인 초기화 함수
-        async function init() {
+        // 메인 초기화 함수 (KOSIS 통합)
+        async function initWithKosis() {
             try {
-                console.log('초기화 시작...');
+                console.log('KOSIS 통합 초기화 시작...');
                 
                 // 현재 날짜 업데이트
                 updateCurrentDate();
+                
+                // KOSIS 데이터 로드 (비동기)
+                updateKosisStats();
                 
                 // 차트들 병렬로 로드
                 Promise.all([
@@ -1895,26 +2103,37 @@
                     createNVDIChart()
                 ]);
 
-                // 개선된 리포트 데이터 로드
+                // 리포트 데이터 로드
                 allReports = await initializeReports();
                 updateFilters();
-                updateStats();
                 renderReports();
                 
                 // 이벤트 리스너 설정
-                document.getElementById('searchInput').addEventListener('input', filterReports);
-                document.getElementById('yearFilter').addEventListener('change', filterReports);
-                document.getElementById('monthFilter').addEventListener('change', filterReports);
+                const searchInput = document.getElementById('searchInput');
+                const yearFilter = document.getElementById('yearFilter');
+                const monthFilter = document.getElementById('monthFilter');
                 
-                console.log('초기화 완료');
+                if (searchInput) searchInput.addEventListener('input', filterReports);
+                if (yearFilter) yearFilter.addEventListener('change', filterReports);
+                if (monthFilter) monthFilter.addEventListener('change', filterReports);
+                
+                console.log('KOSIS 통합 초기화 완료');
                 
             } catch (error) {
-                console.error('초기화 중 오류:', error);
+                console.error('KOSIS 초기화 중 오류:', error);
+                // 오류 시에도 기본 기능은 동작하도록
+                try {
+                    allReports = await initializeReports();
+                    updateFilters();
+                    renderReports();
+                } catch (fallbackError) {
+                    console.error('기본 초기화도 실패:', fallbackError);
+                }
             }
         }
 
-        // 페이지 로드시 초기화 실행
-        document.addEventListener('DOMContentLoaded', init);
+        // 페이지 로드시 KOSIS 통합 초기화 실행
+        document.addEventListener('DOMContentLoaded', initWithKosis);
 </script>
 </body>
 </html>
