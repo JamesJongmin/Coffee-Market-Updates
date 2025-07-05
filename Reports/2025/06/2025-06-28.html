@@ -29,6 +29,7 @@
             margin-bottom: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
         }
         
         h1 {
@@ -51,6 +52,38 @@
             display: inline-block;
             margin-top: 15px;
             font-weight: 500;
+        }
+
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
+
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
         }
         
         .news-grid {
@@ -224,12 +257,26 @@
             h1 {
                 font-size: 2em;
             }
+
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
             <h1>커피 선물 시장 주간 동향</h1>
             <p class="subtitle">Coffee Futures Market Weekly Update</p>
             <div class="date-stamp">2025년 6월 28일 토요일</div>
@@ -291,7 +338,6 @@
                 <div style="text-align: center;">
                     <h3 style="margin-bottom: 15px; color: #666;">아라비카 커피 선물 (KCU25)</h3>
                     <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
-                        <!-- Grid lines -->
                         <g stroke="#f0f0f0" stroke-width="1">
                             <line x1="40" y1="30" x2="40" y2="200"/>
                             <line x1="40" y1="200" x2="380" y2="200"/>
@@ -302,7 +348,6 @@
                             <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
                         </g>
                         
-                        <!-- Y-axis labels -->
                         <g font-size="10" fill="#666">
                             <text x="35" y="205" text-anchor="end">200</text>
                             <text x="35" y="175" text-anchor="end">250</text>
@@ -312,7 +357,6 @@
                             <text x="35" y="55" text-anchor="end">450</text>
                         </g>
                         
-                        <!-- X-axis labels -->
                         <g font-size="9" fill="#666">
                             <text x="40" y="215" text-anchor="middle">Jun'24</text>
                             <text x="100" y="215" text-anchor="middle">Sep'24</text>
@@ -322,15 +366,12 @@
                             <text x="340" y="215" text-anchor="middle">Jun'25</text>
                         </g>
                         
-                        <!-- Coffee price line - updated to show further decline to 303 -->
                         <polyline fill="none" stroke="#8B4513" stroke-width="2.5"
                             points="40,170 60,165 80,155 100,145 120,130 140,115 160,105 180,70 200,50 220,55 240,65 260,80 280,95 300,105 320,115 340,125 360,145 380,165"/>
                         
-                        <!-- Current price dot -->
                         <circle cx="380" cy="165" r="4" fill="#8B4513"/>
                         <text x="385" y="162" font-size="11" fill="#8B4513" font-weight="bold">303.75</text>
                         
-                        <!-- Title -->
                         <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">센트/파운드</text>
                     </svg>
                     <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
@@ -342,7 +383,6 @@
                 <div style="text-align: center;">
                     <h3 style="margin-bottom: 15px; color: #666;">브라질 헤알/달러 (USD/BRL)</h3>
                     <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
-                        <!-- Grid lines -->
                         <g stroke="#f0f0f0" stroke-width="1">
                             <line x1="40" y1="30" x2="40" y2="200"/>
                             <line x1="40" y1="200" x2="380" y2="200"/>
@@ -353,7 +393,6 @@
                             <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
                         </g>
                         
-                        <!-- Y-axis labels -->
                         <g font-size="10" fill="#666">
                             <text x="35" y="205" text-anchor="end">5.4</text>
                             <text x="35" y="175" text-anchor="end">5.5</text>
@@ -364,7 +403,6 @@
                             <text x="35" y="30" text-anchor="end">6.0</text>
                         </g>
                         
-                        <!-- X-axis labels -->
                         <g font-size="9" fill="#666">
                             <text x="40" y="215" text-anchor="middle">Jun'24</text>
                             <text x="100" y="215" text-anchor="middle">Sep'24</text>
@@ -374,202 +412,197 @@
                             <text x="340" y="215" text-anchor="middle">Jun'25</text>
                         </g>
                         
-                        <!-- BRL historical line (solid) -->
                         <polyline fill="none" stroke="#667eea" stroke-width="2.5"
                             points="40,145 45,148 50,143 55,146 60,144 65,149 70,147 75,145 80,148 85,152 90,146 95,144 100,147 105,145 110,143 115,138 120,135 125,133 130,138 135,135 140,140 145,137 150,133 155,128 160,125 165,122 170,118 175,115 180,110 185,105 190,95 195,85 200,70 205,55 210,45 215,40 220,35 225,38 230,45 235,55 240,70 245,82 250,90 255,95 260,92 265,90 270,88 275,87 280,88 285,92 290,95 295,100 300,103 305,108 310,113 315,115 320,118 325,122 330,125 335,130 340,135 345,140 350,145 355,150 360,155 365,160 370,165 375,170 380,175"/>
-                        
-                        <!-- Future projection line (dashed) - 전망선 추가 -->
-                        <polyline fill="none" stroke="#667eea" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"
-                            points="380,175 385,173 390,171 395,168 400,165"/>
-                        
-                        <!-- Current price dot -->
-                        <circle cx="380" cy="175" r="4" fill="#667eea"/>
-                        <text x="375" y="172" font-size="11" fill="#667eea" font-weight="bold">5.51</text>
-                        
-                        <!-- 미래 전망 표시 -->
-                        <text x="390" y="160" font-size="9" fill="#667eea" opacity="0.7">5.75</text>
-                        <text x="390" y="150" font-size="8" fill="#666" opacity="0.6">(전망)</text>
-                        
-                        <!-- Title -->
-                        <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">BRL/USD</text>
-                    </svg>
-                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
-                        현재 5.51 수준에서 안정세<br>
-                        하반기 5.75-5.81 약세 전망
-                    </p>
-                </div>
-            </div>
-            
-            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
-                <p style="font-size: 0.9em; color: #666; text-align: center; margin: 0;">
-                    <strong>상관관계:</strong> 브라질 헤알화가 현재 강세를 보이며 농부들의 매도 압력이 제한적이나,
-                    수확 진행에 따른 물량 증가가 가격 하락의 주요 동인으로 작용
-                </p>
-            </div>
-        </div>
+                        
+                                                <polyline fill="none" stroke="#667eea" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"
+                            points="380,175 385,173 390,171 395,168 400,165"/>
+                        
+                                                <circle cx="380" cy="175" r="4" fill="#667eea"/>
+                        <text x="375" y="172" font-size="11" fill="#667eea" font-weight="bold">5.51</text>
+                        
+                                                <text x="390" y="160" font-size="9" fill="#667eea" opacity="0.7">5.75</text>
+                        <text x="390" y="150" font-size="8" fill="#666" opacity="0.6">(전망)</text>
+                        
+                                                <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">BRL/USD</text>
+                    </svg>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                        2024년 12월 고점(6.30) 대비 12.5% 하락<br>
+                        2025년 하반기 5.75-5.81 약세 전망
+                    </p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                <p style="font-size: 0.9em; color: #666; text-align: center; margin: 0;">
+                    <strong>상관관계:</strong> 브라질 헤알화가 현재 강세를 보이며 농부들의 매도 압력이 제한적이나,
+                    수확 진행에 따른 물량 증가가 가격 하락의 주요 동인으로 작용
+                </p>
+            </div>
+        </div>
 
-        <div class="news-sections">
-            <div class="news-section">
-                <h3 class="section-title">🌍 최신 시장 동향</h3>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.27</div>
-                    <div class="news-content">
-                        <strong>커피 가격 6.75개월 최저치:</strong> 아라비카 커피가 303.75센트로 
-                        급락하며 11월 중순 이후 최저치 기록. 충분한 공급 전망과 
-                        브라질 수확 진행이 가격 압박 지속.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.26</div>
-                    <div class="news-content">
-                        <strong>USDA 글로벌 생산 전망 상향:</strong> 브라질 2025/26년 생산량을 
-                        6,500만 포대(+0.5%), 베트남을 3,100만 포대(+6.9%)로 상향 조정. 
-                        4년 만에 베트남 최고 생산량 전망.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.25</div>
-                    <div class="news-content">
-                        <strong>Cooxupe 수확 24.3% 완료:</strong> 브라질 최대 협동조합이 6월 20일 기준 
-                        수확률 24.3%로 전년 동기 34.2% 대비 느린 진행 보고. 
-                        그러나 전체 물량 증가로 가격 압박.
-                    </div>
-                </div>
-            </div>
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">🌍 최신 시장 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.27</div>
+                    <div class="news-content">
+                        <strong>커피 가격 6.75개월 최저치:</strong> 아라비카 커피가 303.75센트로 
+                        급락하며 11월 중순 이후 최저치 기록. 충분한 공급 전망과 
+                        브라질 수확 진행이 가격 압박 지속.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.26</div>
+                    <div class="news-content">
+                        <strong>USDA 글로벌 생산 전망 상향:</strong> 브라질 2025/26년 생산량을 
+                        6,500만 포대(+0.5%), 베트남을 3,100만 포대(+6.9%)로 상향 조정. 
+                        4년 만에 베트남 최고 생산량 전망.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.25</div>
+                    <div class="news-content">
+                        <strong>Cooxupe 수확 24.3% 완료:</strong> 브라질 최대 협동조합이 6월 20일 기준 
+                        수확률 24.3%로 전년 동기 34.2% 대비 느린 진행 보고. 
+                        그러나 전체 물량 증가로 가격 압박.
+                    </div>
+                </div>
+            </div>
 
-            <div class="news-section">
-                <h3 class="section-title">📊 아시아 및 로부스타 시장</h3>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.27</div>
-                    <div class="news-content">
-                        <strong>로부스타 1년 최저치:</strong> ICE 로부스타 선물이 톤당 $4,200대로 
-                        하락하며 1년 만에 최저치 기록. 브라질과 베트남의 
-                        생산 회복 전망이 주요 하락 요인.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.26</div>
-                    <div class="news-content">
-                        <strong>베트남 로부스타 생산 회복:</strong> 2025/26년 베트남 로부스타 생산이 
-                        3,000만 포대로 전년 대비 7% 증가 전망. 농가들의 투자 확대와 
-                        기상 여건 개선이 생산 회복 견인.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.24</div>
-                    <div class="news-content">
-                        <strong>브라질 로부스타 기록적 생산:</strong> 브라질 2025/26년 로부스타 생산이 
-                        2,470만 포대로 사상 최고 전망. 아라비카 감소분을 
-                        로부스타가 상쇄하며 전체 생산 유지.
-                    </div>
-                </div>
-            </div>
+            <div class="news-section">
+                <h3 class="section-title">📊 아시아 및 로부스타 시장</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.27</div>
+                    <div class="news-content">
+                        <strong>로부스타 1년 최저치:</strong> ICE 로부스타 선물이 톤당 $4,200대로 
+                        하락하며 1년 만에 최저치 기록. 브라질과 베트남의 
+                        생산 회복 전망이 주요 하락 요인.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.26</div>
+                    <div class="news-content">
+                        <strong>베트남 로부스타 생산 회복:</strong> 2025/26년 베트남 로부스타 생산이 
+                        3,000만 포대로 전년 대비 7% 증가 전망. 농가들의 투자 확대와 
+                        기상 여건 개선이 생산 회복 견인.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.24</div>
+                    <div class="news-content">
+                        <strong>브라질 로부스타 기록적 생산:</strong> 브라질 2025/26년 로부스타 생산이 
+                        2,470만 포대로 사상 최고 전망. 아라비카 감소분을 
+                        로부스타가 상쇄하며 전체 생산 유지.
+                    </div>
+                </div>
+            </div>
 
-            <div class="news-section">
-                <h3 class="section-title">📈 기술적 분석 및 전망</h3>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.27</div>
-                    <div class="news-content">
-                        <strong>300센트 심리적 지지선 접근:</strong> 9월물 303.75센트로 300센트 
-                        중요 심리적 지지선 테스트 임박. 이탈 시 280-290센트까지 
-                        추가 하락 가능성 제기.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.26</div>
-                    <div class="news-content">
-                        <strong>illycaffè CEO 가격 전망:</strong> Cristina Socchia CEO가 향후 
-                        15개월 내 $2.00-2.50/lb 수준으로 하락 전망. 
-                        공급 확대와 수요 둔화가 주요 근거.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.25</div>
-                    <div class="news-content">
-                        <strong>기술적 모멘텀 약세 지속:</strong> RSI 30대 진입으로 과매도 구간 접근. 
-                        단기 반등 가능성 있으나 중기 하락 추세는 
-                        변함없을 것으로 분석.
-                    </div>
-                </div>
-            </div>
+            <div class="news-section">
+                <h3 class="section-title">📈 기술적 분석 및 전망</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.27</div>
+                    <div class="news-content">
+                        <strong>300센트 심리적 지지선 접근:</strong> 9월물 303.75센트로 300센트 
+                        중요 심리적 지지선 테스트 임박. 이탈 시 280-290센트까지 
+                        추가 하락 가능성 제기.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.26</div>
+                    <div class="news-content">
+                        <strong>illycaffè CEO 가격 전망:</strong> Cristina Socchia CEO가 향후 
+                        15개월 내 $2.00-2.50/lb 수준으로 하락 전망. 
+                        공급 확대와 수요 둔화가 주요 근거.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.25</div>
+                    <div class="news-content">
+                        <strong>기술적 모멘텀 약세 지속:</strong> RSI 30대 진입으로 과매도 구간 접근. 
+                        단기 반등 가능성 있으나 중기 하락 추세는 
+                        변함없을 것으로 분석.
+                    </div>
+                </div>
+            </div>
 
-            <div class="news-section">
-                <h3 class="section-title">🌤️ 생산 및 기상 현황</h3>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.27</div>
-                    <div class="news-content">
-                        <strong>브라질 기상 양호:</strong> 주요 아라비카 생산지역에 건조하고 
-                        온화한 날씨가 지속되며 수확 작업 순조. 향후 2주간 
-                        강우 예보 없어 수확 가속화 예상.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.26</div>
-                    <div class="news-content">
-                        <strong>전체 브라질 수확 58% 진행:</strong> Safras & Mercado가 브라질 전체 
-                        커피 수확이 58% 완료되었다고 발표. 아라비카와 로부스타 
-                        모두 순조로운 진행세 유지.
-                    </div>
-                </div>
-                
-                <div class="news-item">
-                    <div class="news-date">2025.06.24</div>
-                    <div class="news-content">
-                        <strong>엘니뇨 영향 제한적:</strong> 기상 전문가들이 엘니뇨 현상이 
-                        온건한 수준에 그칠 것으로 전망. 브라질 커피 생산에 
-                        미치는 영향은 제한적일 것으로 예상.
-                    </div>
-                </div>
-            </div>
-        </div>
+            <div class="news-section">
+                <h3 class="section-title">🌤️ 생산 및 기상 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.27</div>
+                    <div class="news-content">
+                        <strong>브라질 기상 양호:</strong> 주요 아라비카 생산지역에 건조하고 
+                        온화한 날씨가 지속되며 수확 작업 순조. 향후 2주간 
+                        강우 예보 없어 수확 가속화 예상.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.26</div>
+                    <div class="news-content">
+                        <strong>전체 브라질 수확 58% 진행:</strong> Safras & Mercado가 브라질 전체 
+                        커피 수확이 58% 완료되었다고 발표. 아라비카와 로부스타 
+                        모두 순조로운 진행세 유지.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.06.24</div>
+                    <div class="news-content">
+                        <strong>엘니뇨 영향 제한적:</strong> 기상 전문가들이 엘니뇨 현상이 
+                        온건한 수준에 그칠 것으로 전망. 브라질 커피 생산에 
+                        미치는 영향은 제한적일 것으로 예상.
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <div class="market-outlook">
-            <h2 class="outlook-title">시장 전망 및 분석</h2>
-            <p style="font-size: 1.1em; line-height: 1.6;">
-                <strong>커피 선물 시장은 충분한 공급 전망과 수확 가속화로 본격적인 하락 국면에 진입했습니다.</strong> 
-                9월물이 303.75센트로 6.75개월 최저치를 기록하며 300센트 심리적 지지선을 테스트하고 있고, 
-                로부스타도 1년 최저치로 하락하며 양 품종 모두 약세를 보이고 있습니다. 
-                USDA의 생산 전망 상향과 브라질 수확 진행이 가격 하락을 주도하고 있습니다.
-                <br><br>
-                <strong>2025년 하반기 커피 가격은 $2.50-2.80 범위로 추가 하락이 예상됩니다.</strong>
-                illycaffè CEO를 비롯한 업계 전문가들은 충분한 공급과 높은 가격에 따른 수요 둔화로 
-                15개월 내 $2.00-2.50/lb까지 하락 가능성을 제시하고 있습니다. 
-                다만 300센트 이하에서는 생산자 매도 기피로 하방 경직성이 나타날 수 있습니다.
-                <br><br>
-                <strong>커피 관련 기업들은 원재료 가격 하락으로 수익성 개선이 본격화될 전망입니다.</strong>
-                JDE Peet's가 연초 대비 52.3% 급등하며 최고 성과를 기록하고 있고, 
-                네슬레도 23.8% 상승하며 견조한 흐름을 이어가고 있습니다. 
-                원가 부담 완화로 하반기 실적 개선 기대감이 주가 상승을 견인하고 있습니다.
-            </p>
-        </div>
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망 및 분석</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>커피 선물 시장은 충분한 공급 전망과 수확 가속화로 본격적인 하락 국면에 진입했습니다.</strong> 
+                9월물이 303.75센트로 6.75개월 최저치를 기록하며 300센트 심리적 지지선을 테스트하고 있고, 
+                로부스타도 1년 최저치로 하락하며 양 품종 모두 약세를 보이고 있습니다. 
+                USDA의 생산 전망 상향과 브라질 수확 진행이 가격 하락을 주도하고 있습니다.
+                <br><br>
+                <strong>2025년 하반기 커피 가격은 $2.50-2.80 범위로 추가 하락이 예상됩니다.</strong>
+                illycaffè CEO를 비롯한 업계 전문가들은 충분한 공급과 높은 가격에 따른 수요 둔화로 
+                15개월 내 $2.00-2.50/lb까지 하락 가능성을 제시하고 있습니다. 
+                다만 300센트 이하에서는 생산자 매도 기피로 하방 경직성이 나타날 수 있습니다.
+                <br><br>
+                <strong>커피 관련 기업들은 원재료 가격 하락으로 수익성 개선이 본격화될 전망입니다.</strong>
+                JDE Peet's가 연초 대비 52.3% 급등하며 최고 성과를 기록하고 있고, 
+                네슬레도 23.8% 상승하며 견조한 흐름을 이어가고 있습니다. 
+                원가 부담 완화로 하반기 실적 개선 기대감이 주가 상승을 견인하고 있습니다.
+            </p>
+        </div>
 
-        <div class="tags">
-            <span class="tag">6.75개월최저치</span>
-            <span class="tag">300센트테스트</span>
-            <span class="tag">브라질수확58%</span>
-            <span class="tag">USDA생산상향</span>
-            <span class="tag">로부스타1년최저</span>
-            <span class="tag">베트남생산회복</span>
-            <span class="tag">2.50달러전망</span>
-            <span class="tag">수요둔화우려</span>
-            <span class="tag">기업실적개선</span>
-        </div>
+        <div class="tags">
+            <span class="tag">6.75개월최저치</span>
+            <span class="tag">300센트테스트</span>
+            <span class="tag">브라질수확58%</span>
+            <span class="tag">USDA생산상향</span>
+            <span class="tag">로부스타1년최저</span>
+            <span class="tag">베트남생산회복</span>
+            <span class="tag">2.50달러전망</span>
+            <span class="tag">수요둔화우려</span>
+            <span class="tag">기업실적개선</span>
+        </div>
 
-        <footer>
-            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, USDA, Safras & Mercado, illycaffè, Cooxupe | 
-            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
-        </footer>
-    </div>
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, USDA, Safras & Mercado, illycaffè, Cooxupe | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
 </body>
 </html>
