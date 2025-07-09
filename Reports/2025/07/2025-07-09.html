@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+
+<!--REPORT_META
+{
+    "title": "커피 선물 시세 방향성 점검",
+    "subtitle": "하락 조정 국면 진입, 강세·약세 요인 분석 및 시나리오 전망",
+    "date": "2025-07-08",
+    "summary": "커피 선물(KCU25)이 284.30¢로 1개월간 21.5% 급락하며 조정 국면에 진입했습니다. 브라질 수확 압박과 로부스타 공급 과잉 등 단기 약세 요인이 우세하나, 아라비카 구조적 부족과 라니냐 위험(41% 확률) 등 중장기 강세 요인이 견고합니다. 단기적으로는 275-305¢ 박스권 예상되며, 274¢ 핵심 지지선 방어 여부가 향후 방향성을 결정할 전망입니다.",
+    "tags": ["커피선물", "방향성점검", "하락조정", "라니냐위험", "브라질수확", "아라비카부족", "시나리오전망", "투자전략"]
+}
+REPORT_META-->
+
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 전망 분석</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+```
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    /* Home Button */
+    .home-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+        color: #000;
+        padding: 12px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        transition: all 0.3s ease;
+        border: 2px solid rgba(212, 175, 55, 0.5);
+    }
+
+    .home-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    }
+
+    .home-button:active {
+        transform: translateY(0);
+    }
+
+    /* Header */
+    .header {
+        text-align: center;
+        margin-bottom: 50px;
+        padding: 60px 40px;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #1a1a1a 100%);
+        border-radius: 24px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    .header h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #D4AF37 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: #ccc;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .date-badge {
+        display: inline-block;
+        background: rgba(212, 175, 55, 0.2);
+        color: #D4AF37;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 0.95rem;
+        border: 1px solid rgba(212, 175, 55, 0.4);
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Price Section */
+    .price-section {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2a0f0f 100%);
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        text-align: center;
+    }
+
+    .current-price {
+        font-size: 4.5rem;
+        font-weight: 900;
+        color: #e74c3c;
+        margin-bottom: 15px;
+    }
+
+    .price-change {
+        font-size: 1.5rem;
+        color: #e74c3c;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .price-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-value {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #D4AF37;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: #999;
+        font-size: 0.85rem;
+    }
+
+    /* Analysis Grid */
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 50px;
+    }
+
+    .analysis-panel {
+        background: linear-gradient(135deg, #1a1a1a 0%, #1e1e1e 100%);
+        border-radius: 24px;
+        padding: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bearish-panel {
+        border-left: 4px solid #e74c3c;
+        background: linear-gradient(135deg, #1a1a1a 0%, #251515 100%);
+    }
+
+    .bullish-panel {
+        border-left: 4px solid #27ae60;
+        background: linear-gradient(135deg, #1a1a1a 0%, #152515 100%);
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .panel-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .bearish-icon {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    }
+
+    .bullish-icon {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    }
+
+    .panel-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .factor-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 16px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    .factor-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .factor-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .factor-desc {
+        color: #ccc;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Key Levels */
+    .key-levels {
+        background: linear-gradient(135deg, #1a1a1a 0%, #1e1e2e 100%);
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #D4AF37;
+        margin-bottom: 30px;
+    }
+
+    .levels-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .level-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 25px;
+        border-radius: 16px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .level-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .level-type {
+        color: #999;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .level-price {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .support { color: #27ae60; }
+    .resistance { color: #e74c3c; }
+    .current { color: #f39c12; }
+
+    .level-distance {
+        font-size: 0.8rem;
+        color: #666;
+    }
+
+    /* Timeline */
+    .timeline-section {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .timeline-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+
+    .timeline-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+    }
+
+    .timeline-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #D4AF37 0%, #FFD700 100%);
+        border-radius: 4px 4px 0 0;
+    }
+
+    .timeline-period {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #D4AF37;
+        margin-bottom: 15px;
+    }
+
+    .timeline-outlook {
+        font-size: 1.1rem;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .timeline-range {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
+
+    .short-term { color: #f39c12; }
+    .medium-term { color: #3498db; }
+    .long-term { color: #27ae60; }
+
+    .timeline-details {
+        color: #ccc;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    /* Risk Assessment */
+    .risk-section {
+        background: linear-gradient(135deg, #1a1a1a 0%, #1a1a2e 100%);
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .risk-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .risk-meter {
+        text-align: center;
+    }
+
+    .meter-container {
+        position: relative;
+        width: 200px;
+        height: 100px;
+        margin: 0 auto 20px;
+    }
+
+    .meter-background {
+        width: 200px;
+        height: 100px;
+        border: 5px solid #333;
+        border-bottom: none;
+        border-radius: 100px 100px 0 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .meter-fill {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        background: linear-gradient(90deg, #27ae60 0%, #f39c12 40%, #e74c3c 80%, #8e44ad 100%);
+        border-radius: 100px 100px 0 0;
+        width: 65%;
+        animation: fillMeter 2s ease-out;
+    }
+
+    @keyframes fillMeter {
+        0% { width: 0%; }
+        100% { width: 65%; }
+    }
+
+    .meter-needle {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 3px;
+        height: 85px;
+        background: #fff;
+        transform-origin: bottom center;
+        transform: translateX(-50%) rotate(18deg);
+        border-radius: 2px;
+        animation: swingNeedle 2s ease-out;
+    }
+
+    @keyframes swingNeedle {
+        0% { transform: translateX(-50%) rotate(-30deg); }
+        100% { transform: translateX(-50%) rotate(18deg); }
+    }
+
+    .meter-label {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #f39c12;
+    }
+
+    .key-catalysts {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .catalyst-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .catalyst-item:last-child {
+        border-bottom: none;
+    }
+
+    .catalyst-name {
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .catalyst-probability {
+        padding: 4px 10px;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .high { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+    .medium { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+    .low { background: rgba(39, 174, 96, 0.2); color: #27ae60; }
+
+    /* Footer */
+    .footer {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        padding: 40px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+    }
+
+    .footer-content {
+        color: #999;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .disclaimer {
+        color: #666;
+        font-size: 0.8rem;
+        font-style: italic;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Comprehensive Analysis */
+    .comprehensive-analysis {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+        padding: 50px;
+        border-radius: 24px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .analysis-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .market-diagnosis {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .diagnosis-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #D4AF37;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .diagnosis-text p {
+        color: #ddd;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+
+    .strategy-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .strategy-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .strategy-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .conservative {
+        border-left: 4px solid #3498db;
+    }
+
+    .moderate {
+        border-left: 4px solid #f39c12;
+    }
+
+    .aggressive {
+        border-left: 4px solid #e74c3c;
+    }
+
+    .strategy-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .strategy-icon {
+        font-size: 1.8rem;
+    }
+
+    .strategy-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .strategy-content p {
+        color: #D4AF37;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .strategy-content ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .strategy-content li {
+        color: #ccc;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 8px;
+        padding-left: 15px;
+        position: relative;
+    }
+
+    .strategy-content li::before {
+        content: '•';
+        color: #D4AF37;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+
+    .key-insights {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 35px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .insights-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #D4AF37;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .insights-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .insight-item {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .insight-number {
+        width: 35px;
+        height: 35px;
+        background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+        color: #000;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .insight-content {
+        color: #ddd;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .insight-content strong {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .bottom-line {
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+        padding: 35px;
+        border-radius: 20px;
+        border: 2px solid rgba(212, 175, 55, 0.3);
+        text-align: center;
+    }
+
+    .bottom-line-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .analysis-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .timeline-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .risk-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .strategy-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .insights-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px 15px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+        }
+        
+        .current-price {
+            font-size: 3rem;
+        }
+        
+        .price-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .comprehensive-analysis {
+            padding: 30px 25px;
+        }
+        
+        .market-diagnosis,
+        .key-insights,
+        .bottom-line {
+            padding: 25px 20px;
+        }
+        
+        .strategy-card {
+            padding: 25px 20px;
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 16px;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <!-- Home Button -->
+        <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+            Home
+        </a>
+
+```
+    <!-- Header -->
+    <header class="header">
+        <h1>커피 선물 시세 방향성 점검</h1>
+        <p class="subtitle">커피 선물 시세가 하락 조정 국면에 진입했습니다. 향후 강세 및 약세 요인을 분석해보고 커피 가격 시나리오를 전망합니다.</p>
+        <div class="date-badge">📅 분석 기준일: 2025년 7월 8일</div>
+    </header>
+
+    <!-- Current Price -->
+    <section class="price-section">
+        <div class="current-price">284.30¢/lb</div>
+        <div class="price-change">📉 -21.52% (1개월간 변동)</div>
+        <div class="price-stats">
+            <div class="stat-card">
+                <div class="stat-value">429.95¢</div>
+                <div class="stat-label">52주 고점</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">221.00¢</div>
+                <div class="stat-label">52주 저점</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">15,700</div>
+                <div class="stat-label">거래량</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">70,660</div>
+                <div class="stat-label">미결제약정</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Grid -->
+    <div class="analysis-grid">
+        <!-- Bearish Factors -->
+        <div class="analysis-panel bearish-panel">
+            <div class="panel-header">
+                <div class="panel-icon bearish-icon">📉</div>
+                <div class="panel-title">약세 요인</div>
+            </div>
+            
+            <div class="factor-item">
+                <div class="factor-title">🇧🇷 브라질 수확 압박</div>
+                <div class="factor-desc">
+                    2025/26년 수확 40% 완료로 신규 공급 유입, 생산자 판매 서두름
+                </div>
+            </div>
+
+            <div class="factor-item">
+                <div class="factor-title">🌍 로부스타 공급 과잉</div>
+                <div class="factor-desc">
+                    USDA 전망 로부스타 생산량 7.9% 급증, 아라비카 대체 수요 확산
+                </div>
+            </div>
+
+            <div class="factor-item">
+                <div class="factor-title">💵 달러 강세 압박</div>
+                <div class="factor-desc">
+                    DXY 상승으로 원자재 약세, 브라질 생산자 판매 유인 증가
+                </div>
+            </div>
+
+            <div class="factor-item">
+                <div class="factor-title">📊 소비 패턴 변화</div>
+                <div class="factor-desc">
+                    높은 가격으로 외식→가정 소비 전환, 스타벅스 등 매출 감소
+                </div>
+            </div>
+
+            <div class="factor-item">
+                <div class="factor-title">📉 CFTC 투기자금 청산</div>
+                <div class="factor-desc">
+                    CFTC 머니매니저 순매수 포지션 지속 감소, 투기자금 청산 압력으로 하락 가속
+                </div>
+            </div>
+        </div>
+
+        <!-- Bullish Factors -->
+        <div class="analysis-panel bullish-panel">
+            <div class="panel-header">
+                <div class="panel-icon bullish-icon">📈</div>
+                <div class="panel-title">강세 요인</div>
+            </div>
+            
+            <div class="factor-item">
+                <div class="factor-title">☕ 아라비카 구조적 부족</div>
+                <div class="factor-desc">
+                    5년 연속 공급 부족, Volcafe 850만백 부족 전망으로 심화
+                </div>
+            </div>
+
+            <div class="factor-item">
+                <div class="factor-title">🇨🇴 콜롬비아 생산 감소</div>
+                <div class="factor-desc">
+                    USDA 전망 5.3% 생산 감소, 과도한 강우로 개화시기 차질
+                </div>
+            </div>
+
+            <div class="factor-item">
+                <div class="factor-title">🌊 라니냐 위험</div>
+                <div class="factor-desc">
+                    2025-26년 겨울 라니냐 발생 확률 41%, 2026/27년 작황 리스크
+                </div>
+            </div>
+
+            <div class="factor-item">
+                <div class="factor-title">❄️ 브라질 서리 위험</div>
+                <div class="factor-desc">
+                    7월 말-8월 초 서리 시즌, 실제 피해시 급격한 가격 상승 촉발
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Price Levels -->
+    <section class="key-levels">
+        <h2 class="section-title">🎯 핵심 가격대</h2>
+        <div class="levels-grid">
+            <div class="level-card">
+                <div class="level-type">핵심 지지선</div>
+                <div class="level-price support">274.90¢</div>
+                <div class="level-distance">현재가 대비 -3.3%</div>
+            </div>
+            
+            <div class="level-card">
+                <div class="level-type">단기 지지선</div>
+                <div class="level-price support">279.60¢</div>
+                <div class="level-distance">현재가 대비 -1.7%</div>
+            </div>
+            
+            <div class="level-card">
+                <div class="level-type">현재 가격</div>
+                <div class="level-price current">284.30¢</div>
+                <div class="level-distance">KCU25 계약</div>
+            </div>
+            
+            <div class="level-card">
+                <div class="level-type">심리적 저항</div>
+                <div class="level-price resistance">300.00¢</div>
+                <div class="level-distance">현재가 대비 +5.5%</div>
+            </div>
+            
+            <div class="level-card">
+                <div class="level-type">주요 저항선</div>
+                <div class="level-price resistance">304.00¢</div>
+                <div class="level-distance">현재가 대비 +6.9%</div>
+            </div>
+            
+            <div class="level-card">
+                <div class="level-type">중기 목표</div>
+                <div class="level-price resistance">325-345¢</div>
+                <div class="level-distance">현재가 대비 +14-21%</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-section">
+        <h2 class="section-title">📅 시장 전망 타임라인</h2>
+        <div class="timeline-grid">
+            <div class="timeline-card">
+                <div class="timeline-period">단기 (1-3개월)</div>
+                <div class="timeline-outlook">약세 편향 박스권</div>
+                <div class="timeline-range short-term">275-305¢</div>
+                <div class="timeline-details">
+                    <strong>핵심 변수:</strong> 브라질 수확 완료, 서리 위험, DXY<br>
+                    <strong>시나리오:</strong> 베이스 275-305¢, 베어 250-260¢, 불 320¢+
+                </div>
+            </div>
+            
+            <div class="timeline-card">
+                <div class="timeline-period">중기 (3-9개월)</div>
+                <div class="timeline-outlook">점진적 강세 전환</div>
+                <div class="timeline-range medium-term">325-345¢</div>
+                <div class="timeline-details">
+                    <strong>핵심 변수:</strong> 라니냐 발생, 2026/27 작물 개화기<br>
+                    <strong>전환점:</strong> 수확→날씨 전망으로 관심 이동
+                </div>
+            </div>
+            
+            <div class="timeline-card">
+                <div class="timeline-period">장기 (9개월+)</div>
+                <div class="timeline-outlook">강력한 상승 잠재력</div>
+                <div class="timeline-range long-term">400¢+ 재도전</div>
+                <div class="timeline-details">
+                    <strong>강세 시나리오:</strong> 강력한 라니냐, 6년 연속 부족<br>
+                    <strong>목표가:</strong> 1차 400¢, 2차 450¢+, 극단 500¢+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Risk Assessment -->
+    <section class="risk-section">
+        <h2 class="section-title">⚖️ 위험/기회 평가</h2>
+        <div class="risk-grid">
+            <div class="risk-meter">
+                <div class="meter-container">
+                    <div class="meter-background">
+                        <div class="meter-fill"></div>
+                        <div class="meter-needle"></div>
+                    </div>
+                </div>
+                <div class="meter-label">약세 편향 (65/35)</div>
+                <p style="color: #ccc; font-size: 0.9rem; margin-top: 15px;">
+                    단기적으로는 약세 압력이 우세하나,<br>
+                    중장기 구조적 강세 요인이 견고함
+                </p>
+            </div>
+            
+            <div class="key-catalysts">
+                <h3 style="color: #D4AF37; font-size: 1.2rem; margin-bottom: 20px; text-align: center;">
+                    🔥 핵심 리스크/기회 (발생 확률)
+                </h3>
+                
+                <div class="catalyst-item">
+                    <div class="catalyst-name">274¢ 하향 돌파</div>
+                    <div class="catalyst-probability medium">30%</div>
+                </div>
+                
+                <div class="catalyst-item">
+                    <div class="catalyst-name">브라질 서리 피해</div>
+                    <div class="catalyst-probability low">15%</div>
+                </div>
+                
+                <div class="catalyst-item">
+                    <div class="catalyst-name">라니냐 발생 (중강도)</div>
+                    <div class="catalyst-probability medium">41%</div>
+                </div>
+                
+                <div class="catalyst-item">
+                    <div class="catalyst-name">300¢ 돌파 성공</div>
+                    <div class="catalyst-probability medium">35%</div>
+                </div>
+                
+                <div class="catalyst-item">
+                    <div class="catalyst-name">콜롬비아 추가 감산</div>
+                    <div class="catalyst-probability high">60%</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comprehensive Analysis -->
+    <section class="comprehensive-analysis">
+        <h2 class="section-title">💡 종합 분석 및 투자 전략</h2>
+        
+        <div class="analysis-content">
+            <div class="market-diagnosis">
+                <h3 class="diagnosis-title">🔍 현재 시장 진단</h3>
+                <div class="diagnosis-text">
+                    <p><strong>커피 시장은 현재 '인지 부조화' 상태입니다.</strong> 단기적으로는 브라질 수확과 로부스타 공급 과잉, 달러 강세 등으로 명백한 약세 압력이 작용하고 있습니다. 그러나 이는 더 큰 구조적 강세장 내에서의 일시적 조정으로 보는 것이 적절합니다.</p>
+                    
+                    <p>핵심은 <span style="color: #D4AF37; font-weight: 600;">시장의 관심이 언제 '현재의 수확'에서 '미래의 날씨 리스크'로 이동하느냐</span>입니다. 이 전환점이 바로 가격 반등의 시작이 될 것입니다.</p>
+                </div>
+            </div>
+
+            <div class="strategy-grid">
+                <div class="strategy-card conservative">
+                    <div class="strategy-header">
+                        <div class="strategy-icon">🛡️</div>
+                        <div class="strategy-title">보수적 접근</div>
+                    </div>
+                    <div class="strategy-content">
+                        <p><strong>관망 후 진입</strong></p>
+                        <ul>
+                            <li>274-279¢ 지지선 테스트 확인 후 진입</li>
+                            <li>거래량 증가와 함께 지지선 방어 성공시</li>
+                            <li>목표: 300-320¢ (6-12% 수익)</li>
+                            <li>손절: 270¢ 하향돌파시</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="strategy-card moderate">
+                    <div class="strategy-header">
+                        <div class="strategy-icon">⚖️</div>
+                        <div class="strategy-title">균형적 접근</div>
+                    </div>
+                    <div class="strategy-content">
+                        <p><strong>단계적 매수</strong></p>
+                        <ul>
+                            <li>현재가 근처에서 1/3 포지션</li>
+                            <li>279¢ 지지선에서 1/3 추가</li>
+                            <li>274¢ 핵심 지지선에서 1/3 추가</li>
+                            <li>목표: 325-345¢ (14-21% 수익)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="strategy-card aggressive">
+                    <div class="strategy-header">
+                        <div class="strategy-icon">🚀</div>
+                        <div class="strategy-title">공격적 접근</div>
+                    </div>
+                    <div class="strategy-content">
+                        <p><strong>구조적 강세 베팅</strong></p>
+                        <ul>
+                            <li>라니냐 테마 선제적 포지셔닝</li>
+                            <li>9-11월 라니냐 확률 증가 대기</li>
+                            <li>목표: 400¢+ (40%+ 수익)</li>
+                            <li>장기 홀딩 (6-12개월)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insights">
+                <h3 class="insights-title">⚡ 핵심 인사이트</h3>
+                <div class="insights-grid">
+                    <div class="insight-item">
+                        <div class="insight-number">1</div>
+                        <div class="insight-content">
+                            <strong>단기 vs 장기의 싸움</strong><br>
+                            현재 하락은 계절적 요인이 주도하지만, 구조적 부족은 변하지 않았습니다. 수확 완료 후 시장 관심이 라니냐로 이동하는 시점이 핵심입니다.
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-number">2</div>
+                        <div class="insight-content">
+                            <strong>라니냐가 게임 체인저</strong><br>
+                            41% 확률의 라니냐는 브라질과 콜롬비아를 동시에 타격할 수 있는 '퍼펙트 스톰'입니다. 2026/27 작물이 위험에 노출됩니다.
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-number">3</div>
+                        <div class="insight-content">
+                            <strong>274¢가 마지노선</strong><br>
+                            이 수준의 결정적 하향돌파는 250-260¢ 급락을 유발할 수 있지만, 구조적 부족 상황에서는 매수 기회로 작용할 가능성이 높습니다.
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-number">4</div>
+                        <div class="insight-content">
+                            <strong>CFTC 포지션 정상화 필요</strong><br>
+                            머니매니저 순매수 포지션이 감소 추세를 보이며 최근 하락을 부추겼을 가능성이 있습니다. 이 청산 압력이 진정되고 포지션이 안정화되어야 반등 여건이 마련됩니다.
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-number">5</div>
+                        <div class="insight-content">
+                            <strong>리스크 대비 보상 매력적</strong><br>
+                            현재 가격에서 상방 잠재력(40-75%)이 하방 리스크(10-15%)를 크게 상회합니다. 위험 조정 수익률이 우수합니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-line">
+                <div class="bottom-line-content">
+                    <h3 style="color: #D4AF37; font-size: 1.4rem; margin-bottom: 15px;">🎯 Bottom Line</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6; color: #fff;">
+                        <strong>단기적으로는 인내가 필요하지만, 중장기적으로는 반등 가능성이 존재하는 구간입니다.</strong> 
+                        현재의 약세는 더 큰 강세 사이클 내에서의 건전한 조정으로, 구조적 공급 부족과 라니냐 위험을 고려할 때 
+                        <span style="color: #27ae60; font-weight: 600;">현재 가격은 과소평가되어 있을 가능성이 높습니다.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <strong style="color: #D4AF37;">데이터 출처:</strong> 
+            ICE, USDA, Volcafe, CFTC, NOAA, Rabobank, Cooxupe<br>
+            <strong style="color: #D4AF37;">분석 방법:</strong> 
+            기술적 분석, 펀더멘털 분석, 기상분석, 거시경제 분석
+        </div>
+        
+        <div class="disclaimer">
+            <strong>⚠️ 투자 유의사항</strong><br>
+            본 분석은 정보 제공 목적이며, 투자 권유가 아닙니다. 커피 선물은 높은 변동성을 가진 파생상품으로 원금 손실 위험이 있습니다.<br><br>
+            <span style="color: #D4AF37;">📈 Report by Align Commodities & Yellowknife</span> | 
+            <span style="font-size: 0.75rem;">Last updated: July 8, 2025</span>
+        </div>
+    </footer>
+</div>
+```
+
+</body>
+</html>
