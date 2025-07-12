@@ -78,10 +78,10 @@ class CoffeeMarketDashboard {
     // Google Sheets configuration
     get GOOGLE_SHEETS_URLS() {
         return {
-            coffee: 'https://docs.google.com/spreadsheets/d/1-JRnQN2_9vXCQZcCbJSLrUBmwQpPRfZcvqZKfI-YqJ4/export?format=csv&gid=0',
-            usd: 'https://docs.google.com/spreadsheets/d/1-JRnQN2_9vXCQZcCbJSLrUBmwQpPRfZcvqZKfI-YqJ4/export?format=csv&gid=1',
-            cftc: 'https://docs.google.com/spreadsheets/d/1-JRnQN2_9vXCQZcCbJSLrUBmwQpPRfZcvqZKfI-YqJ4/export?format=csv&gid=2',
-            nvdi: 'https://docs.google.com/spreadsheets/d/1-JRnQN2_9vXCQZcCbJSLrUBmwQpPRfZcvqZKfI-YqJ4/export?format=csv&gid=3'
+            coffee: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
+            usd: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
+            cftc: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
+            nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
         };
     }
 
@@ -111,6 +111,55 @@ class CoffeeMarketDashboard {
             result.push(current.trim());
             return result;
         });
+    }
+
+    // Google Sheets data reader function (2 columns: Date, Value)
+    async readGoogleSheetData(sheetKey) {
+        try {
+            const url = this.GOOGLE_SHEETS_URLS[sheetKey];
+            if (!url) {
+                throw new Error(`Unknown sheet key: ${sheetKey}`);
+            }
+
+            console.log(`Fetching data from Google Sheets: ${sheetKey}`);
+            
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const csvText = await response.text();
+            const data = this.parseCSV(csvText);
+            
+            // First row is header, so exclude and process data
+            const dataRows = data.slice(1);
+            
+            const processedData = dataRows.map(row => ({
+                date: row[0], // First column is always Date
+                value: row[1] // Second column is the corresponding value
+            })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
+            
+            // Sort by date (oldest → newest)
+            processedData.sort((a, b) => {
+                const dateA = this.parseDate(a.date);
+                const dateB = this.parseDate(b.date);
+                
+                // Check if dates are valid
+                if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                    console.error('Invalid dates in sorting:', a.date, b.date);
+                    return 0;
+                }
+                
+                return dateA - dateB;
+            });
+            
+            console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
+            return processedData;
+            
+        } catch (error) {
+            console.error(`Error reading Google Sheet ${sheetKey}:`, error);
+            return null;
+        }
     }
 
     // Debounced search function
