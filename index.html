@@ -1436,11 +1436,18 @@
                     throw new Error('No data received');
                 }
 
-                const chartData = data.map((row, index) => ({
-                    x: index,
-                    y: parseInt(row.value),
+                // Sort data by date first, then create chart data
+                const sortedData = data.map(row => ({
+                    value: parseInt(row.value),
                     date: parseDate(row.date)
-                })).filter(point => !isNaN(point.y));
+                })).filter(point => !isNaN(point.value) && point.date)
+                .sort((a, b) => b.date - a.date); // Sort by date descending (newest first)
+
+                const chartData = sortedData.map((row, index) => ({
+                    x: index,
+                    y: row.value,
+                    date: row.date
+                }));
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';

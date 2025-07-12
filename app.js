@@ -60,6 +60,15 @@ class CoffeeMarketDashboard {
         if (chartMethods[chartId]) {
             try {
                 await chartMethods[chartId]();
+                
+                // Force refresh for mobile CFTC chart
+                if (chartId === 'cftc' && window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        if (this.charts.cftc) {
+                            this.charts.cftc.update('none');
+                        }
+                    }, 100);
+                }
             } catch (error) {
                 console.error(`Error loading ${chartId} chart:`, error);
             }
@@ -417,12 +426,42 @@ class CoffeeMarketDashboard {
         } else if (typeof dateValue === 'string') {
             // String date - try various formats
             const cleanedDate = dateValue.trim();
-            if (cleanedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            
+            // Check for Korean date format like "2024년 7월 12일"
+            if (cleanedDate.match(/^\d{4}년\s*\d{1,2}월\s*\d{1,2}일$/)) {
+                const koreanMatch = cleanedDate.match(/^(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일$/);
+                if (koreanMatch) {
+                    const year = parseInt(koreanMatch[1]);
+                    const month = parseInt(koreanMatch[2]) - 1; // 0-based month
+                    const day = parseInt(koreanMatch[3]);
+                    date = new Date(year, month, day);
+                }
+            }
+            // Standard ISO format
+            else if (cleanedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
                 date = new Date(cleanedDate + 'T00:00:00');
-            } else if (cleanedDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+            }
+            // US format MM/DD/YYYY
+            else if (cleanedDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
                 const parts = cleanedDate.split('/');
                 date = new Date(parts[2], parts[0] - 1, parts[1]);
-            } else {
+            }
+            // European format DD/MM/YYYY
+            else if (cleanedDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                const parts = cleanedDate.split('/');
+                // Try to determine if it's DD/MM/YYYY or MM/DD/YYYY
+                const month = parseInt(parts[1]);
+                const day = parseInt(parts[0]);
+                if (month > 12) {
+                    // Must be DD/MM/YYYY
+                    date = new Date(parts[2], parts[1] - 1, parts[0]);
+                } else {
+                    // Default to MM/DD/YYYY
+                    date = new Date(parts[2], parts[0] - 1, parts[1]);
+                }
+            }
+            // Try different date formats
+            else {
                 date = new Date(cleanedDate);
             }
         } else {
@@ -438,6 +477,9 @@ class CoffeeMarketDashboard {
         
         if (!loadingElement || !chartElement) return;
         
+        // Detect if this is a mobile device
+        const isMobile = window.innerWidth <= 768;
+        
         try {
             const response = await fetch('cftcpositions.xlsx');
             const arrayBuffer = await response.arrayBuffer();
@@ -445,26 +487,48 @@ class CoffeeMarketDashboard {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(worksheet);
             
-            // Improved data processing with better date handling
+            // Enhanced data processing with better date handling
             const chartData = data.map(row => {
                 const date = this.parseDate(row.Date);
                 const value = parseFloat(row.NetPosition);
                 
                 return {
                     x: date,
-                    y: value
+                    y: value,
+                    originalDate: row.Date // Keep original for debugging
                 };
-            }).filter(item => item.x !== null && !isNaN(item.y))
-              .sort((a, b) => a.x - b.x); // Sort by date
+            }).filter(item => item.x !== null && !isNaN(item.y));
+            
+            // Sort by date in descending order (newest first) - ensure proper sorting
+            chartData.sort((a, b) => {
+                const dateA = new Date(a.x);
+                const dateB = new Date(b.x);
+                return dateB.getTime() - dateA.getTime();
+            });
             
             if (chartData.length === 0) {
                 throw new Error('No valid data found');
             }
             
+            // Log for debugging
+            console.log('CFTC Chart Data:', {
+                totalRecords: chartData.length,
+                firstDate: chartData[0]?.x,
+                lastDate: chartData[chartData.length - 1]?.x,
+                sample: chartData.slice(0, 3),
+                isMobile: isMobile
+            });
+            
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
             
             const ctx = chartElement.getContext('2d');
+            
+            // Check if chart already exists and destroy it
+            if (this.charts.cftc) {
+                this.charts.cftc.destroy();
+            }
+            
             this.charts.cftc = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -488,18 +552,51 @@ class CoffeeMarketDashboard {
                             type: 'time',
                             time: {
                                 unit: 'week',
-                                tooltipFormat: 'yyyy-MM-dd'
+                                tooltipFormat: 'yyyy-MM-dd',
+                                displayFormats: {
+                                    week: isMobile ? 'MM/dd' : 'MM/dd/yy'
+                                }
                             },
                             title: {
                                 display: true,
-                                text: 'Date'
+                                text: 'Date',
+                                font: {
+                                    size: isMobile ? 12 : 14
+                                }
+                            },
+                            // Ensure proper ordering for mobile
+                            reverse: false,
+                            ticks: {
+                                maxTicksLimit: isMobile ? 6 : 12,
+                                font: {
+                                    size: isMobile ? 10 : 12
+                                },
+                                callback: function(value, index, values) {
+                                    const date = new Date(value);
+                                    const month = date.getMonth() + 1;
+                                    const day = date.getDate();
+                                    return isMobile ? `${month}/${day}` : `${month}/${day}`;
+                                }
                             }
                         },
                         y: {
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Net Long Positions'
+                                text: 'Net Long Positions',
+                                font: {
+                                    size: isMobile ? 12 : 14
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: isMobile ? 10 : 12
+                                },
+                                callback: function(value) {
+                                    return isMobile ? 
+                                        (Math.abs(value) >= 1000 ? (value/1000).toFixed(0) + 'k' : value.toString()) :
+                                        value.toLocaleString();
+                                }
                             }
                         }
                     },
@@ -508,10 +605,26 @@ class CoffeeMarketDashboard {
                             display: false
                         },
                         tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#333',
+                            bodyColor: '#333',
+                            borderColor: '#ccc',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            titleFont: {
+                                size: isMobile ? 12 : 14
+                            },
+                            bodyFont: {
+                                size: isMobile ? 11 : 13
+                            },
                             callbacks: {
                                 title: function(context) {
                                     if (context[0] && context[0].parsed.x) {
                                         const date = new Date(context[0].parsed.x);
+                                        // Use consistent date formatting
                                         return date.toLocaleDateString('ko-KR', {
                                             year: 'numeric',
                                             month: 'short',
@@ -521,13 +634,53 @@ class CoffeeMarketDashboard {
                                     return 'Invalid Date';
                                 },
                                 label: function(context) {
-                                    return `Net Position: ${context.parsed.y.toLocaleString()}`;
+                                    const value = context.parsed.y;
+                                    const position = value >= 0 ? 'Long' : 'Short';
+                                    return `Net ${position}: ${Math.abs(value).toLocaleString()}`;
                                 }
                             }
+                        }
+                    },
+                    // Add mobile-specific configurations
+                    elements: {
+                        bar: {
+                            borderRadius: isMobile ? 2 : 4
+                        }
+                    },
+                    // Mobile touch optimization
+                    onHover: isMobile ? null : undefined,
+                    onClick: (event, activeElements) => {
+                        if (activeElements.length > 0 && isMobile) {
+                            // Handle mobile tap
+                            const chart = event.chart;
+                            const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
+                            const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+                            const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+                            console.log('Mobile tap on chart:', { dataX, dataY });
                         }
                     }
                 }
             });
+            
+            // Add resize handler for mobile optimization
+            const resizeObserver = new ResizeObserver(entries => {
+                if (this.charts.cftc) {
+                    this.charts.cftc.resize();
+                }
+            });
+            resizeObserver.observe(chartElement);
+            
+            // Add window resize listener for mobile orientation changes
+            const handleResize = () => {
+                if (this.charts.cftc) {
+                    setTimeout(() => {
+                        this.charts.cftc.resize();
+                    }, 100);
+                }
+            };
+            window.addEventListener('resize', handleResize);
+            window.addEventListener('orientationchange', handleResize);
+            
         } catch (error) {
             console.error('CFTC chart error:', error);
             loadingElement.innerHTML = `<div style="color: #e74c3c;">데이터 로딩 실패: ${error.message}</div>`;
@@ -701,6 +854,15 @@ class CoffeeMarketDashboard {
     async init() {
         try {
             console.log('Initializing dashboard...');
+            
+            // Mobile debugging
+            if (window.innerWidth <= 768) {
+                console.log('Mobile device detected:', {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    userAgent: navigator.userAgent.substring(0, 100)
+                });
+            }
             
             // Update current date
             this.updateCurrentDate();
