@@ -659,7 +659,7 @@
                 <!-- CFTC Positions Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
-                        <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
+                        <div class="chart-title">CFTC 투기 포지션 (순매수) - 최근 2년</div>
                         <div class="chart-source">출처: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
@@ -675,6 +675,7 @@
                             <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
                             양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
                             극단적 포지션은 종종 시장 전환점의 신호가 되며, 
+                            <strong>최근 2년 데이터</strong>를 역순으로 배치하여 최신 추세를 우선 표시합니다. 
                             현재 포지션 수준은 투기 자금의 방향성과 시장 과열/과매도 상태를 판단하는 중요한 지표입니다.
                         </div>
                     </div>
@@ -768,13 +769,28 @@
                 // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
                 const dataRows = data.slice(1);
                 
-                const processedData = dataRows.map(row => ({
+                let processedData = dataRows.map(row => ({
                     date: row[0], // 첫 번째 컬럼은 항상 Date
                     value: row[1] // 두 번째 컬럼은 해당 값
                 })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
                 
-                // 날짜순으로 정렬 (오래된 것 → 최신 순서로)
-                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                // CFTC 데이터의 경우 특별 처리
+                if (sheetKey === 'cftcpositions') {
+                    // 최근 2년 데이터만 필터링
+                    const cutoffDate = new Date();
+                    cutoffDate.setFullYear(cutoffDate.getFullYear() - 2);
+                    
+                    processedData = processedData.filter(row => {
+                        const dataDate = parseDate(row.date);
+                        return dataDate >= cutoffDate;
+                    });
+                    
+                    // 날짜순으로 정렬 (최신 → 오래된 순서로 역순)
+                    processedData.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+                } else {
+                    // 다른 차트들은 기존 방식 유지 (오래된 것 → 최신 순서로)
+                    processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                }
                 
                 console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
                 return processedData;
@@ -1387,7 +1403,7 @@
                                 position: 'bottom',
                                 title: {
                                     display: true,
-                                    text: 'Date'
+                                    text: 'Date (최근 2년)'
                                 },
                                 ticks: {
                                     callback: function(value) {
