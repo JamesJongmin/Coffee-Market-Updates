@@ -207,10 +207,21 @@ class CoffeeMarketDashboard {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(worksheet);
             
-            const chartData = data.map(row => ({
-                x: new Date(row.Date),
-                y: parseFloat(row.Close)
-            })).filter(item => !isNaN(item.y));
+            // Improved data processing with better date handling
+            const chartData = data.map(row => {
+                const date = this.parseDate(row.Date);
+                const value = parseFloat(row.Close);
+                
+                return {
+                    x: date,
+                    y: value
+                };
+            }).filter(item => item.x !== null && !isNaN(item.y))
+              .sort((a, b) => a.x - b.x); // Sort by date
+            
+            if (chartData.length === 0) {
+                throw new Error('No valid data found');
+            }
             
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -232,20 +243,51 @@ class CoffeeMarketDashboard {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
                     scales: {
                         x: {
                             type: 'time',
                             time: {
-                                unit: 'day'
+                                unit: 'day',
+                                tooltipFormat: 'yyyy-MM-dd'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
                             }
                         },
                         y: {
-                            beginAtZero: false
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Price (cents/lb)'
+                            }
                         }
                     },
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    if (context[0] && context[0].parsed.x) {
+                                        const date = new Date(context[0].parsed.x);
+                                        return date.toLocaleDateString('ko-KR', {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric'
+                                        });
+                                    }
+                                    return 'Invalid Date';
+                                },
+                                label: function(context) {
+                                    return `Price: ${context.parsed.y.toFixed(2)} cents/lb`;
+                                }
+                            }
                         }
                     }
                 }
@@ -269,10 +311,21 @@ class CoffeeMarketDashboard {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(worksheet);
             
-            const chartData = data.map(row => ({
-                x: new Date(row.Date),
-                y: parseFloat(row.Close)
-            })).filter(item => !isNaN(item.y));
+            // Improved data processing with better date handling
+            const chartData = data.map(row => {
+                const date = this.parseDate(row.Date);
+                const value = parseFloat(row.Close);
+                
+                return {
+                    x: date,
+                    y: value
+                };
+            }).filter(item => item.x !== null && !isNaN(item.y))
+              .sort((a, b) => a.x - b.x); // Sort by date
+            
+            if (chartData.length === 0) {
+                throw new Error('No valid data found');
+            }
             
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -294,20 +347,51 @@ class CoffeeMarketDashboard {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
                     scales: {
                         x: {
                             type: 'time',
                             time: {
-                                unit: 'day'
+                                unit: 'day',
+                                tooltipFormat: 'yyyy-MM-dd'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
                             }
                         },
                         y: {
-                            beginAtZero: false
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'BRL per USD'
+                            }
                         }
                     },
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    if (context[0] && context[0].parsed.x) {
+                                        const date = new Date(context[0].parsed.x);
+                                        return date.toLocaleDateString('ko-KR', {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric'
+                                        });
+                                    }
+                                    return 'Invalid Date';
+                                },
+                                label: function(context) {
+                                    return `Exchange Rate: ${context.parsed.y.toFixed(4)} BRL/USD`;
+                                }
+                            }
                         }
                     }
                 }
@@ -316,6 +400,36 @@ class CoffeeMarketDashboard {
             console.error('USD chart error:', error);
             loadingElement.innerHTML = `<div style="color: #e74c3c;">데이터 로딩 실패: ${error.message}</div>`;
         }
+    }
+
+    // Safe date parsing function
+    parseDate(dateValue) {
+        if (!dateValue) return null;
+        
+        let date;
+        if (typeof dateValue === 'number') {
+            // Excel serial number
+            if (dateValue > 1 && dateValue < 2958465) {
+                date = new Date((dateValue - 25569) * 86400 * 1000);
+            } else {
+                return null;
+            }
+        } else if (typeof dateValue === 'string') {
+            // String date - try various formats
+            const cleanedDate = dateValue.trim();
+            if (cleanedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                date = new Date(cleanedDate + 'T00:00:00');
+            } else if (cleanedDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                const parts = cleanedDate.split('/');
+                date = new Date(parts[2], parts[0] - 1, parts[1]);
+            } else {
+                date = new Date(cleanedDate);
+            }
+        } else {
+            date = new Date(dateValue);
+        }
+        
+        return (date && !isNaN(date.getTime())) ? date : null;
     }
 
     async createCFTCChart() {
@@ -331,10 +445,21 @@ class CoffeeMarketDashboard {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(worksheet);
             
-            const chartData = data.map(row => ({
-                x: new Date(row.Date),
-                y: parseFloat(row.NetPosition)
-            })).filter(item => !isNaN(item.y));
+            // Improved data processing with better date handling
+            const chartData = data.map(row => {
+                const date = this.parseDate(row.Date);
+                const value = parseFloat(row.NetPosition);
+                
+                return {
+                    x: date,
+                    y: value
+                };
+            }).filter(item => item.x !== null && !isNaN(item.y))
+              .sort((a, b) => a.x - b.x); // Sort by date
+            
+            if (chartData.length === 0) {
+                throw new Error('No valid data found');
+            }
             
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -346,28 +471,59 @@ class CoffeeMarketDashboard {
                     datasets: [{
                         label: 'CFTC Net Positions',
                         data: chartData,
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 0.6)' : 'rgba(231, 76, 60, 0.6)'),
+                        borderColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 1)' : 'rgba(231, 76, 60, 1)'),
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
                     scales: {
                         x: {
                             type: 'time',
                             time: {
-                                unit: 'week'
+                                unit: 'week',
+                                tooltipFormat: 'yyyy-MM-dd'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
                             }
                         },
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Net Long Positions'
+                            }
                         }
                     },
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    if (context[0] && context[0].parsed.x) {
+                                        const date = new Date(context[0].parsed.x);
+                                        return date.toLocaleDateString('ko-KR', {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric'
+                                        });
+                                    }
+                                    return 'Invalid Date';
+                                },
+                                label: function(context) {
+                                    return `Net Position: ${context.parsed.y.toLocaleString()}`;
+                                }
+                            }
                         }
                     }
                 }

@@ -1248,7 +1248,10 @@
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
+                                        if (chartData[index] && chartData[index].date) {
+                                            return formatDateSafely(chartData[index].date);
+                                        }
+                                        return 'Invalid Date';
                                     }
                                 }
                             }
@@ -1264,12 +1267,12 @@
                                 ticks: {
                                     callback: function(value) {
                                         const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
+                                        if (chartData[index] && index >= 0 && index < chartData.length && chartData[index].date) {
                                             const totalPoints = chartData.length;
                                             const step = Math.max(1, Math.floor(totalPoints / 8));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
+                                                return formatDateSafely(chartData[index].date, { 
                                                     year: '2-digit', 
                                                     month: 'short' 
                                                 });
@@ -1365,7 +1368,10 @@
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
+                                        if (chartData[index] && chartData[index].date) {
+                                            return formatDateSafely(chartData[index].date);
+                                        }
+                                        return 'Invalid Date';
                                     }
                                 }
                             }
@@ -1381,12 +1387,12 @@
                                 ticks: {
                                     callback: function(value) {
                                         const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
+                                        if (chartData[index] && index >= 0 && index < chartData.length && chartData[index].date) {
                                             const totalPoints = chartData.length;
                                             const step = Math.max(1, Math.floor(totalPoints / 8));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
+                                                return formatDateSafely(chartData[index].date, { 
                                                     year: '2-digit', 
                                                     month: 'short' 
                                                 });
