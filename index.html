@@ -774,7 +774,18 @@
                 })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
                 
                 // 날짜순으로 정렬 (오래된 것 → 최신 순서로)
-                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                processedData.sort((a, b) => {
+                    const dateA = parseDate(a.date);
+                    const dateB = parseDate(b.date);
+                    
+                    // 유효한 날짜인지 확인
+                    if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                        console.error('Invalid dates in sorting:', a.date, b.date);
+                        return 0;
+                    }
+                    
+                    return dateA - dateB;
+                });
                 
                 console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
                 return processedData;
@@ -1079,14 +1090,49 @@
             }
         }
 
-        // 날짜 변환 함수
+        // 날짜 변환 함수 (모바일 호환성 개선)
         function parseDate(dateValue) {
             if (typeof dateValue === 'number') {
-                // Excel 날짜 시리얼 번호인 경우
-                const date = new Date((dateValue - 25569) * 86400 * 1000);
+                // Excel 날짜 시리얼 번호인 경우 - UTC 시간으로 계산
+                const utcDays = dateValue - 25569;
+                const utcValue = utcDays * 86400 * 1000;
+                const date = new Date(utcValue);
+                
+                // 유효한 날짜인지 확인
+                if (isNaN(date.getTime())) {
+                    console.error('Invalid date from Excel serial:', dateValue);
+                    return new Date();
+                }
                 return date;
             } else if (typeof dateValue === 'string') {
-                return new Date(dateValue);
+                // 다양한 날짜 형식 처리
+                let date;
+                
+                // ISO 형식 (YYYY-MM-DD)
+                if (dateValue.match(/^\d{4}-\d{2}-\d{2}/)) {
+                    date = new Date(dateValue + 'T00:00:00');
+                } 
+                // DD/MM/YYYY 형식
+                else if (dateValue.match(/^\d{2}\/\d{2}\/\d{4}/)) {
+                    const parts = dateValue.split('/');
+                    date = new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+                // MM/DD/YYYY 형식
+                else if (dateValue.match(/^\d{1,2}\/\d{1,2}\/\d{4}/)) {
+                    const parts = dateValue.split('/');
+                    date = new Date(parts[2], parts[0] - 1, parts[1]);
+                }
+                // 기본 Date 파싱
+                else {
+                    date = new Date(dateValue);
+                }
+                
+                // 유효한 날짜인지 확인
+                if (isNaN(date.getTime())) {
+                    console.error('Invalid date string:', dateValue);
+                    return new Date();
+                }
+                return date;
             }
             return new Date(dateValue);
         }
@@ -1158,7 +1204,21 @@
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
+                                        const dataPoint = chartData[index];
+                                        if (dataPoint && dataPoint.date) {
+                                            try {
+                                                const date = dataPoint.date;
+                                                if (!isNaN(date.getTime())) {
+                                                    const year = date.getFullYear();
+                                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                    const day = String(date.getDate()).padStart(2, '0');
+                                                    return `${year}년 ${month}월 ${day}일`;
+                                                }
+                                            } catch (e) {
+                                                console.error('Date formatting error:', e);
+                                            }
+                                        }
+                                        return 'N/A';
                                     }
                                 }
                             }
@@ -1179,10 +1239,19 @@
                                             const step = Math.max(1, Math.floor(totalPoints / 8));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
+                                                const date = chartData[index].date;
+                                                if (date && !isNaN(date.getTime())) {
+                                                    try {
+                                                        const year = String(date.getFullYear()).slice(-2);
+                                                        const month = date.getMonth() + 1;
+                                                        const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', 
+                                                                          '7월', '8월', '9월', '10월', '11월', '12월'];
+                                                        return `${year}년 ${monthNames[month - 1]}`;
+                                                    } catch (e) {
+                                                        console.error('X-axis date formatting error:', e);
+                                                        return '';
+                                                    }
+                                                }
                                             }
                                         }
                                         return '';
@@ -1275,7 +1344,21 @@
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
+                                        const dataPoint = chartData[index];
+                                        if (dataPoint && dataPoint.date) {
+                                            try {
+                                                const date = dataPoint.date;
+                                                if (!isNaN(date.getTime())) {
+                                                    const year = date.getFullYear();
+                                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                    const day = String(date.getDate()).padStart(2, '0');
+                                                    return `${year}년 ${month}월 ${day}일`;
+                                                }
+                                            } catch (e) {
+                                                console.error('Date formatting error:', e);
+                                            }
+                                        }
+                                        return 'N/A';
                                     }
                                 }
                             }
@@ -1296,10 +1379,19 @@
                                             const step = Math.max(1, Math.floor(totalPoints / 8));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
+                                                const date = chartData[index].date;
+                                                if (date && !isNaN(date.getTime())) {
+                                                    try {
+                                                        const year = String(date.getFullYear()).slice(-2);
+                                                        const month = date.getMonth() + 1;
+                                                        const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', 
+                                                                          '7월', '8월', '9월', '10월', '11월', '12월'];
+                                                        return `${year}년 ${monthNames[month - 1]}`;
+                                                    } catch (e) {
+                                                        console.error('X-axis date formatting error:', e);
+                                                        return '';
+                                                    }
+                                                }
                                             }
                                         }
                                         return '';
@@ -1376,7 +1468,22 @@
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
+                                        const dataPoint = chartData[index];
+                                        if (dataPoint && dataPoint.date) {
+                                            try {
+                                                // 모바일 호환성을 위한 안전한 날짜 포맷팅
+                                                const date = dataPoint.date;
+                                                if (!isNaN(date.getTime())) {
+                                                    const year = date.getFullYear();
+                                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                    const day = String(date.getDate()).padStart(2, '0');
+                                                    return `${year}년 ${month}월 ${day}일`;
+                                                }
+                                            } catch (e) {
+                                                console.error('Date formatting error:', e);
+                                            }
+                                        }
+                                        return 'N/A';
                                     }
                                 }
                             }
@@ -1397,10 +1504,19 @@
                                             const step = Math.max(1, Math.floor(totalPoints / 12));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
+                                                const date = chartData[index].date;
+                                                if (date && !isNaN(date.getTime())) {
+                                                    try {
+                                                        const year = String(date.getFullYear()).slice(-2);
+                                                        const month = date.getMonth() + 1;
+                                                        const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', 
+                                                                          '7월', '8월', '9월', '10월', '11월', '12월'];
+                                                        return `${year}년 ${monthNames[month - 1]}`;
+                                                    } catch (e) {
+                                                        console.error('X-axis date formatting error:', e);
+                                                        return '';
+                                                    }
+                                                }
                                             }
                                         }
                                         return '';
@@ -1415,7 +1531,14 @@
                                 title: {
                                     display: true,
                                     text: 'Net Long Positions'
-                                }
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        // 천 단위 구분자 추가
+                                        return value.toLocaleString('ko-KR');
+                                    }
+                                },
+                                reverse: false  // y축이 반대로 표시되는 경우 이 값을 true로 변경
                             }
                         }
                     }
