@@ -499,23 +499,33 @@ class CoffeeMarketDashboard {
                 };
             }).filter(item => item.x !== null && !isNaN(item.y));
             
-            // Sort by date in descending order (newest first) - ensure proper sorting
+            // Sort by date in ASCENDING order (oldest first, newest last - left to right)
             chartData.sort((a, b) => {
                 const dateA = new Date(a.x);
                 const dateB = new Date(b.x);
-                return dateB.getTime() - dateA.getTime();
+                return dateA.getTime() - dateB.getTime();
             });
             
-            if (chartData.length === 0) {
-                throw new Error('No valid data found');
+            // Filter to show only last 2 years
+            const now = new Date();
+            const twoYearsAgo = new Date(now.getFullYear() - 2, now.getMonth(), now.getDate());
+            const filteredData = chartData.filter(item => {
+                const itemDate = new Date(item.x);
+                return itemDate >= twoYearsAgo;
+            });
+            
+            if (filteredData.length === 0) {
+                throw new Error('No valid data found in the last 2 years');
             }
             
             // Log for debugging
             console.log('CFTC Chart Data:', {
                 totalRecords: chartData.length,
-                firstDate: chartData[0]?.x,
-                lastDate: chartData[chartData.length - 1]?.x,
-                sample: chartData.slice(0, 3),
+                filteredRecords: filteredData.length,
+                dateRange: `${twoYearsAgo.toISOString().split('T')[0]} to ${now.toISOString().split('T')[0]}`,
+                firstDate: filteredData[0]?.x,
+                lastDate: filteredData[filteredData.length - 1]?.x,
+                sample: filteredData.slice(0, 3),
                 isMobile: isMobile
             });
             
@@ -534,9 +544,9 @@ class CoffeeMarketDashboard {
                 data: {
                     datasets: [{
                         label: 'CFTC Net Positions',
-                        data: chartData,
-                        backgroundColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 0.6)' : 'rgba(231, 76, 60, 0.6)'),
-                        borderColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 1)' : 'rgba(231, 76, 60, 1)'),
+                        data: filteredData,
+                        backgroundColor: filteredData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 0.6)' : 'rgba(231, 76, 60, 0.6)'),
+                        borderColor: filteredData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 1)' : 'rgba(231, 76, 60, 1)'),
                         borderWidth: 1
                     }]
                 },
@@ -564,18 +574,12 @@ class CoffeeMarketDashboard {
                                     size: isMobile ? 12 : 14
                                 }
                             },
-                            // Ensure proper ordering for mobile
+                            // Ensure proper left-to-right chronological order
                             reverse: false,
                             ticks: {
                                 maxTicksLimit: isMobile ? 6 : 12,
                                 font: {
                                     size: isMobile ? 10 : 12
-                                },
-                                callback: function(value, index, values) {
-                                    const date = new Date(value);
-                                    const month = date.getMonth() + 1;
-                                    const day = date.getDate();
-                                    return isMobile ? `${month}/${day}` : `${month}/${day}`;
                                 }
                             }
                         },
