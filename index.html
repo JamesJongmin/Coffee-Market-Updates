@@ -1436,11 +1436,28 @@
                     throw new Error('No data received');
                 }
 
-                const chartData = data.map((row, index) => ({
-                    x: index,
-                    y: parseInt(row.value),
-                    date: parseDate(row.date)
-                })).filter(point => !isNaN(point.y));
+                // 데이터 처리 및 최근 2년 치 필터링
+                const allData = data.map((row) => ({
+                    date: parseDate(row.date),
+                    value: parseInt(row.value)
+                })).filter(point => !isNaN(point.value));
+
+                // 최근 2년 치 데이터 필터링 (2023년 7월 8일부터 2025년 7월 8일까지)
+                const twoYearsAgo = new Date('2023-07-08T00:00:00');
+                const latestDate = new Date('2025-07-08T00:00:00');
+                
+                const filteredData = allData.filter(point => {
+                    return point.date >= twoYearsAgo && point.date <= latestDate;
+                });
+
+                // 데이터를 역순으로 정렬 (최신 데이터가 우측에 표시)
+                filteredData.sort((a, b) => a.date - b.date);
+
+                const chartData = filteredData.map((point, index) => ({
+                    x: point.date.getTime(),
+                    y: point.value,
+                    date: point.date
+                }));
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -1482,30 +1499,19 @@
                         },
                         scales: {
                             x: {
-                                type: 'linear',
-                                position: 'bottom',
+                                type: 'time',
+                                time: {
+                                    unit: 'month',
+                                    displayFormats: {
+                                        month: 'MMM yy'
+                                    }
+                                },
                                 title: {
                                     display: true,
-                                    text: 'Date'
+                                    text: '날짜'
                                 },
                                 ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length && chartData[index].date) {
-                                            const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 12));
-                                            
-                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return formatDateSafely(chartData[index].date, { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
-                                            }
-                                        }
-                                        return '';
-                                    },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / 12)),
-                                    maxTicksLimit: 15,
+                                    maxTicksLimit: 12,
                                     maxRotation: 45,
                                     minRotation: 0
                                 }
