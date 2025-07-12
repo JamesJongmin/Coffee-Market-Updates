@@ -1436,11 +1436,30 @@
                     throw new Error('No data received');
                 }
 
-                const chartData = data.map((row, index) => ({
-                    x: index,
-                    y: parseInt(row.value),
+                // 데이터 전처리: 날짜 파싱 및 정렬
+                const processedData = data.map(row => ({
+                    value: parseInt(row.value),
                     date: parseDate(row.date)
-                })).filter(point => !isNaN(point.y));
+                })).filter(point => !isNaN(point.value) && point.date);
+
+                // 날짜순으로 정렬 (오래된 날짜부터)
+                processedData.sort((a, b) => a.date - b.date);
+
+                // 최근 2년 데이터만 필터링
+                const twoYearsAgo = new Date();
+                twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+                
+                const recentData = processedData.filter(point => point.date >= twoYearsAgo);
+
+                // 역순 배치 (최신 데이터가 먼저 나오도록)
+                const reversedData = recentData.reverse();
+
+                // 차트 데이터 생성
+                const chartData = reversedData.map((row, index) => ({
+                    x: index,
+                    y: row.value,
+                    date: row.date
+                }));
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -1486,7 +1505,7 @@
                                 position: 'bottom',
                                 title: {
                                     display: true,
-                                    text: 'Date'
+                                    text: 'Date (최근 2년, 역순)'
                                 },
                                 ticks: {
                                     callback: function(value) {
