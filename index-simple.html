@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Market Updates Archive - Simple</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { background: #8B4513; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .report-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; cursor: pointer; }
+        .report-card:hover { background: #f5f5f5; }
+        .error { color: red; padding: 10px; background: #fee; border: 1px solid #fcc; border-radius: 5px; }
+        .success { color: green; padding: 10px; background: #efe; border: 1px solid #cfc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Coffee Market Updates - Simple Version</h1>
+            <p>간단한 테스트 버전</p>
+        </header>
+        
+        <div id="status"></div>
+        
+        <h2>Reports</h2>
+        <div id="reportsGrid"></div>
+    </div>
+
+    <script>
+        console.log('Simple index.html 시작');
+        
+        const statusDiv = document.getElementById('status');
+        const reportsGrid = document.getElementById('reportsGrid');
+        
+        // 간단한 리포트 데이터
+        const simpleReports = [
+            {
+                date: '2025-06-28',
+                title: '커피 시장 동향 - 2025-06-28',
+                link: 'Reports/2025/06/2025-06-28.html'
+            },
+            {
+                date: '2025-06-24',
+                title: '커피 가격, 폭풍 전야',
+                link: 'Reports/2025/06/2025-06-24.html'
+            },
+            {
+                date: '2025-06-21',
+                title: '커피 시장 동향 - 2025-06-21',
+                link: 'Reports/2025/06/2025-06-21.html'
+            }
+        ];
+        
+        // 리포트 렌더링
+        function renderSimpleReports() {
+            try {
+                console.log('리포트 렌더링 시작');
+                statusDiv.innerHTML = '<div class="success">리포트 로드 중...</div>';
+                
+                const html = simpleReports.map(report => `
+                    <div class="report-card" onclick="window.location.href='${report.link}'">
+                        <h3>${report.title}</h3>
+                        <p>날짜: ${report.date}</p>
+                        <a href="${report.link}">보고서 읽기</a>
+                    </div>
+                `).join('');
+                
+                reportsGrid.innerHTML = html;
+                statusDiv.innerHTML = '<div class="success">✓ 리포트 로드 완료</div>';
+                console.log('리포트 렌더링 완료');
+                
+            } catch (error) {
+                console.error('렌더링 오류:', error);
+                statusDiv.innerHTML = '<div class="error">렌더링 오류: ' + error.message + '</div>';
+            }
+        }
+        
+        // 파일 접근 테스트
+        async function testFileAccess() {
+            try {
+                console.log('파일 접근 테스트 시작');
+                const response = await fetch('Reports/2025/06/2025-06-28.html');
+                if (response.ok) {
+                    console.log('파일 접근 성공');
+                    return true;
+                } else {
+                    console.error('파일 접근 실패:', response.status);
+                    return false;
+                }
+            } catch (error) {
+                console.error('파일 접근 오류:', error);
+                return false;
+            }
+        }
+        
+        // 초기화
+        async function init() {
+            console.log('초기화 시작');
+            
+            // 파일 접근 테스트
+            const fileAccessOk = await testFileAccess();
+            if (fileAccessOk) {
+                statusDiv.innerHTML += '<div class="success">✓ 파일 접근 가능</div>';
+            } else {
+                statusDiv.innerHTML += '<div class="error">✗ 파일 접근 불가</div>';
+            }
+            
+            // 리포트 렌더링
+            renderSimpleReports();
+        }
+        
+        // DOM 로드 완료 시 초기화
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

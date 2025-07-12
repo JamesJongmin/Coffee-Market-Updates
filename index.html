@@ -1983,38 +1983,92 @@
         async function init() {
             try {
                 console.log('초기화 시작...');
+                console.log('DOM 요소 확인:');
+                console.log('- searchInput:', document.getElementById('searchInput'));
+                console.log('- yearFilter:', document.getElementById('yearFilter'));
+                console.log('- monthFilter:', document.getElementById('monthFilter'));
+                console.log('- reportsGrid:', document.getElementById('reportsGrid'));
                 
                 // 현재 날짜 업데이트
+                console.log('현재 날짜 업데이트 중...');
                 updateCurrentDate();
                 
                 // 차트들 병렬로 로드
+                console.log('차트 로드 시작...');
                 Promise.all([
                     createCoffeeChart(),
                     createUSDChart(),
                     createCFTCChart(),
                     createNVDIChart()
-                ]);
+                ]).catch(error => {
+                    console.error('차트 로드 중 오류:', error);
+                });
 
                 // 개선된 리포트 데이터 로드
+                console.log('리포트 데이터 로드 시작...');
                 allReports = await initializeReports();
+                console.log('로드된 리포트 수:', allReports.length);
+                
+                console.log('필터 업데이트 중...');
                 updateFilters();
+                
+                console.log('통계 업데이트 중...');
                 updateStats();
+                
+                console.log('리포트 렌더링 중...');
                 renderReports();
                 
                 // 이벤트 리스너 설정
-                document.getElementById('searchInput').addEventListener('input', filterReports);
-                document.getElementById('yearFilter').addEventListener('change', filterReports);
-                document.getElementById('monthFilter').addEventListener('change', filterReports);
+                console.log('이벤트 리스너 설정 중...');
+                const searchInput = document.getElementById('searchInput');
+                const yearFilter = document.getElementById('yearFilter');
+                const monthFilter = document.getElementById('monthFilter');
+                
+                if (searchInput) {
+                    searchInput.addEventListener('input', filterReports);
+                    console.log('검색 입력 이벤트 리스너 추가됨');
+                } else {
+                    console.error('searchInput 요소를 찾을 수 없습니다');
+                }
+                
+                if (yearFilter) {
+                    yearFilter.addEventListener('change', filterReports);
+                    console.log('년도 필터 이벤트 리스너 추가됨');
+                } else {
+                    console.error('yearFilter 요소를 찾을 수 없습니다');
+                }
+                
+                if (monthFilter) {
+                    monthFilter.addEventListener('change', filterReports);
+                    console.log('월 필터 이벤트 리스너 추가됨');
+                } else {
+                    console.error('monthFilter 요소를 찾을 수 없습니다');
+                }
                 
                 console.log('초기화 완료');
                 
             } catch (error) {
                 console.error('초기화 중 오류:', error);
+                console.error('오류 스택:', error.stack);
             }
         }
 
         // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', init);
+        
+        // 전역 오류 처리기 추가
+        window.addEventListener('error', function(event) {
+            console.error('전역 오류 발생:', event.error);
+            console.error('오류 위치:', event.filename, '라인:', event.lineno, '컬럼:', event.colno);
+        });
+        
+        // Promise 거부 처리
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('처리되지 않은 Promise 거부:', event.reason);
+        });
+        
+        // 페이지 로드 상태 확인
+        console.log('index.html JavaScript 로드 완료');
 </script>
 </body>
 </html>
