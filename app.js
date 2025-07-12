@@ -526,51 +526,25 @@ class CoffeeMarketDashboard {
         
         if (!loadingElement || !chartElement) return;
         
-        // Detect if this is a mobile device
-        const isMobile = window.innerWidth <= 768;
-        
         try {
-            const response = await fetch('cftcpositions.xlsx');
-            const arrayBuffer = await response.arrayBuffer();
-            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            const data = XLSX.utils.sheet_to_json(worksheet);
+            const data = await Promise.race([
+                this.readGoogleSheetData('cftc'),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+            ]);
             
-            // Enhanced data processing with better date handling
-            const chartData = data.map(row => {
-                const date = this.parseDate(row.Date);
-                const value = parseFloat(row.NetPosition);
-                
-                return {
-                    x: date,
-                    y: value,
-                    originalDate: row.Date // Keep original for debugging
-                };
-            }).filter(item => item.x !== null && !isNaN(item.y));
-            
-            // Sort by date in descending order (newest first) - ensure proper sorting
-            chartData.sort((a, b) => {
-                const dateA = new Date(a.x);
-                const dateB = new Date(b.x);
-                return dateB.getTime() - dateA.getTime();
-            });
-            
-            if (chartData.length === 0) {
-                throw new Error('No valid data found');
+            if (!data) {
+                throw new Error('No data received');
             }
-            
-            // Log for debugging
-            console.log('CFTC Chart Data:', {
-                totalRecords: chartData.length,
-                firstDate: chartData[0]?.x,
-                lastDate: chartData[chartData.length - 1]?.x,
-                sample: chartData.slice(0, 3),
-                isMobile: isMobile
-            });
-            
+
+            const chartData = data.map((row, index) => ({
+                x: index,
+                y: parseInt(row.value),
+                date: this.parseDate(row.date)
+            })).filter(point => !isNaN(point.y));
+
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
-            
+
             const ctx = chartElement.getContext('2d');
             
             // Check if chart already exists and destroy it
@@ -582,10 +556,10 @@ class CoffeeMarketDashboard {
                 type: 'bar',
                 data: {
                     datasets: [{
-                        label: 'CFTC Net Positions',
+                        label: 'Net Long Positions',
                         data: chartData,
-                        backgroundColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 0.6)' : 'rgba(231, 76, 60, 0.6)'),
-                        borderColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 1)' : 'rgba(231, 76, 60, 1)'),
+                        backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
+                        borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
                         borderWidth: 1
                     }]
                 },
@@ -596,143 +570,92 @@ class CoffeeMarketDashboard {
                         intersect: false,
                         mode: 'index'
                     },
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'week',
-                                tooltipFormat: 'yyyy-MM-dd',
-                                displayFormats: {
-                                    week: isMobile ? 'MM/dd' : 'MM/dd/yy'
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Date',
-                                font: {
-                                    size: isMobile ? 12 : 14
-                                }
-                            },
-                            // Ensure proper ordering for mobile
-                            reverse: false,
-                            ticks: {
-                                maxTicksLimit: isMobile ? 6 : 12,
-                                font: {
-                                    size: isMobile ? 10 : 12
-                                },
-                                callback: function(value, index, values) {
-                                    const date = new Date(value);
-                                    const month = date.getMonth() + 1;
-                                    const day = date.getDate();
-                                    return isMobile ? `${month}/${day}` : `${month}/${day}`;
-                                }
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Net Long Positions',
-                                font: {
-                                    size: isMobile ? 12 : 14
-                                }
-                            },
-                            ticks: {
-                                font: {
-                                    size: isMobile ? 10 : 12
-                                },
-                                callback: function(value) {
-                                    return isMobile ? 
-                                        (Math.abs(value) >= 1000 ? (value/1000).toFixed(0) + 'k' : value.toString()) :
-                                        value.toLocaleString();
-                                }
-                            }
-                        }
-                    },
                     plugins: {
                         legend: {
                             display: false
                         },
                         tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            titleColor: '#333',
-                            bodyColor: '#333',
-                            borderColor: '#ccc',
-                            borderWidth: 1,
-                            cornerRadius: 8,
-                            displayColors: false,
-                            titleFont: {
-                                size: isMobile ? 12 : 14
-                            },
-                            bodyFont: {
-                                size: isMobile ? 11 : 13
-                            },
                             callbacks: {
-                                title: function(context) {
-                                    if (context[0] && context[0].parsed.x) {
-                                        const date = new Date(context[0].parsed.x);
-                                        // Use consistent date formatting
-                                        return date.toLocaleDateString('ko-KR', {
-                                            year: 'numeric',
-                                            month: 'short',
-                                            day: 'numeric'
-                                        });
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    const dataPoint = chartData[index];
+                                    if (dataPoint && dataPoint.date) {
+                                        try {
+                                            // Mobile compatible safe date formatting
+                                            const date = dataPoint.date;
+                                            if (!isNaN(date.getTime())) {
+                                                const year = date.getFullYear();
+                                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                const day = String(date.getDate()).padStart(2, '0');
+                                                return `${year}년 ${month}월 ${day}일`;
+                                            }
+                                        } catch (e) {
+                                            console.error('Date formatting error:', e);
+                                        }
                                     }
-                                    return 'Invalid Date';
-                                },
-                                label: function(context) {
-                                    const value = context.parsed.y;
-                                    const position = value >= 0 ? 'Long' : 'Short';
-                                    return `Net ${position}: ${Math.abs(value).toLocaleString()}`;
+                                    return 'N/A';
                                 }
                             }
                         }
                     },
-                    // Add mobile-specific configurations
-                    elements: {
-                        bar: {
-                            borderRadius: isMobile ? 2 : 4
-                        }
-                    },
-                    // Mobile touch optimization
-                    onHover: isMobile ? null : undefined,
-                    onClick: (event, activeElements) => {
-                        if (activeElements.length > 0 && isMobile) {
-                            // Handle mobile tap
-                            const chart = event.chart;
-                            const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
-                            const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
-                            const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
-                            console.log('Mobile tap on chart:', { dataX, dataY });
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    const index = Math.round(value);
+                                    if (chartData[index] && index >= 0 && index < chartData.length) {
+                                        const totalPoints = chartData.length;
+                                        const step = Math.max(1, Math.floor(totalPoints / 12));
+                                        
+                                        if (index === 0 || index === totalPoints - 1 || index % step === 0) {
+                                            const date = chartData[index].date;
+                                            if (date && !isNaN(date.getTime())) {
+                                                try {
+                                                    const year = String(date.getFullYear()).slice(-2);
+                                                    const month = date.getMonth() + 1;
+                                                    const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', 
+                                                                      '7월', '8월', '9월', '10월', '11월', '12월'];
+                                                    return `${year}년 ${monthNames[month - 1]}`;
+                                                } catch (e) {
+                                                    console.error('X-axis date formatting error:', e);
+                                                    return '';
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return '';
+                                },
+                                stepSize: Math.max(1, Math.floor(chartData.length / 12)),
+                                maxTicksLimit: 15,
+                                maxRotation: 45,
+                                minRotation: 0
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Net Long Positions'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    // Add thousand separators
+                                    return value.toLocaleString('ko-KR');
+                                }
+                            },
+                            reverse: false  // If y-axis is displayed in reverse, change this value to true
                         }
                     }
                 }
             });
-            
-            // Add resize handler for mobile optimization
-            const resizeObserver = new ResizeObserver(entries => {
-                if (this.charts.cftc) {
-                    this.charts.cftc.resize();
-                }
-            });
-            resizeObserver.observe(chartElement);
-            
-            // Add window resize listener for mobile orientation changes
-            const handleResize = () => {
-                if (this.charts.cftc) {
-                    setTimeout(() => {
-                        this.charts.cftc.resize();
-                    }, 100);
-                }
-            };
-            window.addEventListener('resize', handleResize);
-            window.addEventListener('orientationchange', handleResize);
-            
         } catch (error) {
             console.error('CFTC chart error:', error);
-            loadingElement.innerHTML = `<div style="color: #e74c3c;">데이터 로딩 실패: ${error.message}</div>`;
+            loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
         }
     }
 
