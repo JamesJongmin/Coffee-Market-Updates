@@ -1917,5 +1917,44 @@
         // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', init);
 </script>
+
+<!-- 트래픽 분석 스크립트 -->
+<script src="traffic-analytics.js"></script>
+
+<!-- 트래픽 대시보드 토글 버튼 -->
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <button onclick="toggleTrafficDashboard()" 
+            style="background: #007bff; color: white; border: none; padding: 12px 16px; 
+                   border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold;
+                   box-shadow: 0 4px 12px rgba(0,123,255,0.3); transition: all 0.3s ease;
+                   display: flex; align-items: center; gap: 8px; margin-bottom: 10px;"
+            onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0,123,255,0.4)'"
+            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,123,255,0.3)'">
+        📊 트래픽 분석
+    </button>
+    
+    <a href="traffic-dashboard.html" 
+       style="background: #17a2b8; color: white; border: none; padding: 12px 16px; 
+              border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold;
+              box-shadow: 0 4px 12px rgba(23,162,184,0.3); transition: all 0.3s ease;
+              display: flex; align-items: center; gap: 8px; text-decoration: none;"
+       onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(23,162,184,0.4)'"
+       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(23,162,184,0.3)'">
+        📈 상세 분석
+    </a>
+</div>
+
+<script>
+    // 트래픽 분석 초기화 및 대시보드 자동 표시
+    document.addEventListener('DOMContentLoaded', function() {
+        // 5초 후 자동으로 대시보드 표시 (첫 방문자를 위해)
+        setTimeout(function() {
+            if (localStorage.getItem('trafficDashboardShown') !== 'true') {
+                toggleTrafficDashboard();
+                localStorage.setItem('trafficDashboardShown', 'true');
+            }
+        }, 5000);
+    });
+</script>
 </body>
 </html>

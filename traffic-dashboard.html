@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트래픽 분석 대시보드 | Coffee Market Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        .data-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #34495e;
+            color: white;
+            padding: 1rem;
+            font-weight: bold;
+        }
+
+        .table-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .table-row {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-row:hover {
+            background: #f8f9fa;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #ecf0f1;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.3s ease;
+        }
+
+        .real-time-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: #27ae60;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .dashboard-container {
+                padding: 0 0.5rem;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 트래픽 분석 대시보드</h1>
+        <div class="header-controls">
+            <div class="real-time-indicator">
+                <div class="pulse"></div>
+                실시간 분석
+            </div>
+            <button class="btn btn-primary" onclick="refreshData()">🔄 새로고침</button>
+            <button class="btn btn-secondary" onclick="exportAllData()">📊 데이터 내보내기</button>
+            <a href="index.html" class="btn btn-secondary">← 대시보드로 돌아가기</a>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- 통계 카드 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalVisitors">-</div>
+                <div class="stat-label">총 방문자 (24시간)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeUsers">-</div>
+                <div class="stat-label">현재 접속자</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalPageViews">-</div>
+                <div class="stat-label">페이지뷰</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalClicks">-</div>
+                <div class="stat-label">클릭 수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgSessionDuration">-</div>
+                <div class="stat-label">평균 세션 시간</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="bounceRate">-</div>
+                <div class="stat-label">이탈률</div>
+            </div>
+        </div>
+
+        <!-- 차트 그리드 -->
+        <div class="chart-grid">
+            <!-- 유입 소스 차트 -->
+            <div class="chart-container">
+                <div class="chart-title">🔗 유입 소스 분석</div>
+                <canvas id="trafficSourceChart" class="chart-canvas"></canvas>
+            </div>
+
+            <!-- 시간대별 방문자 차트 -->
+            <div class="chart-container">
+                <div class="chart-title">⏰ 시간대별 방문자</div>
+                <canvas id="hourlyTrafficChart" class="chart-canvas"></canvas>
+            </div>
+
+            <!-- 일별 트렌드 차트 -->
+            <div class="chart-container">
+                <div class="chart-title">📈 일별 트렌드</div>
+                <canvas id="dailyTrendChart" class="chart-canvas"></canvas>
+            </div>
+
+            <!-- 디바이스별 분석 -->
+            <div class="chart-container">
+                <div class="chart-title">📱 디바이스별 분석</div>
+                <canvas id="deviceChart" class="chart-canvas"></canvas>
+            </div>
+        </div>
+
+        <!-- 상세 데이터 테이블 -->
+        <div class="data-table">
+            <div class="table-header">📋 상세 유입 데이터</div>
+            <div class="table-content" id="detailedTrafficTable">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    데이터를 불러오는 중...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="traffic-analytics.js"></script>
+    <script>
+        let charts = {};
+        let refreshInterval;
+
+        // 데이터 새로고침
+        function refreshData() {
+            loadDashboardData();
+        }
+
+        // 대시보드 데이터 로드
+        function loadDashboardData() {
+            if (!window.trafficAnalytics) {
+                console.error('Traffic Analytics not loaded');
+                return;
+            }
+
+            const stats = window.trafficAnalytics.generateTrafficStats();
+            
+            // 통계 카드 업데이트
+            updateStatsCards(stats);
+            
+            // 차트 업데이트
+            updateCharts(stats);
+            
+            // 테이블 업데이트
+            updateDetailedTable();
+        }
+
+        // 통계 카드 업데이트
+        function updateStatsCards(stats) {
+            document.getElementById('totalVisitors').textContent = stats.summary.totalVisitors;
+            document.getElementById('activeUsers').textContent = stats.summary.activeUsers;
+            document.getElementById('totalPageViews').textContent = stats.summary.totalPageViews;
+            document.getElementById('totalClicks').textContent = stats.summary.totalClicks;
+            
+            // 평균 세션 시간 계산
+            const avgDuration = Math.floor(stats.summary.sessionDuration / 60);
+            document.getElementById('avgSessionDuration').textContent = `${avgDuration}분`;
+            
+            // 이탈률 계산 (단순화된 계산)
+            const bounceRate = stats.summary.totalPageViews > 0 ? 
+                Math.round((1 - stats.summary.totalClicks / stats.summary.totalPageViews) * 100) : 0;
+            document.getElementById('bounceRate').textContent = `${bounceRate}%`;
+        }
+
+        // 차트 업데이트
+        function updateCharts(stats) {
+            updateTrafficSourceChart(stats.sourceStats);
+            updateHourlyTrafficChart(stats.hourlyStats);
+            updateDailyTrendChart();
+            updateDeviceChart();
+        }
+
+        // 유입 소스 차트
+        function updateTrafficSourceChart(sourceStats) {
+            const ctx = document.getElementById('trafficSourceChart').getContext('2d');
+            
+            if (charts.trafficSource) {
+                charts.trafficSource.destroy();
+            }
+
+            const labels = Object.keys(sourceStats);
+            const data = Object.values(sourceStats).map(stat => stat.count);
+            const colors = [
+                '#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6',
+                '#1abc9c', '#34495e', '#e67e22', '#95a5a6', '#16a085'
+            ];
+
+            charts.trafficSource = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 시간대별 트래픽 차트
+        function updateHourlyTrafficChart(hourlyStats) {
+            const ctx = document.getElementById('hourlyTrafficChart').getContext('2d');
+            
+            if (charts.hourlyTraffic) {
+                charts.hourlyTraffic.destroy();
+            }
+
+            const labels = Object.keys(hourlyStats).map(hour => `${hour}시`);
+            const data = Object.values(hourlyStats);
+
+            charts.hourlyTraffic = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '방문자 수',
+                        data: data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 일별 트렌드 차트
+        function updateDailyTrendChart() {
+            const ctx = document.getElementById('dailyTrendChart').getContext('2d');
+            
+            if (charts.dailyTrend) {
+                charts.dailyTrend.destroy();
+            }
+
+            // 최근 7일 데이터 생성
+            const labels = [];
+            const data = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }));
+                
+                // 실제 데이터를 가져와야 하지만, 예시로 랜덤 데이터 사용
+                data.push(Math.floor(Math.random() * 50) + 10);
+            }
+
+            charts.dailyTrend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '방문자 수',
+                        data: data,
+                        borderColor: '#2ecc71',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 디바이스별 차트
+        function updateDeviceChart() {
+            const ctx = document.getElementById('deviceChart').getContext('2d');
+            
+            if (charts.device) {
+                charts.device.destroy();
+            }
+
+            // 사용자 에이전트 분석하여 디바이스 분류
+            const deviceData = analyzeDeviceData();
+
+            charts.device = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(deviceData),
+                    datasets: [{
+                        data: Object.values(deviceData),
+                        backgroundColor: ['#3498db', '#e74c3c', '#2ecc71', '#f39c12'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 디바이스 데이터 분석
+        function analyzeDeviceData() {
+            const trafficLogs = JSON.parse(localStorage.getItem('trafficLogs') || '[]');
+            const deviceCounts = { 'Desktop': 0, 'Mobile': 0, 'Tablet': 0, 'Other': 0 };
+
+            trafficLogs.forEach(log => {
+                const userAgent = log.userAgent || '';
+                if (/Mobile|Android|iPhone|iPad/.test(userAgent)) {
+                    if (/iPad|Tablet/.test(userAgent)) {
+                        deviceCounts['Tablet']++;
+                    } else {
+                        deviceCounts['Mobile']++;
+                    }
+                } else {
+                    deviceCounts['Desktop']++;
+                }
+            });
+
+            return deviceCounts;
+        }
+
+        // 상세 테이블 업데이트
+        function updateDetailedTable() {
+            const trafficLogs = JSON.parse(localStorage.getItem('trafficLogs') || '[]');
+            const tableContent = document.getElementById('detailedTrafficTable');
+            
+            if (trafficLogs.length === 0) {
+                tableContent.innerHTML = '<div class="no-data">📊 아직 트래픽 데이터가 없습니다.</div>';
+                return;
+            }
+
+            // 최근 20개 항목만 표시
+            const recentLogs = trafficLogs.slice(-20).reverse();
+            
+            const tableHTML = recentLogs.map(log => {
+                const date = new Date(log.timestamp);
+                const timeStr = date.toLocaleString('ko-KR');
+                const source = log.source.source;
+                const type = log.source.type;
+                
+                return `
+                    <div class="table-row">
+                        <div>
+                            <strong>${source}</strong>
+                            <div style="font-size: 0.8rem; color: #7f8c8d;">${type} • ${timeStr}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.8rem;">${log.viewport}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            tableContent.innerHTML = tableHTML;
+        }
+
+        // 모든 데이터 내보내기
+        function exportAllData() {
+            const stats = window.trafficAnalytics.generateTrafficStats();
+            const trafficLogs = JSON.parse(localStorage.getItem('trafficLogs') || '[]');
+            const clickLogs = JSON.parse(localStorage.getItem('clickLogs') || '[]');
+            const pageViewLogs = JSON.parse(localStorage.getItem('pageViewLogs') || '[]');
+            
+            const exportData = {
+                summary: stats.summary,
+                sourceStats: stats.sourceStats,
+                hourlyStats: stats.hourlyStats,
+                topPages: stats.topPages,
+                topReferrers: stats.topReferrers,
+                rawData: {
+                    traffic: trafficLogs,
+                    clicks: clickLogs,
+                    pageViews: pageViewLogs
+                },
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `traffic-analytics-detailed-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 트래픽 분석 로드 대기
+            setTimeout(function() {
+                loadDashboardData();
+                
+                // 30초마다 자동 새로고침
+                refreshInterval = setInterval(loadDashboardData, 30000);
+            }, 1000);
+        });
+
+        // 페이지를 떠날 때 인터벌 정리
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>
