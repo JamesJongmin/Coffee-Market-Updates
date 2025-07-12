@@ -1340,30 +1340,11 @@
                     throw new Error('No data received');
                 }
 
-                const chartData = data.map((row, index) => {
-                    // 더 안전한 날짜 파싱
-                    let parsedDate;
-                    try {
-                        parsedDate = parseDate(row.date);
-                        // Invalid date 체크
-                        if (isNaN(parsedDate.getTime())) {
-                            // 다른 날짜 형식 시도
-                            parsedDate = new Date(row.date);
-                            if (isNaN(parsedDate.getTime())) {
-                                // 기본값으로 인덱스 기반 날짜 생성
-                                parsedDate = new Date(2024, 0, 1 + index);
-                            }
-                        }
-                    } catch (e) {
-                        parsedDate = new Date(2024, 0, 1 + index);
-                    }
-                    
-                    return {
-                        x: index,
-                        y: parseInt(row.value),
-                        date: parsedDate
-                    };
-                }).filter(point => !isNaN(point.y));
+                const chartData = data.map((row, index) => ({
+                    x: index,
+                    y: parseInt(row.value),
+                    date: parseDate(row.date)
+                })).filter(point => !isNaN(point.y));
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -1395,14 +1376,7 @@
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        const date = chartData[index].date;
-                                        if (date && !isNaN(date.getTime())) {
-                                            return date.toLocaleDateString('ko-KR');
-                                        }
-                                        return `데이터 포인트 ${index + 1}`;
-                                    },
-                                    label: function(context) {
-                                        return `포지션: ${context.parsed.y.toLocaleString()}`;
+                                        return chartData[index].date.toLocaleDateString('ko-KR');
                                     }
                                 }
                             }
@@ -1413,71 +1387,34 @@
                                 position: 'bottom',
                                 title: {
                                     display: true,
-                                    text: '날짜'
+                                    text: 'Date'
                                 },
                                 ticks: {
                                     callback: function(value) {
                                         const index = Math.round(value);
                                         if (chartData[index] && index >= 0 && index < chartData.length) {
                                             const totalPoints = chartData.length;
-                                            // 모바일에서는 더 적은 틱 표시
-                                            const isMobile = window.innerWidth < 768;
-                                            const maxTicks = isMobile ? 6 : 12;
-                                            const step = Math.max(1, Math.floor(totalPoints / maxTicks));
+                                            const step = Math.max(1, Math.floor(totalPoints / 12));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                const date = chartData[index].date;
-                                                if (date && !isNaN(date.getTime())) {
-                                                    if (isMobile) {
-                                                        // 모바일에서는 더 간단한 날짜 포맷
-                                                        return date.toLocaleDateString('ko-KR', { 
-                                                            month: 'numeric',
-                                                            day: 'numeric'
-                                                        });
-                                                    } else {
-                                                        return date.toLocaleDateString('ko-KR', { 
-                                                            year: '2-digit', 
-                                                            month: 'short' 
-                                                        });
-                                                    }
-                                                } else {
-                                                    return `${index + 1}`;
-                                                }
+                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
+                                                    year: '2-digit', 
+                                                    month: 'short' 
+                                                });
                                             }
                                         }
                                         return '';
                                     },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / (window.innerWidth < 768 ? 6 : 12))),
-                                    maxTicksLimit: window.innerWidth < 768 ? 6 : 15,
+                                    stepSize: Math.max(1, Math.floor(chartData.length / 12)),
+                                    maxTicksLimit: 15,
                                     maxRotation: 45,
                                     minRotation: 0
                                 }
                             },
                             y: {
-                                type: 'linear',
-                                reverse: false, // Y축을 정상 방향으로 설정
                                 title: {
                                     display: true,
-                                    text: '순매수 포지션'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toLocaleString();
-                                    }
-                                },
-                                grid: {
-                                    color: function(context) {
-                                        if (context.tick.value === 0) {
-                                            return '#333'; // 0선을 강조
-                                        }
-                                        return 'rgba(0, 0, 0, 0.1)';
-                                    },
-                                    lineWidth: function(context) {
-                                        if (context.tick.value === 0) {
-                                            return 2; // 0선을 두껍게
-                                        }
-                                        return 1;
-                                    }
+                                    text: 'Net Long Positions'
                                 }
                             }
                         }
