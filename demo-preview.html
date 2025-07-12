@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트래픽 분석 기능 미리보기</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .preview-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .preview-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mini-dashboard {
+            position: relative;
+            width: 300px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-title {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 11px;
+        }
+        
+        .source-list {
+            margin-bottom: 15px;
+        }
+        
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .hourly-chart {
+            display: flex;
+            height: 30px;
+            align-items: end;
+            gap: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .hour-bar {
+            flex: 1;
+            background: #007bff;
+            opacity: 0.7;
+            min-height: 2px;
+        }
+        
+        .export-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            width: 100%;
+        }
+        
+        .float-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .float-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .float-btn.secondary {
+            background: #17a2b8;
+        }
+        
+        .detailed-dashboard {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .detailed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .detailed-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .detailed-stat-card {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .detailed-stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-card {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .chart-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .chart-placeholder {
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .feature-list {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .feature-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 8px;
+            color: #2d5a2d;
+        }
+        
+        .code-example {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 트래픽 분석 기능 미리보기</h1>
+        
+        <!-- 1. 실시간 미니 대시보드 -->
+        <div class="preview-section">
+            <div class="preview-title">📊 실시간 미니 대시보드</div>
+            <p>메인 페이지에서 "📊 트래픽 분석" 버튼을 클릭하면 나타나는 팝업입니다.</p>
+            
+            <div class="mini-dashboard">
+                <div class="dashboard-header">
+                    <span class="dashboard-title">📊 실시간 트래픽</span>
+                    <button class="close-btn">✕</button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">방문자 (24h)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">현재 접속자</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">127</div>
+                        <div class="stat-label">페이지뷰</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">클릭수</div>
+                    </div>
+                </div>
+                
+                <div class="source-list">
+                    <h4 style="margin: 0 0 8px 0; color: #333;">🔗 주요 유입 소스</h4>
+                    <div class="source-item">
+                        <span style="color: #666;">Google</span>
+                        <span style="font-weight: bold;">15</span>
+                    </div>
+                    <div class="source-item">
+                        <span style="color: #666;">Direct</span>
+                        <span style="font-weight: bold;">12</span>
+                    </div>
+                    <div class="source-item">
+                        <span style="color: #666;">Facebook</span>
+                        <span style="font-weight: bold;">8</span>
+                    </div>
+                    <div class="source-item">
+                        <span style="color: #666;">Naver</span>
+                        <span style="font-weight: bold;">5</span>
+                    </div>
+                    <div class="source-item">
+                        <span style="color: #666;">Twitter</span>
+                        <span style="font-weight: bold;">2</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="margin: 0 0 8px 0; color: #333;">📈 시간대별 접속</h4>
+                    <div class="hourly-chart">
+                        <div class="hour-bar" style="height: 20%;"></div>
+                        <div class="hour-bar" style="height: 15%;"></div>
+                        <div class="hour-bar" style="height: 10%;"></div>
+                        <div class="hour-bar" style="height: 25%;"></div>
+                        <div class="hour-bar" style="height: 40%;"></div>
+                        <div class="hour-bar" style="height: 60%;"></div>
+                        <div class="hour-bar" style="height: 80%;"></div>
+                        <div class="hour-bar" style="height: 100%;"></div>
+                        <div class="hour-bar" style="height: 90%;"></div>
+                        <div class="hour-bar" style="height: 70%;"></div>
+                        <div class="hour-bar" style="height: 50%;"></div>
+                        <div class="hour-bar" style="height: 30%;"></div>
+                        <div class="hour-bar" style="height: 20%;"></div>
+                        <div class="hour-bar" style="height: 15%;"></div>
+                        <div class="hour-bar" style="height: 10%;"></div>
+                        <div class="hour-bar" style="height: 20%;"></div>
+                        <div class="hour-bar" style="height: 40%;"></div>
+                        <div class="hour-bar" style="height: 60%;"></div>
+                        <div class="hour-bar" style="height: 45%;"></div>
+                        <div class="hour-bar" style="height: 35%;"></div>
+                        <div class="hour-bar" style="height: 25%;"></div>
+                        <div class="hour-bar" style="height: 20%;"></div>
+                        <div class="hour-bar" style="height: 15%;"></div>
+                        <div class="hour-bar" style="height: 10%;"></div>
+                    </div>
+                </div>
+                
+                <button class="export-btn">📊 데이터 내보내기</button>
+            </div>
+        </div>
+        
+        <!-- 2. 플로팅 버튼들 -->
+        <div class="preview-section">
+            <div class="preview-title">🎯 플로팅 버튼들</div>
+            <p>메인 페이지 우측 하단에 고정되어 있는 버튼들입니다.</p>
+            
+            <div style="position: relative; height: 100px; background: #f8f9fa; border-radius: 8px;">
+                <div style="position: absolute; bottom: 10px; right: 10px; display: flex; flex-direction: column; gap: 10px;">
+                    <button class="float-btn">📊 트래픽 분석</button>
+                    <button class="float-btn secondary">📈 상세 분석</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 3. 상세 대시보드 -->
+        <div class="preview-section">
+            <div class="preview-title">📈 상세 트래픽 대시보드</div>
+            <p>"📈 상세 분석" 버튼을 클릭하면 나타나는 전용 대시보드 페이지입니다.</p>
+            
+            <div class="detailed-dashboard">
+                <div class="detailed-header">
+                    <h2 style="margin: 0;">📊 트래픽 분석 대시보드</h2>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span style="background: #27ae60; padding: 4px 8px; border-radius: 12px; font-size: 12px;">🔴 실시간 분석</span>
+                        <button style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">🔄 새로고침</button>
+                    </div>
+                </div>
+                
+                <div class="detailed-stats">
+                    <div class="detailed-stat-card">
+                        <div class="detailed-stat-value" style="color: #28a745;">42</div>
+                        <div>총 방문자 (24시간)</div>
+                    </div>
+                    <div class="detailed-stat-card">
+                        <div class="detailed-stat-value" style="color: #007bff;">3</div>
+                        <div>현재 접속자</div>
+                    </div>
+                    <div class="detailed-stat-card">
+                        <div class="detailed-stat-value" style="color: #ffc107;">127</div>
+                        <div>페이지뷰</div>
+                    </div>
+                    <div class="detailed-stat-card">
+                        <div class="detailed-stat-value" style="color: #dc3545;">89</div>
+                        <div>클릭 수</div>
+                    </div>
+                    <div class="detailed-stat-card">
+                        <div class="detailed-stat-value" style="color: #17a2b8;">4분</div>
+                        <div>평균 세션 시간</div>
+                    </div>
+                    <div class="detailed-stat-card">
+                        <div class="detailed-stat-value" style="color: #6c757d;">28%</div>
+                        <div>이탈률</div>
+                    </div>
+                </div>
+                
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <div class="chart-title">🔗 유입 소스 분석</div>
+                        <div class="chart-placeholder">도넛 차트<br>Google, Direct, Facebook, Naver...</div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">⏰ 시간대별 방문자</div>
+                        <div class="chart-placeholder">바 차트<br>24시간 방문 패턴</div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">📈 일별 트렌드</div>
+                        <div class="chart-placeholder">라인 차트<br>최근 7일 트렌드</div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">📱 디바이스별 분석</div>
+                        <div class="chart-placeholder">파이 차트<br>Desktop, Mobile, Tablet</div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">📋 상세 유입 데이터</div>
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        <div style="padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <div><strong>Google</strong><br><small>검색 • 2024-01-15 14:30</small></div>
+                            <div><small>1920x1080</small></div>
+                        </div>
+                        <div style="padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <div><strong>Facebook</strong><br><small>소셜 • 2024-01-15 14:25</small></div>
+                            <div><small>375x667</small></div>
+                        </div>
+                        <div style="padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <div><strong>Direct</strong><br><small>직접 • 2024-01-15 14:20</small></div>
+                            <div><small>1366x768</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. 주요 기능 설명 -->
+        <div class="preview-section">
+            <div class="preview-title">⚡ 주요 기능들</div>
+            
+            <div class="feature-list">
+                <h4>🔍 자동 추적되는 데이터:</h4>
+                <ul>
+                    <li><strong>유입 소스</strong>: Google, Naver, Facebook, Twitter 등 자동 감지</li>
+                    <li><strong>UTM 파라미터</strong>: 캠페인 추적 (?utm_source=google&utm_medium=cpc)</li>
+                    <li><strong>클릭 이벤트</strong>: 사용자가 클릭하는 모든 요소 추적</li>
+                    <li><strong>디바이스 정보</strong>: 모바일/데스크톱/태블릿 자동 분류</li>
+                    <li><strong>실시간 접속자</strong>: 5분 이내 활성 사용자 실시간 카운트</li>
+                </ul>
+            </div>
+            
+            <div class="feature-list">
+                <h4>📊 분석 가능한 데이터:</h4>
+                <ul>
+                    <li><strong>어디서 클릭해서 들어왔는지</strong>: 검색엔진, 소셜미디어, 직접방문 구분</li>
+                    <li><strong>시간대별 방문 패턴</strong>: 언제 가장 많이 방문하는지 분석</li>
+                    <li><strong>사용자 행동 분석</strong>: 클릭 위치, 체류 시간, 페이지 이동 패턴</li>
+                    <li><strong>디바이스별 접속 비율</strong>: 모바일 vs 데스크톱 사용 패턴</li>
+                    <li><strong>실시간 활성 사용자</strong>: 현재 사이트를 보고 있는 사용자 수</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 5. 테스트 방법 -->
+        <div class="preview-section">
+            <div class="preview-title">🧪 테스트 방법</div>
+            
+            <div class="highlight">
+                <strong>💡 팁:</strong> 실제 환경에서는 아래와 같은 URL로 접속하면 다양한 유입 소스를 시뮬레이션할 수 있습니다!
+            </div>
+            
+            <div class="code-example">
+# Google 검색에서 온 것처럼 시뮬레이션
+http://yoursite.com?utm_source=google&utm_medium=organic
+
+# Facebook에서 온 것처럼 시뮬레이션  
+http://yoursite.com?utm_source=facebook&utm_medium=social
+
+# 캠페인 추적 테스트
+http://yoursite.com?utm_source=newsletter&utm_medium=email&utm_campaign=weekly
+            </div>
+            
+            <div class="feature-list">
+                <h4>🔧 개발자 도구에서 테스트:</h4>
+                <ul>
+                    <li><code>window.trafficAnalytics.generateTrafficStats()</code> - 현재 통계 확인</li>
+                    <li><code>toggleTrafficDashboard()</code> - 실시간 대시보드 열기</li>
+                    <li><code>localStorage.getItem('trafficLogs')</code> - 저장된 데이터 확인</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
