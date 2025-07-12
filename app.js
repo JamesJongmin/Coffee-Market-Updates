@@ -439,27 +439,43 @@ class CoffeeMarketDashboard {
         if (!loadingElement || !chartElement) return;
         
         try {
-            const response = await fetch('cftcpositions.xlsx');
-            const arrayBuffer = await response.arrayBuffer();
-            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            const data = XLSX.utils.sheet_to_json(worksheet);
+            // 구글 스프레드시트에서 데이터 가져오기
+            const response = await fetch(this.GOOGLE_SHEETS_URLS.cftc);
+            const csvText = await response.text();
+            const data = this.parseCSV(csvText);
             
-            // Improved data processing with better date handling
-            const chartData = data.map(row => {
-                const date = this.parseDate(row.Date);
-                const value = parseFloat(row.NetPosition);
+            // 헤더 제거
+            const dataRows = data.slice(1);
+            
+            // 최근 2년 날짜 계산
+            const twoYearsAgo = new Date();
+            twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+            
+            // 데이터 처리 및 최근 2년 필터링
+            const processedData = dataRows.map(row => {
+                const date = this.parseDate(row[0]); // 첫 번째 컬럼은 날짜
+                const value = parseFloat(row[1]); // 두 번째 컬럼은 값
                 
                 return {
-                    x: date,
-                    y: value
+                    date: date,
+                    value: value,
+                    isValid: !isNaN(value) && date && !isNaN(date.getTime())
                 };
-            }).filter(item => item.x !== null && !isNaN(item.y))
-              .sort((a, b) => a.x - b.x); // Sort by date
+            }).filter(point => point.isValid && point.date >= twoYearsAgo);
             
-            if (chartData.length === 0) {
-                throw new Error('No valid data found');
+            if (processedData.length === 0) {
+                throw new Error('No valid data found for the last 2 years');
             }
+            
+            // 날짜순 정렬 후 역순 배치 (최신 데이터가 오른쪽에)
+            processedData.sort((a, b) => a.date - b.date);
+            const chartData = processedData.reverse().map((point, index) => ({
+                x: index,
+                y: point.value,
+                date: point.date
+            }));
+            
+            console.log(`CFTC: Loaded ${chartData.length} data points for the last 2 years`);
             
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -469,7 +485,7 @@ class CoffeeMarketDashboard {
                 type: 'bar',
                 data: {
                     datasets: [{
-                        label: 'CFTC Net Positions',
+                        label: 'CFTC Net Long Positions',
                         data: chartData,
                         backgroundColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 0.6)' : 'rgba(231, 76, 60, 0.6)'),
                         borderColor: chartData.map(item => item.y >= 0 ? 'rgba(39, 174, 96, 1)' : 'rgba(231, 76, 60, 1)'),
@@ -485,21 +501,44 @@ class CoffeeMarketDashboard {
                     },
                     scales: {
                         x: {
-                            type: 'time',
-                            time: {
-                                unit: 'week',
-                                tooltipFormat: 'yyyy-MM-dd'
-                            },
+                            type: 'linear',
+                            position: 'bottom',
                             title: {
                                 display: true,
-                                text: 'Date'
+                                text: '날짜 (최근 2년, 최신 → 과거)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    const index = Math.round(value);
+                                    if (chartData[index] && index >= 0 && index < chartData.length && chartData[index].date) {
+                                        const totalPoints = chartData.length;
+                                        const step = Math.max(1, Math.floor(totalPoints / 10));
+                                        
+                                        if (index === 0 || index === totalPoints - 1 || index % step === 0) {
+                                            return chartData[index].date.toLocaleDateString('ko-KR', { 
+                                                year: '2-digit', 
+                                                month: 'short' 
+                                            });
+                                        }
+                                    }
+                                    return '';
+                                },
+                                stepSize: Math.max(1, Math.floor(chartData.length / 10)),
+                                maxTicksLimit: 12,
+                                maxRotation: 45,
+                                minRotation: 0
                             }
                         },
                         y: {
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Net Long Positions'
+                                text: '순매수 포지션 (계약 수)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
                             }
                         }
                     },
@@ -510,9 +549,9 @@ class CoffeeMarketDashboard {
                         tooltip: {
                             callbacks: {
                                 title: function(context) {
-                                    if (context[0] && context[0].parsed.x) {
-                                        const date = new Date(context[0].parsed.x);
-                                        return date.toLocaleDateString('ko-KR', {
+                                    const index = context[0].dataIndex;
+                                    if (chartData[index] && chartData[index].date) {
+                                        return chartData[index].date.toLocaleDateString('ko-KR', {
                                             year: 'numeric',
                                             month: 'short',
                                             day: 'numeric'
@@ -521,7 +560,9 @@ class CoffeeMarketDashboard {
                                     return 'Invalid Date';
                                 },
                                 label: function(context) {
-                                    return `Net Position: ${context.parsed.y.toLocaleString()}`;
+                                    const value = context.parsed.y;
+                                    const sign = value >= 0 ? '매수' : '매도';
+                                    return `${sign} 포지션: ${Math.abs(value).toLocaleString()}`;
                                 }
                             }
                         }
