@@ -1341,16 +1341,28 @@
                     throw new Error('No data received');
                 }
 
-                const chartData = data.map((row, index) => ({
-                    x: index,
+                // 날짜 기반으로 정렬 확인 및 데이터 생성
+                const chartData = data.map((row) => ({
                     y: parseInt(row.value),
                     date: parseDate(row.date)
                 })).filter(point => !isNaN(point.y));
+
+                // 날짜 기준으로 명시적 정렬 (오래된 날짜 -> 최신 날짜)
+                chartData.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+                // 정렬된 데이터에 인덱스 추가
+                chartData.forEach((item, index) => {
+                    item.x = index;
+                });
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
 
                 const ctx = chartElement.getContext('2d');
+                
+                // 모바일 여부 확인
+                const isMobile = window.innerWidth <= 768;
+                
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -1377,7 +1389,14 @@
                                 callbacks: {
                                     title: function(tooltipItems) {
                                         const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
+                                        return chartData[index].date.toLocaleDateString('ko-KR', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        });
+                                    },
+                                    label: function(context) {
+                                        return 'Net Long: ' + context.parsed.y.toLocaleString();
                                     }
                                 }
                             }
@@ -1388,39 +1407,72 @@
                                 position: 'bottom',
                                 title: {
                                     display: true,
-                                    text: 'Date'
+                                    text: 'Date',
+                                    font: {
+                                        size: isMobile ? 10 : 12
+                                    }
                                 },
                                 ticks: {
                                     callback: function(value) {
                                         const index = Math.round(value);
                                         if (chartData[index] && index >= 0 && index < chartData.length) {
                                             const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 12));
+                                            // 모바일에서는 더 적은 레이블 표시
+                                            const step = Math.max(1, Math.floor(totalPoints / (isMobile ? 6 : 12)));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
+                                                const date = chartData[index].date;
+                                                // 모바일에서는 더 짧은 형식 사용
+                                                if (isMobile) {
+                                                    return (date.getMonth() + 1) + '/' + date.getDate();
+                                                } else {
+                                                    return date.toLocaleDateString('ko-KR', { 
+                                                        year: '2-digit', 
+                                                        month: 'short' 
+                                                    });
+                                                }
                                             }
                                         }
                                         return '';
                                     },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / 12)),
-                                    maxTicksLimit: 15,
-                                    maxRotation: 45,
-                                    minRotation: 0
+                                    stepSize: Math.max(1, Math.floor(chartData.length / (isMobile ? 6 : 12))),
+                                    maxTicksLimit: isMobile ? 8 : 15,
+                                    maxRotation: isMobile ? 90 : 45,
+                                    minRotation: isMobile ? 45 : 0,
+                                    font: {
+                                        size: isMobile ? 9 : 11
+                                    },
+                                    autoSkip: false
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'Net Long Positions'
+                                    text: 'Net Long Positions',
+                                    font: {
+                                        size: isMobile ? 10 : 12
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: isMobile ? 9 : 11
+                                    }
                                 }
                             }
                         }
                     }
                 });
+                
+                // 모바일에서 화면 회전 시 차트 업데이트
+                window.addEventListener('resize', () => {
+                    if (charts.cftc) {
+                        const newIsMobile = window.innerWidth <= 768;
+                        if (newIsMobile !== isMobile) {
+                            createCFTCChart(); // 차트 재생성
+                        }
+                    }
+                });
+                
             } catch (error) {
                 console.error('CFTC chart error:', error);
                 loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
