@@ -1056,13 +1056,17 @@
         
         try {
             const data = await readGoogleSheetData('coffeefutures');
-            
-            if (!data) throw new Error('No data received');
+            if (!data) {
+                throw new Error('No data received');
+            }
 
             const chartData = data.map(row => ({
                 x: parseDate(row.date),
                 y: parseFloat(row.value)
             })).filter(point => !isNaN(point.y) && point.x);
+
+            // 데이터가 시간순으로 정렬되었는지 확인 (readGoogleSheetData에서 이미 수행)
+            // chartData.sort((a, b) => a.x - b.x);
 
             loadingElement.style.display = 'none';
             chartElement.style.display = 'block';
@@ -1090,7 +1094,15 @@
                         mode: 'index'
                     },
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const date = tooltipItems[0].parsed.x;
+                                    return new Date(date).toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
                     },
                     scales: {
                         x: {
@@ -1122,8 +1134,9 @@
         
         try {
             const data = await readGoogleSheetData('usdbrl');
-            
-            if (!data) throw new Error('No data received');
+            if (!data) {
+                throw new Error('No data received');
+            }
 
             const chartData = data.map(row => ({
                 x: parseDate(row.date),
@@ -1156,7 +1169,15 @@
                         mode: 'index'
                     },
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
+                         tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const date = tooltipItems[0].parsed.x;
+                                    return new Date(date).toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
                     },
                     scales: {
                         x: {
@@ -1188,8 +1209,9 @@
         
         try {
             const data = await readGoogleSheetData('cftcpositions');
-            
-            if (!data) throw new Error('No data received');
+            if (!data) {
+                throw new Error('No data received');
+            }
 
             const chartData = data.map(row => ({
                 x: parseDate(row.date),
@@ -1219,7 +1241,15 @@
                         mode: 'index'
                     },
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
+                         tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const date = tooltipItems[0].parsed.x;
+                                    return new Date(date).toLocaleDateString('ko-KR');
+                                }
+                            }
+                        }
                     },
                     scales: {
                         x: {
@@ -1252,7 +1282,9 @@
         try {
             const nvdiData = await readNVDIGoogleSheet();
             
-            if (!nvdiData || nvdiData.length === 0) throw new Error('NVDI 데이터를 읽을 수 없습니다');
+            if (!nvdiData || nvdiData.length === 0) {
+                throw new Error('NVDI 데이터를 읽을 수 없습니다');
+            }
 
             const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
             const datasets = [];
@@ -1461,7 +1493,7 @@
         
         if (totalElement) totalElement.textContent = allReports.length;
         if (latestElement && allReports.length > 0) {
-            latestElement.textContent = allReports[0].displayDate.substring(0, 7).replace(' ', '');
+            latestElement.textContent = allReports[0].displayDate.substring(0, 8).replace(' ', '');
         }
     }
 
@@ -1503,7 +1535,6 @@
             
         } catch (error) {
             console.error('초기화 중 치명적 오류:', error);
-            // 여기에 사용자에게 오류 메시지를 보여주는 로직을 추가할 수 있습니다.
         }
     }
 
