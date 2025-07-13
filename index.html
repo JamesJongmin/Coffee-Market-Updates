@@ -1344,7 +1344,8 @@
                 // 날짜 기반으로 정렬 확인 및 데이터 생성
                 const chartData = data.map((row) => ({
                     y: parseInt(row.value),
-                    date: parseDate(row.date)
+                    date: parseDate(row.date),
+                    dateString: row.date // 원본 날짜 문자열 보존
                 })).filter(point => !isNaN(point.y));
 
                 // 날짜 기준으로 명시적 정렬 (오래된 날짜 -> 최신 날짜)
@@ -1355,6 +1356,8 @@
                     item.x = index;
                 });
 
+                console.log('CFTC Data sorted:', chartData.map(d => ({date: d.dateString, value: d.y})));
+
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
 
@@ -1363,12 +1366,16 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
+                // 날짜 레이블 생성
+                const labels = chartData.map(d => d.date);
+                
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
                     data: {
+                        labels: labels, // x축 레이블로 날짜 사용
                         datasets: [{
                             label: 'Net Long Positions',
-                            data: chartData,
+                            data: chartData.map(d => d.y), // y값만 전달
                             backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
                             borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
                             borderWidth: 1
@@ -1403,8 +1410,7 @@
                         },
                         scales: {
                             x: {
-                                type: 'linear',
-                                position: 'bottom',
+                                type: 'category', // category 타입으로 변경
                                 title: {
                                     display: true,
                                     text: 'Date',
@@ -1413,36 +1419,35 @@
                                     }
                                 },
                                 ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
-                                            const totalPoints = chartData.length;
-                                            // 모바일에서는 더 적은 레이블 표시
-                                            const step = Math.max(1, Math.floor(totalPoints / (isMobile ? 6 : 12)));
-                                            
-                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                const date = chartData[index].date;
-                                                // 모바일에서는 더 짧은 형식 사용
-                                                if (isMobile) {
-                                                    return (date.getMonth() + 1) + '/' + date.getDate();
-                                                } else {
-                                                    return date.toLocaleDateString('ko-KR', { 
-                                                        year: '2-digit', 
-                                                        month: 'short' 
-                                                    });
-                                                }
+                                    callback: function(value, index) {
+                                        const totalPoints = chartData.length;
+                                        const step = Math.max(1, Math.floor(totalPoints / (isMobile ? 5 : 10)));
+                                        
+                                        // 첫번째, 마지막, 또는 step에 해당하는 인덱스만 표시
+                                        if (index === 0 || index === totalPoints - 1 || index % step === 0) {
+                                            const date = chartData[index].date;
+                                            if (isMobile) {
+                                                // 모바일: MM/DD 형식
+                                                const month = date.getMonth() + 1;
+                                                const day = date.getDate();
+                                                return `${month}/${day}`;
+                                            } else {
+                                                // PC: 기존 형식
+                                                return date.toLocaleDateString('ko-KR', { 
+                                                    year: '2-digit', 
+                                                    month: 'short' 
+                                                });
                                             }
                                         }
                                         return '';
                                     },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / (isMobile ? 6 : 12))),
-                                    maxTicksLimit: isMobile ? 8 : 15,
                                     maxRotation: isMobile ? 90 : 45,
                                     minRotation: isMobile ? 45 : 0,
                                     font: {
-                                        size: isMobile ? 9 : 11
+                                        size: isMobile ? 8 : 11
                                     },
-                                    autoSkip: false
+                                    autoSkip: false,
+                                    maxTicksLimit: isMobile ? 7 : 15
                                 }
                             },
                             y: {
@@ -1464,13 +1469,17 @@
                 });
                 
                 // 모바일에서 화면 회전 시 차트 업데이트
+                let resizeTimer;
                 window.addEventListener('resize', () => {
-                    if (charts.cftc) {
-                        const newIsMobile = window.innerWidth <= 768;
-                        if (newIsMobile !== isMobile) {
-                            createCFTCChart(); // 차트 재생성
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => {
+                        if (charts.cftc) {
+                            const newIsMobile = window.innerWidth <= 768;
+                            if (newIsMobile !== isMobile) {
+                                createCFTCChart(); // 차트 재생성
+                            }
                         }
-                    }
+                    }, 250);
                 });
                 
             } catch (error) {
