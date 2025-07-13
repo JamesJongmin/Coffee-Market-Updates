@@ -1351,11 +1351,6 @@
                 // 날짜 기준으로 명시적 정렬 (오래된 날짜 -> 최신 날짜)
                 chartData.sort((a, b) => a.date.getTime() - b.date.getTime());
 
-                // 정렬된 데이터에 인덱스 추가
-                chartData.forEach((item, index) => {
-                    item.x = index;
-                });
-
                 console.log('CFTC Data sorted:', chartData.map(d => ({date: d.dateString, value: d.y})));
 
                 loadingElement.style.display = 'none';
@@ -1366,13 +1361,36 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
-                // 날짜 레이블 생성
-                const labels = chartData.map(d => d.date);
+                // 날짜 레이블 생성 (문자열로)
+                const labels = chartData.map(d => {
+                    const date = d.date;
+                    if (isMobile) {
+                        // 모바일: 간단한 MM/DD 형식
+                        return `${date.getMonth() + 1}/${date.getDate()}`;
+                    } else {
+                        // PC: 기존 형식
+                        return date.toLocaleDateString('ko-KR', { 
+                            year: '2-digit', 
+                            month: 'short' 
+                        });
+                    }
+                });
+                
+                // 모바일에서 표시할 레이블 인덱스 계산
+                const displayIndices = new Set();
+                const totalPoints = chartData.length;
+                const step = Math.max(1, Math.floor(totalPoints / (isMobile ? 5 : 10)));
+                
+                for (let i = 0; i < totalPoints; i++) {
+                    if (i === 0 || i === totalPoints - 1 || i % step === 0) {
+                        displayIndices.add(i);
+                    }
+                }
                 
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: labels, // x축 레이블로 날짜 사용
+                        labels: labels, // 문자열 레이블 사용
                         datasets: [{
                             label: 'Net Long Positions',
                             data: chartData.map(d => d.y), // y값만 전달
@@ -1410,7 +1428,6 @@
                         },
                         scales: {
                             x: {
-                                type: 'category', // category 타입으로 변경
                                 title: {
                                     display: true,
                                     text: 'Date',
@@ -1419,35 +1436,19 @@
                                     }
                                 },
                                 ticks: {
+                                    // 모든 레이블을 받되, 표시 여부만 결정
                                     callback: function(value, index) {
-                                        const totalPoints = chartData.length;
-                                        const step = Math.max(1, Math.floor(totalPoints / (isMobile ? 5 : 10)));
-                                        
-                                        // 첫번째, 마지막, 또는 step에 해당하는 인덱스만 표시
-                                        if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                            const date = chartData[index].date;
-                                            if (isMobile) {
-                                                // 모바일: MM/DD 형식
-                                                const month = date.getMonth() + 1;
-                                                const day = date.getDate();
-                                                return `${month}/${day}`;
-                                            } else {
-                                                // PC: 기존 형식
-                                                return date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
-                                            }
+                                        if (displayIndices.has(index)) {
+                                            return this.getLabelForValue(value);
                                         }
                                         return '';
                                     },
-                                    maxRotation: isMobile ? 90 : 45,
+                                    maxRotation: isMobile ? 70 : 45,
                                     minRotation: isMobile ? 45 : 0,
                                     font: {
                                         size: isMobile ? 8 : 11
                                     },
-                                    autoSkip: false,
-                                    maxTicksLimit: isMobile ? 7 : 15
+                                    autoSkip: false
                                 }
                             },
                             y: {
@@ -1468,19 +1469,33 @@
                     }
                 });
                 
+                // 차트 생성 후 강제 업데이트 (모바일 대응)
+                if (isMobile) {
+                    setTimeout(() => {
+                        if (charts.cftc) {
+                            charts.cftc.update();
+                        }
+                    }, 100);
+                }
+                
                 // 모바일에서 화면 회전 시 차트 업데이트
                 let resizeTimer;
-                window.addEventListener('resize', () => {
+                const handleResize = () => {
                     clearTimeout(resizeTimer);
                     resizeTimer = setTimeout(() => {
                         if (charts.cftc) {
                             const newIsMobile = window.innerWidth <= 768;
                             if (newIsMobile !== isMobile) {
-                                createCFTCChart(); // 차트 재생성
+                                // 기존 차트 제거 후 재생성
+                                charts.cftc.destroy();
+                                createCFTCChart();
                             }
                         }
                     }, 250);
-                });
+                };
+                
+                window.removeEventListener('resize', handleResize); // 중복 방지
+                window.addEventListener('resize', handleResize);
                 
             } catch (error) {
                 console.error('CFTC chart error:', error);
