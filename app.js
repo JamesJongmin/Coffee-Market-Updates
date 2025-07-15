@@ -53,7 +53,7 @@ class CoffeeMarketDashboard {
         const chartMethods = {
             'coffee': () => this.createCoffeeChart(),
             'usd': () => this.createUSDChart(),
-            'cftc': () => this.createCFTCChart(),
+
             'nvdi': () => this.createNVDIChart()
         };
 
@@ -61,14 +61,7 @@ class CoffeeMarketDashboard {
             try {
                 await chartMethods[chartId]();
                 
-                // Force refresh for mobile CFTC chart
-                if (chartId === 'cftc' && window.innerWidth <= 768) {
-                    setTimeout(() => {
-                        if (this.charts.cftc) {
-                            this.charts.cftc.update('none');
-                        }
-                    }, 100);
-                }
+
             } catch (error) {
                 console.error(`Error loading ${chartId} chart:`, error);
             }
@@ -80,7 +73,7 @@ class CoffeeMarketDashboard {
         return {
             coffee: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
             usd: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
-            cftc: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
+
             nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
         };
     }
@@ -520,144 +513,7 @@ class CoffeeMarketDashboard {
         return (date && !isNaN(date.getTime())) ? date : null;
     }
 
-    async createCFTCChart() {
-        const loadingElement = document.getElementById('loading-cftc');
-        const chartElement = document.getElementById('cftcChart');
-        
-        if (!loadingElement || !chartElement) return;
-        
-        try {
-            const data = await Promise.race([
-                this.readGoogleSheetData('cftc'),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-            ]);
-            
-            if (!data) {
-                throw new Error('No data received');
-            }
 
-            const chartData = data.map((row, index) => ({
-                x: index,
-                y: parseInt(row.value),
-                date: this.parseDate(row.date)
-            })).filter(point => !isNaN(point.y));
-
-            loadingElement.style.display = 'none';
-            chartElement.style.display = 'block';
-
-            const ctx = chartElement.getContext('2d');
-            
-            // Check if chart already exists and destroy it
-            if (this.charts.cftc) {
-                this.charts.cftc.destroy();
-            }
-            
-            this.charts.cftc = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    datasets: [{
-                        label: 'Net Long Positions',
-                        data: chartData,
-                        backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
-                        borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const index = tooltipItems[0].dataIndex;
-                                    const dataPoint = chartData[index];
-                                    if (dataPoint && dataPoint.date) {
-                                        try {
-                                            // Mobile compatible safe date formatting
-                                            const date = dataPoint.date;
-                                            if (!isNaN(date.getTime())) {
-                                                const year = date.getFullYear();
-                                                const month = String(date.getMonth() + 1).padStart(2, '0');
-                                                const day = String(date.getDate()).padStart(2, '0');
-                                                return `${year}년 ${month}월 ${day}일`;
-                                            }
-                                        } catch (e) {
-                                            console.error('Date formatting error:', e);
-                                        }
-                                    }
-                                    return 'N/A';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    const index = Math.round(value);
-                                    if (chartData[index] && index >= 0 && index < chartData.length) {
-                                        const totalPoints = chartData.length;
-                                        const step = Math.max(1, Math.floor(totalPoints / 12));
-                                        
-                                        if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                            const date = chartData[index].date;
-                                            if (date && !isNaN(date.getTime())) {
-                                                try {
-                                                    const year = String(date.getFullYear()).slice(-2);
-                                                    const month = date.getMonth() + 1;
-                                                    const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', 
-                                                                      '7월', '8월', '9월', '10월', '11월', '12월'];
-                                                    return `${year}년 ${monthNames[month - 1]}`;
-                                                } catch (e) {
-                                                    console.error('X-axis date formatting error:', e);
-                                                    return '';
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return '';
-                                },
-                                stepSize: Math.max(1, Math.floor(chartData.length / 12)),
-                                maxTicksLimit: 15,
-                                maxRotation: 45,
-                                minRotation: 0
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Net Long Positions'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    // Add thousand separators
-                                    return value.toLocaleString('ko-KR');
-                                }
-                            },
-                            reverse: false  // If y-axis is displayed in reverse, change this value to true
-                        }
-                    }
-                }
-            });
-        } catch (error) {
-            console.error('CFTC chart error:', error);
-            loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
-        }
-    }
 
     async createNVDIChart() {
         const loadingElement = document.getElementById('loading-nvdi');

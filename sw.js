@@ -12,7 +12,6 @@ const CACHE_URLS = [
     '/coffee-abstract-dark-optimized.webp',
     '/coffeefutures.xlsx',
     '/usdbrl.xlsx',
-    '/cftcpositions.xlsx',
     '/nvdi.xls'
 ];
 
@@ -123,7 +122,7 @@ async function updateCache() {
     const excelFiles = [
         '/coffeefutures.xlsx',
         '/usdbrl.xlsx',
-        '/cftcpositions.xlsx',
+
         '/nvdi.xls'
     ];
     
