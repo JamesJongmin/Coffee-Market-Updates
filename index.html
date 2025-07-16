@@ -636,7 +636,7 @@
                 <div class="chart-container">
                     <div class="chart-header">
                         <div class="chart-title">미국달러-브라질헤알 환율</div>
-                        <div class="chart-source">출처: Investing.com</div>
+                        <div class="chart-source">출처: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="loading-spinner" id="loading-usd">
@@ -660,7 +660,7 @@
                 <div class="chart-container">
                     <div class="chart-header">
                         <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
-                        <div class="chart-source">출처: CFTC</div>
+                        <div class="chart-source">출처: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="loading-spinner" id="loading-cftc">
@@ -676,7 +676,6 @@
                             양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
                             극단적 포지션은 종종 시장 전환점의 신호가 되며, 
                             현재 포지션 수준은 투기 자금의 방향성과 시장 과열/과매도 상태를 판단하는 중요한 지표입니다.
-                            PC 환경에서 값이 올바르게 표기 됩니다. (모바일 화면에서 데이터 오류 발생 중) 
                         </div>
                     </div>
                 </div>
@@ -1328,7 +1327,7 @@
             }
         }
 
-        // CFTC 포지션 차트
+        // CFTC 포지션 차트 (모바일 날짜 표시 개선)
         async function createCFTCChart() {
             const loadingElement = document.getElementById('loading-cftc');
             const chartElement = document.getElementById('cftcChart');
@@ -1363,42 +1362,40 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
-                // 날짜 레이블 생성 (문자열로)
-                const labels = chartData.map(d => {
-                    const date = d.date;
+                // 날짜 레이블 생성 함수
+                const formatDateLabel = (date) => {
                     if (isMobile) {
-                        // 모바일: 간단한 MM/DD 형식
+                        // 모바일: 간단한 M/D 형식
                         return `${date.getMonth() + 1}/${date.getDate()}`;
                     } else {
                         // PC: 기존 형식
                         return date.toLocaleDateString('ko-KR', { 
                             year: '2-digit', 
-                            month: 'short' 
+                            month: 'short',
+                            day: 'numeric'
                         });
                     }
-                });
+                };
                 
-                // 모바일에서 표시할 레이블 인덱스 계산
-                const displayIndices = new Set();
-                const totalPoints = chartData.length;
-                const step = Math.max(1, Math.floor(totalPoints / (isMobile ? 5 : 10)));
+                // 날짜 레이블 생성
+                const labels = chartData.map(d => formatDateLabel(d.date));
                 
-                for (let i = 0; i < totalPoints; i++) {
-                    if (i === 0 || i === totalPoints - 1 || i % step === 0) {
-                        displayIndices.add(i);
-                    }
-                }
+                // 모바일에서 표시할 레이블 수 계산
+                const maxLabels = isMobile ? 6 : 12;
+                const step = Math.max(1, Math.floor(chartData.length / maxLabels));
                 
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: labels, // 문자열 레이블 사용
+                        labels: labels,
                         datasets: [{
                             label: 'Net Long Positions',
-                            data: chartData.map(d => d.y), // y값만 전달
+                            data: chartData.map(d => d.y),
                             backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
                             borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                            borderWidth: 1
+                            borderWidth: 1,
+                            barPercentage: isMobile ? 0.9 : 0.8,
+                            categoryPercentage: isMobile ? 0.9 : 0.8
                         }]
                     },
                     options: {
@@ -1438,32 +1435,11 @@
                                     }
                                 },
                                 ticks: {
-                                    // 모든 레이블을 받되, 표시 여부만 결정
-                                    callback: function(value, index) {
-                                        if (displayIndices.has(index)) {
-                                            return this.getLabelForValue(value);
-                                        }
-                                        return '';
-                                    },
-                                    maxRotation: isMobile ? 70 : 45,
-                                    minRotation: isMobile ? 45 : 0,
-                                    font: {
-                                        size: isMobile ? 8 : 11
-                                    },
-                                    autoSkip: false
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Net Long Positions',
-                                    font: {
-                                        size: isMobile ? 10 : 12
-                                    }
-                                },
-                                ticks: {
                                     font: {
                                         size: isMobile ? 9 : 11
+                                    },
+                                    callback: function(value) {
+                                        return value.toLocaleString();
                                     }
                                 }
                             }
@@ -1480,7 +1456,7 @@
                     }, 100);
                 }
                 
-                // 모바일에서 화면 회전 시 차트 업데이트
+                // 화면 회전 또는 리사이즈 시 차트 재생성
                 let resizeTimer;
                 const handleResize = () => {
                     clearTimeout(resizeTimer);
@@ -1488,7 +1464,7 @@
                         if (charts.cftc) {
                             const newIsMobile = window.innerWidth <= 768;
                             if (newIsMobile !== isMobile) {
-                                // 기존 차트 제거 후 재생성
+                                // 차트 재생성
                                 charts.cftc.destroy();
                                 createCFTCChart();
                             }
@@ -1496,7 +1472,7 @@
                     }, 250);
                 };
                 
-                window.removeEventListener('resize', handleResize); // 중복 방지
+                window.removeEventListener('resize', handleResize);
                 window.addEventListener('resize', handleResize);
                 
             } catch (error) {
@@ -1997,4 +1973,31 @@
         document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
-</html>
+</html>: isMobile ? 10 : 12
+                                    }
+                                },
+                                ticks: {
+                                    callback: function(value, index) {
+                                        // 첫번째, 마지막, 그리고 일정 간격으로만 표시
+                                        if (index === 0 || 
+                                            index === chartData.length - 1 || 
+                                            index % step === 0) {
+                                            return this.getLabelForValue(value);
+                                        }
+                                        return '';
+                                    },
+                                    maxRotation: isMobile ? 45 : 45,
+                                    minRotation: isMobile ? 45 : 0,
+                                    font: {
+                                        size: isMobile ? 9 : 11
+                                    },
+                                    autoSkip: false,
+                                    padding: isMobile ? 5 : 10
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Net Long Positions',
+                                    font: {
+                                        size
