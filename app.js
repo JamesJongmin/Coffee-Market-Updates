@@ -32,21 +32,14 @@ class CoffeeMarketDashboard {
         }
     }
 
+    // Removed IntersectionObserver for simpler implementation
     initializeIntersectionObserver() {
-        this.intersectionObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const chartId = entry.target.dataset.chartId;
-                        if (chartId && !this.loadedCharts.has(chartId)) {
-                            this.loadChart(chartId);
-                            this.loadedCharts.add(chartId);
-                        }
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
+        // Load all charts immediately instead of lazy loading
+        setTimeout(() => {
+            this.loadChart('coffee');
+            this.loadChart('usd');
+            this.loadChart('nvdi');
+        }, 100);
     }
 
     async loadChart(chartId) {
@@ -74,32 +67,10 @@ class CoffeeMarketDashboard {
         };
     }
 
-    // Optimized CSV parser
+    // Simplified CSV parser - removed complex quote handling
     parseCSV(csvText) {
         const lines = csvText.trim().split('\n');
-        return lines.map(line => {
-            const result = [];
-            let current = '';
-            let inQuotes = false;
-            
-            for (let i = 0; i < line.length; i++) {
-                const char = line[i];
-                
-                if (char === '"' && (i === 0 || line[i-1] === ',')) {
-                    inQuotes = true;
-                } else if (char === '"' && inQuotes) {
-                    inQuotes = false;
-                } else if (char === ',' && !inQuotes) {
-                    result.push(current.trim());
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            
-            result.push(current.trim());
-            return result;
-        });
+        return lines.map(line => line.split(',').map(cell => cell.trim()));
     }
 
     // Google Sheets data reader function (2 columns: Date, Value)
@@ -216,26 +187,14 @@ class CoffeeMarketDashboard {
     createReportCard(report, isLatest) {
         const card = document.createElement('div');
         card.className = 'report-card';
-        card.setAttribute('role', 'button');
-        card.setAttribute('tabindex', '0');
         
+        // Simplified HTML structure
         card.innerHTML = `
             <div class="report-date">${report.displayDate}</div>
-            <h3 class="report-title">
-                <span>${report.title}</span>
-                ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
-            </h3>
+            <h3 class="report-title">${report.title}</h3>
             <p class="report-summary">${report.summary}</p>
-            <div class="report-tags">
-                ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
             <a href="${report.link}" class="read-more">보고서 읽기</a>
         `;
-        
-        // Add click handler
-        card.addEventListener('click', () => {
-            window.location.href = report.link;
-        });
         
         return card;
     }
@@ -254,17 +213,11 @@ class CoffeeMarketDashboard {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(worksheet);
             
-            // Improved data processing with better date handling
-            const chartData = data.map(row => {
-                const date = this.parseDate(row.Date);
-                const value = parseFloat(row.Close);
-                
-                return {
-                    x: date,
-                    y: value
-                };
-            }).filter(item => item.x !== null && !isNaN(item.y))
-              .sort((a, b) => a.x - b.x); // Sort by date
+            // Simplified data processing - removed complex date parsing
+            const chartData = data.map(row => ({
+                x: new Date(row.Date),
+                y: parseFloat(row.Close)
+            })).filter(item => !isNaN(item.y));
             
             if (chartData.length === 0) {
                 throw new Error('No valid data found');
@@ -358,17 +311,11 @@ class CoffeeMarketDashboard {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(worksheet);
             
-            // Improved data processing with better date handling
-            const chartData = data.map(row => {
-                const date = this.parseDate(row.Date);
-                const value = parseFloat(row.Close);
-                
-                return {
-                    x: date,
-                    y: value
-                };
-            }).filter(item => item.x !== null && !isNaN(item.y))
-              .sort((a, b) => a.x - b.x); // Sort by date
+            // Simplified data processing
+            const chartData = data.map(row => ({
+                x: new Date(row.Date),
+                y: parseFloat(row.Close)
+            })).filter(item => !isNaN(item.y));
             
             if (chartData.length === 0) {
                 throw new Error('No valid data found');
@@ -449,64 +396,10 @@ class CoffeeMarketDashboard {
         }
     }
 
-    // Safe date parsing function
+    // Simplified date parsing - just use native Date constructor
     parseDate(dateValue) {
         if (!dateValue) return null;
-        
-        let date;
-        if (typeof dateValue === 'number') {
-            // Excel serial number
-            if (dateValue > 1 && dateValue < 2958465) {
-                date = new Date((dateValue - 25569) * 86400 * 1000);
-            } else {
-                return null;
-            }
-        } else if (typeof dateValue === 'string') {
-            // String date - try various formats
-            const cleanedDate = dateValue.trim();
-            
-            // Check for Korean date format like "2024년 7월 12일"
-            if (cleanedDate.match(/^\d{4}년\s*\d{1,2}월\s*\d{1,2}일$/)) {
-                const koreanMatch = cleanedDate.match(/^(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일$/);
-                if (koreanMatch) {
-                    const year = parseInt(koreanMatch[1]);
-                    const month = parseInt(koreanMatch[2]) - 1; // 0-based month
-                    const day = parseInt(koreanMatch[3]);
-                    date = new Date(year, month, day);
-                }
-            }
-            // Standard ISO format
-            else if (cleanedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                date = new Date(cleanedDate + 'T00:00:00');
-            }
-            // US format MM/DD/YYYY
-            else if (cleanedDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-                const parts = cleanedDate.split('/');
-                date = new Date(parts[2], parts[0] - 1, parts[1]);
-            }
-            // European format DD/MM/YYYY
-            else if (cleanedDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-                const parts = cleanedDate.split('/');
-                // Try to determine if it's DD/MM/YYYY or MM/DD/YYYY
-                const month = parseInt(parts[1]);
-                const day = parseInt(parts[0]);
-                if (month > 12) {
-                    // Must be DD/MM/YYYY
-                    date = new Date(parts[2], parts[1] - 1, parts[0]);
-                } else {
-                    // Default to MM/DD/YYYY
-                    date = new Date(parts[2], parts[0] - 1, parts[1]);
-                }
-            }
-            // Try different date formats
-            else {
-                date = new Date(cleanedDate);
-            }
-        } else {
-            date = new Date(dateValue);
-        }
-        
-        return (date && !isNaN(date.getTime())) ? date : null;
+        return new Date(dateValue);
     }
 
 

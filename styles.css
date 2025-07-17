@@ -9,7 +9,7 @@ body {
     position: relative;
 }
 
-/* Optimize background image loading with lazy loading */
+/* Simplified background - removed will-change for better performance */
 body::before {
     content: '';
     position: fixed;
@@ -17,13 +17,9 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('coffee-beans-pattern-optimized.webp');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: #f5f5f5; /* Solid color instead of image for faster loading */
     opacity: 0.08;
     z-index: -1;
-    will-change: opacity;
 }
 
 .container {
@@ -44,6 +40,7 @@ header {
     overflow: hidden;
 }
 
+/* Removed header background image for faster loading */
 header::before {
     content: '';
     position: absolute;
@@ -51,12 +48,8 @@ header::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('coffee-abstract-dark-optimized.webp');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.25;
+    background: rgba(0, 0, 0, 0.1); /* Simple overlay instead of image */
     z-index: 0;
-    will-change: opacity;
 }
 
 header > * {
@@ -77,7 +70,7 @@ h1 {
 }
 
 .live-indicator {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    background: #27ae60; /* Removed gradient for performance */
     color: white;
     padding: 6px 12px;
     border-radius: 20px;
@@ -86,27 +79,15 @@ h1 {
     text-transform: uppercase;
     letter-spacing: 1px;
     position: relative;
-    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
-    animation: pulse-live 2s infinite;
+    /* Removed animation and shadow for better performance */
 }
 
+/* Removed blinking animation for better performance */
 .live-indicator::before {
     content: '●';
     color: #fff;
     font-size: 1.2em;
     margin-right: 4px;
-    animation: blink 1.5s infinite;
-}
-
-@keyframes pulse-live {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0.3; }
 }
 
 .date-badge {
@@ -292,23 +273,8 @@ h1 {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-    animation: pulse 2s infinite;
+    /* Removed pulse animation */
     flex-shrink: 0;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(231, 76, 60, 0.5);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-    }
 }
 
 .report-summary {
@@ -476,13 +442,8 @@ h1 {
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    animation: spin 1s linear infinite;
+    /* Removed spin animation */
     margin-right: 15px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 footer {
