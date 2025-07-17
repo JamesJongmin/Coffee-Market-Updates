@@ -1,133 +1,196 @@
 #!/bin/bash
 
 # Image Optimization Script for Coffee Market Dashboard
-# This script converts existing images to optimized WebP format
+echo "🖼️  Coffee Market Dashboard - Image Optimization"
+echo "================================================"
 
-echo "🖼️  Starting image optimization process..."
-
-# Check if cwebp is installed
-if ! command -v cwebp &> /dev/null; then
-    echo "⚠️  cwebp is not installed. Installing WebP tools..."
+# Check if ImageMagick is available (more widely available than webp)
+if command -v convert &> /dev/null; then
+    TOOL="imagemagick"
+    echo "✅ Using ImageMagick for optimization"
+elif command -v cwebp &> /dev/null; then
+    TOOL="webp"
+    echo "✅ Using WebP for optimization"
+else
+    echo "❌ No image optimization tools found"
+    echo "💡 Installing basic optimization tools..."
     
-    # Install webp tools based on the system
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        # Ubuntu/Debian
-        sudo apt-get update
-        sudo apt-get install -y webp
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS
-        if command -v brew &> /dev/null; then
-            brew install webp
-        else
-            echo "❌ Homebrew not found. Please install webp tools manually."
-            exit 1
-        fi
-    elif [[ "$OSTYPE" == "msys" ]]; then
-        # Windows with Git Bash
-        echo "❌ Please install webp tools manually for Windows"
+    # Try to install imagemagick (more universal)
+    if command -v apt-get &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y imagemagick
+        TOOL="imagemagick"
+    elif command -v yum &> /dev/null; then
+        sudo yum install -y ImageMagick
+        TOOL="imagemagick"
+    elif command -v brew &> /dev/null; then
+        brew install imagemagick
+        TOOL="imagemagick"
+    else
+        echo "❌ Cannot install optimization tools automatically"
+        echo "📝 Manual installation required:"
+        echo "   Ubuntu/Debian: sudo apt-get install imagemagick"
+        echo "   CentOS/RHEL: sudo yum install ImageMagick"
+        echo "   macOS: brew install imagemagick"
         exit 1
     fi
 fi
 
-# Function to optimize image
-optimize_image() {
-    local input_file="$1"
-    local output_file="$2"
-    local quality="$3"
-    
-    if [[ -f "$input_file" ]]; then
-        echo "🔄 Converting $input_file..."
-        
-        # Convert to WebP
-        cwebp -q "$quality" "$input_file" -o "$output_file"
-        
-        # Check if conversion was successful
-        if [[ -f "$output_file" ]]; then
-            # Get file sizes
-            original_size=$(stat -c%s "$input_file" 2>/dev/null || stat -f%z "$input_file")
-            optimized_size=$(stat -c%s "$output_file" 2>/dev/null || stat -f%z "$output_file")
-            
-            # Calculate savings
-            savings=$((100 - (optimized_size * 100 / original_size)))
-            
-            echo "✅ $input_file → $output_file"
-            echo "   Original: $(numfmt --to=iec $original_size), Optimized: $(numfmt --to=iec $optimized_size)"
-            echo "   Savings: ${savings}%"
-            echo ""
-        else
-            echo "❌ Failed to convert $input_file"
-        fi
+# Original image files
+ORIGINAL_IMAGES=(
+    "coffee-abstract-dark.jpg"
+    "coffee-beans-pattern.jpg"
+)
+
+echo ""
+echo "📊 Current file sizes:"
+for img in "${ORIGINAL_IMAGES[@]}"; do
+    if [ -f "$img" ]; then
+        size=$(ls -lh "$img" | awk '{print $5}')
+        echo "   $img: $size"
     else
-        echo "⚠️  File not found: $input_file"
-    fi
-}
-
-# Optimize existing images
-echo "🎯 Optimizing background images..."
-
-# Convert coffee background images
-optimize_image "coffee-abstract-dark.jpg" "coffee-abstract-dark-optimized.webp" 80
-optimize_image "coffee-beans-pattern.jpg" "coffee-beans-pattern-optimized.webp" 80
-
-# Check for other image files and optimize them
-echo "🔍 Checking for other image files..."
-
-# Find all image files in the current directory
-image_files=$(find . -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | grep -v optimized)
-
-if [[ -n "$image_files" ]]; then
-    echo "📸 Found additional image files:"
-    echo "$image_files"
-    echo ""
-    
-    # Ask user if they want to optimize all images
-    read -p "Do you want to optimize all found images? (y/n): " -n 1 -r
-    echo ""
-    
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        while IFS= read -r image_file; do
-            if [[ -f "$image_file" ]]; then
-                # Generate output filename
-                filename=$(basename "$image_file")
-                extension="${filename##*.}"
-                name="${filename%.*}"
-                output_file="${name}-optimized.webp"
-                
-                # Optimize with appropriate quality
-                if [[ "$extension" == "png" ]]; then
-                    optimize_image "$image_file" "$output_file" 90
-                else
-                    optimize_image "$image_file" "$output_file" 80
-                fi
-            fi
-        done <<< "$image_files"
-    fi
-fi
-
-# Create a backup of original files
-echo "💾 Creating backup of original images..."
-backup_dir="images-backup-$(date +%Y%m%d_%H%M%S)"
-mkdir -p "$backup_dir"
-
-# Move original files to backup
-for file in coffee-abstract-dark.jpg coffee-beans-pattern.jpg; do
-    if [[ -f "$file" ]]; then
-        cp "$file" "$backup_dir/"
-        echo "📁 Backed up: $file → $backup_dir/$file"
+        echo "   ❌ $img: Not found"
     fi
 done
 
 echo ""
-echo "✨ Image optimization complete!"
-echo "📊 Summary:"
-echo "   - Original images backed up to: $backup_dir"
-echo "   - Optimized images ready for use"
-echo "   - Update your HTML to use -optimized.webp files"
+echo "🚀 Starting optimization..."
+
+optimize_with_imagemagick() {
+    local input="$1"
+    local output="$2"
+    local quality="$3"
+    
+    # Convert to WebP if possible, otherwise optimize JPEG
+    if convert "$input" -quality "$quality" -strip -interlace Plane "$output.webp" 2>/dev/null; then
+        echo "   ✅ Created optimized WebP: $output.webp"
+        return 0
+    else
+        # Fallback to optimized JPEG
+        convert "$input" -quality "$quality" -strip -interlace Plane "${output}.jpg" 2>/dev/null
+        echo "   ✅ Created optimized JPEG: ${output}.jpg"
+        return 0
+    fi
+}
+
+optimize_with_webp() {
+    local input="$1"
+    local output="$2"
+    local quality="$3"
+    
+    cwebp -q "$quality" "$input" -o "$output.webp"
+    echo "   ✅ Created optimized WebP: $output.webp"
+}
+
+# Optimize images
+total_savings=0
+
+for img in "${ORIGINAL_IMAGES[@]}"; do
+    if [ ! -f "$img" ]; then
+        echo "   ⚠️  Skipping $img (not found)"
+        continue
+    fi
+    
+    # Get original size
+    original_size=$(stat -c%s "$img" 2>/dev/null || stat -f%z "$img" 2>/dev/null)
+    
+    # Extract filename without extension
+    basename="${img%.*}"
+    output_name="${basename}-optimized"
+    
+    echo "   🔄 Optimizing $img..."
+    
+    if [ "$TOOL" = "imagemagick" ]; then
+        optimize_with_imagemagick "$img" "$output_name" 75
+    elif [ "$TOOL" = "webp" ]; then
+        optimize_with_webp "$img" "$output_name" 75
+    fi
+    
+    # Calculate savings if optimized file exists
+    optimized_file=""
+    if [ -f "${output_name}.webp" ]; then
+        optimized_file="${output_name}.webp"
+    elif [ -f "${output_name}.jpg" ]; then
+        optimized_file="${output_name}.jpg"
+    fi
+    
+    if [ -n "$optimized_file" ] && [ -f "$optimized_file" ]; then
+        optimized_size=$(stat -c%s "$optimized_file" 2>/dev/null || stat -f%z "$optimized_file" 2>/dev/null)
+        savings=$((original_size - optimized_size))
+        percentage=$((savings * 100 / original_size))
+        total_savings=$((total_savings + savings))
+        
+        echo "      📉 Size reduction: $percentage% ($(numfmt --to=iec $savings) saved)"
+    fi
+done
+
 echo ""
-echo "🚀 Next steps:"
-echo "   1. Test the optimized images in your browser"
-echo "   2. Use index-optimized.html for better performance"
-echo "   3. Set up the service worker for caching"
+echo "✨ Optimization complete!"
+echo "💾 Total space saved: $(numfmt --to=iec $total_savings)"
+
+# Update CSS references if optimized files exist
 echo ""
-echo "💡 Pro tip: Use 'identify' command to verify image properties:"
-echo "   identify coffee-abstract-dark-optimized.webp"
+echo "🔧 Updating CSS references..."
+
+# Create a simple CSS update
+css_updates=""
+for img in "${ORIGINAL_IMAGES[@]}"; do
+    basename="${img%.*}"
+    output_name="${basename}-optimized"
+    
+    if [ -f "${output_name}.webp" ]; then
+        echo "   📝 Updating references from $img to ${output_name}.webp"
+        # Update both CSS files
+        if [ -f "styles.css" ]; then
+            sed -i.bak "s|$img|${output_name}.webp|g" styles.css 2>/dev/null || \
+            sed -i '' "s|$img|${output_name}.webp|g" styles.css 2>/dev/null
+        fi
+        if [ -f "index.html" ]; then
+            sed -i.bak "s|$img|${output_name}.webp|g" index.html 2>/dev/null || \
+            sed -i '' "s|$img|${output_name}.webp|g" index.html 2>/dev/null
+        fi
+    elif [ -f "${output_name}.jpg" ]; then
+        echo "   📝 Updating references from $img to ${output_name}.jpg"
+        if [ -f "styles.css" ]; then
+            sed -i.bak "s|$img|${output_name}.jpg|g" styles.css 2>/dev/null || \
+            sed -i '' "s|$img|${output_name}.jpg|g" styles.css 2>/dev/null
+        fi
+        if [ -f "index.html" ]; then
+            sed -i.bak "s|$img|${output_name}.jpg|g" index.html 2>/dev/null || \
+            sed -i '' "s|$img|${output_name}.jpg|g" index.html 2>/dev/null
+        fi
+    fi
+done
+
+echo ""
+echo "🎯 Performance Recommendations:"
+echo "================================"
+echo "1. ✅ Images optimized for web delivery"
+echo "2. ✅ Reduced file sizes for faster loading"
+echo "3. 💡 Consider using a CDN for even better performance"
+echo "4. 💡 Enable browser caching with proper HTTP headers"
+echo "5. 💡 Use responsive images with srcset for different screen sizes"
+
+# Clean up backup files
+rm -f *.bak 2>/dev/null
+
+echo ""
+echo "🚀 Ready to deploy! Your images are now optimized for better performance."
+echo ""
+
+# Show final file sizes
+echo "📊 Final optimized file sizes:"
+for img in "${ORIGINAL_IMAGES[@]}"; do
+    basename="${img%.*}"
+    output_name="${basename}-optimized"
+    
+    if [ -f "${output_name}.webp" ]; then
+        size=$(ls -lh "${output_name}.webp" | awk '{print $5}')
+        echo "   ${output_name}.webp: $size"
+    elif [ -f "${output_name}.jpg" ]; then
+        size=$(ls -lh "${output_name}.jpg" | awk '{print $5}')
+        echo "   ${output_name}.jpg: $size"
+    fi
+done
+
+echo ""
+echo "🎉 Optimization complete! Check your website loading speed now."
