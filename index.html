@@ -20,6 +20,7 @@
             position: relative;
         }
         
+        /* Removed background image for faster loading */
         body::before {
             content: '';
             position: fixed;
@@ -27,10 +28,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('coffee-beans-pattern.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-color: #f5f5f5;
             opacity: 0.08;
             z-index: -1;
         }
@@ -53,6 +51,7 @@
             overflow: hidden;
         }
         
+        /* Removed header background image */
         header::before {
             content: '';
             position: absolute;
@@ -60,10 +59,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('coffee-abstract-dark.jpg');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.25;
+            background: rgba(0, 0, 0, 0.1);
             z-index: 0;
         }
         
@@ -95,7 +91,7 @@
             letter-spacing: 1px;
             position: relative;
             box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
-            animation: pulse-live 2s infinite;
+            /* Removed animations */
         }
         
         .live-indicator::before {
@@ -103,18 +99,6 @@
             color: #fff;
             font-size: 1.2em;
             margin-right: 4px;
-            animation: blink 1.5s infinite;
-        }
-        
-        @keyframes pulse-live {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
         }
         
         .date-badge {
@@ -300,24 +284,11 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            animation: pulse 2s infinite;
+            /* Removed pulse animation */
             flex-shrink: 0;
         }
         
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 4px 8px rgba(231, 76, 60, 0.5);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            }
-        }
+        /* Removed pulse animation */
         
         .report-summary {
             font-size: 0.95em;
@@ -484,14 +455,11 @@
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            animation: spin 1s linear infinite;
+            /* Removed spin animation */
             margin-right: 15px;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* Removed spin animation */
         
         footer {
             text-align: center;
