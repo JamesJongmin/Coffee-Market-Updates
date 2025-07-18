@@ -5,26 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
     
-    <!-- Preload critical resources -->
+    <!-- Essential preloads only -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="app.js" as="script">
-    <link rel="preload" href="reports.json" as="fetch" type="application/json" crossorigin>
-    
-    <!-- Preload critical images in WebP format -->
-    <link rel="preload" href="coffee-beans-pattern-optimized.webp" as="image">
-    <link rel="preload" href="coffee-abstract-dark-optimized.webp" as="image">
     
     <!-- DNS prefetch for external resources -->
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
-    <!-- Critical CSS (inlined for initial render) -->
+    <!-- Critical CSS (minimal for initial render) -->
     <style>
-        /* Critical CSS for above-the-fold content */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: Arial, sans-serif; 
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #2c3e50;
+            line-height: 1.6;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         header { 
@@ -37,30 +33,46 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         h1 { font-size: 2.8em; font-weight: 700; margin-bottom: 10px; }
-        .loading { text-align: center; padding: 20px; font-size: 1.2em; }
+        .loading { 
+            text-align: center; 
+            padding: 20px; 
+            font-size: 1.2em;
+            color: #7f8c8d;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-width: 150px;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
     </style>
     
-    <!-- Load full CSS asynchronously -->
-    <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
+    <!-- Load full CSS -->
+    <link rel="stylesheet" href="styles.css">
     
-    <!-- Meta tags for performance and SEO -->
-    <meta name="description" content="Coffee Market Updates Archive - Real-time data visualization and analysis">
-    <meta name="keywords" content="coffee, market, futures, trading, analysis, CFTC, NVDI">
-    <meta name="author" content="Coffee Market Analysis Team">
-    
-    <!-- Open Graph tags for social sharing -->
-    <meta property="og:title" content="Coffee Market Updates Archive">
-    <meta property="og:description" content="Real-time coffee market data visualization and analysis">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="coffee-abstract-dark-optimized.webp">
-    
-    <!-- Performance hints -->
+    <!-- Meta tags for performance -->
+    <meta name="description" content="Coffee Market Updates Archive - Real-time data visualization">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
-    
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
 <body>
     <div class="container">
@@ -95,133 +107,87 @@
         <!-- Search and Filter -->
         <div class="search-filter">
             <div class="filter-row">
-                <input type="text" id="searchInput" class="search-input" placeholder="보고서 제목, 내용 또는 태그로 검색...">
+                <input type="text" id="searchInput" class="search-input" placeholder="보고서 제목, 내용 또는 태그로 검색..." autocomplete="off">
                 <select id="yearFilter" class="filter-select">
                     <option value="">전체 년도</option>
                 </select>
                 <select id="monthFilter" class="filter-select">
                     <option value="">전체 월</option>
+                    <option value="01">1월</option>
+                    <option value="02">2월</option>
+                    <option value="03">3월</option>
+                    <option value="04">4월</option>
+                    <option value="05">5월</option>
+                    <option value="06">6월</option>
+                    <option value="07">7월</option>
+                    <option value="08">8월</option>
+                    <option value="09">9월</option>
+                    <option value="10">10월</option>
+                    <option value="11">11월</option>
+                    <option value="12">12월</option>
                 </select>
             </div>
         </div>
 
-        <!-- Charts Dashboard -->
-        <div class="dashboard-section">
-            <h2 class="section-title">📊 실시간 시장 데이터</h2>
-            
-            <div class="charts-grid">
-                <!-- Coffee Futures Chart -->
-                <div class="chart-container" data-chart-id="coffee">
-                    <div class="chart-header">
-                        <h3 class="chart-title">커피 선물 가격</h3>
-                        <p class="chart-source">데이터 소스: 커피 선물 시장</p>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div id="loading-coffee" class="loading-spinner">
-                            <div class="spinner"></div>
-                            <span>차트 로딩 중...</span>
-                        </div>
-                        <canvas id="coffeeChart" style="display: none;"></canvas>
-                    </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">분석 요약</div>
-                        <div class="analysis-text">커피 선물 가격의 최근 동향을 보여주는 차트입니다.</div>
-                    </div>
+        <!-- Main Content -->
+        <main>
+            <!-- Charts Container -->
+            <div class="charts-container">
+                <div class="chart-wrapper" data-chart-id="coffee-futures">
+                    <h3>☕ Coffee Futures Price (ICE KC)</h3>
+                    <canvas id="coffeeFuturesChart"></canvas>
+                    <div class="chart-loading">차트 로딩 중...</div>
                 </div>
-
-                <!-- USD/BRL Exchange Rate Chart -->
-                <div class="chart-container" data-chart-id="usd">
-                    <div class="chart-header">
-                        <h3 class="chart-title">USD/BRL 환율</h3>
-                        <p class="chart-source">데이터 소스: 외환 시장</p>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div id="loading-usd" class="loading-spinner">
-                            <div class="spinner"></div>
-                            <span>차트 로딩 중...</span>
-                        </div>
-                        <canvas id="usdChart" style="display: none;"></canvas>
-                    </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">분석 요약</div>
-                        <div class="analysis-text">브라질 레알 대비 미국 달러 환율 추이를 보여줍니다.</div>
-                    </div>
+                
+                <div class="chart-wrapper" data-chart-id="usd-brl">
+                    <h3>💰 USD/BRL Exchange Rate</h3>
+                    <canvas id="usdBrlChart"></canvas>
+                    <div class="chart-loading">차트 로딩 중...</div>
                 </div>
-
-                <!-- CFTC Chart -->
-                <div class="chart-container" data-chart-id="cftc">
-                    <div class="chart-header">
-                        <h3 class="chart-title">CFTC 포지션</h3>
-                        <p class="chart-source">데이터 소스: CFTC</p>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div id="loading-cftc" class="loading-spinner">
-                            <div class="spinner"></div>
-                            <span>차트 로딩 중...</span>
-                        </div>
-                        <canvas id="cftcChart" style="display: none;"></canvas>
-                    </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">분석 요약</div>
-                        <div class="analysis-text">상품선물거래위원회(CFTC)의 포지션 데이터를 보여줍니다.</div>
-                    </div>
+                
+                <div class="chart-wrapper" data-chart-id="cftc">
+                    <h3>📊 CFTC Commitments of Traders</h3>
+                    <canvas id="cftcChart"></canvas>
+                    <div class="chart-loading">차트 로딩 중...</div>
                 </div>
-
-                <!-- NVDI Chart -->
-                <div class="chart-container" data-chart-id="nvdi">
-                    <div class="chart-header">
-                        <h3 class="chart-title">NVDI 지수</h3>
-                        <p class="chart-source">데이터 소스: NVDI</p>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div id="loading-nvdi" class="loading-spinner">
-                            <div class="spinner"></div>
-                            <span>차트 로딩 중...</span>
-                        </div>
-                        <canvas id="nvdiChart" style="display: none;"></canvas>
-                    </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">분석 요약</div>
-                        <div class="analysis-text">식생지수(NVDI)의 월별 변화를 보여줍니다.</div>
-                    </div>
+                
+                <div class="chart-wrapper" data-chart-id="nvdi">
+                    <h3>🌿 NVDI Index</h3>
+                    <canvas id="nvdiChart"></canvas>
+                    <div class="chart-loading">차트 로딩 중...</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Reports Section -->
-        <div class="dashboard-section">
-            <h2 class="section-title">📋 보고서 아카이브</h2>
-            
-            <div class="reports-grid" id="reportsGrid">
-                <!-- Reports will be loaded here -->
-            </div>
-            
-            <div class="no-results" id="noResults" style="display: none;">
-                <h3>검색 결과가 없습니다</h3>
-                <p>다른 검색어를 시도해보세요.</p>
-            </div>
-        </div>
-
-        <footer>
-            <p>&copy; 2024 Coffee Market Analysis Team. All rights reserved.</p>
-            <p>실시간 데이터 및 분석 서비스</p>
-        </footer>
+            <!-- Reports Section -->
+            <section class="reports-section">
+                <h2>📄 Market Reports Archive</h2>
+                <div id="reportsGrid" class="reports-grid">
+                    <div class="loading">보고서 로딩 중...</div>
+                </div>
+                <div id="noResults" class="no-results" style="display: none;">
+                    검색 조건에 맞는 보고서가 없습니다.
+                </div>
+            </section>
+        </main>
     </div>
 
-    <!-- Load JavaScript libraries asynchronously -->
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-date-fns/2.0.0/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
-    <!-- Load main application script -->
-    <script defer src="app.js"></script>
-    
-    <!-- Service Worker for caching (optional) -->
+    <!-- Load scripts efficiently -->
     <script>
+        // Service Worker registration
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(console.error);
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .catch(err => console.log('SW registration failed'));
+            });
         }
     </script>
+    
+    <!-- Load external libraries with defer -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-date-fns/2.0.0/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Load main app -->
+    <script defer src="app.js"></script>
 </body>
 </html>
