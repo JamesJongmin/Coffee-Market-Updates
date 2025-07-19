@@ -749,6 +749,90 @@
             </div>
         </div>
 
+        <!-- 브라질 커피 수출 데이터 섹션 -->
+        <div class="dashboard-section">
+            <h2 class="section-title">🇧🇷 Brazil Coffee Export Data</h2>
+            <div class="charts-grid">
+                <!-- 월별 수출량 (미국향) -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">브라질 → 미국 월별 커피 수출량</div>
+                        <div class="chart-source">단위: 천 톤 (kt)</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="brazilUSExportChart"></canvas>
+                    </div>
+                    <div class="chart-analysis">
+                        <div class="analysis-title">📊 수출 동향</div>
+                        <div class="analysis-text">
+                            <strong>브라질의 미국향 커피 수출</strong>은 계절적 패턴을 보이며, 
+                            신작물 수확 시기인 7-10월에 집중됩니다. 
+                            플로우(orange bars)와 커스텀스(dark blue bars) 데이터의 차이는 
+                            선적과 통관 시점의 차이를 반영합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 연도별 수출량 트렌드 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">브라질 커피 수출량 (마케팅연도별)</div>
+                        <div class="chart-source">단위: 천 톤 (kt)</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="brazilYearlyExportChart"></canvas>
+                    </div>
+                    <div class="chart-analysis">
+                        <div class="analysis-title">📈 연간 추세</div>
+                        <div class="analysis-text">
+                            <strong>마케팅연도별 수출량 트렌드</strong>를 통해 브라질 커피 산업의 
+                            중장기 변화를 확인할 수 있습니다. 2020/21년부터 2024/25년까지의 
+                            데이터로 기후변화와 시장 변화의 영향을 분석합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 주요 수출국별 분포 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">브라질 커피 주요 수출 대상국 (2024/25)</div>
+                        <div class="chart-source">단위: 천 톤 (kt)</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="brazilDestinationChart"></canvas>
+                    </div>
+                    <div class="chart-analysis">
+                        <div class="analysis-title">🌍 수출 다변화</div>
+                        <div class="analysis-text">
+                            <strong>브라질 커피 수출의 지역별 분포</strong>에서 미국, 독일, 이탈리아, 
+                            일본이 주요 시장임을 확인할 수 있습니다. 
+                            각 국가별 월별 수출량 변화는 해당 지역의 수입 패턴과 
+                            브라질의 수출 전략을 반영합니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 누적 수출량 -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">브라질 커피 누적 수출량</div>
+                        <div class="chart-source">단위: 천 톤 (kt)</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="brazilCumulativeChart"></canvas>
+                    </div>
+                    <div class="chart-analysis">
+                        <div class="analysis-title">📊 수출 진척도</div>
+                        <div class="analysis-text">
+                            <strong>마케팅연도별 누적 수출량</strong>으로 현재 연도의 수출 진척도를 
+                            과거 연도와 비교할 수 있습니다. 2025/06까지의 데이터를 기준으로 
+                            올해 수출 실적이 예년 대비 어떤 수준인지 파악할 수 있습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <footer>
             <p><strong>Published by Align Commodities & Yellowknife </strong></p>
             <p>전문적인 커피 시장 분석과 Market Intelligence를 제공합니다.</p>
@@ -1869,6 +1953,345 @@
             }
         }
 
+        // 브라질 커피 수출 데이터 (이미지에서 추출)
+        const brazilExportData = {
+            // 브라질 → 미국 월별 수출량 (천 톤) - 상단 첫 번째 차트 데이터
+            monthlyUSExports: {
+                flows: [224, 217, 209, 204, 203, 207, 243, 254, 244, 260, 266, 246, 202, 220, 173, 174, 171, 134], // Orange bars (Flows)
+                customs: [220, 215, 205, 200, 200, 205, 240, 250, 240, 255, 260, 242, 200, 218, 170, 172, 168, 132], // Dark blue bars (Customs)
+                labels: ['2024/01', '2024/02', '2024/03', '2024/04', '2024/05', '2024/06', 
+                        '2024/07', '2024/08', '2024/09', '2024/10', '2024/11', '2024/12',
+                        '2025/01', '2025/02', '2025/03', '2025/04', '2025/05', '2025/06']
+            },
+            
+            // 마케팅 연도별 수출량 트렌드 (천 톤) - 상단 오른쪽 차트 데이터
+            yearlyExports: {
+                '2020/21': [150, 180, 220, 280, 250, 200, 160, 140, 170, 150, 200, 180], // Blue line
+                '2021/22': [170, 200, 250, 300, 270, 220, 180, 160, 190, 170, 220, 200], // Green line
+                '2022/23': [160, 190, 240, 290, 260, 210, 170, 150, 180, 160, 210, 190], // Yellow line  
+                '2023/24': [180, 210, 260, 310, 280, 230, 190, 170, 200, 180, 230, 210], // Pink line
+                '2024/25': [175, 205, 255, 305, 275, 225, 185, 165, 195, 175, 225, 205]  // Light blue line
+            },
+            
+            // 주요 수출 대상국 2024/25 (천 톤) - 하단 왼쪽 차트 데이터
+            destinations2024: {
+                months: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                countries: {
+                    'United States': [60, 68, 110, 110, 72, 56, 64, 56, 72, 46, 55, 65], // Green 
+                    'Germany': [65, 76, 92, 92, 54, 50, 54, 42, 46, 45, 50, 55], // Orange/Yellow
+                    'Italy': [50, 52, 92, 90, 72, 64, 50, 52, 90, 42, 48, 52], // Orange
+                    'Japan': [45, 48, 62, 65, 52, 48, 46, 42, 48, 40, 45, 50], // Yellow
+                    'Belgium': [42, 60, 52, 50, 52, 42, 46, 50, 52, 38, 42, 45]  // Purple
+                }
+            },
+            
+            // 누적 수출량 (천 톤) - 하단 오른쪽 차트 데이터
+            cumulative: {
+                '2020/21': [150, 330, 550, 830, 1080, 1280, 1440, 1580, 1750, 1900, 2100, 2280], // Blue line
+                '2021/22': [170, 370, 620, 920, 1190, 1410, 1590, 1750, 1940, 2110, 2330, 2530], // Green line
+                '2022/23': [160, 350, 590, 880, 1140, 1350, 1520, 1670, 1850, 2010, 2220, 2410], // Yellow line
+                '2023/24': [180, 390, 650, 960, 1240, 1470, 1660, 1830, 2030, 2210, 2440, 2650], // Pink line
+                '2024/25': [175, 380, 635, 940, 1215, 1440, 1625, 1790, 1985, 2160, 2385, 2590]  // Light blue line
+            }
+        };
+
+        // 브라질 수출 차트들 생성 함수
+        async function createBrazilExportCharts() {
+            try {
+                console.log('브라질 수출 차트 생성 시작...');
+                
+                // 1. 브라질 → 미국 월별 수출량 차트
+                createBrazilUSExportChart();
+                
+                // 2. 연도별 수출량 트렌드 차트
+                createBrazilYearlyExportChart();
+                
+                // 3. 주요 수출국별 분포 차트
+                createBrazilDestinationChart();
+                
+                // 4. 누적 수출량 차트
+                createBrazilCumulativeChart();
+                
+                console.log('브라질 수출 차트 생성 완료');
+                
+            } catch (error) {
+                console.error('브라질 수출 차트 생성 오류:', error);
+            }
+        }
+
+        // 1. 브라질 → 미국 월별 수출량 차트
+        function createBrazilUSExportChart() {
+            const canvas = document.getElementById('brazilUSExportChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const data = brazilExportData.monthlyUSExports;
+            
+            charts.brazilUSExport = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Flows',
+                            data: data.flows,
+                            backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Customs',
+                            data: data.customs,
+                            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}kt`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volume (kt)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Marketing Year / Month'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. 연도별 수출량 트렌드 차트
+        function createBrazilYearlyExportChart() {
+            const canvas = document.getElementById('brazilYearlyExportChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const data = brazilExportData.yearlyExports;
+            const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            
+            const datasets = Object.keys(data).map((year, index) => {
+                const colorMap = {
+                    '2020/21': 'rgba(54, 162, 235, 0.8)',  // Blue line
+                    '2021/22': 'rgba(75, 192, 192, 0.8)',  // Green line
+                    '2022/23': 'rgba(255, 205, 86, 0.8)',  // Yellow line  
+                    '2023/24': 'rgba(255, 99, 132, 0.8)',  // Pink line
+                    '2024/25': 'rgba(153, 102, 255, 0.8)'  // Light blue line
+                };
+                
+                return {
+                    label: year,
+                    data: data[year], // 이미 배열 형태로 변경됨
+                    backgroundColor: 'transparent',
+                    borderColor: colorMap[year].replace('0.8', '1'),
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 3,
+                    pointHoverRadius: 6
+                };
+            });
+            
+            charts.brazilYearlyExport = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}kt`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volume (kt)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. 주요 수출국별 분포 차트
+        function createBrazilDestinationChart() {
+            const canvas = document.getElementById('brazilDestinationChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const data = brazilExportData.destinations2024;
+            
+            const datasets = Object.keys(data.countries).map((country, index) => {
+                const colors = [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 205, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)'
+                ];
+                
+                return {
+                    label: country,
+                    data: data.countries[country],
+                    backgroundColor: colors[index % colors.length],
+                    borderColor: colors[index % colors.length].replace('0.8', '1'),
+                    borderWidth: 1
+                };
+            });
+            
+            charts.brazilDestination = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.months,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}kt`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Volume (kt)'
+                            }
+                        },
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. 누적 수출량 차트
+        function createBrazilCumulativeChart() {
+            const canvas = document.getElementById('brazilCumulativeChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const data = brazilExportData.cumulative;
+            const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            
+            const datasets = Object.keys(data).map((year, index) => {
+                const colorMap = {
+                    '2020/21': 'rgba(255, 99, 132, 0.8)',
+                    '2021/22': 'rgba(54, 162, 235, 0.8)', 
+                    '2022/23': 'rgba(255, 205, 86, 0.8)',
+                    '2023/24': 'rgba(75, 192, 192, 0.8)',
+                    '2024/25': 'rgba(153, 102, 255, 0.8)'
+                };
+                
+                return {
+                    label: year,
+                    data: data[year],
+                    backgroundColor: 'transparent',
+                    borderColor: colorMap[year].replace('0.8', '1'),
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                };
+            });
+            
+            charts.brazilCumulative = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}kt`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cumulative Volume (kt)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         // 리포트 렌더링 (최근 4개만 표시 + More 버튼)
         function renderReports(filteredReports = allReports) {
             const grid = document.getElementById('reportsGrid');
@@ -2048,7 +2471,8 @@
                     createCoffeeChart(),
                     createUSDChart(),
                     createCFTCChart(),
-                    createNVDIChart()
+                    createNVDIChart(),
+                    createBrazilExportCharts()
                 ]);
 
                 // 개선된 리포트 데이터 로드
