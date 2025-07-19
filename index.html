@@ -562,7 +562,24 @@
             </p>
         </header>
 
-
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-number" id="totalReports">5</div>
+                <div class="stat-label">총 보고서 수</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="latestDate">2025.06</div>
+                <div class="stat-label">최신 업데이트</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">주간</div>
+                <div class="stat-label">업데이트 주기</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">KR/EN</div>
+                <div class="stat-label">언어 지원</div>
+            </div>
+        </div>
 
         <div class="search-filter">
             <div class="filter-row">
@@ -1311,7 +1328,7 @@
             }
         }
 
-        // CFTC 포지션 차트 (모바일 날짜 표시 개선)
+        // CFTC 포지션 차트
         async function createCFTCChart() {
             const loadingElement = document.getElementById('loading-cftc');
             const chartElement = document.getElementById('cftcChart');
@@ -1326,17 +1343,14 @@
                     throw new Error('No data received');
                 }
 
-                // 날짜 기반으로 정렬 확인 및 데이터 생성
                 const chartData = data.map((row) => ({
                     y: parseInt(row.value),
                     date: parseDate(row.date),
-                    dateString: row.date // 원본 날짜 문자열 보존
+                    dateString: row.date
                 })).filter(point => !isNaN(point.y));
 
-                // 날짜 기준으로 명시적 정렬 (오래된 날짜 -> 최신 날짜)
+                // 날짜 기준으로 정렬
                 chartData.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-                console.log('CFTC Data sorted:', chartData.map(d => ({date: d.dateString, value: d.y})));
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -1346,27 +1360,32 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
-                // 날짜 레이블 생성 함수
-                const formatDateLabel = (date) => {
-                    if (isMobile) {
-                        // 모바일: 간단한 M/D 형식
-                        return `${date.getMonth() + 1}/${date.getDate()}`;
+                // 날짜 레이블을 선택적으로 표시하기 위한 설정
+                const totalLabels = chartData.length;
+                const maxDisplayLabels = isMobile ? 6 : 10;
+                const labelStep = Math.max(1, Math.floor(totalLabels / maxDisplayLabels));
+                
+                // 레이블 배열 생성 - 모든 데이터에 대해 레이블을 만들되, 일부만 표시
+                const labels = chartData.map((d, index) => {
+                    if (index === 0 || index === totalLabels - 1 || index % labelStep === 0) {
+                        // 표시할 레이블
+                        if (isMobile) {
+                            return d.date.toLocaleDateString('ko-KR', { 
+                                month: 'short', 
+                                day: 'numeric' 
+                            });
+                        } else {
+                            return d.date.toLocaleDateString('ko-KR', { 
+                                year: '2-digit', 
+                                month: 'short', 
+                                day: 'numeric' 
+                            });
+                        }
                     } else {
-                        // PC: 기존 형식
-                        return date.toLocaleDateString('ko-KR', { 
-                            year: '2-digit', 
-                            month: 'short',
-                            day: 'numeric'
-                        });
+                        // 빈 레이블 (차트에는 있지만 표시되지 않음)
+                        return '';
                     }
-                };
-                
-                // 날짜 레이블 생성
-                const labels = chartData.map(d => formatDateLabel(d.date));
-                
-                // 모바일에서 표시할 레이블 수 계산
-                const maxLabels = isMobile ? 6 : 12;
-                const step = Math.max(1, Math.floor(chartData.length / maxLabels));
+                });
                 
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
@@ -1377,9 +1396,7 @@
                             data: chartData.map(d => d.y),
                             backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
                             borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                            borderWidth: 1,
-                            barPercentage: isMobile ? 0.9 : 0.8,
-                            categoryPercentage: isMobile ? 0.9 : 0.8
+                            borderWidth: 1
                         }]
                     },
                     options: {
@@ -1413,15 +1430,22 @@
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Date',
-                                    font: {
-                                        size: isMobile ? 10 : 12
-                                    }
+                                    text: 'Date'
                                 },
                                 ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 0,
                                     font: {
-                                        size: isMobile ? 9 : 11
-                                    },
+                                        size: isMobile ? 10 : 11
+                                    }
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Net Long Positions'
+                                },
+                                ticks: {
                                     callback: function(value) {
                                         return value.toLocaleString();
                                     }
@@ -1430,34 +1454,6 @@
                         }
                     }
                 });
-                
-                // 차트 생성 후 강제 업데이트 (모바일 대응)
-                if (isMobile) {
-                    setTimeout(() => {
-                        if (charts.cftc) {
-                            charts.cftc.update();
-                        }
-                    }, 100);
-                }
-                
-                // 화면 회전 또는 리사이즈 시 차트 재생성
-                let resizeTimer;
-                const handleResize = () => {
-                    clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(() => {
-                        if (charts.cftc) {
-                            const newIsMobile = window.innerWidth <= 768;
-                            if (newIsMobile !== isMobile) {
-                                // 차트 재생성
-                                charts.cftc.destroy();
-                                createCFTCChart();
-                            }
-                        }
-                    }, 250);
-                };
-                
-                window.removeEventListener('resize', handleResize);
-                window.addEventListener('resize', handleResize);
                 
             } catch (error) {
                 console.error('CFTC chart error:', error);
