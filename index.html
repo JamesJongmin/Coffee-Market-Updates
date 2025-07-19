@@ -1311,7 +1311,7 @@
             }
         }
 
-        // CFTC 포지션 차트 (3개월 단위 날짜 표시)
+        // CFTC 포지션 차트 (가로축 날짜 표시 문제 해결)
         async function createCFTCChart() {
             const loadingElement = document.getElementById('loading-cftc');
             const chartElement = document.getElementById('cftcChart');
@@ -1326,14 +1326,22 @@
                     throw new Error('No data received');
                 }
 
+                console.log('CFTC Raw data sample:', data.slice(0, 3));
+
                 const chartData = data.map((row) => ({
                     y: parseInt(row.value),
                     date: parseDate(row.date),
                     dateString: row.date
-                })).filter(point => !isNaN(point.y));
+                })).filter(point => !isNaN(point.y) && point.date);
 
                 // 날짜 기준으로 정렬
                 chartData.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+                console.log('CFTC Processed data sample:', {
+                    total: chartData.length,
+                    first: chartData[0],
+                    last: chartData[chartData.length - 1]
+                });
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -1343,22 +1351,19 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
-                // 전체 데이터에서 3개월(분기) 간격으로 날짜 선택
+                // 3개월 간격으로 표시할 인덱스 계산
                 const totalData = chartData.length;
-                const quarterStep = Math.max(Math.floor(totalData / 8), 1); // 8개 정도의 레이블 표시
+                const step = Math.max(Math.floor(totalData / 6), 1); // 6개 정도의 레이블
                 
-                console.log('CFTC Chart Debug:', {
-                    totalData,
-                    quarterStep,
-                    firstDate: chartData[0]?.dateString,
-                    lastDate: chartData[totalData-1]?.dateString
-                });
+                console.log('CFTC Label generation:', { totalData, step });
                 
-                // 레이블 배열 생성
+                // Chart.js에서 사용할 레이블 배열 생성
                 const labels = [];
+                const displayIndices = [];
+                
                 for (let i = 0; i < totalData; i++) {
-                    if (i === 0 || i === totalData - 1 || i % quarterStep === 0) {
-                        // 표시할 레이블
+                    if (i === 0 || i === totalData - 1 || i % step === 0) {
+                        displayIndices.push(i);
                         if (isMobile) {
                             labels.push(chartData[i].date.toLocaleDateString('ko-KR', { 
                                 year: '2-digit',
@@ -1371,12 +1376,12 @@
                             }));
                         }
                     } else {
-                        // 빈 레이블
-                        labels.push('');
+                        labels.push(''); // 빈 레이블
                     }
                 }
                 
                 console.log('Generated labels:', labels.filter(l => l !== ''));
+                console.log('Display indices:', displayIndices);
                 
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
@@ -1427,8 +1432,17 @@
                                     maxRotation: 45,
                                     minRotation: 0,
                                     font: {
-                                        size: isMobile ? 10 : 11
+                                        size: isMobile ? 10 : 12
+                                    },
+                                    color: '#666',
+                                    // 강제로 모든 레이블 표시 시도
+                                    callback: function(value, index) {
+                                        return labels[index] || '';
                                     }
+                                },
+                                grid: {
+                                    display: true,
+                                    color: 'rgba(0, 0, 0, 0.1)'
                                 }
                             },
                             y: {
@@ -1445,6 +1459,8 @@
                         }
                     }
                 });
+                
+                console.log('CFTC Chart created successfully');
                 
             } catch (error) {
                 console.error('CFTC chart error:', error);
