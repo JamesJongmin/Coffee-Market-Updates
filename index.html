@@ -366,6 +366,59 @@
             margin-left: 10px;
         }
         
+        .more-reports-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .more-reports-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+        
+        .more-reports-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+        }
+        
+        .more-reports-btn:active {
+            transform: translateY(0);
+        }
+        
+        .more-icon {
+            transition: transform 0.3s ease;
+            font-size: 0.8em;
+        }
+        
+        .more-reports-btn.expanded .more-icon {
+            transform: rotate(180deg);
+        }
+        
+        .more-reports-btn.expanded .more-text::after {
+            content: " Less";
+        }
+        
+        .report-card.hidden {
+            display: none;
+        }
+        
+        .report-card.show-more {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
         .no-results {
             text-align: center;
             padding: 60px 20px;
@@ -583,6 +636,13 @@
             <!-- 보고서 카드들이 여기에 동적으로 추가됩니다 -->
         </div>
 
+        <div class="more-reports-container" id="moreReportsContainer" style="display: none;">
+            <button class="more-reports-btn" id="moreReportsBtn">
+                <span class="more-text">More Reports</span>
+                <span class="more-icon">▼</span>
+            </button>
+        </div>
+
         <div class="no-results" id="noResults" style="display: none;">
             <h3>검색 결과가 없습니다</h3>
             <p>다른 검색어나 필터를 시도해보세요.</p>
@@ -656,7 +716,7 @@
                         <div class="analysis-title">📈 차트 분석</div>
                         <div class="analysis-text">
                             <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
-                            양수는 강세 베팅(순매수), 음수는 약세 베팅(순매도)을 의미합니다. 
+                            양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
                             극단적 포지션은 종종 시장 전환점의 신호가 되며, 
                             현재 포지션 수준은 투기 자금의 방향성과 시장 과열/과매도 상태를 판단하는 중요한 지표입니다.
                         </div>
@@ -1809,14 +1869,17 @@
             }
         }
 
-        // 리포트 렌더링
+        // 리포트 렌더링 (최근 4개만 표시 + More 버튼)
         function renderReports(filteredReports = allReports) {
             const grid = document.getElementById('reportsGrid');
             const noResults = document.getElementById('noResults');
+            const moreContainer = document.getElementById('moreReportsContainer');
+            const moreBtn = document.getElementById('moreReportsBtn');
             
             if (filteredReports.length === 0) {
                 grid.style.display = 'none';
                 noResults.style.display = 'block';
+                moreContainer.style.display = 'none';
                 return;
             }
             
@@ -1827,24 +1890,76 @@
             const sortedReports = [...filteredReports].sort((a, b) => new Date(b.date) - new Date(a.date));
             const latestDate = sortedReports.length > 0 ? sortedReports[0].date : null;
             
-            grid.innerHTML = filteredReports.map(report => {
-                const isLatest = report.date === latestDate;
+            // 최근 4개와 나머지 분리
+            const recentReports = sortedReports.slice(0, 4);
+            const olderReports = sortedReports.slice(4);
+            
+            // More 버튼 표시 여부 결정
+            if (olderReports.length > 0) {
+                moreContainer.style.display = 'block';
                 
-                return `
-                <div class="report-card" onclick="window.location.href='${report.link}'">
-                    <div class="report-date">${report.displayDate}</div>
-                    <h3 class="report-title">
-                        <span>${report.title}</span>
-                        ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
-                    </h3>
-                    <p class="report-summary">${report.summary}</p>
-                    <div class="report-tags">
-                        ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                    <a href="${report.link}" class="read-more">보고서 읽기</a>
+                // More 버튼 이벤트 리스너 (중복 방지)
+                const newMoreBtn = moreBtn.cloneNode(true);
+                moreBtn.parentNode.replaceChild(newMoreBtn, moreBtn);
+                
+                let isExpanded = false;
+                newMoreBtn.addEventListener('click', () => {
+                    isExpanded = !isExpanded;
+                    
+                    if (isExpanded) {
+                        // 나머지 보고서들 표시
+                        olderReports.forEach((report, index) => {
+                            const isLatest = report.date === latestDate;
+                            const card = createReportCard(report, isLatest);
+                            card.classList.add('show-more');
+                            card.style.animationDelay = `${index * 0.1}s`;
+                            grid.appendChild(card);
+                        });
+                        
+                        newMoreBtn.classList.add('expanded');
+                        newMoreBtn.querySelector('.more-text').textContent = 'Show Less';
+                    } else {
+                        // 나머지 보고서들 숨기기
+                        const moreCards = grid.querySelectorAll('.show-more');
+                        moreCards.forEach(card => card.remove());
+                        
+                        newMoreBtn.classList.remove('expanded');
+                        newMoreBtn.querySelector('.more-text').textContent = 'More Reports';
+                    }
+                });
+            } else {
+                moreContainer.style.display = 'none';
+            }
+            
+            // 최근 4개 보고서만 먼저 표시
+            grid.innerHTML = '';
+            recentReports.forEach(report => {
+                const isLatest = report.date === latestDate;
+                const card = createReportCard(report, isLatest);
+                grid.appendChild(card);
+            });
+        }
+        
+        // 보고서 카드 생성 함수
+        function createReportCard(report, isLatest) {
+            const card = document.createElement('div');
+            card.className = 'report-card';
+            card.onclick = () => window.location.href = report.link;
+            
+            card.innerHTML = `
+                <div class="report-date">${report.displayDate}</div>
+                <h3 class="report-title">
+                    <span>${report.title}</span>
+                    ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
+                </h3>
+                <p class="report-summary">${report.summary}</p>
+                <div class="report-tags">
+                    ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
+                <a href="${report.link}" class="read-more">보고서 읽기</a>
             `;
-            }).join('');
+            
+            return card;
         }
 
         // 리포트 필터링
