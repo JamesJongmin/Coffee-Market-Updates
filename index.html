@@ -562,24 +562,7 @@
             </p>
         </header>
 
-        <div class="stats-bar">
-            <div class="stat-box">
-                <div class="stat-number" id="totalReports">5</div>
-                <div class="stat-label">총 보고서 수</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="latestDate">2025.06</div>
-                <div class="stat-label">최신 업데이트</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">주간</div>
-                <div class="stat-label">업데이트 주기</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">KR/EN</div>
-                <div class="stat-label">언어 지원</div>
-            </div>
-        </div>
+
 
         <div class="search-filter">
             <div class="filter-row">
@@ -1328,7 +1311,7 @@
             }
         }
 
-        // CFTC 포지션 차트
+        // CFTC 포지션 차트 (3개월 단위 날짜 표시)
         async function createCFTCChart() {
             const loadingElement = document.getElementById('loading-cftc');
             const chartElement = document.getElementById('cftcChart');
@@ -1360,29 +1343,27 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
-                // 날짜 레이블을 선택적으로 표시하기 위한 설정
-                const totalLabels = chartData.length;
-                const maxDisplayLabels = isMobile ? 6 : 10;
-                const labelStep = Math.max(1, Math.floor(totalLabels / maxDisplayLabels));
-                
-                // 레이블 배열 생성 - 모든 데이터에 대해 레이블을 만들되, 일부만 표시
+                // 3개월 단위로 날짜 레이블 생성
                 const labels = chartData.map((d, index) => {
-                    if (index === 0 || index === totalLabels - 1 || index % labelStep === 0) {
-                        // 표시할 레이블
+                    // 3개월(약 13주) 간격으로 표시
+                    const totalData = chartData.length;
+                    const quarterlyStep = Math.max(1, Math.floor(totalData / 4)); // 대략 4분기로 나누기
+                    
+                    if (index === 0 || index === totalData - 1 || index % quarterlyStep === 0) {
+                        // 표시할 레이블 - 3개월 단위
                         if (isMobile) {
                             return d.date.toLocaleDateString('ko-KR', { 
-                                month: 'short', 
-                                day: 'numeric' 
+                                year: '2-digit',
+                                month: 'short'
                             });
                         } else {
                             return d.date.toLocaleDateString('ko-KR', { 
-                                year: '2-digit', 
-                                month: 'short', 
-                                day: 'numeric' 
+                                year: 'numeric', 
+                                month: 'long'
                             });
                         }
                     } else {
-                        // 빈 레이블 (차트에는 있지만 표시되지 않음)
+                        // 빈 레이블
                         return '';
                     }
                 });
@@ -1430,7 +1411,7 @@
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Date'
+                                    text: 'Date (3개월 단위)'
                                 },
                                 ticks: {
                                     maxRotation: 45,
