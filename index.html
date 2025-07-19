@@ -1343,30 +1343,40 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
-                // 3개월 단위로 날짜 레이블 생성
-                const labels = chartData.map((d, index) => {
-                    // 3개월(약 13주) 간격으로 표시
-                    const totalData = chartData.length;
-                    const quarterlyStep = Math.max(1, Math.floor(totalData / 4)); // 대략 4분기로 나누기
-                    
-                    if (index === 0 || index === totalData - 1 || index % quarterlyStep === 0) {
-                        // 표시할 레이블 - 3개월 단위
+                // 전체 데이터에서 3개월(분기) 간격으로 날짜 선택
+                const totalData = chartData.length;
+                const quarterStep = Math.max(Math.floor(totalData / 8), 1); // 8개 정도의 레이블 표시
+                
+                console.log('CFTC Chart Debug:', {
+                    totalData,
+                    quarterStep,
+                    firstDate: chartData[0]?.dateString,
+                    lastDate: chartData[totalData-1]?.dateString
+                });
+                
+                // 레이블 배열 생성
+                const labels = [];
+                for (let i = 0; i < totalData; i++) {
+                    if (i === 0 || i === totalData - 1 || i % quarterStep === 0) {
+                        // 표시할 레이블
                         if (isMobile) {
-                            return d.date.toLocaleDateString('ko-KR', { 
+                            labels.push(chartData[i].date.toLocaleDateString('ko-KR', { 
                                 year: '2-digit',
                                 month: 'short'
-                            });
+                            }));
                         } else {
-                            return d.date.toLocaleDateString('ko-KR', { 
+                            labels.push(chartData[i].date.toLocaleDateString('ko-KR', { 
                                 year: 'numeric', 
                                 month: 'long'
-                            });
+                            }));
                         }
                     } else {
                         // 빈 레이블
-                        return '';
+                        labels.push('');
                     }
-                });
+                }
+                
+                console.log('Generated labels:', labels.filter(l => l !== ''));
                 
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
