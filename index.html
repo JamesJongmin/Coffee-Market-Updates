@@ -50,7 +50,7 @@
         }
         
         .logo-header img {
-            height: 60px;
+            height: 80px;
             width: auto;
             object-fit: contain;
         }
@@ -571,7 +571,8 @@
             border-radius: 15px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            gap: 30px;
         }
         
         .footer-logo {
@@ -579,14 +580,15 @@
         }
         
         .footer-logo img {
-            height: 50px;
+            height: 70px;
             width: auto;
             object-fit: contain;
         }
         
         .footer-content {
-            flex: 1;
+            flex: 0 1 auto;
             text-align: center;
+            max-width: none;
         }
         
         .footer-links {
@@ -615,7 +617,7 @@
             }
             
             .logo-header img {
-                height: 50px;
+                height: 65px;
             }
             
             h1 {
@@ -2076,6 +2078,24 @@
             
             if (latestElement && allReports.length > 0) {
                 latestElement.textContent = allReports[0].displayDate.substring(0, 7);
+            }
+            
+            // Latest Report 링크 업데이트
+            updateLatestReportLink();
+        }
+
+        // Latest Report 링크 업데이트 함수
+        function updateLatestReportLink() {
+            const latestReportLink = document.getElementById('latestReportLink');
+            if (latestReportLink && allReports.length > 0) {
+                // 날짜순으로 정렬하여 가장 최신 보고서 찾기
+                const sortedReports = [...allReports].sort((a, b) => new Date(b.date) - new Date(a.date));
+                const latestReport = sortedReports[0];
+                
+                if (latestReport) {
+                    latestReportLink.href = latestReport.link;
+                    console.log('Latest Report Link updated to:', latestReport.link);
+                }
             }
         }
 
