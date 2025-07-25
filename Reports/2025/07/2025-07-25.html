@@ -493,13 +493,19 @@ REPORT_META-->
             }
             
             .home-button {
-                position: static;
+                position: relative;
                 margin-bottom: 15px;
-                display: flex;
-                justify-content: center;
-                margin-left: auto;
-                margin-right: auto;
-                width: fit-content;
+                display: inline-flex;
+                align-self: center;
+                z-index: 10;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            
+            .home-button:hover {
+                background-color: #e76f51;
+                text-decoration: none;
+                color: white;
             }
         }
     </style>
@@ -1029,6 +1035,20 @@ REPORT_META-->
                 }, 150);
             });
         });
+
+        // 홈버튼 터치 이벤트 처리 (모바일 대응)
+        const homeButton = document.querySelector('.home-button');
+        if (homeButton) {
+            homeButton.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                window.location.href = this.getAttribute('href');
+            });
+            
+            homeButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = this.getAttribute('href');
+            });
+        }
 
         // 섹션이 뷰포트에 들어올 때 애니메이션 효과
         const observerOptions = {
