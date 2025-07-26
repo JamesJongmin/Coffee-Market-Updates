@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Report - Coffee Market Updates</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 3em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+        
+        .info-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .info-title {
+            font-size: 2em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .info-content {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .info-content ul {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+        
+        .info-content li {
+            margin-bottom: 10px;
+        }
+        
+        /* 리포트 그리드 스타일 (index.html과 동일) */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #8B4513;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url('coffee-beans-pattern.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.08;
+            transform: rotate(45deg);
+            transition: opacity 0.3s ease;
+        }
+        
+        .report-card:hover::before {
+            opacity: 0.15;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .report-date {
+            font-size: 0.9em;
+            color: #8B4513;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .report-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .new-badge {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            font-size: 0.7em;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 8px rgba(231, 76, 60, 0.5);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            }
+        }
+        
+        .report-summary {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .report-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: #8B4513;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+        }
+        
+        .read-more:hover {
+            color: #A0522D;
+        }
+        
+        .read-more::after {
+            content: " →";
+            margin-left: 5px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .read-more:hover::after {
+            margin-left: 10px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #8B4513;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 1.1em;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">
+            ← 메인 페이지로 돌아가기
+        </a>
+        
+        <div class="header">
+            <h1>📊 Weekly Report</h1>
+            <p class="subtitle">커피 선물 시장 주간 동향 보고서</p>
+        </div>
+        
+        <div class="info-section">
+            <h2 class="info-title">
+                📋 Weekly Report 소개
+            </h2>
+            <div class="info-content">
+                <p>매주 발행되는 커피 선물 시장 주간 동향 보고서는 글로벌 커피 시장의 최신 동향과 가격 변동을 심층적으로 분석합니다.</p>
+                
+                <ul>
+                    <li><strong>발행 주기:</strong> 매주 금요일</li>
+                    <li><strong>주요 내용:</strong> 주간 가격 동향, 수급 현황, 기후 영향, 투기 포지션 분석</li>
+                    <li><strong>데이터 소스:</strong> ICE, LSEG, CFTC, 주요 생산국 통계청</li>
+                    <li><strong>분석 범위:</strong> 아라비카/로부스타 선물, 현물 시장, 환율 영향</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner"></div>
+            리포트를 불러오는 중...
+        </div>
+        
+        <div class="reports-grid" id="reportsGrid" style="display: none;">
+            <!-- 주간 동향 리포트들이 여기에 동적으로 추가됩니다 -->
+        </div>
+        
+        <div class="no-results" id="noResults" style="display: none;">
+            <h3>주간 동향 리포트가 없습니다</h3>
+            <p>아직 "커피 선물 시장 주간 동향" 리포트가 등록되지 않았습니다.</p>
+        </div>
+    </div>
+
+    <script>
+        // 리포트 파일 목록 (index.html과 동일)
+        const reportFiles = [
+            'Reports/2025/07/2025-07-26.html',       
+            'Reports/2025/07/2025-07-25.html',       
+            'Reports/2025/07/2025-07-19.html',   
+            'Reports/2025/07/2025-07-16.html',
+            'Reports/2025/07/2025-07-12.html',
+            'Reports/2025/07/2025-07-09.html',
+            'Reports/2025/07/2025-07-04.html',
+            'Reports/2025/06/2025-06-30.html',
+            'Reports/2025/06/2025-06-28.html',
+            'Reports/2025/06/2025-06-24.html', 
+            'Reports/2025/06/2025-06-21.html',
+            'Reports/2025/06/2025-06-14.html',
+            'Reports/2025/06/2025-06-13.html',
+            'Reports/2025/06/2025-06-09.html',
+            'Reports/2025/06/2025-06-08.html',
+            'Reports/2025/05/2025-05-31.html'
+        ];
+        
+        // 메타데이터 추출 함수 (index.html과 동일)
+        function extractReportMetadata(htmlContent, filePath) {
+            const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
+            
+            if (metaMatch) {
+                try {
+                    const metadata = JSON.parse(metaMatch[1].trim());
+                    return metadata;
+                } catch (error) {
+                    console.error(`메타데이터 파싱 실패 ${filePath}:`, error);
+                }
+            }
+            
+            return extractLegacyMetadata(htmlContent, filePath);
+        }
+        
+        function extractLegacyMetadata(htmlContent, filePath) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlContent, 'text/html');
+            
+            const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
+            const defaultDate = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+            
+            // 제목 추출
+            let title = '';
+            const titleElement = doc.querySelector('h1') || doc.querySelector('title');
+            if (titleElement) {
+                title = titleElement.textContent.trim();
+            }
+            
+            // 요약 추출
+            let summary = '';
+            const summaryElement = doc.querySelector('.highlight p') || doc.querySelector('.summary') || doc.querySelector('p');
+            if (summaryElement) {
+                summary = summaryElement.textContent.trim().substring(0, 200);
+            }
+            
+            // 태그 추출
+            const tags = Array.from(doc.querySelectorAll('.tag'))
+                .map(tag => tag.textContent.trim())
+                .filter(tag => tag && tag.length > 0)
+                .slice(0, 6);
+            
+            return {
+                title: title || '커피 시장 동향',
+                subtitle: '',
+                date: defaultDate,
+                summary: summary || '',
+                tags: tags
+            };
+        }
+        
+        // 날짜 포맷팅
+        function formatKoreanDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return dateString;
+            }
+        }
+        
+        // 리포트 카드 생성
+        function createReportCard(report, isLatest) {
+            const card = document.createElement('div');
+            card.className = 'report-card';
+            card.onclick = () => window.location.href = report.link;
+            
+            card.innerHTML = `
+                <div class="report-date">${report.displayDate}</div>
+                <h3 class="report-title">
+                    <span>${report.title}</span>
+                    ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
+                </h3>
+                <p class="report-summary">${report.summary}</p>
+                <div class="report-tags">
+                    ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <a href="${report.link}" class="read-more">보고서 읽기</a>
+            `;
+            
+            return card;
+        }
+        
+        // 리포트 로드 및 필터링
+        async function loadWeeklyReports() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const reportsGrid = document.getElementById('reportsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            const weeklyReports = [];
+            
+            for (const filePath of reportFiles) {
+                try {
+                    const response = await fetch(filePath);
+                    if (!response.ok) continue;
+                    
+                    const htmlContent = await response.text();
+                    const metadata = extractReportMetadata(htmlContent, filePath);
+                    
+                    if (metadata && metadata.title.includes('커피 선물 시장 주간 동향')) {
+                        weeklyReports.push({
+                            ...metadata,
+                            link: filePath,
+                            displayDate: formatKoreanDate(metadata.date)
+                        });
+                    }
+                } catch (error) {
+                    console.error(`로딩 실패 ${filePath}:`, error);
+                }
+            }
+            
+            // 날짜순 정렬
+            weeklyReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // 로딩 스피너 숨기기
+            loadingSpinner.style.display = 'none';
+            
+            if (weeklyReports.length > 0) {
+                reportsGrid.style.display = 'grid';
+                noResults.style.display = 'none';
+                
+                // 리포트 카드 렌더링
+                weeklyReports.forEach((report, index) => {
+                    const isLatest = index === 0;
+                    const card = createReportCard(report, isLatest);
+                    reportsGrid.appendChild(card);
+                });
+            } else {
+                reportsGrid.style.display = 'none';
+                noResults.style.display = 'block';
+            }
+        }
+        
+        // 페이지 로드시 실행
+        document.addEventListener('DOMContentLoaded', loadWeeklyReports);
+    </script>
+</body>
+</html>

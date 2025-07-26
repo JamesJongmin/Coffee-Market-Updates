@@ -3,741 +3,393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>커피 시장 통합 대시보드</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Fundamentals - Coffee Market Updates</title>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            color: #1e293b;
         }
         
-        .dashboard-container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-        
-        .dashboard-header {
-            text-align: center;
-            margin-bottom: 40px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-        }
-        
-        .dashboard-title {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 12px;
-            letter-spacing: -0.025em;
-        }
-        
-        .dashboard-subtitle {
-            font-size: 1.125em;
-            color: #64748b;
-            margin-bottom: 16px;
-            font-weight: 500;
-            letter-spacing: -0.015em;
-        }
-        
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-        
-        .chart-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .chart-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-        
-        .chart-title {
-            font-size: 1.75em;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 10px;
-            letter-spacing: -0.025em;
-        }
-        
-        .chart-subtitle {
-            font-size: 1em;
-            color: #64748b;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-        
-        .chart-source {
-            font-size: 0.875em;
-            color: #94a3b8;
-            font-weight: 500;
-            font-style: normal;
-        }
-        
-        .chart-container {
-            position: relative;
-            height: 450px;
-            margin-bottom: 20px;
-        }
-        
-        .legend-custom {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 25px;
-            flex-wrap: wrap;
             padding: 20px;
-            background: rgba(248, 250, 252, 0.8);
-            border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
         }
         
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.875em;
-            font-weight: 500;
-            color: #334155;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .legend-line {
-            width: 32px;
-            height: 4px;
-            border-radius: 2px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .trend-analysis {
-            margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #fef3e2 0%, #fed7aa 100%);
-            border-radius: 16px;
-            border-left: 5px solid #f59e0b;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        
-        .trend-title {
-            font-size: 1.125em;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 15px;
-            letter-spacing: -0.015em;
-        }
-        
-        .trend-content {
-            font-size: 0.95em;
-            line-height: 1.7;
-            color: #374151;
-            margin: 0;
-            font-weight: 500;
-        }
-        
-        .trend-content strong {
-            color: #b45309;
-            font-weight: 700;
-        }
-        
-        .stats-section {
-            margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            border-radius: 16px;
-            border: 1px solid rgba(148, 163, 184, 0.2);
-        }
-        
-        .stats-title {
-            font-size: 1.25em;
-            font-weight: 700;
-            margin-bottom: 18px;
-            color: #0f172a;
+        .header {
             text-align: center;
-            letter-spacing: -0.015em;
+            margin-bottom: 50px;
+            padding: 40px 20px;
         }
         
-        .stats-grid {
+        h1 {
+            font-size: 3em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .fundamentals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
         }
         
-        .stat-item {
-            text-align: center;
-            padding: 20px 16px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .stat-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-value {
-            font-size: 1.5em;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-        }
-        
-        .stat-label {
-            font-size: 0.875em;
-            color: #64748b;
-            margin-top: 6px;
-            font-weight: 500;
-        }
-        
-        .update-note {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border: 1px solid #f59e0b;
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 20px;
-            text-align: center;
-            color: #92400e;
-            font-size: 0.875em;
-            font-weight: 600;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        
-        .comparison-section {
+        .fundamental-card {
             background: white;
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-top: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #8B4513;
         }
         
-        .comparison-title {
+        .fundamental-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-align: center;
+            display: block;
+        }
+        
+        .card-title {
             font-size: 1.5em;
             font-weight: 700;
             color: #2c3e50;
+            margin-bottom: 15px;
             text-align: center;
-            margin-bottom: 20px;
         }
         
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .card-content {
+            color: #666;
+            line-height: 1.6;
         }
         
-        .comparison-item {
-            padding: 20px;
+        .stat-box {
             background: #f8f9fa;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
             text-align: center;
         }
         
-        .comparison-country {
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .comparison-trend {
-            font-size: 2em;
+        .stat-value {
+            font-size: 1.8em;
             font-weight: 700;
-            margin-bottom: 5px;
+            color: #8B4513;
         }
         
-        .comparison-desc {
+        .stat-label {
             font-size: 0.9em;
             color: #666;
+            margin-top: 5px;
         }
         
-        @media (max-width: 1024px) {
-            .dashboard-container {
-                padding: 10px;
-            }
-            
-            .chart-container {
-                height: 400px;
-            }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+        
+        .supply-demand-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .balance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .balance-table th {
+            background: #8B4513;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .balance-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .balance-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .trend-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .trend-up {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .trend-down {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .trend-neutral {
+            background: #fff3cd;
+            color: #856404;
         }
         
         @media (max-width: 768px) {
-            .dashboard-header,
-            .chart-card {
-                padding: 20px;
+            h1 {
+                font-size: 2.2em;
             }
             
-            .chart-container {
-                height: 350px;
+            .fundamentals-grid {
+                grid-template-columns: 1fr;
             }
             
-            .legend-custom {
-                gap: 15px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            .balance-table {
+                font-size: 0.9em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- 대시보드 헤더 -->
-        <div class="dashboard-header">
-            <h1 class="dashboard-title"> 커피 시장 통합 대시보드</h1>
-            <p class="dashboard-subtitle">브라질 커피 수출입 동향 및 전년 동기 대비 분석</p>
+    <div class="container">
+        <a href="../index.html" class="back-button">
+            ← 메인 페이지로 돌아가기
+        </a>
+        
+        <div class="header">
+            <h1>📊 Fundamentals</h1>
+            <p class="subtitle">커피 시장 펀더멘털 분석</p>
         </div>
         
-        <!-- 차트 그리드 -->
-        <div class="charts-grid">
-            <!-- 미국향 브라질 수출 차트 -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2 class="chart-title">브라질 대미 생두 수출량</h2>
-                    <p class="chart-subtitle">2024년 vs 2025년 월별 비교 및 전년 동기 대비 변화율</p>
-                    <p class="chart-source">출처: LSEG</p>
-                </div>
-                
-                <div class="chart-container">
-                    <canvas id="usExportChart"></canvas>
-                </div>
-                
-                <div class="legend-custom">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #bdc3c7;"></div>
-                        <span>2024년 (10만톤)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #8B4513;"></div>
-                        <span>2025년 (10만톤)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-line" style="background: linear-gradient(to right, #3498db, #FF6B35); height: 4px;"></div>
-                        <span>전년 동기 대비 변화율 (+ 파란색, - 주황색)</span>
-                    </div>
-                </div>
-                
-                <!-- 트렌드 분석 -->
-                <div class="trend-analysis">
-                    <h4 class="trend-title">💡 Implication - 수출입 동향</h4>
-                    <p class="trend-content">
-                        브라질의 대미 생두 수출은 <strong>4-6월 연속 전년 대비 역성장</strong> (-31.5%, -29.9%, -34.3%)을 기록했습니다. 
-                        특히 6월 134천톤은 18개월 중 최저 수준으로, <strong>8/1 관세 부과 시 완충 역할을 할 재고가 불충분한 상황</strong>입니다. 
-                        이는 미국 커피 가격 상승 압력과 공급망 불안정성을 시사합니다.
-                    </p>
-                </div>
-                
-                <div class="stats-section">
-                    <h3 class="stats-title">📊 주요 통계</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #FF6B35;">-16.8%</div>
-                            <div class="stat-label">평균 변화율</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #8B4513;">2.46</div>
-                            <div class="stat-label">2025년 최고 (1월)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #8B4513;">1.34</div>
-                            <div class="stat-label">2025년 최저 (6월)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #bdc3c7;">2.86</div>
-                            <div class="stat-label">2024년 최고 (11월)</div>
-                        </div>
+        <div class="fundamentals-grid">
+            <div class="fundamental-card">
+                <span class="card-icon">🌍</span>
+                <h3 class="card-title">글로벌 생산량</h3>
+                <div class="card-content">
+                    <p>주요 생산국의 커피 생산량과 작황 현황을 모니터링합니다.</p>
+                    <div class="stat-box">
+                        <div class="stat-value">170M</div>
+                        <div class="stat-label">2024/25 예상 생산량 (bags)</div>
                     </div>
                 </div>
             </div>
             
-            <!-- 한국의 브라질 수입 차트 -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2 class="chart-title">한국 브라질 생두 수입량</h2>
-                    <p class="chart-subtitle">2024년 vs 2025년 월별 비교 및 전년 동기 대비 변화율</p>
-                    <p class="chart-source">출처: 식품의약품안전처</p>
-                </div>
-                
-                <div class="chart-container">
-                    <canvas id="koreaImportChart"></canvas>
-                </div>
-                
-                <div class="legend-custom">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #bdc3c7;"></div>
-                        <span>2024년 (kg)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #8B4513;"></div>
-                        <span>2025년 (kg)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-line" style="background: linear-gradient(to right, #3498db, #FF6B35); height: 4px;"></div>
-                        <span>전년 동기 대비 변화율 (+ 파란색, - 주황색)</span>
+            <div class="fundamental-card">
+                <span class="card-icon">☕</span>
+                <h3 class="card-title">글로벌 소비량</h3>
+                <div class="card-content">
+                    <p>전 세계 커피 소비 트렌드와 주요 소비국의 수요 변화를 추적합니다.</p>
+                    <div class="stat-box">
+                        <div class="stat-value">175M</div>
+                        <div class="stat-label">2024/25 예상 소비량 (bags)</div>
                     </div>
                 </div>
-                
-                <div class="update-note">
-                    📍 2025년 7월 데이터는 월 중 집계로 계속 업데이트 중입니다.
+            </div>
+            
+            <div class="fundamental-card">
+                <span class="card-icon">📦</span>
+                <h3 class="card-title">재고 수준</h3>
+                <div class="card-content">
+                    <p>주요 소비국과 생산국의 커피 재고 현황을 분석합니다.</p>
+                    <div class="stat-box">
+                        <div class="stat-value">25년 최저</div>
+                        <div class="stat-label">현재 재고 수준</div>
+                    </div>
                 </div>
-                
-                <!-- 트렌드 분석 -->
-                <div class="trend-analysis">
-                    <h4 class="trend-title">💡 Implication - 수출입 동향</h4>
-                    <p class="trend-content">
-                        한국의 브라질 생두 수입은 <strong>5-7월 안정적 유지</strong> (5,779kg → 4,815kg → 4,033kg)를 보이며, 
-                        <strong>전년 동기 대비 지속적인 성장세</strong>를 이어가고 있습니다. 
-                        다만 <strong>최근 증가율이 둔화되는 추세</strong> (5월 +30.0% → 6월 -3.3% → 7월 -24.4%)로, 
-                        향후 수입 패턴 변화를 주시할 필요가 있습니다. 그럼에도 미국 시장 대비 <strong>상대적으로 안정적인 공급망을 확보</strong>하고 있는 상황입니다.
-                    </p>
+            </div>
+            
+            <div class="fundamental-card">
+                <span class="card-icon">🌦️</span>
+                <h3 class="card-title">기후 영향</h3>
+                <div class="card-content">
+                    <p>엘니뇨/라니냐 등 기후 패턴이 커피 생산에 미치는 영향을 평가합니다.</p>
+                    <div class="stat-box">
+                        <div class="stat-value">라니냐</div>
+                        <div class="stat-label">2025년 예상 패턴</div>
+                    </div>
                 </div>
-                
-                <div class="stats-section">
-                    <h3 class="stats-title">📊 주요 통계</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #FF6B35;" id="koreaAvgChange">+5.6%</div>
-                            <div class="stat-label">평균 변화율 (1-7월)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #8B4513;">7,009</div>
-                            <div class="stat-label">2025년 최고 (2월)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #8B4513;">3,830</div>
-                            <div class="stat-label">2025년 최저 (1월)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" style="color: #bdc3c7;">6,890</div>
-                            <div class="stat-label">2024년 최고 (1월)</div>
-                        </div>
+            </div>
+            
+            <div class="fundamental-card">
+                <span class="card-icon">💰</span>
+                <h3 class="card-title">생산 비용</h3>
+                <div class="card-content">
+                    <p>비료, 노동력, 운송비 등 생산 비용 변화를 모니터링합니다.</p>
+                    <div class="stat-box">
+                        <div class="stat-value">+15%</div>
+                        <div class="stat-label">전년 대비 비용 상승</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fundamental-card">
+                <span class="card-icon">🚢</span>
+                <h3 class="card-title">수출입 동향</h3>
+                <div class="card-content">
+                    <p>주요 수출국과 수입국의 무역 흐름을 추적합니다.</p>
+                    <div class="stat-box">
+                        <div class="stat-value">145M</div>
+                        <div class="stat-label">연간 교역량 (bags)</div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <div class="supply-demand-section">
+            <h2 class="section-title">
+                ⚖️ 글로벌 수급 밸런스
+            </h2>
+            <table class="balance-table">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>2023/24</th>
+                        <th>2024/25(E)</th>
+                        <th>변화</th>
+                        <th>트렌드</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>생산량</strong></td>
+                        <td>168M bags</td>
+                        <td>170M bags</td>
+                        <td>+1.2%</td>
+                        <td><span class="trend-indicator trend-up">↑ 증가</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>소비량</strong></td>
+                        <td>171M bags</td>
+                        <td>175M bags</td>
+                        <td>+2.3%</td>
+                        <td><span class="trend-indicator trend-up">↑ 증가</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>수급 차이</strong></td>
+                        <td>-3M bags</td>
+                        <td>-5M bags</td>
+                        <td>-66.7%</td>
+                        <td><span class="trend-indicator trend-down">↓ 적자 확대</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>기말 재고</strong></td>
+                        <td>32M bags</td>
+                        <td>27M bags</td>
+                        <td>-15.6%</td>
+                        <td><span class="trend-indicator trend-down">↓ 감소</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>재고/소비 비율</strong></td>
+                        <td>18.7%</td>
+                        <td>15.4%</td>
+                        <td>-3.3%p</td>
+                        <td><span class="trend-indicator trend-down">↓ 타이트</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="supply-demand-section">
+            <h2 class="section-title">
+                🌎 주요 생산국 현황
+            </h2>
+            <table class="balance-table">
+                <thead>
+                    <tr>
+                        <th>국가</th>
+                        <th>2024/25 생산량</th>
+                        <th>세계 점유율</th>
+                        <th>주요 품종</th>
+                        <th>수확 시기</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>브라질</strong></td>
+                        <td>65M bags</td>
+                        <td>38.2%</td>
+                        <td>아라비카/로부스타</td>
+                        <td>5-9월</td>
+                    </tr>
+                    <tr>
+                        <td><strong>베트남</strong></td>
+                        <td>28M bags</td>
+                        <td>16.5%</td>
+                        <td>로부스타</td>
+                        <td>10-3월</td>
+                    </tr>
+                    <tr>
+                        <td><strong>콜롬비아</strong></td>
+                        <td>12M bags</td>
+                        <td>7.1%</td>
+                        <td>아라비카</td>
+                        <td>연중</td>
+                    </tr>
+                    <tr>
+                        <td><strong>인도네시아</strong></td>
+                        <td>10M bags</td>
+                        <td>5.9%</td>
+                        <td>로부스타/아라비카</td>
+                        <td>4-9월</td>
+                    </tr>
+                    <tr>
+                        <td><strong>에티오피아</strong></td>
+                        <td>8M bags</td>
+                        <td>4.7%</td>
+                        <td>아라비카</td>
+                        <td>10-1월</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <script>
-        // 공통 차트 옵션
-        const commonChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false
-            },
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        font: {
-                            size: 11,
-                            weight: '500'
-                        }
-                    }
-                },
-                y: {
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.1)'
-                    }
-                },
-                y1: {
-                    type: 'linear',
-                    display: true,
-                    position: 'right',
-                    title: {
-                        display: true,
-                        text: '변화율 (%)',
-                        font: {
-                            size: 12,
-                            weight: '600'
-                        }
-                    },
-                    grid: {
-                        drawOnChartArea: false,
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return value + '%';
-                        }
-                    }
-                }
-            }
-        };
-
-        // 월 라벨
-        const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-        
-        // 미국향 수출 데이터 (10만톤 단위로 변환)
-        const usExportData2024 = [2.24, 2.17, 2.09, 2.54, 2.44, 2.04, 2.03, 2.07, 2.43, 2.80, 2.86, 2.02];
-        const usExportData2025 = [2.46, 1.73, 2.20, 1.74, 1.71, 1.34, null, null, null, null, null, null];
-        const usYoyChangeRate = [9.8, -20.3, 5.3, -31.5, -29.9, -34.3];
-        
-        // 한국 수입 데이터 (톤 단위 그대로)
-        const koreaImportData2024 = [6889.81, 4185.71, 3503.19, 5721.36, 4445.76, 4980.18, 5330.91, 6420.28, 4327.47, 5144.04, 2457.25, 5752.22];
-        const koreaImportData2025 = [3829.50, 7009.28, 5072.39, 5672.69, 5779.15, 4815.05, 4033.01, null, null, null, null, null];
-        
-        // 한국 YoY 변화율 계산
-        const koreaYoyChangeRate = [];
-        for (let i = 0; i < 7; i++) {
-            if (koreaImportData2025[i] !== null && koreaImportData2024[i] !== null) {
-                const changeRate = ((koreaImportData2025[i] - koreaImportData2024[i]) / koreaImportData2024[i]) * 100;
-                koreaYoyChangeRate.push(parseFloat(changeRate.toFixed(1)));
-            } else {
-                koreaYoyChangeRate.push(null);
-            }
-        }
-        
-        // 그라데이션 생성 함수
-        function createGradient(ctx, color1, color2) {
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, color1);
-            gradient.addColorStop(1, color2);
-            return gradient;
-        }
-        
-        // 미국향 수출 차트 생성
-        const usCtx = document.getElementById('usExportChart').getContext('2d');
-        
-        // 그라데이션 생성
-        const us2024Gradient = createGradient(usCtx, '#d5dbdb', '#bdc3c7');
-        const us2025Gradient = createGradient(usCtx, '#A0522D', '#6B2C0F');
-        
-        const usChart = new Chart(usCtx, {
-            type: 'bar',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: '2024년',
-                        data: usExportData2024,
-                        backgroundColor: us2024Gradient,
-                        borderColor: '#95a5a6',
-                        borderWidth: 1,
-                        yAxisID: 'y',
-                        order: 3
-                    },
-                    {
-                        label: '2025년',
-                        data: usExportData2025,
-                        backgroundColor: us2025Gradient,
-                        borderColor: '#8B4513',
-                        borderWidth: 1,
-                        yAxisID: 'y',
-                        order: 2
-                    },
-                    {
-                        label: '전년 동기 대비 변화율',
-                        data: [...usYoyChangeRate, null, null, null, null, null, null],
-                        type: 'line',
-                        borderColor: function(context) {
-                            return '#FF6B35'; // 모든 점을 주황색으로 (음수가 많음)
-                        },
-                        backgroundColor: 'rgba(255, 107, 53, 0.2)',
-                        borderWidth: 4,
-                        pointBackgroundColor: usYoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 3,
-                        pointRadius: 8,
-                        pointHoverRadius: 10,
-                        yAxisID: 'y1',
-                        tension: 0.3,
-                        fill: false,
-                        order: 1,
-                        segment: {
-                            borderColor: function(ctx) {
-                                const current = usYoyChangeRate[ctx.p0DataIndex];
-                                const next = usYoyChangeRate[ctx.p1DataIndex];
-                                if (current >= 0 && next >= 0) return '#3498db';
-                                if (current < 0 && next < 0) return '#FF6B35';
-                                return '#95a5a6'; // 교차점
-                            }
-                        }
-                    }
-                ]
-            },
-            options: {
-                ...commonChartOptions,
-                plugins: {
-                    ...commonChartOptions.plugins,
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                if (context.datasetIndex === 2) {
-                                    return `변화율: ${context.parsed.y}%`;
-                                } else {
-                                    return `${context.dataset.label}: ${context.parsed.y}십만톤`;
-                                }
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    ...commonChartOptions.scales,
-                    y: {
-                        ...commonChartOptions.scales.y,
-                        title: {
-                            display: true,
-                            text: '수출량 (10만톤)',
-                            font: {
-                                size: 12,
-                                weight: '600'
-                            }
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value.toFixed(1);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 한국 수입 차트 생성
-        const koreaCtx = document.getElementById('koreaImportChart').getContext('2d');
-        
-        // 그라데이션 생성
-        const korea2024Gradient = createGradient(koreaCtx, '#d5dbdb', '#bdc3c7');
-        const korea2025Gradient = createGradient(koreaCtx, '#A0522D', '#6B2C0F');
-        
-        const koreaChart = new Chart(koreaCtx, {
-            type: 'bar',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: '2024년',
-                        data: koreaImportData2024,
-                        backgroundColor: korea2024Gradient,
-                        borderColor: '#95a5a6',
-                        borderWidth: 1,
-                        yAxisID: 'y',
-                        order: 3
-                    },
-                    {
-                        label: '2025년',
-                        data: koreaImportData2025,
-                        backgroundColor: korea2025Gradient,
-                        borderColor: '#8B4513',
-                        borderWidth: 1,
-                        yAxisID: 'y',
-                        order: 2
-                    },
-                    {
-                        label: '전년 동기 대비 변화율',
-                        data: [...koreaYoyChangeRate, null, null, null, null, null],
-                        type: 'line',
-                        borderColor: function(context) {
-                            return '#3498db'; // 기본색 (양수가 많음)
-                        },
-                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                        borderWidth: 4,
-                        pointBackgroundColor: koreaYoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 3,
-                        pointRadius: 8,
-                        pointHoverRadius: 10,
-                        yAxisID: 'y1',
-                        tension: 0.3,
-                        fill: false,
-                        order: 1,
-                        segment: {
-                            borderColor: function(ctx) {
-                                const current = koreaYoyChangeRate[ctx.p0DataIndex];
-                                const next = koreaYoyChangeRate[ctx.p1DataIndex];
-                                if (current >= 0 && next >= 0) return '#3498db';
-                                if (current < 0 && next < 0) return '#FF6B35';
-                                return '#95a5a6'; // 교차점
-                            }
-                        }
-                    }
-                ]
-            },
-            options: {
-                ...commonChartOptions,
-                plugins: {
-                    ...commonChartOptions.plugins,
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                if (context.datasetIndex === 2) {
-                                    return `변화율: ${context.parsed.y}%`;
-                                } else {
-                                    return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}kg`;
-                                }
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    ...commonChartOptions.scales,
-                    y: {
-                        ...commonChartOptions.scales.y,
-                        title: {
-                            display: true,
-                            text: '수입량 (kg)',
-                            font: {
-                                size: 12,
-                                weight: '600'
-                            }
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value.toLocaleString();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 한국 평균 변화율 업데이트
-        const koreaAvgChangeRate = koreaYoyChangeRate.filter(rate => rate !== null).reduce((sum, rate) => sum + rate, 0) / koreaYoyChangeRate.filter(rate => rate !== null).length;
-        document.getElementById('koreaAvgChange').textContent = (koreaAvgChangeRate >= 0 ? '+' : '') + koreaAvgChangeRate.toFixed(1) + '%';
-        
-        // 차트 애니메이션
-        usChart.update('active');
-        koreaChart.update('active');
-    </script>
 </body>
 </html>
