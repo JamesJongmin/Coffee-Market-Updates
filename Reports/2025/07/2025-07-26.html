@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<!--REPORT_META
+{
+    "title": "커피 선물 시장 주간 동향",
+    "subtitle": "단기 상승 후 혼조세, 극단적 숏 포지션과 수확 마무리의 대조",
+    "date": "2025-07-26",
+    "summary": "커피 선물이 브라질 서리 위험에 대한 우려로 단기 상승 후 혼조세를 보이며 시장 변동성이 극대화되고 있습니다. 9월물 아라비카(KCU25)는 7월 25일 297.55센트를 기록하며 전일 대비 2.39% 하락했으나, 주중에는 한때 1주 최고치까지 상승하는 등 극심한 변동성을 보였습니다. 미국의 브라질 50% 관세 부과 발표와 펀드의 극단적 숏 포지션(2년 최대)이 시장 혼란을 가중시키고 있습니다.",
+    "tags": ["커피선물", "미국관세", "브라질수확", "펀드숏포지션", "ICE재고", "에티오피아옥션", "변동성", "시장혼조"]
+}
+REPORT_META-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #f4a261;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .home-button:hover {
+            background-color: #e76f51;
+        }
+
+        .home-button svg {
+            fill: currentColor;
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: middle;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #8B4513;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: center;
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <div class="date-stamp">2025년 7월 26일 토요일</div>
+        </header>
+
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #8B4513; margin-bottom: 20px;">주요 헤드라인: 단기 상승 후 혼조세, 극단적 숏 포지션과 수확 마무리의 대조</h2>
+                <p style="margin-bottom: 15px;">
+                    <strong>커피 선물이 브라질 서리 위험에 대한 우려로 단기 상승 후 혼조세를 보이며 시장 변동성이 극대화되고 있습니다.</strong> 
+                    9월 아라비카 커피(KCU25)는 7월 25일 297.55센트로 마감하며 전일 대비 2.39% 하락했으나, 
+                    주중에는 한때 1주 최고치까지 상승하는 등 극심한 변동성을 보였습니다. 
+                    브라질 수확 77% 완료와 펀드의 2년 최대 숏 포지션이 대조를 이루며 시장 혼란을 가중시키고 있습니다.
+                </p>
+                
+                <div class="content-section" style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #764ba2;">
+                    <h3 style="color: #764ba2; margin-bottom: 10px;">핵심 요약</h3>
+                    <p style="font-size: 1.0em; line-height: 1.6;">
+                        이번 주 커피 시장은 브라질 기상 위험과 수급 현실 사이의 극명한 대조를 보였습니다. 
+                        Climatempo의 서리 경보가 시장을 강타한 가운데 Safras & Mercado는 수확이 77% 완료되어 
+                        역대 최고 진행률을 기록했다고 발표했습니다. ICE 로부스타 재고가 1년 최고치를 경신하는 등 
+                        공급 증가 신호가 뚜렷함에도 불구하고 펀드의 극단적 숏 포지션이 가격 급등을 증폭시켰습니다.
+                    </p>
+                </div>
+                <div class="highlight">
+                    <h3 style="margin-bottom: 10px;">이번 주 핵심 시장 동향</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>미국 50% 관세 부과:</strong> 트럼프 대통령이 브라질에 8월 1일부터 50% 관세 시행 발표</li>
+                        <li><strong>브라질 서리 경보 발령:</strong> Climatempo가 커피 벨트 지역 한파 전선 경고</li>
+                        <li><strong>수확 77% 완료:</strong> Safras & Mercado 보고, 로부스타 93% 아라비카 67% 진행</li>
+                        <li><strong>펀드 극단적 숏 포지션:</strong> ICE 로부스타에서 2년 최대 1,294 계약 순매도</li>
+                        <li><strong>ICE 재고 1년 최고:</strong> 로부스타 재고 6,519 로트, 아라비카 806,062포대로 3개월 최저</li>
+                        <li><strong>에티오피아 옥션 신기록:</strong> Faysel Abdosh 옥션에서 $1,604/kg 달성</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="price-box">
+                    <h3>9월 아라비카 (KCU25)</h3>
+                    <div class="price-value">297.55¢</div>
+                    <div class="price-change negative">-7.30¢ (-2.39%)</div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">25년 7월 25일 미국 종가 기준</div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">주요 지표 현황 (1D, 1W, 1M, 3M, 6M, 1Y)</h3>
+                    <div class="stat-item">
+                        <span><strong>커피 선물 (KCU25, ICE):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #ff6b6b;">-2.39%</span> / <span style="color: #51cf66;">+2.8%</span> / <span style="color: #ff6b6b;">-13.1%</span> / <span style="color: #ff6b6b;">-29.1%</span> / <span style="color: #ff6b6b;">-22.8%</span> / <span style="color: #51cf66;">+29.2%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>로부스타 (RMU25, ICE):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #51cf66;">+1.2%</span> / <span style="color: #51cf66;">+3.5%</span> / <span style="color: #ff6b6b;">-18.9%</span> / <span style="color: #ff6b6b;">-33.2%</span> / <span style="color: #ff6b6b;">-16.4%</span> / <span style="color: #51cf66;">+22.8%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>네슬레 (NESN.SW):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #ff6b6b;">-4.9%</span> / <span style="color: #ff6b6b;">-3.2%</span> / <span style="color: #ff6b6b;">-5.8%</span> / <span style="color: #ff6b6b;">-8.9%</span> / <span style="color: #ff6b6b;">-1.1%</span> / <span style="color: #ff6b6b;">-12.3%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>JDE Peet's (JDEP.AS):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #51cf66;">+0.8%</span> / <span style="color: #51cf66;">+1.9%</span> / <span style="color: #51cf66;">+3.4%</span> / <span style="color: #51cf66;">+19.8%</span> / <span style="color: #51cf66;">+41.2%</span> / <span style="color: #51cf66;">+34.7%</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+            <h2 style="color: #8B4513; margin-bottom: 30px; text-align: center;">CFTC 펀드 포지션 현황: 아라비카 vs 로부스타</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 20px; color: #555; font-size: 1.3em;">아라비카 CFTC 머니매니저 포지션</h3>
+                    <svg viewBox="0 0 420 280" style="width: 100%; max-width: 420px; margin: 0 auto; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; padding: 10px;">
+                        <defs>
+                            <linearGradient id="trendGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:0.8" />
+                                <stop offset="70%" style="stop-color:#f39c12;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#27ae60;stop-opacity:0.8" />
+                            </linearGradient>
+                            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.3"/>
+                            </filter>
+                        </defs>
+                        
+                        <line x1="50" y1="40" x2="50" y2="220" stroke="#34495e" stroke-width="2"/>
+                        <line x1="50" y1="220" x2="380" y2="220" stroke="#34495e" stroke-width="2"/>
+                        
+                        <!-- 트렌드 라인 (하락 후 최근 반등) -->
+                        <polyline fill="none" stroke="url(#trendGradient)" stroke-width="3"
+                            points="60,80 100,90 140,105 180,125 220,150 260,170 300,165 340,155 380,145"/>
+                        
+                        <!-- 포인트들 -->
+                        <circle cx="60" cy="80" r="4" fill="#e74c3c"/>
+                        <circle cx="100" cy="90" r="4" fill="#e74c3c"/>
+                        <circle cx="140" cy="105" r="4" fill="#e74c3c"/>
+                        <circle cx="180" cy="125" r="4" fill="#f39c12"/>
+                        <circle cx="220" cy="150" r="4" fill="#f39c12"/>
+                        <circle cx="260" cy="170" r="4" fill="#f39c12"/>
+                        <circle cx="300" cy="165" r="5" fill="#27ae60"/>
+                        <circle cx="340" cy="155" r="5" fill="#27ae60"/>
+                        <circle cx="380" cy="145" r="6" fill="#27ae60"/>
+                        
+                        <!-- 최근 반등 구간 표시 -->
+                        <rect x="290" y="35" width="100" height="15" fill="#d4edda" rx="7" ry="7" opacity="0.8"/>
+                        <text x="340" y="45" font-size="10" fill="#155724" font-weight="bold" text-anchor="middle">최근 2주 반등</text>
+                        
+                        <g font-size="11" fill="#34495e" font-weight="500">
+                            <text x="45" y="225" text-anchor="end">5월</text>
+                            <text x="110" y="225" text-anchor="end">6월</text>
+                            <text x="180" y="225" text-anchor="end">7월</text>
+                            <text x="250" y="225" text-anchor="end">7월 중</text>
+                            <text x="320" y="225" text-anchor="end">7월 말</text>
+                        </g>
+                        
+                        <text x="215" y="25" text-anchor="middle" font-size="12" fill="#34495e" font-weight="bold">순매수 포지션 추이 (상대적)</text>
+                        <text x="215" y="250" text-anchor="middle" font-size="9" fill="#7f8c8d">CFTC COT 보고서, 비상업적 투기 부문</text>
+                    </svg>
+                    <div style="margin-top: 15px; padding: 10px; background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); border-radius: 8px;">
+                        <p style="font-size: 0.9em; color: #0c5460; margin: 0; font-weight: 500;">
+                            📈 <strong>최근 동향:</strong> 지속 하락 후 반전 신호<br>
+                            🔄 7월 1일 기준 전주 대비 8.15% 감소 후 반등 중
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 20px; color: #555; font-size: 1.3em;">로부스타 펀드 포지션 (ICE)</h3>
+                    <svg viewBox="0 0 420 280" style="width: 100%; max-width: 420px; margin: 0 auto; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; padding: 10px;">
+                        <defs>
+                            <linearGradient id="negativeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#c0392b;stop-opacity:0.9" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <line x1="50" y1="40" x2="50" y2="220" stroke="#34495e" stroke-width="2"/>
+                        <line x1="50" y1="220" x2="380" y2="220" stroke="#34495e" stroke-width="2"/>
+                        <line x1="50" y1="130" x2="380" y2="130" stroke="#95a5a6" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="385" y="135" font-size="10" fill="#95a5a6">0선</text>
+                        
+                        <g font-size="11" fill="#34495e" font-weight="500">
+                            <text x="45" y="225" text-anchor="end">-1500</text>
+                            <text x="45" y="189" text-anchor="end">-1000</text>
+                            <text x="45" y="153" text-anchor="end">-500</text>
+                            <text x="45" y="135" text-anchor="end">0</text>
+                            <text x="45" y="117" text-anchor="end">+500</text>
+                            <text x="45" y="81" text-anchor="end">+1000</text>
+                        </g>
+                        
+                        <!-- 숏 포지션 바 (-1,294) -->
+                        <rect x="100" y="175" width="194" height="35" fill="url(#negativeGradient)" rx="8" ry="8" filter="url(#shadow)"/>
+                        <text x="90" y="170" font-size="11" fill="#e74c3c" font-weight="bold">숏 포지션</text>
+                        <text x="200" y="196" font-size="14" fill="white" font-weight="bold" text-anchor="middle">-1,294</text>
+                        
+                        <!-- 경고 표시 -->
+                        <circle cx="320" cy="192" r="20" fill="#f39c12" opacity="0.8"/>
+                        <text x="320" y="198" font-size="16" fill="white" font-weight="bold" text-anchor="middle">!</text>
+                        <text x="350" y="180" font-size="10" fill="#f39c12" font-weight="bold">2년 최대</text>
+                        <text x="350" y="195" font-size="10" fill="#f39c12" font-weight="bold">숏 포지션</text>
+                        
+                        <text x="215" y="25" text-anchor="middle" font-size="12" fill="#34495e" font-weight="bold">펀드 순포지션 (계약수)</text>
+                        <text x="215" y="250" text-anchor="middle" font-size="9" fill="#7f8c8d">ICE Futures Europe, 7월 15일 기준</text>
+                    </svg>
+                    <div style="margin-top: 15px; padding: 10px; background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%); border-radius: 8px;">
+                        <p style="font-size: 0.9em; color: #721c24; margin: 0; font-weight: 500;">
+                            ⚠️ <strong>위험 신호:</strong> 극단적 숏 포지션<br>
+                            📈 숏 커버링 시 급등 가능성 높음
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 12px; border-left: 5px solid #f39c12; box-shadow: 0 4px 12px rgba(243, 156, 18, 0.1);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                    <span style="font-size: 1.2em;">⚖️</span>
+                    <strong style="color: #856404; font-size: 1.1em;">포지션 분석</strong>
+                </div>
+                <p style="font-size: 0.95em; color: #856404; margin: 0; line-height: 1.6;">
+                    <strong>아라비카와 로부스타 시장에서 상반된 펀드 포지션 패턴</strong>이 관찰되고 있습니다. 
+                    아라비카는 CFTC 머니매니저들이 지속적인 하락 후 최근 2주간 순매수 포지션을 증가시키기 시작했으나, 
+                    로부스타는 여전히 2년 최대 규모의 극단적 숏 포지션(-1,294 계약)을 유지하고 있어 
+                    <strong>품종별 시장 심리의 극명한 차이</strong>를 보여주고 있습니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">🌡️ 기상 위험 & 수급 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.25</div>
+                    <div class="news-content">
+                        <strong>ICE 로부스타 재고 1년 최고:</strong> ICE 모니터링 로부스타 재고가 6,519 로트로 1년 최고치를 
+                        기록했습니다. 반면 아라비카 재고는 806,062포대로 3개월 최저 수준까지 감소하여 
+                        품종별 공급 상황의 극명한 대조를 보였습니다.
+                        <a href="https://qahwaworld.com/news/weather-risk-brazil-coffee-prices-rise/" target="_blank">출처: Qahwa World</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.24</div>
+                    <div class="news-content">
+                        <strong>브라질 소규모 농장 관세 우려:</strong> 트럼프의 50% 관세 부과 발표 이후 브라질 소규모 커피 농가들이 
+                        미래에 대한 불안감을 표출하고 있습니다. 미국은 브라질 커피의 주요 수출 시장으로 
+                        관세 부과 시 농가 경제에 직접적 타격이 예상됩니다.
+                        <a href="https://www.chicoer.com/2025/07/24/brazil-us-coffee-producers/" target="_blank">출처: AP/Chico Enterprise</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.23</div>
+                    <div class="news-content">
+                        <strong>브라질 서리 경보 발령:</strong> Climatempo가 이번 주 후반 브라질 커피 벨트 지역에 
+                        한파 전선이 이동하며 작물 피해를 줄 수 있는 서리 위험이 높아졌다고 경고했습니다. 
+                        이로 인해 화요일 아라비카와 로부스타 선물이 각각 1.51%, 3.20% 급등했습니다.
+                        <a href="https://qahwaworld.com/news/brazil-frost-coffee-price-surge-2025/" target="_blank">출처: Qahwa World</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🇺🇸 미국 관세 정책 & 무역</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.21</div>
+                    <div class="news-content">
+                        <strong>미국 50% 관세 부과 충격파:</strong> 트럼프 대통령이 브라질에 8월 1일부터 50% 관세를 부과한다고 
+                        발표하며 커피 업계에 충격을 주었습니다. 브라질은 미국 커피 수입의 30%를 차지하는 최대 공급국으로 
+                        관세 부과 시 미국 소비자 가격 급등이 불가피할 전망입니다.
+                        <a href="https://www.npr.org/2025/07/21/nx-s1-5470131/us-coffee-prices-brazil-trump-tariffs" target="_blank">출처: NPR</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.18</div>
+                    <div class="news-content">
+                        <strong>브라질 커피 경쟁력 타격 전망:</strong> Rabobank 분석가들은 50% 관세 부과로 브라질 커피가 
+                        미국 시장에서 경쟁력을 잃고 콜롬비아, 베트남, 에티오피아 등 다른 생산국들이 
+                        시장 점유율을 확대할 것이라고 분석했습니다.
+                        <a href="https://intelligence.coffee/2025/07/how-50-us-tariffs-on-brazil-could-reshape-coffee/" target="_blank">출처: Coffee Intelligence</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.18</div>
+                    <div class="news-content">
+                        <strong>Royal Coffee 관세 업데이트:</strong> 미국 최대 커피 수입업체 Royal Coffee가 8월 1일부터 시행되는 
+                        새로운 관세율을 발표했습니다. 인도네시아 32%, 베트남 20%, 인도 27%, 니카라과 19%이며 
+                        브라질의 50% 관세가 가장 높은 수준입니다.
+                        <a href="https://royalcoffee.com/july-2025-coffee-tariffs-updates-impact/" target="_blank">출처: Royal Coffee</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🏢 기업 동향 & 시장 분석</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.24</div>
+                    <div class="news-content">
+                        <strong>네슬레 추가 가격 인상 시사:</strong> 네슬레 CEO Laurent Freixe가 킷캣과 네스프레소 등 
+                        제품 가격을 하반기에 추가 인상할 가능성을 시사했습니다. 미국 관세와 원자재 가격 상승이 
+                        마진을 압박하고 있다고 설명했으며, 네슬레 주가는 4.9% 급락했습니다.
+                        <a href="https://www.cnbc.com/2025/07/24/nestle-flags-price-hikes-as-tariffs-commodities-weigh-on-margins.html" target="_blank">출처: CNBC</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.23</div>
+                    <div class="news-content">
+                        <strong>에티오피아 커피 옥션 신기록:</strong> Faysel Abdosh의 첫 번째 시그니처 옥션에서 
+                        Sidama Keramo Super Natural 로트가 $1,604/kg에 낙찰되어 에티오피아 커피 사상 최고가를 기록했습니다. 
+                        대만의 Black Gold Coffee가 낙찰받았으며, 수익금은 농민 교육과 의료시설 건설에 사용됩니다.
+                        <a href="https://qahwaworld.com/news/ethiopian-coffee-auction-record-2025/" target="_blank">출처: Qahwa World</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.21</div>
+                    <div class="news-content">
+                        <strong>JDE Peet's 자사주 매입 지속:</strong> JDE Peet's가 7월 14-18일 기간 190,991주를 
+                        평균 24.08유로에 매입했다고 발표했습니다. 이는 3월 발표한 2억 5천만 유로 규모 
+                        자사주 매입 프로그램의 일환으로 현재까지 총 8,800만 유로를 집행했습니다.
+                        <a href="https://www.globenewswire.com/news-release/2025/07/21/3118664/0/en/JDE-Peet-s-share-buyback-periodic-update-July-21-2025.html" target="_blank">출처: Globe Newswire</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📊 시장 분석 & 전망</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.22</div>
+                    <div class="news-content">
+                        <strong>브라질 6월 수출 31% 급감:</strong> Cecafe에 따르면 브라질의 6월 커피 수출이 전년 동월 대비 
+                        31% 감소한 230만 포대를 기록했습니다. 아라비카는 27% 감소, 로부스타는 42% 급감하여 
+                        수출 둔화가 가격 지지 요인으로 작용했습니다.
+                        <a href="https://qahwaworld.com/news/weather-risk-brazil-coffee-prices-rise/" target="_blank">출처: Qahwa World</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.21</div>
+                    <div class="news-content">
+                        <strong>Lavazza 회장 인플레이션 경고:</strong> Giuseppe Lavazza Lavazza 회장이 Bloomberg TV에서 
+                        50% 관세 부과 시 브라질 커피 가격이 "상당히" 상승하고 커피 업계에 "많은 인플레이션"을 
+                        가져올 수 있다고 경고했습니다.
+                        <a href="https://dailycoffeenews.com/2025/07/10/trumps-50-tariff-on-brazilian-goods-could-make-us-coffee-prices-soar/" target="_blank">출처: Daily Coffee News</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.20</div>
+                    <div class="news-content">
+                        <strong>CFTC 아라비카 포지션 반전 신호:</strong> I&M Smith 보고서에 따르면 뉴욕 아라비카 시장에서 
+                        비상업적 투기 부문이 지속적인 순매수 포지션 감소 추세를 보이다가 최근 2주간 반등 조짐을 
+                        보이고 있습니다. 7월 1일 기준 전주 대비 8.15% 감소 후 회복세로 전환했습니다.
+                        <a href="https://www.iandmsmith.com/news-headlines/coffee-market-reports" target="_blank">출처: I&M Smith</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.07.20</div>
+                    <div class="news-content">
+                        <strong>펀드 극단적 숏 포지션 지속:</strong> ICE Futures Europe 최신 보고서에 따르면 펀드들이 
+                        로부스타 선물에서 순매도 포지션을 더욱 확대하여 2년 만에 최대 규모를 기록했습니다. 
+                        이는 숏 커버링 시 급등 위험을 높이는 요인으로 작용하고 있습니다.
+                        <a href="https://www.barchart.com/futures/quotes/kc*0/futures-prices" target="_blank">출처: Barchart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망 및 분석</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>커피 시장은 현실과 인식, 그리고 정치적 요인이 복합적으로 작용하며 극한의 변동성을 경험하고 있습니다.</strong> 
+                브라질 수확 77% 완료와 ICE 로부스타 재고 1년 최고치 경신 등 공급 개선 신호가 뚜렷함에도 불구하고, 
+                트럼프의 브라질 50% 관세 부과 발표와 펀드의 극단적 숏 포지션이 시장 혼란을 가중시키고 있습니다.
+                <br><br>
+                <strong>미국의 50% 관세는 글로벌 커피 무역 구조를 근본적으로 재편할 게임 체인저입니다.</strong> 
+                브라질이 미국 커피 수입의 30%를 차지하는 만큼 8월 1일 시행 시 미국 소비자 가격 급등과 
+                브라질 커피의 경쟁력 약화가 불가피하며, 콜롬비아·베트남·에티오피아 등이 시장 점유율을 확대할 전망입니다.
+                <br><br>
+                <strong>단기적으로는 로부스타 극단적 숏 포지션과 아라비카 머니매니저 포지션 반등이 핵심 변수로 작용할 것입니다.</strong> 
+                에티오피아 옥션 신기록($1,604/kg)과 네슬레 추가 가격 인상 시사는 고품질 커피 프리미엄 지속을 의미하며, 
+                관세와 펀드 포지션 리스크가 복합 작용하여 중장기 인플레이션 압력이 강화될 전망입니다.
+            </p>
+        </div>
+
+        <div class="tags">
+            <span class="tag">297.55센트</span>
+            <span class="tag">혼조마감</span>
+            <span class="tag">미국관세50%</span>
+            <span class="tag">펀드숏포지션</span>
+            <span class="tag">ICE재고최고</span>
+            <span class="tag">에티오피아신기록</span>
+            <span class="tag">네슬레가격인상</span>
+            <span class="tag">변동성극대화</span>
+            <span class="tag">브라질경쟁력타격</span>
+            <span class="tag">스페셜티프리미엄</span>
+        </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, Barchart, Safras & Mercado, Climatempo, Qahwa World, Nasdaq | 
+            본 리포트는 정보 제공 목적으로 작성되었며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
