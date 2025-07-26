@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Report - Coffee Market Updates</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 3em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            border-left: 5px solid #8B4513;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .report-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+        }
+        
+        .report-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .report-description {
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .latest-badge {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+        
+        .info-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .info-title {
+            font-size: 2em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .info-content {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .info-content ul {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+        
+        .info-content li {
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">
+            ← 메인 페이지로 돌아가기
+        </a>
+        
+        <div class="header">
+            <h1>📊 Weekly Report</h1>
+            <p class="subtitle">주간 커피 시장 동향 보고서</p>
+        </div>
+        
+        <div class="info-section">
+            <h2 class="info-title">
+                📋 Weekly Report 소개
+            </h2>
+            <div class="info-content">
+                <p>매주 발행되는 커피 시장 동향 보고서는 글로벌 커피 시장의 최신 동향과 가격 변동을 심층적으로 분석합니다.</p>
+                
+                <ul>
+                    <li><strong>발행 주기:</strong> 매주 금요일</li>
+                    <li><strong>주요 내용:</strong> 주간 가격 동향, 수급 현황, 기후 영향, 투기 포지션 분석</li>
+                    <li><strong>데이터 소스:</strong> ICE, LSEG, CFTC, 주요 생산국 통계청</li>
+                    <li><strong>분석 범위:</strong> 아라비카/로부스타 선물, 현물 시장, 환율 영향</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="content-grid">
+            <a href="index.html#reportsGrid" class="report-card">
+                <span class="latest-badge">LATEST</span>
+                <span class="report-icon">📈</span>
+                <h3 class="report-title">최신 주간 보고서</h3>
+                <p class="report-description">
+                    이번 주 커피 시장의 주요 이슈와 가격 동향을 확인하세요. 
+                    브라질 작황, 베트남 수출, 글로벌 수요 변화 등을 다룹니다.
+                </p>
+            </a>
+            
+            <a href="index.html#reportsGrid" class="report-card">
+                <span class="report-icon">📚</span>
+                <h3 class="report-title">과거 보고서 아카이브</h3>
+                <p class="report-description">
+                    2024년부터 현재까지의 모든 주간 보고서를 검색하고 열람할 수 있습니다. 
+                    시장 트렌드의 변화를 추적하세요.
+                </p>
+            </a>
+            
+            <a href="index.html#dashboard-section" class="report-card">
+                <span class="report-icon">📊</span>
+                <h3 class="report-title">실시간 차트 대시보드</h3>
+                <p class="report-description">
+                    커피 선물 가격, USD/BRL 환율, CFTC 포지션, NVDI 지수 등 
+                    주요 지표를 실시간으로 확인하세요.
+                </p>
+            </a>
+        </div>
+        
+        <div class="info-section">
+            <h2 class="info-title">
+                💡 보고서 활용 가이드
+            </h2>
+            <div class="info-content">
+                <p><strong>1. 시장 동향 파악:</strong> 주간 가격 변동과 그 원인을 분석하여 시장의 방향성을 이해합니다.</p>
+                <p><strong>2. 리스크 관리:</strong> 기후 변화, 환율 변동 등 주요 리스크 요인을 모니터링합니다.</p>
+                <p><strong>3. 투자 결정:</strong> 펀더멘털과 기술적 분석을 바탕으로 투자 전략을 수립합니다.</p>
+                <p><strong>4. 업계 인사이트:</strong> 글로벌 커피 산업의 구조적 변화와 트렌드를 파악합니다.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-depth Analysis - Coffee Market Updates</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 3em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .analysis-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 5px solid #8B4513;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .chart-preview {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            height: 200px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 4em;
+            color: #8B4513;
+        }
+        
+        .analysis-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .analysis-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .data-points {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .data-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .data-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .data-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+        
+        .view-dashboard-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .view-dashboard-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .methodology-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .methodology-title {
+            font-size: 2em;
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+        
+        .methodology-content {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-points {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">
+            ← 메인 페이지로 돌아가기
+        </a>
+        
+        <div class="header">
+            <h1>🔍 In-depth Analysis</h1>
+            <p class="subtitle">커피 시장 심층 분석 대시보드</p>
+        </div>
+        
+        <div class="analysis-grid">
+            <div class="analysis-card">
+                <div class="chart-preview">📈</div>
+                <h2 class="analysis-title">Coffee Futures Analysis</h2>
+                <p class="analysis-description">
+                    아라비카와 로부스타 커피 선물 가격의 기술적 분석과 추세를 확인하세요. 
+                    지지선, 저항선, 이동평균선 등 주요 기술적 지표를 제공합니다.
+                </p>
+                <div class="data-points">
+                    <div class="data-item">
+                        <div class="data-value">KCN25</div>
+                        <div class="data-label">근월물</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">ICE</div>
+                        <div class="data-label">거래소</div>
+                    </div>
+                </div>
+                <a href="index.html#coffeeChart" class="view-dashboard-btn">차트 보기 →</a>
+            </div>
+            
+            <div class="analysis-card">
+                <div class="chart-preview">💱</div>
+                <h2 class="analysis-title">Currency Impact Analysis</h2>
+                <p class="analysis-description">
+                    브라질 헤알화(BRL)와 베트남 동(VND) 등 주요 생산국 통화가 
+                    커피 가격에 미치는 영향을 분석합니다.
+                </p>
+                <div class="data-points">
+                    <div class="data-item">
+                        <div class="data-value">USD/BRL</div>
+                        <div class="data-label">주요 환율</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">Daily</div>
+                        <div class="data-label">업데이트</div>
+                    </div>
+                </div>
+                <a href="index.html#usdChart" class="view-dashboard-btn">차트 보기 →</a>
+            </div>
+            
+            <div class="analysis-card">
+                <div class="chart-preview">📊</div>
+                <h2 class="analysis-title">Speculative Positions</h2>
+                <p class="analysis-description">
+                    CFTC COT 리포트를 기반으로 한 대형 투기 자금의 포지션 변화를 추적합니다. 
+                    시장 심리와 잠재적 전환점을 파악하세요.
+                </p>
+                <div class="data-points">
+                    <div class="data-item">
+                        <div class="data-value">Weekly</div>
+                        <div class="data-label">업데이트</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">Net Long</div>
+                        <div class="data-label">포지션</div>
+                    </div>
+                </div>
+                <a href="index.html#cftcChart" class="view-dashboard-btn">차트 보기 →</a>
+            </div>
+            
+            <div class="analysis-card">
+                <div class="chart-preview">🌱</div>
+                <h2 class="analysis-title">Crop Condition Analysis</h2>
+                <p class="analysis-description">
+                    위성 데이터를 활용한 NVDI(정규식생지수) 분석으로 브라질 커피 작황을 모니터링합니다. 
+                    수확량 예측의 핵심 지표입니다.
+                </p>
+                <div class="data-points">
+                    <div class="data-item">
+                        <div class="data-value">Brazil SE</div>
+                        <div class="data-label">주요 지역</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-value">Monthly</div>
+                        <div class="data-label">업데이트</div>
+                    </div>
+                </div>
+                <a href="index.html#nvdiChart" class="view-dashboard-btn">차트 보기 →</a>
+            </div>
+        </div>
+        
+        <div class="methodology-section">
+            <h2 class="methodology-title">📐 분석 방법론</h2>
+            <div class="methodology-content">
+                <p><strong>1. 기술적 분석:</strong> 차트 패턴, 추세선, 지지/저항선, 이동평균선, RSI, MACD 등 다양한 기술적 지표를 활용합니다.</p>
+                <br>
+                <p><strong>2. 펀더멘털 분석:</strong> 글로벌 수급 밸런스, 재고 수준, 기후 조건, 생산국 정책 등 기초적 요인을 종합적으로 평가합니다.</p>
+                <br>
+                <p><strong>3. 센티먼트 분석:</strong> CFTC 투기 포지션, 옵션 시장의 Put/Call 비율, 시장 참여자 설문조사 등을 통해 시장 심리를 파악합니다.</p>
+                <br>
+                <p><strong>4. 계절성 분석:</strong> 과거 데이터를 기반으로 한 계절적 패턴과 수확 주기가 가격에 미치는 영향을 분석합니다.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
