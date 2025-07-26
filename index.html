@@ -17,6 +17,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-date-fns/2.0.0/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Traffic Analytics & Management -->
+    <script src="analytics-config.js"></script>
+    
+    <!-- Meta tags for SEO and Analytics -->
+    <meta name="description" content="커피 선물 시장의 주간 동향과 분석을 제공하는 비즈니스 인텔리전스 플랫폼">
+    <meta name="keywords" content="커피, 선물, 시장분석, 아라비카, 로부스타, 트레이딩, 비즈니스 인텔리전스">
+    <meta name="author" content="Coffee Market Analysis Team">
+    <meta property="og:title" content="Coffee Market Updates Archive">
+    <meta property="og:description" content="커피 시장의 최신 동향과 분석 보고서">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jamesjongmin.github.io/Coffee-Market-Updates/">
+    <meta property="og:image" content="https://jamesjongmin.github.io/Coffee-Market-Updates/coffee-abstract-dark.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Coffee Market Updates Archive">
+    <meta name="twitter:description" content="커피 시장의 최신 동향과 분석 보고서">
+    <meta name="twitter:image" content="https://jamesjongmin.github.io/Coffee-Market-Updates/coffee-abstract-dark.jpg">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -669,6 +686,13 @@
         </div>
         
         <header>
+            <div style="position: absolute; top: 20px; right: 20px; z-index: 10;">
+                <a href="traffic-dashboard.html" style="background: rgba(255,255,255,0.2); color: white; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 0.9em; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s ease;" 
+                   onmouseover="this.style.background='rgba(255,255,255,0.3)'" 
+                   onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                    📊 트래픽 대시보드
+                </a>
+            </div>
             <h1>
                 Coffee Market Updates
                 <span class="live-indicator">Live</span>
@@ -2017,7 +2041,13 @@
         function createReportCard(report, isLatest) {
             const card = document.createElement('div');
             card.className = 'report-card';
-            card.onclick = () => window.location.href = report.link;
+            card.onclick = () => {
+                // 트래픽 추적: 보고서 조회
+                if (window.trackReportView) {
+                    window.trackReportView(report.date, 'weekly');
+                }
+                window.location.href = report.link;
+            };
             
             card.innerHTML = `
                 <div class="report-date">${report.displayDate}</div>
@@ -2029,7 +2059,7 @@
                 <div class="report-tags">
                     ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
-                <a href="${report.link}" class="read-more">보고서 읽기</a>
+                <a href="${report.link}" class="read-more" onclick="event.stopPropagation(); if(window.trackReportView) window.trackReportView('${report.date}', 'weekly');">보고서 읽기</a>
             `;
             
             return card;

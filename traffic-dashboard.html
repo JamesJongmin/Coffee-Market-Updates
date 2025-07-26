@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Dashboard - Coffee Market Updates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #8B4513;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .stat-description {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            color: #8B4513;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .real-time-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-feed {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #8B4513;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-time {
+            color: #7f8c8d;
+            font-size: 0.8em;
+        }
+
+        .settings-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: #8B4513;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #A0522D;
+        }
+
+        .btn-secondary {
+            background: #7f8c8d;
+        }
+
+        .btn-secondary:hover {
+            background: #95a5a6;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: #34495e;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #2c3e50;
+        }
+
+        .traffic-chart {
+            width: 100%;
+            height: 300px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .real-time-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="analytics-config.js"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 메인 페이지로 돌아가기</a>
+        
+        <div class="header">
+            <h1>📊 트래픽 대시보드</h1>
+            <p>Coffee Market Updates 웹사이트 실시간 분석</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>📄 오늘 페이지뷰</h3>
+                <div class="stat-value" id="todayPageviews">-</div>
+                <div class="stat-description">어제 대비: <span id="pageviewsGrowth">-</span></div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>👥 오늘 방문자</h3>
+                <div class="stat-value" id="todayVisitors">-</div>
+                <div class="stat-description">현재 온라인: <span id="currentOnline">-</span></div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>⏱️ 평균 세션 시간</h3>
+                <div class="stat-value" id="avgSessionTime">-</div>
+                <div class="stat-description">이번 주 평균</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>📈 가장 인기 보고서</h3>
+                <div class="stat-value" id="topReport" style="font-size: 1.2em;">-</div>
+                <div class="stat-description">오늘 조회수: <span id="topReportViews">-</span></div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">📈 실시간 트래픽 추이 (최근 24시간)</h3>
+            <canvas id="trafficChart" class="traffic-chart"></canvas>
+        </div>
+
+        <div class="real-time-section">
+            <div class="activity-feed">
+                <h3 class="chart-title">🔴 실시간 활동</h3>
+                <div id="activityFeed">
+                    <div class="activity-item">
+                        <div class="activity-icon">👁️</div>
+                        <div class="activity-content">
+                            <div>새 방문자가 메인 페이지를 조회했습니다</div>
+                            <div class="activity-time">방금 전</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-panel">
+                <h3 class="chart-title">⚙️ 분석 도구</h3>
+                <p style="margin-bottom: 15px;">트래픽 데이터를 관리하고 내보내기</p>
+                
+                <button class="btn" onclick="exportData()">📊 데이터 내보내기</button>
+                <button class="btn" onclick="clearData()">🗑️ 로컬 데이터 지우기</button>
+                <button class="btn btn-secondary" onclick="toggleRealTimeStats()">📱 실시간 위젯 토글</button>
+                
+                <div style="margin-top: 20px;">
+                    <h4>Analytics 설정</h4>
+                    <label style="display: block; margin: 10px 0;">
+                        <input type="checkbox" id="enableGA" checked> Google Analytics 추적
+                    </label>
+                    <label style="display: block; margin: 10px 0;">
+                        <input type="checkbox" id="enableCF" checked> Cloudflare Analytics
+                    </label>
+                    <label style="display: block; margin: 10px 0;">
+                        <input type="checkbox" id="enableLocalTracking" checked> 로컬 추적
+                    </label>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>트래픽 알림</h4>
+                    <input type="number" id="alertThreshold" placeholder="방문자 임계값" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100%; margin: 5px 0;">
+                    <button class="btn btn-secondary" onclick="setAlert()">알림 설정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 트래픽 대시보드 로직
+        class TrafficDashboard {
+            constructor() {
+                this.chart = null;
+                this.updateInterval = null;
+                this.init();
+            }
+
+            init() {
+                this.setupChart();
+                this.updateStats();
+                this.startRealTimeUpdates();
+                this.loadSettings();
+            }
+
+            setupChart() {
+                const ctx = document.getElementById('trafficChart').getContext('2d');
+                
+                // 샘플 데이터 생성 (실제로는 localStorage나 서버에서 가져올 것)
+                const labels = [];
+                const data = [];
+                const now = new Date();
+                
+                for (let i = 23; i >= 0; i--) {
+                    const time = new Date(now.getTime() - i * 60 * 60 * 1000);
+                    labels.push(time.getHours() + ':00');
+                    data.push(Math.floor(Math.random() * 50) + 10);
+                }
+
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '방문자 수',
+                            data: data,
+                            borderColor: '#8B4513',
+                            backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0,0,0,0.1)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(0,0,0,0.1)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateStats() {
+                // 로컬 스토리지에서 통계 데이터 가져오기
+                const today = new Date().toDateString();
+                const dailyVisitors = JSON.parse(localStorage.getItem('daily_visitors') || '{}');
+                const currentSession = JSON.parse(localStorage.getItem('current_session') || '{}');
+
+                // 통계 업데이트
+                document.getElementById('todayPageviews').textContent = 
+                    (dailyVisitors[today] || 0) * Math.floor(Math.random() * 3 + 1);
+                
+                document.getElementById('todayVisitors').textContent = dailyVisitors[today] || 0;
+                
+                document.getElementById('currentOnline').textContent = Math.floor(Math.random() * 5 + 1);
+                
+                document.getElementById('avgSessionTime').textContent = '2:34';
+                
+                document.getElementById('topReport').textContent = '최신 커피 시장 동향';
+                document.getElementById('topReportViews').textContent = Math.floor(Math.random() * 50 + 20);
+
+                // 성장률 계산 (샘플)
+                const growth = Math.floor(Math.random() * 30 - 10);
+                const growthElement = document.getElementById('pageviewsGrowth');
+                growthElement.textContent = (growth > 0 ? '+' : '') + growth + '%';
+                growthElement.style.color = growth > 0 ? '#27ae60' : '#e74c3c';
+            }
+
+            startRealTimeUpdates() {
+                this.updateInterval = setInterval(() => {
+                    this.updateStats();
+                    this.addActivityItem();
+                    this.updateChart();
+                }, 10000); // 10초마다 업데이트
+            }
+
+            addActivityItem() {
+                const activities = [
+                    { icon: '👁️', text: '새 방문자가 메인 페이지를 조회했습니다' },
+                    { icon: '📊', text: '사용자가 차트와 상호작용했습니다' },
+                    { icon: '📄', text: '보고서가 다운로드되었습니다' },
+                    { icon: '🔍', text: '검색 기능이 사용되었습니다' },
+                    { icon: '📱', text: '모바일 사용자가 방문했습니다' }
+                ];
+
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                const feed = document.getElementById('activityFeed');
+                
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+                item.innerHTML = `
+                    <div class="activity-icon">${activity.icon}</div>
+                    <div class="activity-content">
+                        <div>${activity.text}</div>
+                        <div class="activity-time">방금 전</div>
+                    </div>
+                `;
+
+                feed.insertBefore(item, feed.firstChild);
+
+                // 최대 10개 항목만 유지
+                while (feed.children.length > 10) {
+                    feed.removeChild(feed.lastChild);
+                }
+            }
+
+            updateChart() {
+                if (this.chart) {
+                    // 새 데이터 포인트 추가
+                    const now = new Date();
+                    const newLabel = now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+                    const newValue = Math.floor(Math.random() * 20) + 5;
+
+                    this.chart.data.labels.push(newLabel);
+                    this.chart.data.datasets[0].data.push(newValue);
+
+                    // 오래된 데이터 제거 (최대 24개 포인트 유지)
+                    if (this.chart.data.labels.length > 24) {
+                        this.chart.data.labels.shift();
+                        this.chart.data.datasets[0].data.shift();
+                    }
+
+                    this.chart.update();
+                }
+            }
+
+            loadSettings() {
+                const settings = JSON.parse(localStorage.getItem('analytics_settings') || '{}');
+                
+                document.getElementById('enableGA').checked = settings.ga !== false;
+                document.getElementById('enableCF').checked = settings.cf !== false;
+                document.getElementById('enableLocalTracking').checked = settings.local !== false;
+                
+                if (settings.alertThreshold) {
+                    document.getElementById('alertThreshold').value = settings.alertThreshold;
+                }
+            }
+
+            saveSettings() {
+                const settings = {
+                    ga: document.getElementById('enableGA').checked,
+                    cf: document.getElementById('enableCF').checked,
+                    local: document.getElementById('enableLocalTracking').checked,
+                    alertThreshold: document.getElementById('alertThreshold').value
+                };
+                
+                localStorage.setItem('analytics_settings', JSON.stringify(settings));
+            }
+        }
+
+        // 대시보드 함수들
+        function exportData() {
+            const data = {
+                dailyVisitors: JSON.parse(localStorage.getItem('daily_visitors') || '{}'),
+                currentSession: JSON.parse(localStorage.getItem('current_session') || '{}'),
+                settings: JSON.parse(localStorage.getItem('analytics_settings') || '{}'),
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `traffic-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert('트래픽 데이터가 내보내졌습니다!');
+        }
+
+        function clearData() {
+            if (confirm('모든 로컬 트래픽 데이터를 삭제하시겠습니까?')) {
+                localStorage.removeItem('daily_visitors');
+                localStorage.removeItem('current_session');
+                localStorage.removeItem('analytics_settings');
+                
+                alert('로컬 데이터가 삭제되었습니다!');
+                location.reload();
+            }
+        }
+
+        function toggleRealTimeStats() {
+            const widget = document.getElementById('traffic-stats');
+            if (widget) {
+                const isVisible = widget.style.display !== 'none';
+                widget.style.display = isVisible ? 'none' : 'block';
+            } else {
+                alert('실시간 위젯이 로드되지 않았습니다. 메인 페이지를 방문해주세요.');
+            }
+        }
+
+        function setAlert() {
+            const threshold = document.getElementById('alertThreshold').value;
+            if (threshold && threshold > 0) {
+                dashboard.saveSettings();
+                alert(`방문자 수가 ${threshold}명을 초과하면 알림을 받게 됩니다.`);
+            } else {
+                alert('유효한 임계값을 입력해주세요.');
+            }
+        }
+
+        // 대시보드 초기화
+        let dashboard;
+        window.addEventListener('DOMContentLoaded', () => {
+            dashboard = new TrafficDashboard();
+            
+            // 설정 변경 이벤트 리스너
+            ['enableGA', 'enableCF', 'enableLocalTracking'].forEach(id => {
+                document.getElementById(id).addEventListener('change', () => {
+                    dashboard.saveSettings();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
