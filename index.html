@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-      gtag('config', 'G-GX9R36120J');
-    </script>   
-
- <meta charset="UTF-8">
+  gtag('config', 'G-GX9R36120J');
+</script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
@@ -51,280 +50,18 @@
             padding: 20px;
         }
         
-        /* 새로운 네비게이션 헤더 */
-        .nav-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px;
-            position: relative;
-        }
-        
-        /* 전체 컨테이너 슬라이드 효과 */
-        .page-wrapper {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 2;
-            background: inherit;
-        }
-        
-        .page-wrapper.menu-open {
-            transform: translateX(280px);
-        }
-        
-        /* 햄버거 메뉴 버튼 */
-        .menu-button {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 1001;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-        
-        .menu-button:hover {
-            transform: scale(1.1);
-        }
-        
-        .menu-button span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background-color: #8B4513;
-            border-radius: 2px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            transform-origin: center;
-        }
-        
-        /* 메뉴가 열렸을 때 햄버거 버튼 숨기기 */
-        .menu-button.active {
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.8);
-        }
-        
-        /* 로고 (오른쪽으로 이동) */
         .logo-header {
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             align-items: center;
+            margin-bottom: 20px;
+            padding-left: 10px;
         }
         
         .logo-header img {
             height: 80px;
             width: auto;
             object-fit: contain;
-        }
-        
-        /* 사이드 메뉴 */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100vh;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            z-index: 1000;
-            transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            overflow-y: auto;
-            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .side-menu.active {
-            left: 0;
-        }
-        
-        /* 메뉴 헤더 */
-        .menu-header {
-            padding: 40px 30px 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            position: relative;
-        }
-        
-        .menu-title {
-            color: white;
-            font-size: 1.5em;
-            font-weight: 700;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .menu-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9em;
-            margin: 5px 0 0;
-            font-weight: 300;
-        }
-        
-        /* 메뉴 닫기 버튼 (햄버거 스타일과 동일) */
-        .menu-close-btn {
-            position: absolute;
-            top: 50%;
-            right: 30px;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .menu-close-btn:hover {
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        .menu-close-btn span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background-color: #2c3e50; /* 사이드 메뉴와 동일한 네이비 색상 */
-            border-radius: 2px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            transform-origin: center;
-        }
-        
-        /* X 모양 애니메이션 (이미 열린 상태이므로 처음부터 X 모양) */
-        .menu-close-btn span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        
-        .menu-close-btn span:nth-child(2) {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        
-        .menu-close-btn span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-        
-        .menu-close-btn:hover span {
-            background-color: #34495e; /* 호버 시 조금 더 밝은 네이비 */
-        }
-        
-        /* 메뉴 네비게이션 */
-        .menu-nav {
-            padding: 20px 0;
-        }
-        
-        .menu-item {
-            display: block;
-            padding: 18px 30px;
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .menu-item:hover::before {
-            left: 100%;
-        }
-        
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-left-color: #f39c12;
-            transform: translateX(10px);
-            backdrop-filter: blur(10px);
-        }
-        
-        .menu-item i {
-            margin-right: 15px;
-            font-size: 1.2em;
-            width: 20px;
-            text-align: center;
-        }
-        
-        /* 메뉴 아이콘 (CSS로 생성) */
-        .menu-icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-right: 15px;
-            position: relative;
-            vertical-align: middle;
-        }
-        
-        .icon-weekly::before {
-            content: '📊';
-            font-size: 16px;
-        }
-        
-        .icon-analysis::before {
-            content: '🔍';
-            font-size: 16px;
-        }
-        
-        .icon-fundamentals::before {
-            content: '📈';
-            font-size: 16px;
-        }
-        
-        /* 메뉴 푸터 */
-        .menu-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.2);
-        }
-        
-        .menu-footer-text {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8em;
-            text-align: center;
-            margin: 0;
-            line-height: 1.4;
-        }
-        
-        /* 메뉴 오버레이 (배경 클릭 시 닫기용) */
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            z-index: 999;
-        }
-        
-        .menu-overlay.active {
-            opacity: 1;
-            visibility: visible;
         }
         
         header {
@@ -883,7 +620,8 @@
                 padding: 15px;
             }
             
-            .nav-header {
+            .logo-header {
+                justify-content: center;
                 margin-bottom: 15px;
             }
             
@@ -921,248 +659,106 @@
             .footer-logo img {
                 height: 40px;
             }
-            
-            /* 모바일에서 사이드 메뉴 전체 화면 */
-            .side-menu {
-                width: 100vw;
-                left: -100vw;
-            }
-            
-            .side-menu.active {
-                left: 0;
-            }
-            
-            .page-wrapper.menu-open {
-                transform: translateX(100vw);
-            }
-            
-            /* 모바일에서 메뉴 버튼 색상 조정 */
-            .menu-button.active span {
-                background-color: white;
-            }
         }
     </style>
 </head>
 <body>
-<body>
-    <!-- 사이드 메뉴 -->
-    <div class="side-menu" id="sideMenu">
-        <div class="menu-header">
-            <h2 class="menu-title">Coffee Market</h2>
-            <p class="menu-subtitle">Navigation Menu</p>
-            <button class="menu-close-btn" id="menuCloseBtn" aria-label="Close Menu">
-                <span></span>
-                <span></span>
-                <span></span>
+    <div class="container">
+        <div class="logo-header">
+            <img src="Transparent.png" alt="Align Commodities" />
+        </div>
+        
+        <header>
+            <h1>
+                Coffee Market Updates
+                <span class="live-indicator">Live</span>
+                <span class="date-badge" id="currentDate">2025년 6월 22일</span>
+            </h1>
+            <p class="subtitle">Coffee Futures Market Analysis & Dashboard</p>
+            <p class="description">
+                커피 선물 시장 분석 보고서 아카이브 및 실시간 시장 대시보드입니다. <br/>
+                주간 시장 동향, 가격 변동 및 글로벌 수급 현황을 정기적으로 업데이트합니다.
+            </p>
+        </header>
+
+
+
+        <div class="search-filter">
+            <div class="filter-row">
+                <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
+                <select class="filter-select" id="yearFilter">
+                    <option value="">전체 년도</option>
+                    <option value="2025">2025년</option>
+                </select>
+                <select class="filter-select" id="monthFilter">
+                    <option value="">전체 월</option>
+                    <option value="05">5월</option>
+                    <option value="06">6월</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="reports-grid" id="reportsGrid">
+            <!-- 보고서 카드들이 여기에 동적으로 추가됩니다 -->
+        </div>
+
+        <div class="more-reports-container" id="moreReportsContainer" style="display: none;">
+            <button class="more-reports-btn" id="moreReportsBtn">
+                <span class="more-text">More Reports</span>
+                <span class="more-icon">▼</span>
             </button>
         </div>
-        
-        <nav class="menu-nav">
-            <a href="#" class="menu-item">
-                <span class="menu-icon icon-weekly"></span>
-                Weekly Report
-            </a>
-            <a href="#" class="menu-item">
-                <span class="menu-icon icon-analysis"></span>
-                In-depth Analysis
-            </a>
-            <a href="#" class="menu-item">
-                <span class="menu-icon icon-fundamentals"></span>
-                Fundamentals
-            </a>
-        </nav>
-        
-        <div class="menu-footer">
-            <p class="menu-footer-text">Align Commodities<br>Market Intelligence</p>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <h3>검색 결과가 없습니다</h3>
+            <p>다른 검색어나 필터를 시도해보세요.</p>
         </div>
-    </div>
-    
-    <!-- 메뉴 오버레이 -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-    
-    <!-- 페이지 래퍼 (슬라이드 효과용) -->
-    <div class="page-wrapper" id="pageWrapper">
-        <div class="container">
-            <div class="nav-header">
-                <!-- 햄버거 메뉴 버튼 (왼쪽) -->
-                <div class="menu-container">
-                    <button class="menu-button" id="menuButton">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                </div>
-                
-                <!-- 로고 (오른쪽) -->
-                <div class="logo-header">
-                    <img src="Transparent.png" alt="Align Commodities" />
-                </div>
-            </div>
-            
-            <header>
-                <h1>
-                    Coffee Market Updates
-                    <span class="live-indicator">Live</span>
-                    <span class="date-badge" id="currentDate">2025년 6월 22일</span>
-                </h1>
-                <p class="subtitle">Coffee Futures Market Analysis & Dashboard</p>
-                <p class="description">
-                    커피 선물 시장 분석 보고서 아카이브 및 실시간 시장 대시보드입니다. <br/>
-                    주간 시장 동향, 가격 변동 및 글로벌 수급 현황을 정기적으로 업데이트합니다.
-                </p>
-            </header>
 
-            <div class="search-filter">
-                <div class="filter-row">
-                    <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
-                    <select class="filter-select" id="yearFilter">
-                        <option value="">전체 년도</option>
-                        <option value="2025">2025년</option>
-                    </select>
-                    <select class="filter-select" id="monthFilter">
-                        <option value="">전체 월</option>
-                        <option value="05">5월</option>
-                        <option value="06">6월</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="reports-grid" id="reportsGrid">
-                <!-- 보고서 카드들이 여기에 동적으로 추가됩니다 -->
-            </div>
-
-            <div class="more-reports-container" id="moreReportsContainer" style="display: none;">
-                <button class="more-reports-btn" id="moreReportsBtn">
-                    <span class="more-text">More Reports</span>
-                    <span class="more-icon">▼</span>
-                </button>
-            </div>
-
-            <div class="no-results" id="noResults" style="display: none;">
-                <h3>검색 결과가 없습니다</h3>
-                <p>다른 검색어나 필터를 시도해보세요.</p>
-            </div>
-
-            <!-- 차트 대시보드 섹션 -->
-            <div class="dashboard-section">
-                <h2 class="section-title">📊 Market Dashboard</h2>
-                <div class="charts-grid">
-                    <!-- Coffee Futures Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">Coffee Futures</div>
-                            <div class="chart-source">출처: ICE</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-coffee">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="coffeeChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">📊 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>커피 선물 가격</strong>은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
-                                브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다. 
-                                현재 추세는 시장의 공급/수요 균형과 투기적 포지션 변화를 나타냅니다.
-                            </div>
-                        </div>
+        <!-- 차트 대시보드 섹션 -->
+        <div class="dashboard-section">
+            <h2 class="section-title">📊 Market Dashboard</h2>
+            <div class="charts-grid">
+                <!-- Coffee Futures Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">Coffee Futures</div>
+                        <div class="chart-source">출처: ICE</div>
                     </div>
-
-                    <!-- USD/BRL Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">미국달러-브라질헤알 환율</div>
-                            <div class="chart-source">출처: LSEG</div>
+                    <div class="chart-wrapper">
+                        <div class="loading-spinner" id="loading-coffee">
+                            <div class="spinner"></div>
+                            데이터 로딩 중...
                         </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-usd">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="usdChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">💱 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>USD/BRL 환율</strong>은 커피 시장에 중요한 영향을 미칩니다. 
-                                헤알화 약세(USD/BRL 상승) 시 브라질 농민들의 달러 수취액이 증가해 수출 경쟁력이 강화되고, 
-                                반대로 헤알화 강세 시에는 브라질 커피의 국제 경쟁력이 약화됩니다. 
-                                브라질이 세계 최대 커피 생산국이므로 환율 변동은 글로벌 커피 가격에 직접적 영향을 줍니다.
-                            </div>
-                        </div>
+                        <canvas id="coffeeChart" style="display: none;"></canvas>
                     </div>
-
-                    <!-- CFTC Positions Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
-                            <div class="chart-source">출처: LSEG</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-cftc">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="cftcChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">📈 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
-                                양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
-                                극단적 포지션은 종종 시장 전환점의 신호가 되며, 
-                                현재 포지션 수준은 투기 자금의 방향성과 시장 과열/과매도 상태를 판단하는 중요한 지표입니다.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- NVDI Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">브라질 남동부 NVDI (식물활력도)</div>
-                            <div class="chart-source">출처: LSEG</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-nvdi">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="nvdiChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">🌱 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>NVDI (정규식생지수)</strong>는 위성 데이터로 측정한 식물의 건강도와 활력도를 나타냅니다. 
-                                브라질 남동부는 세계 최대 아라비카 커피 생산지역으로, NVDI 수치가 높을수록 커피나무가 건강하고 
-                                수확량 증가가 예상됩니다. 역사적 범위 대비 현재 수치를 통해 
-                                올해 작황 상태와 향후 공급량 전망을 예측할 수 있는 핵심 지표입니다.
-                            </div>
+                    <div class="chart-analysis">
+                        <div class="analysis-title">📊 차트 분석</div>
+                        <div class="analysis-text">
+                            <strong>커피 선물 가격</strong>은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
+                            브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다. 
+                            현재 추세는 시장의 공급/수요 균형과 투기적 포지션 변화를 나타냅니다.
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <footer>
-                <div class="footer-logo">
-                    <img src="Transparent.png" alt="Align Commodities" />
-                </div>
-                <div class="footer-content">
-                    <p><strong>Published by Align Commodities & Yellowknife </strong></p>
-                    <p>전문적인 커피 시장 분석과 Market Intelligence를 제공합니다.</p>
-                    <div class="footer-links">
-                        <a href="mailto:james.baek@aligncommodities.com">Contact</a>
-                        <a href="https://github.com/jamesjongmin/Coffee-Market-Updates">GitHub</a>
-                        <a href="#" id="latestReportLink">Latest Report</a>
+                <!-- USD/BRL Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">미국달러-브라질헤알 환율</div>
+                        <div class="chart-source">출처: LSEG</div>
                     </div>
-                    <p style="margin-top: 15px; font-size: 0.8em; opacity: 0.7;">
-                        본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.
-                    </p>
-                </div>
-            </footer>
-        </div>
-    </div>/BRL 상승) 시 브라질 농민들의 달러 수취액이 증가해 수출 경쟁력이 강화되고, 
+                    <div class="chart-wrapper">
+                        <div class="loading-spinner" id="loading-usd">
+                            <div class="spinner"></div>
+                            데이터 로딩 중...
+                        </div>
+                        <canvas id="usdChart" style="display: none;"></canvas>
+                    </div>
+                    <div class="chart-analysis">
+                        <div class="analysis-title">💱 차트 분석</div>
+                        <div class="analysis-text">
+                            <strong>USD/BRL 환율</strong>은 커피 시장에 중요한 영향을 미칩니다. 
+                            헤알화 약세(USD/BRL 상승) 시 브라질 농민들의 달러 수취액이 증가해 수출 경쟁력이 강화되고, 
                             반대로 헤알화 강세 시에는 브라질 커피의 국제 경쟁력이 약화됩니다. 
                             브라질이 세계 최대 커피 생산국이므로 환율 변동은 글로벌 커피 가격에 직접적 영향을 줍니다.
                         </div>
@@ -1237,90 +833,9 @@
             </div>
         </footer>
     </div>
-
 <script>
         let allReports = [];
         let charts = {};
-
-        // 메뉴 토글 기능 (사이드 메뉴 슬라이드 효과)
-        function initializeMenu() {
-            const menuButton = document.getElementById('menuButton');
-            const menuCloseBtn = document.getElementById('menuCloseBtn');
-            const sideMenu = document.getElementById('sideMenu');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const pageWrapper = document.getElementById('pageWrapper');
-            
-            function toggleMenu() {
-                const isActive = menuButton.classList.contains('active');
-                
-                if (isActive) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            }
-            
-            function openMenu() {
-                menuButton.classList.add('active');
-                sideMenu.classList.add('active');
-                menuOverlay.classList.add('active');
-                pageWrapper.classList.add('menu-open');
-                document.body.style.overflow = 'hidden'; // 스크롤 방지
-            }
-            
-            function closeMenu() {
-                menuButton.classList.remove('active');
-                sideMenu.classList.remove('active');
-                menuOverlay.classList.remove('active');
-                pageWrapper.classList.remove('menu-open');
-                document.body.style.overflow = ''; // 스크롤 복원
-            }
-            
-            // 이벤트 리스너
-            menuButton.addEventListener('click', toggleMenu);
-            menuCloseBtn.addEventListener('click', closeMenu); // 사이드 메뉴 내 닫기 버튼
-            menuOverlay.addEventListener('click', closeMenu);
-            
-            // ESC 키로 메뉴 닫기
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeMenu();
-                }
-            });
-            
-            // 메뉴 아이템 클릭 시 메뉴 닫기
-            const menuItems = sideMenu.querySelectorAll('.menu-item');
-            menuItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    closeMenu();
-                    
-                    // 여기에 각 메뉴 아이템별 기능 추가 가능
-                    const menuText = item.textContent.trim();
-                    console.log(`${menuText} 메뉴가 클릭되었습니다.`);
-                    
-                    // 예시: 각 메뉴별 동작
-                    switch(menuText) {
-                        case 'Weekly Report':
-                            // Weekly Report 페이지로 이동 또는 섹션 스크롤
-                            break;
-                        case 'In-depth Analysis':
-                            // In-depth Analysis 페이지로 이동 또는 섹션 스크롤
-                            break;
-                        case 'Fundamentals':
-                            // Fundamentals 페이지로 이동 또는 섹션 스크롤
-                            break;
-                    }
-                });
-            });
-            
-            // 창 크기 변경 시 메뉴 상태 리셋 (모바일 대응)
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768 && sideMenu.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-        }
 
         // 구글 시트 URL 설정
         const GOOGLE_SHEETS_URLS = {
@@ -2615,9 +2130,6 @@
         async function init() {
             try {
                 console.log('초기화 시작...');
-                
-                // 메뉴 초기화 (첫 번째로)
-                initializeMenu();
                 
                 // 현재 날짜 업데이트
                 updateCurrentDate();
