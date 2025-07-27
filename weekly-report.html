@@ -367,11 +367,45 @@
                 title = titleElement.textContent.trim();
             }
             
-            // 요약 추출
+            // 요약 추출 - 여러 방법으로 시도
             let summary = '';
-            const summaryElement = doc.querySelector('.highlight p') || doc.querySelector('.summary') || doc.querySelector('p');
-            if (summaryElement) {
-                summary = summaryElement.textContent.trim().substring(0, 200);
+            
+            // 1. 주요 헤드라인 찾기
+            const headlineElement = doc.querySelector('h2');
+            if (headlineElement && headlineElement.textContent.includes('주요 헤드라인')) {
+                const nextElement = headlineElement.nextElementSibling;
+                if (nextElement && nextElement.tagName === 'P') {
+                    summary = nextElement.textContent.trim();
+                }
+            }
+            
+            // 2. highlight 클래스 내용 찾기
+            if (!summary) {
+                const highlightElement = doc.querySelector('.highlight p, .highlight li');
+                if (highlightElement) {
+                    summary = highlightElement.textContent.trim();
+                }
+            }
+            
+            // 3. main-story 클래스 내용 찾기
+            if (!summary) {
+                const mainStoryElement = doc.querySelector('.main-story p');
+                if (mainStoryElement) {
+                    summary = mainStoryElement.textContent.trim();
+                }
+            }
+            
+            // 4. 첫 번째 p 태그 찾기
+            if (!summary) {
+                const firstParagraph = doc.querySelector('p');
+                if (firstParagraph) {
+                    summary = firstParagraph.textContent.trim();
+                }
+            }
+            
+            // summary가 너무 길면 자르기
+            if (summary && summary.length > 200) {
+                summary = summary.substring(0, 197) + '...';
             }
             
             // 태그 추출
@@ -380,11 +414,16 @@
                 .filter(tag => tag && tag.length > 0)
                 .slice(0, 6);
             
+            // 태그가 없으면 기본 태그 추가
+            if (tags.length === 0) {
+                tags.push('주간동향', '커피선물', '시장분석');
+            }
+            
             return {
-                title: title || '커피 시장 동향',
+                title: title || '커피 선물 시장 주간 동향',
                 subtitle: '',
                 date: defaultDate,
-                summary: summary || '',
+                summary: summary || '커피 선물 시장의 주간 동향을 분석한 리포트입니다.',
                 tags: tags
             };
         }
@@ -441,7 +480,14 @@
                     const htmlContent = await response.text();
                     const metadata = extractReportMetadata(htmlContent, filePath);
                     
-                    if (metadata && metadata.title.includes('커피 선물 시장 주간 동향')) {
+                    // 주간 동향 리포트 필터링 - 더 유연한 조건
+                    if (metadata && (
+                        metadata.title.includes('커피 선물 시장 주간 동향') ||
+                        metadata.title.includes('Coffee Futures Market Weekly Update') ||
+                        metadata.title.includes('Coffee Futures Market Update') ||
+                        (metadata.title.includes('주간') && metadata.title.includes('동향')) ||
+                        metadata.tags.includes('주간동향')
+                    )) {
                         weeklyReports.push({
                             ...metadata,
                             link: filePath,
