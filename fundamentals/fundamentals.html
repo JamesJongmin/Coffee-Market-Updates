@@ -576,7 +576,7 @@
         // 구글 시트 URL 설정
         const EXPORT_IMPORT_SHEETS = {
             brazilUsExport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=0',
-            koreaBrazilImport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=1897130496'
+            koreaBrazilImport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=1'
         };
 
         // CSV 파싱 함수
@@ -910,7 +910,10 @@
         async function loadAndCreateCharts() {
             try {
                 // 로딩 표시
-                document.querySelector('.chart-wrapper').style.opacity = '0.5';
+                const chartWrappers = document.querySelectorAll('.chart-wrapper');
+                chartWrappers.forEach(wrapper => {
+                    wrapper.style.opacity = '0.5';
+                });
                 
                 // 브라질 수출 데이터 로드
                 const usExportResponse = await fetch(EXPORT_IMPORT_SHEETS.brazilUsExport);
@@ -931,7 +934,9 @@
                 updateKoreaAvgChange(koreaImportData);
                 
                 // 로딩 완료
-                document.querySelector('.chart-wrapper').style.opacity = '1';
+                chartWrappers.forEach(wrapper => {
+                    wrapper.style.opacity = '1';
+                });
                 
             } catch (error) {
                 console.error('Error loading data:', error);
