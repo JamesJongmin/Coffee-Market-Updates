@@ -632,12 +632,9 @@
                 if (index === 0) return; // 헤더 스킵
                 
                 const dateStr = row[0];
-                let valueStr = row[1];
+                const valueStr = row[1];
                 
                 if (!dateStr || !valueStr) return;
-                
-                // 따옴표와 쉼표 제거
-                valueStr = valueStr.replace(/"/g, '').replace(/,/g, '');
                 
                 const [year, month] = dateStr.split('-');
                 const value = parseFloat(valueStr);
@@ -653,9 +650,8 @@
                         }
                     }
                     
-                    // 한국 수입은 톤 단위로 유지 (이미 톤 단위로 입력됨)
+                    // 한국 수입은 톤 단위로 유지
                     if (isKoreaImport) {
-                        // 데이터가 이미 톤 단위이므로 변환 불필요
                         if (index < 5) {
                             console.log(`Korea import value: ${value} tons`);
                         }
