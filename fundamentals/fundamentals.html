@@ -519,11 +519,11 @@
                     <div class="legend-custom">
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #bdc3c7;"></div>
-                            <span>2024년 (kg)</span>
+                            <span>2024년 (톤)</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #8B4513;"></div>
-                            <span>2025년 (kg)</span>
+                            <span>2025년 (톤)</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-line" style="background: linear-gradient(to right, #3498db, #FF6B35); height: 4px;"></div>
@@ -539,7 +539,7 @@
                     <div class="trend-analysis">
                         <h4 class="trend-title">💡 Implication - 수출입 동향</h4>
                         <p class="trend-content">
-                            한국의 브라질 생두 수입은 <strong>5-7월 안정적 유지</strong> (5,779kg → 4,815kg → 4,033kg)를 보이며, 
+                            한국의 브라질 생두 수입은 <strong>5-7월 안정적 유지</strong> (5.8톤 → 4.8톤 → 4.0톤)를 보이며, 
                             <strong>전년 동기 대비 지속적인 성장세</strong>를 이어가고 있습니다. 
                             다만 <strong>최근 증가율이 둔화되는 추세</strong> (5월 +30.0% → 6월 -3.3% → 7월 -24.4%)로, 
                             향후 수입 패턴 변화를 주시할 필요가 있습니다. 그럼에도 미국 시장 대비 <strong>상대적으로 안정적인 공급망을 확보</strong>하고 있는 상황입니다.
@@ -554,15 +554,15 @@
                                 <div class="stat-label">평균 변화율 (1-7월)</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #8B4513;">7,009</div>
+                                <div class="stat-value" style="color: #8B4513;">7.0</div>
                                 <div class="stat-label">2025년 최고 (2월)</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #8B4513;">3,830</div>
+                                <div class="stat-value" style="color: #8B4513;">3.8</div>
                                 <div class="stat-label">2025년 최저 (1월)</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #bdc3c7;">6,890</div>
+                                <div class="stat-value" style="color: #bdc3c7;">6.9</div>
                                 <div class="stat-label">2024년 최고 (1월)</div>
                             </div>
                         </div>
@@ -596,7 +596,7 @@
         }
 
         // 데이터 처리 함수
-        function processExportImportData(csvData, isUsExport = false) {
+        function processExportImportData(csvData, isUsExport = false, isKoreaImport = false) {
             const dataByYear = {};
             
             // 헤더 제외하고 데이터 처리
@@ -613,6 +613,11 @@
                     // 미국 수출 데이터는 10만톤 단위로 변환
                     if (isUsExport) {
                         value = value / 100000;
+                    }
+                    
+                    // 한국 수입 데이터는 kg를 톤으로 변환
+                    if (isKoreaImport) {
+                        value = value / 1000;
                     }
                     
                     dataByYear[year][parseInt(month) - 1] = value;
@@ -925,7 +930,7 @@
                 const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
                 const koreaImportCsv = await koreaImportResponse.text();
                 const koreaImportCsvData = parseCSV(koreaImportCsv);
-                const koreaImportData = processExportImportData(koreaImportCsvData, false);
+                const koreaImportData = processExportImportData(koreaImportCsvData, false, true);
                 
                 // 차트 생성/업데이트
                 createOrUpdateCharts(brazilExportData, koreaImportData);
