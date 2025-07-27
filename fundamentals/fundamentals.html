@@ -31,40 +31,6 @@
             padding: 40px 20px;
         }
         
-        .page-header {
-            text-align: center;
-            margin: 60px 0 50px 0;
-            padding: 50px 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            backdrop-filter: blur(10px);
-        }
-        
-        .page-title {
-            font-size: 3.5em;
-            color: #1a1a1a;
-            margin-bottom: 20px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .page-subtitle {
-            font-size: 1.4em;
-            color: #64748b;
-            margin-bottom: 0;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
         h1 {
             font-size: 3em;
             color: #8B4513;
@@ -474,13 +440,13 @@
 </head>
 <body>
     <div class="container">
-        <a href="../index.html" class="back-button">
-            ← 메인 페이지로 돌아가기
-        </a>
-        
-        <div class="page-header">
-            <h1 class="page-title">Coffee Market Fundamentals</h1>
-            <p class="page-subtitle">글로벌 커피 시장의 수급 동향과 핵심 지표를 실시간으로 분석합니다</p>
+        <div class="header">
+            <h1>☕ Coffee Market Fundamentals</h1>
+            <p class="subtitle">커피 시장의 기초 데이터와 핵심 지표를 실시간으로 확인하세요</p>
+            <a href="../index.html" class="back-button">
+                <span>←</span>
+                <span>메인으로 돌아가기</span>
+            </a>
         </div>
         
         <!-- 주요국 수출입 동향 섹션 -->
@@ -1006,26 +972,50 @@
                 const brazilExportCsvData = parseCSV(brazilExportCsv);
                 const brazilExportData = processExportImportData(brazilExportCsvData, true);
                 
-                console.log('Loading Korea import data...');
-                // 한국 수입 데이터 로드
-                const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
-                console.log('Korea import response status:', koreaImportResponse.status);
+                // 한국 수입 데이터는 백업 데이터 사용
+                console.log('Using backup data for Korea import...');
+                const koreaImportData = {
+                    data2024: KOREA_IMPORT_BACKUP_DATA['2024'],
+                    data2025: KOREA_IMPORT_BACKUP_DATA['2025'],
+                    yoyChangeRate: []
+                };
                 
-                if (!koreaImportResponse.ok) {
-                    throw new Error(`Korea import data fetch failed: ${koreaImportResponse.status}`);
+                // 전년 동기 대비 변화율 계산
+                for (let i = 0; i < 12; i++) {
+                    const current = koreaImportData.data2025[i];
+                    const previous = koreaImportData.data2024[i];
+                    
+                    if (current !== null && previous !== null && previous !== 0) {
+                        const change = ((current - previous) / previous) * 100;
+                        koreaImportData.yoyChangeRate.push(parseFloat(change.toFixed(1)));
+                    } else {
+                        koreaImportData.yoyChangeRate.push(null);
+                    }
                 }
                 
-                const koreaImportCsv = await koreaImportResponse.text();
-                console.log('Korea import CSV first 200 chars:', koreaImportCsv.substring(0, 200));
-                
-                // HTML 응답인지 확인
-                if (koreaImportCsv.includes('<HTML>') || koreaImportCsv.includes('<!DOCTYPE')) {
-                    console.error('Received HTML instead of CSV for Korea import data');
-                    throw new Error('Invalid data format: received HTML instead of CSV');
+                // 선택적으로 Google Sheets 데이터 시도
+                try {
+                    console.log('Attempting to load Korea import data from Google Sheets...');
+                    const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
+                    
+                    if (koreaImportResponse.ok) {
+                        const koreaImportCsv = await koreaImportResponse.text();
+                        
+                        // HTML 응답이 아닌 경우에만 처리
+                        if (!koreaImportCsv.includes('<HTML>') && !koreaImportCsv.includes('<!DOCTYPE')) {
+                            const koreaImportCsvData = parseCSV(koreaImportCsv);
+                            const googleSheetsData = processExportImportData(koreaImportCsvData, false, true);
+                            
+                            // 유효한 데이터인 경우 업데이트
+                            if (googleSheetsData.data2025.some(val => val !== null)) {
+                                console.log('Using Google Sheets data for Korea import');
+                                Object.assign(koreaImportData, googleSheetsData);
+                            }
+                        }
+                    }
+                } catch (sheetsError) {
+                    console.log('Failed to load Google Sheets data, continuing with backup data');
                 }
-                
-                const koreaImportCsvData = parseCSV(koreaImportCsv);
-                const koreaImportData = processExportImportData(koreaImportCsvData, false, true);
                 
                 // 디버깅용 로그
                 console.log('Brazil Export Data:', brazilExportData);
@@ -1049,13 +1039,37 @@
                 // 에러 메시지를 콘솔에만 표시하고 alert는 제거
                 console.error('데이터 로딩 중 오류가 발생했습니다:', error.message);
                 
-                // 에러 시 기본 데이터로 표시
-                const defaultData = {
+                // 에러 시 백업 데이터로 표시
+                console.log('Using backup data for Korea import...');
+                const koreaBackupData = {
+                    data2024: KOREA_IMPORT_BACKUP_DATA['2024'],
+                    data2025: KOREA_IMPORT_BACKUP_DATA['2025'],
+                    yoyChangeRate: []
+                };
+                
+                // 전년 동기 대비 변화율 계산
+                for (let i = 0; i < 12; i++) {
+                    const current = koreaBackupData.data2025[i];
+                    const previous = koreaBackupData.data2024[i];
+                    
+                    if (current !== null && previous !== null && previous !== 0) {
+                        const change = ((current - previous) / previous) * 100;
+                        koreaBackupData.yoyChangeRate.push(parseFloat(change.toFixed(1)));
+                    } else {
+                        koreaBackupData.yoyChangeRate.push(null);
+                    }
+                }
+                
+                const defaultBrazilData = {
                     data2024: new Array(12).fill(0),
                     data2025: new Array(12).fill(null),
                     yoyChangeRate: new Array(12).fill(null)
                 };
-                createOrUpdateCharts(defaultData, defaultData);
+                
+                createOrUpdateCharts(defaultBrazilData, koreaBackupData);
+                
+                // 한국 평균 변화율 업데이트
+                updateKoreaAvgChange(koreaBackupData);
             }
         }
 
