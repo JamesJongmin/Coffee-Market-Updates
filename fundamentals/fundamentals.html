@@ -891,6 +891,7 @@
                             ...commonChartOptions.scales,
                             y: {
                                 ...commonChartOptions.scales.y,
+                                beginAtZero: true,
                                 title: {
                                     display: true,
                                     text: '수입량 (톤)',
@@ -901,7 +902,7 @@
                                 },
                                 ticks: {
                                     callback: function(value) {
-                                        return value.toLocaleString();
+                                        return value.toFixed(1);
                                     }
                                 }
                             }
@@ -932,6 +933,9 @@
                 const koreaImportCsvData = parseCSV(koreaImportCsv);
                 const koreaImportData = processExportImportData(koreaImportCsvData, false, true);
                 
+                // 디버깅용 로그
+                console.log('Korea Import Data:', koreaImportData);
+                
                 // 차트 생성/업데이트
                 createOrUpdateCharts(brazilExportData, koreaImportData);
                 
@@ -945,6 +949,7 @@
                 
             } catch (error) {
                 console.error('Error loading data:', error);
+                alert('데이터 로딩 중 오류가 발생했습니다: ' + error.message);
                 // 에러 시 기본 데이터로 표시
                 const defaultData = {
                     data2024: new Array(12).fill(0),
