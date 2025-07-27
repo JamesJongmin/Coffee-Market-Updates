@@ -31,40 +31,6 @@
             padding: 40px 20px;
         }
         
-        .page-header {
-            text-align: center;
-            margin: 60px 0 50px 0;
-            padding: 50px 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            backdrop-filter: blur(10px);
-        }
-        
-        .page-title {
-            font-size: 3.5em;
-            color: #1a1a1a;
-            margin-bottom: 20px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .page-subtitle {
-            font-size: 1.4em;
-            color: #64748b;
-            margin-bottom: 0;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
         h1 {
             font-size: 3em;
             color: #8B4513;
@@ -474,13 +440,13 @@
 </head>
 <body>
     <div class="container">
-        <a href="../index.html" class="back-button">
-            ← 메인 페이지로 돌아가기
-        </a>
-        
-        <div class="page-header">
-            <h1 class="page-title">Coffee Market Fundamentals</h1>
-            <p class="page-subtitle">글로벌 커피 시장의 수급 동향과 핵심 지표를 실시간으로 분석합니다</p>
+        <div class="header">
+            <h1>Coffee Market Fundamentals</h1>
+            <p class="subtitle">커피 시장의 기초 데이터와 핵심 지표를 실시간으로 확인하세요</p>
+            <a href="../index.html" class="back-button">
+                <span>←</span>
+                <span>메인으로 돌아가기</span>
+            </a>
         </div>
         
         <!-- 주요국 수출입 동향 섹션 -->
@@ -653,42 +619,45 @@
         }
 
         // 데이터 처리 함수
-        function processExportImportData(csvData, isUsExport = false, isKoreaImport = false) {
-            console.log('Processing data - isUsExport:', isUsExport, 'isKoreaImport:', isKoreaImport);
-            console.log('CSV data rows:', csvData.length);
+        function processExportImportData(csvData, isBrazilExport = false, isKoreaImport = false) {
+            console.log('Processing data, isBrazilExport:', isBrazilExport, 'isKoreaImport:', isKoreaImport);
+            console.log('CSV data first 5 rows:', csvData.slice(0, 5));
             
-            const dataByYear = {};
+            const dataByYear = {
+                '2024': new Array(12).fill(null),
+                '2025': new Array(12).fill(null)
+            };
             
-            // 헤더 제외하고 데이터 처리
-            const dataRows = csvData.slice(1);
-            
-            dataRows.forEach((row, index) => {
-                if (row[0] && row[1]) {
-                    const [year, month] = row[0].split('-');
-                    if (!dataByYear[year]) {
-                        dataByYear[year] = new Array(12).fill(null);
-                    }
-                    let value = parseFloat(row[1]);
+            csvData.forEach((row, index) => {
+                if (index === 0) return; // 헤더 스킵
+                
+                const dateStr = row[0];
+                const valueStr = row[1];
+                
+                if (!dateStr || !valueStr) return;
+                
+                const [year, month] = dateStr.split('-');
+                const value = parseFloat(valueStr);
+                
+                if (!isNaN(value) && year && month) {
+                    let processedValue = value;
                     
-                    // 디버깅용 로그
-                    if (index < 5) {
-                        console.log(`Row ${index}: ${row[0]} = ${row[1]} -> ${value}`);
-                    }
-                    
-                    // 미국 수출 데이터는 10만톤 단위로 변환
-                    if (isUsExport) {
-                        value = value / 100000;
-                    }
-                    
-                    // 한국 수입 데이터는 kg를 톤으로 변환
-                    if (isKoreaImport) {
-                        value = value / 1000;
+                    // 브라질 수출은 10만톤 단위로 변환
+                    if (isBrazilExport) {
+                        processedValue = value / 100000;
                         if (index < 5) {
-                            console.log(`Korea import converted: ${row[1]} kg -> ${value} tons`);
+                            console.log(`Brazil export converted: ${value} -> ${processedValue} (100k tons)`);
                         }
                     }
                     
-                    dataByYear[year][parseInt(month) - 1] = value;
+                    // 한국 수입은 톤 단위로 유지
+                    if (isKoreaImport) {
+                        if (index < 5) {
+                            console.log(`Korea import value: ${value} tons`);
+                        }
+                    }
+                    
+                    dataByYear[year][parseInt(month) - 1] = processedValue;
                 }
             });
             
@@ -1011,6 +980,8 @@
                 const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
                 console.log('Korea import response status:', koreaImportResponse.status);
                 
+                let koreaImportData;
+                
                 if (!koreaImportResponse.ok) {
                     throw new Error(`Korea import data fetch failed: ${koreaImportResponse.status}`);
                 }
@@ -1025,7 +996,7 @@
                 }
                 
                 const koreaImportCsvData = parseCSV(koreaImportCsv);
-                const koreaImportData = processExportImportData(koreaImportCsvData, false, true);
+                koreaImportData = processExportImportData(koreaImportCsvData, false, true);
                 
                 // 디버깅용 로그
                 console.log('Brazil Export Data:', brazilExportData);
@@ -1049,13 +1020,37 @@
                 // 에러 메시지를 콘솔에만 표시하고 alert는 제거
                 console.error('데이터 로딩 중 오류가 발생했습니다:', error.message);
                 
-                // 에러 시 기본 데이터로 표시
-                const defaultData = {
+                // 에러 시 백업 데이터로 표시
+                console.log('Using backup data for Korea import...');
+                const koreaBackupData = {
+                    data2024: KOREA_IMPORT_BACKUP_DATA['2024'],
+                    data2025: KOREA_IMPORT_BACKUP_DATA['2025'],
+                    yoyChangeRate: []
+                };
+                
+                // 전년 동기 대비 변화율 계산
+                for (let i = 0; i < 12; i++) {
+                    const current = koreaBackupData.data2025[i];
+                    const previous = koreaBackupData.data2024[i];
+                    
+                    if (current !== null && previous !== null && previous !== 0) {
+                        const change = ((current - previous) / previous) * 100;
+                        koreaBackupData.yoyChangeRate.push(parseFloat(change.toFixed(1)));
+                    } else {
+                        koreaBackupData.yoyChangeRate.push(null);
+                    }
+                }
+                
+                const defaultBrazilData = {
                     data2024: new Array(12).fill(0),
                     data2025: new Array(12).fill(null),
                     yoyChangeRate: new Array(12).fill(null)
                 };
-                createOrUpdateCharts(defaultData, defaultData);
+                
+                createOrUpdateCharts(defaultBrazilData, koreaBackupData);
+                
+                // 한국 평균 변화율 업데이트
+                updateKoreaAvgChange(koreaBackupData);
             }
         }
 
