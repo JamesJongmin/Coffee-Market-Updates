@@ -423,6 +423,7 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -572,7 +573,81 @@
     </div>
 
     <script>
-        // 공통 차트 옵션
+        // 구글 시트 URL 설정
+        const EXPORT_IMPORT_SHEETS = {
+            brazilUsExport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=0',
+            koreaBrazilImport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=1897130496'
+        };
+
+        // CSV 파싱 함수
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const result = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) {
+                    const cells = line.split(',');
+                    result.push(cells);
+                }
+            }
+            
+            return result;
+        }
+
+        // 데이터 처리 함수
+        function processExportImportData(csvData, isUsExport = false) {
+            const dataByYear = {};
+            
+            // 헤더 제외하고 데이터 처리
+            const dataRows = csvData.slice(1);
+            
+            dataRows.forEach(row => {
+                if (row[0] && row[1]) {
+                    const [year, month] = row[0].split('-');
+                    if (!dataByYear[year]) {
+                        dataByYear[year] = new Array(12).fill(null);
+                    }
+                    let value = parseFloat(row[1]);
+                    
+                    // 미국 수출 데이터는 10만톤 단위로 변환
+                    if (isUsExport) {
+                        value = value / 100000;
+                    }
+                    
+                    dataByYear[year][parseInt(month) - 1] = value;
+                }
+            });
+            
+            // YoY 변화율 자동 계산
+            const years = Object.keys(dataByYear).sort();
+            const yoyChangeRate = [];
+            
+            if (years.length >= 2) {
+                const currentYear = years[years.length - 1];
+                const previousYear = years[years.length - 2];
+                
+                for (let i = 0; i < 12; i++) {
+                    const current = dataByYear[currentYear][i];
+                    const previous = dataByYear[previousYear][i];
+                    
+                    if (current !== null && previous !== null && previous !== 0) {
+                        const change = ((current - previous) / previous) * 100;
+                        yoyChangeRate.push(parseFloat(change.toFixed(1)));
+                    } else {
+                        yoyChangeRate.push(null);
+                    }
+                }
+            }
+            
+            return {
+                data2024: dataByYear['2024'] || new Array(12).fill(null),
+                data2025: dataByYear['2025'] || new Array(12).fill(null),
+                yoyChangeRate: yoyChangeRate
+            };
+        }
+
+        // 차트 공통 옵션
         const commonChartOptions = {
             responsive: true,
             maintainAspectRatio: false,
@@ -632,26 +707,10 @@
         // 월 라벨
         const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
         
-        // 미국향 수출 데이터 (10만톤 단위로 변환)
-        const usExportData2024 = [2.24, 2.17, 2.09, 2.54, 2.44, 2.04, 2.03, 2.07, 2.43, 2.80, 2.86, 2.02];
-        const usExportData2025 = [2.46, 1.73, 2.20, 1.74, 1.71, 1.34, null, null, null, null, null, null];
-        const usYoyChangeRate = [9.8, -20.3, 5.3, -31.5, -29.9, -34.3];
-        
-        // 한국 수입 데이터 (톤 단위 그대로)
-        const koreaImportData2024 = [6889.81, 4185.71, 3503.19, 5721.36, 4445.76, 4980.18, 5330.91, 6420.28, 4327.47, 5144.04, 2457.25, 5752.22];
-        const koreaImportData2025 = [3829.50, 7009.28, 5072.39, 5672.69, 5779.15, 4815.05, 4033.01, null, null, null, null, null];
-        
-        // 한국 YoY 변화율 계산
-        const koreaYoyChangeRate = [];
-        for (let i = 0; i < 7; i++) {
-            if (koreaImportData2025[i] !== null && koreaImportData2024[i] !== null) {
-                const changeRate = ((koreaImportData2025[i] - koreaImportData2024[i]) / koreaImportData2024[i]) * 100;
-                koreaYoyChangeRate.push(parseFloat(changeRate.toFixed(1)));
-            } else {
-                koreaYoyChangeRate.push(null);
-            }
-        }
-        
+        // 차트 인스턴스 저장
+        let usChart = null;
+        let koreaChart = null;
+
         // 그라데이션 생성 함수
         function createGradient(ctx, color1, color2) {
             const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -659,22 +718,20 @@
             gradient.addColorStop(1, color2);
             return gradient;
         }
-        
-        // 미국향 수출 차트 생성
-        const usCtx = document.getElementById('usExportChart').getContext('2d');
-        
-        // 그라데이션 생성
-        const us2024Gradient = createGradient(usCtx, '#d5dbdb', '#bdc3c7');
-        const us2025Gradient = createGradient(usCtx, '#A0522D', '#6B2C0F');
-        
-        const usChart = new Chart(usCtx, {
-            type: 'bar',
-            data: {
+
+        // 차트 생성/업데이트 함수
+        function createOrUpdateCharts(usExportData, koreaImportData) {
+            // 미국향 수출 차트
+            const usCtx = document.getElementById('usExportChart').getContext('2d');
+            const us2024Gradient = createGradient(usCtx, '#d5dbdb', '#bdc3c7');
+            const us2025Gradient = createGradient(usCtx, '#A0522D', '#6B2C0F');
+            
+            const usChartData = {
                 labels: months,
                 datasets: [
                     {
                         label: '2024년',
-                        data: usExportData2024,
+                        data: usExportData.data2024,
                         backgroundColor: us2024Gradient,
                         borderColor: '#95a5a6',
                         borderWidth: 1,
@@ -683,7 +740,7 @@
                     },
                     {
                         label: '2025년',
-                        data: usExportData2025,
+                        data: usExportData.data2025,
                         backgroundColor: us2025Gradient,
                         borderColor: '#8B4513',
                         borderWidth: 1,
@@ -692,14 +749,12 @@
                     },
                     {
                         label: '전년 동기 대비 변화율',
-                        data: [...usYoyChangeRate, null, null, null, null, null, null],
+                        data: usExportData.yoyChangeRate,
                         type: 'line',
-                        borderColor: function(context) {
-                            return '#FF6B35'; // 모든 점을 주황색으로 (음수가 많음)
-                        },
+                        borderColor: '#FF6B35',
                         backgroundColor: 'rgba(255, 107, 53, 0.2)',
                         borderWidth: 4,
-                        pointBackgroundColor: usYoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
+                        pointBackgroundColor: usExportData.yoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 3,
                         pointRadius: 8,
@@ -707,72 +762,68 @@
                         yAxisID: 'y1',
                         tension: 0.3,
                         fill: false,
-                        order: 1,
-                        segment: {
-                            borderColor: function(ctx) {
-                                const current = usYoyChangeRate[ctx.p0DataIndex];
-                                const next = usYoyChangeRate[ctx.p1DataIndex];
-                                if (current >= 0 && next >= 0) return '#3498db';
-                                if (current < 0 && next < 0) return '#FF6B35';
-                                return '#95a5a6'; // 교차점
-                            }
-                        }
+                        order: 1
                     }
                 ]
-            },
-            options: {
-                ...commonChartOptions,
-                plugins: {
-                    ...commonChartOptions.plugins,
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                if (context.datasetIndex === 2) {
-                                    return `변화율: ${context.parsed.y}%`;
-                                } else {
-                                    return `${context.dataset.label}: ${context.parsed.y}십만톤`;
+            };
+
+            if (usChart) {
+                usChart.data = usChartData;
+                usChart.update();
+            } else {
+                usChart = new Chart(usCtx, {
+                    type: 'bar',
+                    data: usChartData,
+                    options: {
+                        ...commonChartOptions,
+                        plugins: {
+                            ...commonChartOptions.plugins,
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.datasetIndex === 2) {
+                                            return `변화율: ${context.parsed.y}%`;
+                                        } else {
+                                            return `${context.dataset.label}: ${context.parsed.y}십만톤`;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            ...commonChartOptions.scales,
+                            y: {
+                                ...commonChartOptions.scales.y,
+                                title: {
+                                    display: true,
+                                    text: '수출량 (10만톤)',
+                                    font: {
+                                        size: 12,
+                                        weight: '600'
+                                    }
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toFixed(1);
+                                    }
                                 }
                             }
                         }
                     }
-                },
-                scales: {
-                    ...commonChartOptions.scales,
-                    y: {
-                        ...commonChartOptions.scales.y,
-                        title: {
-                            display: true,
-                            text: '수출량 (10만톤)',
-                            font: {
-                                size: 12,
-                                weight: '600'
-                            }
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value.toFixed(1);
-                            }
-                        }
-                    }
-                }
+                });
             }
-        });
-        
-        // 한국 수입 차트 생성
-        const koreaCtx = document.getElementById('koreaImportChart').getContext('2d');
-        
-        // 그라데이션 생성
-        const korea2024Gradient = createGradient(koreaCtx, '#d5dbdb', '#bdc3c7');
-        const korea2025Gradient = createGradient(koreaCtx, '#A0522D', '#6B2C0F');
-        
-        const koreaChart = new Chart(koreaCtx, {
-            type: 'bar',
-            data: {
+
+            // 한국 수입 차트
+            const koreaCtx = document.getElementById('koreaImportChart').getContext('2d');
+            const korea2024Gradient = createGradient(koreaCtx, '#d5dbdb', '#bdc3c7');
+            const korea2025Gradient = createGradient(koreaCtx, '#A0522D', '#6B2C0F');
+            
+            const koreaChartData = {
                 labels: months,
                 datasets: [
                     {
                         label: '2024년',
-                        data: koreaImportData2024,
+                        data: koreaImportData.data2024,
                         backgroundColor: korea2024Gradient,
                         borderColor: '#95a5a6',
                         borderWidth: 1,
@@ -781,7 +832,7 @@
                     },
                     {
                         label: '2025년',
-                        data: koreaImportData2025,
+                        data: koreaImportData.data2025,
                         backgroundColor: korea2025Gradient,
                         borderColor: '#8B4513',
                         borderWidth: 1,
@@ -790,14 +841,12 @@
                     },
                     {
                         label: '전년 동기 대비 변화율',
-                        data: [...koreaYoyChangeRate, null, null, null, null, null],
+                        data: koreaImportData.yoyChangeRate,
                         type: 'line',
-                        borderColor: function(context) {
-                            return '#3498db'; // 기본색 (양수가 많음)
-                        },
+                        borderColor: '#3498db',
                         backgroundColor: 'rgba(52, 152, 219, 0.2)',
                         borderWidth: 4,
-                        pointBackgroundColor: koreaYoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
+                        pointBackgroundColor: koreaImportData.yoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 3,
                         pointRadius: 8,
@@ -805,64 +854,117 @@
                         yAxisID: 'y1',
                         tension: 0.3,
                         fill: false,
-                        order: 1,
-                        segment: {
-                            borderColor: function(ctx) {
-                                const current = koreaYoyChangeRate[ctx.p0DataIndex];
-                                const next = koreaYoyChangeRate[ctx.p1DataIndex];
-                                if (current >= 0 && next >= 0) return '#3498db';
-                                if (current < 0 && next < 0) return '#FF6B35';
-                                return '#95a5a6'; // 교차점
-                            }
-                        }
+                        order: 1
                     }
                 ]
-            },
-            options: {
-                ...commonChartOptions,
-                plugins: {
-                    ...commonChartOptions.plugins,
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                if (context.datasetIndex === 2) {
-                                    return `변화율: ${context.parsed.y}%`;
-                                } else {
-                                    return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}kg`;
+            };
+
+            if (koreaChart) {
+                koreaChart.data = koreaChartData;
+                koreaChart.update();
+            } else {
+                koreaChart = new Chart(koreaCtx, {
+                    type: 'bar',
+                    data: koreaChartData,
+                    options: {
+                        ...commonChartOptions,
+                        plugins: {
+                            ...commonChartOptions.plugins,
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.datasetIndex === 2) {
+                                            return `변화율: ${context.parsed.y}%`;
+                                        } else {
+                                            return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}톤`;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            ...commonChartOptions.scales,
+                            y: {
+                                ...commonChartOptions.scales.y,
+                                title: {
+                                    display: true,
+                                    text: '수입량 (톤)',
+                                    font: {
+                                        size: 12,
+                                        weight: '600'
+                                    }
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString();
+                                    }
                                 }
                             }
                         }
                     }
-                },
-                scales: {
-                    ...commonChartOptions.scales,
-                    y: {
-                        ...commonChartOptions.scales.y,
-                        title: {
-                            display: true,
-                            text: '수입량 (kg)',
-                            font: {
-                                size: 12,
-                                weight: '600'
-                            }
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value.toLocaleString();
-                            }
-                        }
-                    }
+                });
+            }
+        }
+
+        // 데이터 로드 및 차트 생성
+        async function loadAndCreateCharts() {
+            try {
+                // 로딩 표시
+                document.querySelector('.chart-wrapper').style.opacity = '0.5';
+                
+                // 브라질 수출 데이터 로드
+                const usExportResponse = await fetch(EXPORT_IMPORT_SHEETS.brazilUsExport);
+                const usExportCsv = await usExportResponse.text();
+                const usExportCsvData = parseCSV(usExportCsv);
+                const usExportData = processExportImportData(usExportCsvData, true);
+                
+                // 한국 수입 데이터 로드
+                const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
+                const koreaImportCsv = await koreaImportResponse.text();
+                const koreaImportCsvData = parseCSV(koreaImportCsv);
+                const koreaImportData = processExportImportData(koreaImportCsvData, false);
+                
+                // 차트 생성/업데이트
+                createOrUpdateCharts(usExportData, koreaImportData);
+                
+                // 한국 평균 변화율 업데이트
+                updateKoreaAvgChange(koreaImportData);
+                
+                // 로딩 완료
+                document.querySelector('.chart-wrapper').style.opacity = '1';
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                // 에러 시 기본 데이터로 표시
+                const defaultData = {
+                    data2024: new Array(12).fill(0),
+                    data2025: new Array(12).fill(null),
+                    yoyChangeRate: new Array(12).fill(null)
+                };
+                createOrUpdateCharts(defaultData, defaultData);
+            }
+        }
+
+        // 페이지 로드 시 차트 생성
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAndCreateCharts();
+            
+            // 5분마다 데이터 새로고침
+            setInterval(loadAndCreateCharts, 5 * 60 * 1000);
+        });
+
+        // 한국 평균 변화율 업데이트 함수
+        function updateKoreaAvgChange(koreaImportData) {
+            const koreaYoyChangeRate = koreaImportData.yoyChangeRate;
+            const validRates = koreaYoyChangeRate.filter(rate => rate !== null);
+            if (validRates.length > 0) {
+                const koreaAvgChangeRate = validRates.reduce((sum, rate) => sum + rate, 0) / validRates.length;
+                const element = document.getElementById('koreaAvgChange');
+                if (element) {
+                    element.textContent = (koreaAvgChangeRate >= 0 ? '+' : '') + koreaAvgChangeRate.toFixed(1) + '%';
                 }
             }
-        });
-        
-        // 한국 평균 변화율 업데이트
-        const koreaAvgChangeRate = koreaYoyChangeRate.filter(rate => rate !== null).reduce((sum, rate) => sum + rate, 0) / koreaYoyChangeRate.filter(rate => rate !== null).length;
-        document.getElementById('koreaAvgChange').textContent = (koreaAvgChangeRate >= 0 ? '+' : '') + koreaAvgChangeRate.toFixed(1) + '%';
-        
-        // 차트 애니메이션
-        usChart.update('active');
-        koreaChart.update('active');
+        }
     </script>
 </body>
 </html>
