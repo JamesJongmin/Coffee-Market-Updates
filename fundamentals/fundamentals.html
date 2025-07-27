@@ -441,7 +441,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>☕ Coffee Market Fundamentals</h1>
+            <h1>Coffee Market Fundamentals</h1>
             <p class="subtitle">커피 시장의 기초 데이터와 핵심 지표를 실시간으로 확인하세요</p>
             <a href="../index.html" class="back-button">
                 <span>←</span>
@@ -619,42 +619,49 @@
         }
 
         // 데이터 처리 함수
-        function processExportImportData(csvData, isUsExport = false, isKoreaImport = false) {
-            console.log('Processing data - isUsExport:', isUsExport, 'isKoreaImport:', isKoreaImport);
-            console.log('CSV data rows:', csvData.length);
+        function processExportImportData(csvData, isBrazilExport = false, isKoreaImport = false) {
+            console.log('Processing data, isBrazilExport:', isBrazilExport, 'isKoreaImport:', isKoreaImport);
+            console.log('CSV data first 5 rows:', csvData.slice(0, 5));
             
-            const dataByYear = {};
+            const dataByYear = {
+                '2024': new Array(12).fill(null),
+                '2025': new Array(12).fill(null)
+            };
             
-            // 헤더 제외하고 데이터 처리
-            const dataRows = csvData.slice(1);
-            
-            dataRows.forEach((row, index) => {
-                if (row[0] && row[1]) {
-                    const [year, month] = row[0].split('-');
-                    if (!dataByYear[year]) {
-                        dataByYear[year] = new Array(12).fill(null);
-                    }
-                    let value = parseFloat(row[1]);
+            csvData.forEach((row, index) => {
+                if (index === 0) return; // 헤더 스킵
+                
+                const dateStr = row[0];
+                let valueStr = row[1];
+                
+                if (!dateStr || !valueStr) return;
+                
+                // 따옴표와 쉼표 제거
+                valueStr = valueStr.replace(/"/g, '').replace(/,/g, '');
+                
+                const [year, month] = dateStr.split('-');
+                const value = parseFloat(valueStr);
+                
+                if (!isNaN(value) && year && month) {
+                    let processedValue = value;
                     
-                    // 디버깅용 로그
-                    if (index < 5) {
-                        console.log(`Row ${index}: ${row[0]} = ${row[1]} -> ${value}`);
-                    }
-                    
-                    // 미국 수출 데이터는 10만톤 단위로 변환
-                    if (isUsExport) {
-                        value = value / 100000;
-                    }
-                    
-                    // 한국 수입 데이터는 kg를 톤으로 변환
-                    if (isKoreaImport) {
-                        value = value / 1000;
+                    // 브라질 수출은 10만톤 단위로 변환
+                    if (isBrazilExport) {
+                        processedValue = value / 100000;
                         if (index < 5) {
-                            console.log(`Korea import converted: ${row[1]} kg -> ${value} tons`);
+                            console.log(`Brazil export converted: ${value} -> ${processedValue} (100k tons)`);
                         }
                     }
                     
-                    dataByYear[year][parseInt(month) - 1] = value;
+                    // 한국 수입은 톤 단위로 유지 (이미 톤 단위로 입력됨)
+                    if (isKoreaImport) {
+                        // 데이터가 이미 톤 단위이므로 변환 불필요
+                        if (index < 5) {
+                            console.log(`Korea import value: ${value} tons`);
+                        }
+                    }
+                    
+                    dataByYear[year][parseInt(month) - 1] = processedValue;
                 }
             });
             
@@ -972,50 +979,28 @@
                 const brazilExportCsvData = parseCSV(brazilExportCsv);
                 const brazilExportData = processExportImportData(brazilExportCsvData, true);
                 
-                // 한국 수입 데이터는 백업 데이터 사용
-                console.log('Using backup data for Korea import...');
-                const koreaImportData = {
-                    data2024: KOREA_IMPORT_BACKUP_DATA['2024'],
-                    data2025: KOREA_IMPORT_BACKUP_DATA['2025'],
-                    yoyChangeRate: []
-                };
+                console.log('Loading Korea import data...');
+                // 한국 수입 데이터 로드
+                const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
+                console.log('Korea import response status:', koreaImportResponse.status);
                 
-                // 전년 동기 대비 변화율 계산
-                for (let i = 0; i < 12; i++) {
-                    const current = koreaImportData.data2025[i];
-                    const previous = koreaImportData.data2024[i];
-                    
-                    if (current !== null && previous !== null && previous !== 0) {
-                        const change = ((current - previous) / previous) * 100;
-                        koreaImportData.yoyChangeRate.push(parseFloat(change.toFixed(1)));
-                    } else {
-                        koreaImportData.yoyChangeRate.push(null);
-                    }
+                let koreaImportData;
+                
+                if (!koreaImportResponse.ok) {
+                    throw new Error(`Korea import data fetch failed: ${koreaImportResponse.status}`);
                 }
                 
-                // 선택적으로 Google Sheets 데이터 시도
-                try {
-                    console.log('Attempting to load Korea import data from Google Sheets...');
-                    const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
-                    
-                    if (koreaImportResponse.ok) {
-                        const koreaImportCsv = await koreaImportResponse.text();
-                        
-                        // HTML 응답이 아닌 경우에만 처리
-                        if (!koreaImportCsv.includes('<HTML>') && !koreaImportCsv.includes('<!DOCTYPE')) {
-                            const koreaImportCsvData = parseCSV(koreaImportCsv);
-                            const googleSheetsData = processExportImportData(koreaImportCsvData, false, true);
-                            
-                            // 유효한 데이터인 경우 업데이트
-                            if (googleSheetsData.data2025.some(val => val !== null)) {
-                                console.log('Using Google Sheets data for Korea import');
-                                Object.assign(koreaImportData, googleSheetsData);
-                            }
-                        }
-                    }
-                } catch (sheetsError) {
-                    console.log('Failed to load Google Sheets data, continuing with backup data');
+                const koreaImportCsv = await koreaImportResponse.text();
+                console.log('Korea import CSV first 200 chars:', koreaImportCsv.substring(0, 200));
+                
+                // HTML 응답인지 확인
+                if (koreaImportCsv.includes('<HTML>') || koreaImportCsv.includes('<!DOCTYPE')) {
+                    console.error('Received HTML instead of CSV for Korea import data');
+                    throw new Error('Invalid data format: received HTML instead of CSV');
                 }
+                
+                const koreaImportCsvData = parseCSV(koreaImportCsv);
+                koreaImportData = processExportImportData(koreaImportCsvData, false, true);
                 
                 // 디버깅용 로그
                 console.log('Brazil Export Data:', brazilExportData);
