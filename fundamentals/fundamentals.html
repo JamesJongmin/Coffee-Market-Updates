@@ -453,7 +453,7 @@
                     </div>
                     
                     <div class="chart-container">
-                        <canvas id="usExportChart"></canvas>
+                        <canvas id="brazilExportChart"></canvas>
                     </div>
                     
                     <div class="legend-custom">
@@ -575,7 +575,7 @@
     <script>
         // 구글 시트 URL 설정
         const EXPORT_IMPORT_SHEETS = {
-            brazilUsExport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=0',
+            brazilTotalExport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=0',
             koreaBrazilImport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=1'
         };
 
@@ -708,7 +708,7 @@
         const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
         
         // 차트 인스턴스 저장
-        let usChart = null;
+        let brazilChart = null;
         let koreaChart = null;
 
         // 그라데이션 생성 함수
@@ -720,19 +720,19 @@
         }
 
         // 차트 생성/업데이트 함수
-        function createOrUpdateCharts(usExportData, koreaImportData) {
-            // 미국향 수출 차트
-            const usCtx = document.getElementById('usExportChart').getContext('2d');
-            const us2024Gradient = createGradient(usCtx, '#d5dbdb', '#bdc3c7');
-            const us2025Gradient = createGradient(usCtx, '#A0522D', '#6B2C0F');
+        function createOrUpdateCharts(brazilExportData, koreaImportData) {
+            // 브라질 전체 수출 차트
+            const brazilCtx = document.getElementById('brazilExportChart').getContext('2d');
+            const brazil2024Gradient = createGradient(brazilCtx, '#d5dbdb', '#bdc3c7');
+            const brazil2025Gradient = createGradient(brazilCtx, '#A0522D', '#6B2C0F');
             
-            const usChartData = {
+            const brazilChartData = {
                 labels: months,
                 datasets: [
                     {
                         label: '2024년',
-                        data: usExportData.data2024,
-                        backgroundColor: us2024Gradient,
+                        data: brazilExportData.data2024,
+                        backgroundColor: brazil2024Gradient,
                         borderColor: '#95a5a6',
                         borderWidth: 1,
                         yAxisID: 'y',
@@ -740,8 +740,8 @@
                     },
                     {
                         label: '2025년',
-                        data: usExportData.data2025,
-                        backgroundColor: us2025Gradient,
+                        data: brazilExportData.data2025,
+                        backgroundColor: brazil2025Gradient,
                         borderColor: '#8B4513',
                         borderWidth: 1,
                         yAxisID: 'y',
@@ -749,12 +749,12 @@
                     },
                     {
                         label: '전년 동기 대비 변화율',
-                        data: usExportData.yoyChangeRate,
+                        data: brazilExportData.yoyChangeRate,
                         type: 'line',
                         borderColor: '#FF6B35',
                         backgroundColor: 'rgba(255, 107, 53, 0.2)',
                         borderWidth: 4,
-                        pointBackgroundColor: usExportData.yoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
+                        pointBackgroundColor: brazilExportData.yoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 3,
                         pointRadius: 8,
@@ -767,13 +767,13 @@
                 ]
             };
 
-            if (usChart) {
-                usChart.data = usChartData;
-                usChart.update();
+            if (brazilChart) {
+                brazilChart.data = brazilChartData;
+                brazilChart.update();
             } else {
-                usChart = new Chart(usCtx, {
+                brazilChart = new Chart(brazilCtx, {
                     type: 'bar',
-                    data: usChartData,
+                    data: brazilChartData,
                     options: {
                         ...commonChartOptions,
                         plugins: {
@@ -915,11 +915,11 @@
                     wrapper.style.opacity = '0.5';
                 });
                 
-                // 브라질 수출 데이터 로드
-                const usExportResponse = await fetch(EXPORT_IMPORT_SHEETS.brazilUsExport);
-                const usExportCsv = await usExportResponse.text();
-                const usExportCsvData = parseCSV(usExportCsv);
-                const usExportData = processExportImportData(usExportCsvData, true);
+                // 브라질 전체 수출 데이터 로드
+                const brazilExportResponse = await fetch(EXPORT_IMPORT_SHEETS.brazilTotalExport);
+                const brazilExportCsv = await brazilExportResponse.text();
+                const brazilExportCsvData = parseCSV(brazilExportCsv);
+                const brazilExportData = processExportImportData(brazilExportCsvData, true);
                 
                 // 한국 수입 데이터 로드
                 const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
@@ -928,7 +928,7 @@
                 const koreaImportData = processExportImportData(koreaImportCsvData, false);
                 
                 // 차트 생성/업데이트
-                createOrUpdateCharts(usExportData, koreaImportData);
+                createOrUpdateCharts(brazilExportData, koreaImportData);
                 
                 // 한국 평균 변화율 업데이트
                 updateKoreaAvgChange(koreaImportData);
