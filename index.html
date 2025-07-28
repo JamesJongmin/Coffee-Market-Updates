@@ -1152,16 +1152,31 @@
 
                 console.log(`Fetching data from Google Sheets: ${sheetKey}`);
                 
-                // AllOrigins CORS proxy 사용
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                let csvText;
                 
-                const response = await fetch(proxyUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                // 먼저 직접 접근 시도
+                try {
+                    const directResponse = await fetch(url);
+                    if (directResponse.ok) {
+                        csvText = await directResponse.text();
+                        console.log(`Direct access successful for ${sheetKey}`);
+                    } else {
+                        throw new Error('Direct access failed');
+                    }
+                } catch (directError) {
+                    // 직접 접근 실패시 AllOrigins 프록시 사용
+                    console.log(`Direct access failed for ${sheetKey}, trying proxy...`);
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                    
+                    const proxyResponse = await fetch(proxyUrl);
+                    if (!proxyResponse.ok) {
+                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
+                    }
+                    
+                    const proxyData = await proxyResponse.json();
+                    csvText = proxyData.contents;
+                    console.log(`Proxy access successful for ${sheetKey}`);
                 }
-                
-                const proxyData = await response.json();
-                const csvText = proxyData.contents;
                 const data = parseCSV(csvText);
                 
                 // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
@@ -2125,16 +2140,31 @@
                 const url = GOOGLE_SHEETS_URLS.nvdi;
                 console.log('Fetching NVDI data from Google Sheets');
                 
-                // AllOrigins CORS proxy 사용
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                let csvText;
                 
-                const response = await fetch(proxyUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                // 먼저 직접 접근 시도
+                try {
+                    const directResponse = await fetch(url);
+                    if (directResponse.ok) {
+                        csvText = await directResponse.text();
+                        console.log('Direct access successful for NVDI');
+                    } else {
+                        throw new Error('Direct access failed');
+                    }
+                } catch (directError) {
+                    // 직접 접근 실패시 AllOrigins 프록시 사용
+                    console.log('Direct access failed for NVDI, trying proxy...');
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                    
+                    const proxyResponse = await fetch(proxyUrl);
+                    if (!proxyResponse.ok) {
+                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
+                    }
+                    
+                    const proxyData = await proxyResponse.json();
+                    csvText = proxyData.contents;
+                    console.log('Proxy access successful for NVDI');
                 }
-                
-                const proxyData = await response.json();
-                const csvText = proxyData.contents;
                 const data = parseCSV(csvText);
                 
                 // 첫 번째 행은 헤더
