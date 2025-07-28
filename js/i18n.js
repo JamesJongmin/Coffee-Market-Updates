@@ -34,6 +34,7 @@ class I18n {
 
                 // Reports
                 'reports.moreReports': 'More Reports',
+                'reports.lessReports': 'Less Reports',
                 'reports.readMore': '보고서 읽기',
                 'reports.noResults.title': '검색 결과가 없습니다',
                 'reports.noResults.description': '다른 검색어나 필터를 시도해보세요.',
@@ -108,6 +109,7 @@ class I18n {
 
                 // Reports
                 'reports.moreReports': 'More Reports',
+                'reports.lessReports': 'Less Reports',
                 'reports.readMore': 'Read Report',
                 'reports.noResults.title': 'No search results found',
                 'reports.noResults.description': 'Try different search terms or filters.',

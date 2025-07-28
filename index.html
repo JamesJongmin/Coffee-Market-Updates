@@ -18,6 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="js/i18n.js"></script>
+    <script src="js/report-translator.js"></script>
+    <script src="js/report-categorizer.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -1572,7 +1574,7 @@
             ];
         }
 
-        // 메인 리포트 초기화 함수 (JSON 제거 버전)
+        // 메인 리포트 초기화 함수 (카테고리 분류 통합)
         async function initializeReports() {
             try {
                 console.log('리포트 초기화 시작...');
@@ -1585,6 +1587,16 @@
                 if (reports.length === 0) {
                     console.log('파일 로드 실패, 기본 데이터 사용');
                     reports = getDefaultReports();
+                }
+                
+                // 리포트 자동 카테고리 분류
+                if (reportCategorizer) {
+                    reports = reportCategorizer.categorizeReports(reports);
+                    console.log('카테고리 분류 완료');
+                    
+                    // 디버깅: 분류 결과 출력
+                    const counts = reportCategorizer.getCategoryCounts(reports);
+                    console.log('📊 카테고리별 리포트 수:', counts);
                 }
                 
                 console.log('최종 리포트 수:', reports.length);
@@ -2340,7 +2352,7 @@
             }
         }
 
-        // 리포트 렌더링 (최근 4개만 표시 + More 버튼)
+        // 리포트 렌더링 (최근 4개만 표시 + More 버튼) - 번역 시스템 통합
         function renderReports(filteredReports = allReports) {
             const grid = document.getElementById('reportsGrid');
             const noResults = document.getElementById('noResults');
@@ -2357,8 +2369,14 @@
             grid.style.display = 'grid';
             noResults.style.display = 'none';
             
+            // 현재 언어에 따라 리포트 번역
+            const currentLang = i18n.getCurrentLanguage();
+            const translatedReports = reportTranslator ? 
+                reportTranslator.translateReports(filteredReports, currentLang) : 
+                filteredReports;
+            
             // 날짜순으로 정렬하여 가장 최근 보고서 찾기
-            const sortedReports = [...filteredReports].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const sortedReports = [...translatedReports].sort((a, b) => new Date(b.date) - new Date(a.date));
             const latestDate = sortedReports.length > 0 ? sortedReports[0].date : null;
             
             // 최근 4개와 나머지 분리
@@ -2701,6 +2719,10 @@
         window.addEventListener('languageChanged', (event) => {
             updateReportCards();
             updateFiltersWithLanguage();
+            // 리포트 다시 렌더링 (번역 적용)
+            if (typeof allReports !== 'undefined' && allReports.length > 0) {
+                renderReports();
+            }
         });
 
         // 페이지 로드시 초기화 실행
