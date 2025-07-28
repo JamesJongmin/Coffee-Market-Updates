@@ -964,14 +964,16 @@
                 
                 console.log('Loading Brazil export data...');
                 // 브라질 전체 수출 데이터 로드
-                const brazilExportResponse = await fetch(EXPORT_IMPORT_SHEETS.brazilTotalExport);
+                const brazilExportProxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(EXPORT_IMPORT_SHEETS.brazilTotalExport)}`;
+                const brazilExportResponse = await fetch(brazilExportProxyUrl);
                 console.log('Brazil export response status:', brazilExportResponse.status);
                 
                 if (!brazilExportResponse.ok) {
                     throw new Error(`Brazil export data fetch failed: ${brazilExportResponse.status}`);
                 }
                 
-                const brazilExportCsv = await brazilExportResponse.text();
+                const brazilExportProxyData = await brazilExportResponse.json();
+                const brazilExportCsv = brazilExportProxyData.contents;
                 console.log('Brazil export CSV first 200 chars:', brazilExportCsv.substring(0, 200));
                 
                 const brazilExportCsvData = parseCSV(brazilExportCsv);
@@ -979,7 +981,8 @@
                 
                 console.log('Loading Korea import data...');
                 // 한국 수입 데이터 로드
-                const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
+                const koreaImportProxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(EXPORT_IMPORT_SHEETS.koreaBrazilImport)}`;
+                const koreaImportResponse = await fetch(koreaImportProxyUrl);
                 console.log('Korea import response status:', koreaImportResponse.status);
                 
                 let koreaImportData;
@@ -988,7 +991,8 @@
                     throw new Error(`Korea import data fetch failed: ${koreaImportResponse.status}`);
                 }
                 
-                const koreaImportCsv = await koreaImportResponse.text();
+                const koreaImportProxyData = await koreaImportResponse.json();
+                const koreaImportCsv = koreaImportProxyData.contents;
                 console.log('Korea import CSV first 200 chars:', koreaImportCsv.substring(0, 200));
                 
                 // HTML 응답인지 확인

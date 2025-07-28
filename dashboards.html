@@ -344,12 +344,16 @@
 
                 console.log(`Fetching data from Google Sheets: ${sheetKey}`);
                 
-                const response = await fetch(url);
+                // AllOrigins CORS proxy 사용
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                
+                const response = await fetch(proxyUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 
-                const csvText = await response.text();
+                const proxyData = await response.json();
+                const csvText = proxyData.contents;
                 const data = parseCSV(csvText);
                 
                 // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
@@ -747,12 +751,16 @@
                 const url = GOOGLE_SHEETS_URLS.nvdi;
                 console.log('Fetching NVDI data from Google Sheets');
                 
-                const response = await fetch(url);
+                // AllOrigins CORS proxy 사용
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                
+                const response = await fetch(proxyUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 
-                const csvText = await response.text();
+                const proxyData = await response.json();
+                const csvText = proxyData.contents;
                 const data = parseCSV(csvText);
                 
                 // 첫 번째 행은 헤더
