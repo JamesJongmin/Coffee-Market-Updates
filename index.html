@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1514,20 +1514,32 @@
             
             try {
                 console.log('Starting to create Coffee chart...');
-                const data = await Promise.race([
-                    readGoogleSheetData('coffeefutures'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-                ]);
                 
-                if (!data) {
+                // 로딩 요소가 없으면 생성
+                if (!loadingElement || !chartElement) {
+                    console.error('Chart elements not found');
+                    return;
+                }
+                
+                const data = await readGoogleSheetData('coffeefutures');
+                
+                if (!data || data.length === 0) {
                     throw new Error('No data received');
                 }
+                
+                console.log('Coffee data received:', data.length, 'rows');
 
                 const chartData = data.map((row, index) => ({
                     x: index,
                     y: parseFloat(row.value),
                     date: parseDate(row.date)
-                })).filter(point => !isNaN(point.y));
+                })).filter(point => !isNaN(point.y) && point.y > 0);
+                
+                console.log('Coffee chart data prepared:', chartData.length, 'points');
+                
+                if (chartData.length === 0) {
+                    throw new Error('No valid data points');
+                }
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -1537,8 +1549,10 @@
                 // 기존 차트가 있으면 제거
                 if (charts.coffee) {
                     charts.coffee.destroy();
+                    charts.coffee = null;
                 }
                 
+                // 차트 생성
                 charts.coffee = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -2573,8 +2587,31 @@
 
         // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing...');
             init();
             initializeMenu();
+        });
+        
+        // 전체 로드 완료시 차트 재시도
+        window.addEventListener('load', () => {
+            console.log('Window fully loaded');
+            // Chart.js가 로드되었는지 확인
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js not loaded!');
+                // Chart.js 재로드 시도
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
+                script.onload = () => {
+                    console.log('Chart.js reloaded, creating charts...');
+                    Promise.all([
+                        createCoffeeChart(),
+                        createUSDChart(),
+                        createCFTCChart(),
+                        createNVDIChart()
+                    ]);
+                };
+                document.head.appendChild(script);
+            }
         });
 </script>
 </body>
