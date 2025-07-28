@@ -13,9 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-date-fns/2.0.0/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1515,6 +1513,7 @@
             const chartElement = document.getElementById('coffeeChart');
             
             try {
+                console.log('Starting to create Coffee chart...');
                 const data = await Promise.race([
                     readGoogleSheetData('coffeefutures'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
@@ -1534,6 +1533,12 @@
                 chartElement.style.display = 'block';
 
                 const ctx = chartElement.getContext('2d');
+                
+                // 기존 차트가 있으면 제거
+                if (charts.coffee) {
+                    charts.coffee.destroy();
+                }
+                
                 charts.coffee = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -1622,6 +1627,7 @@
                 });
             } catch (error) {
                 console.error('Coffee chart error:', error);
+                console.error('Error stack:', error.stack);
                 loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
             }
         }
