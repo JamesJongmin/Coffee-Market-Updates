@@ -964,8 +964,7 @@
                 
                 console.log('Loading Brazil export data...');
                 // 브라질 전체 수출 데이터 로드
-                const brazilExportProxyUrl = `https://corsproxy.io/?${encodeURIComponent(EXPORT_IMPORT_SHEETS.brazilTotalExport)}`;
-                const brazilExportResponse = await fetch(brazilExportProxyUrl);
+                const brazilExportResponse = await fetch(EXPORT_IMPORT_SHEETS.brazilTotalExport);
                 console.log('Brazil export response status:', brazilExportResponse.status);
                 
                 if (!brazilExportResponse.ok) {
@@ -980,8 +979,7 @@
                 
                 console.log('Loading Korea import data...');
                 // 한국 수입 데이터 로드
-                const koreaImportProxyUrl = `https://corsproxy.io/?${encodeURIComponent(EXPORT_IMPORT_SHEETS.koreaBrazilImport)}`;
-                const koreaImportResponse = await fetch(koreaImportProxyUrl);
+                const koreaImportResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaBrazilImport);
                 console.log('Korea import response status:', koreaImportResponse.status);
                 
                 let koreaImportData;
