@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -2587,32 +2587,9 @@
         }
 
         // 페이지 로드시 초기화 실행
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM loaded, initializing...');
+        document.addEventListener('DOMContentLoaded', function() {
             init();
             initializeMenu();
-        });
-        
-        // 전체 로드 완료시 차트 재시도
-        window.addEventListener('load', () => {
-            console.log('Window fully loaded');
-            // Chart.js가 로드되었는지 확인
-            if (typeof Chart === 'undefined') {
-                console.error('Chart.js not loaded!');
-                // Chart.js 재로드 시도
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
-                script.onload = () => {
-                    console.log('Chart.js reloaded, creating charts...');
-                    Promise.all([
-                        createCoffeeChart(),
-                        createUSDChart(),
-                        createCFTCChart(),
-                        createNVDIChart()
-                    ]);
-                };
-                document.head.appendChild(script);
-            }
         });
 </script>
 </body>
