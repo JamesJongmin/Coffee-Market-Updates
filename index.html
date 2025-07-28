@@ -1007,7 +1007,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="coffeeChart" style="display: none;"></canvas>
+                            <canvas id="coffeeChart"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">📊 차트 분석</div>
@@ -1030,7 +1030,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="usdChart" style="display: none;"></canvas>
+                            <canvas id="usdChart"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">💱 차트 분석</div>
@@ -1054,7 +1054,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="cftcChart" style="display: none;"></canvas>
+                            <canvas id="cftcChart"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">📈 차트 분석</div>
@@ -1078,7 +1078,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="nvdiChart" style="display: none;"></canvas>
+                            <canvas id="nvdiChart"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">🌱 차트 분석</div>
@@ -1542,7 +1542,6 @@
                 }
 
                 loadingElement.style.display = 'none';
-                chartElement.style.display = 'block';
 
                 const ctx = chartElement.getContext('2d');
                 
@@ -2473,12 +2472,14 @@
                 updateCurrentDate();
                 
                 // 차트들 병렬로 로드
-                Promise.all([
+                await Promise.all([
                     createCoffeeChart(),
                     createUSDChart(),
                     createCFTCChart(),
                     createNVDIChart()
-                ]);
+                ]).catch(error => {
+                    console.error('차트 생성 중 오류:', error);
+                });
 
                 // 개선된 리포트 데이터 로드
                 allReports = await initializeReports();
