@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-date-fns/2.0.0/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script src="js/i18n.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -28,6 +29,108 @@
             text-align: center;
             margin-bottom: 50px;
             padding: 40px 20px;
+            position: relative;
+        }
+
+        /* 언어 선택기 */
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .language-toggle {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        .language-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 120px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .language-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 0.9em;
+            color: #2c3e50;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .language-option:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .language-option:hover {
+            background-color: #f8f9fa;
+        }
+
+        .language-option.active {
+            background-color: #8B4513;
+            color: white;
+        }
+
+        .flag-icon {
+            width: 18px;
+            height: 12px;
+            border-radius: 2px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .flag-icon.ko {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxOCAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iOSIgY3k9IjYiIHI9IjMiIGZpbGw9IiNlZDRjNjQiLz48L3N2Zz4=');
+        }
+
+        .flag-icon.en {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxOCAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIGZpbGw9IiNiMjIyMzQiLz48cmVjdCB5PSIxIiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSI1IiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSI3IiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSI5IiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSIxMSIgd2lkdGg9IjE4IiBoZWlnaHQ9IjEiIGZpbGw9IndoaXRlIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iNiIgZmlsbD0iIzNjM2I2ZSIvPjwvc3ZnPg==');
         }
         
         h1 {
@@ -185,13 +288,31 @@
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-button">
+        <a href="index.html" class="back-button" data-i18n="page.backToHome">
             ← 메인 페이지로 돌아가기
         </a>
         
         <div class="header">
-            <h1>📊 Market Dashboards</h1>
-            <p class="subtitle">커피 시장 실시간 차트 대시보드</p>
+            <!-- 언어 선택기 -->
+            <div class="language-selector">
+                <button class="language-toggle" id="languageToggle">
+                    <span class="flag-icon ko" id="currentFlag"></span>
+                    <span id="currentLang">KO</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option" data-lang="ko">
+                        <span class="flag-icon ko"></span>
+                        <span>한국어</span>
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <span class="flag-icon en"></span>
+                        <span>English</span>
+                    </div>
+                </div>
+            </div>
+            
+            <h1 data-i18n="page.dashboards.title">📊 Market Dashboards</h1>
+            <p class="subtitle" data-i18n="page.dashboards.subtitle">커피 시장 실시간 차트 대시보드</p>
         </div>
         
         <!-- 차트 대시보드 섹션 -->
@@ -200,19 +321,19 @@
                 <!-- Coffee Futures Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
-                        <div class="chart-title">Coffee Futures</div>
-                        <div class="chart-source">출처: ICE</div>
+                        <div class="chart-title" data-i18n="chart.coffeeFutures">Coffee Futures</div>
+                        <div class="chart-source"><span data-i18n="chart.source">출처</span>: ICE</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="loading-spinner" id="loading-coffee">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                         </div>
                         <canvas id="coffeeChart" style="display: none;"></canvas>
                     </div>
                     <div class="chart-analysis">
-                        <div class="analysis-title">📊 차트 분석</div>
-                        <div class="analysis-text">
+                        <div class="analysis-title" data-i18n="chart.analysis">📊 차트 분석</div>
+                        <div class="analysis-text" data-i18n="analysis.coffee">
                             <strong>커피 선물 가격</strong>은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
                             브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다. 
                             현재 추세는 시장의 공급/수요 균형과 투기적 포지션 변화를 나타냅니다.
@@ -223,19 +344,19 @@
                 <!-- USD/BRL Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
-                        <div class="chart-title">미국달러-브라질헤알 환율</div>
-                        <div class="chart-source">출처: LSEG</div>
+                        <div class="chart-title" data-i18n="chart.usdBrl">미국달러-브라질헤알 환율</div>
+                        <div class="chart-source"><span data-i18n="chart.source">출처</span>: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="loading-spinner" id="loading-usd">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                         </div>
                         <canvas id="usdChart" style="display: none;"></canvas>
                     </div>
                     <div class="chart-analysis">
-                        <div class="analysis-title">💱 차트 분석</div>
-                        <div class="analysis-text">
+                        <div class="analysis-title" data-i18n="chart.analysis.currency">💱 차트 분석</div>
+                        <div class="analysis-text" data-i18n="analysis.usdBrl">
                             <strong>USD/BRL 환율</strong>은 커피 시장에 중요한 영향을 미칩니다. 
                             헤알화 약세(USD/BRL 상승) 시 브라질 농민들의 달러 수취액이 증가해 수출 경쟁력이 강화되고, 
                             반대로 헤알화 강세 시에는 브라질 커피의 국제 경쟁력이 약화됩니다. 
@@ -247,19 +368,19 @@
                 <!-- CFTC Positions Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
-                        <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
-                        <div class="chart-source">출처: LSEG</div>
+                        <div class="chart-title" data-i18n="chart.cftcPositions">CFTC 투기 포지션 (순매수)</div>
+                        <div class="chart-source"><span data-i18n="chart.source">출처</span>: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="loading-spinner" id="loading-cftc">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                         </div>
                         <canvas id="cftcChart" style="display: none;"></canvas>
                     </div>
                     <div class="chart-analysis">
-                        <div class="analysis-title">📈 차트 분석</div>
-                        <div class="analysis-text">
+                        <div class="analysis-title" data-i18n="chart.analysis.cftc">📈 차트 분석</div>
+                        <div class="analysis-text" data-i18n="analysis.cftc">
                             <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
                             양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
                             극단적 포지션은 종종 시장 전환점의 신호가 되며, 
@@ -271,19 +392,19 @@
                 <!-- NVDI Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
-                        <div class="chart-title">브라질 남동부 NVDI (식물활력도)</div>
-                        <div class="chart-source">출처: LSEG</div>
+                        <div class="chart-title" data-i18n="chart.nvdi">브라질 남동부 NVDI (식물활력도)</div>
+                        <div class="chart-source"><span data-i18n="chart.source">출처</span>: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="loading-spinner" id="loading-nvdi">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                         </div>
                         <canvas id="nvdiChart" style="display: none;"></canvas>
                     </div>
                     <div class="chart-analysis">
-                        <div class="analysis-title">🌱 차트 분석</div>
-                        <div class="analysis-text">
+                        <div class="analysis-title" data-i18n="chart.analysis.nvdi">🌱 차트 분석</div>
+                        <div class="analysis-text" data-i18n="analysis.nvdi">
                             <strong>NVDI (정규식생지수)</strong>는 위성 데이터로 측정한 식물의 건강도와 활력도를 나타냅니다. 
                             브라질 남동부는 세계 최대 아라비카 커피 생산지역으로, NVDI 수치가 높을수록 커피나무가 건강하고 
                             수확량 증가가 예상됩니다. 역사적 범위 대비 현재 수치를 통해 
@@ -1102,8 +1223,64 @@
             }
         }
 
+        // 언어 선택기 초기화
+        function initializeLanguageSelector() {
+            const languageToggle = document.getElementById('languageToggle');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const languageOptions = document.querySelectorAll('.language-option');
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLang = document.getElementById('currentLang');
+
+            // 현재 언어에 따라 UI 업데이트
+            function updateLanguageUI() {
+                const currentLanguage = i18n.getCurrentLanguage();
+                currentLang.textContent = currentLanguage.toUpperCase();
+                currentFlag.className = `flag-icon ${currentLanguage}`;
+                
+                // 드롭다운 옵션 활성화 상태 업데이트
+                languageOptions.forEach(option => {
+                    const lang = option.getAttribute('data-lang');
+                    if (lang === currentLanguage) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+            }
+
+            // 드롭다운 토글
+            languageToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('active');
+            });
+
+            // 언어 옵션 클릭
+            languageOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const selectedLang = option.getAttribute('data-lang');
+                    i18n.setLanguage(selectedLang);
+                    updateLanguageUI();
+                    languageDropdown.classList.remove('active');
+                });
+            });
+
+            // 외부 클릭 시 드롭다운 닫기
+            document.addEventListener('click', () => {
+                languageDropdown.classList.remove('active');
+            });
+
+            // 초기 UI 설정
+            updateLanguageUI();
+        }
+
         // 페이지 로드시 초기화 실행
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => {
+            // i18n 초기화 후 다른 초기화 실행
+            i18n.updatePageContent();
+            init();
+            initializeLanguageSelector();
+        });
     </script>
 </body>
 </html>

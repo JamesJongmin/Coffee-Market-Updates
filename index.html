@@ -17,6 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-date-fns/2.0.0/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="js/i18n.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -107,12 +108,112 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
+            gap: 15px;
         }
         
         .logo-text {
             color: #8B4513;
             font-size: 1.5em;
             font-weight: bold;
+        }
+
+        /* 언어 선택기 */
+        .language-selector {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .language-toggle {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        .language-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 120px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .language-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 0.9em;
+            color: #2c3e50;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .language-option:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .language-option:hover {
+            background-color: #f8f9fa;
+        }
+
+        .language-option.active {
+            background-color: #8B4513;
+            color: white;
+        }
+
+        .flag-icon {
+            width: 18px;
+            height: 12px;
+            border-radius: 2px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .flag-icon.ko {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxOCAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iOSIgY3k9IjYiIHI9IjMiIGZpbGw9IiNlZDRjNjQiLz48L3N2Zz4=');
+        }
+
+        .flag-icon.en {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxOCAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTIiIGZpbGw9IiNiMjIyMzQiLz48cmVjdCB5PSIxIiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSI1IiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSI3IiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSI5IiB3aWR0aD0iMTgiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48cmVjdCB5PSIxMSIgd2lkdGg9IjE4IiBoZWlnaHQ9IjEiIGZpbGw9IndoaXRlIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iNiIgZmlsbD0iIzNjM2I2ZSIvPjwvc3ZnPg==');
         }
         
         /* 사이드 메뉴 */
@@ -905,8 +1006,8 @@
     <!-- 사이드 메뉴 -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
-            <h2 class="menu-title">Coffee Market</h2>
-            <p class="menu-subtitle">Information Menu</p>
+            <h2 class="menu-title" data-i18n="menu.title">Coffee Market</h2>
+            <p class="menu-subtitle" data-i18n="menu.subtitle">Information Menu</p>
             <button class="menu-close-btn" id="menuCloseBtn" aria-label="Close Menu">
                 <span></span>
                 <span></span>
@@ -915,14 +1016,14 @@
         </div>
         
         <nav class="menu-nav">
-            <a href="#" class="menu-item" id="weeklyReportMenu">Weekly Report</a>
-            <a href="#" class="menu-item" id="analysisMenu">In-depth Analysis</a>
-            <a href="#" class="menu-item" id="fundamentalsMenu">Fundamentals</a>
-            <a href="#" class="menu-item" id="dashboardsMenu">Dashboards</a>
+            <a href="#" class="menu-item" id="weeklyReportMenu" data-i18n="menu.weeklyReport">Weekly Report</a>
+            <a href="#" class="menu-item" id="analysisMenu" data-i18n="menu.analysis">In-depth Analysis</a>
+            <a href="#" class="menu-item" id="fundamentalsMenu" data-i18n="menu.fundamentals">Fundamentals</a>
+            <a href="#" class="menu-item" id="dashboardsMenu" data-i18n="menu.dashboards">Dashboards</a>
         </nav>
         
         <div class="menu-footer">
-            <p class="menu-footer-text">Align Commodities & <br>Yellowknife</p>
+            <p class="menu-footer-text" data-i18n="menu.footer">Align Commodities & <br>Yellowknife</p>
         </div>
     </div>
     
@@ -941,8 +1042,25 @@
                 </button>
             </div>
             
-            <!-- 로고 (오른쪽) -->
+            <!-- 로고 및 언어 선택기 (오른쪽) -->
             <div class="logo-header">
+                <!-- 언어 선택기 -->
+                <div class="language-selector">
+                    <button class="language-toggle" id="languageToggle">
+                        <span class="flag-icon ko" id="currentFlag"></span>
+                        <span id="currentLang">KO</span>
+                    </button>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <div class="language-option" data-lang="ko">
+                            <span class="flag-icon ko"></span>
+                            <span>한국어</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <span class="flag-icon en"></span>
+                            <span>English</span>
+                        </div>
+                    </div>
+                </div>
                 <img src="Transparent.png" alt="Align Commodities" style="height: 60px; width: auto; object-fit: contain;" />
             </div>
         </div>
@@ -950,12 +1068,12 @@
         <div class="container">
             <header>
                 <h1>
-                    Coffee Market Updates
-                    <span class="live-indicator">Live</span>
+                    <span data-i18n="header.title">Coffee Market Updates</span>
+                    <span class="live-indicator" data-i18n="header.live">Live</span>
                     <span class="date-badge" id="currentDate">2025년 6월 22일</span>
                 </h1>
-                <p class="subtitle">Coffee Futures Market Analysis & Dashboard</p>
-                <p class="description">
+                <p class="subtitle" data-i18n="header.subtitle">Coffee Futures Market Analysis & Dashboard</p>
+                <p class="description" data-i18n="header.description">
                     커피 선물 시장 분석 보고서 아카이브 및 실시간 시장 대시보드입니다. <br/>
                     주간 시장 동향, 가격 변동 및 글로벌 수급 현황을 정기적으로 업데이트합니다.
                 </p>
@@ -965,15 +1083,15 @@
 
             <div class="search-filter">
                 <div class="filter-row">
-                    <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
+                    <input type="text" class="search-input" id="searchInput" data-i18n="search.placeholder" placeholder="보고서 제목이나 내용으로 검색하세요...">
                     <select class="filter-select" id="yearFilter">
-                        <option value="">전체 년도</option>
-                        <option value="2025">2025년</option>
+                        <option value="" data-i18n="filter.allYears">전체 년도</option>
+                        <option value="2025">2025<span data-i18n="filter.year">년</span></option>
                     </select>
                     <select class="filter-select" id="monthFilter">
-                        <option value="">전체 월</option>
-                        <option value="05">5월</option>
-                        <option value="06">6월</option>
+                        <option value="" data-i18n="filter.allMonths">전체 월</option>
+                        <option value="05" data-i18n="filter.month.05">5월</option>
+                        <option value="06" data-i18n="filter.month.06">6월</option>
                     </select>
                 </div>
             </div>
@@ -984,36 +1102,36 @@
 
             <div class="more-reports-container" id="moreReportsContainer" style="display: none;">
                 <button class="more-reports-btn" id="moreReportsBtn">
-                    <span class="more-text">More Reports</span>
+                    <span class="more-text" data-i18n="reports.moreReports">More Reports</span>
                     <span class="more-icon">▼</span>
                 </button>
             </div>
 
             <div class="no-results" id="noResults" style="display: none;">
-                <h3>검색 결과가 없습니다</h3>
-                <p>다른 검색어나 필터를 시도해보세요.</p>
+                <h3 data-i18n="reports.noResults.title">검색 결과가 없습니다</h3>
+                <p data-i18n="reports.noResults.description">다른 검색어나 필터를 시도해보세요.</p>
             </div>
 
             <!-- 차트 대시보드 섹션 -->
             <div class="dashboard-section">
-                <h2 class="section-title">📊 Market Dashboard</h2>
+                <h2 class="section-title" data-i18n="dashboard.title">📊 Market Dashboard</h2>
                 <div class="charts-grid">
                     <!-- Coffee Futures Chart -->
                     <div class="chart-container">
                         <div class="chart-header">
-                            <div class="chart-title">Coffee Futures</div>
-                            <div class="chart-source">출처: ICE</div>
+                            <div class="chart-title" data-i18n="chart.coffeeFutures">Coffee Futures</div>
+                            <div class="chart-source"><span data-i18n="chart.source">출처</span>: ICE</div>
                         </div>
                         <div class="chart-wrapper">
                             <div class="loading-spinner" id="loading-coffee">
                                 <div class="spinner"></div>
-                                데이터 로딩 중...
+                                <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                             </div>
                             <canvas id="coffeeChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
-                            <div class="analysis-title">📊 차트 분석</div>
-                            <div class="analysis-text">
+                            <div class="analysis-title" data-i18n="chart.analysis">📊 차트 분석</div>
+                            <div class="analysis-text" data-i18n="analysis.coffee">
                                 <strong>커피 선물 가격</strong>은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
                                 브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다. 
                                 현재 추세는 시장의 공급/수요 균형과 투기적 포지션 변화를 나타냅니다.
@@ -1024,19 +1142,19 @@
                     <!-- USD/BRL Chart -->
                     <div class="chart-container">
                         <div class="chart-header">
-                            <div class="chart-title">미국달러-브라질헤알 환율</div>
-                            <div class="chart-source">출처: LSEG</div>
+                            <div class="chart-title" data-i18n="chart.usdBrl">미국달러-브라질헤알 환율</div>
+                            <div class="chart-source"><span data-i18n="chart.source">출처</span>: LSEG</div>
                         </div>
                         <div class="chart-wrapper">
                             <div class="loading-spinner" id="loading-usd">
                                 <div class="spinner"></div>
-                                데이터 로딩 중...
+                                <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                             </div>
                             <canvas id="usdChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
-                            <div class="analysis-title">💱 차트 분석</div>
-                            <div class="analysis-text">
+                            <div class="analysis-title" data-i18n="chart.analysis.currency">💱 차트 분석</div>
+                            <div class="analysis-text" data-i18n="analysis.usdBrl">
                                 <strong>USD/BRL 환율</strong>은 커피 시장에 중요한 영향을 미칩니다. 
                                 헤알화 약세(USD/BRL 상승) 시 브라질 농민들의 달러 수취액이 증가해 수출 경쟁력이 강화되고, 
                                 반대로 헤알화 강세 시에는 브라질 커피의 국제 경쟁력이 약화됩니다. 
@@ -1048,19 +1166,19 @@
                     <!-- CFTC Positions Chart -->
                     <div class="chart-container">
                         <div class="chart-header">
-                            <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
-                            <div class="chart-source">출처: LSEG</div>
+                            <div class="chart-title" data-i18n="chart.cftcPositions">CFTC 투기 포지션 (순매수)</div>
+                            <div class="chart-source"><span data-i18n="chart.source">출처</span>: LSEG</div>
                         </div>
                         <div class="chart-wrapper">
                             <div class="loading-spinner" id="loading-cftc">
                                 <div class="spinner"></div>
-                                데이터 로딩 중...
+                                <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                             </div>
                             <canvas id="cftcChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
-                            <div class="analysis-title">📈 차트 분석</div>
-                            <div class="analysis-text">
+                            <div class="analysis-title" data-i18n="chart.analysis.cftc">📈 차트 분석</div>
+                            <div class="analysis-text" data-i18n="analysis.cftc">
                                 <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
                                 양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
                                 극단적 포지션은 종종 시장 전환점의 신호가 되며, 
@@ -1072,19 +1190,19 @@
                     <!-- NVDI Chart -->
                     <div class="chart-container">
                         <div class="chart-header">
-                            <div class="chart-title">브라질 남동부 NVDI (식물활력도)</div>
-                            <div class="chart-source">출처: LSEG</div>
+                            <div class="chart-title" data-i18n="chart.nvdi">브라질 남동부 NVDI (식물활력도)</div>
+                            <div class="chart-source"><span data-i18n="chart.source">출처</span>: LSEG</div>
                         </div>
                         <div class="chart-wrapper">
                             <div class="loading-spinner" id="loading-nvdi">
                                 <div class="spinner"></div>
-                                데이터 로딩 중...
+                                <span data-i18n="dashboard.loading">데이터 로딩 중...</span>
                             </div>
                             <canvas id="nvdiChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
-                            <div class="analysis-title">🌱 차트 분석</div>
-                            <div class="analysis-text">
+                            <div class="analysis-title" data-i18n="chart.analysis.nvdi">🌱 차트 분석</div>
+                            <div class="analysis-text" data-i18n="analysis.nvdi">
                                 <strong>NVDI (정규식생지수)</strong>는 위성 데이터로 측정한 식물의 건강도와 활력도를 나타냅니다. 
                                 브라질 남동부는 세계 최대 아라비카 커피 생산지역으로, NVDI 수치가 높을수록 커피나무가 건강하고 
                                 수확량 증가가 예상됩니다. 역사적 범위 대비 현재 수치를 통해 
@@ -2309,7 +2427,7 @@
                 <div class="report-tags">
                     ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
-                <a href="${report.link}" class="read-more">보고서 읽기</a>
+                <a href="${report.link}" class="read-more">${i18n.t('reports.readMore')}</a>
             `;
             
             return card;
@@ -2336,26 +2454,7 @@
 
         // 필터 옵션 업데이트
         function updateFilters() {
-            const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
-            const months = [...new Set(allReports.map(r => r.month))].sort();
-            
-            const yearSelect = document.getElementById('yearFilter');
-            const monthSelect = document.getElementById('monthFilter');
-            
-            if (yearSelect) {
-                yearSelect.innerHTML = '<option value="">전체 년도</option>';
-                years.forEach(year => {
-                    yearSelect.innerHTML += `<option value="${year}">${year}년</option>`;
-                });
-            }
-            
-            if (monthSelect) {
-                monthSelect.innerHTML = '<option value="">전체 월</option>';
-                months.forEach(month => {
-                    const monthName = parseInt(month) + '월';
-                    monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
-                });
-            }
+            updateFiltersWithLanguage();
         }
 
         // 통계 업데이트
@@ -2390,29 +2489,12 @@
             }
         }
 
-        // 현재 날짜 업데이트
-        function updateCurrentDate() {
-            const dateElement = document.getElementById('currentDate');
-            if (dateElement) {
-                const now = new Date();
-                const options = { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    weekday: 'short'
-                };
-                const formattedDate = now.toLocaleDateString('ko-KR', options);
-                dateElement.textContent = formattedDate;
-            }
-        }
+        // 현재 날짜 업데이트 (i18n 시스템에서 처리)
 
         // 메인 초기화 함수
         async function init() {
             try {
                 console.log('초기화 시작...');
-                
-                // 현재 날짜 업데이트
-                updateCurrentDate();
                 
                 // 차트들 병렬로 로드
                 Promise.all([
@@ -2527,10 +2609,107 @@
             });
         }
 
+        // 언어 선택기 초기화
+        function initializeLanguageSelector() {
+            const languageToggle = document.getElementById('languageToggle');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const languageOptions = document.querySelectorAll('.language-option');
+            const currentFlag = document.getElementById('currentFlag');
+            const currentLang = document.getElementById('currentLang');
+
+            // 현재 언어에 따라 UI 업데이트
+            function updateLanguageUI() {
+                const currentLanguage = i18n.getCurrentLanguage();
+                currentLang.textContent = currentLanguage.toUpperCase();
+                currentFlag.className = `flag-icon ${currentLanguage}`;
+                
+                // 드롭다운 옵션 활성화 상태 업데이트
+                languageOptions.forEach(option => {
+                    const lang = option.getAttribute('data-lang');
+                    if (lang === currentLanguage) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+            }
+
+            // 드롭다운 토글
+            languageToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('active');
+            });
+
+            // 언어 옵션 클릭
+            languageOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const selectedLang = option.getAttribute('data-lang');
+                    i18n.setLanguage(selectedLang);
+                    updateLanguageUI();
+                    languageDropdown.classList.remove('active');
+                    
+                    // 필터 옵션도 업데이트
+                    updateFiltersWithLanguage();
+                });
+            });
+
+            // 외부 클릭 시 드롭다운 닫기
+            document.addEventListener('click', () => {
+                languageDropdown.classList.remove('active');
+            });
+
+            // 초기 UI 설정
+            updateLanguageUI();
+        }
+
+        // 언어 변경 시 필터 옵션 업데이트
+        function updateFiltersWithLanguage() {
+            const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
+            const months = [...new Set(allReports.map(r => r.month))].sort();
+            
+            const yearSelect = document.getElementById('yearFilter');
+            const monthSelect = document.getElementById('monthFilter');
+            
+            if (yearSelect) {
+                yearSelect.innerHTML = `<option value="">${i18n.t('filter.allYears')}</option>`;
+                years.forEach(year => {
+                    const yearSuffix = i18n.getCurrentLanguage() === 'ko' ? '년' : '';
+                    yearSelect.innerHTML += `<option value="${year}">${year}${yearSuffix}</option>`;
+                });
+            }
+            
+            if (monthSelect) {
+                monthSelect.innerHTML = `<option value="">${i18n.t('filter.allMonths')}</option>`;
+                months.forEach(month => {
+                    const monthKey = month.padStart(2, '0');
+                    const monthName = i18n.t(`filter.month.${monthKey}`) || `${parseInt(month)}월`;
+                    monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
+                });
+            }
+        }
+
+        // 언어 변경 시 보고서 카드의 "읽기" 버튼 텍스트 업데이트
+        function updateReportCards() {
+            const readMoreLinks = document.querySelectorAll('.read-more');
+            readMoreLinks.forEach(link => {
+                link.textContent = i18n.t('reports.readMore');
+            });
+        }
+
+        // 언어 변경 이벤트 리스너
+        window.addEventListener('languageChanged', (event) => {
+            updateReportCards();
+            updateFiltersWithLanguage();
+        });
+
         // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', () => {
+            // i18n 초기화 후 다른 초기화 실행
+            i18n.updatePageContent();
             init();
             initializeMenu();
+            initializeLanguageSelector();
         });
 </script>
 </body>
