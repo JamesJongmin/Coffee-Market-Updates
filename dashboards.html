@@ -344,7 +344,10 @@
 
                 console.log(`Fetching data from Google Sheets: ${sheetKey}`);
                 
-                const response = await fetch(url);
+                // CORS 프록시를 통해 요청
+                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+                
+                const response = await fetch(proxyUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
