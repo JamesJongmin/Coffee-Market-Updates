@@ -13,6 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1151,23 +1152,37 @@
                 
                 let csvText;
                 
-                // 먼저 직접 접근 시도
-                try {
-                    const directResponse = await fetch(url);
-                    if (directResponse.ok) {
-                        csvText = await directResponse.text();
-                        console.log(`Direct access successful for ${sheetKey}`);
-                    } else {
-                        throw new Error('Direct access failed');
+                // PC 브라우저는 항상 프록시 사용
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // 모바일은 직접 접근 시도
+                    try {
+                        const directResponse = await fetch(url);
+                        if (directResponse.ok) {
+                            csvText = await directResponse.text();
+                            console.log(`Direct access successful for ${sheetKey}`);
+                        } else {
+                            throw new Error('Direct access failed');
+                        }
+                    } catch (directError) {
+                        // 실패시 프록시 사용
+                        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                        const proxyResponse = await fetch(proxyUrl);
+                        if (!proxyResponse.ok) {
+                            throw new Error(`Proxy also failed: ${proxyResponse.status}`);
+                        }
+                        const proxyData = await proxyResponse.json();
+                        csvText = proxyData.contents;
                     }
-                } catch (directError) {
-                    // 직접 접근 실패시 AllOrigins 프록시 사용
-                    console.log(`Direct access failed for ${sheetKey}, trying proxy...`);
+                } else {
+                    // PC는 바로 프록시 사용
+                    console.log(`PC browser detected, using proxy for ${sheetKey}`);
                     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
                     
                     const proxyResponse = await fetch(proxyUrl);
                     if (!proxyResponse.ok) {
-                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
+                        throw new Error(`Proxy failed: ${proxyResponse.status}`);
                     }
                     
                     const proxyData = await proxyResponse.json();
@@ -1520,7 +1535,6 @@
                 // Chart.js가 로드되었는지 확인
                 if (typeof Chart === 'undefined') {
                     console.error('Chart.js is not loaded yet');
-                    setTimeout(() => createCoffeeChart(), 1000);
                     return;
                 }
                 
@@ -2589,29 +2603,13 @@
         }
 
         // 페이지 로드시 초기화 실행
-        document.addEventListener('DOMContentLoaded', function() {
-            // Chart.js를 동적으로 로드
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
-            script.onload = function() {
-                console.log('Chart.js loaded successfully');
+        window.onload = function() {
+            // 모든 리소스가 완전히 로드된 후 실행
+            setTimeout(function() {
                 init();
                 initializeMenu();
-            };
-            script.onerror = function() {
-                console.error('Failed to load Chart.js');
-                // 백업 CDN 시도
-                const backupScript = document.createElement('script');
-                backupScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
-                backupScript.onload = function() {
-                    console.log('Chart.js loaded from backup CDN');
-                    init();
-                    initializeMenu();
-                };
-                document.head.appendChild(backupScript);
-            };
-            document.head.appendChild(script);
-        });
+            }, 100);
+        };
 </script>
 </body>
 </html>
