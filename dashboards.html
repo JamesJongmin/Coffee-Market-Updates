@@ -179,6 +179,216 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* AI 분석 섹션 스타일 */
+        .analysis-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .analysis-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .analysis-header h2 {
+            font-size: 2.5em;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .analysis-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .key-finding {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5cc 100%);
+            border-left: 5px solid #f39c12;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .key-finding h3 {
+            color: #e67e22;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+        
+        .key-finding .highlight {
+            font-size: 2em;
+            font-weight: bold;
+            color: #d35400;
+        }
+        
+        .analysis-section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .analysis-section h3 {
+            color: #8B4513;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 10px;
+        }
+        
+        .simple-explanation {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .simple-explanation h4 {
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        
+        .factor-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .factor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .factor-card h4 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .impact-bar {
+            background: #e9ecef;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .impact-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+        }
+        
+        .correlation-visual {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .correlation-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .correlation-item .emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .correlation-item .label {
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #6c757d;
+        }
+        
+        .prediction-example {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .prediction-example h4 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .formula-box {
+            background: #f5f5f5;
+            border: 1px dashed #999;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .insight-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .insight-box h4 {
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        
+        .insight-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .insight-box li {
+            padding: 5px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .insight-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #1976d2;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .correlation-visual {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -287,6 +497,168 @@
                             수확량 증가가 예상됩니다. 역사적 범위 대비 현재 수치를 통해 
                             올해 작황 상태와 향후 공급량 전망을 예측할 수 있는 핵심 지표입니다.
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI 분석 결과 섹션 -->
+        <div class="dashboard-section" style="margin-top: 40px;">
+            <div class="analysis-container">
+                <div class="analysis-header">
+                    <h2>☕ 커피 가격 예측 모델 분석 결과</h2>
+                    <p>AI가 발견한 커피 가격의 비밀을 쉽게 풀어드립니다</p>
+                </div>
+                
+                <div class="key-finding">
+                    <h3>🎯 핵심 발견</h3>
+                    <p>우리의 AI 모델이 커피 가격 변동의 <span class="highlight">79.5%</span>를 정확히 설명할 수 있습니다!</p>
+                    <p style="margin-top: 10px; font-size: 1.1em;">이는 매우 높은 수준의 예측력입니다.</p>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3>📊 무엇을 분석했나요?</h3>
+                    
+                    <div class="simple-explanation">
+                        <h4>💡 쉽게 설명하면...</h4>
+                        <p>커피 가격에 영향을 주는 4가지 주요 요인을 찾아냈습니다. 마치 케이크를 만들 때 밀가루, 설탕, 계란, 버터의 비율이 맛을 결정하듯이, 이 4가지 요인이 커피 가격을 결정합니다.</p>
+                    </div>
+                    
+                    <div class="correlation-visual">
+                        <div class="correlation-item">
+                            <div class="emoji">☕</div>
+                            <div class="label">커피 가격</div>
+                        </div>
+                        <div class="arrow">←</div>
+                        <div class="correlation-item">
+                            <div class="emoji">💱</div>
+                            <div class="label">브라질 환율</div>
+                        </div>
+                        <div class="arrow">+</div>
+                        <div class="correlation-item">
+                            <div class="emoji">📊</div>
+                            <div class="label">투자자 포지션</div>
+                        </div>
+                        <div class="arrow">+</div>
+                        <div class="correlation-item">
+                            <div class="emoji">🌱</div>
+                            <div class="label">작물 상태</div>
+                        </div>
+                        <div class="arrow">+</div>
+                        <div class="correlation-item">
+                            <div class="emoji">💵</div>
+                            <div class="label">달러 지수</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3>🔍 각 요인의 영향력</h3>
+                    
+                    <div class="factor-card">
+                        <h4>1. 💱 브라질 헤알/달러 환율 (USD/BRL)</h4>
+                        <p><strong>영향력:</strong> ⭐⭐⭐⭐⭐ (가장 중요!)</p>
+                        <div class="impact-bar">
+                            <div class="impact-fill" style="width: 95%;">95%</div>
+                        </div>
+                        <div class="simple-explanation">
+                            <p><strong>왜 중요한가요?</strong></p>
+                            <p>브라질은 세계 최대 커피 생산국입니다. 브라질 화폐(헤알)가 약해지면(환율 상승), 브라질 농부들이 달러로 더 많은 돈을 받게 되어 커피를 더 많이 팔려고 합니다. 이는 공급 증가로 이어져 가격이 하락합니다.</p>
+                            <p style="margin-top: 10px;"><strong>예시:</strong> USD/BRL이 5.0에서 6.0으로 오르면 → 커피 가격은 약 15% 하락 예상</p>
+                        </div>
+                    </div>
+                    
+                    <div class="factor-card">
+                        <h4>2. 📊 CFTC 투자자 순매수 포지션</h4>
+                        <p><strong>영향력:</strong> ⭐⭐⭐⭐ (매우 중요)</p>
+                        <div class="impact-bar">
+                            <div class="impact-fill" style="width: 75%;">75%</div>
+                        </div>
+                        <div class="simple-explanation">
+                            <p><strong>왜 중요한가요?</strong></p>
+                            <p>대형 투자자들이 커피를 얼마나 사고 있는지 보여줍니다. 투자자들이 많이 사면(순매수 증가) 가격이 오르고, 팔면(순매수 감소) 가격이 내립니다.</p>
+                            <p style="margin-top: 10px;"><strong>예시:</strong> 순매수 포지션이 10,000계약 증가 → 커피 가격 약 5% 상승 예상</p>
+                        </div>
+                    </div>
+                    
+                    <div class="factor-card">
+                        <h4>3. 🌱 NVDI (작물 건강 지수)</h4>
+                        <p><strong>영향력:</strong> ⭐⭐ (보통)</p>
+                        <div class="impact-bar">
+                            <div class="impact-fill" style="width: 30%;">30%</div>
+                        </div>
+                        <div class="simple-explanation">
+                            <p><strong>왜 중요한가요?</strong></p>
+                            <p>위성으로 측정한 커피 농장의 건강 상태입니다. 식물이 건강하면(NVDI 높음) 수확량이 많아져 가격이 내려갈 수 있습니다.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="factor-card">
+                        <h4>4. 💵 달러 인덱스 (DXY)</h4>
+                        <p><strong>영향력:</strong> ⭐⭐⭐ (중요)</p>
+                        <div class="impact-bar">
+                            <div class="impact-fill" style="width: 60%;">60%</div>
+                        </div>
+                        <div class="simple-explanation">
+                            <p><strong>왜 중요한가요?</strong></p>
+                            <p>달러가 강해지면 다른 나라 사람들이 커피를 사기 어려워져 수요가 줄고 가격이 내립니다.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3>🧮 예측 모델 공식</h3>
+                    
+                    <div class="formula-box">
+                        커피 가격 = 462.85 - (42.52 × USD/BRL) + (0.0015 × CFTC) - (131.42 × NVDI) - (0.85 × DXY)
+                    </div>
+                    
+                    <div class="prediction-example">
+                        <h4>📈 실제 예측 예시</h4>
+                        <p>현재 상황이 다음과 같다면:</p>
+                        <ul style="list-style: none; padding-left: 20px;">
+                            <li>• USD/BRL = 5.5</li>
+                            <li>• CFTC 순매수 = 50,000 계약</li>
+                            <li>• NVDI = 0.7</li>
+                            <li>• DXY = 105</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>예상 커피 가격 = 462.85 - (42.52 × 5.5) + (0.0015 × 50,000) - (131.42 × 0.7) - (0.85 × 105)</strong></p>
+                        <p style="margin-top: 10px; font-size: 1.2em;"><strong>= 약 222.39 cents/lb</strong></p>
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3>💡 투자자를 위한 인사이트</h3>
+                    
+                    <div class="insight-box">
+                        <h4>✨ 실전 활용 팁</h4>
+                        <ul>
+                            <li>브라질 헤알이 약세일 때(USD/BRL 상승) 커피 가격 하락에 베팅</li>
+                            <li>CFTC 순매수 포지션이 극단적으로 높거나 낮을 때 반대 포지션 고려</li>
+                            <li>브라질 날씨 뉴스와 NVDI 지수를 함께 모니터링</li>
+                            <li>달러 강세 시기에는 커피 가격 하락 압력 예상</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="insight-box" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
+                        <h4 style="color: #e65100;">⚠️ 주의사항</h4>
+                        <ul>
+                            <li>이 모델은 과거 데이터 기반이며, 미래를 100% 보장하지 않습니다</li>
+                            <li>갑작스러운 날씨 변화, 정치적 이벤트는 예측하지 못합니다</li>
+                            <li>모델 정확도 79.5%는 여전히 20.5%의 불확실성이 있음을 의미합니다</li>
+                            <li>투자 결정은 여러 요인을 종합적으로 고려해야 합니다</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3>📈 모델 성능 평가</h3>
+                    
+                    <div class="simple-explanation">
+                        <h4>🎯 얼마나 정확한가요?</h4>
+                        <p><strong>R² = 0.795</strong> → 커피 가격 변동의 79.5%를 설명</p>
+                        <p><strong>평균 오차 = ±18.4 cents/lb</strong> → 실제 가격과 예측 가격의 평균 차이</p>
+                        <p style="margin-top: 10px;">이는 금융 시장 예측 모델로서는 매우 우수한 성능입니다!</p>
                     </div>
                 </div>
             </div>

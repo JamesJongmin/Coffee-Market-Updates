@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures 회귀분석 리포트</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .metric-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        .importance-bar {
+            background-color: #3498db;
+            height: 20px;
+            border-radius: 3px;
+        }
+        .correlation-positive {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .correlation-negative {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .r-squared {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .equation {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Coffee Futures 회귀분석 리포트</h1>
+        <p class="subtitle">Multiple Linear Regression & Feature Importance Analysis</p>
+        
+        <div class="metric-card">
+            <h2>분석 개요</h2>
+            <p><strong>종속변수:</strong> Coffee Futures (커피 선물 가격)</p>
+            <p><strong>독립변수:</strong> CFTC Positions, USD/BRL, NVDI</p>
+            <p><strong>데이터 기간:</strong> 2023-06-29 ~ 2025-07-18</p>
+            <p><strong>데이터 포인트:</strong> 514개</p>
+        </div>
+        
+        <div class="metric-card">
+            <h2>모델 성능</h2>
+            <div class="r-squared">R² = 0.795</div>
+            <p style="text-align: center;">모델이 Coffee Futures 가격 변동의 79.5%를 설명합니다.</p>
+        </div>
+        
+        <h2>Feature Importance</h2>
+        <table>
+            <tr>
+                <th>순위</th>
+                <th>변수</th>
+                <th>중요도</th>
+                <th>상관계수</th>
+                <th>시각화</th>
+            </tr>
+    
+            <tr>
+                <td>1</td>
+                <td>USD/BRL</td>
+                <td>0.639</td>
+                <td class="correlation-positive">0.8389</td>
+                <td>
+                    <div style="background-color: #ecf0f1; width: 100%; height: 20px; border-radius: 3px;">
+                        <div class="importance-bar" style="width: 63.86987124720036%;"></div>
+                    </div>
+                </td>
+            </tr>
+        
+            <tr>
+                <td>2</td>
+                <td>CFTC Positions</td>
+                <td>0.244</td>
+                <td class="correlation-positive">0.5187</td>
+                <td>
+                    <div style="background-color: #ecf0f1; width: 100%; height: 20px; border-radius: 3px;">
+                        <div class="importance-bar" style="width: 24.419626771666124%;"></div>
+                    </div>
+                </td>
+            </tr>
+        
+            <tr>
+                <td>3</td>
+                <td>NVDI</td>
+                <td>0.117</td>
+                <td class="correlation-positive">0.3592</td>
+                <td>
+                    <div style="background-color: #ecf0f1; width: 100%; height: 20px; border-radius: 3px;">
+                        <div class="importance-bar" style="width: 11.710501981133524%;"></div>
+                    </div>
+                </td>
+            </tr>
+        
+        </table>
+        
+        <div class="equation">
+            <h3>회귀 방정식 (표준화)</h3>
+            <p>Coffee Futures = -0.0360</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;- 0.0360 × CFTC Positions</p><p>&nbsp;&nbsp;&nbsp;&nbsp;+ 0.8367 × USD/BRL</p><p>&nbsp;&nbsp;&nbsp;&nbsp;+ 0.3099 × NVDI</p>
+        </div>
+        
+        <div class="metric-card">
+            <h2>해석 및 시사점</h2>
+            <ul>
+                <li><strong>USD/BRL 환율:</strong> 커피 가격에 가장 큰 영향을 미치는 요소</li>
+                <li><strong>CFTC Positions:</strong> 투기적 포지션이 가격에 미치는 영향 확인</li>
+                <li><strong>NVDI:</strong> 작황 상태가 가격에 미치는 영향</li>
+            </ul>
+            <p>이 모델을 통해 세 가지 주요 지표를 모니터링하여 커피 선물 가격을 예측할 수 있습니다.</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px; color: #7f8c8d;">
+            <p>생성일시: 2025년 07월 27일 08:05:00</p>
+        </div>
+    </div>
+</body>
+</html>
+    
