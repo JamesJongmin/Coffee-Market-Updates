@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1152,43 +1152,30 @@
                 
                 let csvText;
                 
-                // PC 브라우저는 항상 프록시 사용
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                
-                if (isMobile) {
-                    // 모바일은 직접 접근 시도
-                    try {
-                        const directResponse = await fetch(url);
-                        if (directResponse.ok) {
-                            csvText = await directResponse.text();
-                            console.log(`Direct access successful for ${sheetKey}`);
-                        } else {
-                            throw new Error('Direct access failed');
-                        }
-                    } catch (directError) {
-                        // 실패시 프록시 사용
-                        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                        const proxyResponse = await fetch(proxyUrl);
-                        if (!proxyResponse.ok) {
-                            throw new Error(`Proxy also failed: ${proxyResponse.status}`);
-                        }
-                        const proxyData = await proxyResponse.json();
-                        csvText = proxyData.contents;
+                // 먼저 직접 접근 시도
+                try {
+                    const directResponse = await fetch(url);
+                    if (directResponse.ok) {
+                        csvText = await directResponse.text();
+                        console.log(`Direct access successful for ${sheetKey}`);
+                    } else {
+                        throw new Error('Direct access failed');
                     }
-                } else {
-                    // PC는 바로 프록시 사용
-                    console.log(`PC browser detected, using proxy for ${sheetKey}`);
+                } catch (directError) {
+                    // 직접 접근 실패시 AllOrigins 프록시 사용
+                    console.log(`Direct access failed for ${sheetKey}, trying proxy...`);
                     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
                     
                     const proxyResponse = await fetch(proxyUrl);
                     if (!proxyResponse.ok) {
-                        throw new Error(`Proxy failed: ${proxyResponse.status}`);
+                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
                     }
                     
                     const proxyData = await proxyResponse.json();
                     csvText = proxyData.contents;
                     console.log(`Proxy access successful for ${sheetKey}`);
                 }
+                
                 const data = parseCSV(csvText);
                 
                 // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
@@ -1527,18 +1514,10 @@
             const chartElement = document.getElementById('coffeeChart');
             
             try {
-                if (!loadingElement || !chartElement) {
-                    console.error('Chart elements not found');
-                    return;
-                }
-                
-                // Chart.js가 로드되었는지 확인
-                if (typeof Chart === 'undefined') {
-                    console.error('Chart.js is not loaded yet');
-                    return;
-                }
-                
-                const data = await readGoogleSheetData('coffeefutures');
+                const data = await Promise.race([
+                    readGoogleSheetData('coffeefutures'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                ]);
                 
                 if (!data || data.length === 0) {
                     throw new Error('No data received');
@@ -1555,9 +1534,7 @@
                 }
 
                 // 로딩 숨기기
-                if (loadingElement) {
-                    loadingElement.style.display = 'none';
-                }
+                loadingElement.style.display = 'none';
                 
                 // canvas 요소 표시
                 chartElement.style.display = 'block';
@@ -1672,11 +1649,6 @@
             const chartElement = document.getElementById('usdChart');
             
             try {
-                if (!loadingElement || !chartElement) {
-                    console.error('USD chart elements not found');
-                    return;
-                }
-                
                 const data = await Promise.race([
                     readGoogleSheetData('usdbrl'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
@@ -1803,11 +1775,6 @@
             const chartElement = document.getElementById('cftcChart');
             
             try {
-                if (!loadingElement || !chartElement) {
-                    console.error('CFTC chart elements not found');
-                    return;
-                }
-                
                 const data = await Promise.race([
                     readGoogleSheetData('cftcpositions'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
@@ -2516,59 +2483,15 @@
                 // 현재 날짜 업데이트
                 updateCurrentDate();
                 
-                // Chart.js가 로드될 때까지 대기
-                let chartJsLoaded = false;
-                let attempts = 0;
-                while (!chartJsLoaded && attempts < 20) {
-                    if (typeof Chart !== 'undefined') {
-                        chartJsLoaded = true;
-                        console.log('Chart.js loaded successfully');
-                    } else {
-                        console.log('Waiting for Chart.js to load...');
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                        attempts++;
-                    }
-                }
-                
-                if (!chartJsLoaded) {
-                    console.error('Chart.js failed to load');
-                    return;
-                }
-                
-                // 차트들을 개별적으로 로드 (오류가 발생해도 다른 차트는 계속 로드)
+                // 차트들을 병렬로 로드 (오류가 발생해도 다른 차트는 계속 로드)
                 console.log('Starting chart creation...');
                 
-                // Coffee Futures 차트
-                try {
-                    await createCoffeeChart();
-                    console.log('Coffee chart created successfully');
-                } catch (error) {
-                    console.error('Coffee chart failed:', error);
-                }
-                
-                // USD/BRL 차트
-                try {
-                    await createUSDChart();
-                    console.log('USD chart created successfully');
-                } catch (error) {
-                    console.error('USD chart failed:', error);
-                }
-                
-                // CFTC 차트
-                try {
-                    await createCFTCChart();
-                    console.log('CFTC chart created successfully');
-                } catch (error) {
-                    console.error('CFTC chart failed:', error);
-                }
-                
-                // NVDI 차트
-                try {
-                    await createNVDIChart();
-                    console.log('NVDI chart created successfully');
-                } catch (error) {
-                    console.error('NVDI chart failed:', error);
-                }
+                await Promise.all([
+                    createCoffeeChart().catch(error => console.error('Coffee chart failed:', error)),
+                    createUSDChart().catch(error => console.error('USD chart failed:', error)),
+                    createCFTCChart().catch(error => console.error('CFTC chart failed:', error)),
+                    createNVDIChart().catch(error => console.error('NVDI chart failed:', error))
+                ]);
 
                 // 개선된 리포트 데이터 로드
                 allReports = await initializeReports();
