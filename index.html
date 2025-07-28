@@ -1558,6 +1558,9 @@
                 if (loadingElement) {
                     loadingElement.style.display = 'none';
                 }
+                
+                // canvas 요소 표시
+                chartElement.style.display = 'block';
 
                 const ctx = chartElement.getContext('2d');
                 
@@ -1654,6 +1657,8 @@
                         }
                     }
                 });
+                
+                console.log('Coffee chart created with', chartData.length, 'data points');
             } catch (error) {
                 console.error('Coffee chart error:', error);
                 console.error('Error stack:', error.stack);
@@ -1667,6 +1672,11 @@
             const chartElement = document.getElementById('usdChart');
             
             try {
+                if (!loadingElement || !chartElement) {
+                    console.error('USD chart elements not found');
+                    return;
+                }
+                
                 const data = await Promise.race([
                     readGoogleSheetData('usdbrl'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
@@ -1686,6 +1696,13 @@
                 chartElement.style.display = 'block';
 
                 const ctx = chartElement.getContext('2d');
+                
+                // 기존 차트가 있으면 제거
+                if (charts.usd) {
+                    charts.usd.destroy();
+                    charts.usd = null;
+                }
+                
                 charts.usd = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -1772,6 +1789,8 @@
                         }
                     }
                 });
+                
+                console.log('USD chart created with', chartData.length, 'data points');
             } catch (error) {
                 console.error('USD chart error:', error);
                 loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
@@ -1784,6 +1803,11 @@
             const chartElement = document.getElementById('cftcChart');
             
             try {
+                if (!loadingElement || !chartElement) {
+                    console.error('CFTC chart elements not found');
+                    return;
+                }
+                
                 const data = await Promise.race([
                     readGoogleSheetData('cftcpositions'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
@@ -1814,6 +1838,12 @@
                 chartElement.style.display = 'block';
 
                 const ctx = chartElement.getContext('2d');
+                
+                // 기존 차트가 있으면 제거
+                if (charts.cftc) {
+                    charts.cftc.destroy();
+                    charts.cftc = null;
+                }
                 
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
@@ -1924,8 +1954,7 @@
                     }
                 });
                 
-                console.log('CFTC Chart created successfully');
-                console.log('Chart labels:', charts.cftc.data.labels.filter(l => l.trim() !== ''));
+                console.log('CFTC Chart created successfully with', chartData.length, 'data points');
                 
             } catch (error) {
                 console.error('CFTC chart error:', error);
@@ -2487,15 +2516,59 @@
                 // 현재 날짜 업데이트
                 updateCurrentDate();
                 
-                // 차트들 병렬로 로드
-                await Promise.all([
-                    createCoffeeChart(),
-                    createUSDChart(),
-                    createCFTCChart(),
-                    createNVDIChart()
-                ]).catch(error => {
-                    console.error('차트 생성 중 오류:', error);
-                });
+                // Chart.js가 로드될 때까지 대기
+                let chartJsLoaded = false;
+                let attempts = 0;
+                while (!chartJsLoaded && attempts < 20) {
+                    if (typeof Chart !== 'undefined') {
+                        chartJsLoaded = true;
+                        console.log('Chart.js loaded successfully');
+                    } else {
+                        console.log('Waiting for Chart.js to load...');
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        attempts++;
+                    }
+                }
+                
+                if (!chartJsLoaded) {
+                    console.error('Chart.js failed to load');
+                    return;
+                }
+                
+                // 차트들을 개별적으로 로드 (오류가 발생해도 다른 차트는 계속 로드)
+                console.log('Starting chart creation...');
+                
+                // Coffee Futures 차트
+                try {
+                    await createCoffeeChart();
+                    console.log('Coffee chart created successfully');
+                } catch (error) {
+                    console.error('Coffee chart failed:', error);
+                }
+                
+                // USD/BRL 차트
+                try {
+                    await createUSDChart();
+                    console.log('USD chart created successfully');
+                } catch (error) {
+                    console.error('USD chart failed:', error);
+                }
+                
+                // CFTC 차트
+                try {
+                    await createCFTCChart();
+                    console.log('CFTC chart created successfully');
+                } catch (error) {
+                    console.error('CFTC chart failed:', error);
+                }
+                
+                // NVDI 차트
+                try {
+                    await createNVDIChart();
+                    console.log('NVDI chart created successfully');
+                } catch (error) {
+                    console.error('NVDI chart failed:', error);
+                }
 
                 // 개선된 리포트 데이터 로드
                 allReports = await initializeReports();
