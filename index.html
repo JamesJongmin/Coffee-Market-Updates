@@ -1007,7 +1007,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="coffeeChart"></canvas>
+                            <canvas id="coffeeChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">📊 차트 분석</div>
@@ -1030,7 +1030,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="usdChart"></canvas>
+                            <canvas id="usdChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">💱 차트 분석</div>
@@ -1054,7 +1054,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="cftcChart"></canvas>
+                            <canvas id="cftcChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">📈 차트 분석</div>
@@ -1078,7 +1078,7 @@
                                 <div class="spinner"></div>
                                 데이터 로딩 중...
                             </div>
-                            <canvas id="nvdiChart"></canvas>
+                            <canvas id="nvdiChart" style="display: none;"></canvas>
                         </div>
                         <div class="chart-analysis">
                             <div class="analysis-title">🌱 차트 분석</div>
@@ -2676,13 +2676,10 @@
         }
 
         // 페이지 로드시 초기화 실행
-        window.onload = function() {
-            // 모든 리소스가 완전히 로드된 후 실행
-            setTimeout(function() {
-                init();
-                initializeMenu();
-            }, 100);
-        };
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            initializeMenu();
+        });
 </script>
 </body>
 </html>
