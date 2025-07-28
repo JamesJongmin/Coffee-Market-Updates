@@ -13,7 +13,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Market Updates Archive</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1513,11 +1512,15 @@
             const chartElement = document.getElementById('coffeeChart');
             
             try {
-                console.log('Starting to create Coffee chart...');
-                
-                // 로딩 요소가 없으면 생성
                 if (!loadingElement || !chartElement) {
                     console.error('Chart elements not found');
+                    return;
+                }
+                
+                // Chart.js가 로드되었는지 확인
+                if (typeof Chart === 'undefined') {
+                    console.error('Chart.js is not loaded yet');
+                    setTimeout(() => createCoffeeChart(), 1000);
                     return;
                 }
                 
@@ -1526,8 +1529,6 @@
                 if (!data || data.length === 0) {
                     throw new Error('No data received');
                 }
-                
-                console.log('Coffee data received:', data.length, 'rows');
 
                 const chartData = data.map((row, index) => ({
                     x: index,
@@ -1535,13 +1536,14 @@
                     date: parseDate(row.date)
                 })).filter(point => !isNaN(point.y) && point.y > 0);
                 
-                console.log('Coffee chart data prepared:', chartData.length, 'points');
-                
                 if (chartData.length === 0) {
                     throw new Error('No valid data points');
                 }
 
-                loadingElement.style.display = 'none';
+                // 로딩 숨기기
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
 
                 const ctx = chartElement.getContext('2d');
                 
@@ -2588,8 +2590,27 @@
 
         // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', function() {
-            init();
-            initializeMenu();
+            // Chart.js를 동적으로 로드
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+            script.onload = function() {
+                console.log('Chart.js loaded successfully');
+                init();
+                initializeMenu();
+            };
+            script.onerror = function() {
+                console.error('Failed to load Chart.js');
+                // 백업 CDN 시도
+                const backupScript = document.createElement('script');
+                backupScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
+                backupScript.onload = function() {
+                    console.log('Chart.js loaded from backup CDN');
+                    init();
+                    initializeMenu();
+                };
+                document.head.appendChild(backupScript);
+            };
+            document.head.appendChild(script);
         });
 </script>
 </body>
