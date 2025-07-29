@@ -312,7 +312,9 @@
         // 동적으로 리포트 파일 목록 가져오기
         async function getReportFiles() {
             try {
-                const response = await fetch('scan-reports.php');
+                // 캐시 방지를 위한 타임스탬프 추가
+                const timestamp = new Date().getTime();
+                const response = await fetch(`scan-reports.php?t=${timestamp}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.success && data.files) {
@@ -326,6 +328,7 @@
             
             // 폴백: 하드코딩된 파일 목록
             return [
+                'Reports/2025/07/2025-07-29.html',
                 'Reports/2025/07/2025-07-26.html',       
                 'Reports/2025/07/2025-07-25.html',       
                 'Reports/2025/07/2025-07-19.html',   
@@ -468,6 +471,7 @@
             
             // 동적으로 파일 목록 가져오기
             const reportFiles = await getReportFiles();
+            console.log('로드된 전체 파일 목록:', reportFiles);
             const analysisReports = [];
             
             for (const filePath of reportFiles) {
@@ -480,11 +484,14 @@
                     
                     // "커피 선물 시장 주간 동향"을 제외한 모든 리포트
                     if (metadata && !metadata.title.includes('커피 선물 시장 주간 동향')) {
+                        console.log(`심층 분석 리포트 추가: ${filePath} - ${metadata.title}`);
                         analysisReports.push({
                             ...metadata,
                             link: filePath,
                             displayDate: formatKoreanDate(metadata.date)
                         });
+                    } else if (metadata) {
+                        console.log(`주간 동향 리포트로 제외: ${filePath} - ${metadata.title}`);
                     }
                 } catch (error) {
                     console.error(`로딩 실패 ${filePath}:`, error);
