@@ -1204,7 +1204,8 @@
             
             try {
                 // PHP 스크립트를 통해 Reports 폴더 동적 스캔
-                const response = await fetch('scan-reports.php');
+                const timestamp = new Date().getTime();
+                const response = await fetch(`scan-reports.php?t=${timestamp}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.success && data.files) {

@@ -320,7 +320,9 @@
         // 동적으로 리포트 파일 목록 가져오기
         async function getReportFiles() {
             try {
-                const response = await fetch('scan-reports.php');
+                // 캐시 방지를 위한 타임스탬프 추가
+                const timestamp = new Date().getTime();
+                const response = await fetch(`scan-reports.php?t=${timestamp}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.success && data.files) {
@@ -334,6 +336,7 @@
             
             // 폴백: 하드코딩된 파일 목록
             return [
+                'Reports/2025/07/2025-07-29.html',
                 'Reports/2025/07/2025-07-26.html',       
                 'Reports/2025/07/2025-07-25.html',       
                 'Reports/2025/07/2025-07-19.html',   
