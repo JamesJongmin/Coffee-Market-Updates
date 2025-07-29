@@ -309,25 +309,41 @@
     </div>
 
     <script>
-        // 리포트 파일 목록 (index.html과 동일)
-        const reportFiles = [
-            'Reports/2025/07/2025-07-26.html',       
-            'Reports/2025/07/2025-07-25.html',       
-            'Reports/2025/07/2025-07-19.html',   
-            'Reports/2025/07/2025-07-16.html',
-            'Reports/2025/07/2025-07-12.html',
-            'Reports/2025/07/2025-07-09.html',
-            'Reports/2025/07/2025-07-04.html',
-            'Reports/2025/06/2025-06-30.html',
-            'Reports/2025/06/2025-06-28.html',
-            'Reports/2025/06/2025-06-24.html', 
-            'Reports/2025/06/2025-06-21.html',
-            'Reports/2025/06/2025-06-14.html',
-            'Reports/2025/06/2025-06-13.html',
-            'Reports/2025/06/2025-06-09.html',
-            'Reports/2025/06/2025-06-08.html',
-            'Reports/2025/05/2025-05-31.html'
-        ];
+        // 동적으로 리포트 파일 목록 가져오기
+        async function getReportFiles() {
+            try {
+                const response = await fetch('scan-reports.php');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.files) {
+                        console.log(`동적으로 ${data.count}개의 리포트 파일 발견`);
+                        return data.files;
+                    }
+                }
+            } catch (error) {
+                console.log('동적 스캔 실패, 폴백 사용:', error);
+            }
+            
+            // 폴백: 하드코딩된 파일 목록
+            return [
+                'Reports/2025/07/2025-07-26.html',       
+                'Reports/2025/07/2025-07-25.html',       
+                'Reports/2025/07/2025-07-19.html',   
+                'Reports/2025/07/2025-07-16.html',
+                'Reports/2025/07/2025-07-12.html',
+                'Reports/2025/07/2025-07-09.html',
+                'Reports/2025/07/2025-07-04.html',
+                'Reports/2025/06/2025-06-30.html',
+                'Reports/2025/06/2025-06-28.html',
+                'Reports/2025/06/2025-06-24.html', 
+                'Reports/2025/06/2025-06-21.html',
+                'Reports/2025/06/2025-06-14.html',
+                'Reports/2025/06/2025-06-13.html',
+                'Reports/2025/06/2025-06-09.html',
+                'Reports/2025/06/2025-06-08.html',
+                'Reports/2025/05/2025-05-31.html'
+            ];
+        }
         
         // 특수 파일들을 위한 하드코딩된 메타데이터
         const specialFiles = {
@@ -450,6 +466,8 @@
             const reportsGrid = document.getElementById('reportsGrid');
             const noResults = document.getElementById('noResults');
             
+            // 동적으로 파일 목록 가져오기
+            const reportFiles = await getReportFiles();
             const analysisReports = [];
             
             for (const filePath of reportFiles) {

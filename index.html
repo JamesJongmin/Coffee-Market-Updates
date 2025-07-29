@@ -1198,28 +1198,43 @@
             }
         }
 
-        // 개선된 리포트 로딩 시스템 - 메타데이터 우선, 다중 폴백
+        // 개선된 리포트 로딩 시스템 - 동적 파일 스캔
         async function loadReportsFromFiles() {
-            // 실제 리포트 파일 목록 (올바른 경로, 최신순 정렬)
-            const reportFiles = [
-                'Reports/2025/07/2025-07-26.html',       
-                'Reports/2025/07/2025-07-25.html',       
-                'Reports/2025/07/2025-07-19.html',   
-                'Reports/2025/07/2025-07-16.html',
-                'Reports/2025/07/2025-07-12.html',
-                'Reports/2025/07/2025-07-09.html',
-                'Reports/2025/07/2025-07-04.html',
-                'Reports/2025/06/2025-06-30.html',
-                'Reports/2025/06/2025-06-28.html',
-                'Reports/2025/06/2025-06-24.html', 
-                'Reports/2025/06/2025-06-21.html',
-                'Reports/2025/06/2025-06-14.html',
-                'Reports/2025/06/2025-06-13.html',
-                'Reports/2025/06/2025-06-08.html',
-                'Reports/2025/05/2025-05-31.html'  // 5월 폴더의 리포트
-                // 새 리포트 추가 시 여기 맨 위에 올바른 경로로 추가하면 됩니다
-                // 예: 'Reports/2025/07/2025-07-01.html'
-            ];
+            let reportFiles = [];
+            
+            try {
+                // PHP 스크립트를 통해 Reports 폴더 동적 스캔
+                const response = await fetch('scan-reports.php');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.files) {
+                        reportFiles = data.files;
+                        console.log(`동적으로 ${data.count}개의 리포트 파일 발견`);
+                    }
+                } else {
+                    console.log('PHP 스크립트 응답 오류, 폴백 사용');
+                }
+            } catch (error) {
+                console.log('동적 스캔 실패, 하드코딩된 목록 사용:', error);
+                // 폴백: 하드코딩된 파일 목록
+                reportFiles = [
+                    'Reports/2025/07/2025-07-26.html',       
+                    'Reports/2025/07/2025-07-25.html',       
+                    'Reports/2025/07/2025-07-19.html',   
+                    'Reports/2025/07/2025-07-16.html',
+                    'Reports/2025/07/2025-07-12.html',
+                    'Reports/2025/07/2025-07-09.html',
+                    'Reports/2025/07/2025-07-04.html',
+                    'Reports/2025/06/2025-06-30.html',
+                    'Reports/2025/06/2025-06-28.html',
+                    'Reports/2025/06/2025-06-24.html', 
+                    'Reports/2025/06/2025-06-21.html',
+                    'Reports/2025/06/2025-06-14.html',
+                    'Reports/2025/06/2025-06-13.html',
+                    'Reports/2025/06/2025-06-08.html',
+                    'Reports/2025/05/2025-05-31.html'
+                ];
+            }
             
             const reports = [];
             
