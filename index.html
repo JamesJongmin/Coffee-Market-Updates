@@ -219,6 +219,14 @@
             border-left: 4px solid transparent;
             position: relative;
             overflow: hidden;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+        
+        /* In-depth Analysis와 Fundamentals 메뉴 아이템 최적화 */
+        #analysisMenu, #fundamentalsMenu {
+            font-size: 1.05em;
+            padding: 20px 30px;
         }
         
         .menu-item::before {
@@ -854,6 +862,18 @@
                 transform: translateX(100vw);
             }
             
+            /* 모바일에서 메뉴 아이템 최적화 */
+            .menu-item {
+                font-size: 1em;
+                padding: 16px 25px;
+            }
+            
+            #analysisMenu, #fundamentalsMenu {
+                font-size: 0.95em;
+                padding: 18px 25px;
+                line-height: 1.5;
+            }
+            
             .container {
                 padding: 15px;
             }
@@ -916,6 +936,28 @@
         
         /* 더 작은 모바일 화면 */
         @media (max-width: 480px) {
+            /* 작은 화면에서 메뉴 아이템 추가 최적화 */
+            .menu-item {
+                font-size: 0.9em;
+                padding: 14px 20px;
+            }
+            
+            #analysisMenu, #fundamentalsMenu {
+                font-size: 0.85em;
+                padding: 16px 20px;
+                line-height: 1.6;
+                /* 필요시 자동 줄바꿈 */
+                white-space: normal;
+            }
+            
+            .menu-header {
+                padding: 20px;
+            }
+            
+            .menu-title {
+                font-size: 1.6em;
+            }
+            
             h1 {
                 font-size: 1.8em;
                 word-break: keep-all;
