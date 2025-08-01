@@ -1366,6 +1366,17 @@
                 try {
                     const metadata = JSON.parse(metaMatch[1].trim());
                     console.log(`메타데이터 블록에서 로드: ${filePath}`);
+                    
+                    // summary가 없거나 빈 경우 기본값 제공
+                    if (!metadata.summary || metadata.summary.trim() === '') {
+                        metadata.summary = '커피 시장 분석 보고서입니다.';
+                    }
+                    
+                    // tags가 없거나 빈 경우 기본값 제공
+                    if (!metadata.tags || metadata.tags.length === 0) {
+                        metadata.tags = ['커피시장', '분석'];
+                    }
+                    
                     return metadata;
                 } catch (error) {
                     console.error(`메타데이터 파싱 실패 ${filePath}:`, error);
