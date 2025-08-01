@@ -1285,46 +1285,28 @@
             }
         }
 
-        // 개선된 리포트 로딩 시스템 - 동적 파일 스캔
+        // 개선된 리포트 로딩 시스템
         async function loadReportsFromFiles() {
-            let reportFiles = [];
-            
-            try {
-                // PHP 스크립트를 통해 Reports 폴더 동적 스캔
-                const timestamp = new Date().getTime();
-                const response = await fetch(`scan-reports.php?t=${timestamp}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success && data.files) {
-                        reportFiles = data.files;
-                        console.log(`동적으로 ${data.count}개의 리포트 파일 발견`);
-                    }
-                } else {
-                    console.log('PHP 스크립트 응답 오류, 폴백 사용');
-                }
-            } catch (error) {
-                console.log('동적 스캔 실패, 하드코딩된 목록 사용:', error);
-                // 폴백: 하드코딩된 파일 목록
-                reportFiles = [
-                    'Reports/2025/08/2025-08-02.html',
-                    'Reports/2025/07/2025-07-29.html',
-                    'Reports/2025/07/2025-07-26.html',       
-                    'Reports/2025/07/2025-07-25.html',       
-                    'Reports/2025/07/2025-07-19.html',   
-                    'Reports/2025/07/2025-07-16.html',
-                    'Reports/2025/07/2025-07-12.html',
-                    'Reports/2025/07/2025-07-09.html',
-                    'Reports/2025/07/2025-07-04.html',
-                    'Reports/2025/06/2025-06-30.html',
-                    'Reports/2025/06/2025-06-28.html',
-                    'Reports/2025/06/2025-06-24.html', 
-                    'Reports/2025/06/2025-06-21.html',
-                    'Reports/2025/06/2025-06-14.html',
-                    'Reports/2025/06/2025-06-13.html',
-                    'Reports/2025/06/2025-06-08.html',
-                    'Reports/2025/05/2025-05-31.html'
-                ];
-            }
+            // 하드코딩된 파일 목록 (최신순)
+            const reportFiles = [
+                'Reports/2025/08/2025-08-02.html',
+                'Reports/2025/07/2025-07-29.html',
+                'Reports/2025/07/2025-07-26.html',       
+                'Reports/2025/07/2025-07-25.html',       
+                'Reports/2025/07/2025-07-19.html',   
+                'Reports/2025/07/2025-07-16.html',
+                'Reports/2025/07/2025-07-12.html',
+                'Reports/2025/07/2025-07-09.html',
+                'Reports/2025/07/2025-07-04.html',
+                'Reports/2025/06/2025-06-30.html',
+                'Reports/2025/06/2025-06-28.html',
+                'Reports/2025/06/2025-06-24.html', 
+                'Reports/2025/06/2025-06-21.html',
+                'Reports/2025/06/2025-06-14.html',
+                'Reports/2025/06/2025-06-13.html',
+                'Reports/2025/06/2025-06-08.html',
+                'Reports/2025/05/2025-05-31.html'
+            ];
             
             const reports = [];
             
@@ -1347,7 +1329,7 @@
                             month: metadata.date.split('-')[1],
                             displayDate: formatKoreanDate(metadata.date)
                         });
-                        console.log(`성공적으로 로드: ${filePath}`);
+                        console.log(`성공적으로 로드: ${filePath} - 제목: ${metadata.title}`);
                     }
                 } catch (error) {
                     console.error(`로딩 실패 ${filePath}:`, error);
@@ -1366,6 +1348,7 @@
                 try {
                     const metadata = JSON.parse(metaMatch[1].trim());
                     console.log(`메타데이터 블록에서 로드: ${filePath}`);
+                    console.log(`제목: ${metadata.title}, 요약: ${metadata.summary?.substring(0, 50)}...`);
                     
                     // summary가 없거나 빈 경우 기본값 제공
                     if (!metadata.summary || metadata.summary.trim() === '') {
@@ -1375,6 +1358,11 @@
                     // tags가 없거나 빈 경우 기본값 제공
                     if (!metadata.tags || metadata.tags.length === 0) {
                         metadata.tags = ['커피시장', '분석'];
+                    }
+                    
+                    // title이 없는 경우 기본값 제공
+                    if (!metadata.title || metadata.title.trim() === '') {
+                        metadata.title = getDefaultTitle(filePath);
                     }
                     
                     return metadata;
@@ -1389,34 +1377,6 @@
 
         // 기존 방식 폴백 (안전한 추출)
         function extractLegacyMetadata(htmlContent, filePath) {
-            // 특수 파일들을 위한 하드코딩된 메타데이터
-            const specialFiles = {
-                'Reports/2025/06/2025-06-14.html': {
-                    title: '단기 커피 선물 가격 전망 및 방향성 점검',
-                    summary: 'KCN25는 349.90센트로 +0.60% 상승하며 1차 지지선을 상회 회복했습니다. 단기적으로는 브라질 수확 진행과 투기적 숏 포지션이 하방 압력으로 작용하나, 구조적으로는 글로벌 아라비카 적자와 25년 만에 최저 재고가 강세 요인으로 작용합니다.',
-                    tags: ['단기전망', '기술적분석', '브라질수확', '아라비카적자', '투기포지션']
-                },
-                'Reports/2025/06/2025-06-24.html': {
-                    title: '커피 가격, 폭풍 전야 - 아라비카 시장 인포그래픽',
-                    summary: '아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하며 높은 변동성을 예고하고 있습니다. 단기 가격 전망은 310-390센트 범위이며, 브라질 서리 위험이 핵심 변수로 작용할 전망입니다.',
-                    tags: ['인포그래픽', '가격전망', '브라질서리', '공급부족', '변동성']
-                }
-            };
-
-            // 특수 파일인지 확인
-            if (specialFiles[filePath]) {
-                console.log(`특수 파일 처리: ${filePath}`);
-                const fileData = specialFiles[filePath];
-                const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
-                return {
-                    title: fileData.title,
-                    subtitle: '',
-                    date: dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0],
-                    summary: fileData.summary,
-                    tags: fileData.tags
-                };
-            }
-
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlContent, 'text/html');
             
@@ -1482,13 +1442,28 @@
                 .slice(0, 6);
             
             console.log(`폴백 방식으로 추출된 데이터: ${filePath}`);
+            console.log(`폴백 제목: ${title}, 요약: ${summary?.substring(0, 50)}...`);
+            
+            // summary가 비어있으면 첫 번째 문단 찾기
+            if (!summary) {
+                const paragraphs = doc.querySelectorAll('p');
+                for (const p of paragraphs) {
+                    const text = cleanText(p.textContent.trim());
+                    if (text.length > 50 && text.length < 300 && 
+                        !text.includes('<') && !text.includes('{') && 
+                        !text.includes('function')) {
+                        summary = text.substring(0, 200);
+                        break;
+                    }
+                }
+            }
             
             return {
                 title: title || getDefaultTitle(filePath),
                 subtitle: '',
                 date: defaultDate,
-                summary: summary || '',
-                tags: tags
+                summary: summary || '커피 시장 분석 보고서입니다.',
+                tags: tags.length > 0 ? tags : ['커피시장', '분석']
             };
         }
 
@@ -1504,9 +1479,9 @@
         function getDefaultTitle(filePath) {
             const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
             if (dateMatch) {
-                return `커피 시장 동향 - ${dateMatch[1]}`;
+                return `커피 시장 분석 리포트 - ${dateMatch[1]}`;
             }
-            return '커피 시장 동향';
+            return '커피 시장 분석 리포트';
         }
 
         // 날짜 포맷팅 함수
@@ -1538,54 +1513,9 @@
             return [];
         }
 
-        // 기본 데이터 (올바른 경로 기반)
+        // 기본 데이터 (빈 배열 반환)
         function getDefaultReports() {
-            return [
-                {
-                    date: '2025-06-28',
-                    displayDate: '2025년 6월 28일',
-                    title: '커피 시장 동향 - 2025-06-28',
-                    subtitle: 'Coffee Market Update',
-                    summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-                    tags: ['커피', '시장동향'],
-                    link: 'Reports/2025/06/2025-06-28.html',
-                    year: '2025',
-                    month: '06'
-                },
-                {
-                    date: '2025-06-24',
-                    displayDate: '2025년 6월 24일',
-                    title: '커피 시장 동향 - 2025-06-24',
-                    subtitle: 'Coffee Market Update',
-                    summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-                    tags: ['커피', '시장동향'],
-                    link: 'Reports/2025/06/2025-06-24.html',
-                    year: '2025',
-                    month: '06'
-                },
-                {
-                    date: '2025-06-21',
-                    displayDate: '2025년 6월 21일',
-                    title: '커피 시장 동향 - 2025-06-21',
-                    subtitle: 'Coffee Market Update',
-                    summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-                    tags: ['커피', '시장동향'],
-                    link: 'Reports/2025/06/2025-06-21.html',
-                    year: '2025',
-                    month: '06'
-                },
-                {
-                    date: '2025-05-31',
-                    displayDate: '2025년 5월 31일',
-                    title: '커피 시장 동향 - 2025-05-31',
-                    subtitle: 'Coffee Market Update',
-                    summary: '커피 시장 주간 동향 및 분석 보고서입니다.',
-                    tags: ['커피', '시장동향'],
-                    link: 'Reports/2025/05/2025-05-31.html',
-                    year: '2025',
-                    month: '05'
-                }
-            ];
+            return [];
         }
 
         // 메인 리포트 초기화 함수
