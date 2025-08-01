@@ -402,6 +402,17 @@
             if (metaMatch) {
                 try {
                     const metadata = JSON.parse(metaMatch[1].trim());
+                    
+                    // summary가 없거나 빈 경우 기본값 제공
+                    if (!metadata.summary || metadata.summary.trim() === '') {
+                        metadata.summary = '커피 시장 분석 보고서입니다.';
+                    }
+                    
+                    // tags가 없거나 빈 경우 기본값 제공
+                    if (!metadata.tags || metadata.tags.length === 0) {
+                        metadata.tags = ['커피시장', '분석'];
+                    }
+                    
                     return metadata;
                 } catch (error) {
                     console.error(`메타데이터 파싱 실패 ${filePath}:`, error);
@@ -542,11 +553,13 @@
                     
                     // 주간 동향 리포트 필터링 - 더 유연한 조건
                     if (metadata && (
+                        metadata.title === '커피 선물 시장 주간 동향' ||
                         metadata.title.includes('커피 선물 시장 주간 동향') ||
                         metadata.title.includes('Coffee Futures Market Weekly Update') ||
                         metadata.title.includes('Coffee Futures Market Update') ||
                         (metadata.title.includes('주간') && metadata.title.includes('동향')) ||
-                        metadata.tags.includes('주간동향')
+                        (metadata.tags && metadata.tags.includes('주간동향')) ||
+                        (metadata.tags && metadata.tags.includes('커피선물'))
                     )) {
                         weeklyReports.push({
                             ...metadata,
