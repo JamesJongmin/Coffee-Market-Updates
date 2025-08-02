@@ -540,56 +540,52 @@
             const reportsGrid = document.getElementById('reportsGrid');
             const noResults = document.getElementById('noResults');
             
-            // 동적으로 파일 목록 가져오기
-            const reportFiles = await getReportFiles();
-            const weeklyReports = [];
-            
-            for (const filePath of reportFiles) {
-                try {
-                    const response = await fetch(filePath);
-                    if (!response.ok) continue;
-                    
-                    const htmlContent = await response.text();
-                    const metadata = extractReportMetadata(htmlContent, filePath);
-                    
-                    // 주간 동향 리포트 필터링 - 더 유연한 조건
-                    if (metadata && (
-                        metadata.title === '커피 선물 시장 주간 동향' ||
-                        metadata.title.includes('커피 선물 시장 주간 동향') ||
-                        metadata.title.includes('Coffee Futures Market Weekly Update') ||
-                        metadata.title.includes('Coffee Futures Market Update') ||
-                        (metadata.title.includes('주간') && metadata.title.includes('동향')) ||
-                        (metadata.tags && metadata.tags.includes('주간동향')) ||
-                        (metadata.tags && metadata.tags.includes('커피선물'))
-                    )) {
-                        weeklyReports.push({
-                            ...metadata,
-                            link: filePath,
-                            displayDate: formatKoreanDate(metadata.date)
-                        });
-                    }
-                } catch (error) {
-                    console.error(`로딩 실패 ${filePath}:`, error);
-                }
-            }
-            
-            // 날짜순 정렬
-            weeklyReports.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // 로딩 스피너 숨기기
-            loadingSpinner.style.display = 'none';
-            
-            if (weeklyReports.length > 0) {
-                reportsGrid.style.display = 'grid';
-                noResults.style.display = 'none';
+            try {
+                // reports.json에서 데이터 로드
+                const response = await fetch('reports.json');
+                if (!response.ok) throw new Error('Failed to load reports.json');
                 
-                // 리포트 카드 렌더링
-                weeklyReports.forEach((report, index) => {
-                    const isLatest = index === 0;
-                    const card = createReportCard(report, isLatest);
-                    reportsGrid.appendChild(card);
+                const data = await response.json();
+                const allReports = data.reports || [];
+                
+                // 주간 리포트만 필터링
+                const weeklyReports = allReports.filter(report => {
+                    // type 필드가 있으면 우선 사용
+                    if (report.type === 'weekly') return true;
+                    
+                    // type 필드가 없으면 기존 로직 사용
+                    return (
+                        report.title === '커피 선물 시장 주간 동향' ||
+                        report.title.includes('커피 선물 시장 주간 동향') ||
+                        report.title.includes('Coffee Futures Market Weekly Update') ||
+                        report.title.includes('Coffee Futures Market Update') ||
+                        (report.title.includes('주간') && report.title.includes('동향')) ||
+                        (report.tags && report.tags.some(tag => 
+                            tag.includes('주간') || tag.includes('weekly') || tag.includes('주간동향')
+                        ))
+                    );
                 });
-            } else {
+                
+                // 로딩 스피너 숨기기
+                loadingSpinner.style.display = 'none';
+                
+                if (weeklyReports.length > 0) {
+                    reportsGrid.style.display = 'grid';
+                    noResults.style.display = 'none';
+                    
+                    // 리포트 카드 렌더링
+                    weeklyReports.forEach((report, index) => {
+                        const isLatest = index === 0;
+                        const card = createReportCard(report, isLatest);
+                        reportsGrid.appendChild(card);
+                    });
+                } else {
+                    reportsGrid.style.display = 'none';
+                    noResults.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('리포트 로드 실패:', error);
+                loadingSpinner.style.display = 'none';
                 reportsGrid.style.display = 'none';
                 noResults.style.display = 'block';
             }
