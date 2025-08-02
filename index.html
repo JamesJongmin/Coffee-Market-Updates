@@ -1433,7 +1433,7 @@
                             !cleanedText.includes('function') &&
                             cleanedText.length > 20 && 
                             cleanedText.length < 300) {
-                            summary = cleanedText.substring(0, 200);
+                            summary = cleanedText.substring(0, 150) + (cleanedText.length > 150 ? '...' : '');
                             break;
                         }
                     }
@@ -1457,7 +1457,7 @@
                     if (text.length > 50 && text.length < 300 && 
                         !text.includes('<') && !text.includes('{') && 
                         !text.includes('function')) {
-                        summary = text.substring(0, 200);
+                        summary = text.substring(0, 150) + (text.length > 150 ? '...' : '');
                         break;
                     }
                 }
@@ -1476,7 +1476,7 @@
         function cleanText(text) {
             return text
                 .replace(/\s+/g, ' ')        // 여러 공백을 하나로
-                .replace(/[^\w\s가-힣.,!?-]/g, '') // 특수문자 제거 (한글, 영문, 숫자, 기본 문장부호만 유지)
+                .replace(/[\r\n]+/g, ' ')    // 줄바꿈을 공백으로
                 .trim();
         }
 
