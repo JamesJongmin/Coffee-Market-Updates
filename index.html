@@ -1355,6 +1355,11 @@
                         metadata.summary = '커피 시장 분석 보고서입니다.';
                     }
                     
+                    // 요약이 너무 길면 잘라내기
+                    if (metadata.summary.length > 150) {
+                        metadata.summary = metadata.summary.substring(0, 150) + '...';
+                    }
+                    
                     // tags가 없거나 빈 경우 기본값 제공
                     if (!metadata.tags || metadata.tags.length === 0) {
                         metadata.tags = ['커피시장', '분석'];
@@ -1428,7 +1433,7 @@
                             !cleanedText.includes('function') &&
                             cleanedText.length > 20 && 
                             cleanedText.length < 300) {
-                            summary = cleanedText.substring(0, 200);
+                            summary = cleanedText.substring(0, 150) + (cleanedText.length > 150 ? '...' : '');
                             break;
                         }
                     }
@@ -1452,7 +1457,7 @@
                     if (text.length > 50 && text.length < 300 && 
                         !text.includes('<') && !text.includes('{') && 
                         !text.includes('function')) {
-                        summary = text.substring(0, 200);
+                        summary = text.substring(0, 150) + (text.length > 150 ? '...' : '');
                         break;
                     }
                 }
@@ -1471,7 +1476,7 @@
         function cleanText(text) {
             return text
                 .replace(/\s+/g, ' ')        // 여러 공백을 하나로
-                .replace(/[^\w\s가-힣.,!?-]/g, '') // 특수문자 제거 (한글, 영문, 숫자, 기본 문장부호만 유지)
+                .replace(/[\r\n]+/g, ' ')    // 줄바꿈을 공백으로
                 .trim();
         }
 
@@ -2428,7 +2433,7 @@
                 </h3>
                 <p class="report-summary">${report.summary}</p>
                 <div class="report-tags">
-                    ${report.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    ${report.tags.slice(0, 4).map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
                 <a href="${report.link}" class="read-more">보고서 읽기</a>
             `;
