@@ -1872,29 +1872,14 @@
                 // 모바일 여부 확인
                 const isMobile = window.innerWidth <= 768;
                 
-                // 3개월 간격으로 레이블 인덱스 선택 (바 차트용)
+                // 모든 데이터 포인트에 대해 월만 표시
                 const totalData = chartData.length;
-                const step = Math.max(Math.floor(totalData / 6), 1);
                 
-                // **핵심 수정**: 바 차트용 레이블을 모든 데이터 포인트에 대해 생성
-                // 빈 문자열이 아닌 실제 날짜 문자열로 생성
-                const labels = chartData.map((item, index) => {
-                    // 선택된 인덱스에만 실제 날짜 표시, 나머지는 공백으로 처리하되 구조는 유지
-                    if (index === 0 || index === totalData - 1 || index % step === 0) {
-                        if (isMobile) {
-                            return item.date.toLocaleDateString('ko-KR', { 
-                                year: '2-digit',
-                                month: 'short'
-                            });
-                        } else {
-                            return item.date.toLocaleDateString('ko-KR', { 
-                                year: 'numeric', 
-                                month: 'long'
-                            });
-                        }
-                    }
-                    // 빈 레이블이지만 Chart.js가 인식할 수 있도록 공백 반환
-                    return ' ';
+                // 바 차트용 레이블을 모든 데이터 포인트에 대해 생성 (월만 표시)
+                const labels = chartData.map((item) => {
+                    return item.date.toLocaleDateString('ko-KR', { 
+                        month: 'short'
+                    });
                 });
                 
                 console.log('Generated labels count:', labels.length);
@@ -1943,20 +1928,17 @@
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Date (3개월 단위)'
+                                    text: 'Date'
                                 },
                                 ticks: {
                                     maxRotation: 45,
                                     minRotation: 0,
                                     font: {
-                                        size: isMobile ? 11 : 13,
-                                        weight: 'bold'
+                                        size: isMobile ? 10 : 12
                                     },
                                     color: '#333',
-                                    // **핵심 수정**: autoSkip을 false로 설정하여 모든 레이블 표시 시도
-                                    autoSkip: false,
-                                    // maxTicksLimit 제거하여 제한 없애기
-                                    // maxTicksLimit: 제거
+                                    autoSkip: true,
+                                    maxTicksLimit: 12
                                 },
                                 grid: {
                                     display: true,
