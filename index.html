@@ -1528,14 +1528,14 @@
             try {
                 console.log('리포트 초기화 시작...');
                 
-                // 먼저 JSON 파일에서 로드 시도
-                let reports = await loadReportsFromJSON();
-                console.log('JSON에서 로드된 리포트:', reports.length);
+                // HTML 파일에서 직접 로드를 우선 시도
+                let reports = await loadReportsFromFiles();
+                console.log('파일에서 로드된 리포트:', reports.length);
                 
-                // JSON 로드 실패 시 HTML 파일에서 직접 로드
+                // HTML 로드 실패 시 JSON 파일에서 로드 시도
                 if (reports.length === 0) {
-                    reports = await loadReportsFromFiles();
-                    console.log('파일에서 로드된 리포트:', reports.length);
+                    reports = await loadReportsFromJSON();
+                    console.log('JSON에서 로드된 리포트:', reports.length);
                 }
                 
                 // 모든 로드 실패 시 기본 데이터 사용
