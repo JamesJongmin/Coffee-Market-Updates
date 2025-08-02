@@ -19,11 +19,37 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Generate reports.json with extracted headlines
+    - name: Generate reports.json with extracted metadata
       run: |
         node -e "
         const fs = require('fs');
         const path = require('path');
+        
+        function extractReportMetadata(htmlContent) {
+          // REPORT_META 블록에서 메타데이터 추출
+          const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
+          if (metaMatch && metaMatch[1]) {
+            try {
+              const metadata = JSON.parse(metaMatch[1].trim());
+              return metadata;
+            } catch (error) {
+              console.error('Failed to parse REPORT_META JSON:', error);
+            }
+          }
+          return null;
+        }
+        
+        function cleanSummary(summary) {
+          // HTML 태그, CSS 코드, 특수 문자 제거
+          return summary
+            .replace(/<[^>]*>/g, '') // HTML 태그 제거
+            .replace(/style\s*=\s*[\"'][^\"']*[\"']/gi, '') // style 속성 제거
+            .replace(/[{}]/g, '') // CSS 중괄호 제거
+            .replace(/[\r\n]+/g, ' ') // 줄바꿈을 공백으로
+            .replace(/\s+/g, ' ') // 연속된 공백을 하나로
+            .replace(/[\"']/g, '') // 따옴표 제거
+            .trim();
+        }
         
         function extractHeadline(htmlContent) {
           // 다양한 헤드라인 패턴을 찾아봄
@@ -31,13 +57,15 @@ jobs:
             /<h2[^>]*>주요 헤드라인:\s*([^<]+)</i,
             /<h2[^>]*>헤드라인:\s*([^<]+)</i,
             /<h2[^>]*>[^:]*:\s*([^<]+)</i,
-            /<div class=\"main-story\"[^>]*>[\s\S]*?<h2[^>]*>[^:]*:\s*([^<]+)</i
+            /<div class=\"main-story\"[^>]*>[\s\S]*?<h2[^>]*>[^:]*:\s*([^<]+)</i,
+            /<p[^>]*class=\"[^\"]*subtitle[^\"]*\"[^>]*>([^<]+)</i,
+            /<div[^>]*class=\"[^\"]*subtitle[^\"]*\"[^>]*>([^<]+)</i
           ];
           
           for (const pattern of patterns) {
             const match = htmlContent.match(pattern);
             if (match && match[1]) {
-              return match[1].trim();
+              return cleanSummary(match[1]);
             }
           }
           
@@ -66,30 +94,57 @@ jobs:
                   const [, year, month, day] = dateMatch;
                   const relativePath = path.relative('.', fullPath).replace(/\\\\/g, '/');
                   
-                  // HTML 파일 읽어서 헤드라인 추출
-                  let summary = \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일 커피 시장 분석 보고서입니다.\`;
-                  
                   try {
                     const htmlContent = fs.readFileSync(fullPath, 'utf8');
-                    const extractedHeadline = extractHeadline(htmlContent);
-                    if (extractedHeadline) {
-                      summary = extractedHeadline;
+                    
+                    // 먼저 REPORT_META 블록에서 메타데이터 추출 시도
+                    const metadata = extractReportMetadata(htmlContent);
+                    
+                    let title = '커피 선물 시장 주간 동향';
+                    let subtitle = 'Coffee Futures Market Weekly Update';
+                    let summary = \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일 커피 시장 분석 보고서입니다.\`;
+                    let tags = ['아라비카', '로부스타', '시장분석', '주간동향'];
+                    
+                    if (metadata) {
+                      // REPORT_META에서 추출한 데이터 사용
+                      title = metadata.title || title;
+                      subtitle = metadata.subtitle || subtitle;
+                      summary = cleanSummary(metadata.summary || summary);
+                      tags = metadata.tags || tags;
+                    } else {
+                      // REPORT_META가 없으면 헤드라인 추출 시도
+                      const extractedHeadline = extractHeadline(htmlContent);
+                      if (extractedHeadline) {
+                        summary = extractedHeadline;
+                      }
                     }
+                    
+                    reports.push({
+                      date: \`\${year}-\${month}-\${day}\`,
+                      displayDate: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일\`,
+                      title: title,
+                      subtitle: subtitle,
+                      summary: summary,
+                      tags: tags,
+                      link: relativePath,
+                      year: year,
+                      month: month
+                    });
                   } catch (error) {
-                    console.log(\`Failed to extract headline from \${item}: \${error.message}\`);
+                    console.log(\`Failed to process \${item}: \${error.message}\`);
+                    // 에러가 발생해도 기본값으로 리포트 추가
+                    reports.push({
+                      date: \`\${year}-\${month}-\${day}\`,
+                      displayDate: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일\`,
+                      title: '커피 선물 시장 주간 동향',
+                      subtitle: 'Coffee Futures Market Weekly Update',
+                      summary: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일 커피 시장 분석 보고서입니다.\`,
+                      tags: ['아라비카', '로부스타', '시장분석', '주간동향'],
+                      link: relativePath,
+                      year: year,
+                      month: month
+                    });
                   }
-                  
-                  reports.push({
-                    date: \`\${year}-\${month}-\${day}\`,
-                    displayDate: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일\`,
-                    title: '커피 선물 시장 주간 동향',
-                    subtitle: 'Coffee Futures Market Weekly Update',
-                    summary: summary,
-                    tags: ['아라비카', '로부스타', '시장분석', '주간동향'],
-                    link: relativePath,
-                    year: year,
-                    month: month
-                  });
                 }
               }
             }
@@ -106,7 +161,7 @@ jobs:
         fs.writeFileSync('reports.json', JSON.stringify(output, null, 2));
         
         console.log(\`Generated reports.json with \${reports.length} reports\`);
-        reports.forEach(r => console.log(\`- \${r.date}: \${r.summary}\`));
+        reports.forEach(r => console.log(\`- \${r.date}: \${r.title} - \${r.summary.substring(0, 50)}...\`));
         "
         
     - name: Commit and push
@@ -114,5 +169,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add reports.json
-        git diff --staged --quiet || git commit -m "Update reports.json with extracted headlines"
+        git diff --staged --quiet || git commit -m "Update reports.json with extracted metadata"
         git push
