@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리포트 시스템 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .report-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f9f9f9;
+            border-left: 4px solid #8B4513;
+        }
+        .weekly {
+            border-left-color: #2ecc71;
+        }
+        .in-depth {
+            border-left-color: #3498db;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #A0522D;
+        }
+    </style>
+</head>
+<body>
+    <h1>리포트 시스템 테스트</h1>
+    
+    <div class="test-section">
+        <h2>1. 리포트 파일 스캔 테스트</h2>
+        <button onclick="testReportScan()">리포트 스캔 시작</button>
+        <div id="scanResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. 리포트 분류 테스트</h2>
+        <button onclick="testReportClassification()">분류 테스트</button>
+        <div id="classificationResults"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 새 리포트 인식 테스트</h2>
+        <p>테스트 리포트 파일:</p>
+        <ul>
+            <li>Reports/2025/01/2025-01-15.html (주간 동향)</li>
+            <li>Reports/2025/01/2025-01-16.html (심층 분석)</li>
+        </ul>
+        <button onclick="testNewReports()">새 리포트 확인</button>
+        <div id="newReportResults"></div>
+    </div>
+
+    <script>
+        // 리포트 메타데이터 추출 함수
+        function extractReportMetadata(htmlContent, filePath) {
+            const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
+            
+            if (metaMatch) {
+                try {
+                    const metadata = JSON.parse(metaMatch[1].trim());
+                    return metadata;
+                } catch (error) {
+                    console.error(`메타데이터 파싱 실패 ${filePath}:`, error);
+                }
+            }
+            
+            return null;
+        }
+        
+        // 1. 리포트 스캔 테스트
+        async function testReportScan() {
+            const resultsDiv = document.getElementById('scanResults');
+            resultsDiv.innerHTML = '<div class="status">스캔 중...</div>';
+            
+            const reports = [];
+            const testPaths = [
+                'Reports/2025/01/2025-01-15.html',
+                'Reports/2025/01/2025-01-16.html',
+                'Reports/2025/08/2025-08-02.html',
+                'Reports/2025/07/2025-07-29.html'
+            ];
+            
+            let foundCount = 0;
+            let notFoundCount = 0;
+            
+            for (const path of testPaths) {
+                try {
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        foundCount++;
+                        const content = await response.text();
+                        const metadata = extractReportMetadata(content, path);
+                        if (metadata) {
+                            reports.push({ path, metadata });
+                        }
+                    } else {
+                        notFoundCount++;
+                    }
+                } catch (error) {
+                    notFoundCount++;
+                }
+            }
+            
+            resultsDiv.innerHTML = `
+                <div class="status success">
+                    스캔 완료: ${foundCount}개 발견, ${notFoundCount}개 없음
+                </div>
+                <h3>발견된 리포트:</h3>
+                ${reports.map(r => `
+                    <div class="report-item">
+                        <strong>${r.metadata.title}</strong><br>
+                        경로: ${r.path}<br>
+                        날짜: ${r.metadata.date}
+                    </div>
+                `).join('')}
+            `;
+        }
+        
+        // 2. 리포트 분류 테스트
+        async function testReportClassification() {
+            const resultsDiv = document.getElementById('classificationResults');
+            resultsDiv.innerHTML = '<div class="status">분류 중...</div>';
+            
+            const weeklyReports = [];
+            const inDepthReports = [];
+            
+            const testPaths = [
+                'Reports/2025/01/2025-01-15.html',
+                'Reports/2025/01/2025-01-16.html',
+                'Reports/2025/08/2025-08-02.html',
+                'Reports/2025/07/2025-07-29.html'
+            ];
+            
+            for (const path of testPaths) {
+                try {
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        const content = await response.text();
+                        const metadata = extractReportMetadata(content, path);
+                        
+                        if (metadata) {
+                            if (metadata.title === '커피 선물 시장 주간 동향' ||
+                                metadata.title.includes('커피 선물 시장 주간 동향') ||
+                                metadata.title.includes('Coffee Futures Market Weekly Update')) {
+                                weeklyReports.push({ path, metadata });
+                            } else {
+                                inDepthReports.push({ path, metadata });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            
+            resultsDiv.innerHTML = `
+                <div class="status success">분류 완료</div>
+                <h3>Weekly Reports (${weeklyReports.length}개):</h3>
+                ${weeklyReports.map(r => `
+                    <div class="report-item weekly">
+                        <strong>${r.metadata.title}</strong><br>
+                        날짜: ${r.metadata.date}
+                    </div>
+                `).join('')}
+                
+                <h3>In-depth Analysis (${inDepthReports.length}개):</h3>
+                ${inDepthReports.map(r => `
+                    <div class="report-item in-depth">
+                        <strong>${r.metadata.title}</strong><br>
+                        날짜: ${r.metadata.date}
+                    </div>
+                `).join('')}
+            `;
+        }
+        
+        // 3. 새 리포트 인식 테스트
+        async function testNewReports() {
+            const resultsDiv = document.getElementById('newReportResults');
+            resultsDiv.innerHTML = '<div class="status">확인 중...</div>';
+            
+            const newReports = [
+                'Reports/2025/01/2025-01-15.html',
+                'Reports/2025/01/2025-01-16.html'
+            ];
+            
+            const results = [];
+            
+            for (const path of newReports) {
+                try {
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        const content = await response.text();
+                        const metadata = extractReportMetadata(content, path);
+                        
+                        if (metadata) {
+                            const type = (metadata.title === '커피 선물 시장 주간 동향' ||
+                                         metadata.title.includes('커피 선물 시장 주간 동향')) 
+                                         ? 'Weekly' : 'In-depth';
+                            results.push({
+                                path,
+                                metadata,
+                                type,
+                                status: '성공'
+                            });
+                        }
+                    } else {
+                        results.push({
+                            path,
+                            status: '파일 없음'
+                        });
+                    }
+                } catch (error) {
+                    results.push({
+                        path,
+                        status: '오류: ' + error.message
+                    });
+                }
+            }
+            
+            resultsDiv.innerHTML = `
+                <div class="status ${results.every(r => r.status === '성공') ? 'success' : 'error'}">
+                    테스트 완료
+                </div>
+                ${results.map(r => `
+                    <div class="report-item ${r.type === 'Weekly' ? 'weekly' : 'in-depth'}">
+                        <strong>파일:</strong> ${r.path}<br>
+                        <strong>상태:</strong> ${r.status}<br>
+                        ${r.metadata ? `
+                            <strong>제목:</strong> ${r.metadata.title}<br>
+                            <strong>분류:</strong> ${r.type}<br>
+                            <strong>요약:</strong> ${r.metadata.summary}
+                        ` : ''}
+                    </div>
+                `).join('')}
+            `;
+        }
+    </script>
+</body>
+</html>
