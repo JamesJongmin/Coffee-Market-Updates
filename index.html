@@ -488,6 +488,7 @@
             grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             gap: 25px;
             margin-bottom: 40px;
+            min-height: 400px;
         }
         
         .report-card {
@@ -685,6 +686,12 @@
         .dashboard-section {
             margin-bottom: 50px;
             position: relative;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .dashboard-section.loaded {
+            opacity: 1;
         }
         
         .dashboard-section::before {
@@ -1290,10 +1297,63 @@
             const reports = [];
             
             try {
-                // GitHub Pages에서는 직접 디렉토리 리스팅이 안되므로, 
-                // 알려진 패턴으로 파일 존재 여부를 확인하는 방식 사용
+                // 최근 리포트를 먼저 빠르게 로드하기 위한 최적화
                 const currentYear = new Date().getFullYear();
+                const currentMonth = new Date().getMonth() + 1;
                 const startYear = 2025;
+                
+                // 병렬 로딩을 위한 프로미스 배열
+                const loadPromises = [];
+                
+                // 최근 2개월 먼저 빠르게 스캔
+                for (let monthOffset = 0; monthOffset < 2; monthOffset++) {
+                    let targetMonth = currentMonth - monthOffset;
+                    let targetYear = currentYear;
+                    
+                    if (targetMonth <= 0) {
+                        targetMonth += 12;
+                        targetYear--;
+                    }
+                    
+                    if (targetYear < startYear) break;
+                    
+                    const monthStr = targetMonth.toString().padStart(2, '0');
+                    
+                    // 일별로 스캔 (31일부터 1일까지 역순)
+                    for (let day = 31; day >= 1; day--) {
+                        const dayStr = day.toString().padStart(2, '0');
+                        const filePath = `Reports/${targetYear}/${monthStr}/${targetYear}-${monthStr}-${dayStr}.html`;
+                        
+                        loadPromises.push(
+                            fetch(filePath, { method: 'HEAD' })
+                                .then(response => {
+                                    if (response.ok) {
+                                        return fetch(filePath)
+                                            .then(fullResponse => fullResponse.text())
+                                            .then(htmlContent => {
+                                                const metadata = extractReportMetadata(htmlContent, filePath);
+                                                if (metadata) {
+                                                    reports.push({
+                                                        ...metadata,
+                                                        link: filePath,
+                                                        year: targetYear.toString(),
+                                                        month: monthStr,
+                                                        displayDate: formatKoreanDate(`${targetYear}-${monthStr}-${dayStr}`)
+                                                    });
+                                                }
+                                            });
+                                    }
+                                })
+                                .catch(() => {}) // 파일이 없으면 무시
+                        );
+                    }
+                }
+                
+                // 최근 2개월 로딩 완료 대기
+                await Promise.all(loadPromises);
+                
+                // 나머지 이전 데이터는 알려진 파일 목록에서 로드
+                const olderLoadPromises = [];
                 
                 // 년도별로 스캔
                 for (let year = currentYear; year >= startYear; year--) {
@@ -1301,66 +1361,43 @@
                     for (let month = 12; month >= 1; month--) {
                         const monthStr = month.toString().padStart(2, '0');
                         
-                        // 일별로 스캔 (31일부터 1일까지 역순)
-                        for (let day = 31; day >= 1; day--) {
-                            const dayStr = day.toString().padStart(2, '0');
-                            const filePath = `Reports/${year}/${monthStr}/${year}-${monthStr}-${dayStr}.html`;
-                            
-                            try {
-                                const response = await fetch(filePath, { method: 'HEAD' });
-                                if (response.ok) {
-                                    // 파일이 존재하면 전체 내용을 가져와서 메타데이터 추출
-                                    const fullResponse = await fetch(filePath);
-                                    const htmlContent = await fullResponse.text();
-                                    const metadata = extractReportMetadata(htmlContent, filePath);
-                                    
-                                    if (metadata) {
-                                        reports.push({
-                                            ...metadata,
-                                            link: filePath,
-                                            year: year.toString(),
-                                            month: monthStr,
-                                            displayDate: formatKoreanDate(`${year}-${monthStr}-${dayStr}`)
-                                        });
-                                        console.log(`발견된 리포트: ${filePath} - 제목: ${metadata.title}`);
-                                    }
-                                }
-                            } catch (error) {
-                                // 파일이 없으면 무시
-                            }
-                        }
+                        // 이미 스캔한 최근 2개월은 건너뛰기
+                        const monthsAgo = (currentYear - year) * 12 + (currentMonth - month);
+                        if (monthsAgo < 2) continue;
                         
-                        // 너무 많은 요청을 방지하기 위해 최근 3개월까지만 전체 스캔
-                        const monthsAgo = (currentYear - year) * 12 + (new Date().getMonth() + 1 - month);
-                        if (monthsAgo > 3) {
-                            // 3개월 이전의 경우 알려진 파일 목록 사용
+                        // 3개월 이전의 경우 알려진 파일 목록 사용
+                        if (monthsAgo >= 3) {
                             const knownFiles = getKnownReportFiles(year, monthStr);
                             for (const filePath of knownFiles) {
-                                try {
-                                    const response = await fetch(filePath);
-                                    if (response.ok) {
-                                        const htmlContent = await response.text();
-                                        const metadata = extractReportMetadata(htmlContent, filePath);
-                                        
-                                        if (metadata) {
-                                            const dateMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})/);
-                                            reports.push({
-                                                ...metadata,
-                                                link: filePath,
-                                                year: dateMatch[1],
-                                                month: dateMatch[2],
-                                                displayDate: formatKoreanDate(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`)
-                                            });
-                                        }
-                                    }
-                                } catch (error) {
-                                    // 무시
-                                }
+                                olderLoadPromises.push(
+                                    fetch(filePath)
+                                        .then(response => {
+                                            if (response.ok) {
+                                                return response.text().then(htmlContent => {
+                                                    const metadata = extractReportMetadata(htmlContent, filePath);
+                                                    if (metadata) {
+                                                        const dateMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})/);
+                                                        reports.push({
+                                                            ...metadata,
+                                                            link: filePath,
+                                                            year: dateMatch[1],
+                                                            month: dateMatch[2],
+                                                            displayDate: formatKoreanDate(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`)
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        })
+                                        .catch(() => {}) // 오류 무시
+                                );
                             }
-                            break; // 이 월은 더 이상 스캔하지 않음
                         }
                     }
                 }
+                
+                // 나머지 파일들 병렬 로드
+                await Promise.all(olderLoadPromises);
+                
             } catch (error) {
                 console.error('리포트 스캔 중 오류:', error);
             }
@@ -2571,17 +2608,8 @@
                 // 현재 날짜 업데이트
                 updateCurrentDate();
                 
-                // 차트들을 병렬로 로드 (오류가 발생해도 다른 차트는 계속 로드)
-                console.log('Starting chart creation...');
-                
-                await Promise.all([
-                    createCoffeeChart().catch(error => console.error('Coffee chart failed:', error)),
-                    createUSDChart().catch(error => console.error('USD chart failed:', error)),
-                    createCFTCChart().catch(error => console.error('CFTC chart failed:', error)),
-                    createNVDIChart().catch(error => console.error('NVDI chart failed:', error))
-                ]);
-
-                // 개선된 리포트 데이터 로드
+                // 리포트를 먼저 로드하여 즉시 표시
+                console.log('리포트 로딩 시작...');
                 allReports = await initializeReports();
                 updateFilters();
                 updateStats();
@@ -2591,6 +2619,24 @@
                 document.getElementById('searchInput').addEventListener('input', filterReports);
                 document.getElementById('yearFilter').addEventListener('change', filterReports);
                 document.getElementById('monthFilter').addEventListener('change', filterReports);
+                
+                console.log('리포트 로딩 완료');
+                
+                // 차트는 백그라운드에서 비동기로 로드 (사용자는 기다리지 않음)
+                console.log('차트 백그라운드 로딩 시작...');
+                Promise.all([
+                    createCoffeeChart().catch(error => console.error('Coffee chart failed:', error)),
+                    createUSDChart().catch(error => console.error('USD chart failed:', error)),
+                    createCFTCChart().catch(error => console.error('CFTC chart failed:', error)),
+                    createNVDIChart().catch(error => console.error('NVDI chart failed:', error))
+                ]).then(() => {
+                    console.log('모든 차트 로딩 완료');
+                    // 차트 로딩이 완료되면 대시보드 섹션을 부드럽게 표시
+                    const dashboardSection = document.querySelector('.dashboard-section');
+                    if (dashboardSection) {
+                        dashboardSection.classList.add('loaded');
+                    }
+                });
                 
                 console.log('초기화 완료');
                 
@@ -2688,6 +2734,9 @@
 
         // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', function() {
+            // 페이지 로드 시 스크롤을 맨 위로
+            window.scrollTo(0, 0);
+            
             init();
             initializeMenu();
         });
