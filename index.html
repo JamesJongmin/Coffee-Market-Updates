@@ -1287,56 +1287,106 @@
 
         // 개선된 리포트 로딩 시스템
         async function loadReportsFromFiles() {
-            // 하드코딩된 파일 목록 (최신순)
-            const reportFiles = [
-                'Reports/2025/08/2025-08-02.html',
-                'Reports/2025/07/2025-07-29.html',
-                'Reports/2025/07/2025-07-26.html',       
-                'Reports/2025/07/2025-07-25.html',       
-                'Reports/2025/07/2025-07-19.html',   
-                'Reports/2025/07/2025-07-16.html',
-                'Reports/2025/07/2025-07-12.html',
-                'Reports/2025/07/2025-07-09.html',
-                'Reports/2025/07/2025-07-04.html',
-                'Reports/2025/06/2025-06-30.html',
-                'Reports/2025/06/2025-06-28.html',
-                'Reports/2025/06/2025-06-24.html', 
-                'Reports/2025/06/2025-06-21.html',
-                'Reports/2025/06/2025-06-14.html',
-                'Reports/2025/06/2025-06-13.html',
-                'Reports/2025/06/2025-06-08.html',
-                'Reports/2025/05/2025-05-31.html'
-            ];
-            
+            // GitHub API를 통해 동적으로 파일 목록 가져오기
             const reports = [];
             
-            for (const filePath of reportFiles) {
-                try {
-                    const response = await fetch(filePath);
-                    if (!response.ok) {
-                        console.log(`파일 없음: ${filePath}`);
-                        continue;
+            try {
+                // GitHub Pages에서는 직접 디렉토리 리스팅이 안되므로, 
+                // 알려진 패턴으로 파일 존재 여부를 확인하는 방식 사용
+                const currentYear = new Date().getFullYear();
+                const startYear = 2025;
+                
+                // 년도별로 스캔
+                for (let year = currentYear; year >= startYear; year--) {
+                    // 월별로 스캔 (12월부터 1월까지 역순)
+                    for (let month = 12; month >= 1; month--) {
+                        const monthStr = month.toString().padStart(2, '0');
+                        
+                        // 일별로 스캔 (31일부터 1일까지 역순)
+                        for (let day = 31; day >= 1; day--) {
+                            const dayStr = day.toString().padStart(2, '0');
+                            const filePath = `Reports/${year}/${monthStr}/${year}-${monthStr}-${dayStr}.html`;
+                            
+                            try {
+                                const response = await fetch(filePath, { method: 'HEAD' });
+                                if (response.ok) {
+                                    // 파일이 존재하면 전체 내용을 가져와서 메타데이터 추출
+                                    const fullResponse = await fetch(filePath);
+                                    const htmlContent = await fullResponse.text();
+                                    const metadata = extractReportMetadata(htmlContent, filePath);
+                                    
+                                    if (metadata) {
+                                        reports.push({
+                                            ...metadata,
+                                            link: filePath,
+                                            year: year.toString(),
+                                            month: monthStr,
+                                            displayDate: formatKoreanDate(`${year}-${monthStr}-${dayStr}`)
+                                        });
+                                        console.log(`발견된 리포트: ${filePath} - 제목: ${metadata.title}`);
+                                    }
+                                }
+                            } catch (error) {
+                                // 파일이 없으면 무시
+                            }
+                        }
+                        
+                        // 너무 많은 요청을 방지하기 위해 최근 3개월까지만 전체 스캔
+                        const monthsAgo = (currentYear - year) * 12 + (new Date().getMonth() + 1 - month);
+                        if (monthsAgo > 3) {
+                            // 3개월 이전의 경우 알려진 파일 목록 사용
+                            const knownFiles = getKnownReportFiles(year, monthStr);
+                            for (const filePath of knownFiles) {
+                                try {
+                                    const response = await fetch(filePath);
+                                    if (response.ok) {
+                                        const htmlContent = await response.text();
+                                        const metadata = extractReportMetadata(htmlContent, filePath);
+                                        
+                                        if (metadata) {
+                                            const dateMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})/);
+                                            reports.push({
+                                                ...metadata,
+                                                link: filePath,
+                                                year: dateMatch[1],
+                                                month: dateMatch[2],
+                                                displayDate: formatKoreanDate(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`)
+                                            });
+                                        }
+                                    }
+                                } catch (error) {
+                                    // 무시
+                                }
+                            }
+                            break; // 이 월은 더 이상 스캔하지 않음
+                        }
                     }
-                    
-                    const htmlContent = await response.text();
-                    const metadata = extractReportMetadata(htmlContent, filePath);
-                    
-                    if (metadata) {
-                        reports.push({
-                            ...metadata,
-                            link: filePath,
-                            year: metadata.date.split('-')[0],
-                            month: metadata.date.split('-')[1],
-                            displayDate: formatKoreanDate(metadata.date)
-                        });
-                        console.log(`성공적으로 로드: ${filePath} - 제목: ${metadata.title}`);
-                    }
-                } catch (error) {
-                    console.error(`로딩 실패 ${filePath}:`, error);
                 }
+            } catch (error) {
+                console.error('리포트 스캔 중 오류:', error);
             }
             
+            // 날짜순으로 정렬
             return reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+        
+        // 알려진 리포트 파일 목록 (3개월 이전 데이터용)
+        function getKnownReportFiles(year, month) {
+            const knownFiles = {
+                '2025': {
+                    '08': ['2025-08-02.html'],
+                    '07': ['2025-07-29.html', '2025-07-26.html', '2025-07-25.html', '2025-07-19.html', 
+                           '2025-07-16.html', '2025-07-12.html', '2025-07-09.html', '2025-07-04.html'],
+                    '06': ['2025-06-30.html', '2025-06-28.html', '2025-06-24.html', '2025-06-21.html',
+                           '2025-06-14.html', '2025-06-13.html', '2025-06-08.html'],
+                    '05': ['2025-05-31.html']
+                }
+            };
+            
+            if (knownFiles[year] && knownFiles[year][month]) {
+                return knownFiles[year][month].map(file => `Reports/${year}/${month}/${file}`);
+            }
+            return [];
         }
 
         // 메타데이터 추출 함수 (개선된 폴백 시스템)
