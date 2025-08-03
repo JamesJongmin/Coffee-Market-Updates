@@ -499,21 +499,23 @@
             }
         }
         
-        // 리포트 카드 생성 함수
-        function createReportCard(report) {
+        // 리포트 카드 생성
+        function createReportCard(report, isLatest) {
             const card = document.createElement('div');
             card.className = 'report-card';
-            
-            const tagsHtml = report.tags ? report.tags.map(tag => 
-                `<span class="tag">${tag}</span>`
-            ).join('') : '';
+            card.onclick = () => window.location.href = report.link;
             
             card.innerHTML = `
-                <h3 class="report-title">${report.title || '제목 없음'}</h3>
-                <p class="report-date">${report.displayDate || report.date}</p>
-                <p class="report-summary">${report.summary || '요약 정보가 없습니다.'}</p>
-                <div class="report-tags">${tagsHtml}</div>
-                <a href="${report.link}" class="read-more">자세히 보기 →</a>
+                <div class="report-date">${report.displayDate}</div>
+                <h3 class="report-title">
+                    <span>${report.title}</span>
+                    ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
+                </h3>
+                <p class="report-summary">${report.summary}</p>
+                <div class="report-tags">
+                    ${report.tags.slice(0, 4).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <a href="${report.link}" class="read-more">보고서 읽기</a>
             `;
             
             return card;
@@ -521,51 +523,57 @@
         
         // 리포트 로드 및 필터링
         async function loadAnalysisReports() {
-            const grid = document.getElementById('reportsGrid');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const reportsGrid = document.getElementById('reportsGrid');
             const noResults = document.getElementById('noResults');
             
             try {
-                // 파일 기반 로딩 시도
-                let allReports = await loadReportsFromFiles();
+                // reports.json에서 데이터 로드
+                const response = await fetch('reports.json');
+                if (!response.ok) throw new Error('Failed to load reports.json');
                 
-                // 파일 로딩 실패 시 JSON 폴백
-                if (allReports.length === 0) {
-                    allReports = await loadReportsFromJSON();
-                }
+                const data = await response.json();
+                const allReports = data.reports || [];
                 
-                // 심층 분석 리포트만 필터링 - 주간 동향이 아닌 리포트
+                // 심층 분석 리포트만 필터링
                 const analysisReports = allReports.filter(report => {
-                    // type이 in-depth로 명시된 경우
+                    // type 필드가 있으면 우선 사용
                     if (report.type === 'in-depth') return true;
                     
-                    // 제목에 "커피 시장 주간 동향"이 포함되지 않은 경우
-                    return report.title && !(
-                        report.title.includes('커피 시장 주간 동향') ||
+                    // type 필드가 없으면 기존 로직 사용 (주간 리포트가 아닌 것들)
+                    return !(
+                        report.title === '커피 선물 시장 주간 동향' ||
                         report.title.includes('커피 선물 시장 주간 동향') ||
-                        report.title === '커피 선물 시장 주간 동향'
+                        report.title.includes('Coffee Futures Market Weekly Update') ||
+                        report.title.includes('Coffee Futures Market Update') ||
+                        (report.title.includes('주간') && report.title.includes('동향')) ||
+                        (report.tags && report.tags.some(tag => 
+                            tag.includes('주간') || tag.includes('weekly') || tag.includes('주간동향')
+                        ))
                     );
                 });
                 
-                // 날짜순 정렬 (최신순)
-                analysisReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+                // 로딩 스피너 숨기기
+                loadingSpinner.style.display = 'none';
                 
                 if (analysisReports.length > 0) {
-                    grid.innerHTML = '';
+                    reportsGrid.style.display = 'grid';
                     noResults.style.display = 'none';
-                    grid.style.display = 'grid';
                     
+                    // 리포트 카드 렌더링
                     analysisReports.forEach((report, index) => {
-                        const card = createReportCard(report);
-                        card.style.animationDelay = `${index * 0.1}s`;
-                        grid.appendChild(card);
+                        const isLatest = index === 0;
+                        const card = createReportCard(report, isLatest);
+                        reportsGrid.appendChild(card);
                     });
                 } else {
-                    grid.style.display = 'none';
+                    reportsGrid.style.display = 'none';
                     noResults.style.display = 'block';
                 }
             } catch (error) {
-                console.error('심층 분석 리포트 로딩 실패:', error);
-                grid.style.display = 'none';
+                console.error('리포트 로드 실패:', error);
+                loadingSpinner.style.display = 'none';
+                reportsGrid.style.display = 'none';
                 noResults.style.display = 'block';
             }
         }

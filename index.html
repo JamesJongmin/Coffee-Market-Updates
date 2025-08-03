@@ -1333,20 +1333,12 @@
                                             .then(htmlContent => {
                                                 const metadata = extractReportMetadata(htmlContent, filePath);
                                                 if (metadata) {
-                                                    // 카테고리 분류 로직 추가
-                                                    const isWeekly = metadata.title && (
-                                                        metadata.title.includes('커피 시장 주간 동향') ||
-                                                        metadata.title.includes('커피 선물 시장 주간 동향') ||
-                                                        metadata.title.includes('주간 동향')
-                                                    );
-                                                    
                                                     reports.push({
                                                         ...metadata,
                                                         link: filePath,
                                                         year: targetYear.toString(),
                                                         month: monthStr,
-                                                        displayDate: formatKoreanDate(`${targetYear}-${monthStr}-${dayStr}`),
-                                                        type: isWeekly ? 'weekly' : 'in-depth'
+                                                        displayDate: formatKoreanDate(`${targetYear}-${monthStr}-${dayStr}`)
                                                     });
                                                 }
                                             });
@@ -1385,21 +1377,12 @@
                                                     const metadata = extractReportMetadata(htmlContent, filePath);
                                                     if (metadata) {
                                                         const dateMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})/);
-                                                        
-                                                        // 카테고리 분류 로직 추가
-                                                        const isWeekly = metadata.title && (
-                                                            metadata.title.includes('커피 시장 주간 동향') ||
-                                                            metadata.title.includes('커피 선물 시장 주간 동향') ||
-                                                            metadata.title.includes('주간 동향')
-                                                        );
-                                                        
                                                         reports.push({
                                                             ...metadata,
                                                             link: filePath,
                                                             year: dateMatch[1],
                                                             month: dateMatch[2],
-                                                            displayDate: formatKoreanDate(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`),
-                                                            type: isWeekly ? 'weekly' : 'in-depth'
+                                                            displayDate: formatKoreanDate(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`)
                                                         });
                                                     }
                                                 });
@@ -1453,19 +1436,14 @@
                     console.log(`메타데이터 블록에서 로드: ${filePath}`);
                     console.log(`제목: ${metadata.title}, 요약: ${metadata.summary?.substring(0, 50)}...`);
                     
-                    // title이 없는 경우 기본값 제공
-                    if (!metadata.title || metadata.title.trim() === '') {
-                        metadata.title = getDefaultTitle(filePath);
-                    }
-                    
                     // summary가 없거나 빈 경우 기본값 제공
                     if (!metadata.summary || metadata.summary.trim() === '') {
                         metadata.summary = '커피 시장 분석 보고서입니다.';
                     }
                     
-                    // 요약이 너무 길면 잘라내기 (150자로 제한)
+                    // 요약이 너무 길면 잘라내기
                     if (metadata.summary.length > 150) {
-                        metadata.summary = metadata.summary.substring(0, 147) + '...';
+                        metadata.summary = metadata.summary.substring(0, 150) + '...';
                     }
                     
                     // tags가 없거나 빈 경우 기본값 제공
@@ -1473,10 +1451,9 @@
                         metadata.tags = ['커피시장', '분석'];
                     }
                     
-                    // date가 없는 경우 파일명에서 추출
-                    if (!metadata.date) {
-                        const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
-                        metadata.date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+                    // title이 없는 경우 기본값 제공
+                    if (!metadata.title || metadata.title.trim() === '') {
+                        metadata.title = getDefaultTitle(filePath);
                     }
                     
                     return metadata;
