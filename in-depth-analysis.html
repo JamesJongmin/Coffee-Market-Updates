@@ -390,6 +390,171 @@
             ];
         }
         
+        // 개선된 리포트 로딩 시스템
+        async function loadReportsFromFiles() {
+            const reports = [];
+            
+            try {
+                // 현재 날짜 정보
+                const currentYear = new Date().getFullYear();
+                const currentMonth = new Date().getMonth() + 1;
+                const startYear = 2025;
+                
+                // 병렬 로딩을 위한 프로미스 배열
+                const loadPromises = [];
+                
+                // 최근 2개월 먼저 빠르게 스캔
+                for (let monthOffset = 0; monthOffset < 2; monthOffset++) {
+                    let targetMonth = currentMonth - monthOffset;
+                    let targetYear = currentYear;
+                    
+                    if (targetMonth <= 0) {
+                        targetMonth += 12;
+                        targetYear--;
+                    }
+                    
+                    if (targetYear < startYear) break;
+                    
+                    const monthStr = targetMonth.toString().padStart(2, '0');
+                    
+                    // 일별로 스캔 (31일부터 1일까지 역순)
+                    for (let day = 31; day >= 1; day--) {
+                        const dayStr = day.toString().padStart(2, '0');
+                        const filePath = `Reports/${targetYear}/${monthStr}/${targetYear}-${monthStr}-${dayStr}.html`;
+                        
+                        loadPromises.push(
+                            fetch(filePath, { method: 'HEAD' })
+                                .then(response => {
+                                    if (response.ok) {
+                                        return fetch(filePath)
+                                            .then(fullResponse => fullResponse.text())
+                                            .then(htmlContent => {
+                                                const metadata = extractReportMetadata(htmlContent, filePath);
+                                                if (metadata) {
+                                                    // 카테고리 분류 로직 추가
+                                                    const isWeekly = metadata.title && (
+                                                        metadata.title.includes('커피 시장 주간 동향') ||
+                                                        metadata.title.includes('커피 선물 시장 주간 동향') ||
+                                                        metadata.title.includes('주간 동향')
+                                                    );
+                                                    
+                                                    reports.push({
+                                                        ...metadata,
+                                                        link: filePath,
+                                                        year: targetYear.toString(),
+                                                        month: monthStr,
+                                                        displayDate: formatKoreanDate(`${targetYear}-${monthStr}-${dayStr}`),
+                                                        type: isWeekly ? 'weekly' : 'in-depth'
+                                                    });
+                                                }
+                                            });
+                                    }
+                                })
+                                .catch(() => {}) // 파일이 없으면 무시
+                        );
+                    }
+                }
+                
+                // 최근 2개월 로딩 완료 대기
+                await Promise.all(loadPromises);
+                
+                // 나머지 이전 데이터는 알려진 파일 목록에서 로드
+                const olderLoadPromises = [];
+                
+                // 년도별로 스캔
+                for (let year = currentYear; year >= startYear; year--) {
+                    // 월별로 스캔 (12월부터 1월까지 역순)
+                    for (let month = 12; month >= 1; month--) {
+                        const monthStr = month.toString().padStart(2, '0');
+                        
+                        // 이미 스캔한 최근 2개월은 건너뛰기
+                        const monthsAgo = (currentYear - year) * 12 + (currentMonth - month);
+                        if (monthsAgo < 2) continue;
+                        
+                        // 3개월 이전의 경우 알려진 파일 목록 사용
+                        if (monthsAgo >= 3) {
+                            const knownFiles = getKnownReportFiles(year, monthStr);
+                            for (const filePath of knownFiles) {
+                                olderLoadPromises.push(
+                                    fetch(filePath)
+                                        .then(response => {
+                                            if (response.ok) {
+                                                return response.text().then(htmlContent => {
+                                                    const metadata = extractReportMetadata(htmlContent, filePath);
+                                                    if (metadata) {
+                                                        const dateMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})/);
+                                                        
+                                                        // 카테고리 분류 로직 추가
+                                                        const isWeekly = metadata.title && (
+                                                            metadata.title.includes('커피 시장 주간 동향') ||
+                                                            metadata.title.includes('커피 선물 시장 주간 동향') ||
+                                                            metadata.title.includes('주간 동향')
+                                                        );
+                                                        
+                                                        reports.push({
+                                                            ...metadata,
+                                                            link: filePath,
+                                                            year: dateMatch[1],
+                                                            month: dateMatch[2],
+                                                            displayDate: formatKoreanDate(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`),
+                                                            type: isWeekly ? 'weekly' : 'in-depth'
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        })
+                                        .catch(() => {}) // 오류 무시
+                                );
+                            }
+                        }
+                    }
+                }
+                
+                // 나머지 파일들 병렬 로드
+                await Promise.all(olderLoadPromises);
+                
+            } catch (error) {
+                console.error('리포트 스캔 중 오류:', error);
+            }
+            
+            // 날짜순으로 정렬
+            return reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+        
+        // 알려진 리포트 파일 목록 (3개월 이전 데이터용)
+        function getKnownReportFiles(year, month) {
+            const knownFiles = {
+                '2025': {
+                    '08': ['2025-08-02.html'],
+                    '07': ['2025-07-29.html', '2025-07-26.html', '2025-07-25.html', '2025-07-19.html', 
+                           '2025-07-16.html', '2025-07-12.html', '2025-07-09.html', '2025-07-04.html'],
+                    '06': ['2025-06-30.html', '2025-06-28.html', '2025-06-24.html', '2025-06-21.html',
+                           '2025-06-14.html', '2025-06-13.html', '2025-06-08.html'],
+                    '05': ['2025-05-31.html']
+                }
+            };
+            
+            if (knownFiles[year] && knownFiles[year][month]) {
+                return knownFiles[year][month].map(file => `Reports/${year}/${month}/${file}`);
+            }
+            return [];
+        }
+        
+        // JSON 폴백 함수 (기존 reports.json 지원)
+        async function loadReportsFromJSON() {
+            try {
+                const response = await fetch('reports.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('reports.json에서 로드된 보고서 수:', data.reports?.length || 0);
+                    return data.reports || [];
+                }
+            } catch (error) {
+                console.log('reports.json 로딩 실패:', error.message);
+            }
+            return [];
+        }
+        
         // 특수 파일들을 위한 하드코딩된 메타데이터
         const specialFiles = {
             'Reports/2025/06/2025-06-14.html': {
@@ -503,13 +668,20 @@
         function createReportCard(report) {
             const card = document.createElement('div');
             card.className = 'report-card';
+            card.onclick = () => window.location.href = report.link;
             
             const tagsHtml = report.tags ? report.tags.map(tag => 
                 `<span class="tag">${tag}</span>`
             ).join('') : '';
             
+            // NEW 배지 여부 확인 (최신 리포트인 경우)
+            const isLatest = new Date().getTime() - new Date(report.date).getTime() < 7 * 24 * 60 * 60 * 1000; // 7일 이내
+            
             card.innerHTML = `
-                <h3 class="report-title">${report.title || '제목 없음'}</h3>
+                <h3 class="report-title">
+                    <span>${report.title || '제목 없음'}</span>
+                    ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
+                </h3>
                 <p class="report-date">${report.displayDate || report.date}</p>
                 <p class="report-summary">${report.summary || '요약 정보가 없습니다.'}</p>
                 <div class="report-tags">${tagsHtml}</div>
@@ -523,6 +695,7 @@
         async function loadAnalysisReports() {
             const grid = document.getElementById('reportsGrid');
             const noResults = document.getElementById('noResults');
+            const loadingSpinner = document.getElementById('loadingSpinner');
             
             try {
                 // 파일 기반 로딩 시도
@@ -549,6 +722,9 @@
                 // 날짜순 정렬 (최신순)
                 analysisReports.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
+                // 로딩 스피너 숨기기
+                loadingSpinner.style.display = 'none';
+                
                 if (analysisReports.length > 0) {
                     grid.innerHTML = '';
                     noResults.style.display = 'none';
@@ -565,6 +741,7 @@
                 }
             } catch (error) {
                 console.error('심층 분석 리포트 로딩 실패:', error);
+                loadingSpinner.style.display = 'none';
                 grid.style.display = 'none';
                 noResults.style.display = 'block';
             }
