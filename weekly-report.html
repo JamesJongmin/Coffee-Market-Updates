@@ -711,29 +711,47 @@
             const loadingSpinner = document.getElementById('loadingSpinner');
             
             try {
-                // 파일 기반 로딩 시도
-                let allReports = await loadReportsFromFiles();
+                // JSON 파일을 우선적으로 시도
+                let allReports = await loadReportsFromJSON();
                 
-                // 파일 로딩 실패 시 JSON 폴백
+                // JSON 로딩 실패 시 파일 기반 로딩 시도
                 if (allReports.length === 0) {
-                    allReports = await loadReportsFromJSON();
+                    allReports = await loadReportsFromFiles();
                 }
                 
-                // 주간 동향 리포트만 필터링 - 제목 기준으로 정확하게 필터링
+                // 주간 동향 리포트만 필터링 - 개선된 필터링 로직
                 const weeklyReports = allReports.filter(report => {
                     // type이 weekly로 명시된 경우
                     if (report.type === 'weekly') return true;
                     
-                    // 제목에 "커피 시장 주간 동향"이 포함된 경우
-                    return report.title && (
+                    // 제목에 "주간 동향" 키워드가 포함된 경우
+                    if (report.title && (
+                        report.title.includes('주간 동향') ||
                         report.title.includes('커피 시장 주간 동향') ||
                         report.title.includes('커피 선물 시장 주간 동향') ||
                         report.title === '커피 선물 시장 주간 동향'
-                    );
+                    )) {
+                        return true;
+                    }
+                    
+                    // 태그에 주간 관련 키워드가 있는 경우
+                    if (report.tags && Array.isArray(report.tags)) {
+                        const weeklyTags = report.tags.some(tag => 
+                            tag.includes('주간') || 
+                            tag.includes('동향') || 
+                            tag.includes('weekly')
+                        );
+                        if (weeklyTags) return true;
+                    }
+                    
+                    return false;
                 });
                 
                 // 날짜순 정렬 (최신순)
                 weeklyReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                console.log('로드된 전체 리포트 수:', allReports.length);
+                console.log('필터링된 주간 리포트 수:', weeklyReports.length);
                 
                 // 로딩 스피너 숨기기
                 loadingSpinner.style.display = 'none';
