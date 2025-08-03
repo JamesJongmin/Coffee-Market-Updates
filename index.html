@@ -1005,10 +1005,10 @@
         </div>
         
         <nav class="menu-nav">
-            <a href="#" class="menu-item" id="weeklyReportMenu">Weekly Report</a>
-            <a href="#" class="menu-item" id="analysisMenu">In-depth Analysis</a>
-            <a href="#" class="menu-item" id="fundamentalsMenu">Fundamentals</a>
-            <a href="#" class="menu-item" id="dashboardsMenu">Dashboards</a>
+            <a href="weekly-report.html" class="menu-item" id="weeklyReportMenu">Weekly Report</a>
+            <a href="in-depth-analysis.html" class="menu-item" id="analysisMenu">In-depth Analysis</a>
+            <a href="fundamentals.html" class="menu-item" id="fundamentalsMenu">Fundamentals</a>
+            <a href="#dashboard-section" class="menu-item" id="dashboardsMenu">Dashboards</a>
         </nav>
         
         <div class="menu-footer">
@@ -1086,7 +1086,7 @@
             </div>
 
             <!-- 차트 대시보드 섹션 -->
-            <div class="dashboard-section">
+            <div class="dashboard-section" id="dashboard-section">
                 <h2 class="section-title">📊 Market Dashboard</h2>
                 <div class="charts-grid">
                     <!-- Coffee Futures Chart -->
@@ -2668,7 +2668,7 @@
             }
         }
 
-        // 메뉴 토글 기능
+        // 메뉴 초기화 함수
         function initializeMenu() {
             const menuButton = document.getElementById('menuButton');
             const menuCloseBtn = document.getElementById('menuCloseBtn');
@@ -2676,90 +2676,46 @@
             const menuOverlay = document.getElementById('menuOverlay');
             const pageWrapper = document.getElementById('pageWrapper');
             
-            function openMenu() {
-                menuButton.classList.add('active');
-                sideMenu.classList.add('active');
-                menuOverlay.classList.add('active');
-                pageWrapper.classList.add('menu-open');
-                document.body.style.overflow = 'hidden'; // 스크롤 방지
-            }
-            
+            // 메뉴 닫기 함수
             function closeMenu() {
-                menuButton.classList.remove('active');
                 sideMenu.classList.remove('active');
                 menuOverlay.classList.remove('active');
                 pageWrapper.classList.remove('menu-open');
-                document.body.style.overflow = ''; // 스크롤 복원
+                menuButton.classList.remove('active');
             }
             
-            function toggleMenu() {
-                const isActive = menuButton.classList.contains('active');
-                if (isActive) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            }
+            // 메뉴 버튼 이벤트 리스너
+            menuButton.addEventListener('click', function() {
+                sideMenu.classList.add('active');
+                menuOverlay.classList.add('active');
+                pageWrapper.classList.add('menu-open');
+                menuButton.classList.add('active');
+            });
             
-            // 이벤트 리스너
-            menuButton.addEventListener('click', toggleMenu);
-            menuCloseBtn.addEventListener('click', closeMenu); // 사이드 메뉴 내 X 버튼
+            // 메뉴 닫기 버튼 이벤트 리스너
+            menuCloseBtn.addEventListener('click', closeMenu);
+            
+            // 오버레이 클릭 시 메뉴 닫기
             menuOverlay.addEventListener('click', closeMenu);
             
-            // ESC 키로 메뉴 닫기
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeMenu();
-                }
-            });
-            
-            // 메뉴 아이템 클릭 시 메뉴 닫기 및 스크롤
-            const weeklyReportMenu = document.getElementById('weeklyReportMenu');
-            const analysisMenu = document.getElementById('analysisMenu');
-            const fundamentalsMenu = document.getElementById('fundamentalsMenu');
+            // 대시보드 메뉴 클릭 이벤트
             const dashboardsMenu = document.getElementById('dashboardsMenu');
-            
-            weeklyReportMenu.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeMenu();
-                // Weekly Report 페이지로 이동
-                window.location.href = 'weekly-report.html';
-            });
-            
-            analysisMenu.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeMenu();
-                // In-depth Analysis 페이지로 이동
-                window.location.href = 'in-depth-analysis.html';
-            });
-            
-            fundamentalsMenu.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeMenu();
-                // Fundamentals 페이지로 이동
-                window.location.href = 'fundamentals/fundamentals.html';
-            });
-            
-            dashboardsMenu.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeMenu();
-                // Dashboards 페이지로 이동
-                window.location.href = 'dashboards.html';
-            });
-            
-            // 창 크기 변경 시 메뉴 상태 리셋 (모바일 대응)
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768 && sideMenu.classList.contains('active')) {
+            if (dashboardsMenu) {
+                dashboardsMenu.addEventListener('click', function(e) {
+                    e.preventDefault();
                     closeMenu();
-                }
-            });
+                    
+                    // 대시보드 섹션으로 스크롤
+                    const dashboardSection = document.getElementById('dashboard-section');
+                    if (dashboardSection) {
+                        dashboardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
         }
 
         // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', function() {
-            // 페이지 로드 시 스크롤을 맨 위로
-            window.scrollTo(0, 0);
-            
             init();
             initializeMenu();
         });
