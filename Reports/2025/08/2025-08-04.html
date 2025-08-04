@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPECIAL REPORT: 미국-브라질 커피 관세 전쟁</title>
+    <!--REPORT_META
+    {
+        "title": "미국-브라질 관세 분쟁이 커피 시장에 미치는 영향 심층 분석",
+        "subtitle": "50% 관세 위협과 글로벌 공급망 재편 전망",
+        "date": "2025-08-02",
+        "summary": "미국의 브라질산 커피 50% 관세 부과 1주일 연기 조치가 시장에 미친 영향을 다각도로 분석. ICE 선물 시장과 ICO 현물 시장의 괴리, 브라질의 대체 불가능한 역할, 미국 로스터의 비용 충격 등을 종합 검토. 관세 위협이 정치적 동기에서 비롯되었으며, 단기적 시장 혼란과 장기적 공급망 재편 가능성을 전망.",
+        "tags": ["미국관세", "브라질커피", "50%관세", "공급망재편", "가격인플레이션", "정치적리스크"]
+    }
+    REPORT_META-->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Pretendard', 'Trebuchet MS', 'Arial', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: #0a0a0a;
+            overflow-x: hidden;
+        }
+
+        /* 히어로 섹션 */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #1a0000 0%, #0a0a0a 100%);
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(231, 76, 60, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(139, 69, 19, 0.3) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            padding: 0 20px;
+            max-width: 1000px;
+        }
+
+        .hero-label {
+            color: #e74c3c;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5em, 8vw, 5em);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #e74c3c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2em, 3vw, 1.8em);
+            color: #999;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .hero-date {
+            font-size: 1.1em;
+            color: #666;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 홈 버튼 */
+        .home-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(244, 162, 97, 0.2);
+            backdrop-filter: blur(10px);
+            color: #f4a261;
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(244, 162, 97, 0.3);
+        }
+
+        .home-button:hover {
+            background: rgba(244, 162, 97, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(244, 162, 97, 0.3);
+        }
+
+        .home-button svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* 스크롤 인디케이터 */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            fill: #666;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* 메인 컨텐츠 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* 경고 섹션 */
+        .warning-section {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(192, 57, 43, 0.1) 100%);
+            border: 2px solid #e74c3c;
+            border-radius: 20px;
+            padding: 60px;
+            margin: 100px auto;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning-section::before {
+            content: '⚠️';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            font-size: 200px;
+            opacity: 0.05;
+            transform: rotate(-15deg);
+        }
+
+        .warning-title {
+            font-size: 2.5em;
+            color: #e74c3c;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .warning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .warning-item {
+            text-align: left;
+        }
+
+        .warning-item h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .warning-item p {
+            color: #ccc;
+            font-size: 0.95em;
+        }
+
+        /* 섹션 스타일 */
+        .section {
+            margin: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-label {
+            color: #8B4513;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 3em;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2em;
+            color: #999;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 카드 그리드 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(139, 69, 19, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 69, 19, 0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .card-content {
+            color: #bbb;
+            line-height: 1.8;
+        }
+
+        /* 데이터 비주얼라이제이션 */
+        .data-viz {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .viz-title {
+            font-size: 1.8em;
+            color: #fff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* 관세율 비교 차트 */
+        .tariff-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 400px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .tariff-bar {
+            width: 80px;
+            background: linear-gradient(to top, #8B4513, #CD853F);
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tariff-bar.brazil {
+            background: linear-gradient(to top, #e74c3c, #ff6b6b);
+            animation: pulse-red 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.5); }
+            50% { box-shadow: 0 0 30px 10px rgba(231, 76, 60, 0.3); }
+        }
+
+        .tariff-bar:hover {
+            transform: translateY(-10px);
+        }
+
+        .tariff-label {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tariff-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        /* 시나리오 카드 */
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .scenario-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: scale(1.05);
+            border-color: rgba(139, 69, 19, 0.5);
+        }
+
+        .probability-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .probability-circle.low {
+            background: rgba(46, 204, 113, 0.2);
+            border: 3px solid #2ecc71;
+            color: #2ecc71;
+        }
+
+        .probability-circle.medium {
+            background: rgba(241, 196, 15, 0.2);
+            border: 3px solid #f1c40f;
+            color: #f1c40f;
+        }
+
+        .probability-circle.high {
+            background: rgba(231, 76, 60, 0.2);
+            border: 3px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        .scenario-title {
+            font-size: 1.4em;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .scenario-impact {
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .scenario-strategy {
+            color: #8B4513;
+            font-weight: 600;
+        }
+
+        /* 타임라인 */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(139, 69, 19, 0.3);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #8B4513;
+            border-radius: 50%;
+            border: 4px solid #0a0a0a;
+            z-index: 10;
+        }
+
+        .timeline-date {
+            color: #8B4513;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            color: #fff;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .timeline-description {
+            color: #999;
+            line-height: 1.6;
+        }
+
+        /* 인용구 */
+        .quote-box {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.1) 100%);
+            border-left: 4px solid #8B4513;
+            padding: 40px;
+            margin: 60px 0;
+            position: relative;
+        }
+
+        .quote-box::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 100px;
+            color: rgba(139, 69, 19, 0.3);
+            font-family: Georgia, serif;
+        }
+
+        .quote-text {
+            font-size: 1.4em;
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .quote-author {
+            color: #8B4513;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* 푸터 */
+        footer {
+            background: rgba(0, 0, 0, 0.5);
+            text-align: center;
+            padding: 60px 20px;
+            margin-top: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #666;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5em;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+            
+            .timeline-marker {
+                left: 20px;
+            }
+            
+            .tariff-chart {
+                flex-wrap: wrap;
+                height: auto;
+            }
+            
+            .tariff-bar {
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 홈 버튼 -->
+    <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span>Home</span>
+    </a>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-label">Special Report</div>
+            <h1 class="hero-title">커피 시장의 블랙 스완</h1>
+            <p class="hero-subtitle">미국 50% 관세가 촉발한 글로벌 공급망 대격변</p>
+            <p class="hero-date">2025년 8월 2일</p>
+        </div>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- 경고 섹션 -->
+    <section class="warning-section container">
+        <h2 class="warning-title">시장 충격 카운트다운</h2>
+        <p style="font-size: 1.3em; color: #e74c3c; margin-bottom: 20px;">8월 7일, D-5</p>
+        <div class="warning-grid">
+            <div class="warning-item">
+                <h4>관세율</h4>
+                <p>10% → 50%</p>
+            </div>
+            <div class="warning-item">
+                <h4>영향 규모</h4>
+                <p>미국 수입의 35%</p>
+            </div>
+            <div class="warning-item">
+                <h4>가격 전망</h4>
+                <p>커피 한 잔 $3-5 추가</p>
+                <p style="font-size: 0.8em; color: #ccc; margin-top: 5px;">*원두 $17.9→$26.5/kg 기준</p>
+            </div>
+            <div class="warning-item">
+                <h4>위험 수준</h4>
+                <p>극도로 높음</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 관세 비교 섹션 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Tariff Analysis</div>
+            <h2 class="section-title">관세율 충격 비교</h2>
+            <p class="section-subtitle">주요 커피 수출국별 미국 관세율 현황</p>
+        </div>
+        
+        <div class="data-viz">
+            <div class="viz-title">2025년 8월 7일 발효 예정 관세율</div>
+            <div class="tariff-chart">
+                <div class="tariff-bar brazil" style="height: 80%;">
+                    <div class="tariff-value">50%</div>
+                    <div class="tariff-label">브라질</div>
+                </div>
+                <div class="tariff-bar" style="height: 30%;">
+                    <div class="tariff-value">15%</div>
+                    <div class="tariff-label">콜롬비아</div>
+                </div>
+                <div class="tariff-bar" style="height: 40%;">
+                    <div class="tariff-value">20%</div>
+                    <div class="tariff-label">베트남</div>
+                </div>
+                <div class="tariff-bar" style="height: 20%;">
+                    <div class="tariff-value">10%</div>
+                    <div class="tariff-label">온두라스</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 핵심 영향 분석 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Impact Analysis</div>
+            <h2 class="section-title">연쇄 충격 시나리오</h2>
+            <p class="section-subtitle">관세 폭탄이 불러올 시장 대혼란</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">🌍</div>
+                <h3 class="card-title">글로벌 공급망 붕괴</h3>
+                <div class="card-content">
+                    브라질은 전 세계 커피의 37%, 미국 수입의 35%를 담당하는 절대적 공급원입니다. 
+                    어떤 단일 국가도 연간 6,500만 백에 달하는 브라질의 생산량을 대체할 수 없으며, 
+                    이는 곧 미국 커피 시장의 구조적 공급 부족을 의미합니다.
+                    <br><br>
+                    <strong style="color: #8B4513;">핵심 해석:</strong> 브라질의 산토스(Santos) 품종은 
+                    미국 블렌드 커피의 기초를 이루는 특유의 부드럽고 균형 잡힌 풍미를 제공합니다. 
+                    콜롬비아나 중미 커피로 대체 시 산미가 강해지고 가격도 상승하여, 
+                    미국인들이 즐겨 마시는 '클래식 아메리칸 커피'의 맛 자체가 사라질 위기에 처했습니다.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">💰</div>
+                <h3 class="card-title">가격 인플레이션 쓰나미</h3>
+                <div class="card-content">
+                    이미 5년간 74% 상승한 커피 가격에 50% 관세가 추가됩니다. 
+                    중소 로스터들은 5% 내외의 박리다매 마진으로 운영되어 생존 자체가 위협받고 있으며, 
+                    이 비용은 결국 소비자에게 전가되어 "아침 커피세"라는 비난을 피할 수 없을 것입니다.
+                    <br><br>
+                    <strong style="color: #8B4513;">핵심 해석:</strong> 현재 파운드당 $8.13(kg당 $17.9)인 원두 가격이 
+                    $12-13(kg당 $26.5-28.7)로 상승하면, 커피 한 잔당 $3-5의 추가 비용이 발생합니다. 
+                    더 큰 문제는 중소 로스터의 도태로 시장이 소수 대기업에 집중되면서 
+                    장기적으로 경쟁 감소와 추가 가격 인상의 악순환이 시작될 수 있다는 점입니다.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">정치적 리스크 시대</h3>
+                <div class="card-content">
+                    이번 관세는 경제 논리가 아닌 보우소나루 재판 등 순수한 정치적 동기에서 비롯되었습니다. 
+                    이는 향후 예측 불가능한 정책 변화가 언제든 시장을 뒤흔들 수 있다는 
+                    새로운 리스크 패러다임의 시작을 알립니다.
+                    <br><br>
+                    <strong style="color: #8B4513;">핵심 해석:</strong> 미국이 브라질과의 무역에서 흑자를 
+                    기록하는 상황에서의 관세 부과는 전통적인 무역 이론으로 설명할 수 없습니다. 
+                    이는 시장이 이제 수급 분석만으로는 예측 불가능해졌으며, 
+                    정치적 변수가 언제든 시장을 뒤집을 수 있는 '블랙 스완'이 되었음을 의미합니다.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 시장 메커니즘 분석 섹션 추가 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Market Mechanism</div>
+            <h2 class="section-title">시장 괴리의 심층 분석</h2>
+            <p class="section-subtitle">선물과 현물, 두 개의 다른 이야기</p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.02); border-radius: 20px; padding: 40px; margin-bottom: 40px;">
+            <h3 style="color: #fff; font-size: 1.8em; margin-bottom: 20px;">ICE 선물 vs ICO 현물의 극명한 대조</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px;">
+                <div style="border-right: 1px solid rgba(255, 255, 255, 0.1); padding-right: 30px;">
+                    <h4 style="color: #e74c3c; margin-bottom: 15px;">ICE 아라비카 선물</h4>
+                    <p style="color: #ccc; line-height: 1.8;">
+                        <strong>7월 30일:</strong> 292.75 센트/파운드<br>
+                        <strong>8월 1일:</strong> 284.20 센트/파운드<br>
+                        <strong>변동률:</strong> -3.92% (하루 만에 급락)
+                    </p>
+                    <p style="margin-top: 20px; color: #999;">
+                        <strong style="color: #8B4513;">해석:</strong> 선물 시장은 미래의 공급 차질 가능성을 
+                        즉각적으로 가격에 반영합니다. 관세 연기 소식에도 불구하고 급락한 것은 
+                        단기 포지션 정리와 불확실성에 대한 공포를 반영한 것으로, 
+                        여전히 50% 관세가 현실화될 경우의 충격을 크게 우려하고 있음을 보여줍니다.
+                    </p>
+                </div>
+                
+                <div style="padding-left: 30px;">
+                    <h4 style="color: #2ecc71; margin-bottom: 15px;">ICO 종합지표가격 (I-CIP)</h4>
+                    <p style="color: #ccc; line-height: 1.8;">
+                        <strong>6월:</strong> 295.06 센트/파운드<br>
+                        <strong>7월 말:</strong> 256.89 센트/파운드<br>
+                        <strong>변동률:</strong> -12.9% (지속적 하락)
+                    </p>
+                    <p style="margin-top: 20px; color: #999;">
+                        <strong style="color: #8B4513;">해석:</strong> 현물 시장은 브라질의 풍작과 
+                        84%에 달하는 수확 진행률을 반영하여 약세를 유지했습니다. 
+                        이는 당장의 공급은 충분하지만, 미래의 공급망 차질 우려가 
+                        선물 시장에만 선별적으로 반영되는 '시장 분열' 현상을 보여줍니다.
+                    </p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 20px; background: rgba(139, 69, 19, 0.2); border-radius: 15px;">
+                <p style="color: #fff; font-size: 1.1em; line-height: 1.8;">
+                    <strong>핵심 통찰:</strong> 이러한 선물-현물 괴리는 시장이 '현재의 풍부함'과 '미래의 결핍' 사이에서 
+                    방향성을 잃었음을 의미합니다. 관세가 실제로 부과되면 현물 가격도 급등할 것이며, 
+                    이는 곧 소비자 가격으로 직결됩니다. 현재의 괴리는 폭풍 전 고요함일 뿐입니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 대체 공급처 한계 분석 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Supply Chain Analysis</div>
+            <h2 class="section-title">대체 불가능한 브라질</h2>
+            <p class="section-subtitle">왜 다른 국가들이 해답이 될 수 없는가</p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.02); border-radius: 20px; padding: 40px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div style="padding: 30px; background: rgba(231, 76, 60, 0.1); border-radius: 15px; border: 1px solid rgba(231, 76, 60, 0.3);">
+                    <h3 style="color: #e74c3c; margin-bottom: 15px;">콜롬비아의 한계</h3>
+                    <ul style="color: #ccc; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✗ 15% 관세 여전히 적용</li>
+                        <li>✗ 폭우로 생산량 5.3% 감소</li>
+                        <li>✗ 연간 1,250만 백 (브라질의 1/5)</li>
+                        <li>✗ 고품질=고가격 프리미엄</li>
+                    </ul>
+                    <p style="margin-top: 20px; color: #999; font-size: 0.9em;">
+                        <strong>결론:</strong> 물량도 부족하고 가격도 비싸며 
+                        관세도 여전히 존재하는 불완전한 대안
+                    </p>
+                </div>
+
+                <div style="padding: 30px; background: rgba(241, 196, 15, 0.1); border-radius: 15px; border: 1px solid rgba(241, 196, 15, 0.3);">
+                    <h3 style="color: #f1c40f; margin-bottom: 15px;">베트남의 미스매치</h3>
+                    <ul style="color: #ccc; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✗ 20% 관세 부담</li>
+                        <li>✗ 97%가 로부스타 품종</li>
+                        <li>✗ 아라비카 생산 100만 백 미만</li>
+                        <li>✗ 미국 블렌드와 맞지 않는 풍미</li>
+                    </ul>
+                    <p style="margin-top: 20px; color: #999; font-size: 0.9em;">
+                        <strong>결론:</strong> 품종이 다르고 맛이 다르며 
+                        미국 소비자가 원하는 커피가 아님
+                    </p>
+                </div>
+
+                <div style="padding: 30px; background: rgba(46, 204, 113, 0.1); border-radius: 15px; border: 1px solid rgba(46, 204, 113, 0.3);">
+                    <h3 style="color: #2ecc71; margin-bottom: 15px;">중미 국가들의 분산</h3>
+                    <ul style="color: #ccc; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✗ 각국 10%+ 관세</li>
+                        <li>✗ 개별 생산량 미미</li>
+                        <li>✗ 물류 복잡성 증가</li>
+                        <li>✗ 품질 일관성 확보 어려움</li>
+                    </ul>
+                    <p style="margin-top: 20px; color: #999; font-size: 0.9em;">
+                        <strong>결론:</strong> 여러 국가를 합쳐도 브라질 하나를 
+                        대체할 수 없는 구조적 한계
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center; padding: 30px; background: rgba(139, 69, 19, 0.2); border-radius: 15px;">
+                <p style="color: #fff; font-size: 1.3em; margin-bottom: 20px;">
+                    "브라질 = 6,500만 백 생산 + 10% 관세 (현재)"
+                </p>
+                <p style="color: #8B4513; font-size: 1.1em;">
+                    vs
+                </p>
+                <p style="color: #fff; font-size: 1.3em; margin-top: 20px;">
+                    "모든 대체국 = 소량 분산 + 10-20% 관세 + 품질 차이"
+                </p>
+                <p style="color: #999; margin-top: 30px; font-style: italic;">
+                    수학적으로도, 경제적으로도, 품질적으로도 대체 불가능
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 시나리오 분석 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Scenario Planning</div>
+            <h2 class="section-title">시나리오별 전망</h2>
+            <p class="section-subtitle">8월 7일 이후 펼쳐질 3가지 미래</p>
+        </div>
+
+        <div class="scenario-cards">
+            <div class="scenario-card">
+                <div class="probability-circle low">20%</div>
+                <h3 class="scenario-title">관세 철회</h3>
+                <p class="scenario-impact">즉각적인 가격 안정화</p>
+                <p class="scenario-strategy">전략: 기존 공급망 유지</p>
+            </div>
+
+            <div class="scenario-card">
+                <div class="probability-circle medium">30%</div>
+                <h3 class="scenario-title">부분 면제</h3>
+                <p class="scenario-impact">제한적 영향, 불확실성 지속</p>
+                <p class="scenario-strategy">전략: 선별적 재고 확보</p>
+            </div>
+
+            <div class="scenario-card">
+                <div class="probability-circle high">50%</div>
+                <h3 class="scenario-title">전면 시행</h3>
+                <p class="scenario-impact">극심한 가격 상승과 공급 차질</p>
+                <p class="scenario-strategy">전략: 공급처 다변화 가속</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 타임라인 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Timeline</div>
+            <h2 class="section-title">위기의 전개 과정</h2>
+            <p class="section-subtitle">관세 폭탄의 카운트다운</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">7월 초</div>
+                    <div class="timeline-title">관세 위협 발표</div>
+                    <div class="timeline-description">
+                        미국, 정치적 이유로 브라질산 수입품 50% 관세 부과 발표. 
+                        커피는 면제 품목에서 제외되며 시장 충격 시작.
+                    </div>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">8월 1일</div>
+                    <div class="timeline-title">1주일 연기</div>
+                    <div class="timeline-description">
+                        관세 발효를 8월 7일로 연기. 행정 절차상의 이유이나 
+                        시장은 협상 가능성에 일말의 기대.
+                    </div>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">8월 7일</div>
+                    <div class="timeline-title">D-Day</div>
+                    <div class="timeline-description">
+                        50% 관세 발효 예정일. 이날 이후 미국 커피 시장은 
+                        완전히 새로운 현실에 직면할 것으로 예상.
+                    </div>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 마켓 아웃룩 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Market Outlook</div>
+            <h2 class="section-title">폭풍의 눈 속으로</h2>
+            <p class="section-subtitle">단기 혼란에서 장기 재편까지</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">🔥</div>
+                <h3 class="card-title">단기 전망 (1-3개월)</h3>
+                <div class="card-content">
+                    ICE 선물 시장의 극심한 변동성과 패닉 바잉이 예상됩니다. 
+                    대형 업체들의 재고 비축 경쟁으로 단기 공급 부족이 심화되고, 
+                    중소 로스터들은 생존을 위한 사투를 벌일 것입니다. 
+                    정치적 반전 가능성이 유일한 희망이나 확률은 낮습니다.
+                    <br><br>
+                    <strong style="color: #8B4513;">예상 시나리오:</strong>
+                    <br>• ICE 재고 770,621백 → 50만 백 이하로 급감
+                    <br>• 선물 가격 300센트 재돌파 후 350센트 도전
+                    <br>• 현물 프리미엄 확대로 실물 확보 경쟁 격화
+                    <br>• 중소업체 20-30% 폐업 또는 M&A 급증
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📈</div>
+                <h3 class="card-title">중기 전망 (3-12개월)</h3>
+                <div class="card-content">
+                    소비자 가격 인상이 본격화되며 커피 인플레이션이 현실화됩니다. 
+                    브라질은 EU와 아시아로 수출을 전환하고, 미국은 콜롬비아와 중미에서 
+                    비싼 대체 공급을 찾아야 합니다. 블렌드 재구성으로 
+                    미국 커피의 맛 자체가 변할 수 있습니다.
+                    <br><br>
+                    <strong style="color: #8B4513;">구조적 변화:</strong>
+                    <br>• 미국 수입: 브라질 35% → 20% 이하로 감소
+                    <br>• EU/아시아 커피 가격 10-15% 하락 (공급 증가)
+                    <br>• 미국 프리미엄 커피 시장 30% 이상 성장
+                    <br>• 저가 커피 시장 붕괴, 양극화 심화
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🌐</div>
+                <h3 class="card-title">장기 전망 (1년 이상)</h3>
+                <div class="card-content">
+                    글로벌 커피 무역의 구조적 재편이 완성됩니다. 
+                    미국은 고비용 커피 시장으로 전락하고, 브라질은 새로운 시장에서 
+                    지배력을 강화합니다. 정치적 리스크가 상시화되며 
+                    시장은 새로운 불확실성의 시대에 적응해야 합니다.
+                    <br><br>
+                    <strong style="color: #8B4513;">새로운 균형점:</strong>
+                    <br>• 미국: "프리미엄 커피 섬"으로 고립
+                    <br>• 브라질-중국 커피 무역 300% 증가
+                    <br>• 정치적 리스크 헤징 상품 일상화
+                    <br>• 합성 커피/대체 커피 시장 급성장
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 핵심 데이터 포인트 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Key Metrics</div>
+            <h2 class="section-title">숫자로 보는 충격</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin: 40px 0;">
+            <div style="text-align: center; padding: 30px; background: rgba(231, 76, 60, 0.1); border-radius: 20px; border: 2px solid rgba(231, 76, 60, 0.3);">
+                <div style="font-size: 3em; font-weight: 800; color: #e74c3c; margin-bottom: 10px;">50%</div>
+                <div style="color: #999; font-size: 1.1em;">브라질산 관세율</div>
+            </div>
+            <div style="text-align: center; padding: 30px; background: rgba(139, 69, 19, 0.1); border-radius: 20px; border: 2px solid rgba(139, 69, 19, 0.3);">
+                <div style="font-size: 3em; font-weight: 800; color: #8B4513; margin-bottom: 10px;">35%</div>
+                <div style="color: #999; font-size: 1.1em;">미국 수입 점유율</div>
+            </div>
+            <div style="text-align: center; padding: 30px; background: rgba(241, 196, 15, 0.1); border-radius: 20px; border: 2px solid rgba(241, 196, 15, 0.3);">
+                <div style="font-size: 3em; font-weight: 800; color: #f1c40f; margin-bottom: 10px;">$13</div>
+                <div style="color: #999; font-size: 1.1em;">예상 소비자가/lb</div>
+            </div>
+            <div style="text-align: center; padding: 30px; background: rgba(46, 204, 113, 0.1); border-radius: 20px; border: 2px solid rgba(46, 204, 113, 0.3);">
+                <div style="font-size: 3em; font-weight: 800; color: #2ecc71; margin-bottom: 10px;">5%</div>
+                <div style="color: #999; font-size: 1.1em;">로스터 이익률</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 전략적 시사점 섹션 추가 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Strategic Implications</div>
+            <h2 class="section-title">시장 참여자별 생존 전략</h2>
+            <p class="section-subtitle">새로운 현실에 적응하는 법</p>
+        </div>
+
+        <div style="display: grid; gap: 30px;">
+            <div style="background: rgba(231, 76, 60, 0.05); border: 1px solid rgba(231, 76, 60, 0.3); border-radius: 20px; padding: 40px;">
+                <h3 style="color: #e74c3c; font-size: 1.6em; margin-bottom: 20px;">수입업체 & 로스터</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">즉시 실행 사항</h4>
+                        <ul style="color: #ccc; line-height: 1.8;">
+                            <li>• 8월 7일 전 최대한 재고 확보</li>
+                            <li>• 브라질 외 공급처와 긴급 협상</li>
+                            <li>• 가격 인상 시나리오별 고객 커뮤니케이션 준비</li>
+                            <li>• 운전자금 확대 및 신용한도 증액</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">중장기 전략</h4>
+                        <ul style="color: #ccc; line-height: 1.8;">
+                            <li>• 공급처 다변화 (최소 5개국 이상)</li>
+                            <li>• 정치적 리스크 헤징 상품 개발</li>
+                            <li>• 프리미엄 시장으로 포지셔닝 전환</li>
+                            <li>• M&A 기회 또는 exit 전략 검토</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(139, 69, 19, 0.05); border: 1px solid rgba(139, 69, 19, 0.3); border-radius: 20px; padding: 40px;">
+                <h3 style="color: #8B4513; font-size: 1.6em; margin-bottom: 20px;">투자자 & 트레이더</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">단기 트레이딩 전략</h4>
+                        <ul style="color: #ccc; line-height: 1.8;">
+                            <li>• 브라질-콜롬비아 스프레드 거래</li>
+                            <li>• 선물-현물 베이시스 차익거래</li>
+                            <li>• 관세 뉴스 기반 모멘텀 트레이딩</li>
+                            <li>• 커피 관련주 공매도/매수 페어</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">장기 투자 테마</h4>
+                        <ul style="color: #ccc; line-height: 1.8;">
+                            <li>• 비브라질 생산국 인프라 투자</li>
+                            <li>• 대체 커피 기술 기업</li>
+                            <li>• 정치적 리스크 헤징 금융상품</li>
+                            <li>• 아시아 커피 소비 관련주</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(46, 204, 113, 0.05); border: 1px solid rgba(46, 204, 113, 0.3); border-radius: 20px; padding: 40px;">
+                <h3 style="color: #2ecc71; font-size: 1.6em; margin-bottom: 20px;">정책 입안자 & 업계 단체</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">긴급 대응</h4>
+                        <ul style="color: #ccc; line-height: 1.8;">
+                            <li>• 커피 관세 면제 긴급 로비</li>
+                            <li>• 중소기업 피해 데이터 수집</li>
+                            <li>• 소비자 영향 분석 보고서 발간</li>
+                            <li>• 의회 청문회 준비</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 15px;">구조적 개선</h4>
+                        <ul style="color: #ccc; line-height: 1.8;">
+                            <li>• 무역 정책 예측가능성 제고</li>
+                            <li>• 산업 복원력 강화 프로그램</li>
+                            <li>• 국제 협력 체계 구축</li>
+                            <li>• 정치-경제 분리 원칙 확립</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 숨겨진 위험 요소 -->
+    <section class="section container">
+        <div class="section-header">
+            <div class="section-label">Hidden Risks</div>
+            <h2 class="section-title">아직 계산되지 않은 위험들</h2>
+            <p class="section-subtitle">표면 아래 숨어있는 2차, 3차 파급효과</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card" style="border-color: rgba(231, 76, 60, 0.5);">
+                <div class="card-icon">⚖️</div>
+                <h3 class="card-title">법적 불확실성</h3>
+                <div class="card-content">
+                    미국 국제무역법원은 이미 대통령의 관세 부과 권한에 의문을 제기했습니다. 
+                    현재 항소법원을 거쳐 연방대법원까지 갈 것으로 예상되는 이 소송은 
+                    관세의 법적 정당성 자체를 뒤흔들 수 있습니다.
+                    <br><br>
+                    <strong style="color: #e74c3c;">리스크:</strong> 관세가 시행되었다가 
+                    나중에 위헌 판결을 받을 경우, 이미 파괴된 공급망과 관계는 
+                    쉽게 복구되지 않을 것입니다.
+                </div>
+            </div>
+
+            <div class="card" style="border-color: rgba(241, 196, 15, 0.5);">
+                <div class="card-icon">🌡️</div>
+                <h3 class="card-title">기후 리스크 증폭</h3>
+                <div class="card-content">
+                    브라질 의존도가 감소하면서 더 많은 국가에 분산된 공급망은 
+                    역설적으로 기후 리스크에 더 취약해집니다. 한 지역의 기상 이변이 
+                    전체 공급에 미치는 영향이 증폭될 수 있습니다.
+                    <br><br>
+                    <strong style="color: #f1c40f;">리스크:</strong> 엘니뇨/라니냐 같은 
+                    글로벌 기상 현상이 여러 소규모 생산국을 동시에 타격할 경우, 
+                    브라질이라는 거대한 완충장치 없이는 가격 폭등이 불가피합니다.
+                </div>
+            </div>
+
+            <div class="card" style="border-color: rgba(155, 89, 182, 0.5);">
+                <div class="card-icon">🔄</div>
+                <h3 class="card-title">연쇄 보복 관세</h3>
+                <div class="card-content">
+                    브라질이 미국산 농산물에 보복 관세를 부과할 가능성이 있습니다. 
+                    옥수수, 대두, 밀 등 미국의 주요 수출 농산물이 타겟이 될 수 있으며, 
+                    이는 글로벌 농산물 시장 전체의 혼란으로 이어질 수 있습니다.
+                    <br><br>
+                    <strong style="color: #9b59b6;">리스크:</strong> 농산물 무역 전쟁이 
+                    확대되면 식품 인플레이션이 커피를 넘어 전방위적으로 확산되어 
+                    서민 경제에 치명적 타격을 줄 것입니다.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="footer-content">
+            <p style="font-size: 1.1em; margin-bottom: 20px;">
+                <strong>Special Report by Align Commodities</strong>
+            </p>
+            <p style="margin-bottom: 10px;">
+                james.baek@aligncommodities.com
+            </p>
+            <p style="font-size: 0.9em; opacity: 0.7;">
+                데이터 출처: ICE, USDA, Argus Media, Cecafé, NCA<br>
+                본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // 모든 섹션에 초기 스타일 적용
+        document.querySelectorAll('.section, .card, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // 관세 막대 애니메이션
+        setTimeout(() => {
+            document.querySelectorAll('.tariff-bar').forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.animation = 'fadeInUp 0.6s ease forwards';
+                }, index * 100);
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
