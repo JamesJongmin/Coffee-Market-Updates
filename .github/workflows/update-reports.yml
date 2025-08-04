@@ -26,29 +26,41 @@ jobs:
         const path = require('path');
         
         function extractReportMetadata(htmlContent) {
-          // REPORT_META 블록에서 메타데이터 추출
-          const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
+          // REPORT_META 블록에서 메타데이터 추출 - 개선된 버전
+          const metaMatch = htmlContent.match(/<!--\s*REPORT_META\s*([\s\S]*?)\s*REPORT_META\s*-->/);
           if (metaMatch && metaMatch[1]) {
             try {
-              const metadata = JSON.parse(metaMatch[1].trim());
+              const jsonString = metaMatch[1].trim();
+              console.log('Extracted JSON string:', jsonString.substring(0, 100) + '...');
+              const metadata = JSON.parse(jsonString);
+              console.log('Successfully parsed metadata for:', metadata.title || 'Unknown');
               return metadata;
             } catch (error) {
-              console.error('Failed to parse REPORT_META JSON:', error);
+              console.error('Failed to parse REPORT_META JSON:', error.message);
+              console.error('Raw JSON string:', metaMatch[1]);
             }
+          } else {
+            console.log('No REPORT_META block found in HTML content');
           }
           return null;
         }
         
         function cleanSummary(summary) {
-          // HTML 태그, CSS 코드, 특수 문자 제거
-          return summary
+          // HTML 태그, CSS 코드, 특수 문자 제거 - 개선된 버전
+          if (!summary) return '';
+          
+          const original = summary;
+          const cleaned = summary
             .replace(/<[^>]*>/g, '') // HTML 태그 제거
             .replace(/style\s*=\s*[\"'][^\"']*[\"']/gi, '') // style 속성 제거
             .replace(/[{}]/g, '') // CSS 중괄호 제거
             .replace(/[\r\n]+/g, ' ') // 줄바꿈을 공백으로
             .replace(/\s+/g, ' ') // 연속된 공백을 하나로
-            .replace(/[\"']/g, '') // 따옴표 제거
+            .replace(/^[\"']+|[\"']+$/g, '') // 시작과 끝의 따옴표만 제거
             .trim();
+          
+          console.log(`Summary cleaning: ${original.length} -> ${cleaned.length} chars`);
+          return cleaned;
         }
         
         function extractHeadline(htmlContent) {
@@ -96,32 +108,39 @@ jobs:
                   
                   try {
                     const htmlContent = fs.readFileSync(fullPath, 'utf8');
+                    console.log(`Processing file: ${item}`);
                     
                     // 먼저 REPORT_META 블록에서 메타데이터 추출 시도
                     const metadata = extractReportMetadata(htmlContent);
                     
                     let title = '커피 선물 시장 주간 동향';
                     let subtitle = 'Coffee Futures Market Weekly Update';
-                    let summary = \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일 커피 시장 분석 보고서입니다.\`;
+                    let summary = `${year}년 ${parseInt(month)}월 ${parseInt(day)}일 커피 시장 분석 보고서입니다.`;
                     let tags = ['아라비카', '로부스타', '시장분석', '주간동향'];
                     
                     if (metadata) {
                       // REPORT_META에서 추출한 데이터 사용
+                      console.log(`Using REPORT_META for ${item}`);
                       title = metadata.title || title;
                       subtitle = metadata.subtitle || subtitle;
-                      summary = cleanSummary(metadata.summary || summary);
+                      summary = metadata.summary ? cleanSummary(metadata.summary) : summary;
                       tags = metadata.tags || tags;
+                      console.log(`Summary length: ${summary.length}`);
                     } else {
                       // REPORT_META가 없으면 헤드라인 추출 시도
+                      console.log(`No REPORT_META found for ${item}, trying headline extraction`);
                       const extractedHeadline = extractHeadline(htmlContent);
                       if (extractedHeadline) {
                         summary = extractedHeadline;
+                        console.log(`Extracted headline: ${summary.substring(0, 50)}...`);
+                      } else {
+                        console.log(`No headline found for ${item}, using default summary`);
                       }
                     }
                     
                     reports.push({
-                      date: \`\${year}-\${month}-\${day}\`,
-                      displayDate: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일\`,
+                      date: `${year}-${month}-${day}`,
+                      displayDate: `${year}년 ${parseInt(month)}월 ${parseInt(day)}일`,
                       title: title,
                       subtitle: subtitle,
                       summary: summary,
@@ -131,14 +150,14 @@ jobs:
                       month: month
                     });
                   } catch (error) {
-                    console.log(\`Failed to process \${item}: \${error.message}\`);
+                    console.log(`Failed to process ${item}: ${error.message}`);
                     // 에러가 발생해도 기본값으로 리포트 추가
                     reports.push({
-                      date: \`\${year}-\${month}-\${day}\`,
-                      displayDate: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일\`,
+                      date: `${year}-${month}-${day}`,
+                      displayDate: `${year}년 ${parseInt(month)}월 ${parseInt(day)}일`,
                       title: '커피 선물 시장 주간 동향',
                       subtitle: 'Coffee Futures Market Weekly Update',
-                      summary: \`\${year}년 \${parseInt(month)}월 \${parseInt(day)}일 커피 시장 분석 보고서입니다.\`,
+                      summary: `${year}년 ${parseInt(month)}월 ${parseInt(day)}일 커피 시장 분석 보고서입니다.`,
                       tags: ['아라비카', '로부스타', '시장분석', '주간동향'],
                       link: relativePath,
                       year: year,
@@ -160,8 +179,8 @@ jobs:
         const output = { reports: reports };
         fs.writeFileSync('reports.json', JSON.stringify(output, null, 2));
         
-        console.log(\`Generated reports.json with \${reports.length} reports\`);
-        reports.forEach(r => console.log(\`- \${r.date}: \${r.title} - \${r.summary.substring(0, 50)}...\`));
+        console.log(`Generated reports.json with ${reports.length} reports`);
+        reports.forEach(r => console.log(`- ${r.date}: ${r.title} - ${r.summary.substring(0, 50)}...`));
         "
         
     - name: Commit and push
