@@ -326,9 +326,17 @@
             display: flex;
             align-items: flex-end;
             justify-content: space-around;
-            height: 400px;
-            padding: 60px 20px 20px;
+            height: 300px;
+            padding: 80px 20px 60px;
             position: relative;
+        }
+
+        .tariff-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            min-width: 100px;
         }
 
         .tariff-bar {
@@ -338,6 +346,7 @@
             position: relative;
             transition: all 0.3s ease;
             cursor: pointer;
+            margin-bottom: 10px;
         }
 
         .tariff-bar.brazil {
@@ -355,28 +364,26 @@
         }
 
         .tariff-label {
-            position: absolute;
-            bottom: -40px;
-            left: 50%;
-            transform: translateX(-50%);
             color: #fff;
             font-weight: 600;
             white-space: nowrap;
+            margin-top: 10px;
+            text-align: center;
         }
 
         .tariff-value {
-            position: absolute;
-            top: -45px;
-            left: 50%;
-            transform: translateX(-50%);
             color: #fff;
             font-weight: 700;
-            font-size: 1.2em;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 4px 8px;
-            border-radius: 6px;
+            font-size: 1.4em;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
             white-space: nowrap;
             z-index: 10;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            min-width: 60px;
         }
 
         /* 시나리오 카드 */
@@ -590,17 +597,29 @@
             .tariff-chart {
                 flex-wrap: wrap;
                 height: auto;
-                padding: 80px 20px 60px;
+                padding: 60px 20px 40px;
+                gap: 30px;
+            }
+            
+            .tariff-item {
+                min-width: 80px;
+                margin: 10px;
             }
             
             .tariff-bar {
-                margin: 20px;
                 width: 60px;
+                margin-bottom: 8px;
             }
             
             .tariff-value {
-                font-size: 1em;
-                top: -35px;
+                font-size: 1.2em;
+                padding: 6px 10px;
+                margin-bottom: 10px;
+            }
+            
+            .tariff-label {
+                font-size: 0.9em;
+                margin-top: 8px;
             }
         }
     </style>
@@ -665,19 +684,27 @@
         <div class="data-viz">
             <div class="viz-title">2025년 8월 7일 발효 예정 관세율</div>
             <div class="tariff-chart">
-                <div class="tariff-bar brazil" style="height: 80%;">
+                <div class="tariff-item">
+                    <div class="tariff-bar brazil" style="height: 200px;">
+                    </div>
                     <div class="tariff-value">50%</div>
                     <div class="tariff-label">브라질</div>
                 </div>
-                <div class="tariff-bar" style="height: 30%;">
+                <div class="tariff-item">
+                    <div class="tariff-bar" style="height: 60px;">
+                    </div>
                     <div class="tariff-value">15%</div>
                     <div class="tariff-label">콜롬비아</div>
                 </div>
-                <div class="tariff-bar" style="height: 40%;">
+                <div class="tariff-item">
+                    <div class="tariff-bar" style="height: 80px;">
+                    </div>
                     <div class="tariff-value">20%</div>
                     <div class="tariff-label">베트남</div>
                 </div>
-                <div class="tariff-bar" style="height: 20%;">
+                <div class="tariff-item">
+                    <div class="tariff-bar" style="height: 40px;">
+                    </div>
                     <div class="tariff-value">10%</div>
                     <div class="tariff-label">온두라스</div>
                 </div>
