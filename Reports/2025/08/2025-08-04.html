@@ -326,8 +326,8 @@
             display: flex;
             align-items: flex-end;
             justify-content: space-around;
-            height: 300px;
-            padding: 80px 20px 60px;
+            height: 350px;
+            padding: 100px 20px 80px;
             position: relative;
         }
 
@@ -336,7 +336,8 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            min-width: 100px;
+            min-width: 120px;
+            margin: 0 10px;
         }
 
         .tariff-bar {
@@ -346,7 +347,7 @@
             position: relative;
             transition: all 0.3s ease;
             cursor: pointer;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .tariff-bar.brazil {
@@ -367,23 +368,28 @@
             color: #fff;
             font-weight: 600;
             white-space: nowrap;
-            margin-top: 10px;
+            margin-top: 15px;
             text-align: center;
+            font-size: 1em;
         }
 
         .tariff-value {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
             color: #fff;
             font-weight: 700;
             font-size: 1.4em;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 15px;
             border-radius: 8px;
             white-space: nowrap;
             z-index: 10;
-            margin-bottom: 15px;
             border: 2px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             min-width: 60px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         /* 시나리오 카드 */
@@ -595,31 +601,61 @@
             }
             
             .tariff-chart {
-                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: center;
                 height: auto;
-                padding: 60px 20px 40px;
-                gap: 30px;
+                padding: 80px 20px 60px;
+                gap: 40px;
             }
             
             .tariff-item {
-                min-width: 80px;
-                margin: 10px;
+                min-width: 120px;
+                margin: 20px 0;
+                position: relative;
             }
             
             .tariff-bar {
-                width: 60px;
-                margin-bottom: 8px;
+                width: 80px;
+                margin-bottom: 25px;
             }
             
             .tariff-value {
-                font-size: 1.2em;
-                padding: 6px 10px;
-                margin-bottom: 10px;
+                position: absolute;
+                top: -45px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 1.3em;
+                padding: 8px 12px;
+                min-width: 55px;
             }
             
             .tariff-label {
-                font-size: 0.9em;
-                margin-top: 8px;
+                font-size: 1em;
+                margin-top: 20px;
+                white-space: nowrap;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .scenario-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .warning-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .section-title {
+                font-size: 2.2em;
+            }
+            
+            .section-subtitle {
+                font-size: 1.1em;
             }
         }
     </style>
@@ -685,27 +721,27 @@
             <div class="viz-title">2025년 8월 7일 발효 예정 관세율</div>
             <div class="tariff-chart">
                 <div class="tariff-item">
+                    <div class="tariff-value">50%</div>
                     <div class="tariff-bar brazil" style="height: 200px;">
                     </div>
-                    <div class="tariff-value">50%</div>
                     <div class="tariff-label">브라질</div>
                 </div>
                 <div class="tariff-item">
+                    <div class="tariff-value">15%</div>
                     <div class="tariff-bar" style="height: 60px;">
                     </div>
-                    <div class="tariff-value">15%</div>
                     <div class="tariff-label">콜롬비아</div>
                 </div>
                 <div class="tariff-item">
+                    <div class="tariff-value">20%</div>
                     <div class="tariff-bar" style="height: 80px;">
                     </div>
-                    <div class="tariff-value">20%</div>
                     <div class="tariff-label">베트남</div>
                 </div>
                 <div class="tariff-item">
+                    <div class="tariff-value">10%</div>
                     <div class="tariff-bar" style="height: 40px;">
                     </div>
-                    <div class="tariff-value">10%</div>
                     <div class="tariff-label">온두라스</div>
                 </div>
             </div>
