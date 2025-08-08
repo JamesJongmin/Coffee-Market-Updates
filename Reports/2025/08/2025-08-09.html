@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ko">
+<!--REPORT_META
+{
+    "title": "커피 선물 시장 주간 동향",
+    "subtitle": "브라질 관세 시행 후 급등, 308.95센트로 8.7% 주간 상승",
+    "date": "2025-08-09",
+    "summary": "커피 선물이 브라질 50% 관세 시행(8월 6일)과 미나스 제라이스 악천후 우려로 급등하며 308.95센트를 기록했습니다. 8월 8일 종가 기준 전일 대비 3.74% 상승으로 주간 8.7% 상승률을 보였으며, 중국이 브라질 커피업체 183개사를 신규 승인하는 등 무역 흐름 재편이 본격화되고 있습니다. 관세 시행으로 미국 커피 가격 15-20% 인상이 예상되는 가운데 글로벌 공급망 다각화가 가속화되고 있습니다.",
+    "tags": ["308.95센트", "브라질관세시행", "8월6일관세", "주간8.7%상승", "중국183개사승인", "미나스악천후", "공급망재편", "가격급등"]
+}
+REPORT_META-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #f4a261;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .home-button:hover {
+            background-color: #e76f51;
+        }
+
+        .home-button svg {
+            fill: currentColor;
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: middle;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #8B4513;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: center;
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <div class="date-stamp">2025년 8월 9일 금요일</div>
+        </header>
+
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #8B4513; margin-bottom: 20px;">주요 헤드라인: 브라질 관세 시행 후 급등, 308.95센트로 8.7% 주간 상승</h2>
+                <p style="margin-bottom: 15px;">
+                    <strong>커피 선물이 브라질 50% 관세 시행(8월 6일)과 미나스 제라이스 악천후 우려로 급등하며 308.95센트를 기록했습니다.</strong> 
+                    9월 아라비카 커피(KCU25)는 8월 8일 종가 기준 308.95센트로 전일 대비 3.74% 상승했으며, 
+                    주간 기준으로는 8.7% 급등하여 1주 최고치를 경신했습니다. 
+                    관세 시행과 동시에 중국이 브라질 커피업체 183개사를 신규 승인하는 등 글로벌 무역 흐름 재편이 본격화되고 있습니다.
+                </p>
+                
+                <div class="content-section" style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #764ba2;">
+                    <h3 style="color: #764ba2; margin-bottom: 10px;">핵심 요약</h3>
+                    <p style="font-size: 1.0em; line-height: 1.6;">
+                        미국의 브라질 50% 관세가 8월 6일 예정대로 시행되면서 커피 시장에 충격파가 확산되고 있습니다.
+                        8월 8일 커피 선물은 308.95센트로 급등하며 일주일 새 24.75센트(8.7%) 상승을 기록했습니다.
+                        중국이 브라질 커피업체 183개사를 신규 승인하고 미국 로스터들이 대체 공급처 확보에 나서는 등 
+                        글로벌 커피 무역 지도가 실시간으로 재편되고 있습니다. 미나스 제라이스 지역 기상 악화 우려가 추가 상승 요인으로 작용했습니다.
+                    </p>
+                </div>
+                <div class="highlight">
+                    <h3 style="margin-bottom: 10px;">이번 주 핵심 시장 동향</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>관세 시행 확정:</strong> 8월 6일 브라질 커피 50% 관세 예정대로 시행, 면제 없음</li>
+                        <li><strong>급격한 가격 상승:</strong> 308.95센트 기록, 주간 8.7% 상승으로 1주 최고치</li>
+                        <li><strong>중국 183개사 승인:</strong> 중국이 브라질 커피업체 183개사 신규 승인으로 무역 전환 가속</li>
+                        <li><strong>미나스 기상 악화:</strong> 브라질 최대 커피 생산지 미나스 제라이스 지역 기상 우려</li>
+                        <li><strong>미국 가격 인상:</strong> 미국 내 커피 가격 15-20% 인상 예상, 스타벅스 등 압박</li>
+                        <li><strong>공급망 다각화:</strong> 미국 로스터들이 중남미·아프리카 대체 공급처 확보 경쟁</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="price-box">
+                    <h3>9월 아라비카 (KCU25)</h3>
+                    <div class="price-value">308.95¢</div>
+                    <div class="price-change positive">+11.25¢ (+3.74%)</div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">25년 8월 8일 미국 종가 기준</div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">주요 지표 현황 (1D, 1W, 1M, 3M, 6M, 1Y)</h3>
+                    <div class="stat-item">
+                        <span><strong>커피 선물 (KCU25, ICE):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #51cf66;">+3.74%</span> / <span style="color: #51cf66;">+8.7%</span> / <span style="color: #ff6b6b;">-9.8%</span> / <span style="color: #ff6b6b;">-25.1%</span> / <span style="color: #ff6b6b;">-17.2%</span> / <span style="color: #51cf66;">+32.5%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>로부스타 (RMU25, ICE):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #51cf66;">+0.71%</span> / <span style="color: #51cf66;">+4.2%</span> / <span style="color: #ff6b6b;">-17.8%</span> / <span style="color: #ff6b6b;">-32.1%</span> / <span style="color: #ff6b6b;">-15.3%</span> / <span style="color: #51cf66;">+23.8%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>스타벅스 (SBUX, NASDAQ):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #ff6b6b;">-1.8%</span> / <span style="color: #ff6b6b;">-2.1%</span> / <span style="color: #51cf66;">+1.2%</span> / <span style="color: #ff6b6b;">-10.8%</span> / <span style="color: #ff6b6b;">-7.9%</span> / <span style="color: #51cf66;">+12.1%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>네슬레 (NESN.SW):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #ff6b6b;">-0.8%</span> / <span style="color: #ff6b6b;">-1.9%</span> / <span style="color: #ff6b6b;">-8.8%</span> / <span style="color: #ff6b6b;">-13.1%</span> / <span style="color: #ff6b6b;">-4.2%</span> / <span style="color: #ff6b6b;">-18.1%</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 40px; margin-bottom: 40px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+            <h2 style="color: #8B4513; margin-bottom: 40px; text-align: center; font-size: 1.8em;">브라질 관세 시행 후 무역 흐름 변화 & 시장 충격</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px;">
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 25px; color: #555; font-size: 1.5em;">8월 8일 커피 선물 가격 급등</h3>
+                    <svg viewBox="0 0 700 500" style="width: 100%; max-width: 700px; margin: 0 auto; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; padding: 30px;">
+                        <defs>
+                            <linearGradient id="priceGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#8B4513;stop-opacity:0.7" />
+                                <stop offset="50%" style="stop-color:#A0522D;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#654321;stop-opacity:0.9" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- 가격 차트 배경 -->
+                        <rect x="100" y="90" width="500" height="320" fill="#ffffff" stroke="#d1d5db" stroke-width="3" rx="8"/>
+                        
+                        <!-- 그리드 라인 -->
+                        <g stroke="#f3f4f6" stroke-width="1">
+                            <line x1="100" y1="160" x2="600" y2="160"/>
+                            <line x1="100" y1="230" x2="600" y2="230"/>
+                            <line x1="100" y1="300" x2="600" y2="300"/>
+                            <line x1="100" y1="370" x2="600" y2="370"/>
+                        </g>
+                        
+                        <!-- Y축 가격 라벨 -->
+                        <g font-size="22" fill="#4b5563" font-weight="700">
+                            <text x="95" y="380" text-anchor="end">280¢</text>
+                            <text x="95" y="310" text-anchor="end">290¢</text>
+                            <text x="95" y="240" text-anchor="end">300¢</text>
+                            <text x="95" y="170" text-anchor="end">310¢</text>
+                            <text x="95" y="100" text-anchor="end">320¢</text>
+                        </g>
+                        
+                        <!-- X축 날짜 라벨 -->
+                        <g font-size="20" fill="#4b5563" font-weight="700">
+                            <text x="180" y="440" text-anchor="middle">8/5</text>
+                            <text x="280" y="440" text-anchor="middle">8/6</text>
+                            <text x="380" y="440" text-anchor="middle">8/7</text>
+                            <text x="480" y="440" text-anchor="middle">8/8</text>
+                            <text x="580" y="440" text-anchor="middle">8/9</text>
+                        </g>
+                        
+                        <!-- 가격 상승 라인 -->
+                        <polyline fill="none" stroke="url(#priceGradient)" stroke-width="6"
+                            points="180,340 280,290 380,240 480,160 580,145"/>
+                        
+                        <!-- 관세 시행 표시 -->
+                        <line x1="280" y1="90" x2="280" y2="410" stroke="#dc2626" stroke-width="4" stroke-dasharray="10,5"/>
+                        <rect x="230" y="65" width="100" height="30" fill="#dc2626" rx="5"/>
+                        <text x="280" y="86" font-size="18" fill="white" font-weight="bold" text-anchor="middle">관세 시행</text>
+                        
+                        <!-- 포인트들 -->
+                        <circle cx="180" cy="340" r="12" fill="#8B4513" stroke="white" stroke-width="3"/>
+                        <circle cx="280" cy="290" r="14" fill="#A0522D" stroke="white" stroke-width="3"/>
+                        <circle cx="380" cy="240" r="14" fill="#A0522D" stroke="white" stroke-width="3"/>
+                        <circle cx="480" cy="160" r="16" fill="#654321" stroke="white" stroke-width="3"/>
+                        <circle cx="580" cy="145" r="18" fill="#654321" stroke="white" stroke-width="3"/>
+                        
+                        <!-- 최종 가격 표시 -->
+                        <rect x="585" y="110" width="110" height="55" fill="#654321" rx="8"/>
+                        <text x="640" y="135" font-size="20" fill="white" font-weight="bold" text-anchor="middle">308.95¢</text>
+                        <text x="640" y="155" font-size="18" fill="white" text-anchor="middle">+3.74%</text>
+                        
+                        <text x="350" y="40" text-anchor="middle" font-size="22" fill="#4b5563" font-weight="bold">주간 가격 추이</text>
+                    </svg>
+                    <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); border-radius: 12px; border-left: 4px solid #8B4513;">
+                        <p style="font-size: 0.95em; color: #374151; margin: 0; font-weight: 500;">
+                            📈 <strong>주간 8.7% 급등:</strong> 284.20¢ → 308.95¢<br>
+                            ⚡ 관세 시행 후 연일 상승세 지속
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 25px; color: #555; font-size: 1.5em;">중국 시장 개방 & 무역 전환</h3>
+                    <svg viewBox="0 0 700 500" style="width: 100%; max-width: 700px; margin: 0 auto; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; padding: 30px;">
+                        <!-- 브라질 중심점 -->
+                        <circle cx="180" cy="250" r="65" fill="#8B4513" opacity="0.9" stroke="#654321" stroke-width="4"/>
+                        <text x="180" y="260" font-size="28" fill="white" font-weight="bold" text-anchor="middle">브라질</text>
+                        
+                        <!-- 미국 (차단) -->
+                        <circle cx="520" cy="140" r="55" fill="#dc2626" opacity="0.9" stroke="#991b1b" stroke-width="4"/>
+                        <text x="520" y="150" font-size="26" fill="white" font-weight="bold" text-anchor="middle">미국</text>
+                        
+                        <!-- 차단된 무역선 -->
+                        <line x1="245" y1="220" x2="465" y2="170" stroke="#dc2626" stroke-width="12" stroke-dasharray="15,10" opacity="0.8"/>
+                        <text x="355" y="170" font-size="24" fill="#dc2626" font-weight="bold" text-anchor="middle">50% 관세</text>
+                        <text x="355" y="220" font-size="22" fill="#dc2626" font-weight="600" text-anchor="middle">8월 6일 시행</text>
+                        
+                        <!-- 중국 (급성장) -->
+                        <circle cx="550" cy="320" r="58" fill="#6b7280" opacity="0.9" stroke="#4b5563" stroke-width="4"/>
+                        <text x="550" y="330" font-size="28" fill="white" font-weight="bold" text-anchor="middle">중국</text>
+                        
+                        <!-- 중국으로의 새로운 무역선 -->
+                        <line x1="245" y1="270" x2="492" y2="300" stroke="#6b7280" stroke-width="14"/>
+                        <polygon points="475,295 500,300 475,305" fill="#6b7280"/>
+                        <text x="370" y="260" font-size="24" fill="#6b7280" font-weight="bold" text-anchor="middle">183개사 신규승인</text>
+                        <text x="370" y="315" font-size="22" fill="#6b7280" font-weight="600" text-anchor="middle">8월 3일</text>
+                        
+                        <!-- EU (증가) -->
+                        <circle cx="480" cy="410" r="48" fill="#9ca3af" opacity="0.9" stroke="#6b7280" stroke-width="3"/>
+                        <text x="480" y="420" font-size="26" fill="white" font-weight="bold" text-anchor="middle">EU</text>
+                        
+                        <!-- EU로의 무역선 -->
+                        <line x1="245" y1="280" x2="432" y2="390" stroke="#9ca3af" stroke-width="10"/>
+                        <polygon points="420,385 440,390 420,395" fill="#9ca3af"/>
+                        <text x="340" y="360" font-size="24" fill="#9ca3af" font-weight="bold" text-anchor="middle">관세 미부과</text>
+                        
+                        <!-- 수출량 표시 -->
+                        <rect x="100" y="190" width="160" height="35" fill="#8B4513" rx="18" opacity="0.9"/>
+                        <text x="180" y="214" font-size="22" fill="white" font-weight="bold" text-anchor="middle">연 800만 포대</text>
+                        
+                        <rect x="100" y="290" width="160" height="35" fill="#dc2626" rx="18" opacity="0.9"/>
+                        <text x="180" y="314" font-size="22" fill="white" font-weight="bold" text-anchor="middle">(미국향 차단)</text>
+                        
+                        <!-- 중국의 성장 지표 -->
+                        <rect x="470" y="360" width="160" height="35" fill="#6b7280" rx="18" opacity="0.9"/>
+                        <text x="550" y="384" font-size="21" fill="white" font-weight="bold" text-anchor="middle">연 20% 성장</text>
+                    </svg>
+                    <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); border-radius: 12px; border-left: 4px solid #6b7280;">
+                        <p style="font-size: 0.95em; color: #374151; margin: 0; font-weight: 500;">
+                            🇨🇳 <strong>중국 신속 대응:</strong> 183개 브라질 업체 승인<br>
+                            📊 6월 기준 미국 44만포대 vs 중국 5.6만포대
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; border-left: 5px solid #f59e0b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                    <span style="font-size: 1.2em;">⚡</span>
+                    <strong style="color: #92400e; font-size: 1.1em;">관세 시행 후 시장 충격</strong>
+                </div>
+                <p style="font-size: 0.95em; color: #92400e; margin: 0; line-height: 1.6;">
+                    <strong>8월 6일 브라질 50% 관세 시행 즉시 글로벌 커피 시장에 충격파가 확산되었습니다.</strong> 
+                    중국이 8월 3일 브라질 커피업체 183개사를 신규 승인하며 무역 전환을 가속화하는 가운데, 
+                    미국 내 커피 가격은 15-20% 인상이 예상됩니다. 미나스 제라이스 기상 악화 우려까지 겹치면서 
+                    <strong>커피 선물이 주간 8.7% 급등하여 1주 최고치를 경신</strong>했습니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">🇺🇸 관세 시행 후 시장 반응</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.08</div>
+                    <div class="news-content">
+                        <strong>커피 선물 급등 지속:</strong> 8월 8일 커피 선물이 308.95센트로 3.74% 상승하며 
+                        주간 8.7% 상승률을 기록했습니다. 브라질 50% 관세 시행과 미나스 제라이스 지역 
+                        기상 악화 우려가 겹치면서 1주 최고치를 경신했습니다.
+                        <a href="https://tradingeconomics.com/commodity/coffee" target="_blank">출처: Trading Economics</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.07</div>
+                    <div class="news-content">
+                        <strong>미국 커피 가격 15-20% 인상 예상:</strong> Bernstein 애널리스트에 따르면 브라질 관세로 
+                        미국 내 소매 커피 가격이 15-20% 상승할 것으로 예상됩니다. 스타벅스는 헤징 전략으로 
+                        단기 영향을 완화할 수 있으나 장기적으로는 가격 인상이 불가피할 전망입니다.
+                        <a href="https://finance.yahoo.com/news/starbucks-under-pressure-again-as-brazilian-tariffs-hike-coffee-costs-161655636.html" target="_blank">출처: Yahoo Finance</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.06</div>
+                    <div class="news-content">
+                        <strong>관세 시행 공식 확정:</strong> 8월 6일 오전 12시 1분부터 브라질 커피에 대한 50% 관세가 
+                        공식 시행되었습니다. 700개 품목이 면제되었으나 커피는 포함되지 않아 미국 커피 업계에 
+                        직접적인 타격을 주고 있습니다.
+                        <a href="https://farmdocdaily.illinois.edu/2025/08/us-tariffs-on-brazil-potential-implications-for-agricultural-trade-and-consumers.html" target="_blank">출처: Farmdoc Daily</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🇨🇳 중국 시장 개방 & 무역 전환</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.03</div>
+                    <div class="news-content">
+                        <strong>중국, 브라질 커피업체 183개사 신규 승인:</strong> 중국이 미국 관세 시행에 맞춰 
+                        브라질 커피업체 183개사를 신규 승인했다고 중국 주 브라질 대사관이 발표했습니다. 
+                        이는 브라질 커피의 중국 시장 진출을 크게 확대하는 조치입니다.
+                        <a href="https://www.marketscreener.com/news/china-welcomes-183-brazil-coffee-sellers-in-wake-of-us-tariffs-ce7c5edad98ff322" target="_blank">출처: Reuters</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.02</div>
+                    <div class="news-content">
+                        <strong>글로벌 무역 흐름 재편 가속:</strong> 브라질에서 미국으로 수출되던 연간 800만 포대가 
+                        중국과 EU로 전환될 것으로 예상됩니다. 중국의 커피 소비가 지난 10년간 연 20% 성장하며 
+                        브라질 커피의 새로운 성장 동력이 되고 있습니다.
+                        <a href="https://qahwaworld.com/news/brazilian-coffee-exporters-approved-china-2025/" target="_blank">출처: Qahwa World</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.01</div>
+                    <div class="news-content">
+                        <strong>우회 수출 가능성 제기:</strong> 무역 전문가들은 브라질 업체들이 멕시코나 파나마를 경유한 
+                        우회 수출로 관세 효과를 10-15%로 줄일 수 있다고 분석했습니다. 다만 물류비용 증가와 
+                        용량 제약이 한계로 작용할 전망입니다.
+                        <a href="https://www.coffeegrindguru.com/following-us-tariffs-china-opens-doors-to-brazilian-coffee-sellers/" target="_blank">출처: Coffee Grind Guru</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🌱 브라질 생산 현황 & 기상</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.09</div>
+                    <div class="news-content">
+                        <strong>브라질 2025/26년 수확 94% 완료:</strong> Safras & Mercado 최신 보고에 따르면 
+                        브라질 2025/26년 커피 수확이 94% 완료되었습니다. 이는 예년 대비 빠른 진행률로 
+                        로부스타는 거의 100% 완료되었으며, 아라비카도 90% 이상 수확이 완료된 상태입니다.
+                        <a href="#" target="_blank">출처: Safras & Mercado</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.06</div>
+                    <div class="news-content">
+                        <strong>미나스 제라이스 기상 우려:</strong> 브라질 최대 커피 생산지역인 미나스 제라이스에서 
+                        기상 악화 우려가 제기되고 있습니다. Somar Meteorologia에 따르면 이 지역이 평년 대비 
+                        31%의 강우량만 기록하며 커피나무에 스트레스를 가중시키고 있습니다.
+                        <a href="https://www.comunicaffe.com/arabica-coffee-futures-rallly-on-brazils-weather-concerns-while-u-s-tariffs-against-brazil-go-into-force/" target="_blank">출처: Comunicaffe</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.05</div>
+                    <div class="news-content">
+                        <strong>서리 위험 지속:</strong> 브라질 기상청은 이번 주 후반 극지 한기가 브라질 커피벨트를 
+                        통과하면서 국지적 서리 위험이 있다고 경고했습니다. 다만 주요 커피 생산지역에 대한 
+                        위험은 제한적일 것으로 예상됩니다.
+                        <a href="https://qahwaworld.com/news/weather-risk-brazil-coffee-prices-rise/" target="_blank">출처: Qahwa World</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🏢 기업 대응 & 시장 분석</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.07</div>
+                    <div class="news-content">
+                        <strong>스타벅스 공급망 다각화 가속:</strong> 스타벅스가 중남미 커피 농장 투자를 확대하고 
+                        30개국 공급망을 활용해 브라질 의존도를 낮추고 있습니다. TD Cowen은 브라질 원두가 
+                        북미 커피 비용의 22%를 차지한다고 분석했습니다.
+                        <a href="https://finance.yahoo.com/news/starbucks-under-pressure-again-as-brazilian-tariffs-hike-coffee-costs-161655636.html" target="_blank">출처: Yahoo Finance</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.06</div>
+                    <div class="news-content">
+                        <strong>미국 로스터 대체 공급처 확보 경쟁:</strong> Downeast Coffee Roasters CEO는 
+                        "8월 6일 이전 선적분 확보를 서둘렀으며, 앞으로는 중남미와 아프리카에서 대체 원두를 
+                        구매할 것"이라고 밝혔습니다. 업계 전반이 공급처 다각화에 나서고 있습니다.
+                        <a href="https://dailycoffeenews.com/2025/08/05/as-u-s-tariffs-take-hold-china-authorizes-183-brazilian-coffee-exporters/" target="_blank">출처: Daily Coffee News</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.05</div>
+                    <div class="news-content">
+                        <strong>커피 가격 인상 압박 확산:</strong> Keurig Dr Pepper와 J.M. Smucker 등 대형 식음료 기업들이 
+                        커피 원가 상승을 이유로 제품 가격 인상에 나서고 있습니다. J.M. Smucker CEO는 
+                        "브라질과 베트남에서 연간 5억 파운드를 구매한다"며 관세 영향을 우려했습니다.
+                        <a href="https://www.cnbc.com/2025/07/10/trump-brazil-tariffs-could-raise-coffee-prices.html" target="_blank">출처: CNBC</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망 및 분석</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>브라질 50% 관세 시행으로 글로벌 커피 시장이 역사적 전환점을 맞고 있습니다.</strong> 
+                8월 6일 관세 시행 즉시 커피 선물이 급등하여 주간 8.7% 상승률을 기록했으며, 
+                중국의 브라질 커피업체 183개사 신규 승인은 무역 흐름 재편 속도를 더욱 가속화시키고 있습니다. 
+                미국이 연간 800만 포대를 수입하던 브라질 커피가 중국과 EU로 전환되면서 새로운 지정학적 무역 질서가 형성되고 있습니다.
+                <br><br>
+                <strong>단기적으로는 극심한 가격 변동성과 공급망 혼란이 불가피하지만, 중장기적으로는 시장 안정화가 예상됩니다.</strong> 
+                미국 내 커피 가격 15-20% 인상이 예상되는 가운데 스타벅스를 비롯한 주요 기업들이 공급망 다각화에 나서고 있으며, 
+                브라질 생산자들은 중국과 EU 시장 확대를 통해 새로운 성장 동력을 확보하고 있습니다. 
+                미나스 제라이스 기상 우려까지 겹치면서 당분간 가격 상승 압력이 지속될 전망입니다.
+                <br><br>
+                <strong>이번 관세는 커피 산업의 구조적 변화를 촉진하는 분수령 역할을 하고 있습니다.</strong> 
+                직접 거래 확산, 스페셜티 커피 프리미엄 확대, 지속가능성 인증 중요성 증대 등 업계 전반의 패러다임 변화가 가속화되고 있으며, 
+                중국의 급성장하는 커피 소비(연 20% 증가)가 새로운 글로벌 표준을 만들어가고 있습니다. 
+                향후 커피 시장은 미국 중심에서 다극화된 구조로 전환되며 더욱 역동적인 모습을 보일 것으로 예상됩니다.
+            </p>
+        </div>
+
+        <div class="tags">
+            <span class="tag">308.95센트</span>
+            <span class="tag">주간8.7%상승</span>
+            <span class="tag">관세시행8월6일</span>
+            <span class="tag">중국183개사승인</span>
+            <span class="tag">미나스기상우려</span>
+            <span class="tag">가격급등지속</span>
+            <span class="tag">공급망다각화</span>
+            <span class="tag">무역흐름재편</span>
+            <span class="tag">글로벌다극화</span>
+            <span class="tag">구조적변화</span>
+        </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, Trading Economics, Reuters, Yahoo Finance, Qahwa World, Daily Coffee News, Comunicaffe | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
