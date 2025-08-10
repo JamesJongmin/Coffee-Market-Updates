@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Market Analytics | Modern Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Figma-inspired Color System */
+            --primary-50: #f0f9ff;
+            --primary-100: #e0f2fe;
+            --primary-500: #0ea5e9;
+            --primary-600: #0284c7;
+            --primary-700: #0369a1;
+            --primary-900: #0c4a6e;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f5f5f5;
+            --neutral-200: #e5e5e5;
+            --neutral-300: #d4d4d4;
+            --neutral-400: #a3a3a3;
+            --neutral-500: #737373;
+            --neutral-600: #525252;
+            --neutral-700: #404040;
+            --neutral-800: #262626;
+            --neutral-900: #171717;
+            
+            --accent-orange: #f97316;
+            --accent-green: #22c55e;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--neutral-50) 0%, var(--primary-50) 100%);
+            color: var(--neutral-800);
+            line-height: 1.6;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Header Navigation */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--neutral-200);
+        }
+        
+        .nav-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-family: 'Manrope', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--neutral-900);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo::before {
+            content: '☕';
+            font-size: 24px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--neutral-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-600);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--neutral-200);
+        }
+        
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-700);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        /* Sample Gallery */
+        .sample-gallery {
+            background: white;
+            border-radius: var(--radius-2xl);
+            padding: 32px;
+            margin-bottom: 60px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .gallery-title {
+            font-family: 'Manrope', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: 16px;
+        }
+
+        .gallery-subtitle {
+            color: var(--neutral-600);
+            margin-bottom: 32px;
+        }
+
+        .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .sample-card {
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            transition: all 0.2s ease;
+            background: var(--neutral-50);
+        }
+
+        .sample-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-300);
+        }
+
+        .sample-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--primary-500), var(--accent-purple));
+            color: white;
+        }
+
+        .sample-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: 8px;
+        }
+
+        .sample-description {
+            color: var(--neutral-600);
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .sample-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .feature-tag {
+            padding: 4px 8px;
+            background: var(--primary-50);
+            color: var(--primary-700);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .sample-link {
+            color: var(--primary-600);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .sample-link:hover {
+            color: var(--primary-700);
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .hero-title {
+            font-family: 'Manrope', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--neutral-900);
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--neutral-600);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+        
+        .btn-large {
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: var(--radius-lg);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--neutral-200);
+            transition: all 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+        
+        .stat-icon.primary {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+            color: white;
+        }
+        
+        .stat-icon.orange {
+            background: linear-gradient(135deg, var(--accent-orange), #ea580c);
+            color: white;
+        }
+        
+        .stat-icon.green {
+            background: linear-gradient(135deg, var(--accent-green), #16a34a);
+            color: white;
+        }
+        
+        .stat-icon.purple {
+            background: linear-gradient(135deg, var(--accent-purple), #7c3aed);
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--neutral-900);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            color: var(--neutral-600);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .stat-change {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .stat-change.positive {
+            color: var(--accent-green);
+        }
+        
+        .stat-change.negative {
+            color: #ef4444;
+        }
+        
+        /* Charts Section */
+        .charts-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-family: 'Manrope', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neutral-900);
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--neutral-200);
+        }
+        
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+        
+        .chart-period {
+            font-size: 12px;
+            color: var(--neutral-500);
+            background: var(--neutral-100);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+        }
+        
+        .chart-canvas {
+            height: 300px;
+        }
+        
+        /* Table */
+        .data-table {
+            background: white;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--neutral-200);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+        
+        .table-content {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: var(--neutral-50);
+            padding: 16px 32px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--neutral-200);
+            font-size: 14px;
+        }
+        
+        tr:hover {
+            background: var(--neutral-50);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+            }
+            
+            .main-container {
+                padding: 24px 16px;
+            }
+
+            .sample-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--neutral-200);
+            border-radius: 50%;
+            border-top-color: var(--primary-600);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="#" class="logo">Coffee Analytics</a>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active">Dashboard</a></li>
+                <li><a href="#" class="nav-link">Market Reports</a></li>
+                <li><a href="#" class="nav-link">Analytics</a></li>
+                <li><a href="#" class="nav-link">Insights</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#" class="btn btn-secondary">Export Data</a>
+                <a href="#" class="btn btn-primary">Get Premium</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Sample Gallery -->
+        <section class="sample-gallery">
+            <h2 class="gallery-title">🎨 Figma 스타일 샘플 갤러리</h2>
+            <p class="gallery-subtitle">다양한 Figma 전문가 스타일의 웹페이지 디자인을 확인해보세요. 각 샘플은 현대적인 디자인 시스템과 사용자 경험을 반영합니다.</p>
+            
+            <div class="sample-grid">
+                <div class="sample-card">
+                    <div class="sample-icon">🌟</div>
+                    <h3 class="sample-name">메인 대시보드</h3>
+                    <p class="sample-description">
+                        현재 페이지 - 전체적인 데이터 개요와 주요 지표를 한눈에 볼 수 있는 종합 대시보드
+                    </p>
+                    <div class="sample-features">
+                        <span class="feature-tag">히어로 섹션</span>
+                        <span class="feature-tag">인터랙티브 차트</span>
+                        <span class="feature-tag">실시간 데이터</span>
+                    </div>
+                    <a href="#hero" class="sample-link">현재 페이지 보기 ↓</a>
+                </div>
+
+                <div class="sample-card">
+                    <div class="sample-icon">📱</div>
+                    <h3 class="sample-name">미니멀 대시보드</h3>
+                    <p class="sample-description">
+                        사이드바 네비게이션과 클린한 레이아웃을 가진 전문적인 애널리틱스 대시보드
+                    </p>
+                    <div class="sample-features">
+                        <span class="feature-tag">사이드바 네비</span>
+                        <span class="feature-tag">카드 레이아웃</span>
+                        <span class="feature-tag">활동 피드</span>
+                    </div>
+                    <a href="figma-style-dashboard.html" class="sample-link">미니멀 대시보드 보기 →</a>
+                </div>
+
+                <div class="sample-card">
+                    <div class="sample-icon">🎯</div>
+                    <h3 class="sample-name">카드 기반 레이아웃</h3>
+                    <p class="sample-description">
+                        모던한 카드 시스템으로 구성된 정보 중심의 인터페이스와 다양한 UI 컴포넌트
+                    </p>
+                    <div class="sample-features">
+                        <span class="feature-tag">그리드 시스템</span>
+                        <span class="feature-tag">프로그레스 바</span>
+                        <span class="feature-tag">태그 시스템</span>
+                    </div>
+                    <a href="figma-style-card-layout.html" class="sample-link">카드 레이아웃 보기 →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <h1 class="hero-title">Coffee Market Intelligence</h1>
+            <p class="hero-subtitle">실시간 커피 시장 데이터와 인사이트로 더 나은 비즈니스 결정을 내리세요</p>
+            <div class="hero-actions">
+                <a href="#" class="btn btn-primary btn-large">📊 대시보드 보기</a>
+                <a href="#" class="btn btn-secondary btn-large">📈 최신 리포트</a>
+            </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">📈</div>
+                <div class="stat-number">$4.87</div>
+                <div class="stat-label">평균 커피 가격 (파운드당)</div>
+                <div class="stat-change positive">+2.3% 이번 주</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">📦</div>
+                <div class="stat-number">2.4M</div>
+                <div class="stat-label">월간 거래량 (톤)</div>
+                <div class="stat-change positive">+5.7% 전월 대비</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">🌱</div>
+                <div class="stat-number">89.2%</div>
+                <div class="stat-label">서스테이너블 인증 비율</div>
+                <div class="stat-change positive">+1.2% 전년 대비</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">🏪</div>
+                <div class="stat-number">12,847</div>
+                <div class="stat-label">활성 거래처</div>
+                <div class="stat-change positive">+8.4% 전월 대비</div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="section-header">
+                <h2 class="section-title">시장 동향 분석</h2>
+                <div class="nav-actions">
+                    <button class="btn btn-secondary">필터</button>
+                    <button class="btn btn-secondary">내보내기</button>
+                </div>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">가격 동향</h3>
+                        <span class="chart-period">지난 30일</span>
+                    </div>
+                    <canvas id="priceChart" class="chart-canvas"></canvas>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">지역별 생산량</h3>
+                        <span class="chart-period">2024년</span>
+                    </div>
+                    <canvas id="regionChart" class="chart-canvas"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="data-table">
+            <div class="table-header">
+                <h3 class="table-title">최신 거래 내역</h3>
+            </div>
+            <div class="table-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>원산지</th>
+                            <th>등급</th>
+                            <th>가격</th>
+                            <th>거래량</th>
+                            <th>변동률</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-01-15</td>
+                            <td>브라질 세라도</td>
+                            <td>NY2 17/18</td>
+                            <td>$4.92</td>
+                            <td>2,500톤</td>
+                            <td style="color: var(--accent-green);">+2.1%</td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-15</td>
+                            <td>콜롬비아 수프리모</td>
+                            <td>Excelso</td>
+                            <td>$5.15</td>
+                            <td>1,800톤</td>
+                            <td style="color: var(--accent-green);">+1.8%</td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-14</td>
+                            <td>에티오피아 시다모</td>
+                            <td>Grade 2</td>
+                            <td>$6.23</td>
+                            <td>950톤</td>
+                            <td style="color: #ef4444;">-0.5%</td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-14</td>
+                            <td>과테말라 안티구아</td>
+                            <td>SHB</td>
+                            <td>$5.87</td>
+                            <td>1,200톤</td>
+                            <td style="color: var(--accent-green);">+3.2%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Price Chart
+        const priceCtx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(priceCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan 1', 'Jan 5', 'Jan 10', 'Jan 15', 'Jan 20', 'Jan 25', 'Jan 30'],
+                datasets: [{
+                    label: '평균 가격',
+                    data: [4.75, 4.82, 4.78, 4.92, 4.89, 4.95, 4.87],
+                    borderColor: 'rgb(14, 165, 233)',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Region Chart
+        const regionCtx = document.getElementById('regionChart').getContext('2d');
+        const regionChart = new Chart(regionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['브라질', '베트남', '콜롬비아', '인도네시아', '기타'],
+                datasets: [{
+                    data: [35, 20, 15, 12, 18],
+                    backgroundColor: [
+                        'rgb(14, 165, 233)',
+                        'rgb(249, 115, 22)',
+                        'rgb(34, 197, 94)',
+                        'rgb(139, 92, 246)',
+                        'rgb(236, 72, 153)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
