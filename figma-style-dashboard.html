@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | Minimal Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --border-primary: #e2e8f0;
+            --border-secondary: #cbd5e1;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-primary);
+            padding: 24px 0;
+            z-index: 50;
+        }
+
+        .sidebar-header {
+            padding: 0 24px 32px;
+            border-bottom: 1px solid var(--border-primary);
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: '⚡';
+            font-size: 20px;
+        }
+
+        .sidebar-nav {
+            padding: 0 16px;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding: 0 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-ghost {
+            padding: 6px 12px;
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--border-secondary);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        /* Dashboard Content */
+        .dashboard {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .metric-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.15s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--border-secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .metric-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .metric-trend {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .metric-trend.up {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .metric-trend.down {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .metric-subtitle {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .chart-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .chart-filter {
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .chart-canvas {
+            height: 280px;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .activity-icon.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .activity-icon.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .activity-subtitle {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .activity-time {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        /* Table */
+        .data-table {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            padding: 12px 24px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-primary);
+            font-size: 13px;
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-inactive {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard {
+                padding: 24px 16px;
+            }
+
+            .topbar {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">Analytics Pro</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">메인</div>
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    대시보드
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📈</span>
+                    분석
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📋</span>
+                    리포트
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">데이터</div>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">☕</span>
+                    커피 시장
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">🌍</span>
+                    글로벌 동향
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    매출 분석
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">설정</div>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚙️</span>
+                    설정
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">👤</span>
+                    프로필
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <h1 class="page-title">대시보드</h1>
+            <div class="topbar-actions">
+                <button class="btn-ghost">내보내기</button>
+                <button class="btn-ghost">새로고침</button>
+                <div class="avatar">JK</div>
+            </div>
+        </header>
+
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <!-- Metrics Grid -->
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">총 매출</span>
+                        <span class="metric-trend up">+12.5%</span>
+                    </div>
+                    <div class="metric-value">₩2.4M</div>
+                    <div class="metric-subtitle">이번 달</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">신규 고객</span>
+                        <span class="metric-trend up">+8.3%</span>
+                    </div>
+                    <div class="metric-value">1,847</div>
+                    <div class="metric-subtitle">이번 주</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">주문 건수</span>
+                        <span class="metric-trend down">-2.1%</span>
+                    </div>
+                    <div class="metric-value">934</div>
+                    <div class="metric-subtitle">오늘</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">전환율</span>
+                        <span class="metric-trend up">+5.7%</span>
+                    </div>
+                    <div class="metric-value">3.42%</div>
+                    <div class="metric-subtitle">평균</div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">매출 추이</h3>
+                        <div class="chart-actions">
+                            <select class="chart-filter">
+                                <option>지난 7일</option>
+                                <option>지난 30일</option>
+                                <option>지난 90일</option>
+                            </select>
+                        </div>
+                    </div>
+                    <canvas id="salesChart" class="chart-canvas"></canvas>
+                </div>
+
+                <div class="activity-feed">
+                    <div class="chart-header">
+                        <h3 class="chart-title">최근 활동</h3>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon success">✓</div>
+                        <div class="activity-content">
+                            <div class="activity-title">새 주문 완료</div>
+                            <div class="activity-subtitle">브라질 원두 5kg 주문</div>
+                        </div>
+                        <div class="activity-time">2분 전</div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon warning">⚠</div>
+                        <div class="activity-content">
+                            <div class="activity-title">재고 부족 알림</div>
+                            <div class="activity-subtitle">콜롬비아 원두 재고 확인 필요</div>
+                        </div>
+                        <div class="activity-time">15분 전</div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon info">i</div>
+                        <div class="activity-content">
+                            <div class="activity-title">가격 업데이트</div>
+                            <div class="activity-subtitle">에티오피아 원두 가격 변동</div>
+                        </div>
+                        <div class="activity-time">1시간 전</div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon success">✓</div>
+                        <div class="activity-content">
+                            <div class="activity-title">리포트 생성</div>
+                            <div class="activity-subtitle">주간 매출 분석 완료</div>
+                        </div>
+                        <div class="activity-time">3시간 전</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Table -->
+            <section class="data-table">
+                <div class="table-header">
+                    <h3 class="table-title">최근 거래</h3>
+                    <button class="btn-ghost">전체 보기</button>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>주문 ID</th>
+                            <th>고객</th>
+                            <th>상품</th>
+                            <th>금액</th>
+                            <th>상태</th>
+                            <th>날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD-001</td>
+                            <td>김철수</td>
+                            <td>브라질 세라도</td>
+                            <td>₩125,000</td>
+                            <td><span class="status-badge status-active">완료</span></td>
+                            <td>2024-01-15</td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-002</td>
+                            <td>이영희</td>
+                            <td>콜롬비아 수프리모</td>
+                            <td>₩89,500</td>
+                            <td><span class="status-badge status-pending">처리중</span></td>
+                            <td>2024-01-15</td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-003</td>
+                            <td>박민수</td>
+                            <td>에티오피아 시다모</td>
+                            <td>₩156,000</td>
+                            <td><span class="status-badge status-active">완료</span></td>
+                            <td>2024-01-14</td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-004</td>
+                            <td>정수연</td>
+                            <td>과테말라 안티구아</td>
+                            <td>₩203,000</td>
+                            <td><span class="status-badge status-inactive">취소</span></td>
+                            <td>2024-01-14</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Sales Chart
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: '매출',
+                    data: [340, 290, 380, 450, 520, 680, 750],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9',
+                            borderDash: [5, 5]
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+    </script>
+</body>
+</html>

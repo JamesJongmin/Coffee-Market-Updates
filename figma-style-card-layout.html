@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Market Insights | Card Layout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Design tokens inspired by Figma */
+            --neutral-0: #ffffff;
+            --neutral-50: #fafafa;
+            --neutral-100: #f4f4f5;
+            --neutral-200: #e4e4e7;
+            --neutral-300: #d4d4d8;
+            --neutral-400: #a1a1aa;
+            --neutral-500: #71717a;
+            --neutral-600: #52525b;
+            --neutral-700: #3f3f46;
+            --neutral-800: #27272a;
+            --neutral-900: #18181b;
+            
+            --blue-50: #eff6ff;
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            
+            --violet-50: #f5f3ff;
+            --violet-500: #8b5cf6;
+            --violet-600: #7c3aed;
+            
+            --emerald-50: #ecfdf5;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            
+            --rose-50: #fff1f2;
+            --rose-500: #f43f5e;
+            --rose-600: #e11d48;
+            
+            --amber-50: #fffbeb;
+            --amber-500: #f59e0b;
+            --amber-600: #d97706;
+            
+            /* Shadows */
+            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border radius */
+            --radius-xs: 0.125rem;
+            --radius-sm: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+            --radius-2xl: 1rem;
+            --radius-3xl: 1.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(to bottom right, var(--neutral-50), var(--blue-50));
+            color: var(--neutral-800);
+            line-height: 1.6;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--neutral-0);
+            border-bottom: 1px solid var(--neutral-200);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--blue-500), var(--violet-500));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: var(--neutral-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--neutral-900);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--neutral-600);
+            border: 1px solid var(--neutral-300);
+        }
+
+        .btn-ghost:hover {
+            background: var(--neutral-100);
+            border-color: var(--neutral-400);
+        }
+
+        .btn-primary {
+            background: var(--blue-600);
+            color: var(--neutral-0);
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-700);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Main content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--neutral-900);
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--neutral-600);
+            margin-bottom: 32px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--blue-50);
+            color: var(--blue-700);
+            padding: 6px 12px;
+            border-radius: var(--radius-2xl);
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        /* Card grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .card {
+            background: var(--neutral-0);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-3xl);
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--neutral-300);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-500), var(--violet-500));
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .card-icon.blue {
+            background: var(--blue-50);
+            color: var(--blue-600);
+        }
+
+        .card-icon.violet {
+            background: var(--violet-50);
+            color: var(--violet-600);
+        }
+
+        .card-icon.emerald {
+            background: var(--emerald-50);
+            color: var(--emerald-600);
+        }
+
+        .card-icon.rose {
+            background: var(--rose-50);
+            color: var(--rose-600);
+        }
+
+        .card-icon.amber {
+            background: var(--amber-50);
+            color: var(--amber-600);
+        }
+
+        .card-menu {
+            background: none;
+            border: none;
+            color: var(--neutral-400);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+
+        .card-menu:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-600);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: var(--neutral-600);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-metrics {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neutral-900);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-700);
+        }
+
+        .progress-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--neutral-200);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-500), var(--violet-500));
+            border-radius: var(--radius-2xl);
+            transition: width 0.3s ease;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+            border-radius: var(--radius-2xl);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .tag.primary {
+            background: var(--blue-50);
+            color: var(--blue-700);
+        }
+
+        .tag.success {
+            background: var(--emerald-50);
+            color: var(--emerald-700);
+        }
+
+        .tag.warning {
+            background: var(--amber-50);
+            color: var(--amber-700);
+        }
+
+        .card-action {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-link {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .card-link:hover {
+            color: var(--blue-700);
+        }
+
+        .trend-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .trend-up {
+            color: var(--emerald-600);
+        }
+
+        .trend-down {
+            color: var(--rose-600);
+        }
+
+        /* Featured cards */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, var(--blue-600), var(--violet-600));
+            color: var(--neutral-0);
+            padding: 40px;
+            border-radius: var(--radius-3xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .featured-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .featured-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .featured-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+            font-size: 16px;
+        }
+
+        .featured-cta {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--neutral-0);
+            padding: 12px 20px;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .featured-cta:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header-nav {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 24px 16px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .featured-card {
+                padding: 32px 24px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="brand">
+                <div class="brand-icon">☕</div>
+                Coffee Analytics
+            </a>
+            
+            <nav class="header-nav">
+                <a href="#" class="nav-link active">대시보드</a>
+                <a href="#" class="nav-link">시장 분석</a>
+                <a href="#" class="nav-link">리포트</a>
+                <a href="#" class="nav-link">인사이트</a>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="btn btn-ghost">내보내기</button>
+                <button class="btn btn-primary">프리미엄</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container">
+        <!-- Hero section -->
+        <section class="hero">
+            <div class="hero-badge">
+                ✨ 새로운 인사이트가 준비되었습니다
+            </div>
+            <h1 class="hero-title">커피 시장의 모든 것</h1>
+            <p class="hero-subtitle">
+                실시간 데이터와 AI 기반 분석으로 커피 시장의 트렌드를 파악하고, 
+                더 나은 비즈니스 결정을 내리세요.
+            </p>
+        </section>
+
+        <!-- Featured cards -->
+        <section class="featured-grid">
+            <div class="featured-card">
+                <div class="featured-content">
+                    <h2 class="featured-title">월간 마켓 리포트</h2>
+                    <p class="featured-subtitle">
+                        1월 커피 시장 동향과 주요 변화 요인을 상세히 분석한 
+                        종합 리포트를 확인하세요.
+                    </p>
+                    <a href="#" class="featured-cta">
+                        리포트 보기 →
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon blue">📊</div>
+                </div>
+                <h3 class="card-title">실시간 알림</h3>
+                <p class="card-subtitle">중요한 시장 변화를 놓치지 마세요</p>
+                
+                <div class="card-tags">
+                    <span class="tag primary">가격 알림</span>
+                    <span class="tag success">재고 상태</span>
+                </div>
+                
+                <div class="card-action">
+                    <a href="#" class="card-link">설정하기 →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card grid -->
+        <section class="card-grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon emerald">📈</div>
+                    <button class="card-menu">⋯</button>
+                </div>
+                <h3 class="card-title">시장 성장률</h3>
+                <p class="card-subtitle">글로벌 커피 시장의 성장 추이를 분석합니다</p>
+                
+                <div class="card-metrics">
+                    <div class="metric">
+                        <div class="metric-value">+12.3%</div>
+                        <div class="metric-label">연간 성장률</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$45.2B</div>
+                        <div class="metric-label">시장 규모</div>
+                    </div>
+                </div>
+
+                <div class="card-progress">
+                    <div class="progress-label">
+                        <span class="progress-title">목표 달성률</span>
+                        <span class="progress-value">78%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%"></div>
+                    </div>
+                </div>
+
+                <div class="card-action">
+                    <a href="#" class="card-link">자세히 보기 →</a>
+                    <div class="trend-indicator trend-up">
+                        ↗ +5.2%
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon violet">🌍</div>
+                    <button class="card-menu">⋯</button>
+                </div>
+                <h3 class="card-title">지역별 동향</h3>
+                <p class="card-subtitle">주요 생산국별 커피 생산량과 품질 변화</p>
+                
+                <div class="card-metrics">
+                    <div class="metric">
+                        <div class="metric-value">브라질</div>
+                        <div class="metric-label">최대 생산국</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">34.5%</div>
+                        <div class="metric-label">전세계 점유율</div>
+                    </div>
+                </div>
+
+                <div class="card-tags">
+                    <span class="tag">아라비카</span>
+                    <span class="tag">로부스타</span>
+                    <span class="tag warning">기후변화</span>
+                </div>
+
+                <div class="card-action">
+                    <a href="#" class="card-link">지역 분석 →</a>
+                    <div class="trend-indicator trend-up">
+                        ↗ +2.1%
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon amber">💰</div>
+                    <button class="card-menu">⋯</button>
+                </div>
+                <h3 class="card-title">가격 동향</h3>
+                <p class="card-subtitle">원두 가격 변동과 시장 요인 분석</p>
+                
+                <div class="card-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$4.87</div>
+                        <div class="metric-label">파운드당 평균</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">+8.3%</div>
+                        <div class="metric-label">월간 변동률</div>
+                    </div>
+                </div>
+
+                <div class="card-progress">
+                    <div class="progress-label">
+                        <span class="progress-title">가격 안정성</span>
+                        <span class="progress-value">65%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                </div>
+
+                <div class="card-action">
+                    <a href="#" class="card-link">가격 차트 →</a>
+                    <div class="trend-indicator trend-up">
+                        ↗ +3.7%
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon rose">📋</div>
+                    <button class="card-menu">⋯</button>
+                </div>
+                <h3 class="card-title">품질 등급</h3>
+                <p class="card-subtitle">국제 커피 품질 기준과 등급 분포</p>
+                
+                <div class="card-metrics">
+                    <div class="metric">
+                        <div class="metric-value">AA+</div>
+                        <div class="metric-label">최고 등급</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">89%</div>
+                        <div class="metric-label">품질 만족도</div>
+                    </div>
+                </div>
+
+                <div class="card-tags">
+                    <span class="tag success">유기농</span>
+                    <span class="tag primary">페어트레이드</span>
+                    <span class="tag">스페셜티</span>
+                </div>
+
+                <div class="card-action">
+                    <a href="#" class="card-link">등급 기준 →</a>
+                    <div class="trend-indicator trend-up">
+                        ↗ +1.4%
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon blue">🚚</div>
+                    <button class="card-menu">⋯</button>
+                </div>
+                <h3 class="card-title">물류 현황</h3>
+                <p class="card-subtitle">전세계 커피 운송과 공급망 상태</p>
+                
+                <div class="card-metrics">
+                    <div class="metric">
+                        <div class="metric-value">2.4M</div>
+                        <div class="metric-label">월간 물동량(톤)</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">14일</div>
+                        <div class="metric-label">평균 운송기간</div>
+                    </div>
+                </div>
+
+                <div class="card-progress">
+                    <div class="progress-label">
+                        <span class="progress-title">배송 정시율</span>
+                        <span class="progress-value">92%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%"></div>
+                    </div>
+                </div>
+
+                <div class="card-action">
+                    <a href="#" class="card-link">물류 추적 →</a>
+                    <div class="trend-indicator trend-down">
+                        ↘ -2.1%
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon emerald">🌱</div>
+                    <button class="card-menu">⋯</button>
+                </div>
+                <h3 class="card-title">지속가능성</h3>
+                <p class="card-subtitle">친환경 커피 생산과 ESG 경영 동향</p>
+                
+                <div class="card-metrics">
+                    <div class="metric">
+                        <div class="metric-value">67%</div>
+                        <div class="metric-label">인증 농장 비율</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">-15%</div>
+                        <div class="metric-label">탄소 배출 절감</div>
+                    </div>
+                </div>
+
+                <div class="card-tags">
+                    <span class="tag success">탄소 중립</span>
+                    <span class="tag primary">재생농업</span>
+                </div>
+
+                <div class="card-action">
+                    <a href="#" class="card-link">ESG 리포트 →</a>
+                    <div class="trend-indicator trend-up">
+                        ↗ +6.8%
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
