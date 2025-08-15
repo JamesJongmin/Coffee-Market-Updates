@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Chart Loading Test</h1>
+    <div id="status"></div>
+    
+    <script>
+        const status = document.getElementById('status');
+        
+        // Check if Chart.js loaded
+        if (typeof Chart !== 'undefined') {
+            status.innerHTML += '<p style="color: green;">✓ Chart.js loaded successfully</p>';
+        } else {
+            status.innerHTML += '<p style="color: red;">✗ Chart.js failed to load</p>';
+        }
+        
+        // Check if XLSX loaded
+        if (typeof XLSX !== 'undefined') {
+            status.innerHTML += '<p style="color: green;">✓ XLSX library loaded successfully</p>';
+        } else {
+            status.innerHTML += '<p style="color: red;">✗ XLSX library failed to load</p>';
+        }
+        
+        // Test Google Sheets API for coffee data
+        fetch('https://script.google.com/macros/s/AKfycbynvFMJNFmqvTD0bvOdKkPRLHcEcOdJqfJzJ1KCLIZKYBQOCfAV0IsMOSdMIXqWmUZi/exec?type=coffee')
+            .then(response => {
+                status.innerHTML += `<p style="color: green;">✓ Coffee data API responded: ${response.status}</p>`;
+                return response.json();
+            })
+            .then(data => {
+                status.innerHTML += `<p style="color: green;">✓ Coffee data loaded: ${data.data?.length || 0} points</p>`;
+            })
+            .catch(error => {
+                status.innerHTML += `<p style="color: red;">✗ Coffee data error: ${error.message}</p>`;
+            });
+            
+        // Test simple chart creation
+        setTimeout(() => {
+            try {
+                const canvas = document.createElement('canvas');
+                document.body.appendChild(canvas);
+                const ctx = canvas.getContext('2d');
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar'],
+                        datasets: [{
+                            label: 'Test',
+                            data: [1, 2, 3]
+                        }]
+                    }
+                });
+                
+                status.innerHTML += '<p style="color: green;">✓ Test chart created successfully</p>';
+            } catch (error) {
+                status.innerHTML += `<p style="color: red;">✗ Chart creation error: ${error.message}</p>`;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
