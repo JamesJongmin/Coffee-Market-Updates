@@ -1042,8 +1042,21 @@
                 <h1>
                     Coffee Market Info
                     <span class="live-indicator">Live</span>
-                    <span class="date-badge" id="currentDate">2025년 6월 22일</span>
+                    <span class="date-badge" id="currentDate"></span>
                 </h1>
+                <script>
+                    // 즉시 날짜 업데이트
+                    (function() {
+                        const dateElement = document.getElementById('currentDate');
+                        if (dateElement) {
+                            const now = new Date();
+                            const year = now.getFullYear();
+                            const month = now.getMonth() + 1;
+                            const day = now.getDate();
+                            dateElement.textContent = `${year}년 ${month}월 ${day}일`;
+                        }
+                    })();
+                </script>
                 <p class="subtitle"> Market Analysis and Forecast by Align Commodities</p>
                 <p class="description">
                     커피 선물 시장 분석 아카이브 및 대시보드 입니다. <br/>
