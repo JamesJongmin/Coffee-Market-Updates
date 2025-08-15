@@ -294,7 +294,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            overflow-x: hidden;
         }
         
         header {
@@ -725,7 +724,6 @@
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
-            overflow-x: hidden;
         }
         
         .chart-container {
@@ -734,8 +732,6 @@
             padding: 25px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
-            overflow: hidden;
-            max-width: 100%;
         }
         
         .chart-container:hover {
@@ -763,7 +759,6 @@
         .chart-wrapper {
             position: relative;
             height: 400px;
-            overflow: hidden;
         }
         
         .chart-analysis {
@@ -920,16 +915,6 @@
             
             .charts-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .chart-container {
-                padding: 20px;
-                margin: 0;
-            }
-            
-            .chart-wrapper {
-                height: 350px;
             }
             
             .reports-grid {
@@ -2000,14 +1985,7 @@
                 const totalData = chartData.length;
                 
                 // 바 차트용 레이블을 모든 데이터 포인트에 대해 생성 (월만 표시)
-                // 데이터가 많을 때는 레이블을 간소화
-                const totalData = chartData.length;
-                const shouldSkipLabels = totalData > 20;
-                
-                const labels = chartData.map((item, index) => {
-                    if (shouldSkipLabels && index % Math.ceil(totalData / 15) !== 0 && index !== totalData - 1) {
-                        return '';
-                    }
+                const labels = chartData.map((item) => {
                     return item.date.toLocaleDateString('ko-KR', { 
                         month: 'short'
                     });
@@ -2025,23 +2003,12 @@
                             data: chartData.map(d => d.y),
                             backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
                             borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                            borderWidth: 1,
-                            maxBarThickness: 40,
-                            categoryPercentage: 0.8,
-                            barPercentage: 0.9
+                            borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        layout: {
-                            padding: {
-                                left: 5,
-                                right: 5,
-                                top: 5,
-                                bottom: 5
-                            }
-                        },
                         interaction: {
                             intersect: false,
                             mode: 'index'
@@ -2076,25 +2043,16 @@
                                     maxRotation: 45,
                                     minRotation: 0,
                                     font: {
-                                        size: isMobile ? 9 : 11
+                                        size: isMobile ? 10 : 12
                                     },
                                     color: '#333',
                                     autoSkip: true,
-                                    autoSkipPadding: 5,
-                                    maxTicksLimit: isMobile ? 8 : 15,
-                                    callback: function(value, index, values) {
-                                        // 빈 레이블은 표시하지 않음
-                                        if (labels[index] === '') return '';
-                                        return labels[index];
-                                    }
+                                    maxTicksLimit: 12
                                 },
                                 grid: {
                                     display: true,
                                     color: 'rgba(0, 0, 0, 0.1)'
-                                },
-                                offset: true,
-                                categoryPercentage: 0.8,
-                                barPercentage: 0.9
+                                }
                             },
                             y: {
                                 title: {
