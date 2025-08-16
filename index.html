@@ -1,2737 +1,374 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-GX9R36120J');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee Market Updates Archive</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
-            line-height: 1.7;
-            color: #2c3e50;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            position: relative;
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('coffee-beans-pattern.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            opacity: 0.08;
-            z-index: -1;
-        }
-        
-        /* 전체 컨테이너 슬라이드 효과 */
-        .page-wrapper {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 2;
-            background: inherit;
-        }
-        
-        .page-wrapper.menu-open {
-            transform: translateX(280px);
-        }
-        
-        /* 네비게이션 헤더 */
-        .nav-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 20px;
-        }
-        
-        /* 햄버거 메뉴 버튼 */
-        .menu-button {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 1001;
-            transition: all 0.4s ease;
-        }
-        
-        .menu-button:hover {
-            transform: scale(1.1);
-        }
-        
-        .menu-button span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background-color: #8B4513;
-            border-radius: 2px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        /* 메뉴가 열렸을 때 햄버거 버튼 숨기기 */
-        .menu-button.active {
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.8);
-        }
-        
-        /* 로고 (오른쪽) */
-        .logo-header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        
-        .logo-text {
-            color: #8B4513;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        
-        /* 사이드 메뉴 */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100vh;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            z-index: 1000;
-            transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            overflow-y: auto;
-            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .side-menu.active {
-            left: 0;
-        }
-        
-        /* 메뉴 헤더 */
-        .menu-header {
-            padding: 40px 30px 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            position: relative;
-        }
-        
-        .menu-title {
-            color: white;
-            font-size: 1.5em;
-            font-weight: 700;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .menu-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9em;
-            margin: 5px 0 0;
-            font-weight: 300;
-        }
-        
-        /* 메뉴 닫기 버튼 (X 모양) */
-        .menu-close-btn {
-            position: absolute;
-            top: 50%;
-            right: 30px;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .menu-close-btn:hover {
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        .menu-close-btn span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background-color: #2c3e50; /* 네이비 색상 */
-            border-radius: 2px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        /* X 모양 (이미 X 상태로 시작) */
-        .menu-close-btn span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        
-        .menu-close-btn span:nth-child(2) {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        
-        .menu-close-btn span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-        
-        .menu-close-btn:hover span {
-            background-color: #34495e; /* 호버 시 조금 더 밝은 네이비 */
-        }
-        
-        /* 메뉴 네비게이션 */
-        .menu-nav {
-            padding: 20px 0;
-        }
-        
-        .menu-item {
-            display: block;
-            padding: 18px 30px;
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-            position: relative;
-            overflow: hidden;
-            word-wrap: break-word;
-            line-height: 1.4;
-        }
-        
-        /* Fundamentals 메뉴 아이템 최적화 */
-        #fundamentalsMenu {
-            font-size: 1.05em;
-            padding: 20px 30px;
-        }
-        
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .menu-item:hover::before {
-            left: 100%;
-        }
-        
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-left-color: #f39c12;
-            transform: translateX(10px);
-            backdrop-filter: blur(10px);
-        }
-        
-        /* 메뉴 푸터 */
-        .menu-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.2);
-        }
-        
-        .menu-footer-text {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8em;
-            text-align: center;
-            margin: 0;
-            line-height: 1.4;
-        }
-        
-        /* 메뉴 오버레이 */
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            z-index: 999;
-        }
-        
-        .menu-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-            margin-bottom: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('coffee-abstract-dark.jpg');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.25;
-            z-index: 0;
-        }
-        
-        header > * {
-            position: relative;
-            z-index: 1;
-        }
-        
-        h1 {
-            font-size: 2.8em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .live-indicator {
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.3em;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
-            animation: pulse-live 2s infinite;
-        }
-        
-        .live-indicator::before {
-            content: '●';
-            color: #fff;
-            font-size: 1.2em;
-            margin-right: 4px;
-            animation: blink 1.5s infinite;
-        }
-        
-        @keyframes pulse-live {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-        
-        .date-badge {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 25px;
-            font-size: 0.35em;
-            font-weight: 500;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .subtitle {
-            font-size: 1.3em;
-            opacity: 0.9;
-            font-weight: 300;
-            margin-bottom: 15px;
-        }
-        
-        .description {
-            font-size: 1.1em;
-            opacity: 0.8;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .stat-box {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            border-left: 5px solid #8B4513;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stat-box::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            width: 80px;
-            height: 80px;
-            background-image: url('coffee-beans-pattern.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.15;
-            transform: rotate(-15deg);
-        }
-        
-        .stat-number {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: #8B4513;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.95em;
-            color: #666;
-            font-weight: 500;
-        }
-        
-        .search-filter {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .filter-row {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .search-input {
-            flex: 1;
-            min-width: 250px;
-            padding: 12px 15px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.3s ease;
-        }
-        
-        .search-input:focus {
-            border-color: #8B4513;
-            outline: none;
-        }
-        
-        .filter-select {
-            padding: 12px 15px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 1em;
-            background: white;
-            cursor: pointer;
-        }
-        
-        .reports-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-            min-height: 400px;
-        }
-        
-        .report-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid #8B4513;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .report-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: url('coffee-beans-pattern.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.08;
-            transform: rotate(45deg);
-            transition: opacity 0.3s ease;
-        }
-        
-        .report-card:hover::before {
-            opacity: 0.15;
-        }
-        
-        .report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-        
-        .report-date {
-            font-size: 0.9em;
-            color: #8B4513;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .report-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            line-height: 1.4;
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .new-badge {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            font-size: 0.7em;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            animation: pulse 2s infinite;
-            flex-shrink: 0;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 4px 8px rgba(231, 76, 60, 0.5);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            }
-        }
-        
-        .report-summary {
-            font-size: 0.95em;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        
-        .report-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        
-        .tag {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            font-weight: 500;
-        }
-        
-        .read-more {
-            display: inline-flex;
-            align-items: center;
-            color: #8B4513;
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 0.95em;
-            transition: color 0.3s ease;
-        }
-        
-        .read-more:hover {
-            color: #A0522D;
-        }
-        
-        .read-more::after {
-            content: " →";
-            margin-left: 5px;
-            transition: margin-left 0.3s ease;
-        }
-        
-        .read-more:hover::after {
-            margin-left: 10px;
-        }
-        
-        .more-reports-container {
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .more-reports-btn {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0 auto;
-        }
-        
-        .more-reports-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
-            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
-        }
-        
-        .more-reports-btn:active {
-            transform: translateY(0);
-        }
-        
-        .more-icon {
-            transition: transform 0.3s ease;
-            font-size: 0.8em;
-        }
-        
-        .more-reports-btn.expanded .more-icon {
-            transform: rotate(180deg);
-        }
-        
-        .more-reports-btn.expanded .more-text::after {
-            content: " Less";
-        }
-        
-        .report-card.hidden {
-            display: none;
-        }
-        
-        .report-card.show-more {
-            animation: fadeInUp 0.5s ease forwards;
-        }
-        
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-            font-size: 1.1em;
-        }
-        
-        /* 차트 대시보드 스타일 */
-        .dashboard-section {
-            margin-bottom: 50px;
-            position: relative;
-            opacity: 1;  /* 기본적으로 보이도록 변경 */
-            transition: opacity 0.5s ease-in-out;
-        }
-        
-        .dashboard-section.loaded {
-            opacity: 1;
-        }
-        
-        .dashboard-section::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 600px;
-            height: 600px;
-            background-image: url('coffee-beans-pattern.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.06;
-            transform: translate(-50%, -50%) rotate(15deg);
-            z-index: -1;
-        }
-        
-        .section-title {
-            font-size: 2em;
-            font-weight: 700;
-            color: #8B4513;
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #8B4513;
-        }
-        
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        .chart-container {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .chart-container:hover {
-            transform: translateY(-5px);
-        }
-        
-        .chart-header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .chart-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .chart-source {
-            font-size: 0.9em;
-            color: #666;
-            font-style: italic;
-        }
-        
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-        }
-        
-        .chart-analysis {
-            margin-top: 15px;
-            padding: 12px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 8px;
-            border-left: 4px solid #8B4513;
-            font-size: 0.9em;
-            line-height: 1.5;
-            color: #495057;
-        }
-        
-        .chart-analysis .analysis-title {
-            font-weight: 600;
-            color: #8B4513;
-            margin-bottom: 6px;
-            font-size: 0.95em;
-        }
-        
-        .chart-analysis .analysis-text {
-            font-size: 0.85em;
-            color: #6c757d;
-        }
-        
-        .loading-spinner {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 400px;
-            font-size: 1.1em;
-            color: #666;
-        }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #8B4513;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-right: 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            color: #666;
-            font-size: 0.9em;
-            border-top: 1px solid #eee;
-            margin-top: 40px;
-            background: white;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-        }
-        
-        .footer-logo {
-            flex-shrink: 0;
-        }
-        
-        .footer-logo img {
-            height: 70px;
-            width: auto;
-            object-fit: contain;
-        }
-        
-        .footer-content {
-            flex: 0 1 auto;
-            text-align: center;
-            max-width: none;
-        }
-        
-        .footer-links {
-            margin-top: 15px;
-        }
-        
-        .footer-links a {
-            color: #8B4513;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: 500;
-        }
-        
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-        
-        /* 모바일 반응형 */
-        @media (max-width: 768px) {
-            .side-menu {
-                width: 100vw;
-                left: -100vw;
-            }
-            
-            .side-menu.active {
-                left: 0;
-            }
-            
-            .page-wrapper.menu-open {
-                transform: translateX(100vw);
-            }
-            
-            /* 모바일에서 메뉴 아이템 최적화 */
-            .menu-item {
-                font-size: 1em;
-                padding: 16px 25px;
-            }
-            
-            #analysisMenu, #fundamentalsMenu {
-                font-size: 0.95em;
-                padding: 18px 25px;
-                line-height: 1.5;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-            
-            .nav-header {
-                padding: 15px;
-            }
-            
-            .logo-text {
-                font-size: 1.2em;
-            }
-            
-            h1 {
-                font-size: 2.2em;
-                line-height: 1.3;
-            }
-            
-            .subtitle {
-                font-size: 1.1em;
-                line-height: 1.5;
-            }
-            
-            .description {
-                font-size: 0.95em;
-                line-height: 1.6;
-                padding: 0 10px;
-            }
-            
-            .description br {
-                display: inline;
-            }
-            
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .reports-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .filter-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .search-input {
-                min-width: auto;
-            }
-            
-            footer {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            
-            .footer-logo img {
-                height: 40px;
-            }
-        }
-        
-        /* 더 작은 모바일 화면 */
-        @media (max-width: 480px) {
-            /* 작은 화면에서 메뉴 아이템 추가 최적화 */
-            .menu-item {
-                font-size: 0.9em;
-                padding: 14px 20px;
-            }
-            
-            #analysisMenu, #fundamentalsMenu {
-                font-size: 0.85em;
-                padding: 16px 20px;
-                line-height: 1.6;
-                /* 필요시 자동 줄바꿈 */
-                white-space: normal;
-            }
-            
-            .menu-header {
-                padding: 20px;
-            }
-            
-            .menu-title {
-                font-size: 1.6em;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-                word-break: keep-all;
-            }
-            
-            .subtitle {
-                font-size: 1em;
-            }
-            
-            .description {
-                font-size: 0.9em;
-                line-height: 1.7;
-            }
-            
-            .report-card h3 {
-                font-size: 1.1em;
-                line-height: 1.4;
-            }
-            
-            .report-card p {
-                font-size: 0.9em;
-                line-height: 1.6;
-            }
-        }
-    </style>
+    <title>Figma Design System - Modern Web Design</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 사이드 메뉴 -->
-    <div class="side-menu" id="sideMenu">
-        <div class="menu-header">
-            <h2 class="menu-title">Coffee Market</h2>
-            <p class="menu-subtitle">Information Menu</p>
-            <button class="menu-close-btn" id="menuCloseBtn" aria-label="Close Menu">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient1)"/>
+                    <path d="M12 10H20V14H16V22H12V10Z" fill="white"/>
+                    <defs>
+                        <linearGradient id="gradient1" x1="0" y1="0" x2="32" y2="32">
+                            <stop stop-color="#667EEA"/>
+                            <stop offset="1" stop-color="#764BA2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>DesignFlow</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#components">Components</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-secondary">Sign In</button>
+                <button class="btn-primary">Get Started</button>
+            </div>
+            <button class="mobile-menu-toggle">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
         </div>
-        
-        <nav class="menu-nav">
-            <a href="weekly-report.html" class="menu-item" id="weeklyReportMenu">Weekly Report</a>
-            <a href="in-depth-analysis.html" class="menu-item" id="analysisMenu">In-depth Analysis</a>
-            <a href="fundamentals/fundamentals.html" class="menu-item" id="fundamentalsMenu">Fundamentals</a>
-            <a href="#dashboard-section" class="menu-item" id="dashboardsMenu">Dashboards</a>
-        </nav>
-        
-        <div class="menu-footer">
-            <p class="menu-footer-text">Align Commodities & <br>Yellowknife</p>
-        </div>
-    </div>
-    
-    <!-- 메뉴 오버레이 -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-    
-    <!-- 페이지 래퍼 (슬라이드되는 부분) -->
-    <div class="page-wrapper" id="pageWrapper">
-        <div class="nav-header">
-            <!-- 햄버거 메뉴 버튼 (왼쪽) -->
-            <div class="menu-container">
-                <button class="menu-button" id="menuButton">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-            
-            <!-- 로고 (오른쪽) -->
-            <div class="logo-header">
-                <img src="Transparent.png" alt="Align Commodities" style="height: 60px; width: auto; object-fit: contain;" />
-            </div>
-        </div>
-        
-        <div class="container">
-            <header>
-                <h1>
-                    Coffee Market Info
-                    <span class="live-indicator">Live</span>
-                    <span class="date-badge" id="currentDate"></span>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="badge">✨ New Feature Available</div>
+                <h1 class="hero-title">
+                    Design Better,
+                    <span class="gradient-text">Ship Faster</span>
                 </h1>
-                <script>
-                    // 즉시 날짜 업데이트
-                    (function() {
-                        const dateElement = document.getElementById('currentDate');
-                        if (dateElement) {
-                            const now = new Date();
-                            const year = now.getFullYear();
-                            const month = now.getMonth() + 1;
-                            const day = now.getDate();
-                            dateElement.textContent = `${year}년 ${month}월 ${day}일`;
-                        }
-                    })();
-                </script>
-                <p class="subtitle"> Market Analysis and Forecast by Align Commodities</p>
-                <p class="description">
-                    커피 선물 시장 분석 아카이브 및 대시보드 입니다. <br/>
-                    주간 시장 동향, 시세 변동 및 주요 뉴스, <br/>
-                    글로벌 수급 현황을 정기적으로 업데이트합니다.
+                <p class="hero-description">
+                    Create stunning interfaces with our modern design system. 
+                    Built for designers and developers who care about quality.
                 </p>
-            </header>
-
-
-
-            <div class="search-filter">
-                <div class="filter-row">
-                    <input type="text" class="search-input" id="searchInput" placeholder="보고서 제목이나 내용으로 검색하세요...">
-                    <select class="filter-select" id="yearFilter">
-                        <option value="">전체 년도</option>
-                        <option value="2025">2025년</option>
-                    </select>
-                    <select class="filter-select" id="monthFilter">
-                        <option value="">전체 월</option>
-                        <option value="05">5월</option>
-                        <option value="06">6월</option>
-                    </select>
+                <div class="hero-buttons">
+                    <button class="btn-primary btn-large">
+                        Start Free Trial
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7 10H13M13 10L10 7M13 10L10 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="btn-ghost btn-large">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2"/>
+                            <path d="M8 7V13L14 10L8 7Z" fill="currentColor"/>
+                        </svg>
+                        Watch Demo
+                    </button>
                 </div>
             </div>
-
-            <div class="reports-grid" id="reportsGrid">
-                <!-- 보고서 카드들이 여기에 동적으로 추가됩니다 -->
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-header">
+                        <div class="card-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
+                    </div>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="mini-chart">
+                        <div class="bar" style="height: 40%"></div>
+                        <div class="bar" style="height: 70%"></div>
+                        <div class="bar" style="height: 55%"></div>
+                        <div class="bar" style="height: 85%"></div>
+                        <div class="bar" style="height: 65%"></div>
+                    </div>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="color-palette">
+                        <div class="color" style="background: #667EEA"></div>
+                        <div class="color" style="background: #F56565"></div>
+                        <div class="color" style="background: #48BB78"></div>
+                        <div class="color" style="background: #ED8936"></div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="more-reports-container" id="moreReportsContainer" style="display: none;">
-                <button class="more-reports-btn" id="moreReportsBtn">
-                    <span class="more-text">More Reports</span>
-                    <span class="more-icon">▼</span>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2>Everything you need to design</h2>
+                <p>Powerful features to help you create amazing products</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect width="48" height="48" rx="12" fill="url(#grad1)" opacity="0.1"/>
+                            <path d="M24 16V32M16 24H32" stroke="url(#grad1)" stroke-width="3" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="grad1" x1="0" y1="0" x2="48" y2="48">
+                                    <stop stop-color="#667EEA"/>
+                                    <stop offset="1" stop-color="#764BA2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3>Component Library</h3>
+                    <p>Pre-built components ready to use in your projects. Fully customizable and responsive.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect width="48" height="48" rx="12" fill="#F56565" opacity="0.1"/>
+                            <rect x="14" y="14" width="20" height="20" rx="4" stroke="#F56565" stroke-width="3"/>
+                            <circle cx="34" cy="34" r="7" fill="#F56565"/>
+                        </svg>
+                    </div>
+                    <h3>Auto Layout</h3>
+                    <p>Smart layout system that adapts to your content automatically. No more manual adjustments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect width="48" height="48" rx="12" fill="#48BB78" opacity="0.1"/>
+                            <path d="M16 24L22 30L32 18" stroke="#48BB78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Design Tokens</h3>
+                    <p>Consistent design language across all platforms. Colors, typography, and spacing in sync.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect width="48" height="48" rx="12" fill="#ED8936" opacity="0.1"/>
+                            <circle cx="24" cy="24" r="10" stroke="#ED8936" stroke-width="3"/>
+                            <path d="M24 20V24L27 27" stroke="#ED8936" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Real-time Collaboration</h3>
+                    <p>Work together with your team in real-time. See changes as they happen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Components Showcase -->
+    <section class="components-showcase" id="components">
+        <div class="showcase-container">
+            <div class="section-header">
+                <h2>Beautiful Components</h2>
+                <p>Crafted with attention to detail</p>
+            </div>
+            <div class="component-tabs">
+                <button class="tab active" data-tab="buttons">Buttons</button>
+                <button class="tab" data-tab="cards">Cards</button>
+                <button class="tab" data-tab="forms">Forms</button>
+                <button class="tab" data-tab="modals">Modals</button>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="buttons">
+                    <div class="component-grid">
+                        <button class="btn-primary">Primary Button</button>
+                        <button class="btn-secondary">Secondary</button>
+                        <button class="btn-ghost">Ghost Button</button>
+                        <button class="btn-danger">Danger</button>
+                        <button class="btn-success">Success</button>
+                        <button class="btn-primary" disabled>Disabled</button>
+                    </div>
+                </div>
+                <div class="tab-pane" id="cards">
+                    <div class="cards-showcase">
+                        <div class="showcase-card">
+                            <img src="https://via.placeholder.com/300x200/667EEA/ffffff?text=Card+Image" alt="Card">
+                            <div class="card-body">
+                                <h4>Card Title</h4>
+                                <p>Beautiful card component with image and content.</p>
+                                <button class="btn-primary btn-small">Learn More</button>
+                            </div>
+                        </div>
+                        <div class="showcase-card minimal">
+                            <h4>Minimal Card</h4>
+                            <p>Clean and simple design for content presentation.</p>
+                            <div class="card-footer">
+                                <span class="tag">Design</span>
+                                <span class="tag">UI/UX</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="forms">
+                    <div class="form-showcase">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="you@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea placeholder="Type your message here..." rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                <span>I agree to the terms and conditions</span>
+                            </label>
+                        </div>
+                        <button class="btn-primary">Submit Form</button>
+                    </div>
+                </div>
+                <div class="tab-pane" id="modals">
+                    <button class="btn-primary" onclick="openModal()">Open Modal</button>
+                    <div class="modal-preview">
+                        <div class="modal-content-preview">
+                            <h3>Modal Title</h3>
+                            <p>This is a preview of the modal component. Click the button above to see it in action.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>10K+</h3>
+                <p>Active Users</p>
+            </div>
+            <div class="stat-item">
+                <h3>500+</h3>
+                <p>Components</p>
+            </div>
+            <div class="stat-item">
+                <h3>99.9%</h3>
+                <p>Uptime</p>
+            </div>
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p>Support</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Ready to get started?</h2>
+            <p>Join thousands of designers and developers using our design system</p>
+            <div class="cta-buttons">
+                <button class="btn-white btn-large">Start Free Trial</button>
+                <button class="btn-white-outline btn-large">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <rect width="32" height="32" rx="8" fill="url(#gradient2)"/>
+                            <path d="M12 10H20V14H16V22H12V10Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="gradient2" x1="0" y1="0" x2="32" y2="32">
+                                    <stop stop-color="#667EEA"/>
+                                    <stop offset="1" stop-color="#764BA2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>DesignFlow</span>
+                    </div>
+                    <p>Building the future of design systems.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 DesignFlow. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Twitter">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="GitHub">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Dribbble">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 0C4.475 0 0 4.475 0 10a9.994 9.994 0 006.838 9.488c.5.087.687-.213.687-.476 0-.237-.013-1.024-.013-1.862-2.512.463-3.162-.612-3.362-1.175-.113-.288-.6-1.175-1.025-1.413-.35-.187-.85-.65-.013-.662.788-.013 1.35.725 1.538 1.025.9 1.512 2.338 1.087 2.912.825.088-.65.35-1.087.638-1.337-2.225-.25-4.55-1.113-4.55-4.938 0-1.088.387-1.987 1.025-2.688-.1-.25-.45-1.275.1-2.65 0 0 .837-.262 2.75 1.026a9.28 9.28 0 012.5-.338c.85 0 1.7.112 2.5.337 1.912-1.3 2.75-1.024 2.75-1.024.55 1.375.2 2.4.1 2.65.637.7 1.025 1.587 1.025 2.687 0 3.838-2.337 4.688-4.562 4.938.362.312.675.912.675 1.85 0 1.337-.013 2.412-.013 2.75 0 .262.188.574.688.474A10.016 10.016 0 0020 10c0-5.525-4.475-10-10-10z" clip-rule="evenodd"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome to DesignFlow</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
                 </button>
             </div>
-
-            <div class="no-results" id="noResults" style="display: none;">
-                <h3>검색 결과가 없습니다</h3>
-                <p>다른 검색어나 필터를 시도해보세요.</p>
+            <div class="modal-body">
+                <p>This is a beautiful modal component with smooth animations and backdrop blur effect.</p>
+                <p>You can use it for notifications, forms, or any content that needs user attention.</p>
             </div>
-
-            <!-- 차트 대시보드 섹션 -->
-            <div class="dashboard-section" id="dashboard-section">
-                <h2 class="section-title">📊 Market Dashboard</h2>
-                <div class="charts-grid">
-                    <!-- Coffee Futures Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">Coffee Futures</div>
-                            <div class="chart-source">출처: ICE</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-coffee">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="coffeeChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">📊 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>커피 선물 가격</strong>은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
-                                브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다. 
-                                현재 추세는 시장의 공급/수요 균형과 투기적 포지션 변화를 나타냅니다.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- USD/BRL Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">미국달러-브라질헤알 환율</div>
-                            <div class="chart-source">출처: LSEG</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-usd">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="usdChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">💱 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>USD/BRL 환율</strong>은 커피 시장에 중요한 영향을 미칩니다. 
-                                헤알화 약세(USD/BRL 상승) 시 브라질 농민들의 달러 수취액이 증가해 수출 경쟁력이 강화되고, 
-                                반대로 헤알화 강세 시에는 브라질 커피의 국제 경쟁력이 약화됩니다. 
-                                브라질이 세계 최대 커피 생산국이므로 환율 변동은 글로벌 커피 가격에 직접적 영향을 줍니다.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CFTC Positions Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
-                            <div class="chart-source">출처: LSEG</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-cftc">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="cftcChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">📈 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
-                                양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
-                                극단적 포지션은 종종 시장 전환점의 신호가 되며, 
-                                현재 포지션 수준은 투기 자금의 방향성과 시장 과열/과매도 상태를 판단하는 중요한 지표입니다.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- NVDI Chart -->
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <div class="chart-title">브라질 남동부 NVDI (식물활력도)</div>
-                            <div class="chart-source">출처: LSEG</div>
-                        </div>
-                        <div class="chart-wrapper">
-                            <div class="loading-spinner" id="loading-nvdi">
-                                <div class="spinner"></div>
-                                데이터 로딩 중...
-                            </div>
-                            <canvas id="nvdiChart" style="display: none;"></canvas>
-                        </div>
-                        <div class="chart-analysis">
-                            <div class="analysis-title">🌱 차트 분석</div>
-                            <div class="analysis-text">
-                                <strong>NVDI (정규식생지수)</strong>는 위성 데이터로 측정한 식물의 건강도와 활력도를 나타냅니다. 
-                                브라질 남동부는 세계 최대 아라비카 커피 생산지역으로, NVDI 수치가 높을수록 커피나무가 건강하고 
-                                수확량 증가가 예상됩니다. 역사적 범위 대비 현재 수치를 통해 
-                                올해 작황 상태와 향후 공급량 전망을 예측할 수 있는 핵심 지표입니다.
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary">Continue</button>
             </div>
-
-            <footer>
-                <div class="footer-logo">
-                    <img src="Transparent.png" alt="Align Commodities" />
-                </div>
-                <div class="footer-content">
-                    <p><strong>Published by Align Commodities & Yellowknife </strong></p>
-                    <p>전문적인 커피 시장 분석과 Market Intelligence를 제공합니다.</p>
-                    <div class="footer-links">
-                        <a href="mailto:james.baek@aligncommodities.com">Contact</a>
-                        <a href="https://github.com/jamesjongmin/Coffee-Market-Updates">GitHub</a>
-                        <a href="#" id="latestReportLink">Latest Report</a>
-                    </div>
-                    <p style="margin-top: 15px; font-size: 0.8em; opacity: 0.7;">
-                        본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.
-                    </p>
-                </div>
-            </footer>
         </div>
     </div>
-<script>
-        let allReports = [];
-        let charts = {};
 
-        // 구글 시트 URL 설정
-        const GOOGLE_SHEETS_URLS = {
-            coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
-            usdbrl: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
-            cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
-            nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
-        };
-
-        // CSV 파싱 함수
-        function parseCSV(csvText) {
-            const lines = csvText.split('\n');
-            const result = [];
-            
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (line) {
-                    const cells = line.split(',');
-                    result.push(cells);
-                }
-            }
-            
-            return result;
-        }
-
-        // 구글 시트에서 데이터 읽기 함수 (2컬럼: Date, Value)
-        async function readGoogleSheetData(sheetKey) {
-            try {
-                const url = GOOGLE_SHEETS_URLS[sheetKey];
-                if (!url) {
-                    throw new Error(`Unknown sheet key: ${sheetKey}`);
-                }
-
-                console.log(`Fetching data from Google Sheets: ${sheetKey}`);
-                
-                let csvText;
-                
-                // 먼저 직접 접근 시도
-                try {
-                    const directResponse = await fetch(url);
-                    if (directResponse.ok) {
-                        csvText = await directResponse.text();
-                        console.log(`Direct access successful for ${sheetKey}`);
-                    } else {
-                        throw new Error('Direct access failed');
-                    }
-                } catch (directError) {
-                    // 직접 접근 실패시 AllOrigins 프록시 사용
-                    console.log(`Direct access failed for ${sheetKey}, trying proxy...`);
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    
-                    const proxyResponse = await fetch(proxyUrl);
-                    if (!proxyResponse.ok) {
-                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
-                    }
-                    
-                    const proxyData = await proxyResponse.json();
-                    csvText = proxyData.contents;
-                    console.log(`Proxy access successful for ${sheetKey}`);
-                }
-                
-                const data = parseCSV(csvText);
-                
-                // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
-                const dataRows = data.slice(1);
-                
-                const processedData = dataRows.map(row => ({
-                    date: row[0], // 첫 번째 컬럼은 항상 Date
-                    value: row[1] // 두 번째 컬럼은 해당 값
-                })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
-                
-                // 날짜순으로 정렬 (오래된 것 → 최신 순서로)
-                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-                
-                console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
-                return processedData;
-                
-            } catch (error) {
-                console.error(`Error reading Google Sheet ${sheetKey}:`, error);
-                return null;
-            }
-        }
-
-        // 개선된 리포트 로딩 시스템
-        async function loadReportsFromFiles() {
-            // GitHub API를 통해 동적으로 파일 목록 가져오기
-            const reports = [];
-            
-            try {
-                // 최근 리포트를 먼저 빠르게 로드하기 위한 최적화
-                const currentYear = new Date().getFullYear();
-                const currentMonth = new Date().getMonth() + 1;
-                const startYear = 2025;
-                
-                // 병렬 로딩을 위한 프로미스 배열
-                const loadPromises = [];
-                
-                // 최근 2개월 먼저 빠르게 스캔
-                for (let monthOffset = 0; monthOffset < 2; monthOffset++) {
-                    let targetMonth = currentMonth - monthOffset;
-                    let targetYear = currentYear;
-                    
-                    if (targetMonth <= 0) {
-                        targetMonth += 12;
-                        targetYear--;
-                    }
-                    
-                    if (targetYear < startYear) break;
-                    
-                    const monthStr = targetMonth.toString().padStart(2, '0');
-                    
-                    // 일별로 스캔 (31일부터 1일까지 역순)
-                    for (let day = 31; day >= 1; day--) {
-                        const dayStr = day.toString().padStart(2, '0');
-                        const filePath = `Reports/${targetYear}/${monthStr}/${targetYear}-${monthStr}-${dayStr}.html`;
-                        
-                        loadPromises.push(
-                            fetch(filePath, { method: 'HEAD' })
-                                .then(response => {
-                                    if (response.ok) {
-                                        return fetch(filePath)
-                                            .then(fullResponse => fullResponse.text())
-                                            .then(htmlContent => {
-                                                const metadata = extractReportMetadata(htmlContent, filePath);
-                                                if (metadata) {
-                                                    // 카테고리 분류 로직 추가
-                                                    const isWeekly = metadata.title && (
-                                                        metadata.title.includes('커피 시장 주간 동향') ||
-                                                        metadata.title.includes('커피 선물 시장 주간 동향') ||
-                                                        metadata.title.includes('주간 동향')
-                                                    );
-                                                    
-                                                    reports.push({
-                                                        ...metadata,
-                                                        link: filePath,
-                                                        year: targetYear.toString(),
-                                                        month: monthStr,
-                                                        displayDate: formatKoreanDate(`${targetYear}-${monthStr}-${dayStr}`),
-                                                        type: isWeekly ? 'weekly' : 'in-depth'
-                                                    });
-                                                }
-                                            });
-                                    }
-                                })
-                                .catch(() => {}) // 파일이 없으면 무시
-                        );
-                    }
-                }
-                
-                // 최근 2개월 로딩 완료 대기
-                await Promise.all(loadPromises);
-                
-                // 나머지 이전 데이터는 알려진 파일 목록에서 로드
-                const olderLoadPromises = [];
-                
-                // 년도별로 스캔
-                for (let year = currentYear; year >= startYear; year--) {
-                    // 월별로 스캔 (12월부터 1월까지 역순)
-                    for (let month = 12; month >= 1; month--) {
-                        const monthStr = month.toString().padStart(2, '0');
-                        
-                        // 이미 스캔한 최근 2개월은 건너뛰기
-                        const monthsAgo = (currentYear - year) * 12 + (currentMonth - month);
-                        if (monthsAgo < 2) continue;
-                        
-                        // 3개월 이전의 경우 알려진 파일 목록 사용
-                        if (monthsAgo >= 3) {
-                            const knownFiles = getKnownReportFiles(year, monthStr);
-                            for (const filePath of knownFiles) {
-                                olderLoadPromises.push(
-                                    fetch(filePath)
-                                        .then(response => {
-                                            if (response.ok) {
-                                                return response.text().then(htmlContent => {
-                                                    const metadata = extractReportMetadata(htmlContent, filePath);
-                                                    if (metadata) {
-                                                        const dateMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})/);
-                                                        
-                                                        // 카테고리 분류 로직 추가
-                                                        const isWeekly = metadata.title && (
-                                                            metadata.title.includes('커피 시장 주간 동향') ||
-                                                            metadata.title.includes('커피 선물 시장 주간 동향') ||
-                                                            metadata.title.includes('주간 동향')
-                                                        );
-                                                        
-                                                        reports.push({
-                                                            ...metadata,
-                                                            link: filePath,
-                                                            year: dateMatch[1],
-                                                            month: dateMatch[2],
-                                                            displayDate: formatKoreanDate(`${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`),
-                                                            type: isWeekly ? 'weekly' : 'in-depth'
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        })
-                                        .catch(() => {}) // 오류 무시
-                                );
-                            }
-                        }
-                    }
-                }
-                
-                // 나머지 파일들 병렬 로드
-                await Promise.all(olderLoadPromises);
-                
-            } catch (error) {
-                console.error('리포트 스캔 중 오류:', error);
-            }
-            
-            // 날짜순으로 정렬
-            return reports.sort((a, b) => new Date(b.date) - new Date(a.date));
-        }
-        
-        // 알려진 리포트 파일 목록 (3개월 이전 데이터용)
-        function getKnownReportFiles(year, month) {
-            const knownFiles = {
-                '2025': {
-                    '08': ['2025-08-02.html'],
-                    '07': ['2025-07-29.html', '2025-07-26.html', '2025-07-25.html', '2025-07-19.html', 
-                           '2025-07-16.html', '2025-07-12.html', '2025-07-09.html', '2025-07-04.html'],
-                    '06': ['2025-06-30.html', '2025-06-28.html', '2025-06-24.html', '2025-06-21.html',
-                           '2025-06-14.html', '2025-06-13.html', '2025-06-08.html'],
-                    '05': ['2025-05-31.html']
-                }
-            };
-            
-            if (knownFiles[year] && knownFiles[year][month]) {
-                return knownFiles[year][month].map(file => `Reports/${year}/${month}/${file}`);
-            }
-            return [];
-        }
-
-        // 메타데이터 추출 함수 (개선된 폴백 시스템)
-        function extractReportMetadata(htmlContent, filePath) {
-            // 1단계: HTML 메타데이터 블록 검색
-            const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
-            
-            if (metaMatch) {
-                try {
-                    const metadata = JSON.parse(metaMatch[1].trim());
-                    console.log(`메타데이터 블록에서 로드: ${filePath}`);
-                    console.log(`제목: ${metadata.title}, 요약: ${metadata.summary?.substring(0, 50)}...`);
-                    
-                    // title이 없는 경우 기본값 제공
-                    if (!metadata.title || metadata.title.trim() === '') {
-                        metadata.title = getDefaultTitle(filePath);
-                    }
-                    
-                    // summary가 없거나 빈 경우 기본값 제공
-                    if (!metadata.summary || metadata.summary.trim() === '') {
-                        metadata.summary = '커피 시장 분석 보고서입니다.';
-                    }
-                    
-                    // 요약이 너무 길면 잘라내기 (150자로 제한)
-                    if (metadata.summary.length > 150) {
-                        metadata.summary = metadata.summary.substring(0, 147) + '...';
-                    }
-                    
-                    // tags가 없거나 빈 경우 기본값 제공
-                    if (!metadata.tags || metadata.tags.length === 0) {
-                        metadata.tags = ['커피시장', '분석'];
-                    }
-                    
-                    // date가 없는 경우 파일명에서 추출
-                    if (!metadata.date) {
-                        const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
-                        metadata.date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
-                    }
-                    
-                    return metadata;
-                } catch (error) {
-                    console.error(`메타데이터 파싱 실패 ${filePath}:`, error);
-                }
-            }
-            
-            // 2단계: 기존 방식 폴백 (개선된 버전)
-            return extractLegacyMetadata(htmlContent, filePath);
-        }
-
-        // 기존 방식 폴백 (안전한 추출)
-        function extractLegacyMetadata(htmlContent, filePath) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(htmlContent, 'text/html');
-            
-            // 파일명에서 날짜 추출
-            const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
-            const defaultDate = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
-            
-            // 제목 추출 (개선된 셀렉터)
-            const titleSelectors = [
-                'h1',                    // 메인 제목
-                '.main-story h2',        // 주요 스토리 제목
-                'header h1',             // 헤더의 제목
-                'title'                  // HTML title 태그
-            ];
-            
-            let title = '';
-            for (const selector of titleSelectors) {
-                const element = doc.querySelector(selector);
-                if (element && element.textContent.trim()) {
-                    title = cleanText(element.textContent.trim());
-                    // HTML 태그나 스타일 코드가 포함된 경우 제외
-                    if (!title.includes('<') && !title.includes('{') && title.length > 5) {
-                        break;
-                    }
-                }
-            }
-            
-            // 요약 추출 (안전한 방식)
-            let summary = '';
-            const summarySelectors = [
-                '.highlight p',           // 하이라이트 박스
-                '.main-story p:first-of-type',  // 주요 스토리 첫 문단
-                '.summary',               // 요약 전용 클래스
-                'meta[name="description"]' // 메타 설명
-            ];
-            
-            for (const selector of summarySelectors) {
-                const element = doc.querySelector(selector);
-                if (element) {
-                    const text = selector.includes('meta') ? 
-                        element.getAttribute('content') : 
-                        element.textContent;
-                    
-                    if (text && text.trim()) {
-                        const cleanedText = cleanText(text.trim());
-                        // HTML 코드나 스타일이 포함되지 않고 적절한 길이인지 확인
-                        if (!cleanedText.includes('<') && 
-                            !cleanedText.includes('{') && 
-                            !cleanedText.includes('function') &&
-                            cleanedText.length > 20 && 
-                            cleanedText.length < 300) {
-                            summary = cleanedText.substring(0, 150) + (cleanedText.length > 150 ? '...' : '');
-                            break;
-                        }
-                    }
-                }
-            }
-            
-            // 태그 추출 (기존 .tag 클래스에서)
-            const tags = Array.from(doc.querySelectorAll('.tag'))
-                .map(tag => cleanText(tag.textContent.trim()))
-                .filter(tag => tag && tag.length > 0 && tag.length < 20)
-                .slice(0, 6);
-            
-            console.log(`폴백 방식으로 추출된 데이터: ${filePath}`);
-            console.log(`폴백 제목: ${title}, 요약: ${summary?.substring(0, 50)}...`);
-            
-            // summary가 비어있으면 첫 번째 문단 찾기
-            if (!summary) {
-                const paragraphs = doc.querySelectorAll('p');
-                for (const p of paragraphs) {
-                    const text = cleanText(p.textContent.trim());
-                    if (text.length > 50 && text.length < 300 && 
-                        !text.includes('<') && !text.includes('{') && 
-                        !text.includes('function')) {
-                        summary = text.substring(0, 150) + (text.length > 150 ? '...' : '');
-                        break;
-                    }
-                }
-            }
-            
-            return {
-                title: title || getDefaultTitle(filePath),
-                subtitle: '',
-                date: defaultDate,
-                summary: summary || '커피 시장 분석 보고서입니다.',
-                tags: tags.length > 0 ? tags : ['커피시장', '분석']
-            };
-        }
-
-        // 텍스트 정제 함수
-        function cleanText(text) {
-            return text
-                .replace(/\s+/g, ' ')        // 여러 공백을 하나로
-                .replace(/[\r\n]+/g, ' ')    // 줄바꿈을 공백으로
-                .trim();
-        }
-
-        // 기본 제목 생성
-        function getDefaultTitle(filePath) {
-            const dateMatch = filePath.match(/(\d{4}-\d{2}-\d{2})/);
-            if (dateMatch) {
-                return `커피 시장 분석 리포트 - ${dateMatch[1]}`;
-            }
-            return '커피 시장 분석 리포트';
-        }
-
-        // 날짜 포맷팅 함수
-        function formatKoreanDate(dateString) {
-            try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            } catch (error) {
-                return dateString;
-            }
-        }
-
-        // JSON 폴백 함수 (기존 reports.json 지원)
-        async function loadReportsFromJSON() {
-            try {
-                const response = await fetch('reports.json');
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('reports.json에서 로드된 보고서 수:', data.reports?.length || 0);
-                    return data.reports || [];
-                }
-            } catch (error) {
-                console.log('reports.json 로딩 실패:', error.message);
-            }
-            return [];
-        }
-
-        // 기본 데이터 (빈 배열 반환)
-        function getDefaultReports() {
-            return [];
-        }
-
-        // 메인 리포트 초기화 함수
-        async function initializeReports() {
-            try {
-                console.log('리포트 초기화 시작...');
-                
-                // HTML 파일에서 직접 로드를 우선 시도
-                let reports = await loadReportsFromFiles();
-                console.log('파일에서 로드된 리포트:', reports.length);
-                
-                // HTML 로드 실패 시 JSON 파일에서 로드 시도
-                if (reports.length === 0) {
-                    reports = await loadReportsFromJSON();
-                    console.log('JSON에서 로드된 리포트:', reports.length);
-                }
-                
-                // 모든 로드 실패 시 기본 데이터 사용
-                if (reports.length === 0) {
-                    console.log('모든 로드 실패, 기본 데이터 사용');
-                    reports = getDefaultReports();
-                }
-                
-                console.log('최종 리포트 수:', reports.length);
-                return reports;
-                
-            } catch (error) {
-                console.error('리포트 초기화 중 오류:', error);
-                return getDefaultReports();
-            }
-        }
-
-        // 날짜 변환 함수
-        function parseDate(dateValue) {
-            if (typeof dateValue === 'number') {
-                // Excel 날짜 시리얼 번호인 경우
-                const date = new Date((dateValue - 25569) * 86400 * 1000);
-                return date;
-            } else if (typeof dateValue === 'string') {
-                return new Date(dateValue);
-            }
-            return new Date(dateValue);
-        }
-
-        // Coffee Futures 차트
-        async function createCoffeeChart() {
-            const loadingElement = document.getElementById('loading-coffee');
-            const chartElement = document.getElementById('coffeeChart');
-            
-            try {
-                const data = await Promise.race([
-                    readGoogleSheetData('coffeefutures'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-                ]);
-                
-                if (!data || data.length === 0) {
-                    throw new Error('No data received');
-                }
-
-                const chartData = data.map((row, index) => ({
-                    x: index,
-                    y: parseFloat(row.value),
-                    date: parseDate(row.date)
-                })).filter(point => !isNaN(point.y) && point.y > 0);
-                
-                if (chartData.length === 0) {
-                    throw new Error('No valid data points');
-                }
-
-                // 로딩 숨기기
-                loadingElement.style.display = 'none';
-                
-                // canvas 요소 표시
-                chartElement.style.display = 'block';
-
-                const ctx = chartElement.getContext('2d');
-                
-                // 기존 차트가 있으면 제거
-                if (charts.coffee) {
-                    charts.coffee.destroy();
-                    charts.coffee = null;
-                }
-                
-                // 차트 생성
-                charts.coffee = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: [{
-                            label: 'Coffee Futures Price',
-                            data: chartData,
-                            borderColor: '#8B4513',
-                            backgroundColor: 'rgba(139, 69, 19, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.2,
-                            pointRadius: 0,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#8B4513' : 'transparent'
-                            ),
-                            pointBorderColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#FFFFFF' : 'transparent'
-                            ),
-                            pointBorderWidth: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 2 : 0
-                            ),
-                            pointRadius: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 4 : 0
-                            )
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: 'Date'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
-                                            const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 8));
-                                            
-                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
-                                            }
-                                        }
-                                        return '';
-                                    },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / 8)),
-                                    maxTicksLimit: 10,
-                                    maxRotation: 45,
-                                    minRotation: 0
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Price (cents/lb)'
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                console.log('Coffee chart created with', chartData.length, 'data points');
-            } catch (error) {
-                console.error('Coffee chart error:', error);
-                console.error('Error stack:', error.stack);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
-            }
-        }
-
-        // USD/BRL 환율 차트
-        async function createUSDChart() {
-            const loadingElement = document.getElementById('loading-usd');
-            const chartElement = document.getElementById('usdChart');
-            
-            try {
-                const data = await Promise.race([
-                    readGoogleSheetData('usdbrl'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-                ]);
-                
-                if (!data) {
-                    throw new Error('No data received');
-                }
-
-                const chartData = data.map((row, index) => ({
-                    x: index,
-                    y: parseFloat(row.value),
-                    date: parseDate(row.date)
-                })).filter(point => !isNaN(point.y));
-
-                loadingElement.style.display = 'none';
-                chartElement.style.display = 'block';
-
-                const ctx = chartElement.getContext('2d');
-                
-                // 기존 차트가 있으면 제거
-                if (charts.usd) {
-                    charts.usd.destroy();
-                    charts.usd = null;
-                }
-                
-                charts.usd = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: [{
-                            label: 'USD/BRL Rate',
-                            data: chartData,
-                            borderColor: '#2E8B57',
-                            backgroundColor: 'rgba(46, 139, 87, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.2,
-                            pointRadius: 0,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#2E8B57' : 'transparent'
-                            ),
-                            pointBorderColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#FFFFFF' : 'transparent'
-                            ),
-                            pointBorderWidth: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 2 : 0
-                            ),
-                            pointRadius: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 4 : 0
-                            )
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: 'Date'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
-                                            const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 8));
-                                            
-                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
-                                            }
-                                        }
-                                        return '';
-                                    },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / 8)),
-                                    maxTicksLimit: 10,
-                                    maxRotation: 45,
-                                    minRotation: 0
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'BRL per USD'
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                console.log('USD chart created with', chartData.length, 'data points');
-            } catch (error) {
-                console.error('USD chart error:', error);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
-            }
-        }
-
-        // CFTC 포지션 차트 (바 차트 레이블 문제 해결)
-        async function createCFTCChart() {
-            const loadingElement = document.getElementById('loading-cftc');
-            const chartElement = document.getElementById('cftcChart');
-            
-            try {
-                const data = await Promise.race([
-                    readGoogleSheetData('cftcpositions'),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-                ]);
-                
-                if (!data) {
-                    throw new Error('No data received');
-                }
-
-                console.log('CFTC Raw data sample:', data.slice(0, 3));
-
-                const chartData = data.map((row) => ({
-                    y: parseInt(row.value),
-                    date: parseDate(row.date),
-                    dateString: row.date
-                })).filter(point => !isNaN(point.y) && point.date);
-
-                // 날짜 기준으로 정렬
-                chartData.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-                console.log('CFTC Processed data sample:', {
-                    total: chartData.length,
-                    first: chartData[0],
-                    last: chartData[chartData.length - 1]
-                });
-
-                loadingElement.style.display = 'none';
-                chartElement.style.display = 'block';
-
-                const ctx = chartElement.getContext('2d');
-                
-                // 기존 차트가 있으면 제거
-                if (charts.cftc) {
-                    charts.cftc.destroy();
-                    charts.cftc = null;
-                }
-                
-                // 모바일 여부 확인
-                const isMobile = window.innerWidth <= 768;
-                
-                // 모든 데이터 포인트에 대해 월만 표시
-                const totalData = chartData.length;
-                
-                // 바 차트용 레이블을 모든 데이터 포인트에 대해 생성 (월만 표시)
-                const labels = chartData.map((item) => {
-                    return item.date.toLocaleDateString('ko-KR', { 
-                        month: 'short'
-                    });
-                });
-                
-                console.log('Generated labels count:', labels.length);
-                console.log('Non-empty labels:', labels.filter(l => l.trim() !== ''));
-                
-                charts.cftc = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Net Long Positions',
-                            data: chartData.map(d => d.y),
-                            backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
-                            borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR', {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric'
-                                        });
-                                    },
-                                    label: function(context) {
-                                        return 'Net Long: ' + context.parsed.y.toLocaleString();
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Date'
-                                },
-                                ticks: {
-                                    maxRotation: 45,
-                                    minRotation: 0,
-                                    font: {
-                                        size: isMobile ? 10 : 12
-                                    },
-                                    color: '#333',
-                                    autoSkip: true,
-                                    maxTicksLimit: 12
-                                },
-                                grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Net Long Positions'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toLocaleString();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                console.log('CFTC Chart created successfully with', chartData.length, 'data points');
-                
-            } catch (error) {
-                console.error('CFTC chart error:', error);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
-            }
-        }
-
-        // NVDI 차트 (구글 시트에서 읽기)
-        async function createNVDIChart() {
-            const loadingElement = document.getElementById('loading-nvdi');
-            const chartElement = document.getElementById('nvdiChart');
-            
-            try {
-                const nvdiData = await Promise.race([
-                    readNVDIGoogleSheet(),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-                ]);
-                
-                if (!nvdiData || nvdiData.length === 0) {
-                    throw new Error('NVDI 데이터를 읽을 수 없습니다');
-                }
-
-                const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', 
-                               '7월', '8월', '9월', '10월', '11월', '12월'];
-
-                const datasets = [];
-
-                // Min-Max 범위 상한선
-                const maxData = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.maxValue
-                })).filter(point => point.y !== null);
-
-                datasets.push({
-                    label: 'Historical Range (2010-2023)',
-                    data: maxData,
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                    borderWidth: 1,
-                    fill: '+1',
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 0
-                });
-
-                // Min-Max 범위 하한선
-                const minData = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.minValue
-                })).filter(point => point.y !== null);
-
-                datasets.push({
-                    label: '',
-                    data: minData,
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
-                    borderWidth: 1,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 0
-                });
-
-                // 2024년 라인
-                const data2024 = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.year2024
-                })).filter(point => point.y !== null && !isNaN(point.y));
-
-                if (data2024.length > 0) {
-                    datasets.push({
-                        label: '2024',
-                        data: data2024,
-                        borderColor: '#E74C3C',
-                        backgroundColor: 'transparent',
-                        borderWidth: 3,
-                        fill: false,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#E74C3C',
-                        pointBorderColor: '#FFFFFF',
-                        pointBorderWidth: 2
-                    });
-                }
-
-                // 2025년 라인
-                const data2025 = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.year2025
-                })).filter(point => point.y !== null && !isNaN(point.y));
-
-                if (data2025.length > 0) {
-                    datasets.push({
-                        label: '2025',
-                        data: data2025,
-                        borderColor: '#3498DB',
-                        backgroundColor: 'transparent',
-                        borderWidth: 3,
-                        fill: false,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#3498DB',
-                        pointBorderColor: '#FFFFFF',
-                        pointBorderWidth: 2
-                    });
-                }
-
-                loadingElement.style.display = 'none';
-                chartElement.style.display = 'block';
-
-                const ctx = chartElement.getContext('2d');
-                charts.nvdi = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: datasets
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'bottom',
-                                labels: {
-                                    filter: function(item) {
-                                        return item.text !== '';
-                                    },
-                                    usePointStyle: false,
-                                    padding: 20,
-                                    font: {
-                                        size: 12
-                                    },
-                                    generateLabels: function(chart) {
-                                        const datasets = chart.data.datasets;
-                                        return datasets.map((dataset, i) => {
-                                            if (dataset.label && dataset.label !== '') {
-                                                return {
-                                                    text: dataset.label,
-                                                    fillStyle: dataset.borderColor,
-                                                    strokeStyle: dataset.borderColor,
-                                                    lineWidth: 3,
-                                                    hidden: !chart.isDatasetVisible(i),
-                                                    datasetIndex: i
-                                                };
-                                            }
-                                        }).filter(item => item);
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return monthKR[index] || `월 ${index + 1}`;
-                                    },
-                                    label: function(context) {
-                                        if (context.datasetIndex === 0) {
-                                            const index = context.dataIndex;
-                                            const dataPoint = nvdiData[index];
-                                            if (dataPoint) {
-                                                return `Range: ${dataPoint.minValue?.toFixed(3)} - ${dataPoint.maxValue?.toFixed(3)}`;
-                                            }
-                                            return 'Range data';
-                                        } else if (context.datasetIndex === 1) {
-                                            return '';
-                                        }
-                                        return context.dataset.label + ': ' + (context.parsed.y ? context.parsed.y.toFixed(3) : 'N/A');
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: '월',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        return monthKR[index] || '';
-                                    },
-                                    maxTicksLimit: 12,
-                                    stepSize: 1
-                                },
-                                min: 0,
-                                max: 11,
-                                grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'NVDI Index',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                },
-                                grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toFixed(2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                console.log('NVDI 차트 생성 완료');
-                
-            } catch (error) {
-                console.error('NVDI chart error:', error);
-                loadingElement.innerHTML = `
-                    <div style="color: #e74c3c; text-align: center;">
-                        <strong>NVDI 데이터 로딩 실패</strong><br>
-                        <small>${error.message}</small><br>
-                        <small style="margin-top: 10px; display: block;">
-                            구글 시트에서 데이터를 읽을 수 없습니다.
-                        </small>
-                    </div>
-                `;
-            }
-        }
-
-        // NVDI 구글 시트 읽기 함수
-        async function readNVDIGoogleSheet() {
-            try {
-                const url = GOOGLE_SHEETS_URLS.nvdi;
-                console.log('Fetching NVDI data from Google Sheets');
-                
-                let csvText;
-                
-                // 먼저 직접 접근 시도
-                try {
-                    const directResponse = await fetch(url);
-                    if (directResponse.ok) {
-                        csvText = await directResponse.text();
-                        console.log('Direct access successful for NVDI');
-                    } else {
-                        throw new Error('Direct access failed');
-                    }
-                } catch (directError) {
-                    // 직접 접근 실패시 AllOrigins 프록시 사용
-                    console.log('Direct access failed for NVDI, trying proxy...');
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    
-                    const proxyResponse = await fetch(proxyUrl);
-                    if (!proxyResponse.ok) {
-                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
-                    }
-                    
-                    const proxyData = await proxyResponse.json();
-                    csvText = proxyData.contents;
-                    console.log('Proxy access successful for NVDI');
-                }
-                const data = parseCSV(csvText);
-                
-                // 첫 번째 행은 헤더
-                const headers = data[0];
-                const yearColumns = {};
-                
-                // 헤더에서 년도 컬럼 인덱스 찾기
-                headers.forEach((header, index) => {
-                    if (index > 0) { // 첫 번째 컬럼은 Date
-                        const year = parseInt(header.toString().trim());
-                        if (!isNaN(year)) {
-                            yearColumns[year] = index;
-                        }
-                    }
-                });
-                
-                console.log('Found year columns:', Object.keys(yearColumns));
-                
-                // 월별 데이터 집계
-                const monthlyData = [];
-                
-                for (let month = 1; month <= 12; month++) {
-                    const monthRows = [];
-                    
-                    // 해당 월의 모든 행 찾기
-                    for (let i = 1; i < data.length; i++) {
-                        const row = data[i];
-                        if (row && row[0]) {
-                            // DD/MM 형식에서 월 추출
-                            const dateParts = row[0].toString().split('/');
-                            if (dateParts.length === 2) {
-                                const rowMonth = parseInt(dateParts[1]);
-                                if (rowMonth === month) {
-                                    monthRows.push(row);
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (monthRows.length > 0) {
-                        // 2010-2023년 데이터에서 min/max 계산
-                        const allValues = [];
-                        for (const row of monthRows) {
-                            for (let year = 2010; year <= 2023; year++) {
-                                const colIndex = yearColumns[year];
-                                if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
-                                    const value = parseFloat(row[colIndex]);
-                                    if (!isNaN(value)) {
-                                        allValues.push(value);
-                                    }
-                                }
-                            }
-                        }
-                        
-                        const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
-                        const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
-                        
-                        // 2024년과 2025년 데이터 (평균값 계산)
-                        let year2024Values = [];
-                        let year2025Values = [];
-                        
-                        for (const row of monthRows) {
-                            const val2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
-                            const val2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
-                            
-                            if (!isNaN(val2024) && val2024 !== null) year2024Values.push(val2024);
-                            if (!isNaN(val2025) && val2025 !== null) year2025Values.push(val2025);
-                        }
-                        
-                        const avg2024 = year2024Values.length > 0 ? 
-                            year2024Values.reduce((sum, val) => sum + val, 0) / year2024Values.length : null;
-                        const avg2025 = year2025Values.length > 0 ? 
-                            year2025Values.reduce((sum, val) => sum + val, 0) / year2025Values.length : null;
-                        
-                        monthlyData.push({
-                            month: month,
-                            minValue: minValue,
-                            maxValue: maxValue,
-                            year2024: avg2024,
-                            year2025: avg2025
-                        });
-                        
-                        console.log(`Month ${month}: ${monthRows.length} rows, min=${minValue?.toFixed(3)}, max=${maxValue?.toFixed(3)}, 2024=${avg2024?.toFixed(3)}, 2025=${avg2025?.toFixed(3)}`);
-                    }
-                }
-                
-                console.log('Successfully processed NVDI data:', monthlyData.length, 'months');
-                return monthlyData;
-                
-            } catch (error) {
-                console.error('Error reading NVDI Google Sheet:', error);
-                return null;
-            }
-        }
-
-        // 리포트 렌더링 (최근 4개만 표시 + More 버튼)
-        function renderReports(filteredReports = allReports) {
-            const grid = document.getElementById('reportsGrid');
-            const noResults = document.getElementById('noResults');
-            const moreContainer = document.getElementById('moreReportsContainer');
-            const moreBtn = document.getElementById('moreReportsBtn');
-            
-            if (filteredReports.length === 0) {
-                grid.style.display = 'none';
-                noResults.style.display = 'block';
-                moreContainer.style.display = 'none';
-                return;
-            }
-            
-            grid.style.display = 'grid';
-            noResults.style.display = 'none';
-            
-            // 날짜순으로 정렬하여 가장 최근 보고서 찾기
-            const sortedReports = [...filteredReports].sort((a, b) => new Date(b.date) - new Date(a.date));
-            const latestDate = sortedReports.length > 0 ? sortedReports[0].date : null;
-            
-            // 최근 4개와 나머지 분리
-            const recentReports = sortedReports.slice(0, 4);
-            const olderReports = sortedReports.slice(4);
-            
-            // More 버튼 표시 여부 결정
-            if (olderReports.length > 0) {
-                moreContainer.style.display = 'block';
-                
-                // More 버튼 이벤트 리스너 (중복 방지)
-                const newMoreBtn = moreBtn.cloneNode(true);
-                moreBtn.parentNode.replaceChild(newMoreBtn, moreBtn);
-                
-                let isExpanded = false;
-                newMoreBtn.addEventListener('click', () => {
-                    isExpanded = !isExpanded;
-                    
-                    if (isExpanded) {
-                        // 나머지 보고서들 표시
-                        olderReports.forEach((report, index) => {
-                            const isLatest = report.date === latestDate;
-                            const card = createReportCard(report, isLatest);
-                            card.classList.add('show-more');
-                            card.style.animationDelay = `${index * 0.1}s`;
-                            grid.appendChild(card);
-                        });
-                        
-                        newMoreBtn.classList.add('expanded');
-                        newMoreBtn.querySelector('.more-text').textContent = 'Show';
-                    } else {
-                        // 나머지 보고서들 숨기기
-                        const moreCards = grid.querySelectorAll('.show-more');
-                        moreCards.forEach(card => card.remove());
-                        
-                        newMoreBtn.classList.remove('expanded');
-                        newMoreBtn.querySelector('.more-text').textContent = 'More Reports';
-                    }
-                });
-            } else {
-                moreContainer.style.display = 'none';
-            }
-            
-            // 최근 4개 보고서만 먼저 표시
-            grid.innerHTML = '';
-            recentReports.forEach(report => {
-                const isLatest = report.date === latestDate;
-                const card = createReportCard(report, isLatest);
-                grid.appendChild(card);
-            });
-        }
-        
-        // 보고서 카드 생성 함수
-        function createReportCard(report, isLatest) {
-            const card = document.createElement('div');
-            card.className = 'report-card';
-            card.onclick = () => window.location.href = report.link;
-            
-            card.innerHTML = `
-                <div class="report-date">${report.displayDate}</div>
-                <h3 class="report-title">
-                    <span>${report.title}</span>
-                    ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
-                </h3>
-                <p class="report-summary">${report.summary}</p>
-                <div class="report-tags">
-                    ${report.tags.slice(0, 4).map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-                <a href="${report.link}" class="read-more">보고서 읽기</a>
-            `;
-            
-            return card;
-        }
-
-        // 리포트 필터링
-        function filterReports() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const yearFilter = document.getElementById('yearFilter').value;
-            const monthFilter = document.getElementById('monthFilter').value;
-            
-            const filtered = allReports.filter(report => {
-                const matchesSearch = report.title.toLowerCase().includes(searchTerm) || 
-                                    report.summary.toLowerCase().includes(searchTerm) ||
-                                    report.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-                const matchesYear = !yearFilter || report.year === yearFilter;
-                const matchesMonth = !monthFilter || report.month === monthFilter;
-                
-                return matchesSearch && matchesYear && matchesMonth;
-            });
-            
-            renderReports(filtered);
-        }
-
-        // 필터 옵션 업데이트
-        function updateFilters() {
-            const years = [...new Set(allReports.map(r => r.year))].sort().reverse();
-            const months = [...new Set(allReports.map(r => r.month))].sort();
-            
-            const yearSelect = document.getElementById('yearFilter');
-            const monthSelect = document.getElementById('monthFilter');
-            
-            if (yearSelect) {
-                yearSelect.innerHTML = '<option value="">전체 년도</option>';
-                years.forEach(year => {
-                    yearSelect.innerHTML += `<option value="${year}">${year}년</option>`;
-                });
-            }
-            
-            if (monthSelect) {
-                monthSelect.innerHTML = '<option value="">전체 월</option>';
-                months.forEach(month => {
-                    const monthName = parseInt(month) + '월';
-                    monthSelect.innerHTML += `<option value="${month}">${monthName}</option>`;
-                });
-            }
-        }
-
-        // 통계 업데이트
-        function updateStats() {
-            const totalElement = document.getElementById('totalReports');
-            const latestElement = document.getElementById('latestDate');
-            
-            if (totalElement) {
-                totalElement.textContent = allReports.length;
-            }
-            
-            if (latestElement && allReports.length > 0) {
-                latestElement.textContent = allReports[0].displayDate.substring(0, 7);
-            }
-            
-            // Latest Report 링크 업데이트
-            updateLatestReportLink();
-        }
-
-        // Latest Report 링크 업데이트 함수
-        function updateLatestReportLink() {
-            const latestReportLink = document.getElementById('latestReportLink');
-            if (latestReportLink && allReports.length > 0) {
-                // 날짜순으로 정렬하여 가장 최신 보고서 찾기
-                const sortedReports = [...allReports].sort((a, b) => new Date(b.date) - new Date(a.date));
-                const latestReport = sortedReports[0];
-                
-                if (latestReport) {
-                    latestReportLink.href = latestReport.link;
-                    console.log('Latest Report Link updated to:', latestReport.link);
-                }
-            }
-        }
-
-        // 현재 날짜 업데이트
-        function updateCurrentDate() {
-            const dateElement = document.getElementById('currentDate');
-            if (dateElement) {
-                const now = new Date();
-                const options = { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    weekday: 'short'
-                };
-                const formattedDate = now.toLocaleDateString('ko-KR', options);
-                dateElement.textContent = formattedDate;
-            }
-        }
-
-        // 메인 초기화 함수
-        async function init() {
-            try {
-                console.log('초기화 시작...');
-                
-                // 현재 날짜 업데이트
-                updateCurrentDate();
-                
-                // 리포트를 먼저 로드하여 즉시 표시
-                console.log('리포트 로딩 시작...');
-                allReports = await initializeReports();
-                updateFilters();
-                updateStats();
-                renderReports();
-                
-                // 이벤트 리스너 설정
-                document.getElementById('searchInput').addEventListener('input', filterReports);
-                document.getElementById('yearFilter').addEventListener('change', filterReports);
-                document.getElementById('monthFilter').addEventListener('change', filterReports);
-                
-                console.log('리포트 로딩 완료');
-                
-                // 차트는 백그라운드에서 비동기로 로드 (사용자는 기다리지 않음)
-                console.log('차트 백그라운드 로딩 시작...');
-                Promise.all([
-                    createCoffeeChart().catch(error => console.error('Coffee chart failed:', error)),
-                    createUSDChart().catch(error => console.error('USD chart failed:', error)),
-                    createCFTCChart().catch(error => console.error('CFTC chart failed:', error)),
-                    createNVDIChart().catch(error => console.error('NVDI chart failed:', error))
-                ]).then(() => {
-                    console.log('모든 차트 로딩 완료');
-                    // 차트 로딩이 완료되면 대시보드 섹션을 부드럽게 표시
-                    const dashboardSection = document.querySelector('.dashboard-section');
-                    if (dashboardSection) {
-                        dashboardSection.classList.add('loaded');
-                    }
-                });
-                
-                console.log('초기화 완료');
-                
-            } catch (error) {
-                console.error('초기화 중 오류:', error);
-            }
-        }
-
-        // 메뉴 초기화 함수
-        function initializeMenu() {
-            const menuButton = document.getElementById('menuButton');
-            const menuCloseBtn = document.getElementById('menuCloseBtn');
-            const sideMenu = document.getElementById('sideMenu');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const pageWrapper = document.getElementById('pageWrapper');
-            
-            // 메뉴 닫기 함수
-            function closeMenu() {
-                sideMenu.classList.remove('active');
-                menuOverlay.classList.remove('active');
-                pageWrapper.classList.remove('menu-open');
-                menuButton.classList.remove('active');
-            }
-            
-            // 메뉴 버튼 이벤트 리스너
-            menuButton.addEventListener('click', function() {
-                sideMenu.classList.add('active');
-                menuOverlay.classList.add('active');
-                pageWrapper.classList.add('menu-open');
-                menuButton.classList.add('active');
-            });
-            
-            // 메뉴 닫기 버튼 이벤트 리스너
-            menuCloseBtn.addEventListener('click', closeMenu);
-            
-            // 오버레이 클릭 시 메뉴 닫기
-            menuOverlay.addEventListener('click', closeMenu);
-            
-            // 대시보드 메뉴 클릭 이벤트
-            const dashboardsMenu = document.getElementById('dashboardsMenu');
-            if (dashboardsMenu) {
-                dashboardsMenu.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    closeMenu();
-                    
-                    // 대시보드 섹션으로 스크롤
-                    const dashboardSection = document.getElementById('dashboard-section');
-                    if (dashboardSection) {
-                        dashboardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
-        }
-
-        // 페이지 로드시 초기화 실행
-        document.addEventListener('DOMContentLoaded', function() {
-            init();
-            initializeMenu();
-        });
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
