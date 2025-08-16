@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<!--REPORT_META
+{
+    "title": "커피 선물 시장 주간 동향 - 미국 관세 50%와 브라질 서리로 341.65센트 급등",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2025-08-16",
+    "summary": "9월 아라비카 커피(KCU25)가 341.65센트로 마감하며 월간 6.33% 상승을 기록했습니다. 8월 1일 시행된 미국의 브라질 커피 50% 관세와 Cerrado Mineiro 지역 서리가 복합적으로 작용하여 공급 우려를 극대화시켰습니다. CFTC Managed Money 순매수 포지션도 22,466계약으로 증가하며 강세 모멘텀을 지지하고 있습니다.",
+    "tags": ["미국관세50%", "브라질서리", "341.65센트", "340센트돌파", "로부스타급감", "ICE재고최저", "CFTC순매수증가", "공급우려극대화", "월간6.33%상승", "연간33.61%상승"]
+}
+REPORT_META-->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
+
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #fff2e6 0%, #ffe6e6 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
+        }
+
+        .frost-alert {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #2980b9;
+        }
+
+        .frost-alert h3 {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .frost-alert p {
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <div class="date-stamp">2025년 8월 16일 금요일</div>
+        </header>
+
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #8B4513; margin-bottom: 20px;">주요 헤드라인: 9월물 341.65센트 반등, 미국 관세와 브라질 서리 우려 복합 작용</h2>
+                <p style="margin-bottom: 15px;">
+                    <strong>커피 선물이 미국의 브라질 관세 50% 부과와 서리 우려로 강력한 반등세를 보이고 있습니다.</strong> 
+                    9월 아라비카 커피(KCU25)는 341.65센트로 마감하며 이번 주 급등했습니다. 
+                    8월 1일부터 시행된 미국의 브라질 커피 50% 관세와 Cerrado Mineiro 지역 서리가 복합적으로 작용하여 공급 우려를 극대화시켰습니다.
+                </p>
+                
+                <div class="frost-alert">
+                    <h3>🚨 미국 관세 50% 시행</h3>
+                    <p style="margin-bottom: 10px;">
+                        8월 1일부터 미국이 브라질 커피에 50% 관세를 부과하기 시작했습니다. 
+                        이는 미국 커피 수입의 30%를 차지하는 브라질산 커피 공급망에 직접적 영향을 미치고 있습니다.
+                    </p>
+                    <h3>🌨️ 브라질 서리 발생</h3>
+                    <p>
+                        8월 13일 Cerrado Mineiro 지역에서 경미한 서리가 보고되어 관세와 함께 이중 타격을 가하고 있습니다. 
+                        공급 차질 우려가 극대화되면서 가격 급등을 견인했습니다.
+                    </p>
+                </div>
+                
+                <div class="content-section" style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #e74c3c;">
+                    <h3 style="color: #e74c3c; margin-bottom: 10px;">핵심 요약</h3>
+                    <p style="font-size: 1.0em; line-height: 1.6;">
+                        커피 선물은 8월 15일 341.65센트로 마감하며 월간 6.33% 상승을 기록했습니다.
+                        8월 1일 시행된 미국의 브라질 커피 50% 관세와 브라질 서리 발생이 복합적으로 작용하여 
+                        공급 우려를 극대화시켰습니다. 로부스타 수출 49% 급감도 추가 상승 압력으로 작용했습니다.
+                    </p>
+                </div>
+                <div class="highlight">
+                    <h3 style="margin-bottom: 10px;">핵심 시장 동향</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>9월물 341.65센트 마감:</strong> 8월 15일 기준, 월간 6.33% 상승, 연간 33.61% 상승</li>
+                        <li><strong>미국 관세 50% 시행:</strong> 8월 1일부터 브라질 커피에 50% 관세 부과, 미국 수입의 30% 영향</li>
+                        <li><strong>브라질 서리 발생:</strong> 8월 13일 Cerrado Mineiro 지역 서리로 2026년 작황 우려 증폭</li>
+                        <li><strong>로부스타 수출 급감:</strong> 브라질 7월 로부스타 수출 전년 대비 49% 급감</li>
+                        <li><strong>ICE 재고 최저:</strong> 아라비카 재고 736,411포대로 1.25년 만에 최저 수준</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="price-box">
+                    <h3>9월 아라비카 (KCU25)</h3>
+                    <div class="price-value">341.65</div>
+                    <div class="price-change positive">+20.75 (+6.47%)</div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">센트/파운드 → $7.53/kg</div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">주요 지표 현황</h3>
+                    <div class="stat-item">
+                        <span><strong>ICE 아라비카 재고:</strong></span>
+                        <span style="color: #e74c3c;">736,411포대 (1.25년 최저)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>브라질 2025/26 수확:</strong></span>
+                        <span>94% 완료 (아라비카 91%)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>로부스타 선물(RMU25):</strong></span>
+                        <span style="color: #51cf66;">+206 (+5.53%)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>미국 관세 50%:</strong></span>
+                        <span style="color: #e74c3c;">8월 1일 시행, 커피 포함</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+            <h2 style="color: #8B4513; margin-bottom: 20px; text-align: center;">주간 가격 동향 및 CFTC 포지션 분석</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 15px; color: #666;">아라비카 주간 가격 변동</h3>
+                    <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
+                        <g stroke="#f0f0f0" stroke-width="1">
+                            <line x1="40" y1="30" x2="40" y2="200"/>
+                            <line x1="40" y1="200" x2="380" y2="200"/>
+                            <line x1="40" y1="170" x2="380" y2="170" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="140" x2="380" y2="140" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="110" x2="380" y2="110" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="80" x2="380" y2="80" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
+                        </g>
+                        
+                        <g font-size="10" fill="#666">
+                            <text x="35" y="205" text-anchor="end">320</text>
+                            <text x="35" y="175" text-anchor="end">330</text>
+                            <text x="35" y="145" text-anchor="end">340</text>
+                            <text x="35" y="115" text-anchor="end">350</text>
+                            <text x="35" y="85" text-anchor="end">360</text>
+                            <text x="35" y="55" text-anchor="end">370</text>
+                        </g>
+                        
+                        <g font-size="9" fill="#666">
+                            <text x="60" y="215" text-anchor="middle">8/12</text>
+                            <text x="130" y="215" text-anchor="middle">8/13</text>
+                            <text x="200" y="215" text-anchor="middle">8/14</text>
+                            <text x="270" y="215" text-anchor="middle">8/15</text>
+                            <text x="340" y="215" text-anchor="middle">8/16</text>
+                        </g>
+                        
+                        <polyline fill="none" stroke="#e74c3c" stroke-width="3"
+                            points="60,188 130,178 200,168 270,130 340,120"/>
+                        
+                        <circle cx="340" cy="120" r="4" fill="#e74c3c"/>
+                        <text x="345" y="117" font-size="11" fill="#e74c3c" font-weight="bold">341.65</text>
+                        
+                        <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">센트/파운드</text>
+                    </svg>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                        이번 주 강력한 반등세<br>
+                        브라질 서리 우려로 급등
+                    </p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 15px; color: #666;">CFTC Managed Money 순매수 포지션 (5주 추이)</h3>
+                    <svg viewBox="0 0 400 250" style="width: 100%; max-width: 400px; margin: 0 auto;">
+                        <g stroke="#f0f0f0" stroke-width="1">
+                            <line x1="40" y1="30" x2="40" y2="200"/>
+                            <line x1="40" y1="200" x2="380" y2="200"/>
+                            <line x1="40" y1="170" x2="380" y2="170" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="140" x2="380" y2="140" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="110" x2="380" y2="110" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="80" x2="380" y2="80" stroke-dasharray="2,2"/>
+                            <line x1="40" y1="50" x2="380" y2="50" stroke-dasharray="2,2"/>
+                        </g>
+                        
+                        <g font-size="10" fill="#666">
+                            <text x="35" y="205" text-anchor="end">15K</text>
+                            <text x="35" y="175" text-anchor="end">18K</text>
+                            <text x="35" y="145" text-anchor="end">21K</text>
+                            <text x="35" y="115" text-anchor="end">24K</text>
+                            <text x="35" y="85" text-anchor="end">27K</text>
+                            <text x="35" y="55" text-anchor="end">30K</text>
+                        </g>
+                        
+                        <g font-size="8" fill="#666">
+                            <text x="90" y="215" text-anchor="middle">7/15</text>
+                            <text x="160" y="215" text-anchor="middle">7/22</text>
+                            <text x="230" y="215" text-anchor="middle">7/29</text>
+                            <text x="300" y="215" text-anchor="middle">8/5</text>
+                            <text x="370" y="215" text-anchor="middle">8/12</text>
+                        </g>
+                        
+                        <!-- 4주간 추이 라인 -->
+                        <polyline fill="none" stroke="#3498db" stroke-width="3"
+                            points="90,157 160,148 230,155 300,154 370,146"/>
+                        
+                        <!-- 각 주별 포인트 -->
+                        <circle cx="90" cy="157" r="3" fill="#3498db"/>
+                        <circle cx="160" cy="148" r="3" fill="#3498db"/>
+                        <circle cx="230" cy="155" r="3" fill="#3498db"/>
+                        <circle cx="300" cy="154" r="3" fill="#3498db"/>
+                        <circle cx="370" cy="146" r="4" fill="#e74c3c"/>
+                        
+                        <!-- 최신 수치 표시 -->
+                        <text x="375" y="143" font-size="10" fill="#e74c3c" font-weight="bold">22.5K</text>
+                        
+                        <!-- 수치 레이블 -->
+                        <text x="90" y="152" font-size="8" fill="#3498db" text-anchor="middle">21.8K</text>
+                        <text x="160" y="143" font-size="8" fill="#3498db" text-anchor="middle">22.8K</text>
+                        <text x="230" y="150" font-size="8" fill="#3498db" text-anchor="middle">21.4K</text>
+                        <text x="300" y="149" font-size="8" fill="#3498db" text-anchor="middle">21.5K</text>
+                        
+                        <text x="200" y="20" text-anchor="middle" font-size="11" fill="#333">계약 수</text>
+                    </svg>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                        Managed Money 순매수 22,466계약<br>
+                        전주 대비 상승, 강세 모멘텀 재확인
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">🌍 최신 시장 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.15</div>
+                    <div class="news-content">
+                        <strong>커피 선물 강력 반등:</strong> 9월 아라비카 커피(KCU25)가 341.65센트로 마감하며 
+                        이번 주 연속 상승세를 기록했습니다. 미국의 브라질 관세 50%와 서리 우려가 복합적으로 작용했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.01</div>
+                    <div class="news-content">
+                        <strong>미국 관세 50% 시행:</strong> 트럼프 대통령이 브라질 제품에 50% 관세를 부과하기 시작했습니다.
+                        커피는 면제되지 않아 미국 커피 수입의 30%를 차지하는 브라질산 커피에 직접적 타격을 가했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.13</div>
+                    <div class="news-content">
+                        <strong>브라질 서리 발생:</strong> Cerrado Mineiro 지역에서 경미한 서리가 보고되어 커피 시장에 긴장감이 조성되었습니다.
+                        초기 평가에서는 피해가 제한적이지만, 2026년 작황에 대한 우려가 가격 상승을 견인했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.13</div>
+                    <div class="news-content">
+                        <strong>브라질 수출 급감 확인:</strong> 브라질 7월 커피 수출이 전년 대비 28% 감소한 240만 포대를 기록했습니다.
+                        특히 로부스타 수출은 49% 급감하여 글로벌 공급 우려를 증폭시켰습니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📊 아시아 및 로부스타 시장</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.15</div>
+                    <div class="news-content">
+                        <strong>로부스타 선물 급등:</strong> 9월 ICE 로부스타 커피(RMU25)가 2개월 만에 최고치로 급등했습니다.
+                        브라질 로부스타 수출 49% 급감과 공매 매입이 가격 상승을 주도했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.12</div>
+                    <div class="news-content">
+                        <strong>베트남 생산량 회복 제한적:</strong> USDA는 베트남 2024/25 커피 생산량을 2,900만 포대로 하향 조정했습니다.
+                        이는 이전 전망치 3,010만 포대보다 낮은 수준으로, 글로벌 로부스타 공급 부족을 심화시킬 전망입니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.11</div>
+                    <div class="news-content">
+                        <strong>베트남 수출 지속 감소:</strong> 베트남의 2024/25 상반기 커피 수출이 전년 동기 대비 23% 감소한 1,215만 포대를 기록했습니다.
+                        높은 국내 가격으로 농민들이 재고를 보유하면서 수출 물량이 제한되고 있습니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📈 기술적 분석 및 전망</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.15 시황</div>
+                    <div class="news-content">
+                        <strong>340센트 돌파 성공:</strong> 9월물 가격이 341.65센트로 상승하며 주요 저항선인 340센트를 돌파했습니다.
+                        다음 목표는 350센트 수준으로 예상되며, 추가 상승 여력이 확인되고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.14</div>
+                    <div class="news-content">
+                        <strong>CFTC 포지션 분석:</strong> 8월 12일 기준 Managed Money의 순매수 포지션이 22,466계약으로 증가하여
+                        전주(21,459계약) 대비 상승세를 보였습니다. 헤지펀드들이 서리 우려에 따른 강세 모멘텀에 참여하고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.13</div>
+                    <div class="news-content">
+                        <strong>ICE 재고 급감:</strong> ICE 아라비카 재고가 736,411포대로 1.25년 만에 최저 수준으로 감소했습니다.
+                        이는 글로벌 공급 부족 상황을 반영하며 가격 상승 압력을 가중시키고 있습니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🌤️ 생산 및 기상 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.13</div>
+                    <div class="news-content">
+                        <strong>브라질 서리 위험 재점화:</strong> Cerrado Mineiro 지역의 서리 발생으로 브라질 커피 작황에 대한 우려가 다시 부각되고 있습니다.
+                        일부 분석가들은 이번 서리가 2026년 수확에 "치명타"가 될 수 있다고 경고했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.12</div>
+                    <div class="news-content">
+                        <strong>브라질 수확 94% 완료:</strong> Safras & Mercado에 따르면 브라질 2025/26 커피 수확이 94% 완료되었습니다.
+                        로부스타는 99% 완료되었으나 아라비카는 91% 완료 수준으로 수확이 지연되고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.10</div>
+                    <div class="news-content">
+                        <strong>베트남 기상 회복 조짐:</strong> 베트남 주요 커피 생산 지역에서 강우량이 회복되면서 2025/26 작기 전망이 개선되고 있습니다.
+                        USDA는 베트남 2025/26 생산량을 3,100만 포대로 전망하며 회복세를 예측했습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망 및 분석</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>커피 선물 시장이 미국의 브라질 관세 50% 부과와 서리 우려로 강력한 반등세를 보이고 있습니다.</strong> 
+                9월물 아라비카 커피(KCU25)는 8월 15일 341.65센트로 마감하며 월간 6.33% 상승을 기록했습니다. 
+                8월 1일부터 시행된 트럼프 정부의 브라질 제품 50% 관세와 Cerrado Mineiro 지역 서리가 
+                복합적으로 작용하여 공급 우려를 극대화시켰습니다.
+                <br><br>
+                <strong>관세 부과는 커피 시장에 구조적 변화를 가져올 전망입니다.</strong> 
+                미국 커피 수입의 30%를 차지하는 브라질산 커피에 대한 50% 관세는 미국 내 커피 가격 상승과 
+                대체 공급원 모색을 촉진하고 있습니다. 중국이 즉시 브라질 커피 수입 확대를 발표하는 등 
+                글로벌 커피 무역 흐름의 재편이 시작되고 있습니다.
+                <br><br>
+                <strong>기술적으로는 340센트 돌파로 추가 상승 모멘텀이 확인되었습니다.</strong> 
+                CFTC 데이터에 따르면 Managed Money의 순매수 포지션이 22,466계약으로 증가하여 
+                헤지펀드들이 강세 모멘텀에 적극 참여하고 있음을 보여줍니다. 
+                다음 목표인 350센트 돌파 시 추가 상승이 기대됩니다.
+            </p>
+            </p>
+        </div>
+
+        <div class="tags">
+            <span class="tag">미국관세50%</span>
+            <span class="tag">브라질서리</span>
+            <span class="tag">341.65센트</span>
+            <span class="tag">340센트돌파</span>
+            <span class="tag">로부스타급감</span>
+            <span class="tag">ICE재고최저</span>
+            <span class="tag">CFTC순매수증가</span>
+            <span class="tag">공급우려극대화</span>
+            <span class="tag">월간6.33%상승</span>
+            <span class="tag">연간33.61%상승</span>
+        </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, CFTC, Safras & Mercado, USDA, Qahwa World | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
