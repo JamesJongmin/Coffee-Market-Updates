@@ -711,8 +711,8 @@
                 
                 // 심층 분석 리포트만 필터링 - 개선된 필터링 로직
                 const analysisReports = allReports.filter(report => {
-                    // type이 in-depth로 명시된 경우
-                    if (report.type === 'in-depth') return true;
+                    // type이 in-depth 또는 in-depth-analysis로 명시된 경우
+                    if (report.type === 'in-depth' || report.type === 'in-depth-analysis') return true;
                     
                     // 주간 동향이 아닌 리포트들을 심층 분석으로 분류
                     const isWeekly = report.title && (
