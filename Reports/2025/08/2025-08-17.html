@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퍼펙트 스톰: 2025년 커피 가격 급등 딥다이브</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2B1810;
+            --accent: #D2691E;
+            --danger: #E74C3C;
+            --success: #27AE60;
+            --bg-light: #FAFAFA;
+            --bg-dark: #1A1A1A;
+            --text-primary: #2C3E50;
+            --text-secondary: #7F8C8D;
+            --border: #E1E4E8;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; /* 기본 줄 간격 조정 */
+            color: var(--text-primary);
+            background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%);
+            overflow-x: hidden;
+            word-break: keep-all; /* 전역 단어 단위 줄바꿈 설정 */
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2B1810 0%, #4A2C1F 100%);
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(210, 105, 30, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(139, 69, 19, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(160, 82, 45, 0.2) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--danger) 0%, #C0392B 100%);
+            color: white;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem); /* 반응형 폰트 크기 */
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.3; /* 제목 줄 간격 최적화 */
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.25rem); /* 반응형 폰트 크기 */
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 auto 2rem auto;
+            max-width: 650px; /* 최대 너비 설정 */
+            font-weight: 300;
+            line-height: 1.6;
+        }
+        
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            min-width: 150px;
+        }
+        
+        .meta-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .meta-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .positive { color: var(--success) !important; }
+        .negative { color: var(--danger) !important; }
+        
+        /* Navigation */
+        .nav-section {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            z-index: 90;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .nav-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            background: var(--bg-light);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .nav-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        /* Key Insights Section */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .insight-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--primary) 100%);
+        }
+        
+        .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .insight-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .insight-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .insight-text {
+            color: var(--text-secondary);
+            line-height: 1.7; /* 줄 간격 조정 */
+        }
+        
+        /* Analysis Sections */
+        .section {
+            margin-bottom: 4rem;
+        }
+        
+        .section-header {
+            margin-bottom: 2rem;
+        }
+        
+        .section-number {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 2.5rem); /* 반응형 폰트 크기 */
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .section-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.25rem); /* 반응형 폰트 크기 */
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 700px; /* 최대 너비 설정 */
+            line-height: 1.6;
+        }
+        
+        /* Content Cards */
+        .content-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .content-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .content-card p {
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .content-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-card ul li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .content-card ul li::before {
+            content: '☕';
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 1rem;
+        }
+        
+        /* Data Visualization */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .data-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, white 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .data-card:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow);
+        }
+        
+        .data-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .data-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .data-change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+        
+        /* Charts */
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .chart-legend {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        /* Price Chart Visualization */
+        .price-chart {
+            height: 300px;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .price-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 100%;
+            padding: 0 1rem;
+            border-left: 2px solid var(--border);
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .price-bar {
+            flex: 1;
+            margin: 0 0.25rem;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .price-bar:hover {
+            transform: scaleY(1.05);
+        }
+        
+        .price-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        
+        .price-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        
+        /* Scenario Cards */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .scenario-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .scenario-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+        }
+        
+        .scenario-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .scenario-probability {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .scenario-body {
+            padding: 1.5rem;
+        }
+        
+        .scenario-impact {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+        
+        .impact-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .impact-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+        }
+        
+        .data-table thead {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+        }
+        
+        .data-table th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .data-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--bg-light);
+        }
+        
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Call to Action */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #4A2C1F 100%);
+            padding: 4rem 2rem;
+            border-radius: 32px;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(210, 105, 30, 0.2) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-text {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .footer-divider {
+            width: 100px;
+            height: 2px;
+            background: var(--accent);
+            margin: 2rem auto;
+        }
+        
+        .disclaimer {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 95%; /* 모바일에서 기본 폰트 크기 미세 조정 */
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            
+            .insights-grid,
+            .scenario-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .data-table {
+                font-size: 0.875rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 0.75rem;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <a href="https://coffeemarket.info" class="home-button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Home
+        </a>
+        
+        <div class="hero-content">
+            <div class="hero-badge">🔥 BREAKING ANALYSIS</div>
+            <h1>퍼펙트 스톰:<br/>2025년 커피 가격 급등의&nbsp;모든&nbsp;것</h1>
+            <p class="hero-subtitle">관세, 공급 충격, 시장 역학 변화가 만든 전례 없는&nbsp;가격&nbsp;랠리</p>
+            
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <div class="meta-value positive">334.20</div>
+                    <div class="meta-label">ICE 아라비카 (¢/lb)</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-value">50%</div>
+                    <div class="meta-label">미국 관세율</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-value negative">-6.4%</div>
+                    <div class="meta-label">브라질 아라비카&nbsp;전망</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-value">743K</div>
+                    <div class="meta-label">ICE 인증&nbsp;재고&nbsp;(백)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <nav class="nav-section">
+        <div class="nav-container">
+            <a href="#summary" class="nav-item">Executive Summary</a>
+            <a href="#overview" class="nav-item active">개요</a>
+            <a href="#tariff" class="nav-item">관세 충격</a>
+            <a href="#fundamentals" class="nav-item">펀더멘털</a>
+            <a href="#brazil" class="nav-item">브라질 분석</a>
+            <a href="#robusta" class="nav-item">로부스타</a>
+            <a href="#outlook" class="nav-item">시장 전망</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+
+        <section id="summary" class="section">
+            <div class="section-header">
+                <span class="section-number">SUMMARY</span>
+                <h2 class="section-title">Executive Summary</h2>
+                <p class="section-subtitle">2025년 커피 가격 랠리를 이끄는 핵심&nbsp;동인&nbsp;요약</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>📈 시장 핵심 동력 분석</h3>
+                <ul>
+                    <li>
+                        <strong>공급 풀(Pool)의 구조적 축소:</strong> 미국의 50% 관세 부과로 인해, ICE 선물 계약의 '최저가인도품목(Cheapest-to-Deliver)'이었던 브라질 원두가 사실상 제외되었습니다. 이는 인증 재고로 유입될 수 있는 공급원을 급격히 축소시켜 구조적인 가격 상승 압력으로&nbsp;작용합니다.
+                    </li>
+                    <li>
+                        <strong>견고한 펀더멘털 기반 랠리:</strong> 과거 커피 가격은 브라질 헤알화(USDBRL) 강세와 동조화되는 경향이 컸으나, 이번 랠리는 안정적인 환율 환경 속에서 발생하고 있습니다. 이는 현재의 가격 상승이 통화가 아닌 생두 자체의 수급 불균형이라는 강력한 펀더멘털에 기반하고&nbsp;있음을&nbsp;시사합니다.
+                    </li>
+                    <li>
+                        <strong>투자 심리 전환:</strong> CFTC 투기적 순매수(Net Long) 포지션이 역사적 저점을 확인한 후 점진적으로 증가하고 있습니다. 이는 시장 참여자들의 심리가 약세에서 강세로 전환되고 있으며, 추가적인 자금 유입을 통해 가격 상승을 지지할&nbsp;수&nbsp;있음을&nbsp;의미합니다.
+                    </li>
+                    <li>
+                        <strong>로부스타發 상승 압력 전이:</strong> 지속적인 로부스타 공급 부족 사태는 아라비카 대체재로서의 역할을 제한하고 있습니다. 오히려 로부스타 가격 강세가 전체 커피 시장의 가격 하단을 지지하며 아라비카의 구조적 상승 환경을 더욱&nbsp;공고히&nbsp;하고&nbsp;있습니다.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="overview" class="section">
+            <div class="section-header">
+                <span class="section-number">OVERVIEW</span>
+                <h2 class="section-title">핵심 인사이트</h2>
+                <p class="section-subtitle">2025년 커피 시장을 뒤흔든 4가지&nbsp;충격</p>
+            </div>
+            
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">📈</div>
+                    <h3 class="insight-title">관세 촉매제</h3>
+                    <p class="insight-text">
+                        미국의 브라질산 50% 관세는 즉각적인 공급 위기를 초래했으며, 비브라질산 원두 확보 경쟁과 인증 재고 소진을&nbsp;가속화시켰습니다.
+                    </p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">🌍</div>
+                    <h3 class="insight-title">펀더멘털 악화</h3>
+                    <p class="insight-text">
+                        브라질 2025/26 아라비카 작황이 6.4% 감소 전망되며, 관세와 무관한 구조적 가격 상승 요인이&nbsp;형성되었습니다.
+                    </p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">💱</div>
+                    <h3 class="insight-title">환율 역설</h3>
+                    <p class="insight-text">
+                        강한 헤알화와 자본력 있는 생산자들이 전통적 통화-가격 관계를 무너뜨리며 판매자 우위 시장을&nbsp;만들었습니다.
+                    </p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">☕</div>
+                    <h3 class="insight-title">로부스타 부상</h3>
+                    <p class="insight-text">
+                        로부스타 동반 강세로 아라비카-로부스타 스프레드가 축소되며 로스터들의 블렌딩 전략 재검토를&nbsp;강요하고&nbsp;있습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">2025년 커피 선물 가격&nbsp;급등&nbsp;타임라인</h3>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--accent);"></span>
+                            <span>아라비카 (ICE)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--primary);"></span>
+                            <span>주요 이벤트</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="price-chart">
+                    <div class="price-bars">
+                        <div class="price-bar" style="height: 70%;">
+                            <span class="price-bar-value">281.65</span>
+                            <span class="price-bar-label">7월 말</span>
+                        </div>
+                        <div class="price-bar" style="height: 85%; background: linear-gradient(180deg, var(--danger) 0%, var(--accent) 100%);">
+                            <span class="price-bar-value">314.05</span>
+                            <span class="price-bar-label">8월 1일 (관세)</span>
+                        </div>
+                        <div class="price-bar" style="height: 88%;">
+                            <span class="price-bar-value">329.00</span>
+                            <span class="price-bar-label">8월 8일</span>
+                        </div>
+                        <div class="price-bar" style="height: 95%; background: linear-gradient(180deg, var(--danger) 0%, #8B0000 100%);">
+                            <span class="price-bar-value">334.20</span>
+                            <span class="price-bar-label">8월 15일</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="tariff" class="section">
+            <div class="section-header">
+                <span class="section-number">SECTION 01</span>
+                <h2 class="section-title">관세 쇼크웨이브</h2>
+                <p class="section-subtitle">50% 관세가 촉발한 시장&nbsp;대격변</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>📊 즉각적 시장 반응</h3>
+                <p>
+                    2025년 8월 1일 발효된 브라질산 제품 50% 관세는 커피 시장에 전례 없는 충격을 가했습니다. 단 일주일 만에 ICE 아라비카 선물이 32.40센트 급등하며 파운드당 314.05센트를 기록했고, 이후 334.20센트까지&nbsp;치솟았습니다.
+                </p>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-label">관세 이전</div>
+                        <div class="data-value">10%</div>
+                        <div class="data-change">기존 관세율</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">관세 이후</div>
+                        <div class="data-value">50%</div>
+                        <div class="data-change negative">+40%p 인상</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">가격 상승</div>
+                        <div class="data-value">+18.7%</div>
+                        <div class="data-change">2주간 변동</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">수입 비용</div>
+                        <div class="data-value">+30-60%</div>
+                        <div class="data-change negative">도착 비용&nbsp;증가</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>🔄 공급망 파급 효과</h3>
+                <p>
+                    미국 로스터들은 즉각적인 타격을 받았습니다. 콜로라도의 벨레자 커피 바는 하우스 블렌드의 60%를 차지하던 브라질 원두 구매를 중단해야 했으며, 이는 즉각적이고 비용이 많이 드는 블렌드 재구성을&nbsp;강요했습니다.
+                </p>
+                <p>
+                    관세는 '확실성 쇼크'로 작용했습니다. 브라질 작황이나 생산자 판매 패턴과 달리, 50% 관세는 명확한 날짜와 규모를 가진 확정된 이벤트였기에 시장 참여자들의 즉각적인 행동을&nbsp;촉발했습니다.
+                </p>
+            </div>
+        </section>
+        
+        <section id="fundamentals" class="section">
+            <div class="section-header">
+                <span class="section-number">SECTION 02</span>
+                <h2 class="section-title">근본적 펀더멘털</h2>
+                <p class="section-subtitle">관세 너머의 구조적 공급&nbsp;부족</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>🌱 브라질 2025/26 작황&nbsp;전망</h3>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>전망 기관</th>
+                            <th>아라비카 (백만 백)</th>
+                            <th>전년 대비</th>
+                            <th>주요 근거</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>USDA</strong></td>
+                            <td>40.9</td>
+                            <td class="negative">-6.4%</td>
+                            <td>가뭄/고온 영향</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CONAB (초기)</strong></td>
+                            <td>34.7</td>
+                            <td class="negative">-12.4%</td>
+                            <td>비수확해 + 악천후</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CONAB (수정)</strong></td>
+                            <td>37.0</td>
+                            <td class="negative">-6.6%</td>
+                            <td>상향 조정, 여전히 감소</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rabobank</strong></td>
+                            <td>38.1</td>
+                            <td class="negative">-13.6%</td>
+                            <td>개화 감소</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Volcafe</strong></td>
+                            <td>34.4</td>
+                            <td class="negative">대폭 하향</td>
+                            <td>극심한 장기 가뭄</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-card">
+                <h3>📦 재고 위기 현황</h3>
+                <p>
+                    ICE 인증 아라비카 재고는 743,240백으로 2024년 5월 이후 최저 수준을 기록했습니다. 재고의 90%가 유럽 창고에 보관되어 있어 미국 시장의 물리적 공급 압박이 더욱&nbsp;심화되고&nbsp;있습니다.
+                </p>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-label">ICE 아라비카&nbsp;재고</div>
+                        <div class="data-value">743K</div>
+                        <div class="data-change negative">15개월 최저</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">유럽 보관 비중</div>
+                        <div class="data-value">90%</div>
+                        <div class="data-change">미국 공급&nbsp;압박</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">ICE 로부스타</div>
+                        <div class="data-value">870K</div>
+                        <div class="data-change negative">감소 추세</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="brazil" class="section">
+            <div class="section-header">
+                <span class="section-number">SECTION 03</span>
+                <h2 class="section-title">브라질 헤알화의 역설</h2>
+                <p class="section-subtitle">안정적 통화 환경 속 가격&nbsp;인플레이션</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>💱 전통적 상관관계의 붕괴</h3>
+                <p>
+                    역사적으로 커피 시장은 브라질 헤알화와 역상관 관계를 보여왔습니다. 그러나 현재는 이 관계가 완전히 붕괴되었습니다. 지난 12개월간 상관관계는 -40.4%에서 최근 분기 +5.0%로&nbsp;전환되었습니다.
+                </p>
+                <p>
+                    현재 브라질 농가는 "자본력이 매우 탄탄한" 상태로, 과거처럼 부채 상환을 위해 수확물을 강제 판매할 필요가 없습니다. 이들은 "판매를 서두르지 않으며", 사실상 가격의 하한선을&nbsp;설정하고&nbsp;있습니다.
+                </p>
+            </div>
+            
+            <div class="scenario-grid">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <h4 class="scenario-title">시나리오 A: 강한&nbsp;헤알화&nbsp;유지</h4>
+                        <p class="scenario-probability">확률: 높음</p>
+                    </div>
+                    <div class="scenario-body">
+                        <p>브라질 정부가 헤알화 강세를 용인하며 BNDES 신용 한도로 수출업체&nbsp;지원</p>
+                        <div class="scenario-impact">
+                            <span class="impact-label">가격 영향</span>
+                            <span class="impact-value positive">강세 지속</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <h4 class="scenario-title">시나리오 B: 관리된&nbsp;평가절하</h4>
+                        <p class="scenario-probability">확률: 중간</p>
+                    </div>
+                    <div class="scenario-body">
+                        <p>중앙은행 개입으로 헤알화 약화, 수출 경쟁력&nbsp;강화</p>
+                        <div class="scenario-impact">
+                            <span class="impact-label">가격 영향</span>
+                            <span class="impact-value negative">300¢ 이하&nbsp;조정</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <h4 class="scenario-title">시나리오 C: 시장&nbsp;다변화</h4>
+                        <p class="scenario-probability">확률: 낮음</p>
+                    </div>
+                    <div class="scenario-body">
+                        <p>미국 외 중국, EU 등으로 수출 전환&nbsp;집중</p>
+                        <div class="scenario-impact">
+                            <span class="impact-label">가격 영향</span>
+                            <span class="impact-value">변동성 증가</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="robusta" class="section">
+            <div class="section-header">
+                <span class="section-number">SECTION 04</span>
+                <h2 class="section-title">로부스타의 부상</h2>
+                <p class="section-subtitle">블렌딩 전략의 구조적&nbsp;변화</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>☕ 축소되는 아비트라지</h3>
+                <p>
+                    로부스타 가격이 톤당 $4,067로 수년 만에 최고치를 기록하며 아라비카-로부스타 스프레드가 역사적으로 좁아졌습니다. 이는 프리미엄 로스터들까지 블렌드 내 로부스타 비율 증가를 고려하게&nbsp;만들고&nbsp;있습니다.
+                </p>
+                <p>
+                    이러한 변화가 일시적 생존 전략인지 영구적 구조 변화인지는 논쟁의 여지가 있으나, 로스터들의 R&D 투자 증가와 소비자 입맛 적응은 지속적인 수요층을 창출할 가능성이&nbsp;높습니다.
+                </p>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-label">로부스타 가격</div>
+                        <div class="data-value">$4,067</div>
+                        <div class="data-change positive">수년 최고치</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">베트남 공급</div>
+                        <div class="data-value">타이트</div>
+                        <div class="data-change negative">재고 비축</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">브라질 로부스타</div>
+                        <div class="data-value">+15%</div>
+                        <div class="data-change positive">생산 증가</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="outlook" class="section">
+            <div class="section-header">
+                <span class="section-number">SECTION 05</span>
+                <h2 class="section-title">시장 전망</h2>
+                <p class="section-subtitle">단기 및 중기 가격&nbsp;시나리오</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>📈 종합 가격 전망</h3>
+                
+                <div class="scenario-grid">
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h4 class="scenario-title">단기 전망 (3개월)</h4>
+                            <p class="scenario-probability">극심한 변동성&nbsp;지속</p>
+                        </div>
+                        <div class="scenario-body">
+                            <p>
+                                관세 유지, ICE 재고 감소, 브라질 작황 불확실성이 지속되는 한 가격은 상승 압력을&nbsp;받을&nbsp;것입니다.
+                            </p>
+                            <div class="scenario-impact">
+                                <span class="impact-label">예상 범위</span>
+                                <span class="impact-value">310-350¢/lb</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h4 class="scenario-title">중기 전망 (12개월)</h4>
+                            <p class="scenario-probability">관세 해결 여부가&nbsp;관건</p>
+                        </div>
+                        <div class="scenario-body">
+                            <p>
+                                관세 철회 시 급격한 조정 예상되나, 아라비카 작황 피해로 하한선은 급등 이전보다 높을&nbsp;전망입니다.
+                            </p>
+                            <div class="scenario-impact">
+                                <span class="impact-label">예상 하한</span>
+                                <span class="impact-value">280-290¢/lb</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>⚠️ 주시해야 할 핵심&nbsp;리스크</h3>
+                
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <div class="insight-icon">🤝</div>
+                        <h3 class="insight-title">지정학적 협상</h3>
+                        <p class="insight-text">
+                            미국-브라질 간 협상 동향이 변동성의 가장 큰 원인. 양국 정부 발표를 예의주시&nbsp;필요
+                        </p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon">🌤️</div>
+                        <h3 class="insight-title">기상 패턴</h3>
+                        <p class="insight-text">
+                            2026/27 작황 영향을 미칠 브라질 개화기(9-10월) 날씨가 중요. 악천후 시 사상&nbsp;최고가&nbsp;가능
+                        </p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon">📦</div>
+                        <h3 class="insight-title">재고 재건</h3>
+                        <p class="insight-text">
+                            ICE 재고 감소 속도 모니터링 필수. 재고 안정화는 주요&nbsp;약세&nbsp;시그널
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">전략적 권고사항</h2>
+                <p class="cta-text">
+                    시장 참여자들은 극심한 가격 리스크 관리를 위한 정교한 헤징 전략과 원산지 포트폴리오 다각화가&nbsp;필수적입니다.
+                </p>
+                
+                <div class="insights-grid" style="margin-top: 3rem;">
+                    <div class="insight-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                        <div class="insight-icon" style="background: white; color: var(--primary);">📊</div>
+                        <h3 class="insight-title" style="color: white;">수입업체/로스터</h3>
+                        <p class="insight-text" style="color: rgba(255,255,255,0.9);">
+                            • 브라질 외 산지 즉시 다변화<br/>
+                            • 옵션 전략 활용 헤징<br/>
+                            • 고품질 로부스타 R&D 가속
+                        </p>
+                    </div>
+                    
+                    <div class="insight-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                        <div class="insight-icon" style="background: white; color: var(--primary);">💹</div>
+                        <h3 class="insight-title" style="color: white;">투자자/트레이더</h3>
+                        <p class="insight-text" style="color: rgba(255,255,255,0.9);">
+                            • 강세 편향 유지, 변동성 대비<br/>
+                            • 아라비카-로부스타 스프레드 모니터<br/>
+                            • 펀드 포지션 데이터 면밀히 주시
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ALIGN COMMODITIES</div>
+            <p class="footer-text">
+                Professional Coffee Market Intelligence & Analysis<br/>
+                2025년 8월 16일 발행
+            </p>
+            <div class="footer-divider"></div>
+            <p class="disclaimer">
+                <strong>Published by Align Commodities</strong><br/>
+                본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.<br/>
+                모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-item').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Update active nav item
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = entry.target.dataset.animation || 'fadeIn 0.6s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for animation
+        document.querySelectorAll('.insight-card, .content-card, .scenario-card').forEach(el => {
+            el.style.opacity = '0';
+            el.dataset.animation = 'slideUp 0.6s ease-out forwards';
+            observer.observe(el);
+        });
+        
+        // Update active nav on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section[id]');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            let current = 'overview'; // Default to overview
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').substring(1) === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
