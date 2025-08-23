@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* Home 버튼 위치 지정을 위해 필수 */
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Home 버튼 (아이콘) 스타일 */
+        .home-button {
+            position: absolute;
+            top: 20px; /* 상단에서 20px 아래 */
+            left: 20px; /* 왼쪽에서 20px 떨어지도록 */
+            background-color: #f4a261; /* 버튼 배경색 */
+            color: white;
+            padding: 10px 15px; /* 패딩 조정 */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em; /* 텍스트 크기 유지 */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex; /* 아이콘과 텍스트 정렬을 위해 flexbox 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .home-button:hover {
+            background-color: #e76f51; /* 호버 시 색상 변경 */
+        }
+
+        /* SVG 아이콘 기본 스타일 */
+        .home-button svg {
+            fill: currentColor; /* SVG 색상을 텍스트 색상과 동일하게 설정 */
+            width: 1.2em; /* 아이콘 너비 (텍스트 크기 기준으로) */
+            height: 1.2em; /* 아이콘 높이 */
+            vertical-align: middle; /* 텍스트와 세로 정렬 */
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #8B4513;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static; /* 모바일에서는 정적 위치로 변경 */
+                margin-bottom: 15px;
+                display: flex; /* 블록 요소로 변경 후 flex 유지 */
+                justify-content: center; /* 중앙 정렬 */
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content; /* 내용에 맞춰 너비 조정 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <div class="date-stamp">2025년 8월 23일 금요일</div>
+        </header>
+
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #8B4513; margin-bottom: 20px;">주요 헤드라인: 12월물 378.30센트 돌파 - 브라질 관세와 강세 모멘텀 지속</h2>
+                <p style="margin-bottom: 15px;">
+                    <strong>커피 선물이 브라질 50% 관세 충격과 기상 악화 우려로 2.25개월래 최고치를 경신했습니다.</strong> 
+                    12월 아라비카 커피(KCZ25)는 378.30센트로 8월 들어 30% 이상 급등하며 ICE 실물 인도 시장의 구조적 변화를 반영하고 있습니다. 
+                    브라질이라는 거대한 공급 풀이 관세로 사라지면서 시장에 공급 부족 우려가 확산되고 있습니다.
+                </p>
+                
+                <div class="content-section" style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #764ba2;">
+                    <h3 style="color: #764ba2; margin-bottom: 10px;">핵심 요약</h3>
+                    <p style="font-size: 1.0em; line-height: 1.6;">
+                        12월 아라비카 커피(KCZ25)는 378.30센트로 마감하며 2.25개월래 최고치를 기록했습니다.
+                        8월 6일 발효된 브라질 50% 관세가 ICE 실물 인도 계약에 활용될 수 있는 브라질 원두 공급 구조를 완전히 바꾸어 놓았습니다.
+                        CFTC 머니매니저 순매수 포지션이 크게 증가하며 투기적 강세가 가격 상승을 견인하고 있습니다.
+                        브라질 기상 악화와 서리 우려가 추가적인 상승 동력을 제공하고 있습니다.
+                    </p>
+                </div>
+                <div class="highlight">
+                    <h3 style="margin-bottom: 10px;">핵심 시장 동향</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>12월물 378.30센트 기록:</strong> 8월 22일 종가 기준, 8월 들어 30% 이상 상승.</li>
+                        <li><strong>브라질 관세 충격:</strong> 8월 6일부터 50% 관세 적용, 미국 수입업체들 브라질산 기피.</li>
+                        <li><strong>ICE 재고 극저점:</strong> 아라비카 재고 1.25년래 최저 수준인 726,661포대로 급감.</li>
+                        <li><strong>CFTC 강세 포지션:</strong> 머니매니저 순매수 포지션 크게 증가로 투기적 강세 확산.</li>
+                        <li><strong>브라질 서리 위험:</strong> 8월 중 Cerrado Mineiro 지역 경미한 서리 피해 보고.</li>
+                        <li><strong>베트남 로부스타 회복:</strong> 2025년 1-7월 수출 전년 동기 대비 6.9% 증가.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="price-box">
+                    <h3>12월 아라비카 (KCZ25)</h3>
+                    <div class="price-value">378.30</div>
+                    <div class="price-change positive">+11.55 (+3.27%)</div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">센트/파운드 → $8.34/kg</div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">주요 지표 현황 (1D, 5D, 1M, 3M, 6M, 1Y)</h3>
+                    <div class="stat-item">
+                        <span><strong>커피 선물 (KCZ25, ICE):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #51cf66;">+3.27%</span> / <span style="color: #51cf66;">+8.45%</span> / <span style="color: #51cf66;">+30.12%</span> / <span style="color: #51cf66;">+15.65%</span> / <span style="color: #51cf66;">+25.80%</span> / <span style="color: #51cf66;">+75.20%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>로부스타 선물 (RMU25, ICE):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #51cf66;">+2.41%</span> / <span style="color: #51cf66;">+12.30%</span> / <span style="color: #51cf66;">+28.65%</span> / <span style="color: #51cf66;">+22.45%</span> / <span style="color: #51cf66;">+35.90%</span> / <span style="color: #51cf66;">+85.40%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>스타벅스 (SBUX, NASDAQ):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #ff6b6b;">-0.50%</span> / <span style="color: #51cf66;">+1.25%</span> / <span style="color: #51cf66;">+3.45%</span> / <span style="color: #ff6b6b;">-5.20%</span> / <span style="color: #ff6b6b;">-2.10%</span> / <span style="color: #51cf66;">+8.75%</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>네슬레 (NESN.SW):</strong></span>
+                        <span style="font-size: 0.9em;">
+                            <span style="color: #ff6b6b;">-4.20%</span> / <span style="color: #ff6b6b;">-2.80%</span> / <span style="color: #ff6b6b;">-1.90%</span> / <span style="color: #ff6b6b;">-8.50%</span> / <span style="color: #ff6b6b;">-3.40%</span> / <span style="color: #ff6b6b;">-12.30%</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">🌍 최신 시장 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.22</div>
+                    <div class="news-content">
+                        <strong>커피 선물 2.25개월래 최고치:</strong> 12월 아라비카 커피가 378.30센트를 기록하며 
+                        브라질 관세 영향과 기상 우려로 강세를 이어갔습니다. 8월 들어서만 30% 이상 상승했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.21</div>
+                    <div class="news-content">
+                        <strong>브라질 수출업체들 미국 회피:</strong> Cecafe에 따르면 50% 관세로 인해 
+                        브라질 수출업체들이 미국행 계약을 기피하고 있으며, 이는 글로벌 아라비카 가격 급등의 주요 원인입니다.
+                        <a href="https://www.tradingview.com/news/reuters.com,2025:newsml_S0N3N705A:0-us-tariffs-behind-surge-in-global-arabica-prices-brazil-exporters-group-says/" target="_blank" title="Reuters">출처</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.20</div>
+                    <div class="news-content">
+                        <strong>ICE 재고 극저점:</strong> ICE 아라비카 인증 재고가 733,105포대로 1.25년래 최저치를 기록했습니다.
+                        로부스타 재고도 6,749롯트로 3주래 최저 수준입니다.
+                        <a href="https://qahwaworld.com/news/coffee-prices-brazil-drought-2025/" target="_blank" title="Qahwa World">출처</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📊 관세 및 정책 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.21</div>
+                    <div class="news-content">
+                        <strong>미국 커피 로스터들 타격:</strong> NPR 보도에 따르면 브라질산 커피가 미국 수입의 30%를 차지하는 만큼
+                        50% 관세가 중소 로스터들에게 큰 부담을 주고 있습니다.
+                        <a href="https://www.npr.org/2025/07/21/nx-s1-5470131/us-coffee-prices-brazil-trump-tariffs" target="_blank" title="NPR">출처</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.19</div>
+                    <div class="news-content">
+                        <strong>중국 시장 확대:</strong> 8월 초 중국이 183개 브라질 커피 기업을 인가하며
+                        브라질이 미국 대신 중국 시장으로 수출 방향을 전환하고 있습니다.
+                        <a href="https://www.vietnam.vn/en/gia-ca-phe-hom-nay-20-8-2025-robusta-va-arabica-dong-loat-tang-noi-dia-nguoc-dong" target="_blank" title="Vietnam.vn">출처</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.18</div>
+                    <div class="news-content">
+                        <strong>ICE 실물 인도 구조 변화:</strong> 브라질이 ICE Coffee C 계약에서 600포인트 디스카운트로 
+                        주요 실물 공급원 역할을 했으나, 관세로 인해 이 구조가 완전히 바뀌고 있습니다.
+                        <a href="https://algrano.com/learn/us-tariffs-august-2025" target="_blank" title="Algrano">출처</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🌤️ 생산 및 기상 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.19</div>
+                    <div class="news-content">
+                        <strong>브라질 기상 악화:</strong> Somar Meteorologia에 따르면 브라질 최대 아라비카 생산지인 
+                        미나스 제라이스주가 8월 16일 주까지 강우량이 전혀 없었다고 보고했습니다.
+                        <a href="https://www.bloomberg.com/news/articles/2025-08-19/arabica-coffee-rises-to-two-month-high-on-adverse-brazil-weather" target="_blank" title="Bloomberg">출처</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.12</div>
+                    <div class="news-content">
+                        <strong>Cerrado Mineiro 서리 피해:</strong> 브라질 주요 커피 생산지역인 Cerrado Mineiro에서 
+                        경미한 서리가 보고되었으나, 피해 규모는 제한적인 것으로 평가됩니다.
+                        <a href="https://www.zerohedge.com/commodities/coffee-analyst-warns-brazil-frost-could-deliver-death-blow-2026-harvest" target="_blank" title="ZeroHedge">출처</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.15</div>
+                    <div class="news-content">
+                        <strong>브라질 수확 86% 완료:</strong> 브라질 최대 협동조합 Cooxupé는 8월 15일 기준 
+                        조합원들의 수확이 86.1% 완료되었다고 발표했습니다.
+                        <a href="https://www.nasdaq.com/articles/coffee-prices-soar-dry-brazilian-weather-and-tighter-us-supplies" target="_blank" title="Nasdaq">출처</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📈 베트남 로부스타 시장</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.20</div>
+                    <div class="news-content">
+                        <strong>로부스타 가격 급등:</strong> 9월 로부스타 선물이 4,326달러/톤을 기록하며 
+                        2개월래 최고치를 달성했습니다. 베트남 국내가격도 116,600-117,300동/kg로 상승했습니다.
+                        <a href="https://www.vietnam.vn/en/gia-ca-phe-hom-nay-20-8-2025-robusta-va-arabica-dong-loat-tang-noi-dia-nguoc-dong" target="_blank" title="Vietnam.vn">출처</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.17</div>
+                    <div class="news-content">
+                        <strong>베트남 수출 회복 조짐:</strong> 2025년 1-7월 베트남 커피 수출이 105만 메트릭톤으로 
+                        전년 동기 대비 6.9% 증가하며 회복 신호를 보이고 있습니다.
+                        <a href="https://qahwaworld.com/news/brazil-coffee-prices-2025/" target="_blank" title="Qahwa World">출처</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.15</div>
+                    <div class="news-content">
+                        <strong>국내 재고 제한적:</strong> 베트남 국내에서는 수확 후 농가 재고가 제한적인 상황에서 
+                        농민들이 더 나은 가격을 기대하며 판매를 보류하고 있습니다.
+                        <a href="https://www.vietnam.vn/en/gia-ca-phe-hom-nay-15-8-2025-robusta-len-ngoi-arabica-that-the" target="_blank" title="Vietnam.vn">출처</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망 및 분석</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>커피 선물 시장은 구조적 공급 변화와 투기적 강세가 결합되어 역사적 고점을 향해 나아가고 있습니다.</strong> 
+                12월물 아라비카 커피(KCZ25)는 8월 22일 기준 378.30센트를 기록하며 2.25개월래 최고치를 달성했습니다. 
+                이는 단순한 기상 우려를 넘어 브라질 50% 관세로 인한 ICE 실물 인도 시장의 근본적 변화를 반영합니다.
+                <br><br>
+                <strong>브라질이라는 거대한 공급 풀의 소실이 가장 중요한 강세 동력입니다.</strong> 
+                브라질은 전통적으로 ICE Coffee C 계약에서 600포인트 디스카운트로 주요 실물 공급원 역할을 해왔습니다.
+                그러나 8월 6일부터 시행된 50% 관세로 미국 수입업체들이 브라질산 기피하면서 이 구조가 완전히 붕괴되었습니다.
+                CFTC 머니매니저 순매수 포지션의 급격한 증가는 이러한 구조적 변화에 대한 투기 자금의 반응을 보여줍니다.
+                <br><br>
+                <strong>ICE 재고 급감과 베트남 로부스타 시장의 동반 상승이 전방위적 강세를 만들어내고 있습니다.</strong> 
+                아라비카 인증 재고가 1.25년래 최저인 733,105포대까지 급감한 가운데, 로부스타도 2개월래 최고치를 경신했습니다.
+                베트남의 2025년 1-7월 수출이 전년 동기 대비 6.9% 증가했음에도 불구하고 국내 농가 재고 제한과 
+                글로벌 수요 증가로 로부스타 가격도 4,326달러/톤까지 치솟았습니다.
+                <br><br>
+                <strong>브라질 기상 악화와 서리 위험이 추가적인 상승 모멘텀을 제공하고 있습니다.</strong>
+                미나스 제라이스주의 무강우 상태와 Cerrado Mineiro 지역의 경미한 서리 피해는 
+                2026년 작황에 대한 우려를 증폭시키고 있습니다. 이는 이미 취약해진 공급 구조에 
+                추가적인 리스크 프리미엄을 부여하는 요인으로 작용합니다.
+            </p>
+        </div>
+
+        <div class="tags">
+            <span class="tag">378.30센트</span>
+            <span class="tag">브라질관세50%</span>
+            <span class="tag">ICE재고급감</span>
+            <span class="tag">CFTC강세포지션</span>
+            <span class="tag">실물인도구조변화</span>
+            <span class="tag">베트남로부스타급등</span>
+            <span class="tag">미나스제라이스무강우</span>
+            <span class="tag">서리위험</span>
+            <span class="tag">중국시장확대</span>
+            <span class="tag">공급부족우려</span>
+        </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, USDA, Cecafe, Cooxupé, CFTC | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
