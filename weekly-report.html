@@ -721,6 +721,9 @@
                 
                 // 주간 동향 리포트만 필터링 - 개선된 필터링 로직
                 const weeklyReports = allReports.filter(report => {
+                    // in-depth-analysis 타입은 명시적으로 제외
+                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth') return false;
+                    
                     // type이 weekly로 명시된 경우
                     if (report.type === 'weekly') return true;
                     
@@ -734,11 +737,12 @@
                         return true;
                     }
                     
-                    // 태그에 주간 관련 키워드가 있는 경우
+                    // 태그에 주간 관련 키워드가 있는 경우 (더 구체적으로 필터링)
                     if (report.tags && Array.isArray(report.tags)) {
                         const weeklyTags = report.tags.some(tag => 
                             tag.includes('주간') || 
-                            tag.includes('동향') || 
+                            tag === '동향' || 
+                            tag === '주간동향' ||
                             tag.includes('weekly')
                         );
                         if (weeklyTags) return true;
