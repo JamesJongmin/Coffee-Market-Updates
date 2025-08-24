@@ -1,0 +1,1660 @@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Trebuchet+MS:wght@400;700&display=swap" rel="stylesheet"><!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기술적 분석으로 해부한 커피 선물 시장 급등 현상</title>
+    
+    <!--REPORT_META
+    {
+        "title": "기술적 분석으로 해부한 커피 선물 시장 급등 현상",
+        "subtitle": "ICE 선물 메커니즘과 투기성 자본의 복합적 상호작용",
+        "date": "2025-08-25",
+        "summary": "최근 커피 선물 시장의 역사적 급등(52주 변동폭 224.75~399.65 센트/파운드)을 기술적 분석 관점에서 심층 해부합니다. 브라질 기후 변화와 미국 관세라는 펀더멘털 충격이 ICE 공인 재고 최저치와 과도한 투기성 매도 포지션이라는 구조적 취약성을 만나며 발생한 '숏 커버링 랠리'의 메커니즘을 COT 보고서 데이터와 함께 상세 분석합니다.",
+        "tags": ["커피선물", "기술적분석", "숏커버링", "ICE메커니즘", "COT보고서", "투기성자본", "시장분석"]
+    }
+    REPORT_META-->
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #1a2332;
+            --accent: #d4a574;
+            --danger: #dc3545;
+            --success: #198754;
+            --warning: #ffc107;
+            --bg-light: #f8f9fa;
+            --bg-dark: #0a0f14;
+            --text-primary: #1a2332;
+            --text-secondary: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 8px 32px rgba(0,0,0,0.1);
+            --shadow-hover: 0 16px 48px rgba(0,0,0,0.15);
+        }
+        
+        body {
+            font-family: 'Pretendard', 'Trebuchet MS', 'Arial', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%);
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(212, 165, 116, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(52, 73, 94, 0.2) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 1000px;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #b8860b 100%);
+            color: white;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 auto 2rem auto;
+            max-width: 650px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+        
+        /* Navigation */
+        .nav-section {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            z-index: 90;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .nav-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            background: var(--bg-light);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .nav-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .section {
+            margin-bottom: 4rem;
+        }
+        
+        .section-header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .section-number {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #b8860b 100%);
+            color: white;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .section-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Content Cards */
+        .content-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--primary) 100%);
+        }
+        
+        .content-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .content-card p {
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .content-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .content-card li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        
+        .content-card li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+        
+        /* Data Visualization */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .data-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, white 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent) 0%, transparent 100%);
+            border-radius: 0 20px 0 60px;
+            opacity: 0.1;
+        }
+        
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .data-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .data-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .data-change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+        
+        .data-table thead {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%);
+            color: white;
+        }
+        
+        .data-table th {
+            padding: 1.5rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-table td {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--bg-light);
+        }
+        
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Chart Visualization */
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+        
+        .chart-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .chart-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Price Chart */
+        .price-chart {
+            height: 300px;
+            position: relative;
+            margin: 2rem 0;
+            background: linear-gradient(to bottom, rgba(212, 165, 116, 0.05) 0%, transparent 100%);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+        
+        .price-line {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+        }
+        
+        .price-point {
+            position: relative;
+            width: 4px;
+            background: linear-gradient(to top, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .price-point:hover {
+            transform: scaleX(2);
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.5);
+        }
+        
+        .price-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        
+        .price-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+        
+        /* Analysis Sections */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .analysis-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .analysis-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .analysis-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .analysis-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Key Insights */
+        .insight-highlight {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(26, 35, 50, 0.05) 100%);
+            border-left: 4px solid var(--accent);
+            padding: 2rem;
+            border-radius: 0 15px 15px 0;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .insight-highlight::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+        
+        .insight-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .insight-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+        
+        /* Call to Action */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%);
+            padding: 4rem 2rem;
+            border-radius: 32px;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.2) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-text {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .footer-divider {
+            width: 100px;
+            height: 2px;
+            background: var(--accent);
+            margin: 2rem auto;
+        }
+        
+        .disclaimer {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .data-table {
+                font-size: 0.875rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 1rem 0.75rem;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <a href="https://coffeemarket.info" class="home-button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Home
+        </a>
+        
+        <div class="hero-content">
+            <div class="hero-badge">📈 DEEP DIVE ANALYSIS</div>
+            <h1>기술적 분석으로 해부한<br/>커피 선물 시장 급등 현상</h1>
+            <p class="hero-subtitle">ICE 선물 메커니즘과 투기성 자본의 복합적 상호작용을 통해 본 시장의 구조적 변화</p>
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 1rem; margin-top: 1rem; font-style: italic;">Published on 25th August 2025</p>
+            
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-value">378.30¢</div>
+                    <div class="stat-label">12월물 최근 마감가<br/>(+3.64% 상승)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">36.16%</div>
+                    <div class="stat-label">지난 1년간<br/>변동률</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">440.85¢</div>
+                    <div class="stat-label">2025년 2월<br/>역사적 최고가</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">80.64</div>
+                    <div class="stat-label">RSI(14) 지표<br/>과매수 상태</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <nav class="nav-section">
+        <div class="nav-container">
+            <a href="#overview" class="nav-item active">개요</a>
+            <a href="#technical" class="nav-item">기술적 분석</a>
+            <a href="#mechanism" class="nav-item">ICE 메커니즘</a>
+            <a href="#speculation" class="nav-item">투기성 자본</a>
+            <a href="#forecast" class="nav-item">시장 전망</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        
+        <section id="overview" class="section">
+            <div class="section-header">
+                <span class="section-number">OVERVIEW</span>
+                <h2 class="section-title">시장 급등의 복합적 메커니즘</h2>
+                <p class="section-subtitle">단순한 수급 논리를 넘어선 다층적 구조 분석</p>
+            </div>
+            
+            <div class="insight-highlight">
+                <h3 class="insight-title">핵심 통찰</h3>
+                <p class="insight-text">
+                    최근 커피 선물 시장의 급등은 <strong>펀더멘털적 충격</strong>(브라질 기후 변화 + 미국 관세)이 
+                    <strong>구조적 취약성</strong>(ICE 공인 재고 최저치 + 프리미엄 조정)과 만나면서, 
+                    시장 내 투기성 자본의 과도한 매도 포지션이라는 <strong>기술적 위험</strong>을 폭발적으로 증폭시킨 
+                    '숏 커버링 랠리'였습니다.
+                </p>
+            </div>
+            
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-label">MACD 매수 신호</div>
+                    <div class="data-value">7.19</div>
+                    <div class="data-change">강력한 상승 모멘텀</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">최근 한 달 상승률</div>
+                    <div class="data-value positive">+23.08%</div>
+                    <div class="data-change">역사적 변동성</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">일간 최고 상승폭</div>
+                    <div class="data-value">13.30¢</div>
+                    <div class="data-change">8월 22일 기준</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">ICE 공인 재고</div>
+                    <div class="data-value negative">743,240백</div>
+                    <div class="data-change">1999년 이후 최저</div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="technical" class="section">
+            <div class="section-header">
+                <span class="section-number">PART 01</span>
+                <h2 class="section-title">기술적 분석을 통한 가격 동향 해부</h2>
+                <p class="section-subtitle">숏 커버링 랠리의 메커니즘과 기술적 지표 분석</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>📊 최근 가격 급등 추이 및 주요 가격 지점</h3>
+                <p>
+                    2025년 8월 22일 현지 마감 기준, 12월물(Dec25) 커피 선물 계약은 전일 대비 13.30 USC/lb(3.64%) 상승한 378.30 USC/lb에 마감했습니다. 
+                    이는 하루 최고가인 380.45 USC/lb에 근접한 수준으로, 52주 변동폭의 상단에 근접한 가격대입니다.
+                </p>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h4 class="chart-title">커피 선물 가격 급등 타임라인</h4>
+                        <p class="chart-subtitle">주요 저항선과 지지선 돌파 과정</p>
+                    </div>
+                    <div class="price-chart">
+                        <div class="price-line">
+                            <div class="price-point" style="height: 30%;">
+                                <div class="price-value">280.0¢</div>
+                                <div class="price-label">7월 초</div>
+                            </div>
+                            <div class="price-point" style="height: 45%;">
+                                <div class="price-value">320.5¢</div>
+                                <div class="price-label">8월 1일</div>
+                            </div>
+                            <div class="price-point" style="height: 65%;">
+                                <div class="price-value">344.7¢</div>
+                                <div class="price-label">8월 19일</div>
+                            </div>
+                            <div class="price-point" style="height: 85%;">
+                                <div class="price-value">365.0¢</div>
+                                <div class="price-label">8월 21일</div>
+                            </div>
+                            <div class="price-point" style="height: 95%;">
+                                <div class="price-value">378.3¢</div>
+                                <div class="price-label">8월 22일</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>
+                    <strong>핵심 기술적 지표 현황:</strong><br/>
+                    • RSI(14): 80.64 - 과매수 상태 진입, 단기 조정 가능성<br/>
+                    • STOCHRSI(14): 93.08 - 극도의 과매수 상태<br/>
+                    • MACD(12,26): 7.19 - 강력한 매수 신호 지속<br/>
+                    • 345.00 USC/lb: 새로운 지지선으로 전환<br/>
+                    • 365.00/367.00 USC/lb: 주요 저항선 돌파 완료
+                </p>
+            </div>
+            
+            <div class="content-card">
+                <h3>🔥 숏 커버링 랠리의 핵심 메커니즘</h3>
+                <p>
+                    최근의 커피 선물 가격 급등은 단순한 수요-공급 불일치에 따른 펀더멘털적 가격 상승이 아니었습니다. 
+                    이는 특정 펀더멘털적 충격이 시장 내에 누적되어 있던 기술적 취약성을 건드려 폭발적인 가격 증폭을 유발한 현상입니다.
+                </p>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <div class="analysis-icon">🌡️</div>
+                        <h4 class="analysis-title">브라질 기후 충격</h4>
+                        <div class="analysis-text">
+                            세계 최대 커피 생산국인 브라질의 주요 아라비카 커피 재배 지역인 미나스 제라이스(Minas Gerais)에 가뭄과 서리 피해 우려가 확산. 
+                            2025/26년 작황 생산량이 전년 대비 2.1% 감소할 것이라는 전망 제기.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">📊</div>
+                        <h4 class="analysis-title">미국 관세 정책</h4>
+                        <div class="analysis-text">
+                            미국 정부가 브라질산 커피 수출에 50% 관세를 부과하면서 미국의 공급이 타이트해질 것이라는 우려가 시장을 지배. 
+                            즉각적인 공급 차질 우려로 패닉 바잉 발생.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">⚡</div>
+                        <h4 class="analysis-title">투기적 포지션 청산</h4>
+                        <div class="analysis-text">
+                            펀드들이 로부스타 커피 선물에 지난 2년래 가장 많은 순매도(net-short) 포지션을 구축한 상태에서, 
+                            손실을 줄이기 위한 급격한 매수 전환이 기하급수적인 매수 압력 생성.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="insight-highlight">
+                    <h4 class="insight-title">기술적 랠리의 핵심 동력</h4>
+                    <p class="insight-text">
+                        이러한 포지션 청산(숏 커버링) 움직임은 기하급수적인 매수 압력을 생성하여 가격을 펀더멘털적 가치 상승분 이상으로 끌어올리는 
+                        기술적 랠리로 이어졌습니다. 가격 변동이 단순히 공급 감소에 대한 시장의 반응을 넘어, 
+                        투기적 포지션의 강제적인 재조정 과정에서 비롯된 '기술적 증폭' 현상이었습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="mechanism" class="section">
+            <div class="section-header">
+                <span class="section-number">PART 02</span>
+                <h2 class="section-title">ICE 선물 계약 메커니즘의 구조적 영향</h2>
+                <p class="section-subtitle">거래소 시스템이 시장에 미치는 구조적 압력 분석</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>⚙️ ICE 커피 C 선물 계약의 핵심 구조</h3>
+                <p>
+                    ICE 커피 C 선물(KC)은 전 세계 아라비카 커피 시장의 중심축 역할을 합니다. 
+                    이 계약의 구조적 특성이 최근 가격 급등에 중요한 역할을 했습니다.
+                </p>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>구분</th>
+                            <th>사양</th>
+                            <th>시장 영향</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>상품명</strong></td>
+                            <td>Coffee "C" Futures (KC)</td>
+                            <td>글로벌 아라비카 가격 벤치마크</td>
+                        </tr>
+                        <tr>
+                            <td><strong>계약 단위</strong></td>
+                            <td>37,500 파운드</td>
+                            <td>대규모 거래 단위로 변동성 증폭</td>
+                        </tr>
+                        <tr>
+                            <td><strong>결제 방식</strong></td>
+                            <td>실물 인수도</td>
+                            <td>현물-선물 가격 수렴 메커니즘</td>
+                        </tr>
+                        <tr>
+                            <td><strong>인수도지</strong></td>
+                            <td>미국 및 유럽의 ICE 지정 항구</td>
+                            <td>지역별 공급 불균형 시 가격 차이 발생</td>
+                        </tr>
+                        <tr>
+                            <td><strong>월물 및 만기</strong></td>
+                            <td>3월(2월 말), 5월(4월 말), 7월(6월 말),<br/>9월(8월 말), 12월(11월 말)</td>
+                            <td>만기 접근 시 유동성 감소 및 롤오버 압력</td>
+                        </tr>
+                        <tr>
+                            <td><strong>일일 가격 제한</strong></td>
+                            <td>없음</td>
+                            <td>극한 변동성 허용</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="insight-highlight" style="margin-top: 2rem;">
+                    <h4 class="insight-title">월물별 거래 활성도와 대표성</h4>
+                    <p class="insight-text">
+                        현재 2025년 8월 말 시점에서 9월물(Sep '25)은 이미 만기가 임박하여 <strong>미결제약정(Open Interest)이 거의 없는 상태</strong>입니다. 
+                        만기 1-2주 전부터 대부분의 투자자들이 포지션을 청산하거나 다음 월물로 롤오버하기 때문입니다. 
+                        따라서 현재 시점에서는 <strong>12월물(Dec '25)이 가장 활발하게 거래되는 대표 월물</strong>로, 
+                        대부분의 가격 분석과 헤징 활동이 이 계약을 중심으로 이루어집니다. 
+                        일반적으로 만기까지 3-6개월 남은 월물이 가장 높은 유동성과 거래량을 보이며, 
+                        시장의 가격 발견(Price Discovery) 기능을 주도합니다.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>📈 ICE 프리미엄 조정의 구조적 신호</h3>
+                <p>
+                    ICE는 2024년 1월 26일부터 콜롬비아, 케냐, 코스타리카, 과테말라 등 주요 커피 생산국에 대한 
+                    프리미엄(differentials)을 상향 조정했습니다. 이는 단순한 계약 규칙 변경을 넘어 시장에 강력한 구조적 신호를 전달했습니다.
+                </p>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>생산국</th>
+                            <th>변경 전 ($/lb)</th>
+                            <th>변경 후 ($/lb)</th>
+                            <th>적용 시점</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>콜롬비아</strong></td>
+                            <td>+0.06</td>
+                            <td class="positive">+0.10</td>
+                            <td>2024년 1월 26일, 2026년 3월물 이후</td>
+                        </tr>
+                        <tr>
+                            <td><strong>케냐</strong></td>
+                            <td>Par (동일가)</td>
+                            <td class="positive">+0.10</td>
+                            <td>2024년 1월 26일, 2026년 3월물 이후</td>
+                        </tr>
+                        <tr>
+                            <td><strong>코스타리카</strong></td>
+                            <td>Par (동일가)</td>
+                            <td class="positive">+0.10</td>
+                            <td>2024년 1월 26일, 2026년 3월물 이후</td>
+                        </tr>
+                        <tr>
+                            <td><strong>과테말라</strong></td>
+                            <td>Par (동일가)</td>
+                            <td class="positive">+0.05</td>
+                            <td>2024년 1월 26일, 2026년 3월물 이후</td>
+                        </tr>
+                        <tr>
+                            <td><strong>브라질</strong></td>
+                            <td>-0.06 (디스카운트)</td>
+                            <td>-0.06 (디스카운트)</td>
+                            <td>변경 없음</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="insight-highlight">
+                    <h4 class="insight-title">프리미엄 조정의 시장 시그널</h4>
+                    <p class="insight-text">
+                        이러한 프리미엄 상향 조정은 ICE 공인 창고의 재고가 1999년 이후 최저 수준으로 떨어진 상황에서 이루어졌습니다. 
+                        거래소 스스로가 현물 시장의 공급이 매우 타이트하다는 것을 인정하고, 생산자들이 거래소에 물량을 인도하도록 유도하기 위한 조치였습니다. 
+                        이는 시장 참여자들에게 현물 공급망에 심각한 문제가 있음을 강력하게 시사하며, 가격 상승에 대한 기대를 강화하는 역할을 했습니다.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>🔄 롤오버 메커니즘과 가격 효과</h3>
+                <p>
+                    선물 시장에서 만기일이 다가오는 계약을 청산하고, 만기가 더 먼 다음 월물 계약으로 포지션을 이전하는 '롤오버' 과정에서 
+                    발생하는 수익 또는 손실은 '롤 일드(Roll Yield)'라고 불리며, 시장의 가격 곡선 형태에 따라 결정됩니다.
+                </p>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h4 class="chart-title">커피 선물 월물별 가격 구조 (2025년 8월 22일 기준)</h4>
+                        <p class="chart-subtitle">현재 백워데이션 상태 - 근월물이 원월물보다 비싼 구조</p>
+                    </div>
+                    <div style="height: 300px; position: relative; background: linear-gradient(to bottom, rgba(212, 165, 116, 0.05) 0%, transparent 100%); border-radius: 15px; padding: 2rem;">
+                        <div style="position: relative; height: 100%; display: flex; align-items: end; justify-content: space-around; padding: 0 1rem;">
+                            <!-- Sep '25 -->
+                            <div style="position: relative; text-align: center;">
+                                <div style="height: 190px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">390.65¢</div>
+                                </div>
+                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Sep '25</div>
+                            </div>
+                            
+                            <!-- Dec '25 -->
+                            <div style="position: relative; text-align: center;">
+                                <div style="height: 155px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">378.30¢</div>
+                                </div>
+                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Dec '25</div>
+                            </div>
+                            
+                            <!-- Mar '26 -->
+                            <div style="position: relative; text-align: center;">
+                                <div style="height: 135px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">368.50¢</div>
+                                </div>
+                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Mar '26</div>
+                            </div>
+                            
+                            <!-- May '26 -->
+                            <div style="position: relative; text-align: center;">
+                                <div style="height: 115px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">359.40¢</div>
+                                </div>
+                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">May '26</div>
+                            </div>
+                            
+                            <!-- Jul '26 -->
+                            <div style="position: relative; text-align: center;">
+                                <div style="height: 95px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">348.60¢</div>
+                                </div>
+                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Jul '26</div>
+                            </div>
+                        </div>
+                        
+                        <!-- SVG를 사용한 하향 곡선 -->
+                        <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;" viewBox="0 0 400 240">
+                            <!-- 백워데이션 곡선 (하향) - 각 막대의 상단을 연결 -->
+                            <path d="M 65 40 Q 120 50, 160 65 Q 220 80, 280 100 Q 320 120, 345 140" 
+                                  stroke="#dc3545" 
+                                  stroke-width="3" 
+                                  fill="none" 
+                                  stroke-dasharray="8,4"
+                                  opacity="0.9"/>
+                            <!-- 화살표 -->
+                            <polygon points="340,135 350,140 340,145" 
+                                     fill="#dc3545" 
+                                     opacity="0.9"/>
+                        </svg>
+                        
+                        <!-- 백워데이션 라벨 -->
+                        <div style="position: absolute; top: 20%; right: 8%; background: #dc3545; color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);">백워데이션</div>
+                    </div>
+                </div>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-label">현재 시장 구조</div>
+                        <div class="data-value negative">백워데이션</div>
+                        <div class="data-change">근월물 > 원월물</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">Sep-Dec 스프레드</div>
+                        <div class="data-value positive">+12.35¢</div>
+                        <div class="data-change">근월물 프리미엄</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">롤 일드 효과</div>
+                        <div class="data-value negative">음(-)</div>
+                        <div class="data-change">롤오버 시 비용</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">시장 시그널</div>
+                        <div class="data-value">즉시 공급 부족</div>
+                        <div class="data-change">강한 현물 수요</div>
+                    </div>
+                </div>
+                
+                <div class="insight-highlight">
+                    <h4 class="insight-title">백워데이션의 시장 의미</h4>
+                    <p class="insight-text">
+                        현재의 백워데이션 구조는 <strong>즉시 공급 부족</strong>을 반영합니다. 
+                        근월물(Sep '25) 390.65¢가 12월물 378.30¢보다 12.35¢ 높은 것은 현재 시점의 커피 공급이 매우 타이트함을 의미합니다. 
+                        그러나 이러한 구조에서 롱(매수) 포지션 투자자는 롤오버 시 <strong>음의 롤 일드(Negative Roll Yield)</strong>를 부담하게 됩니다. 
+                        비싼 근월물에서 상대적으로 싼 원월물로 포지션을 이전할 때 가격 차이만큼 비용이 발생하기 때문입니다. 
+                        백워데이션은 현재의 공급 부족이 미래에는 완화될 것으로 시장이 예상한다는 의미이기도 합니다.
+                    </p>
+                </div>
+                
+                <p>
+                    백워데이션 상태에서는 원자재의 현재 공급이 부족하거나 즉시 수요가 매우 강할 때 나타납니다. 
+                    이는 시장이 미래보다는 현재의 공급 부족을 더 크게 우려하고 있음을 보여주며, 
+                    실제로 ICE 공인 재고가 역사적 최저 수준이라는 펀더멘털과 일치하는 가격 구조입니다.
+                </p>
+            </div>
+        </section>
+        
+        <section id="speculation" class="section">
+            <div class="section-header">
+                <span class="section-number">PART 03</span>
+                <h2 class="section-title">투기성 자본의 역할과 COT 보고서 분석</h2>
+                <p class="section-subtitle">CFTC 데이터를 통해 본 투기적 포지션의 시장 영향력</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>📋 CFTC COT(Commitments of Traders) 보고서의 이해</h3>
+                <p>
+                    선물 시장에서 투기성 자본의 움직임을 파악하는 데 가장 중요한 도구는 미국 상품선물거래위원회(CFTC)가 
+                    매주 발행하는 COT(Commitments of Traders) 보고서입니다. 이 보고서는 선물 및 옵션 시장의 
+                    미결제 약정(open interest)을 다양한 유형의 투자자 포지션으로 분류합니다.
+                </p>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <div class="analysis-icon">🏭</div>
+                        <h4 class="analysis-title">상업적(Commercial)</h4>
+                        <div class="analysis-text">
+                            실제 커피를 생산, 가공, 사용하는 기업들로 헤징 목적으로 선물을 활용합니다. 
+                            로스터, 수출업자, 생산자 등이 포함되며, 가격 위험을 관리하기 위해 포지션을 구축합니다.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">💰</div>
+                        <h4 class="analysis-title">매니지드 머니(Managed Money)</h4>
+                        <div class="analysis-text">
+                            헤지펀드, CTA(Commodity Trading Advisor) 등 주로 시세 차익을 노리는 대형 투기성 자본입니다. 
+                            이들의 포지션 동향은 시장의 방향성을 예측하는 핵심 지표로 활용됩니다.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">🏦</div>
+                        <h4 class="analysis-title">스왑 딜러(Swap Dealers)</h4>
+                        <div class="analysis-text">
+                            대형 투자은행들이 고객의 위험을 헤징하기 위해 구축하는 포지션으로, 
+                            주로 상업적 고객들의 반대편에 포지션을 취하는 경향이 있습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>📊 투기성 자본의 포지션과 시장 급등의 상관관계</h3>
+                <p>
+                    이번 커피 선물 시장 급등은 펀더멘털의 변화와 대규모 투기성 자본의 베팅(포지셔닝) 사이에 
+                    존재했던 불일치가 새로운 정보에 의해 폭로되면서 발생한 '포지션 게임'의 성격을 띱니다.
+                </p>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-label">뉴욕 아라비카 시장</div>
+                        <div class="data-value positive">+4.09%</div>
+                        <div class="data-change">비상업적 투기 부문 순매수 증가</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">매니지드 머니 포지션</div>
+                        <div class="data-value positive">+4.70%</div>
+                        <div class="data-change">22,466 계약으로 증가</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">로부스타 매니지드 머니</div>
+                        <div class="data-value negative">-27.38%</div>
+                        <div class="data-change">순매도 포지션 대폭 축소</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">상업적 롱 포지션</div>
+                        <div class="data-value">2011년</div>
+                        <div class="data-change">이후 최저 수준</div>
+                    </div>
+                </div>
+                
+                <div class="insight-highlight">
+                    <h4 class="insight-title">포지션 게임의 핵심 메커니즘</h4>
+                    <p class="insight-text">
+                        COT 보고서에 따르면, 로부스타 커피 선물 시장에서 펀드들은 가격 하락에 베팅하는 과도한 순매도 포지션을 구축한 상태였습니다. 
+                        브라질 기후 변화와 관세 부과 우려가 확산되자 이러한 포지션의 취약성이 드러났고, 
+                        투기성 자본은 손실을 줄이기 위해 급격한 매수 포지션으로 전환하기 시작했습니다. 
+                        이는 기존의 숏 포지션 청산과 새로운 롱 포지션 구축이 복합적으로 나타나며 연쇄적인 매수세를 형성했습니다.
+                    </p>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>트레이더 유형</th>
+                            <th>브라질 기후 악재 전</th>
+                            <th>브라질 기후 악재 후</th>
+                            <th>시장 영향</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>상업적(Commercial)</strong></td>
+                            <td>Net-long (순매수)</td>
+                            <td>Net-long (순매수)</td>
+                            <td>헤징 목적의 일관성 유지</td>
+                        </tr>
+                        <tr>
+                            <td><strong>비상업적(Non-commercial)</strong></td>
+                            <td class="negative">Net-short (순매도)</td>
+                            <td class="positive">Net-long (순매수)</td>
+                            <td>숏 커버링 및 신규 롱 진입</td>
+                        </tr>
+                        <tr>
+                            <td><strong>매니지드 머니</strong></td>
+                            <td class="negative">과도한 Net-short</td>
+                            <td class="positive">Net-long으로 급격히 전환</td>
+                            <td>급등의 주요 동인</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section id="forecast" class="section">
+            <div class="section-header">
+                <span class="section-number">PART 04</span>
+                <h2 class="section-title">종합 분석 및 미래 전망</h2>
+                <p class="section-subtitle">복합적 요인의 상호작용과 향후 시장 동향 예측</p>
+            </div>
+            
+            <div class="content-card">
+                <h3>🔄 복합적 요인의 상호작용</h3>
+                <p>
+                    커피 선물 시장의 최근 급등 현상은 단일 요인으로는 설명할 수 없는 복합적인 성격을 가집니다. 
+                    이는 세 가지 핵심 레이어가 연쇄적으로 상호작용하면서 발생한 시스템적 현상입니다.
+                </p>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <div class="analysis-icon">🌡️</div>
+                        <h4 class="analysis-title">펀더멘털적 충격</h4>
+                        <div class="analysis-text">
+                            <strong>브라질 기후 변화:</strong> 미나스 제라이스 지역의 가뭄과 서리 우려<br/>
+                            <strong>미국 관세 정책:</strong> 브라질산 커피 50% 관세 부과<br/>
+                            <strong>실질적 영향:</strong> 2025/26년 생산량 2.1% 감소 전망
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">⚙️</div>
+                        <h4 class="analysis-title">구조적 취약성</h4>
+                        <div class="analysis-text">
+                            <strong>ICE 공인 재고:</strong> 1999년 이후 최저 수준<br/>
+                            <strong>프리미엄 조정:</strong> 거래소의 공급 부족 공식 인정<br/>
+                            <strong>시스템적 신호:</strong> 시장 인프라 레벨에서의 위험 경고
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">💹</div>
+                        <h4 class="analysis-title">기술적 위험</h4>
+                        <div class="analysis-text">
+                            <strong>과도한 숏 포지션:</strong> 2년래 최대 순매도 포지션<br/>
+                            <strong>강제 청산:</strong> 손실 압력에 의한 급격한 포지션 전환<br/>
+                            <strong>증폭 효과:</strong> 펀더멘털 대비 과도한 가격 급등
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="insight-highlight">
+                    <h4 class="insight-title">시스템적 위험의 연쇄 반응</h4>
+                    <p class="insight-text">
+                        이러한 복합적인 인과 관계에서 가장 큰 영향력을 발휘한 것은 펀더멘털 변화에 대한 투기성 자본의 극단적인 포지셔닝이었습니다. 
+                        시장의 펀더멘털적 가치 변동분(실제 공급 감소분)을 훨씬 뛰어넘는 가격 폭등을 초래한 핵심 동인이며, 
+                        이는 원자료 시장이 실물 경제뿐만 아니라 금융 시장의 복잡한 역학 관계에 의해 좌우될 수 있음을 명확하게 보여줍니다.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>🔮 향후 가격 변동 전망</h3>
+                <p>
+                    향후 커피 가격 변동을 전망하기 위해서는 복합적 요인들을 지속적으로 모니터링해야 합니다.
+                </p>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <div class="analysis-icon">📈</div>
+                        <h4 class="analysis-title">단기 전망 (1-3개월)</h4>
+                        <div class="analysis-text">
+                            현재의 가격 급등은 과도한 투기성 자금 유입에 따른 기술적 랠리 성격이 강합니다. 
+                            펀더멘털에 대한 재평가가 이루어지거나 투기적 롱 포지션이 이익을 실현할 경우 
+                            급격한 조정이 발생할 수 있습니다.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">🌍</div>
+                        <h4 class="analysis-title">중장기 전망 (6-12개월)</h4>
+                        <div class="analysis-text">
+                            장기적으로는 펀더멘털 요인이 가격을 결정할 것입니다. 
+                            브라질의 다음 작황 시즌, ICE 공인 재고 수준의 변화, 
+                            베트남 등 기타 주요 생산국의 생산량 변동이 핵심 변수가 될 것입니다.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">💱</div>
+                        <h4 class="analysis-title">환율 영향 모니터링</h4>
+                        <div class="analysis-text">
+                            브라질 헤알화(USDBRL) 변동성은 커피 가격을 결정하는 핵심 변수입니다. 
+                            관세 위협 발표 후 USD/BRL이 5.45에서 5.60 수준으로 급등하며 
+                            추가적인 수출 유인 감소 요인으로 작용하고 있습니다.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-label">전문가 예측 (현재 분기 말)</div>
+                        <div class="data-value">355.70¢</div>
+                        <div class="data-change">Trading Economics 글로벌 모델</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">12개월 후 전망</div>
+                        <div class="data-value">388.58¢</div>
+                        <div class="data-change">분석가들 기대치</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">미국 커피 의존도</div>
+                        <div class="data-value">34%</div>
+                        <div class="data-change">브라질산 비중</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-label">베트남 수출 증가</div>
+                        <div class="data-value positive">+6.9%</div>
+                        <div class="data-change">2025년 1-7월 대비</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h3>⚠️ 핵심 리스크 요인</h3>
+                <p>투자자와 커피 산업 관계자들이 주시해야 할 핵심 위험 요인들을 정리했습니다.</p>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <div class="analysis-icon">🏛️</div>
+                        <h4 class="analysis-title">정책적 리스크</h4>
+                        <div class="analysis-text">
+                            미국 정부의 50% 관세 정책 지속 여부와 브라질의 대응 조치가 
+                            단기 변동성의 가장 큰 원인입니다. 미국 커피 산업계의 
+                            관세 제외 요청이 정책 변화를 이끌어낼지 주목해야 합니다.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">📊</div>
+                        <h4 class="analysis-title">투기적 포지션 위험</h4>
+                        <div class="analysis-text">
+                            현재의 과매수 상태(RSI 80.64)와 극도의 투기적 롱 포지션 축적은 
+                            언제든 급격한 반대 방향 움직임을 유발할 수 있는 
+                            잠재적 위험 요인입니다.
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <div class="analysis-icon">🌡️</div>
+                        <h4 class="analysis-title">기후 변동성</h4>
+                        <div class="analysis-text">
+                            브라질 2026/27 작황에 영향을 미칠 9-10월 개화기 날씨가 중요합니다. 
+                            추가적인 악천후 발생 시 가격이 사상 최고치를 경신할 
+                            가능성도 배제할 수 없습니다.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="insight-highlight">
+                    <h4 class="insight-title">공급망 전이 효과의 한계</h4>
+                    <p class="insight-text">
+                        주목할 점은 커피 선물 가격의 상승이 반드시 농가 수익으로 직결되지 않는다는 것입니다. 
+                        선물 가격 상승으로 인한 이익의 대부분은 투기성 자본과 공급망 내 중간 거래자에게 돌아가며, 
+                        운송 및 운영 비용 상승으로 인해 농가의 실질 수익은 제한적일 수 있습니다. 
+                        반면 로스터와 소비자에게는 가격 인상이 순차적으로 전가되어 특히 저가 커피 시장에 큰 영향을 미칠 것으로 예상됩니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">결론 및 시사점</h2>
+                <p class="cta-text">
+                    커피 선물 시장의 최근 급등 현상은 단순한 수급 논리를 넘어선 복합적이고 다층적인 사건이었습니다. 
+                    펀더멘털적 충격이 투기성 자본의 취약한 포지션과 ICE의 구조적 불안정성이라는 '잠재적 위험'을 활성화시키며 
+                    가격을 비이성적인 수준까지 밀어 올렸습니다.
+                </p>
+                
+                <div class="analysis-grid" style="margin-top: 3rem;">
+                    <div class="analysis-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                        <div class="analysis-icon" style="background: white; color: var(--primary);">📊</div>
+                        <h4 class="analysis-title" style="color: white;">투자자 관점</h4>
+                        <div class="analysis-text" style="color: rgba(255,255,255,0.9);">
+                            • COT 보고서를 통한 투기성 자금 포지션 추적<br/>
+                            • 펀더멘털과 기술적 분석의 통합적 접근<br/>
+                            • 극한 변동성에 대한 리스크 관리 전략 수립
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                        <div class="analysis-icon" style="background: white; color: var(--primary);">☕</div>
+                        <h4 class="analysis-title" style="color: white;">커피 산업 관계자</h4>
+                        <div class="analysis-text" style="color: rgba(255,255,255,0.9);">
+                            • 시장 변동성을 생산 및 공급망 관리의 핵심 위험으로 인식<br/>
+                            • 체계적인 헤징 전략 수립 및 공급망 다변화<br/>
+                            • 가격 전가 메커니즘에 대한 이해와 대응
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                        <div class="analysis-icon" style="background: white; color: var(--primary);">🔍</div>
+                        <h4 class="analysis-title" style="color: white;">시장 분석가</h4>
+                        <div class="analysis-text" style="color: rgba(255,255,255,0.9);">
+                            • 거래소 메커니즘의 구조적 영향력 재평가<br/>
+                            • 투기적 자본과 실물 경제의 상호작용 모델링<br/>
+                            • 다층적 위험 요인의 시스템적 접근 방법론 개발
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="content-card">
+                <h3>📚 주요 참고 자료</h3>
+                <div style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">
+                    <p><strong>데이터 출처:</strong></p>
+                    <ul>
+                        <li>• Coffee C Futures - Intercontinental Exchange (ICE)</li>
+                        <li>• CFTC Commitments of Traders Reports</li>
+                        <li>• Trading Economics 글로벌 마크로 모델</li>
+                        <li>• Barchart.com 커피 선물 데이터</li>
+                        <li>• Investing.com 기술적 분석 지표</li>
+                    </ul>
+                    <br/>
+                    <p><strong>시장 분석 자료:</strong></p>
+                    <ul>
+                        <li>• ICE Differentials 변경 공시</li>
+                        <li>• 브라질 기후 및 작황 보고서</li>
+                        <li>• 미국 관세 정책 관련 업계 동향</li>
+                        <li>• 베트남 커피 수출 통계</li>
+                        <li>• 한국 원두 수입 현황</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ALIGN COMMODITIES</div>
+            <p class="footer-text">
+                Coffee Futures Market Deep Dive Analysis<br/>
+                2025년 8월 25일 발행
+            </p>
+            <div class="footer-divider"></div>
+            <p class="disclaimer">
+                <strong>Published by Align Commodities & Yellowknife</strong><br/>
+                본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.<br/>
+                모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-item').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Update active nav item
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = entry.target.dataset.animation || 'fadeIn 0.6s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for animation
+        document.querySelectorAll('.content-card, .analysis-card, .data-card').forEach(el => {
+            el.style.opacity = '0';
+            el.dataset.animation = 'slideUp 0.6s ease-out forwards';
+            observer.observe(el);
+        });
+        
+        // Price chart animation
+        document.querySelectorAll('.price-point').forEach((point, index) => {
+            setTimeout(() => {
+                point.style.opacity = '0';
+                point.style.animation = `slideUp 0.8s ease-out ${index * 0.2}s forwards`;
+            }, 1000);
+        });
+        
+        // Update active nav on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section[id]');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            let current = 'overview';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').substring(1) === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+        
+        // Add hover effects to data cards
+        document.querySelectorAll('.data-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Price point hover effects
+        document.querySelectorAll('.price-point').forEach(point => {
+            point.addEventListener('mouseenter', function() {
+                const value = this.querySelector('.price-value');
+                if (value) {
+                    value.style.transform = 'translateX(-50%) scale(1.1)';
+                    value.style.background = 'var(--accent)';
+                    value.style.color = 'white';
+                }
+            });
+            
+            point.addEventListener('mouseleave', function() {
+                const value = this.querySelector('.price-value');
+                if (value) {
+                    value.style.transform = 'translateX(-50%) scale(1)';
+                    value.style.background = 'white';
+                    value.style.color = 'var(--primary)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
