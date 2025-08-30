@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 시장 주간 동향 - 투기 랠리 후 숨고르기</title>
+    
+    <!--REPORT_META
+    {
+        "title": "투기 랠리 후 숨고르기: 커피 시장 주간 동향",
+        "subtitle": "CFTC 데이터로 본 투기성 자금 유입과 기술적 조정 국면 분석",
+        "date": "2025-08-30",
+        "summary": "8월 커피 시장은 관세 쇼크와 공급 부족 우려로 인한 투기성 자금 대거 유입(CFTC 매니지드 머니 +4,000계약)으로 386.10센트까지 급등했으나, 브라질 수확 완료(아라비카 98%, 로부스타 100%)와 기술적 과매수 신호로 단기 조정 국면에 진입했습니다. ICE 재고 부족(아라비카 717,113백, 로부스타 6,614로트)과 미국 50% 관세 영향이 구조적 강세 요인으로 작용하며, 향후 350센트 지지선 근처에서 횡보 또는 소폭 조정이 예상됩니다.",
+        "tags": ["투기자금유입", "CFTC데이터", "기술적조정", "브라질수확", "ICE재고부족", "관세영향", "과매수신호", "서리위험", "2026년개화기"]
+    }
+    REPORT_META-->
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #f4a261;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .home-button:hover {
+            background-color: #e76f51;
+        }
+
+        .home-button svg {
+            fill: currentColor;
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: middle;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            align-items: flex-start;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #8B4513;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+
+        .shock-alert {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .shock-alert h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: center;
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <div class="date-stamp">2025년 8월 30일 금요일</div>
+        </header>
+
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #8B4513; margin-bottom: 20px;">급등 랠리 후 조정 국면: 12월물 367.95센트 기록</h2>
+                <p style="margin-bottom: 15px;">
+                    <strong>8월 마지막 주 ICE 아라비카 12월물(KCZ25)은 극심한 변동성을 보였습니다.</strong> 
+                    투기성 자금 대거 유입으로 주초 3.5개월 최고치를 경신했으나, 기술적 과매수 신호와 브라질 수확 완료 압박으로 주말 367.95센트까지 조정되었습니다.
+                </p>
+                
+                <div class="highlight">
+                    <h3 style="margin-bottom: 10px;">📊 이번 주 핵심 동향</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>투기성 자금 대거 유입:</strong> CFTC 보고서(8/26 기준)에 따르면 매니지드 머니 순매수 포지션이 전주 대비 4,000계약 급증하며 투기적 관심이 크게 높아짐</li>
+                        <li><strong>기술적 조정 신호:</strong> 8월 26일 367.95센트로 하락(-1.4%)하며 "과매수 상황에서 일부 조정"이 나타났으나 구조적 강세는 유지</li>
+                        <li><strong>브라질 수확 거의 완료:</strong> Cooxupé 91.3% 완료(8/22), 전체적으로는 아라비카 98%, 로부스타 100% 완료 상태</li>
+                        <li><strong>재고 부족 심화:</strong> ICE 아라비카 재고 717,113백(1.25년 최저), 로부스타 6,614로트(1개월 최저)로 공급 압박 지속</li>
+                        <li><strong>관세 영향 지속:</strong> 미국 수입업체들의 브라질 원두 계약 취소 및 대체재 확보 경쟁이 계속되며 구조적 변화 심화</li>
+                    </ul>
+                </div>
+
+                <div class="highlight" style="background: linear-gradient(120deg, #ffeaa7 0%, #fab1a0 100%); border-left: 4px solid #e17055;">
+                    <h3 style="margin-bottom: 10px; color: #2d3436;">☄️ 서리의 숨겨진 위험: 2026년 개화기 타격</h3>
+                    <p style="color: #2d3436; line-height: 1.8;">
+                        8월 서리는 당장의 수확에는 큰 영향이 없지만, <strong>2026년 개화기(9-11월)에 치명적 영향</strong>을 미칠 수 있습니다. 
+                        서리로 인한 스트레스는 커피나무의 생육을 방해하여 내년 꽃 피는 시기에 개화량을 현저히 감소시키며, 
+                        이는 곧 2026년 수확량 대폭 감소로 이어집니다. 
+                        <strong style="color: #e17055;">현재 시장이 반응하고 있는 것은 바로 이 '미래 공급 충격' 우려입니다.</strong>
+                    </p>
+                    <p style="margin-top: 10px; color: #636e72; font-size: 0.9em;">
+                        📌 메커니즘: 서리 스트레스 → 나무 약화 → 2026년 개화량 감소 → 2026/27 시즌 생산량 급감 → 장기 공급 부족
+                    </p>
+                </div>
+
+                <div class="shock-alert" style="text-align: left;">
+                    <h3>🎯 투기성 자금 유입 급증</h3>
+                    <p style="margin-bottom: 10px;">CFTC 8월 26일 보고서에 따르면, 매니지드 머니(헤지펀드 등)의 순매수 포지션이 전주 대비 4,000계약 급증했습니다. 이는 관세 쇼크와 공급 부족 우려로 인한 투기성 자금의 대거 유입을 의미합니다.</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>• <strong>과매수 신호:</strong> Safras & Mercado "시장이 과매수 징후를 보이며 일부 조정 필요" 지적</li>
+                        <li>• <strong>숨고르기 국면:</strong> 8월 26일 367.95센트(-1.4%) 하락으로 단기 조정 시작</li>
+                        <li>• <strong>구조적 강세 유지:</strong> 재고 부족과 관세 영향으로 하방 지지선은 견고</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="price-box">
+                    <h3>12월 아라비카 (KCZ25)</h3>
+                    <div class="price-value">367.95</div>
+                    <div class="price-change negative">-1.4% (조정)</div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">센트/파운드 → $8.11/kg</div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #8B4513;">주요 지표 현황</h3>
+                    <div class="stat-item">
+                        <span><strong>ICE 아라비카 재고:</strong></span>
+                        <span style="color: #e74c3c; font-size: 0.9em; text-align: right;">717,113백<br><small>(1.25년 최저)</small></span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>ICE 로부스타 재고:</strong></span>
+                        <span style="color: #e74c3c; font-size: 0.9em; text-align: right;">6,614로트<br><small>(1개월 최저)</small></span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>브라질 수확 진행률:</strong></span>
+                        <span style="color: #27ae60; font-size: 0.9em; text-align: right;">아라비카 98%<br>로부스타 100%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>브라질 7월 수출:</strong></span>
+                        <span style="color: #e74c3c; font-size: 0.9em;">-28% 감소 (YoY)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>CFTC 투기적 포지션:</strong></span>
+                        <span style="color: #27ae60; font-size: 0.9em;">+4,000계약<br><small>(전주 대비)</small></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">📈 이번 주 시장 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.29</div>
+                    <div class="news-content">
+                        <strong>월별 급등 마무리:</strong> ICE 아라비카 12월물이 8월 마지막 거래일 367.95센트로 마감하며 월간 28.4% 상승을 기록했습니다. 
+                        8월 한 달간 극심한 변동성을 보이며 연간 상승률 54.8%를 달성했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.27</div>
+                    <div class="news-content">
+                        <strong>투기성 자금 대거 유입:</strong> CFTC 보고서(8/26 기준)에 따르면 매니지드 머니의 순매수 포지션이 전주 대비 4,000계약 급증했습니다. 
+                        이는 관세 쇼크와 공급 부족 우려로 인한 헤지펀드 등 투기적 관심 증가를 보여줍니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.26</div>
+                    <div class="news-content">
+                        <strong>기술적 조정 신호:</strong> 12월물이 367.95센트로 1.4% 하락하며 Safras & Mercado는 "시장이 과매수 징후를 보이며 일부 조정이 나타나고 있다"고 분석했습니다.
+                        런던 로부스타는 반대로 0.9% 상승하여 $4,690에 마감했습니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🇧🇷 브라질 수확 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.27</div>
+                    <div class="news-content">
+                        <strong>수확 거의 완료:</strong> ICE 아라비카 재고가 717,113백으로 1.25년 만에 최저치를 기록했습니다. 
+                        커피 선물 가격이 8월 들어 급등한 지 4주째 지속되며 월요일 3.5개월 최고치를 경신했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.26</div>
+                    <div class="news-content">
+                        <strong>Cooxupé 91.3% 완료:</strong> 브라질 최대 커피 협동조합인 Cooxupé가 8월 22일 기준으로 회원들의 수확이 91.3% 완료되었다고 발표했습니다. 
+                        Safras & Mercado는 브라질 전체 수확이 아라비카 98%, 로부스타 100% 완료된 것으로 보고했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.25</div>
+                    <div class="news-content">
+                        <strong>미나스 제라이스 무강우와 서리 우려:</strong> Somar Meteorologia는 브라질 최대 아라비카 생산지인 미나스 제라이스가 
+                        8월 23일 종료 주간 동안 강우량이 전혀 없었다고 보고했습니다. 지난 주 서리 피해에 대한 우려도 지속되고 있으며, 
+                        <strong style="color: #8B4513;">서리는 2026년 개화기에 치명적 영향을 미칠 수 있어 내년 생산량 감소 우려를 증폭시키고 있습니다.</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📊 재고 및 공급 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.27</div>
+                    <div class="news-content">
+                        <strong>로부스타 재고 감소:</strong> ICE 로부스타 재고가 6,614로트로 1개월 만에 최저치를 기록했습니다. 
+                        아라비카와 로부스타 모두 재고 감소가 지속되며 전방위적 공급 압박이 이어지고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.26</div>
+                    <div class="news-content">
+                        <strong>미국 공급 압박 지속:</strong> 50% 관세로 인해 미국 구매자들이 브라질 원두 신규 계약을 취소하고 있어 
+                        미국 커피 공급 부족 우려가 가격 상승 압력으로 작용하고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.08.25</div>
+                    <div class="news-content">
+                        <strong>JM 스머커 가격 인상:</strong> 폴저스와 카페 부스텔로 브랜드를 보유한 JM 스머커가 높은 관세에 대응하여 
+                        커피 가격을 다시 인상하겠다고 발표하면서 소비자 수요 위축 우려가 제기되었습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망: 구조적 변화의 시작</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>8월 커피 시장은 50% 관세라는 '흑조(Black Swan)' 이벤트로 인해 근본적인 구조 변화를 겪고 있습니다.</strong> 
+                브라질 수확이 거의 완료되어 단기 공급 부족 우려는 완화되었으나, 미국-브라질 간 무역 차질로 인한 글로벌 공급망 재편이 가격 상승의 주요 동력으로 작용하고 있습니다.
+                <br><br>
+                <strong>단기적으로는 350-380센트 범위에서 횡보할 가능성이 높습니다.</strong> 
+                투기적 과매수 상황에서 일부 조정이 나타났지만, ICE 재고 부족과 관세 영향이 지속되어 하방 지지선은 견고합니다. 
+                9월 들어 브라질 2026년 개화기 기상 상황에 따라 추가적인 변동성이 예상됩니다.
+                <br><br>
+                <strong>중장기적으로는 무역 패턴의 영구적 변화가 예상됩니다.</strong> 
+                중국이 적극적으로 브라질 커피를 받아들이고, 미국은 중남미 소규모 생산국들로부터 비싼 원두를 수입해야 하는 '분할된 시장' 구조가 정착될 가능성이 높습니다. 
+                이는 커피 가격의 구조적 상승과 지역별 가격 차별화로 이어질 것입니다.
+            </p>
+        </div>
+
+        <div class="tags">
+            <span class="tag">투기자금유입</span>
+            <span class="tag">CFTC+4000계약</span>
+            <span class="tag">과매수조정</span>
+            <span class="tag">브라질수확완료</span>
+            <span class="tag">367.95센트</span>
+            <span class="tag">ICE재고최저</span>
+            <span class="tag">기술적조정</span>
+            <span class="tag">구조적강세</span>
+            <span class="tag">단기횡보전망</span>
+            <span class="tag">350센트지지</span>
+        </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, Cooxupé, Safras & Mercado, USDA, Cecafé | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
