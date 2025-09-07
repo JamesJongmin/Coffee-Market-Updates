@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장: 균형점을 찾아가는 변동성</title>
+    
+    <style>
+        /* --- 1. 웹폰트 가져오기 --- */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            /* Figma 스타일 컬러 팔레트 */
+            --primary: #5E2E0C;
+            --primary-light: #8B4513;
+            --primary-dark: #3A1C08;
+            --accent: #D4A574;
+            --accent-light: #E8C4A0;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --background: #FAFAF9;
+            --surface: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF;
+            --border: #E5E7EB;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            /* --- 2. 폰트 적용 --- */
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', 'Helvetica Neue', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* 헤더 스타일 */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(212, 165, 116, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(139, 69, 19, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px; /* 제목과의 간격 */
+        }
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px; /* 아이콘과 텍스트 사이 간격 */
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .home-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .header-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            font-weight: 400;
+            margin-bottom: 32px;
+        }
+        
+        .header-meta {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* 컨테이너 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 64px 24px;
+        }
+        
+        /* 섹션 스타일 */
+        .section {
+            margin-bottom: 80px;
+        }
+        
+        .section-header {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        
+        /* 카드 레이아웃 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .card-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .change-positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .change-negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+        
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* 차트 컨테이너 */
+        .chart-container {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 48px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .chart-legend {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        /* 데이터 테이블 */
+        .data-table {
+            width: 100%;
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .data-table thead {
+            background: var(--background);
+        }
+        
+        .data-table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .data-table td {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--background);
+        }
+        
+        /* 인사이트 박스 */
+        .insight-box {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .insight-box::before {
+            content: '💡';
+            position: absolute;
+            right: 32px;
+            top: 32px;
+            font-size: 48px;
+            opacity: 0.2;
+        }
+        
+        .insight-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+        
+        .insight-content {
+            color: var(--primary);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        /* 시나리오 카드 */
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+        
+        .scenario-card {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+        }
+        
+        .scenario-header {
+            padding: 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        
+        .scenario-probability {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .scenario-range {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .scenario-body {
+            padding: 24px;
+        }
+        
+        .scenario-factors {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .scenario-factors li {
+            padding: 8px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .scenario-factors li::before {
+            content: '→';
+            color: var(--primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        /* 푸터 */
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 48px 0;
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .footer-disclaimer {
+            opacity: 0.6;
+            font-size: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-top">
+                <a href="https://coffeemarket.info" target="_blank" class="home-button">
+                    <svg class="home-icon" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 8l6-5.5L14 8M4 6.5V13h3V9h2v4h3V6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Home
+                </a>
+                <div class="header-badge">MARKET ANALYSIS</div>
+            </div>
+            <h1>커피 선물 시장: 균형점을 찾아가는 변동성</h1>
+            <p class="subtitle">투기적 과열과 펀더멘털 긴축 사이의 미묘한 균형</p>
+            <div class="header-meta">
+                <div class="meta-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M5 1v2M11 1v2M3.5 6h9M2 3.5h12c.55 0 1 .45 1 1V13c0 .55-.45 1-1 1H2c-.55 0-1-.45-1-1V4.5c0-.55.45-1 1-1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    2025년 9월 8일
+                </div>
+                <div class="meta-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M8 4v4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    15분 읽기
+                </div>
+                <div class="meta-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 5.5L8 2l6 3.5v5L8 14l-6-3.5v-5z" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    심층 분석
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        
+        <section class="section">
+            <div class="insight-box">
+                <h2 class="insight-title">핵심 요약</h2>
+                <div class="insight-content">
+                    커피 시장은 8월 31% 급등 이후 <strong>370-375센트 범위</strong>에서 2주간 통합 국면을 보이고 있습니다. 
+                    시장은 브라질 아라비카 생산 11.2% 감소와 미국의 50% 관세라는 강력한 강세 요인과, 
+                    기록적인 로부스타 수확량 및 35,708계약에 달하는 과도한 투기적 순매수 포지션이라는 약세 압력 사이에서 균형을 찾고 있습니다. 
+                    가장 가능성 높은 시나리오는 <strong>350-410센트 범위의 변동성 높은 박스권 장세</strong>(확률 60%)이며, 
+                    새로운 촉매제 없이는 방향성 돌파가 어려울 전망입니다.
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">1</span>
+                    현재 시장 포지션
+                </h2>
+                <p class="section-description">통합 국면 속 잠재된 변동성</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">KCZ25 (12월물)</div>
+                    </div>
+                    <div class="card-value">373.65</div>
+                    <div class="card-change change-negative">-0.75 (-0.20%)</div>
+                    <p class="card-description">
+                        8월 고점 대비 조정 후 370-375센트 좁은 범위에서 횡보. RSI 65.13%로 과매수 영역 근접
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <div class="card-title">52주 범위</div>
+                    </div>
+                    <div class="card-value">224.75 - 399.65</div>
+                    <div class="card-change change-positive">+52.37% YoY</div>
+                    <p class="card-description">
+                        현재 가격은 52주 최고점 근처에서 형성. 역사적으로 높은 수준 유지
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💼</div>
+                        <div class="card-title">미결제약정</div>
+                    </div>
+                    <div class="card-value">84,843</div>
+                    <div class="card-change change-negative">계약</div>
+                    <p class="card-description">
+                        통합 기간 중 미결제약정 유지는 돌파 대기 중인 새로운 포지션 구축 시사
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">2</span>
+                    투기적 포지션의 무게
+                </h2>
+                <p class="section-description">CFTC 데이터가 보여주는 시장 심리</p>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">CFTC 거래자별 순포지션 (9월 2일 기준)</h3>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: var(--success)"></span>
+                            <span>순매수</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: var(--danger)"></span>
+                            <span>순매도</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>거래자 유형</th>
+                            <th>매수 포지션</th>
+                            <th>매도 포지션</th>
+                            <th>순포지션</th>
+                            <th>주간 변동</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>자산운용사 (헤지펀드)</strong></td>
+                            <td>45,239</td>
+                            <td>9,531</td>
+                            <td style="color: var(--success); font-weight: 700">+35,708</td>
+                            <td>+7,402</td>
+                        </tr>
+                        <tr>
+                            <td><strong>생산자/판매자</strong></td>
+                            <td>39,960</td>
+                            <td>72,292</td>
+                            <td style="color: var(--danger); font-weight: 700">-32,332</td>
+                            <td>+26,368</td>
+                        </tr>
+                        <tr>
+                            <td><strong>스왑 딜러</strong></td>
+                            <td>22,116</td>
+                            <td>27,284</td>
+                            <td style="color: var(--danger)">-5,168</td>
+                            <td>-34,777</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="insight-box" style="margin-top: 32px;">
+                <h3 class="insight-title">⚠️ 과밀 거래의 위험</h3>
+                <div class="insight-content">
+                    현재 투기적 순매수 35,708계약은 <strong>"과밀 거래(Crowded Trade)"</strong> 수준입니다. 
+                    이는 강세 내러티브에 대한 시장의 확신을 보여주지만, 동시에 급격한 청산 위험을 내포합니다. 
+                    강세 내러티브가 흔들릴 경우(관세 해결, 작황 개선 등), 동시적 매도세는 빠른 가격 조정을 촉발할 수 있습니다.
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">3</span>
+                    관세 충격파의 연쇄 효과
+                </h2>
+                <p class="section-description">50% 관세가 촉발한 글로벌 무역 재편</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🚢</div>
+                        <div class="card-title">무역 흐름 변화</div>
+                    </div>
+                    <p class="card-description">
+                        <strong>브라질 → 미국:</strong> 급감<br>
+                        <strong>브라질 → 중국/EU:</strong> 급증<br>
+                        <strong>콜롬비아/중미 → 미국:</strong> 증가<br><br>
+                        중국은 이미 183개 브라질 기업에 수출 승인. 미국 로스터들은 브라질 없는 블렌드 재구성이라는 수십 년간 없던 과제 직면
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💰</div>
+                        <div class="card-title">가격 영향</div>
+                    </div>
+                    <p class="card-description">
+                        <strong>미국 프리미엄:</strong> 타 지역 대비 상승<br>
+                        <strong>유럽/아시아:</strong> 브라질 물량 증가로 안정<br>
+                        <strong>ICE-런던 스프레드:</strong> 확대 예상<br><br>
+                        미국 구매자들이 대체 공급원 확보를 위해 프리미엄 지불 불가피
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⏰</div>
+                        <div class="card-title">장기적 영향</div>
+                    </div>
+                    <p class="card-description">
+                        관세가 해결되더라도 한번 구축된 새로운 공급망과 블렌드는 쉽게 되돌리기 어려움. 
+                        브라질의 미국 시장 점유율 영구 손실 가능성. 
+                        미국 커피 시장의 구조적 고비용화 우려
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">4</span>
+                    이원화된 공급 전망
+                </h2>
+                <p class="section-description">아라비카 긴축 vs 로부스타 과잉</p>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">2025/26 작물연도 생산 전망</h3>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>국가/기관</th>
+                            <th>총 생산량</th>
+                            <th>아라비카</th>
+                            <th>로부스타</th>
+                            <th>전년 대비</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>브라질 (USDA)</strong></td>
+                            <td>65.0</td>
+                            <td>40.9</td>
+                            <td>24.1</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>브라질 (CONAB)</strong></td>
+                            <td>55.2</td>
+                            <td style="color: var(--danger)">35.2 (-11.2%)</td>
+                            <td style="color: var(--success)">20.0 (+37%)</td>
+                            <td>-0.9%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>베트남 (USDA)</strong></td>
+                            <td>31.0</td>
+                            <td>1.0</td>
+                            <td style="color: var(--success)">30.0</td>
+                            <td>+6.9%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 16px; color: var(--text-secondary); font-size: 14px;">
+                    * 단위: 백만 60kg 백
+                </p>
+            </div>
+            
+            <div class="insight-box" style="margin-top: 32px;">
+                <h3 class="insight-title">📊 품질의 양극화</h3>
+                <div class="insight-content">
+                    시장은 단순한 총생산량이 아닌 <strong>품종별 수급 불균형</strong>을 가격에 반영하고 있습니다. 
+                    고품질 아라비카는 희소해지는 반면 로부스타는 풍부해지는 "품질의 양극화" 현상이 심화되고 있습니다. 
+                    이는 KC 선물(아라비카)과 RC 선물(로부스타) 간 스프레드 확대로 이어지며, 
+                    로스터들은 비싼 아라비카를 계속 구매하거나 맛을 희생하고 로부스타 비중을 늘리는 어려운 선택에 직면했습니다.
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">5</span>
+                    통화 변수의 역설
+                </h2>
+                <p class="section-description">브라질 헤알화가 커피 가격에 미치는 실제 영향</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💱</div>
+                        <div class="card-title">BRL/USD 메커니즘</div>
+                    </div>
+                    <p class="card-description">
+                        <strong>일반적 오해:</strong> 헤알화 약세 = 커피 가격 상승<br>
+                        <strong>실제 관계:</strong> 헤알화 약세 = 커피 가격 <span style="color: var(--danger)">하락</span><br><br>
+                        헤알화 약세 시 브라질 농부들의 달러 수입이 증가하여 판매 압력이 높아집니다.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🏦</div>
+                        <div class="card-title">중앙은행 정책</div>
+                    </div>
+                    <p class="card-description">
+                        <strong>브라질 (BCB):</strong> 15.00% (20년 최고)<br>
+                        <strong>미국 (Fed):</strong> 중립적 수준으로 이동 중<br><br>
+                        높은 금리 격차는 캐리 트레이드를 통해 헤알화 강세 지지
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <div class="card-title">시장 영향</div>
+                    </div>
+                    <p class="card-description">
+                        현재 헤알화 안정은 커피 가격의 <strong>미묘한 지지 요인</strong>으로 작용. 
+                        급격한 헤알화 약세 가능성이 낮아 과거와 같은 통화 약세로 인한 가격 하락 압력이 제한적
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">6</span>
+                    시장 전망 시나리오
+                </h2>
+                <p class="section-description">확률 기반 3가지 시나리오</p>
+            </div>
+            
+            <div class="scenarios-grid">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-probability">확률 60%</div>
+                        <h3 class="scenario-title">시나리오 1: 변동성 높은 통합</h3>
+                        <div class="scenario-range">목표가: 350-410 센트</div>
+                    </div>
+                    <div class="scenario-body">
+                        <ul class="scenario-factors">
+                            <li>아라비카 희소성과 투기적 포지션 간 균형 지속</li>
+                            <li>새로운 주요 촉매제 부재</li>
+                            <li>관세 상황 미해결 상태 유지</li>
+                            <li>범위 상단에서는 상업적 헤지 매도</li>
+                            <li>범위 하단에서는 실수요자 매수 지지</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-probability">확률 25%</div>
+                        <h3 class="scenario-title">시나리오 2: 강세 돌파</h3>
+                        <div class="scenario-range">목표가: 440-470 센트</div>
+                    </div>
+                    <div class="scenario-body">
+                        <ul class="scenario-factors">
+                            <li>브라질 기상 이변 (서리/가뭄)</li>
+                            <li>CONAB 아라비카 추가 하향 조정</li>
+                            <li>관세 영구화 인식으로 패닉 바잉</li>
+                            <li>400-410센트 저항 돌파 시 기술적 매수세</li>
+                            <li>상업적 숏커버링 연쇄 반응</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-probability">확률 15%</div>
+                        <h3 class="scenario-title">시나리오 3: 약세 반전</h3>
+                        <div class="scenario-range">목표가: 300-320 센트</div>
+                    </div>
+                    <div class="scenario-body">
+                        <ul class="scenario-factors">
+                            <li>관세 문제 외교적 해결</li>
+                            <li>브라질 작황 전망 개선</li>
+                            <li>글로벌 위험 회피 심리로 투기 청산</li>
+                            <li>350센트 지지선 붕괴 시 손절매 가속</li>
+                            <li>과밀 매수 포지션의 급격한 청산</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">7</span>
+                    핵심 모니터링 지표
+                </h2>
+                <p class="section-description">시장 전환점을 알리는 신호들</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🌡️</div>
+                        <div class="card-title">강세 돌파 신호</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <strong>기상:</strong> 브라질 미나스제라이스 악천후
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <strong>포지션:</strong> CFTC 투기 순매수 추가 증가
+                        </li>
+                        <li style="padding: 8px 0;">
+                            <strong>작황:</strong> CONAB 추가 하향 조정
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📉</div>
+                        <div class="card-title">약세 반전 신호</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <strong>정치:</strong> 워싱턴-브라질리아 관세 협상 재개
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <strong>환율:</strong> USD/BRL 지속 상승 (헤알화 약세)
+                        </li>
+                        <li style="padding: 8px 0;">
+                            <strong>포지션:</strong> 미결제약정 급격한 감소
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚖️</div>
+                        <div class="card-title">균형 유지 요인</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <strong>재고:</strong> ICE 인증재고 77만백 수준 유지
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <strong>스프레드:</strong> 아라비카-로부스타 격차 안정
+                        </li>
+                        <li style="padding: 8px 0;">
+                            <strong>수요:</strong> 글로벌 소비 증가세 둔화
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">8</span>
+                    전략적 시사점
+                </h2>
+                <p class="section-description">시장 참여자별 대응 전략</p>
+            </div>
+            
+            <div class="insight-box">
+                <h3 class="insight-title">🎯 트레이더/투자자</h3>
+                <div class="insight-content">
+                    <strong>• 단기:</strong> 350-410센트 범위 거래 전략이 유효. 범위 이탈 시 모멘텀 추종<br>
+                    <strong>• 중기:</strong> 과밀 투기 포지션을 고려한 리스크 관리 필수. 급격한 청산 가능성 대비<br>
+                    <strong>• 헤징:</strong> 변동성 확대에 대비한 옵션 전략 고려
+                </div>
+            </div>
+            
+            <div class="insight-box" style="background: linear-gradient(135deg, #E8C4A0 0%, #D4A574 100%);">
+                <h3 class="insight-title">☕ 로스터/수입업자</h3>
+                <div class="insight-content">
+                    <strong>• 공급망:</strong> 브라질 의존도 축소 및 대체 공급원 다변화 지속<br>
+                    <strong>• 블렌드:</strong> 로부스타 비중 증가 검토, 소비자 반응 테스트<br>
+                    <strong>• 계약:</strong> 관세 리스크 조항 포함한 신규 계약 체결
+                </div>
+            </div>
+            
+            <div class="insight-box" style="background: linear-gradient(135deg, #D4A574 0%, #8B4513 100%); color: white;">
+                <h3 class="insight-title" style="color: white;">📊 리스크 관리</h3>
+                <div class="insight-content" style="color: white;">
+                    현재 시장은 <strong>강세와 약세 요인이 팽팽하게 균형</strong>을 이루고 있습니다. 
+                    어느 한쪽으로의 급격한 움직임보다는 높은 변동성 속에서 범위를 유지할 가능성이 높습니다. 
+                    그러나 과도한 투기적 포지션은 하방 리스크를, 구조적 아라비카 부족은 상방 잠재력을 시사합니다. 
+                    <strong>리스크 관리가 그 어느 때보다 중요한 시점</strong>입니다.
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">9</span>
+                    결론
+                </h2>
+                <p class="section-description">균형 속의 잠재된 폭발력</p>
+            </div>
+            
+            <div class="insight-box" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white;">
+                <h3 class="insight-title" style="color: white;">📌 최종 전망</h3>
+                <div class="insight-content" style="color: white;">
+                    커피 시장은 긴축되는 아라비카 공급과 전례 없는 무역 혼란이라는 펀더멘털 요인에 의해 강력하게 지지되고 있습니다. 
+                    그러나 가격은 이미 상당 부분 상승했으며, 과도한 투기적 참여로 인해 시장은 취약한 상태입니다.<br><br>
+                    
+                    <strong>가장 신중한 접근:</strong> 높은 가격 범위 내에서 지속적인 변동성을 예상하면서, 
+                    현재의 균형 상태를 깨뜨릴 촉매제에 대해 경계를 늦추지 않는 것입니다. 
+                    시장이 강세와 약세의 힘이 팽팽하게 맞서는 만큼, 방향성보다는 변동성 자체가 거래 기회를 제공할 것입니다.<br><br>
+                    
+                    <strong style="font-size: 18px;">핵심 레벨: 지지선 350 | 저항선 410 | 현재가 373.65</strong>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Align Commodities & Yellowknife</div>
+            <p class="footer-text">Coffee Market Intelligence & Analysis</p>
+            <p class="footer-text">james.baek@aligncommodities.com</p>
+            <p class="footer-disclaimer">
+                본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.<br>
+                모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
