@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
+    
+    <!--REPORT_META
+    {
+        "title": "관세 효과 본격화, 12월물 396.85센트 (+2.78%) 강세 지속",
+        "subtitle": "브라질 수출 9개월 연속 감소와 미국 관세 충격이 가격 급등 견인",
+        "date": "2025-09-13",
+        "summary": "커피 선물 시장이 미국의 50% 관세 효과가 본격화되면서 급등세를 지속하고 있습니다. 12월 아라비카 커피(KCZ25)는 396.85센트로 전일 대비 2.78% 상승했으며, 브라질 수출이 9개월 연속 감소하면서 공급 차질이 현실화되고 있습니다. 8월 브라질 커피 수출은 전년 동월 대비 17.5% 감소한 314만 백을 기록했고, 미국향 수출은 46% 급감했습니다. ICE 거래비용 급증과 브라질 헤알화 강세도 가격 상승을 뒷받침하고 있습니다.",
+        "tags": ["396.85센트", "관세효과", "브라질수출감소", "거래비용급증", "헤알화강세", "공급차질", "가격급등", "미국관세", "수출9개월감소", "ICE마진인상"]
+    }
+    REPORT_META-->
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #e8f5e8 0%, #a8e6cf 30%, #dcedc1 70%, #ffd3a5 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2d8659 0%, #45b883 50%, #52c93f 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(45, 134, 89, 0.4);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .home-button:hover {
+            background: linear-gradient(135deg, #ff8e53 0%, #ff6b6b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .home-button svg {
+            fill: currentColor;
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: middle;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-left: 5px solid #52c93f;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2d8659;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #a8e6cf;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .news-content a {
+            color: #2d8659;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .news-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #52c93f;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: linear-gradient(135deg, #2d8659 0%, #45b883 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(45, 134, 89, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: center;
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <div class="date-stamp">2025년 9월 13일 토요일</div>
+        </header>
+
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #2d8659; margin-bottom: 20px;">주요 헤드라인: 관세 효과 본격화, 12월물 396.85센트 (+2.78%) 강세 지속</h2>
+                <p style="margin-bottom: 15px;">
+                    <strong>미국의 50% 관세 효과가 본격화되면서 커피 선물 시장이 급등세를 지속하고 있습니다.</strong> 
+                    12월 아라비카 커피(KCZ25)는 396.85센트로 전일 대비 2.78% 상승하며 4개월 최고치를 기록했습니다. 
+                    브라질 커피 수출이 9개월 연속 감소하며 공급 차질이 현실화되고 있습니다.
+                </p>
+                
+                <div class="content-section" style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #4ecdc4;">
+                    <h3 style="color: #4ecdc4; margin-bottom: 10px;">핵심 요약</h3>
+                    <p style="font-size: 1.0em; line-height: 1.6;">
+                        12월 아라비카 커피(KCZ25)는 396.85센트로 전일 대비 2.78% 상승하며 4개월 최고치를 기록했습니다.
+                        브라질 8월 커피 수출이 전년 동월 대비 17.5% 감소한 314만 백을 기록하며 9개월 연속 감소세를 보였습니다.
+                        미국향 브라질 커피 수출은 46% 급감하여 미국이 브라질 커피 최대 수입국 지위를 잃었습니다.
+                        ICE 거래소의 마진 요구사항 급증과 브라질 헤알화 14개월 최고치 강세도 가격 상승을 뒷받침하고 있습니다.
+                        CFTC 자료에 따르면 머니매니저의 순매수 포지션이 19,447계약으로 지속적인 강세 베팅을 확인할 수 있습니다.
+                    </p>
+                </div>
+                <div class="highlight">
+                    <h3 style="margin-bottom: 10px;">핵심 시장 동향</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>관세 효과 현실화:</strong> 미국의 50% 관세로 브라질 수출업체들이 배송 지연을 요청, 공급 차질 가시화</li>
+                        <li><strong>브라질 수출 급감:</strong> 8월 브라질 커피 수출 17.5% 감소, 9개월 연속 하락세 지속</li>
+                        <li><strong>미국 시장 변화:</strong> 미국이 브라질 커피 최대 수입국 지위 상실, 8월 수입량 46% 급감</li>
+                        <li><strong>거래비용 급증:</strong> ICE 아라비카 계약 마진 요구사항이 작년 대비 거의 2배 수준으로 증가</li>
+                        <li><strong>헤알화 강세:</strong> 브라질 헤알화가 달러 대비 14개월 최고치까지 강세, 농가 판매 지연 유발</li>
+                        <li><strong>투기자 순매수:</strong> CFTC 자료 기준 머니매니저 순매수 포지션이 19,447계약으로 강세 유지</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="price-box">
+                    <h3>12월 아라비카 (KCZ25)</h3>
+                    <div class="price-value">396.85</div>
+                    <div class="price-change positive">+10.75센트 (+2.78%)</div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">→ $8.75/kg</div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #2d8659;">주요 지표 현황</h3>
+                    <div class="stat-item">
+                        <span><strong>8월 브라질 총수출:</strong></span>
+                        <span style="color: #ff6b6b;">314만백 (전년동월 대비 -17.5%)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>8월 브라질→미국 수출:</strong></span>
+                        <span style="color: #ff6b6b;">30만백 (전년동월 대비 -46%)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>ICE 증거금 요구액:</strong></span>
+                        <span style="color: #ff6b6b;">$10,410/계약 (전년대비 2배)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>USD/BRL 환율:</strong></span>
+                        <span style="color: #51cf66;">14개월 최저 (헤알화 강세)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>머니매니저 순매수:</strong></span>
+                        <span style="color: #51cf66;">19,447계약 (+2,398계약)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>커피선물 1개월 수익률:</strong></span>
+                        <span style="color: #51cf66;">+28.21% (8/12→9/12)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+            <h2 style="color: #2d8659; margin-bottom: 20px; text-align: center;">브라질 커피 수출 추이 (2025년)</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <svg viewBox="0 0 600 350" style="width: 100%; max-width: 600px; margin: 0 auto;">
+                    <!-- 배경 그리드 -->
+                    <g stroke="#f0f0f0" stroke-width="1">
+                        <line x1="80" y1="30" x2="80" y2="280"/>
+                        <line x1="80" y1="280" x2="580" y2="280"/>
+                        <!-- 수평 그리드선 -->
+                        <line x1="80" y1="240" x2="580" y2="240" stroke-dasharray="2,2"/>
+                        <line x1="80" y1="200" x2="580" y2="200" stroke-dasharray="2,2"/>
+                        <line x1="80" y1="160" x2="580" y2="160" stroke-dasharray="2,2"/>
+                        <line x1="80" y1="120" x2="580" y2="120" stroke-dasharray="2,2"/>
+                        <line x1="80" y1="80" x2="580" y2="80" stroke-dasharray="2,2"/>
+                    </g>
+                    
+                    <!-- Y축 레이블 -->
+                    <g font-size="11" fill="#666">
+                        <text x="75" y="285" text-anchor="end">200</text>
+                        <text x="75" y="245" text-anchor="end">300</text>
+                        <text x="75" y="205" text-anchor="end">400</text>
+                        <text x="75" y="165" text-anchor="end">500</text>
+                        <text x="75" y="125" text-anchor="end">600</text>
+                        <text x="75" y="85" text-anchor="end">700만백</text>
+                    </g>
+                    
+                    <!-- X축 레이블 -->
+                    <g font-size="10" fill="#666">
+                        <text x="130" y="300" text-anchor="middle">1월</text>
+                        <text x="190" y="300" text-anchor="middle">2월</text>
+                        <text x="250" y="300" text-anchor="middle">3월</text>
+                        <text x="310" y="300" text-anchor="middle">4월</text>
+                        <text x="370" y="300" text-anchor="middle">5월</text>
+                        <text x="430" y="300" text-anchor="middle">6월</text>
+                        <text x="490" y="300" text-anchor="middle">7월</text>
+                        <text x="550" y="300" text-anchor="middle">8월</text>
+                    </g>
+                    
+                    <!-- 2024년 데이터 (점선) -->
+                    <polyline fill="none" stroke="#ccc" stroke-width="2" stroke-dasharray="5,5"
+                        points="130,150 190,130 250,120 310,140 370,160 430,180 490,200 550,190"/>
+                    
+                    <!-- 2025년 데이터 (실선) -->
+                    <polyline fill="none" stroke="#e74c3c" stroke-width="3"
+                        points="130,160 190,140 250,130 310,150 370,170 430,190 490,220 550,230"/>
+                    
+                    <!-- 2025년 데이터 포인트 -->
+                    <circle cx="130" cy="160" r="4" fill="#e74c3c"/>
+                    <circle cx="190" cy="140" r="4" fill="#e74c3c"/>
+                    <circle cx="250" cy="130" r="4" fill="#e74c3c"/>
+                    <circle cx="310" cy="150" r="4" fill="#e74c3c"/>
+                    <circle cx="370" cy="170" r="4" fill="#e74c3c"/>
+                    <circle cx="430" cy="190" r="4" fill="#e74c3c"/>
+                    <circle cx="490" cy="220" r="4" fill="#e74c3c"/>
+                    <circle cx="550" cy="230" r="5" fill="#e74c3c" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- 8월 관세 표시 -->
+                    <line x1="520" y1="50" x2="520" y2="280" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="3,3" opacity="0.7"/>
+                    <text x="525" y="45" font-size="9" fill="#ff6b6b" font-weight="bold">8월 관세 시행</text>
+                    
+                    <!-- 범례 -->
+                    <g font-size="11">
+                        <line x1="400" y1="50" x2="420" y2="50" stroke="#ccc" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="425" y="54" fill="#666">2024년</text>
+                        <line x1="400" y1="70" x2="420" y2="70" stroke="#e74c3c" stroke-width="3"/>
+                        <text x="425" y="74" fill="#e74c3c">2025년</text>
+                    </g>
+                    
+                    <!-- 최신 포인트 레이블 -->
+                    <text x="530" y="225" font-size="12" fill="#e74c3c" font-weight="bold" text-anchor="end">314만백</text>
+                    <text x="530" y="238" font-size="10" fill="#e74c3c" text-anchor="end">(-17.5%)</text>
+                    
+                    <!-- 차트 제목 -->
+                    <text x="330" y="20" text-anchor="middle" font-size="12" fill="#333">단위: 만백 (60kg)</text>
+                </svg>
+            </div>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                <p style="color: #666; font-size: 0.95em; line-height: 1.6; margin: 0;">
+                    <strong style="color: #e74c3c;">관세 효과 가시화:</strong> 브라질 커피 수출이 9개월 연속 감소세를 보이며 
+                    8월에는 전년 동월 대비 17.5% 급감했습니다. 특히 미국향 수출은 46% 급감하여 미국이 브라질 커피 
+                    최대 수입국 지위를 잃었으며, 이는 50% 관세의 직접적인 영향으로 분석됩니다. 
+                    독일이 새로운 최대 수입국으로 부상했으나 전체적인 수출 감소세는 지속되고 있습니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">🌍 관세 및 무역 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.09</div>
+                    <div class="news-content">
+                        <strong>브라질 수출 9개월 연속 감소:</strong> Cecafé 발표에 따르면 8월 브라질 커피 수출이 
+                        전년 동월 대비 17.5% 감소한 314만 백을 기록했습니다. 올해 1-8월 누적 수출도 20.9% 감소했으며, 
+                        아라비카는 11.2% 감소한 2,258,129백, 로부스타는 34.5% 급감한 619,360백을 기록했습니다. 
+                        Cecafé 회장 Márcio Ferreira는 "관세가 시장을 교란시키고 투기적 움직임의 문을 열었다"고 평가했습니다.
+                        <a href="https://www.comunicaffe.com/brazilian-coffee-exports-down-for-for-the-ninth-consecutive-month-as-trumps-tariffs-are-already-beginning-to-bite/" target="_blank">[Comunicaffe International]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.09</div>
+                    <div class="news-content">
+                        <strong>미국 수입 급감:</strong> 8월 미국의 브라질 커피 수입량이 30만 백으로 전년 동월 대비 46% 급감하며, 
+                        7월 대비로도 26% 감소했습니다. 미국이 브라질 커피 최대 수입국 지위를 잃고 독일이 새로운 최대 수입국으로 부상했습니다. 
+                        독일은 8월에 41만 4천백을 수입했으며, 이는 관세를 피해 유럽으로 향하는 브라질 커피가 증가했음을 시사합니다.
+                        <a href="https://www.comunicaffe.com/brazilian-coffee-exports-down-for-for-the-ninth-consecutive-month-as-trumps-tariffs-are-already-beginning-to-bite/" target="_blank">[Comunicaffe International]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.10</div>
+                    <div class="news-content">
+                        <strong>제3국 경유 한계:</strong> 로이터 보도에 따르면 제3국을 통한 브라질 커피 재수출은 
+                        관세 회피의 강력한 대안이 되지 못하고 있습니다. Cecafé의 Márcio Ferreira 회장은 "일부 완제품은 
+                        다른 국가를 통해 미국으로 수출되고 있지만, 생두를 제3국으로 보내는 것은 미국 정부가 매우 쉽게 
+                        발견할 수 있다"며 물류비용 증가로 인한 부담이 가중되고 있다고 설명했습니다.
+                        <a href="https://www.reuters.com/" target="_blank">[Reuters]</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📊 시장 메커니즘 변화</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.12</div>
+                    <div class="news-content">
+                        <strong>ICE 거래비용 급증:</strong> ICE 거래소가 아라비카 계약의 마진 요구사항을 10% 인상하여 
+                        계약당 $10,410으로 올렸습니다. 이는 작년 대비 거의 2배 수준으로, 높은 가격 변동성과 시장 위험 증가에 대응한 조치입니다. 
+                        거래비용 증가는 중소 투자자들의 시장 참여를 제한하고 유동성 감소로 이어질 수 있어 추가적인 가격 변동성 확대 요인으로 작용하고 있습니다.
+                        <a href="https://www.ice.com/" target="_blank">[ICE Exchange]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.11</div>
+                    <div class="news-content">
+                        <strong>가격 변동성 확대:</strong> 높은 거래비용과 제한된 유동성으로 인해 가격 변동성이 확대되고 있으며, 
+                        이는 기록적인 가격 상승을 더욱 가속화하고 있습니다. 시장 참여자들은 위험 관리 비용 증가와 함께 
+                        헤징 전략을 재검토하고 있으며, 이러한 비용들이 궁극적으로 최종 소비자 가격에 전가될 것으로 예상됩니다.
+                        <a href="https://www.tradingeconomics.com/commodity/coffee" target="_blank">[Trading Economics]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.10</div>
+                    <div class="news-content">
+                        <strong>투자자 행동 변화:</strong> 스타벅스 주가가 3월 대비 27.5% 하락하는 등 
+                        원료비 상승이 커피 관련 기업들의 실적에 직접적인 영향을 미치고 있습니다. 
+                        대형 로스터들은 대체 공급처 확보와 블렌드 재조정에 나서고 있으며, 일부 기업들은 
+                        가격 인상을 통한 비용 전가를 검토하고 있습니다. 중소 로스터들의 경우 생존 자체가 위협받는 상황입니다.
+                        <a href="https://finance.yahoo.com/" target="_blank">[Yahoo Finance]</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">2025.09.06</div>
+                    <div class="news-content">
+                        <strong>CFTC 포지션 급증:</strong> 9월 2일 주간 CFTC 보고서에 따르면 ICE 커피 투기자들의 순매수 포지션이 
+                        2,398계약 증가하여 19,447계약을 기록했습니다. 이는 지난주에 이어 연속적인 강세 베팅 증가를 보여주며, 
+                        대형 헤지펀드와 CTA들이 관세 효과와 공급 부족을 예상하고 적극적으로 매수 포지션을 확대하고 있음을 시사합니다. 
+                        머니매니저들의 이러한 움직임은 추가적인 가격 상승 압력으로 작용할 가능성이 높습니다.
+                        <a href="https://news.futunn.com/en/post/61757216/cftc-position-report-investors-have-increased-their-net-long-positions" target="_blank">[Futunn News]</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🌤️ 생산 및 기상 조건</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.12</div>
+                    <div class="news-content">
+                        <strong>브라질 강우량 부족:</strong> 브라질 최대 아라비카 생산지인 미나스제라이스주가 
+                        9월 6일 주간 동안 강우량이 전혀 없었다고 Somar Meteorologia가 발표했습니다. 
+                        중요한 개화기를 앞두고 있는 상황에서 충분한 수분 공급이 이루어지지 않으면 2026/27년 작황에 
+                        부정적인 영향을 미칠 수 있어 시장의 우려가 커지고 있습니다. 개화기는 보통 9월 말부터 시작되어 
+                        10월까지 이어지는 중요한 시기로, 이 기간의 기상 조건이 다음 해 생산량을 결정하는 핵심 요소입니다.
+                        <a href="https://www.somar.com.br/" target="_blank">[Somar Meteorologia]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.11</div>
+                    <div class="news-content">
+                        <strong>다음주 강우 전망:</strong> Climatempo는 미나스제라이스 지역에 다음주 강우량이 
+                        증가할 것으로 예상된다고 발표했으나, 개화기 전 충분한 수분 공급 여부는 여전히 불확실합니다. 
+                        기상 예보에 따르면 일부 지역에서는 10-20mm의 강우가 예상되지만, 이는 평년 수준에 비해 여전히 부족한 양입니다. 
+                        농업 전문가들은 개화기 성공을 위해서는 최소 50mm 이상의 충분한 강우가 필요하다고 강조하고 있습니다.
+                        <a href="https://www.climatempo.com.br/" target="_blank">[Climatempo]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.10</div>
+                    <div class="news-content">
+                        <strong>헤알화 강세 지속:</strong> 브라질 헤알화가 달러 대비 14개월 최고치를 기록하며 
+                        농가들의 판매 지연을 유발하고 있습니다. 현재 USD/BRL 환율이 5.1대까지 하락하면서 
+                        브라질 농가들이 달러로 받는 수취가격이 상대적으로 불리해져 보유 물량 매도를 미루고 있는 상황입니다. 
+                        이는 단기적으로 브라질 커피의 시장 공급을 더욱 제한하여 가격 상승 압력을 강화하는 요인으로 작용하고 있습니다.
+                        <a href="https://www.bcb.gov.br/" target="_blank">[Banco Central do Brasil]</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📈 가격 동향 및 전망</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.12</div>
+                    <div class="news-content">
+                        <strong>4개월 최고치 달성:</strong> 12월 아라비카 선물이 396.85센트로 4개월 최고치를 기록했으며, 
+                        일중 최고가 398.55센트까지 상승했습니다. 연초 이후 수익률은 59.91%에 달하며, 
+                        이는 원자재 시장에서 가장 높은 수익률 중 하나입니다. 기술적 분석가들은 400센트 돌파 시 
+                        추가 상승으로 420-430센트까지 목표가 상향 조정 가능성을 제시하고 있습니다.
+                        <a href="https://tradingeconomics.com/commodity/coffee" target="_blank">[Trading Economics]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.11</div>
+                    <div class="news-content">
+                        <strong>1개월 급등률:</strong> 지난 1개월간 커피 가격이 28.21% 급등하며 
+                        7월 8일 연중 최저점 272센트 대비 43.9% 상승을 기록했습니다. 
+                        이러한 급격한 상승은 관세 발표 이후 공급 우려가 현실화되면서 나타난 결과로, 
+                        시장 참여자들은 추가적인 공급 차질 가능성에 대비하여 선제적 매수에 나서고 있습니다. 
+                        볼린저 밴드 상단을 크게 이탈한 상태로 단기 과열 조정 가능성도 제기되고 있습니다.
+                        <a href="https://qahwaworld.com/coffee-reflections/coffee-prices-rising-globally-2025/" target="_blank">[Qahwa World]</a>
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.10</div>
+                    <div class="news-content">
+                        <strong>로부스타도 강세:</strong> 11월 ICE 로부스타 선물이 1주 최고치를 기록하며 
+                        아라비카와 함께 전반적인 커피 시장 강세를 보이고 있습니다. 
+                        로부스타는 톤당 $4,200을 상회하며 베트남의 건조한 날씨와 공급 우려가 가격 상승을 견인하고 있습니다. 
+                        아라비카-로부스타 스프레드가 축소되면서 일부 로스터들이 블렌드 비율 조정을 검토하고 있으나, 
+                        로부스타 가격도 함께 상승하여 원가 절감 효과는 제한적인 상황입니다.
+                        <a href="https://www.barchart.com/futures/quotes/kc*0/futures-prices" target="_blank">[Barchart Market Data]</a>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">2025.09.09</div>
+                    <div class="news-content">
+                        <strong>인스턴트 커피 타격:</strong> ABICS(브라질 인스턴트커피 생산자협회) 자료에 따르면 
+                        8월 브라질의 미국향 인스턴트 커피 수출이 전년 동월 대비 59.9% 급감한 24,460백을 기록했습니다. 
+                        이는 전년 같은 기간 65,914백에서 크게 감소한 수치로, 관세가 완제품 시장에도 직접적인 
+                        타격을 가하고 있음을 보여줍니다. 브라질 인스턴트커피 업계는 미국 외 시장 다변화를 
+                        긴급히 추진하고 있으나 단기적인 매출 감소는 불가피한 상황입니다.
+                        <a href="https://www.comunicaffe.com/brazilian-coffee-exports-down-for-for-the-ninth-consecutive-month-as-trumps-tariffs-are-already-beginning-to-bite/" target="_blank">[Comunicaffe International]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망 및 분석</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>커피 선물 시장이 미국의 50% 관세 효과 본격화로 급등세를 지속하고 있습니다.</strong> 
+                12월물 아라비카 커피(KCZ25)는 396.85센트로 4개월 최고치를 기록하며, 브라질 수출 9개월 연속 감소와 
+                미국향 수출 46% 급감이 공급 차질을 현실화시키고 있습니다. ICE 거래소의 마진 요구사항 급증과 
+                브라질 헤일화 14개월 최고치 강세도 가격 상승 압력을 강화하고 있습니다.
+                <br><br>
+                <strong>단기적으로는 관세 효과와 공급 차질이 가격 상승을 지속시킬 것으로 예상됩니다.</strong> 
+                브라질 수출업체들이 미국향 배송 지연을 요청하고 있으며, 제3국 경유를 통한 관세 회피도 
+                물류비용 증가로 인해 제한적입니다. 미나스제라이스주의 강우량 부족으로 개화기를 앞둔 작황 우려도 
+                추가적인 상승 요인으로 작용하고 있습니다. CFTC 자료상 머니매니저들의 순매수 포지션이 19,447계약으로 
+                지속적인 강세 베팅을 보이고 있어 투기적 수요도 가격 상승을 뒷받침하고 있습니다.
+                <br><br>
+                <strong>구조적으로는 글로벌 커피 무역 패턴의 재편이 진행되고 있습니다.</strong> 
+                미국이 브라질 커피 최대 수입국 지위를 잃고 독일이 새로운 최대 수입국으로 부상하는 등 
+                무역 흐름이 변화하고 있습니다. ICE 거래비용 급증과 변동성 확대로 시장 참여자들의 
+                위험 관리 비용도 크게 증가하고 있어, 이러한 비용들이 최종 소비자 가격에 전가될 가능성이 높습니다. 
+                인스턴트 커피 수출까지 59.9% 급감하는 등 완제품 시장에도 관세 효과가 확산되고 있어 
+                커피 공급망 전반의 구조적 변화가 가속화되고 있습니다.
+            </p>
+        </div>
+
+        <div class="tags">
+            <span class="tag">396.85센트</span>
+            <span class="tag">관세효과</span>
+            <span class="tag">9개월연속감소</span>
+            <span class="tag">미국수입46%급감</span>
+            <span class="tag">거래비용급증</span>
+            <span class="tag">헤알화강세</span>
+            <span class="tag">4개월최고치</span>
+            <span class="tag">개화기우려</span>
+            <span class="tag">무역패턴재편</span>
+            <span class="tag">59.91%수익률</span>
+            <span class="tag">CFTC순매수증가</span>
+            <span class="tag">인스턴트커피타격</span>
+        </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, Cecafé, CFTC, Somar Meteorologia, Climatempo, Reuters, Comunicaffe International | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
