@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 진단: 9월 17일 주요 동향</title>
+    
+    <!--REPORT_META
+    {
+        "title": "커피 선물 급락 시장 진단 - 브라질 강우 예보와 포지션 조정",
+        "subtitle": "9월 17일 아라비카 7.56% 하락의 배경과 시장 분석",
+        "date": "2025-09-17",
+        "summary": "2025년 9월 17일, ICE 아라비카 12월물이 7.56% 하락하며 378.40센트로 마감했습니다. 브라질 주요 커피 재배지역의 강우 예보가 최근 공급 부족 우려를 완화시키면서 투기적 포지션 조정이 나타났고, 연준 금리 인하 후 달러 강세가 부가적 하방 압력으로 작용했습니다. 시장은 단기적 변동성이 지속될 것으로 예상되나, 구조적 수급 불균형은 여전히 유효합니다.",
+        "tags": ["시장분석", "가격조정", "브라질강우", "포지션조정", "시장진단", "수급분석"]
+    }
+    REPORT_META-->
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 메인 헤더 */
+        .main-header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 5px solid #8B4513;
+        }
+        
+        .main-title {
+            font-size: 2.4em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+        
+        .timestamp {
+            background: rgba(139, 69, 19, 0.1);
+            color: #8B4513;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        /* 핵심 지표 */
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
+        
+        .metric-value.neutral {
+            color: #3498db;
+        }
+        
+        .metric-label {
+            font-size: 1em;
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .metric-detail {
+            font-size: 0.85em;
+            color: #95a5a6;
+        }
+        
+        /* 콘텐츠 섹션 */
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B4513;
+        }
+        
+        .section-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-icon {
+            font-size: 1.2em;
+        }
+        
+        /* 가격 차트 */
+        .price-timeline {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .timeline-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-subtitle {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        
+        .timeline-points {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            height: 180px;
+            position: relative;
+            margin: 0 15px;
+        }
+        
+        .timeline-point {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+        
+        .price-bar {
+            width: 35px;
+            background: linear-gradient(to top, #8B4513, #CD853F);
+            border-radius: 15px 15px 0 0;
+            margin-bottom: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .price-bar.decline {
+            background: linear-gradient(to top, #e74c3c, #ec7063);
+        }
+        
+        .price-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 600;
+            font-size: 0.85em;
+            color: #2c3e50;
+            background: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+        
+        .price-date {
+            font-size: 0.75em;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 8px;
+            white-space: nowrap;
+        }
+        
+        /* 분석 카드 */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .analysis-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .analysis-card:hover {
+            transform: translateX(3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .analysis-card.primary {
+            border-left-color: #e74c3c;
+        }
+        
+        .analysis-icon {
+            font-size: 2em;
+            margin-bottom: 12px;
+        }
+        
+        .analysis-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+        
+        .analysis-content {
+            color: #5a6c7d;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        /* 시장 전망 */
+        .outlook-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .outlook-content {
+            font-size: 1.05em;
+            line-height: 1.7;
+            text-align: center;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+        
+        .outlook-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .outlook-point {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+        }
+        
+        .outlook-point h4 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: #ecf0f1;
+        }
+        
+        .outlook-point p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        /* 푸터 */
+        .footer {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .footer-content {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+        
+        .footer-brand {
+            font-weight: 600;
+            color: #8B4513;
+            margin-bottom: 8px;
+        }
+        
+        /* 홈 버튼 */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: #8B4513;
+            padding: 10px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9em;
+        }
+        
+        .home-button:hover {
+            background: white;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .main-title { font-size: 2em; }
+            .content-section { padding: 25px; }
+            .timeline-points { margin: 0 8px; }
+            .price-bar { width: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        </svg>
+        홈으로
+    </a>
+
+    <div class="container">
+        <!-- 메인 헤더 -->
+        <header class="main-header">
+            <h1 class="main-title">커피 선물 시장 진단</h1>
+            <p class="subtitle">9월 17일 주요 동향 및 배경 분석</p>
+            <div class="timestamp">2025년 9월 17일 시황 분석</div>
+        </header>
+
+        <!-- 핵심 지표 -->
+        <section class="key-metrics">
+            <div class="metric-card">
+                <div class="metric-value">-7.56%</div>
+                <div class="metric-label">ICE 아라비카 12월물</div>
+                <div class="metric-detail">378.40¢/lb 마감</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">-6.92%</div>
+                <div class="metric-label">LIFFE 로부스타 11월물</div>
+                <div class="metric-detail">동반 하락세</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value neutral">427¢</div>
+                <div class="metric-label">9월 15일 고점</div>
+                <div class="metric-detail">7개월 만의 최고치</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">-11.4%</div>
+                <div class="metric-label">고점 대비 조정폭</div>
+                <div class="metric-detail">이틀간 하락</div>
+            </div>
+        </section>
+
+        <!-- 가격 동향 -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">📊</span>
+                주요 가격 동향
+            </h2>
+            
+            <div class="price-timeline">
+                <div class="timeline-header">
+                    <h3 class="timeline-title">ICE 아라비카 12월물 일주일간 추이</h3>
+                    <p class="timeline-subtitle">9월 10일 ~ 9월 17일</p>
+                </div>
+                
+                <div class="timeline-points">
+                    <div class="timeline-point">
+                        <div class="price-bar" style="height: 100px;">
+                            <div class="price-value">385¢</div>
+                        </div>
+                        <div class="price-date">9/10<br/>화</div>
+                    </div>
+                    
+                    <div class="timeline-point">
+                        <div class="price-bar" style="height: 120px;">
+                            <div class="price-value">410¢</div>
+                        </div>
+                        <div class="price-date">9/13<br/>금</div>
+                    </div>
+                    
+                    <div class="timeline-point">
+                        <div class="price-bar" style="height: 140px;">
+                            <div class="price-value">427¢</div>
+                        </div>
+                        <div class="price-date">9/15<br/>일</div>
+                    </div>
+                    
+                    <div class="timeline-point">
+                        <div class="price-bar" style="height: 125px;">
+                            <div class="price-value">409¢</div>
+                        </div>
+                        <div class="price-date">9/16<br/>월</div>
+                    </div>
+                    
+                    <div class="timeline-point">
+                        <div class="price-bar decline" style="height: 85px;">
+                            <div class="price-value">378.40¢</div>
+                        </div>
+                        <div class="price-date">9/17<br/>화</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 배경 분석 -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">🔍</span>
+                하락 배경 분석
+            </h2>
+            
+            <div class="analysis-grid">
+                <div class="analysis-card primary">
+                    <div class="analysis-icon">🌧️</div>
+                    <h3 class="analysis-title">브라질 기상 여건 변화</h3>
+                    <p class="analysis-content">
+                        Climatempo에 따르면 브라질 주요 커피 재배지역인 미나스제라이스에 다음 주부터 강우가 예상된다고 발표했습니다. 이는 2026/27 시즌 커피나무 개화에 긍정적 영향을 미칠 것으로 평가되며, 최근 가격 상승의 주요 동력이었던 공급 부족 우려를 완화시키는 요인으로 작용했습니다.
+                    </p>
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="analysis-icon">📈</div>
+                    <h3 class="analysis-title">투기적 포지션 조정</h3>
+                    <p class="analysis-content">
+                        최근 가파른 상승세에 편승했던 투기 자금들이 강우 예보 소식을 계기로 차익 실현에 나선 것으로 분석됩니다. 기술적으로 과열 상태에 있던 시장에서 롱 포지션 청산이 하락세를 가속화시켰습니다.
+                    </p>
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="analysis-icon">💰</div>
+                    <h3 class="analysis-title">연준 정책과 달러 동향</h3>
+                    <p class="analysis-content">
+                        연준이 0.25%p 금리 인하를 단행했으나 예상과 달리 달러 인덱스가 0.3% 상승했습니다. 달러 강세는 원자재 전반에 하방 압력으로 작용하며, 커피 가격 하락에 부가적인 영향을 미쳤습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 시장 평가 -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">⚖️</span>
+                시장 상황 평가
+            </h2>
+            
+            <p style="font-size: 1.05em; color: #5a6c7d; margin-bottom: 20px; line-height: 1.6;">
+                이번 하락은 단일 변수(브라질 건조 기후)에 과도하게 의존했던 시장 내러티브가 새로운 정보에 민감하게 반응한 결과로 해석됩니다. 최근 몇 주간의 급등이 펀더멘털보다는 투기적 요소에 의해 과열되었음을 시사합니다.
+            </p>
+            
+            <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 20px 0; border-left: 4px solid #3498db;">
+                <h4 style="color: #2c3e50; margin-bottom: 12px;">핵심 관찰 포인트</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #3498db;">•</span>
+                        시장이 브라질 날씨라는 단일 이슈에 과도하게 집중되어 있었음
+                    </li>
+                    <li style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #3498db;">•</span>
+                        투기적 롱 포지션이 상당한 수준으로 누적되어 있었음
+                    </li>
+                    <li style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                        <span style="position: absolute; left: 0; color: #3498db;">•</span>
+                        기상 예보 변화가 즉각적인 시장 반전을 촉발할 정도로 민감한 상태
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 향후 전망 -->
+        <section class="outlook-section">
+            <h2 class="outlook-title">향후 시장 전망</h2>
+            <p class="outlook-content">
+                단기적 공급 부족 우려는 완화되었으나, 커피 시장의 구조적 수급 불균형은 여전히 유효합니다. 
+                향후 시장은 브라질의 실제 강우량과 개화 상황을 면밀히 주시할 것으로 예상됩니다.
+            </p>
+            
+            <div class="outlook-points">
+                <div class="outlook-point">
+                    <h4>단기 전망</h4>
+                    <p>브라질 강우량과 개화 진행 상황에 따라 변동성이 지속될 것으로 예상됩니다. 예상보다 적은 강우량이나 개화 부진 시 재상승 가능성이 있습니다.</p>
+                </div>
+                
+                <div class="outlook-point">
+                    <h4>중기 관점</h4>
+                    <p>ICE 재고는 여전히 역사적 저수준이며, 다년간 지속된 아라비카 공급 부족 구조는 변하지 않았습니다. 근본적 상승 압력은 여전히 유효합니다.</p>
+                </div>
+                
+                <div class="outlook-point">
+                    <h4>주의 사항</h4>
+                    <p>시장이 단일 변수에 과도하게 의존하는 패턴이 반복될 수 있어, 투자자들은 변동성 확대에 대비한 리스크 관리가 필요합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">Published by Align Commodities</div>
+                <p>본 분석은 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.<br/>
+                시장 데이터: ICE, LSEG, Climatempo | 분석 기준: 2025년 9월 17일</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
