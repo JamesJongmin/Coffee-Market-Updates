@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Update)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #5D4E37 0%, #8B7355 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #A0826D;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .home-button:hover {
+            background-color: #8B7355;
+        }
+
+        .home-button svg {
+            fill: currentColor;
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: middle;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .date-stamp {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .main-story {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #6D5A47;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #8B7D6B 0%, #A0956B 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .price-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-change {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .price-change.negative { color: #ff6b6b; }
+        .price-change.positive { color: #51cf66; }
+        
+        .quick-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        
+        .news-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .news-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #6D5A47;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .news-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .news-date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .news-content {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #F5F3F0 0%, #E8E6E3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #6D5A47;
+        }
+        
+        .market-outlook {
+            background: linear-gradient(135deg, #8B7D6B 0%, #A0956B 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .outlook-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .tag {
+            background: #6D5A47;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .home-button {
+                position: static;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: center;
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://jamesjongmin.github.io/Coffee-Market-Updates/" class="home-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <div class="date-stamp">2025년 9월 20일 금요일</div>
+        </header>
+
+        <div class="news-grid">
+            <div class="main-story">
+                <h2 style="color: #6D5A47; margin-bottom: 20px;">주요 헤드라인: 9월 중순, 역사적 급락에서 분기점 모색</h2>
+                <p style="margin-bottom: 15px;">
+                    <strong>커피 선물이 사상 네 번째로 큰 하락폭을 기록한 후 안정세로 전환하고 있습니다.</strong> 
+                    12월 아라비카 커피(KCZ25)는 366.50센트로 전일 대비 3.77% 하락했지만, 
+                    9월 15일 사상 고점 432센트 근처에서 시작된 대폭락 이후 반등 신호를 보이고 있습니다.
+                </p>
+                
+                <div class="content-section" style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #764ba2;">
+                    <h3 style="color: #6D5A47; margin-bottom: 10px;">핵심 요약</h3>
+                    <p style="font-size: 1.0em; line-height: 1.6;">
+                        12월 아라비카 커피(KCZ25)는 366.50센트로 마감하며 전일 대비 3.77% 하락했습니다.
+                        9월 15일 432센트 고점에서 역사적 폭락 이후 첫 번째 안정화 신호를 보이고 있으며,
+                        미국 관세 면제 논의와 브라질 우기 진입이 시장 심리 전환점으로 작용하고 있습니다.
+                    </p>
+                </div>
+                <div class="highlight">
+                    <h3 style="margin-bottom: 10px;">핵심 시장 동향</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>12월물 366.50센트 기록:</strong> 9월 19일 종가 기준, 전일 대비 -3.77% 하락 후 안정화</li>
+                        <li><strong>역사적 변동성:</strong> 9월 15일 432센트 고점에서 15% 급락, 역사상 네 번째로 큰 하락폭 기록</li>
+                        <li><strong>관세 면제 신호:</strong> 트럼프 행정부, 커피를 "미입수 자연자원"으로 분류하여 향후 관세 면제 가능성 시사</li>
+                        <li><strong>브라질 우기 시작:</strong> 미나스 제라이스 지역에 평년 이상 강우로 2026년 작황 우려 일부 완화</li>
+                        <li><strong>ICE 재고 급감:</strong> 아라비카 인증 재고, 658,302백으로 16.5개월 최저치 경신</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="price-box">
+                    <h3>12월 아라비카 (KCZ25)</h3>
+                    <div class="price-value">366.50</div>
+                    <div class="price-change negative">-14.35 (-3.77%)</div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">센트/파운드 → $8.08/kg</div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 style="margin-bottom: 15px; color: #6D5A47;">주요 지표 현황</h3>
+                    <div class="stat-item">
+                        <span><strong>아라비카 선물 (KCZ25):</strong></span>
+                        <span style="color: #e74c3c;">366.50¢ (-3.77%)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>로부스타 선물 (RMX25):</strong></span>
+                        <span style="color: #e74c3c;">하락세 지속</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>ICE 인증 재고:</strong></span>
+                        <span style="color: #e74c3c;">658,302백 (16.5개월 최저)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span><strong>브라질 헤알화:</strong></span>
+                        <span style="color: #51cf66;">15개월 고점</span>
+                    </div>
+                </div>
+
+                <div class="korea-import-stats" style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-top: 20px;">
+                    <h3 style="margin-bottom: 15px; color: #6D5A47; text-align: center;">🇰🇷 한국의 브라질 생두 수입 현황</h3>
+                    <div style="margin-bottom: 15px;">
+                        <canvas id="koreaImportChart" style="max-height: 400px; height: 400px;"></canvas>
+                    </div>
+                    
+                    <!-- 단가 상승률 분기별 평균 표시 -->
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #6C757D;">
+                        <h4 style="color: #495057; margin: 0 0 10px 0; font-size: 1em;">📊 분기별 단가 상승률 평균 (전년 동기 대비)</h4>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 1em;">
+                            <div style="text-align: center; padding: 10px; background: white; border-radius: 6px;">
+                                <div style="color: #6C757D; font-size: 0.9em;">1-3월</div>
+                                <div style="font-weight: bold; color: #DC3545; font-size: 1.2em;">+72.7%</div>
+                            </div>
+                            <div style="text-align: center; padding: 10px; background: white; border-radius: 6px;">
+                                <div style="color: #6C757D; font-size: 0.9em;">4-6월</div>
+                                <div style="font-weight: bold; color: #DC3545; font-size: 1.2em;">+100.7%</div>
+                            </div>
+                            <div style="text-align: center; padding: 10px; background: white; border-radius: 6px;">
+                                <div style="color: #6C757D; font-size: 0.9em;">7-9월</div>
+                                <div style="font-weight: bold; color: #FD7E14; font-size: 1.2em;">+66.7%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="font-size: 0.9em; color: #666; margin: 0; text-align: center;">
+                            <strong>주요 트렌드:</strong> 2분기(4-6월) 단가 100% 상승 정점, 3분기 들어 소폭 하락하지만 여전히 66% 상승 지속
+                        </p>
+                        <p style="font-size: 0.8em; color: #999; margin: 5px 0 0 0; text-align: center;">
+                            출처: 통계청 | 단위: MT(미터톤) | *9월: 1~20일 데이터
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-sections">
+            <div class="news-section">
+                <h3 class="section-title">🌍 최신 시장 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.19</div>
+                    <div class="news-content">
+                        <strong>급락 후 안정화 신호:</strong> 12월 아라비카 선물이 366.50센트로 마감하며 9월 15일 시작된 역사적 폭락세에서 
+                        첫 번째 반등 시도를 보였습니다. 일각에서는 과매도 구간 진입으로 기술적 반등 가능성을 제기하고 있습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.18</div>
+                    <div class="news-content">
+                        <strong>브라질 헤알화 15개월 최고치:</strong> 브라질 헤알화가 달러 대비 15개월 최고치를 기록하며 
+                        브라질 농민들의 수출 판매 의욕을 크게 둔화시키고 있습니다. 이는 단기적으로 공급 부족을 심화시킬 요인으로 작용합니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.16</div>
+                    <div class="news-content">
+                        <strong>미국 커피 가격 1997년 이후 최고치:</strong> 미국 노동통계청에 따르면 로스팅 커피 가격이 전년 대비 21.7%, 
+                        인스턴트 커피가 20.1% 상승하여 1997년 이래 최고 상승률을 기록했습니다. 브라질 50% 관세가 주요 원인으로 지목됩니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📊 관세 및 정책 동향</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.19</div>
+                    <div class="news-content">
+                        <strong>에티오피아 경매 신기록:</strong> 에티오피아 커피가 Echoes of the Peak M-Cultivo 경매에서 
+                        Alo Coffee의 Cloud Harvest Lot NW2가 kg당 1,739달러에 낙찰되어 에티오피아 커피 역사상 최고가를 기록했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.16</div>
+                    <div class="news-content">
+                        <strong>J.M. Smucker 실적 악화:</strong> 폴거스 브랜드를 소유한 J.M. Smucker가 2분기 커피 사업 수익이 
+                        22% 감소했다고 발표했습니다. 회사는 4월까지 커피 가격이 추가로 20% 상승할 가능성을 경고했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.14</div>
+                    <div class="news-content">
+                        <strong>베트남 8개월 수출 급증:</strong> 베트남이 2025년 1-8월 커피 수출량 120만 톤, 수출액 64억2천만 달러를 기록하여 
+                        전년 동기 대비 물량 8.7%, 금액 59.1% 증가했습니다. 평균 수출 단가는 톤당 5,580달러에 달했습니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">🌤️ 생산 및 기상 현황</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.18</div>
+                    <div class="news-content">
+                        <strong>브라질 우기 시작으로 시장 안도:</strong> 브라질 최대 아라비카 생산지인 미나스 제라이스에 
+                        평년 이상의 강우가 기록되며 2026년 작황에 대한 우려가 일부 완화되었습니다. 주말에도 추가 강우가 예상됩니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.16</div>
+                    <div class="news-content">
+                        <strong>커피 가격 급등으로 소비자 영향:</strong> 뉴올리언스의 French Coffee Truck은 주문에 4% 관세 할증료를 추가하고 있으며, 
+                        포틀랜드의 소규모 로스터들은 12온스 원두 한 봉지당 2달러 가격 인상을 단행했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.14</div>
+                    <div class="news-content">
+                        <strong>ICE 재고 지속 감소:</strong> ICE 아라비카 인증 재고가 679,500백으로 7월 초 844,000백 대비 약 20% 감소했습니다.
+                        지속적인 재고 유출과 기상 재해 우려로 공급 압박이 심화되고 있습니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3 class="section-title">📈 기술적 분석 및 전망</h3>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.19 시황</div>
+                    <div class="news-content">
+                        <strong>과매도 구간 진입:</strong> 9월 15일 432센트에서 366센트까지 약 15% 급락 후 
+                        기술적 지표들이 과매도 신호를 보이고 있습니다. RSI와 스토캐스틱 모두 30 이하로 하락했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.18</div>
+                    <div class="news-content">
+                        <strong>콜롬비아 수혜 지속:</strong> 미국 관세로 인해 콜롬비아 커피 농장들이 큰 혜택을 보고 있습니다. 
+                        파라이소 농장의 경우 미국 수출량이 월 45,000파운드로 작년 대비 3배 증가했습니다.
+                    </div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-date">2025.09.15</div>
+                    <div class="news-content">
+                        <strong>변동성 극대화:</strong> 아라비카 선물이 432센트 고점을 기록한 후 급락을 시작했습니다.
+                        이는 C 시장 역사상 네 번째로 큰 하락폭으로, 극심한 변동성이 지속되고 있음을 보여줍니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="market-outlook">
+            <h2 class="outlook-title">시장 전망 및 분석</h2>
+            <p style="font-size: 1.1em; line-height: 1.6;">
+                <strong>커피 선물 시장은 역사적 급락 이후 새로운 균형점을 모색하고 있습니다.</strong> 
+                12월 아라비카 커피(KCZ25)는 9월 19일 366.50센트를 기록하며 전일 대비 3.77% 하락했지만, 
+                9월 15일 432센트 고점에서 시작된 대폭락에서 첫 번째 안정화 신호를 보이고 있습니다.
+                <br><br>
+                <strong>단기적으로는 관세 정책 변화와 브라질 기상 여건이 핵심 변수입니다.</strong> 
+                트럼프 행정부가 커피를 "미입수 자연자원"으로 분류하며 관세 면제 가능성을 시사한 것과 
+                브라질 주요 생산지역에 평년 이상 강우가 시작된 것은 시장 심리 전환의 촉매가 될 수 있습니다.
+                <br><br>
+                <strong>구조적으로는 공급 부족과 높은 변동성이 지속될 전망입니다.</strong> 
+                ICE 인증 재고가 16.5개월 최저치를 기록하고 있고, 브라질 헤알화 강세로 수출 판매 압력이 제한되고 있어 
+                단기 공급 압박은 계속될 것으로 보입니다. 다만 베트남의 4년 만에 최대 작황 전망은 로부스타 시장에 안정 요인으로 작용할 것입니다.
+            </p>
+        </div>
+
+        <div class="tags">
+            <span class="tag">366.50센트</span>
+            <span class="tag">-3.77%하락</span>
+            <span class="tag">역사적급락</span>
+            <span class="tag">관세면제논의</span>
+            <span class="tag">브라질우기</span>
+            <span class="tag">ICE재고최저</span>
+            <span class="tag">헤알화강세</span>
+            <span class="tag">베트남호전</span>
+            <span class="tag">과매도구간</span>
+            <span class="tag">변동성극대</span>
+        </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 데이터 출처: ICE, Barchart, Perfect Daily Grind | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 한국 브라질 생두 수입량 차트
+        const ctx = document.getElementById('koreaImportChart').getContext('2d');
+        
+        const data = {
+            labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월*'],
+            datasets: [{
+                type: 'line',
+                label: '수입량 증감률 (YoY)',
+                data: [-44, 67, 45, -1, 30, -3, -2, -38, -41],
+                borderColor: '#2E86AB',
+                backgroundColor: 'rgba(46, 134, 171, 0.1)',
+                borderWidth: 3,
+                fill: false,
+                yAxisID: 'y1',
+                pointBackgroundColor: '#2E86AB',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                order: 1
+            }, {
+                type: 'bar',
+                label: '수입량 (MT)',
+                data: [3829.50, 7009.28, 5072.39, 5672.69, 5779.15, 4815.05, 5225.30, 3978.18, 2547.04],
+                backgroundColor: 'rgba(74, 85, 104, 0.7)',
+                borderColor: '#4A5568',
+                borderWidth: 1,
+                yAxisID: 'y',
+                order: 2
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                                size: 11,
+                                family: 'Pretendard'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.dataset.label.includes('수입량')) {
+                                    return `수입량: ${context.raw.toLocaleString()} MT`;
+                                } else {
+                                    const value = context.raw;
+                                    const sign = value >= 0 ? '+' : '';
+                                    return `수입량 증감률: ${sign}${value}%`;
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: '수입량 (MT)',
+                            color: '#2c3e50',
+                            font: {
+                                size: 12,
+                                weight: 'bold',
+                                family: 'Pretendard'
+                            }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: '수입량 증감률 (%)',
+                            color: '#8B4513',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                const sign = value >= 0 ? '+' : '';
+                                return sign + value + '%';
+                            }
+                        }
+                    },
+                }
+            }
+        };
+
+        new Chart(ctx, config);
+    </script>
+</body>
+</html>
