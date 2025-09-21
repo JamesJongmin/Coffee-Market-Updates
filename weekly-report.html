@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekly Report - Coffee Market Updates</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
+            font-family: 'Inter', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             line-height: 1.7;
-            color: #2c3e50;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #1e293b;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
         
         .container {
@@ -28,57 +33,72 @@
         }
         
         h1 {
-            font-size: 3em;
-            color: #8B4513;
-            margin-bottom: 20px;
-            font-weight: 700;
+            font-size: 3.2em;
+            color: #0f172a;
+            margin-bottom: 24px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .subtitle {
-            font-size: 1.3em;
-            color: #666;
-            margin-bottom: 30px;
+            font-size: 1.4em;
+            color: #64748b;
+            margin-bottom: 32px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
         
         .back-button {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            gap: 12px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
+            padding: 14px 28px;
+            border-radius: 32px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px -8px rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: -0.01em;
         }
         
         .back-button:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            transform: translateX(-6px);
+            box-shadow: 0 12px 35px -8px rgba(15, 23, 42, 0.7);
         }
         
         .info-section {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            padding: 48px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            margin-bottom: 40px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(10px);
         }
         
         .info-title {
-            font-size: 2em;
-            color: #8B4513;
-            margin-bottom: 20px;
+            font-size: 2.25em;
+            color: #0f172a;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
         
         .info-content {
-            color: #666;
+            color: #64748b;
             line-height: 1.8;
+            font-weight: 400;
         }
         
         .info-content ul {
@@ -99,15 +119,16 @@
         }
         
         .report-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid #8B4513;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(148, 163, 184, 0.1);
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
         
         .report-card::before {
@@ -130,41 +151,45 @@
         }
         
         .report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-color: rgba(16, 185, 129, 0.3);
         }
         
         .report-date {
-            font-size: 0.9em;
-            color: #8B4513;
+            font-size: 0.875em;
+            color: #64748b;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            letter-spacing: 0.025em;
         }
         
         .report-title {
-            font-size: 1.3em;
+            font-size: 1.375em;
             font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 15px;
+            color: #0f172a;
+            margin-bottom: 16px;
             line-height: 1.4;
             position: relative;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            letter-spacing: -0.025em;
         }
         
         .new-badge {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             font-size: 0.7em;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 16px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            letter-spacing: 0.8px;
+            box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39);
             animation: pulse 2s infinite;
             flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         @keyframes pulse {
@@ -184,9 +209,10 @@
         
         .report-summary {
             font-size: 0.95em;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            font-weight: 400;
         }
         
         .report-tags {
@@ -197,26 +223,30 @@
         }
         
         .tag {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-            padding: 4px 10px;
-            border-radius: 15px;
+            padding: 6px 14px;
+            border-radius: 20px;
             font-size: 0.8em;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .read-more {
             display: inline-flex;
             align-items: center;
-            color: #8B4513;
-            font-weight: 600;
+            color: #0f172a;
+            font-weight: 700;
             text-decoration: none;
             font-size: 0.95em;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            letter-spacing: -0.01em;
         }
         
         .read-more:hover {
-            color: #A0522D;
+            color: #10b981;
+            transform: translateX(4px);
         }
         
         .read-more::after {
