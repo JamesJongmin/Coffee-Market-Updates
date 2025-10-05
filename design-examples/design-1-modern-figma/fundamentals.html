@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design 1 - Fundamentals | Coffee Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #6B8E6F;
+            --secondary-green: #8FAA90;
+            --light-green: #E8F3E8;
+            --primary-brown: #8B6F47;
+            --dark-text: #2D3E2D;
+            --medium-text: #5A6B5A;
+            --bg-primary: #FAFCFA;
+            --white: #FFFFFF;
+            --shadow-sm: 0 2px 8px rgba(107, 142, 111, 0.08);
+            --shadow-md: 0 4px 16px rgba(107, 142, 111, 0.12);
+            --shadow-lg: 0 8px 32px rgba(107, 142, 111, 0.16);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #F5F8F5 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .nav-container {
+            background: var(--white);
+            border-bottom: 1px solid rgba(107, 142, 111, 0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-green);
+            background: var(--light-green);
+        }
+        
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button:hover {
+            color: var(--primary-green);
+            background: var(--light-green);
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--medium-text);
+        }
+        
+        .fundamentals-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+        
+        .fundamentals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .fundamental-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(107, 142, 111, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .fundamental-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--light-green), #F5EFE7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .card-description {
+            font-size: 0.9375rem;
+            color: var(--medium-text);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-box {
+            background: var(--light-green);
+            padding: 1.25rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--medium-text);
+            font-weight: 500;
+        }
+        
+        .chart-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(107, 142, 111, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--medium-text);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-placeholder {
+            width: 100%;
+            height: 400px;
+            background: var(--light-green);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-weight: 600;
+            border: 2px dashed var(--primary-green);
+        }
+        
+        .footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+        
+        .footer-text {
+            opacity: 0.7;
+            font-size: 0.9375rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .fundamentals-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="index.html" class="logo">☕ Coffee Market</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="weekly-report.html" class="nav-link">Weekly Report</a></li>
+                <li><a href="in-depth-analysis.html" class="nav-link">In-depth Analysis</a></li>
+                <li><a href="dashboards.html" class="nav-link">Dashboard</a></li>
+                <li><a href="fundamentals.html" class="nav-link active">Fundamentals</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="page-header">
+        <a href="index.html" class="back-button">←  메인으로 돌아가기</a>
+        <h1 class="page-title">🌍 Coffee Market Fundamentals</h1>
+        <p class="page-subtitle">글로벌 수급 동향 및 Flow</p>
+    </div>
+    
+    <div class="fundamentals-section">
+        <div class="fundamentals-grid">
+            <div class="fundamental-card">
+                <div class="card-icon">🌱</div>
+                <h3 class="card-title">Global Supply</h3>
+                <p class="card-description">
+                    전세계 커피 생산량과 주요 생산국(브라질, 베트남, 콜롬비아)의 작황 현황을 실시간으로 모니터링합니다.
+                </p>
+                <div class="stat-box">
+                    <div class="stat-value">175M</div>
+                    <div class="stat-label">Bags (2024/25 시즌)</div>
+                </div>
+            </div>
+            
+            <div class="fundamental-card">
+                <div class="card-icon">☕</div>
+                <h3 class="card-title">Global Demand</h3>
+                <p class="card-description">
+                    글로벌 커피 소비량과 주요 소비국(미국, EU, 중국)의 수요 트렌드를 분석합니다.
+                </p>
+                <div class="stat-box">
+                    <div class="stat-value">173M</div>
+                    <div class="stat-label">Bags (2024/25 시즌)</div>
+                </div>
+            </div>
+            
+            <div class="fundamental-card">
+                <div class="card-icon">📦</div>
+                <h3 class="card-title">Inventory Levels</h3>
+                <p class="card-description">
+                    ICE 인증 재고와 주요 수입국의 항만 재고 수준을 추적하여 시장 타이트니스를 평가합니다.
+                </p>
+                <div class="stat-box">
+                    <div class="stat-value">2.1M</div>
+                    <div class="stat-label">Bags (역대 최저 수준)</div>
+                </div>
+            </div>
+            
+            <div class="fundamental-card">
+                <div class="card-icon">🚢</div>
+                <h3 class="card-title">Export/Import Trends</h3>
+                <p class="card-description">
+                    브라질 생두 수출량과 한국의 브라질 커피 수입량 추이를 월별로 분석합니다.
+                </p>
+                <div class="stat-box">
+                    <div class="stat-value">-16.8%</div>
+                    <div class="stat-label">전년 대비 (2025 상반기)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-section">
+            <h2 class="section-title">브라질 생두 수출량</h2>
+            <p class="section-subtitle">2024년 vs 2025년 월별 비교 및 전년 동기 대비 변화율</p>
+            <div class="chart-placeholder">📊 차트 영역</div>
+        </div>
+        
+        <div class="chart-section">
+            <h2 class="section-title">한국 브라질 생두 수입량</h2>
+            <p class="section-subtitle">2024년 vs 2025년 월별 비교 및 전년 동기 대비 변화율</p>
+            <div class="chart-placeholder">📊 차트 영역</div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2025 Coffee Market Updates. Design 1 - Modern Figma Style</p>
+        </div>
+    </footer>
+</body>
+</html>
