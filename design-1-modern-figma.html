@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design 1 - Modern Figma Style | Coffee Market</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Design 1: Modern Figma-Inspired - Sage Green & Warm Brown */
+        
+        :root {
+            --primary-green: #6B8E6F;
+            --secondary-green: #8FAA90;
+            --light-green: #E8F3E8;
+            --primary-brown: #8B6F47;
+            --secondary-brown: #A68B5B;
+            --light-brown: #F5EFE7;
+            --dark-text: #2D3E2D;
+            --medium-text: #5A6B5A;
+            --light-text: #8A9A8A;
+            --bg-primary: #FAFCFA;
+            --bg-secondary: #F5F8F5;
+            --white: #FFFFFF;
+            --shadow-sm: 0 2px 8px rgba(107, 142, 111, 0.08);
+            --shadow-md: 0 4px 16px rgba(107, 142, 111, 0.12);
+            --shadow-lg: 0 8px 32px rgba(107, 142, 111, 0.16);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            background: var(--white);
+            border-bottom: 1px solid rgba(107, 142, 111, 0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-green);
+            background: var(--light-green);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-green);
+            background: var(--light-green);
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--light-green);
+            color: var(--primary-green);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--dark-text) 0%, var(--primary-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--medium-text);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light-green);
+        }
+        
+        /* Cards Grid */
+        .section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-description {
+            font-size: 1.125rem;
+            color: var(--medium-text);
+            max-width: 600px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(107, 142, 111, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-green);
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--light-green), var(--light-brown));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .card-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+        
+        .card-description {
+            font-size: 0.9375rem;
+            color: var(--medium-text);
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+        
+        .card-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .card-tag {
+            padding: 0.375rem 0.875rem;
+            background: var(--light-green);
+            color: var(--primary-green);
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-brown));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+        
+        .stats-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 1rem;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-text {
+            opacity: 0.7;
+            font-size: 0.9375rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <div class="logo">☕ Coffee Market</div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active">Home</a></li>
+                <li><a href="#" class="nav-link">Weekly Report</a></li>
+                <li><a href="#" class="nav-link">In-depth Analysis</a></li>
+                <li><a href="#" class="nav-link">Dashboard</a></li>
+                <li><a href="#" class="nav-link">Fundamentals</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span>📊</span>
+            <span>Market Intelligence Platform</span>
+        </div>
+        <h1 class="hero-title">Coffee Market<br>Updates Archive</h1>
+        <p class="hero-subtitle">글로벌 커피 시장의 모든 인사이트를 한눈에.<br>전문적인 분석과 데이터를 제공합니다.</p>
+        <div class="hero-actions">
+            <a href="#" class="btn btn-primary">
+                <span>최신 리포트 보기</span>
+                <span>→</span>
+            </a>
+            <a href="#" class="btn btn-secondary">
+                <span>대시보드 둘러보기</span>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Stats Bar -->
+    <div class="section">
+        <div class="stats-bar">
+            <div class="stats-content">
+                <div class="stat-item">
+                    <div class="stat-value">45+</div>
+                    <div class="stat-label">Weekly Reports</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">15+</div>
+                    <div class="stat-label">In-depth Analysis</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Live Dashboards</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">Real-time</div>
+                    <div class="stat-label">Market Data</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">주요 서비스</h2>
+            <p class="section-description">커피 시장의 다양한 분석과 데이터를 카테고리별로 확인하세요</p>
+        </div>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">📋</div>
+                <h3 class="card-title">Weekly Report</h3>
+                <p class="card-description">매주 발행되는 커피 선물 시장 주간 동향 보고서. 최신 가격 동향과 시장 분석을 제공합니다.</p>
+                <div class="card-meta">
+                    <span class="card-tag">주간분석</span>
+                    <span class="card-tag">가격동향</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🔍</div>
+                <h3 class="card-title">In-depth Analysis</h3>
+                <p class="card-description">특정 이슈에 대한 심층 분석 리포트. 시장의 구조적 변화와 장기 트렌드를 다룹니다.</p>
+                <div class="card-meta">
+                    <span class="card-tag">심층분석</span>
+                    <span class="card-tag">트렌드</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">Market Dashboard</h3>
+                <p class="card-description">실시간 커피 가격, 환율, 투기 포지션 등 핵심 지표를 시각화한 대시보드입니다.</p>
+                <div class="card-meta">
+                    <span class="card-tag">실시간</span>
+                    <span class="card-tag">차트</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🌍</div>
+                <h3 class="card-title">Fundamentals</h3>
+                <p class="card-description">글로벌 커피 수급 동향과 주요국의 수출입 데이터를 분석합니다.</p>
+                <div class="card-meta">
+                    <span class="card-tag">수급분석</span>
+                    <span class="card-tag">데이터</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2025 Coffee Market Updates. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
