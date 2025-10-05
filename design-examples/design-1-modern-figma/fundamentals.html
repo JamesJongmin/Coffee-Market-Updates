@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design 1 - Fundamentals | Coffee Market</title>
+    <title>Fundamentals | Coffee Market Info (CMI) - Align Commodities</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-green: #6B8E6F;
-            --secondary-green: #8FAA90;
-            --light-green: #E8F3E8;
-            --primary-brown: #8B6F47;
-            --dark-text: #2D3E2D;
-            --medium-text: #5A6B5A;
-            --bg-primary: #FAFCFA;
+            --primary: #0066FF;
+            --secondary: #7C3AED;
+            --light: #E0E7FF;
+            --accent: #3B82F6;
+            --dark-text: #1A1A1A;
+            --medium-text: #4A5568;
+            --bg-primary: #FFFFFF;
             --white: #FFFFFF;
-            --shadow-sm: 0 2px 8px rgba(107, 142, 111, 0.08);
-            --shadow-md: 0 4px 16px rgba(107, 142, 111, 0.12);
-            --shadow-lg: 0 8px 32px rgba(107, 142, 111, 0.16);
+            --shadow-sm: 0 2px 8px rgba(0, 102, 255, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 102, 255, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 102, 255, 0.16);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,7 +32,7 @@
         
         .nav-container {
             background: var(--white);
-            border-bottom: 1px solid rgba(107, 142, 111, 0.1);
+            border-bottom: 1px solid rgba(0, 102, 255, 0.1);
             padding: 1.5rem 0;
             position: sticky;
             top: 0;
@@ -49,13 +49,40 @@
             align-items: center;
         }
         
-        .logo {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+        
+        .logo-image {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-main {
             font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-green), var(--primary-brown));
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-decoration: none;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        
+        .logo-sub {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--medium-text);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
         
         .nav-menu {
@@ -67,15 +94,23 @@
         .nav-link {
             color: var(--medium-text);
             text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
             transition: all 0.2s ease;
         }
         
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary-green);
-            background: var(--light-green);
+        .nav-link:hover {
+            color: var(--primary);
+            background: var(--light);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-weight: 700;
+            box-shadow: var(--shadow-md);
         }
         
         .page-header {
@@ -90,14 +125,14 @@
             gap: 0.5rem;
             color: var(--medium-text);
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
             margin-bottom: 2rem;
         }
         
         .back-button:hover {
-            color: var(--primary-green);
-            background: var(--light-green);
+            color: var(--primary);
+            background: var(--light);
         }
         
         .page-title {
@@ -130,7 +165,7 @@
             border-radius: 16px;
             padding: 2rem;
             box-shadow: var(--shadow-md);
-            border: 1px solid rgba(107, 142, 111, 0.1);
+            border: 1px solid rgba(0, 102, 255, 0.1);
             transition: all 0.3s ease;
         }
         
@@ -142,7 +177,7 @@
         .card-icon {
             width: 56px;
             height: 56px;
-            background: linear-gradient(135deg, var(--light-green), #F5EFE7);
+            background: linear-gradient(135deg, var(--light), #F5EFE7);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -166,7 +201,7 @@
         }
         
         .stat-box {
-            background: var(--light-green);
+            background: var(--light);
             padding: 1.25rem;
             border-radius: 12px;
             text-align: center;
@@ -175,14 +210,14 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 800;
-            color: var(--primary-green);
+            color: var(--primary);
             margin-bottom: 0.5rem;
         }
         
         .stat-label {
             font-size: 0.875rem;
             color: var(--medium-text);
-            font-weight: 500;
+            font-weight: 600;
         }
         
         .chart-section {
@@ -190,7 +225,7 @@
             border-radius: 16px;
             padding: 2.5rem;
             box-shadow: var(--shadow-md);
-            border: 1px solid rgba(107, 142, 111, 0.1);
+            border: 1px solid rgba(0, 102, 255, 0.1);
             margin-bottom: 2rem;
         }
         
@@ -210,14 +245,14 @@
         .chart-placeholder {
             width: 100%;
             height: 400px;
-            background: var(--light-green);
+            background: var(--light);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary-green);
+            color: var(--primary);
             font-weight: 600;
-            border: 2px dashed var(--primary-green);
+            border: 2px dashed var(--primary);
         }
         
         .footer {
@@ -242,11 +277,17 @@
 <body>
     <nav class="nav-container">
         <div class="nav-content">
-            <a href="index.html" class="logo">☕ Coffee Market</a>
+            <a href="index.html" class="logo-container">
+                <img src="../../Transparent.png" alt="Align Commodities" class="logo-image">
+                <div class="logo-text">
+                    <div class="logo-main">CMI</div>
+                    <div class="logo-sub">Coffee Market Info</div>
+                </div>
+            </a>
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="weekly-report.html" class="nav-link">Weekly Report</a></li>
-                <li><a href="in-depth-analysis.html" class="nav-link">In-depth Analysis</a></li>
+                <li><a href="in-depth-analysis.html" class="nav-link">Analysis</a></li>
                 <li><a href="dashboards.html" class="nav-link">Dashboard</a></li>
                 <li><a href="fundamentals.html" class="nav-link active">Fundamentals</a></li>
             </ul>
@@ -325,7 +366,7 @@
     
     <footer class="footer">
         <div class="footer-content">
-            <p class="footer-text">© 2025 Coffee Market Updates. Design 1 - Modern Figma Style</p>
+            <p class="footer-text">© 2025 Coffee Market Info (CMI) - Published by Align Commodities</p>
         </div>
     </footer>
 </body>
