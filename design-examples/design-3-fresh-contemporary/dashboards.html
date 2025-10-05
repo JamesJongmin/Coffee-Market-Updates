@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design 3 - Fresh Contemporary | Coffee Market Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mint-green: #52B788;
+            --light-mint: #74C69D;
+            --pale-mint: #D8F3DC;
+            --coffee-brown: #6F4E37;
+            --warm-coffee: #8B6F47;
+            --cream-bg: #FFFDF7;
+            --dark-text: #2B3A2B;
+            --medium-text: #5F6F5F;
+            --shadow-fresh: 0 4px 20px rgba(82, 183, 136, 0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, var(--cream-bg), #FEFEFE);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        .nav-modern {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(82,183,136,0.1);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .brand-modern {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--mint-green), var(--coffee-brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-links a {
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--mint-green), var(--light-mint));
+        }
+        .hero-fresh {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2.5rem 4rem;
+            text-align: center;
+        }
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: var(--pale-mint);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--mint-green);
+            margin-bottom: 2rem;
+        }
+        .hero-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.75rem;
+            background: linear-gradient(135deg, var(--dark-text), var(--mint-green), var(--coffee-brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-subheading {
+            font-size: 1.375rem;
+            color: var(--medium-text);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+        .btn-modern {
+            padding: 1.125rem 2.25rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            gap: 0.625rem;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, var(--mint-green), var(--light-mint));
+            color: white;
+            box-shadow: var(--shadow-fresh);
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-modern:hover {
+            transform: translateY(-3px);
+        }
+        .section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2.5rem;
+        }
+        .section-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.75rem;
+            color: var(--dark-text);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-fresh);
+            text-decoration: none;
+            display: block;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--pale-mint);
+        }
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--pale-mint);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .feature-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        .feature-text {
+            color: var(--medium-text);
+            line-height: 1.8;
+        }
+        .footer-fresh {
+            background: linear-gradient(180deg, var(--cream-bg), #F0F4F0);
+            padding: 3rem 2.5rem 2rem;
+            border-top: 1px solid rgba(82,183,136,0.15);
+            text-align: center;
+            margin-top: 5rem;
+        }
+        @media (max-width: 768px) {
+            .hero-heading { font-size: 2.75rem; }
+            .nav-links { display: none; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-modern">
+        <div class="nav-wrapper">
+            <div class="brand-modern">☕ Coffee Market</div>
+            <div class="nav-links">
+                <a href="index.html" ">Home</a>
+                <a href="weekly-report.html">Weekly Report</a>
+                <a href="in-depth-analysis.html">In-depth Analysis</a>
+                <a href="dashboards.html" class="active">Dashboard</a>
+                <a href="fundamentals.html">Fundamentals</a>
+            </div>
+        </div>
+    </nav>
+    
+    <section class="hero-fresh">
+        <div class="hero-tag">
+            <span>✨</span>
+            <span>Design 3: Fresh Contemporary</span>
+        </div>
+        <h1 class="hero-heading">Fresh Insights for Smart Coffee Trading</h1>
+        <p class="hero-subheading">최신 데이터와 전문 분석으로 커피 시장을 리드하세요. 실시간 업데이트되는 인사이트를 경험하세요.</p>
+        <a href="weekly-report.html" class="btn-modern">
+            <span>Start Exploring</span>
+            <span>→</span>
+        </a>
+    </section>
+    
+    <section class="section">
+        <h2 class="section-heading">Everything You Need</h2>
+        <div class="features-grid">
+            <a href="weekly-report.html" class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3 class="feature-heading">Weekly Reports</h3>
+                <p class="feature-text">매주 업데이트되는 시장 동향 분석. 가격 변동, 수급 상황, 투기 포지션까지 모든 핵심 정보를 제공합니다.</p>
+            </a>
+            <a href="in-depth-analysis.html" class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3 class="feature-heading">In-depth Analysis</h3>
+                <p class="feature-text">시장의 구조적 변화를 다루는 심층 리포트. 장기 트렌드와 특별 이슈에 대한 전문 분석을 제공합니다.</p>
+            </a>
+            <a href="dashboards.html" class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-heading">Live Dashboard</h3>
+                <p class="feature-text">실시간 차트와 핵심 지표 대시보드. 커피 가격, 환율, CFTC 포지션을 인터랙티브하게 확인하세요.</p>
+            </a>
+            <a href="fundamentals.html" class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3 class="feature-heading">Fundamentals</h3>
+                <p class="feature-text">글로벌 커피 수급 동향과 주요국 수출입 데이터. 시장 펀더멘털을 한눈에 파악할 수 있습니다.</p>
+            </a>
+        </div>
+    </section>
+    
+    <footer class="footer-fresh">
+        <p>© 2025 Coffee Market Updates. Design 3 - Fresh Contemporary</p>
+    </footer>
+</body>
+</html>

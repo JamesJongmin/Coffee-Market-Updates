@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design 1 - Dashboards | Coffee Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #6B8E6F;
+            --secondary-green: #8FAA90;
+            --light-green: #E8F3E8;
+            --primary-brown: #8B6F47;
+            --dark-text: #2D3E2D;
+            --medium-text: #5A6B5A;
+            --bg-primary: #FAFCFA;
+            --white: #FFFFFF;
+            --shadow-sm: 0 2px 8px rgba(107, 142, 111, 0.08);
+            --shadow-md: 0 4px 16px rgba(107, 142, 111, 0.12);
+            --shadow-lg: 0 8px 32px rgba(107, 142, 111, 0.16);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #F5F8F5 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .nav-container {
+            background: var(--white);
+            border-bottom: 1px solid rgba(107, 142, 111, 0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-green);
+            background: var(--light-green);
+        }
+        
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button:hover {
+            color: var(--primary-green);
+            background: var(--light-green);
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--medium-text);
+        }
+        
+        .dashboards-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+        
+        .chart-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(107, 142, 111, 0.1);
+        }
+        
+        .chart-header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .chart-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .chart-source {
+            font-size: 0.875rem;
+            color: var(--medium-text);
+            font-style: italic;
+        }
+        
+        .chart-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, var(--light-green), var(--light-green));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-weight: 600;
+            border: 2px dashed var(--primary-green);
+        }
+        
+        .chart-analysis {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background: var(--light-green);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+        
+        .analysis-title {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        .analysis-text {
+            font-size: 0.9375rem;
+            color: var(--medium-text);
+            line-height: 1.7;
+        }
+        
+        .footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+        
+        .footer-text {
+            opacity: 0.7;
+            font-size: 0.9375rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="index.html" class="logo">☕ Coffee Market</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="weekly-report.html" class="nav-link">Weekly Report</a></li>
+                <li><a href="in-depth-analysis.html" class="nav-link">In-depth Analysis</a></li>
+                <li><a href="dashboards.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="fundamentals.html" class="nav-link">Fundamentals</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="page-header">
+        <a href="index.html" class="back-button">←  메인으로 돌아가기</a>
+        <h1 class="page-title">📊 Market Dashboards</h1>
+        <p class="page-subtitle">커피 시장 핵심 지표 대시보드</p>
+    </div>
+    
+    <div class="dashboards-section">
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Coffee Futures Price</div>
+                    <div class="chart-source">출처: ICE</div>
+                </div>
+                <div class="chart-placeholder">📈 차트 영역</div>
+                <div class="chart-analysis">
+                    <div class="analysis-title">📊 차트 분석</div>
+                    <div class="analysis-text">
+                        커피 선물 가격은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
+                        브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요가 주요 변동 요인입니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">USD/BRL 환율</div>
+                    <div class="chart-source">출처: LSEG</div>
+                </div>
+                <div class="chart-placeholder">📈 차트 영역</div>
+                <div class="chart-analysis">
+                    <div class="analysis-title">💱 차트 분석</div>
+                    <div class="analysis-text">
+                        USD/BRL 환율은 커피 시장에 중요한 영향을 미칩니다. 
+                        헤알화 약세 시 브라질 농민들의 수출 경쟁력이 강화되고, 
+                        반대로 헤알화 강세 시에는 국제 경쟁력이 약화됩니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">CFTC 투기 포지션</div>
+                    <div class="chart-source">출처: LSEG</div>
+                </div>
+                <div class="chart-placeholder">📈 차트 영역</div>
+                <div class="chart-analysis">
+                    <div class="analysis-title">📈 차트 분석</div>
+                    <div class="analysis-text">
+                        CFTC 머니매니저 순매수 포지션은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
+                        양수는 강세 베팅, 음수는 약세 베팅을 의미합니다.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">브라질 남동부 NVDI</div>
+                    <div class="chart-source">출처: LSEG</div>
+                </div>
+                <div class="chart-placeholder">📈 차트 영역</div>
+                <div class="chart-analysis">
+                    <div class="analysis-title">🌱 차트 분석</div>
+                    <div class="analysis-text">
+                        NVDI는 위성 데이터로 측정한 식물의 건강도를 나타냅니다. 
+                        브라질 남동부는 세계 최대 아라비카 생산지역으로, 
+                        NVDI 수치가 높을수록 수확량 증가가 예상됩니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2025 Coffee Market Updates. Design 1 - Modern Figma Style</p>
+        </div>
+    </footer>
+</body>
+</html>

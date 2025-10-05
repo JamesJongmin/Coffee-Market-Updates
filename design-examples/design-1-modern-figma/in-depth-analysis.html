@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design 1 - In-depth Analysis | Coffee Market</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Design 1: Modern Figma-Inspired - Sage Green & Warm Brown */
+        
+        :root {
+            --primary-green: #6B8E6F;
+            --secondary-green: #8FAA90;
+            --light-green: #E8F3E8;
+            --primary-brown: #8B6F47;
+            --secondary-brown: #A68B5B;
+            --light-brown: #F5EFE7;
+            --dark-text: #2D3E2D;
+            --medium-text: #5A6B5A;
+            --light-text: #8A9A8A;
+            --bg-primary: #FAFCFA;
+            --bg-secondary: #F5F8F5;
+            --white: #FFFFFF;
+            --shadow-sm: 0 2px 8px rgba(107, 142, 111, 0.08);
+            --shadow-md: 0 4px 16px rgba(107, 142, 111, 0.12);
+            --shadow-lg: 0 8px 32px rgba(107, 142, 111, 0.16);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .nav-container {
+            background: var(--white);
+            border-bottom: 1px solid rgba(107, 142, 111, 0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-green);
+            background: var(--light-green);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-green);
+            background: var(--light-green);
+            font-weight: 600;
+        }
+        
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button:hover {
+            color: var(--primary-green);
+            background: var(--light-green);
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--medium-text);
+            margin-bottom: 2rem;
+        }
+        
+        .info-section {
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+        }
+        
+        .info-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(107, 142, 111, 0.1);
+        }
+        
+        .info-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .info-content {
+            color: var(--medium-text);
+            line-height: 1.8;
+        }
+        
+        .info-list {
+            margin-top: 1.5rem;
+            padding-left: 1.5rem;
+        }
+        
+        .info-list li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .reports-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+        
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .report-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(107, 142, 111, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-brown);
+        }
+        
+        .report-date {
+            font-size: 0.875rem;
+            color: var(--primary-brown);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .report-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .report-summary {
+            font-size: 0.9375rem;
+            color: var(--medium-text);
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+        
+        .report-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .report-tag {
+            padding: 0.375rem 0.875rem;
+            background: var(--light-brown);
+            color: var(--primary-brown);
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+        
+        .new-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+        
+        .footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-text {
+            opacity: 0.7;
+            font-size: 0.9375rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="index.html" class="logo">☕ Coffee Market</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="weekly-report.html" class="nav-link">Weekly Report</a></li>
+                <li><a href="in-depth-analysis.html" class="nav-link active">In-depth Analysis</a></li>
+                <li><a href="dashboards.html" class="nav-link">Dashboard</a></li>
+                <li><a href="fundamentals.html" class="nav-link">Fundamentals</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="page-header">
+        <a href="index.html" class="back-button">
+            <span>←</span>
+            <span>메인으로 돌아가기</span>
+        </a>
+        <h1 class="page-title">🔍 In-depth Analysis</h1>
+        <p class="page-subtitle">커피 시장 심층 분석 보고서</p>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-card">
+            <h2 class="info-title">
+                <span>💡</span>
+                <span>In-depth 분석 리포트</span>
+            </h2>
+            <div class="info-content">
+                <p>커피 시장의 특별 이슈와 심층 분석을 다루는 보고서들입니다. 주간 동향 외에 특정 주제에 대한 깊이 있는 분석을 제공합니다.</p>
+                
+                <ul class="info-list">
+                    <li><strong>단기 가격 전망과 방향성 분석</strong></li>
+                    <li><strong>기술적 분석과 차트 패턴</strong></li>
+                    <li><strong>특별 이벤트 및 시장 충격 분석</strong></li>
+                    <li><strong>장기 트렌드와 구조적 변화</strong></li>
+                    <li><strong>인포그래픽 및 시각화 자료</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="reports-section">
+        <div class="reports-grid">
+            <div class="report-card">
+                <div class="report-date">2025년 8월 17일</div>
+                <h3 class="report-title">
+                    퍼펙트 스톰: 2025년 커피 가격 급등 딥다이브
+                    <span class="new-badge">HOT</span>
+                </h3>
+                <p class="report-summary">2025년 커피 시장의 완벽한 폭풍을 분석합니다. 기후 변화, 공급망 위기, 수요 급증이 동시에 발생하며 역사적인 가격 급등을 초래한 요인들을 심층 분석합니다.</p>
+                <div class="report-tags">
+                    <span class="report-tag">심층분석</span>
+                    <span class="report-tag">가격급등</span>
+                    <span class="report-tag">퍼펙트스톰</span>
+                </div>
+            </div>
+            
+            <div class="report-card">
+                <div class="report-date">2025년 6월 24일</div>
+                <h3 class="report-title">커피 가격, 폭풍 전야 - 아라비카 시장 인포그래픽</h3>
+                <p class="report-summary">아라비카 커피 시장은 강력한 강세 요인과 잠재적 약세 리스크가 충돌하며 높은 변동성을 예고하고 있습니다. 단기 가격 전망은 310-390센트 범위입니다.</p>
+                <div class="report-tags">
+                    <span class="report-tag">인포그래픽</span>
+                    <span class="report-tag">가격전망</span>
+                    <span class="report-tag">변동성</span>
+                </div>
+            </div>
+            
+            <div class="report-card">
+                <div class="report-date">2025년 6월 14일</div>
+                <h3 class="report-title">단기 커피 선물 가격 전망 및 방향성 점검</h3>
+                <p class="report-summary">KCN25는 349.90센트로 +0.60% 상승하며 1차 지지선을 상회 회복했습니다. 단기적으로는 브라질 수확 진행이 하방 압력으로 작용하나, 구조적으로는 글로벌 아라비카 적자가 강세 요인입니다.</p>
+                <div class="report-tags">
+                    <span class="report-tag">단기전망</span>
+                    <span class="report-tag">기술적분석</span>
+                    <span class="report-tag">방향성</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2025 Coffee Market Updates. Design 1 - Modern Figma Style</p>
+        </div>
+    </footer>
+</body>
+</html>
