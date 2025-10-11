@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 (Coffee Futures Market Weekly Update)</title>
+    
+    <!--REPORT_META
+    {
+        "title": "커피 선물 시장 주간 동향",
+        "subtitle": "Coffee Futures Market Weekly Update",
+        "date": "2025-10-11",
+        "summary": "12월 아라비카 커피 선물이 373.05센트를 기록하며 높은 가격대를 유지하고 있습니다. ICE 재고가 1.5년 만에 최저치로 급감하고 브라질의 2025/26 작황 전망이 하향 조정되면서 공급 부족 우려가 심화되고 있습니다. 미국의 브라질산 50% 관세 영향으로 글로벌 공급망이 재편되고 있으며, 베트남 생산 회복에도 불구하고 시장은 구조적 강세를 유지할 전망입니다.",
+        "tags": ["373센트", "ICE재고최저", "브라질작황하향", "50%관세", "공급부족", "베트남회복", "콜롬비아최대수확"]
+    }
+    REPORT_META-->
+    
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: #e0e0e0;
+            background: #0a0a0a;
+            padding: 0;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(210, 105, 30, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header Section */
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 60px 40px;
+            margin-bottom: 50px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(210, 105, 30, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+        
+        header > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-meta {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(210, 105, 30, 0.8);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .date {
+            font-size: 0.875rem;
+            color: rgba(210, 105, 30, 0.9);
+            font-weight: 500;
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(210, 105, 30, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(210, 105, 30, 0.2);
+        }
+        
+        /* Typography */
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #8B4513;
+            color: #1a1a1a;
+        }
+        
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            color: #1a1a1a;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1rem;
+        }
+        
+        /* Lists */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            color: #333;
+            line-height: 1.7;
+        }
+        
+        li::before {
+            content: "●";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #1a1a1a;
+            font-size: 0.8rem;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08) 0%, rgba(210, 105, 30, 0.05) 100%);
+            border-left: 3px solid #D2691E;
+            padding: 30px;
+            margin: 40px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(210, 105, 30, 0.1);
+            border-left: 3px solid #D2691E;
+        }
+        
+        .highlight-box h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #D2691E;
+            margin-bottom: 15px;
+        }
+        
+        .highlight-box p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #cccccc !important;
+            line-height: 1.7;
+        }
+        
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* News Item */
+        .news-item {
+            margin-bottom: 35px;
+            padding: 20px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 8px;
+        }
+        
+        .news-item:hover {
+            padding-left: 24px;
+            border-left: 3px solid #D2691E;
+            background: rgba(139, 69, 19, 0.05);
+            transform: translateX(4px);
+            box-shadow: 0 2px 12px rgba(210, 105, 30, 0.1);
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-date {
+            font-size: 0.875rem;
+            color: #D2691E;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(210, 105, 30, 0.1);
+            border-radius: 4px;
+        }
+        
+        .news-title {
+            font-weight: 600;
+            color: #D2691E;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 80px;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(210, 105, 30, 0.2);
+            text-align: center;
+            font-size: 0.875rem;
+            color: #999;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.03) 0%, transparent 100%);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .footer p {
+            margin-bottom: 8px;
+            color: #999 !important;
+        }
+        
+        .footer strong {
+            color: #D2691E;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .highlight-box {
+                padding: 20px;
+            }
+            
+            header {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-meta">Weekly Report</div>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <p class="date">October 11, 2025</p>
+        </header>
+
+        <section>
+            <h2 style="color: #ffffff;">헤드라인: 373센트 기록, ICE 재고 급감 속 높은 가격대 유지</h2>
+            
+            <p style="color: #cccccc;">커피 선물이 ICE 재고 급감과 브라질·베트남 공급 불안으로 높은 가격대를 유지하고 있습니다. 12월 아라비카 커피(KCZ25)는 10월 10일 373.05센트를 기록했으며, 1개월간 5.37% 하락했으나 연초 대비 50% 이상 높은 수준입니다. ICE 인증 아라비카 재고는 519,534백으로 1.5년 만에 최저치를 기록하며 공급 타이트 상황이 지속되고 있습니다.</p>
+        </section>
+
+        <section>
+            <h2 style="color: #ffffff;">핵심 요약</h2>
+            
+            <p style="color: #cccccc;">12월 아라비카 커피(KCZ25)는 10월 10일 373.05센트로 마감하며 1개월간 5.37% 하락했으나, 1년 전 대비 50.03% 높은 수준을 유지하고 있습니다. ICE 인증 아라비카 재고가 519,534백으로 1.5년 만에 최저치를 기록하며 공급 부족 우려가 심화되고 있습니다.</p>
+            
+            <p style="color: #cccccc;">브라질의 2025/26 작황 전망이 StoneX에 의해 62.3백만백으로 하향 조정(-3.4%)되었으며, 2024년 극심한 가뭄과 고온이 개화 불량을 초래한 것으로 분석됩니다. 미국의 브라질산 50% 관세가 8월 1일 발효된 이후 비브라질산 원두 확보 경쟁이 격화되고 있으며, 브라질의 9월 커피 수출은 전년 대비 18% 감소했습니다.</p>
+        </section>
+
+        <section>
+            <h2 style="color: #ffffff;">핵심 시장 동향</h2>
+            
+            <ul>
+                <li style="color: #cccccc;"><strong style="color: #ffffff;">10월 10일 373.05센트 기록:</strong> <span style="color: #cccccc;">1개월간 5.37% 하락했으나 1년 전 대비 50.03% 상승한 높은 수준 유지.</span></li>
+                <li style="color: #cccccc;"><strong style="color: #ffffff;">ICE 재고 1.5년래 최저:</strong> <span style="color: #cccccc;">아라비카 재고 519,534백, 로부스타 6,237롯으로 공급 타이트 심화.</span></li>
+                <li style="color: #cccccc;"><strong style="color: #ffffff;">브라질 작황 하향 조정:</strong> <span style="color: #cccccc;">StoneX는 2025/26 생산량을 62.3백만백으로 전망(-3.4%), Volcafe는 더욱 비관적 전망.</span></li>
+                <li style="color: #cccccc;"><strong style="color: #ffffff;">미국 50% 관세 영향 가시화:</strong> <span style="color: #cccccc;">브라질 9월 수출 18% 감소, 미국향 수출은 53% 급감하며 독일, 이탈리아에 추월당해.</span></li>
+                <li style="color: #cccccc;"><strong style="color: #ffffff;">라니냐 발생 가능성 71%:</strong> <span style="color: #cccccc;">미국 기상청(NOAA)이 10-12월 라니냐 발생 확률 71%로 전망, 브라질 건조 심화 우려.</span></li>
+                <li style="color: #cccccc;"><strong style="color: #ffffff;">베트남 생산 회복 전망:</strong> <span style="color: #cccccc;">2025/26 생산량 31백만백 전망(+6.9%), 하지만 농민 재고 보유로 수출은 제한적.</span></li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>주요 지표 현황</h3>
+                <p style="color: #cccccc;"><strong style="color: #ffffff;">ICE 아라비카 재고:</strong> <span style="color: #cccccc;">519,534백 (1.5년 최저)</span></p>
+                <p style="color: #cccccc;"><strong style="color: #ffffff;">ICE 로부스타 재고:</strong> <span style="color: #cccccc;">6,237롯 (2.5개월 최저)</span></p>
+                <p style="color: #cccccc;"><strong style="color: #ffffff;">브라질 2025/26:</strong> <span style="color: #cccccc;">62.3백만백 (-3.4%)</span></p>
+                <p style="color: #cccccc;"><strong style="color: #ffffff;">베트남 2025/26:</strong> <span style="color: #cccccc;">31백만백 (+6.9%)</span></p>
+                <p style="color: #cccccc;"><strong style="color: #ffffff;">브라질 9월 수출:</strong> <span style="color: #cccccc;">3.45백만백 (-18% YoY)</span></p>
+            </div>
+        </section>
+
+        <section>
+            <h2 style="color: #ffffff;">최신 시장 동향</h2>
+            
+            <div class="news-item">
+                <p class="news-date">2025.10.10</p>
+                <p class="news-title"><strong style="color: #ffffff;">커피 선물 고공행진 지속</strong></p>
+                <p style="color: #cccccc;">12월 아라비카 커피(KCZ25)가 373.05센트로 마감하며 1년 전 대비 50% 이상 높은 수준을 유지했습니다. ICE 재고 급감과 브라질 관세 지속이 주요 상승 동력으로 작용하고 있습니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.10</p>
+                <p class="news-title"><strong style="color: #ffffff;">브라질 수출업체 Cecafe, 9월 수출 18% 감소 보고</strong></p>
+                <p style="color: #cccccc;">브라질 커피수출협회(Cecafe)는 9월 생두 수출이 전년 동월 대비 18% 감소한 3.45백만백을 기록했다고 발표했습니다. 아라비카는 10% 감소한 2.97백만백, 로부스타는 47% 급감한 489,700백을 기록했습니다. 미국향 수출은 관세 영향으로 53% 급감하며 333,000백에 그쳤고, 독일과 이탈리아가 미국을 제치고 브라질 커피의 최대 수입국으로 부상했습니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.10</p>
+                <p class="news-title"><strong style="color: #ffffff;">브라질 무역회사 Timbro, 커피 수출 시장 진출</strong></p>
+                <p style="color: #cccccc;">브라질의 주요 설탕 수출업체 Timbro가 커피 수출 시장에 진출했습니다. 동사는 최근 가격 급등과 변동성 확대로 기존 무역업체들이 어려움을 겪는 시기를 기회로 보고 시장 진입을 결정했습니다. 초년도에는 약 80,000백 규모의 소량 거래로 시작하며, 두바이와 아시아 시장 확대를 위한 거점도 확보했습니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.08</p>
+                <p class="news-title"><strong style="color: #ffffff;">ICO, 9월 가격 상승세 둔화 보고</strong></p>
+                <p style="color: #cccccc;">국제커피기구(ICO)는 8월 급등 후 9월 커피 가격 상승세가 둔화되었다고 발표했습니다. ICO 종합지표가격(I-CIP)은 9월 소폭 상승에 그쳤으나, 여전히 높은 수준을 유지하고 있습니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.08</p>
+                <p class="news-title"><strong style="color: #ffffff;">ICE 재고 사상 최저 근접</strong></p>
+                <p style="color: #cccccc;">아라비카 인증 재고가 10월 7일 기준 519,534백으로 1.5년 만에 최저치를 기록했습니다. 미국의 브라질산 50% 관세로 인한 신규 계약 취소와 공급 차질이 재고 급감의 주요 원인으로 지목되고 있습니다.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 style="color: #ffffff;">브라질 및 생산국 동향</h2>
+            
+            <div class="news-item">
+                <p class="news-date">2025.10.06</p>
+                <p class="news-title"><strong style="color: #ffffff;">브라질 미나스 주 개화 상황 양호, 향후 강우량이 관건</strong></p>
+                <p style="color: #cccccc;">세계 최대 아라비카 생산지인 브라질 미나스제라이스 주에서 양호한 개화가 보고되었으나, 전문가들은 과실 발달이 강우량에 달려 있다고 경고했습니다. 세하두 미네이루 지역에서는 관개 시설이 없는 재배지의 절반 이상이 30도를 넘는 고온과 강우 부족으로 어려움을 겪고 있습니다. LSEG 기상 데이터는 10월 8-9일 주요 커피 벨트에 강우가 예상되나, 남부 미나스는 향후 15일간 90mm, 세하두 지역은 30mm만 예상되어 격차가 큰 상황입니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.05</p>
+                <p class="news-title"><strong style="color: #ffffff;">StoneX, 브라질 작황 하향 조정</strong></p>
+                <p style="color: #cccccc;">StoneX는 브라질 2025/26 생산량을 62.3백만백으로 전망하며 이전 추정치 대비 3.4% 하향 조정했습니다. 2024년 극심한 가뭄과 고온으로 인한 개화 불량이 주요 원인으로 지적되었습니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.08</p>
+                <p class="news-title"><strong style="color: #ffffff;">콜롬비아, 2024/25 시즌 33년 만에 최대 수확</strong></p>
+                <p style="color: #cccccc;">콜롬비아 커피생산자연맹(FNC)은 2024/25 시즌(9월 종료) 생산량이 14.87백만백으로 전년 대비 17% 증가하며 33년 만에 최대 수확을 기록했다고 발표했습니다. 수출도 12% 증가한 13.3백만백을 기록했습니다. FNC는 커피나무 재배지 갱신, 우수한 재배 관리, 정상적인 기후 조건이 주효했다고 설명했습니다. 그러나 2025/26 시즌은 나무의 자연적 회복 주기와 상반기 기후 조건으로 인해 생산량 감소가 예상됩니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.02</p>
+                <p class="news-title"><strong style="color: #ffffff;">에티오피아, EU 규정 대응 강화</strong></p>
+                <p style="color: #cccccc;">에티오피아가 EU 삼림파괴방지규정(EUDR) 준수를 위한 국가 전략을 추진하고 있습니다. 농지 매핑, 추적 시스템 구축, 생산자 교육 등을 통해 유럽 시장 접근성을 확보하려는 노력이 진행 중입니다.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 style="color: #ffffff;">아시아 및 로부스타 시장</h2>
+            
+            <div class="news-item">
+                <p class="news-date">2025.10.09</p>
+                <p class="news-title"><strong style="color: #ffffff;">베트남, 양호한 기상으로 생산량 10-15% 증가 전망</strong></p>
+                <p style="color: #cccccc;">베트남 무역업자들은 양호한 기상 조건 덕분에 이번 수확 시즌 고품질 원두 생산이 10-15% 증가할 것으로 전망했습니다. 중부 고원 지역에서 농민들은 원두를 kg당 114,000-115,000동($4.33-4.36)에 판매하고 있으며, 이는 전주 116,000-117,000동 대비 소폭 하락한 수준입니다. 한 무역업자는 "현재까지 원두 품질이 우수하다"며 "농민들이 수확을 시작했지만 물량은 여전히 제한적이며, 다음 달부터 본격적인 물량이 나올 것"이라고 밝혔습니다. 베트남은 1-9월 커피 수출이 전년 대비 10.9% 증가한 123만톤을 기록했으며, 수출액은 62.2% 증가한 70억달러에 달했습니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.05</p>
+                <p class="news-title"><strong style="color: #ffffff;">USDA, 베트남 생산량 회복 전망</strong></p>
+                <p style="color: #cccccc;">USDA는 베트남 2025/26 생산량을 31백만백으로 전망하며 전년 대비 6.9% 증가를 예상했습니다. 1~4월 강우량 증가로 작황이 개선되었으나, 농민들의 재고 보유로 수출은 여전히 제한적입니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.01</p>
+                <p class="news-title"><strong style="color: #ffffff;">로부스타 가격 동반 강세</strong></p>
+                <p style="color: #cccccc;">런던 로부스타 선물이 톤당 $4,700 수준을 유지하며 아라비카와 함께 강세를 지속하고 있습니다. 베트남 생산 회복 전망에도 불구하고, 낮은 재고와 높은 수요가 가격을 지지하고 있습니다.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 style="color: #ffffff;">기상 및 생산 현황</h2>
+            
+            <div class="news-item">
+                <p class="news-date">2025.10.05</p>
+                <p class="news-title"><strong style="color: #ffffff;">브라질 개화기 날씨 주목</strong></p>
+                <p style="color: #cccccc;">브라질 주요 아라비카 생산지역에서 9~10월 개화기가 진행 중입니다. 남부 미나스, 세하두 미네이루, 상파울루 일부에서 조기 개화가 관찰되고 있으며, 향후 강우 패턴이 2026/27 작황에 결정적 영향을 미칠 것으로 예상됩니다.</p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.10.02</p>
+                <p class="news-title"><strong style="color: #ffffff;">라니냐 발생 가능성 71%</strong></p>
+                <p style="color: #cccccc;">미국 기상청 기후예측센터(CPC)는 10~12월 라니냐 발생 확률을 71%로 예측했습니다. 라니냐는 브라질에 과도한 건조 날씨를 가져올 수 있어, 2026/27 작황에 부정적 영향을 미칠 가능성이 제기되고 있습니다.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>시장 전망</h2>
+            
+            <p style="color: #cccccc;">커피 선물 시장은 구조적 공급 부족과 미국 관세 지속으로 인해 높은 가격대를 유지할 것으로 전망됩니다. 12월물 아라비카 커피(KCZ25)는 373.05센트를 기록하며 1년 전 대비 50% 이상 높은 수준을 유지하고 있습니다. ICE 인증 재고가 1.5년 만에 최저치로 급감하면서 공급 부족 우려가 심화되고 있으며, 이는 단기적으로 가격 하방을 제한하는 핵심 요인으로 작용하고 있습니다.</p>
+
+            <p style="color: #cccccc;">브라질의 2025/26 작황 전망이 지속적으로 하향 조정되고 있는 점은 중기 가격 전망에 우려를 더하고 있습니다. StoneX는 브라질 생산량을 62.3백만백으로 전망하며 이전 추정치 대비 3.4% 하향 조정했으며, Volcafe는 더욱 비관적인 전망을 내놓았습니다. 현재 진행 중인 9~10월 개화기의 기상 조건이 2026/27 작황을 결정할 중요한 시점이며, 라니냐 발생 가능성(71%)이 제기되면서 브라질의 건조 날씨 지속 우려도 가격 상승 리스크로 작용하고 있습니다.</p>
+
+            <p style="color: #cccccc;">미국의 브라질산 50% 관세는 글로벌 공급망을 근본적으로 재편하고 있습니다. 브라질의 9월 커피 수출이 전년 대비 18% 감소했으며, 특히 미국향 수출은 53% 급감하면서 독일과 이탈리아가 새로운 최대 수입국으로 부상했습니다. 미국 수입업자들이 비브라질산 원두 확보에 나서면서 콜롬비아, 온두라스, 페루 등 대체 공급원의 가격 프리미엄이 상승하고 있으며, 이는 전체 시장 가격 상승을 견인하고 있습니다.</p>
+
+            <p style="color: #cccccc;">베트남의 생산 회복 전망은 긍정적이나, 로부스타 가격 역시 동반 강세를 보이며 톤당 $4,700 수준을 유지하고 있습니다. 무역업자들은 양호한 기상으로 10-15% 생산량 증가를 전망하고 있으나, 농민들의 재고 보유 성향으로 인해 즉각적인 공급 증가로 이어지지는 않을 것으로 예상됩니다. 콜롬비아가 33년 만에 최대 수확을 기록한 것은 긍정적이나, 2025/26 시즌은 비수확해로 생산량 감소가 예상되어 중기적 공급 완화 기대는 제한적입니다.</p>
+        </section>
+
+        <div class="footer">
+            <p><strong>Published by Align Commodities</strong></p>
+            <p>james.baek@aligncommodities.com</p>
+            <p>데이터 출처: ICE, USDA, StoneX, ICO, Cecafe, FNC, NOAA, Reuters</p>
+            <p>본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </div>
+    </div>
+</body>
+</html>
