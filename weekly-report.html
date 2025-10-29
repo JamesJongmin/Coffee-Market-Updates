@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Report - Coffee Market Updates</title>
+    <title>Weekly Report - Copper Scrap Market Updates</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -138,7 +138,7 @@
             right: -50%;
             width: 200%;
             height: 200%;
-            background-image: url('coffee-beans-pattern.jpg');
+            background-image: url('copper-scrap-pattern.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             opacity: 0.08;
@@ -352,7 +352,7 @@
         
         <div class="header">
             <h1> Weekly Report</h1>
-            <p class="subtitle">커피 선물 시장 주간 동향 보고서</p>
+            <p class="subtitle">구리 스크랩 시장 주간 동향 보고서</p>
         </div>
         
         <div class="info-section">
@@ -360,13 +360,13 @@
                 📋 Weekly Report 
             </h2>
             <div class="info-content">
-                <p>매주 발행되는 커피 선물 시장 주간 동향 보고서는 글로벌 커피 시장의 최신 동향과 가격 변동을 심층적으로 분석합니다.</p>
+                <p>매주 발행되는 구리 스크랩 시장 주간 동향 보고서는 글로벌 구리 시장의 최신 동향과 가격 변동을 심층적으로 분석합니다.</p>
                 
                 <ul>
                     <li><strong>발행 주기:</strong> 주 1회 업데이트 (매주 토요일 발간)</li>
                     <li><strong>주요 내용:</strong> 주간 가격 동향, 수급 현황, 기후 영향, 투기 포지션 분석</li>
                     <li><strong>데이터 소스:</strong> ICE, Reuter, Refinitiv, CFTC, 주요 생산국 통계청 등 </li>
-                    <li><strong>분석 범위:</strong> 아라비카/로부스타 선물, 현물 시장, 환율 영향</li>
+                    <li><strong>분석 범위:</strong> LME 구리 선물, 현물 시장, 재활용 공급, 산업 수요</li>
                 </ul>
             </div>
         </div>
@@ -382,7 +382,7 @@
         
         <div class="no-results" id="noResults" style="display: none;">
             <h3>주간 동향 리포트가 없습니다</h3>
-            <p>아직 "커피 선물 시장 주간 동향" 리포트가 등록되지 않았습니다.</p>
+            <p>아직 "구리 스크랩 시장 주간 동향" 리포트가 등록되지 않았습니다.</p>
         </div>
     </div>
 
@@ -476,8 +476,8 @@
                                                 if (metadata) {
                                                     // 카테고리 분류 로직 추가
                                                     const isWeekly = metadata.title && (
-                                                        metadata.title.includes('커피 시장 주간 동향') ||
-                                                        metadata.title.includes('커피 선물 시장 주간 동향') ||
+                                                        metadata.title.includes('구리 스크랩 시장 주간 동향') ||
+                                                        metadata.title.includes('구리 스크랩 시장 주간 동향') ||
                                                         metadata.title.includes('주간 동향')
                                                     );
                                                     
@@ -529,8 +529,8 @@
                                                         
                                                         // 카테고리 분류 로직 추가
                                                         const isWeekly = metadata.title && (
-                                                            metadata.title.includes('커피 시장 주간 동향') ||
-                                                            metadata.title.includes('커피 선물 시장 주간 동향') ||
+                                                            metadata.title.includes('구리 스크랩 시장 주간 동향') ||
+                                                            metadata.title.includes('구리 스크랩 시장 주간 동향') ||
                                                             metadata.title.includes('주간 동향')
                                                         );
                                                         
@@ -609,12 +609,12 @@
                     
                     // summary가 없거나 빈 경우 기본값 제공
                     if (!metadata.summary || metadata.summary.trim() === '') {
-                        metadata.summary = '커피 시장 분석 보고서입니다.';
+                        metadata.summary = '구리 스크랩 시장 분석 보고서입니다.';
                     }
                     
                     // tags가 없거나 빈 경우 기본값 제공
                     if (!metadata.tags || metadata.tags.length === 0) {
-                        metadata.tags = ['커피시장', '분석'];
+                        metadata.tags = ['구리스크랩', '분석'];
                     }
                     
                     return metadata;
@@ -688,14 +688,14 @@
             
             // 태그가 없으면 기본 태그 추가
             if (tags.length === 0) {
-                tags.push('주간동향', '커피선물', '시장분석');
+                tags.push('주간동향', '구리스크랩', '시장분석');
             }
             
             return {
-                title: title || '커피 선물 시장 주간 동향',
+                title: title || '구리 스크랩 시장 주간 동향',
                 subtitle: '',
                 date: defaultDate,
-                summary: summary || '커피 선물 시장의 주간 동향을 분석한 리포트입니다.',
+                summary: summary || '구리 스크랩 시장의 주간 동향을 분석한 리포트입니다.',
                 tags: tags
             };
         }
@@ -767,9 +767,9 @@
                     // 제목에 "주간 동향" 키워드가 포함된 경우
                     if (report.title && (
                         report.title.includes('주간 동향') ||
-                        report.title.includes('커피 시장 주간 동향') ||
-                        report.title.includes('커피 선물 시장 주간 동향') ||
-                        report.title === '커피 선물 시장 주간 동향'
+                        report.title.includes('구리 스크랩 시장 주간 동향') ||
+                        report.title.includes('구리 스크랩 시장 주간 동향') ||
+                        report.title === '구리 스크랩 시장 주간 동향'
                     )) {
                         return true;
                     }
