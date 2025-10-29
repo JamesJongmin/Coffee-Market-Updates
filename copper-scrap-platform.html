@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GX9R36120J');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copper Scrap Market Analysis Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.7;
+            color: #1e293b;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            position: relative;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('copper-scrap-pattern.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0.08;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(184, 115, 51, 0.2);
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            color: #0f172a;
+            margin-bottom: 24px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #B87333 0%, #CD7F32 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #64748b;
+            margin-bottom: 32px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        .description {
+            font-size: 1.1em;
+            color: #64748b;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .beta-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 12px;
+            box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.39);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 4px 8px rgba(245, 158, 11, 0.5); }
+            100% { transform: scale(1); box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3); }
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #B87333 0%, #8B4513 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 32px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px -8px rgba(184, 115, 51, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: -0.01em;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-6px);
+            box-shadow: 0 12px 35px -8px rgba(184, 115, 51, 0.7);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .dashboard-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(184, 115, 51, 0.2);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url('copper-scrap-pattern.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.08;
+            transform: rotate(45deg);
+            transition: opacity 0.3s ease;
+        }
+        
+        .dashboard-card:hover::before {
+            opacity: 0.15;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(184, 115, 51, 0.25);
+            border-color: rgba(184, 115, 51, 0.4);
+        }
+        
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-align: center;
+            display: block;
+        }
+        
+        .card-title {
+            font-size: 1.625em;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 18px;
+            text-align: center;
+            letter-spacing: -0.025em;
+        }
+        
+        .card-content {
+            color: #64748b;
+            line-height: 1.7;
+            font-weight: 400;
+            text-align: center;
+        }
+        
+        .chart-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            margin-bottom: 40px;
+            border: 1px solid rgba(184, 115, 51, 0.2);
+        }
+        
+        .chart-title {
+            font-size: 2em;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #B87333 0%, #CD7F32 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #B87333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 20px;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #B87333;
+        }
+        
+        .footer p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .footer-links a {
+            color: #B87333;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #CD7F32;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+                line-height: 1.3;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+                line-height: 1.5;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">
+            ← 커피 시장 대시보드로 돌아가기
+        </a>
+        
+        <div class="header">
+            <h1>
+                구리 스크랩 시황 분석 플랫폼
+                <span class="beta-badge">BETA</span>
+            </h1>
+            <p class="subtitle">Copper Scrap Market Analysis Platform</p>
+            <p class="description">
+                글로벌 구리 스크랩 시장의 실시간 가격 동향, 수급 현황, 재활용 공급 분석을 제공하는 전문 플랫폼입니다. 
+                LME 구리 선물, 현물 시장, 주요 소비국 수요 동향을 종합적으로 분석합니다.
+            </p>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card" onclick="window.location.href='copper-weekly-report.html'">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">주간 시황 리포트</h3>
+                <p class="card-content">
+                    구리 스크랩 시장의 주간 가격 동향과 주요 이슈를 분석한 상세 리포트를 제공합니다.
+                </p>
+            </div>
+            
+            <div class="dashboard-card" onclick="window.location.href='copper-fundamentals.html'">
+                <div class="card-icon">📈</div>
+                <h3 class="card-title">펀더멘털 분석</h3>
+                <p class="card-content">
+                    글로벌 구리 수급 현황, 주요 소비국 동향, 재활용 공급 분석을 제공합니다.
+                </p>
+            </div>
+            
+            <div class="dashboard-card" onclick="window.location.href='copper-price-chart.html'">
+                <div class="card-icon">📉</div>
+                <h3 class="card-title">실시간 가격 차트</h3>
+                <p class="card-content">
+                    LME 구리 선물, 현물 가격, 주요 거래소 가격을 실시간으로 모니터링합니다.
+                </p>
+            </div>
+            
+            <div class="dashboard-card" onclick="window.location.href='copper-supply-demand.html'">
+                <div class="card-icon">⚖️</div>
+                <h3 class="card-title">수급 분석</h3>
+                <p class="card-content">
+                    중국, 미국, 유럽 등 주요 소비국의 구리 수요와 재활용 공급을 분석합니다.
+                </p>
+            </div>
+            
+            <div class="dashboard-card" onclick="window.location.href='copper-news.html'">
+                <div class="card-icon">📰</div>
+                <h3 class="card-title">시장 뉴스</h3>
+                <p class="card-content">
+                    구리 스크랩 시장 관련 최신 뉴스와 시장 동향을 실시간으로 업데이트합니다.
+                </p>
+            </div>
+            
+            <div class="dashboard-card" onclick="window.location.href='copper-forecast.html'">
+                <div class="card-icon">🔮</div>
+                <h3 class="card-title">가격 전망</h3>
+                <p class="card-content">
+                    기술적 분석과 펀더멘털 분석을 바탕으로 한 구리 가격 전망을 제공합니다.
+                </p>
+            </div>
+        </div>
+        
+        <div class="chart-section">
+            <h2 class="chart-title">LME 구리 선물 가격 동향</h2>
+            <div class="chart-container">
+                <div class="loading-spinner" id="loading-chart">
+                    <div class="spinner"></div>
+                    차트 데이터를 로딩 중...
+                </div>
+                <canvas id="copperPriceChart" style="display: none;"></canvas>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-content">
+                <h3>구리 스크랩 시황 분석 플랫폼</h3>
+                <p><strong>Published by Align Commodities & Yellowknife</strong></p>
+                <p>전문적인 구리 스크랩 시장 분석과 Market Intelligence를 제공합니다.</p>
+                <div class="footer-links">
+                    <a href="mailto:james.baek@aligncommodities.com">Contact</a>
+                    <a href="https://github.com/jamesjongmin/Coffee-Market-Updates">GitHub</a>
+                    <a href="index.html">커피 시장 대시보드</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 구리 가격 차트 생성
+        async function createCopperPriceChart() {
+            const loadingElement = document.getElementById('loading-chart');
+            const chartElement = document.getElementById('copperPriceChart');
+            
+            try {
+                // 샘플 데이터 (실제로는 API에서 가져와야 함)
+                const sampleData = generateSampleCopperData();
+                
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+                
+                const ctx = chartElement.getContext('2d');
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: sampleData.labels,
+                        datasets: [{
+                            label: 'LME 구리 선물 가격 (USD/톤)',
+                            data: sampleData.prices,
+                            borderColor: '#B87333',
+                            backgroundColor: 'rgba(184, 115, 51, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.2,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#B87333',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: {
+                                        size: 14,
+                                        weight: '600'
+                                    },
+                                    color: '#1e293b'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 12,
+                                        weight: '500'
+                                    },
+                                    color: '#64748b'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 12,
+                                        weight: '500'
+                                    },
+                                    color: '#64748b',
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    }
+                });
+                
+                console.log('구리 가격 차트가 생성되었습니다.');
+            } catch (error) {
+                console.error('차트 생성 오류:', error);
+                loadingElement.innerHTML = '<div style="color: #e74c3c;">차트 로딩 실패: ' + error.message + '</div>';
+            }
+        }
+        
+        // 샘플 구리 가격 데이터 생성
+        function generateSampleCopperData() {
+            const labels = [];
+            const prices = [];
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 30);
+            
+            let basePrice = 8500;
+            
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(startDate);
+                date.setDate(date.getDate() + i);
+                labels.push(date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }));
+                
+                // 가격 변동 시뮬레이션
+                const variation = (Math.random() - 0.5) * 200;
+                basePrice += variation;
+                prices.push(Math.round(basePrice));
+            }
+            
+            return { labels, prices };
+        }
+        
+        // 페이지 로드 시 차트 생성
+        document.addEventListener('DOMContentLoaded', function() {
+            createCopperPriceChart();
+        });
+    </script>
+</body>
+</html>
