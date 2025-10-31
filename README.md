@@ -19,8 +19,11 @@ Weekly and monthly coffee market updates for business intelligence
 
 ### 자동화
 
-- GitHub Actions를 통해 새 리포트 추가 시 자동으로 `reports.json` 업데이트
-- 메타데이터 추출 및 인덱싱 자동화
+- 📅 **주간 리포트 자동 생성**: 매주 토요일 자동으로 리포트 템플릿 생성
+  - [자동화 가이드](AUTOMATION.md) 참고
+  - `create-weekly-report.js` 스크립트로 수동 실행 가능
+- 🔄 **리포트 메타데이터 자동 업데이트**: 새 리포트 추가 시 자동으로 `reports.json` 업데이트
+- 📝 **메타데이터 추출 및 인덱싱 자동화**
 
 ### 웹사이트
 
