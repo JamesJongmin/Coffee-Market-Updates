@@ -33,23 +33,32 @@ function formatKoreanDate(date) {
     });
 }
 
-// 리포트 HTML 템플릿 생성
+// 리포트 HTML 템플릿 생성 (기존 리포트 형식 그대로 반영)
 function generateReportTemplate(targetDate) {
     const dateStr = formatDate(targetDate);
     const koreanDate = formatKoreanDate(targetDate);
     const year = targetDate.getFullYear();
     const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const day = String(targetDate.getDate()).padStart(2, '0');
+    const weekday = targetDate.toLocaleDateString('ko-KR', { weekday: 'long' });
     
     // REPORT_META 기본값
     const defaultTags = ['아라비카', '로부스타', '시장분석', '주간동향'];
-    const defaultSummary = `${year}년 ${parseInt(month)}월 ${parseInt(dateStr.split('-')[2])}일 커피 선물 시장 주간 동향 분석 보고서입니다. 시장 동향과 가격 변동을 종합적으로 분석합니다.`;
+    const defaultSummary = `${year}년 ${parseInt(month)}월 ${parseInt(day)}일 커피 선물 시장 주간 동향 분석 보고서입니다. 시장 동향과 가격 변동을 종합적으로 분석합니다.`;
+    
+    // 계약월 계산 (다음 달 기준)
+    const nextMonth = targetDate.getMonth() + 1;
+    const contractMonth = nextMonth > 12 ? 1 : nextMonth;
+    const contractMonthStr = ['K', 'H', 'K', 'N', 'U', 'Z', 'H', 'K', 'N', 'U', 'Z', 'H'][contractMonth - 1];
+    const contractYear = contractMonth === 1 ? year + 1 : year;
+    const contractYearStr = String(contractYear).slice(-1);
 
     const html = `<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>커피 선물 시장 주간 동향 - ${koreanDate}</title>
+    <title>커피 선물 시장 주간 동향 - ${year}년 ${parseInt(month)}월 ${parseInt(day)}일</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -365,18 +374,21 @@ REPORT_META-->
 </head>
 <body>
     <div class="container">
-        <a href="../../../../index.html" class="back-link">← 메인 페이지로 돌아가기</a>
-        
         <header>
             <h1>커피 선물 시장 주간 동향</h1>
-            <div class="subtitle">Coffee Futures Market Weekly Update</div>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
             <div class="date-stamp">${koreanDate}</div>
         </header>
 
         <div class="news-grid">
             <div class="main-story">
                 <h2>주요 헤드라인: 여기에 주요 헤드라인을 작성하세요</h2>
-                <div class="highlight">
+                <p style="margin-bottom: 15px;">
+                    <strong>여기에 이번 주 주요 헤드라인에 대한 설명을 작성하세요.</strong> 
+                    주요 가격 변동, 시장 동향, 중요한 이벤트를 간략히 설명합니다.
+                </p>
+                
+                <div class="content-section">
                     <h3>핵심 요약</h3>
                     <p style="line-height: 1.8;">
                         여기에 이번 주 커피 시장의 핵심 요약을 작성하세요. 주요 가격 변동, 시장 동향, 중요한 이벤트를 간략히 정리합니다.
@@ -386,7 +398,7 @@ REPORT_META-->
             
             <div class="sidebar">
                 <div class="price-box">
-                    <div class="price-label">12월 아라비카 선물 (KCZ25)</div>
+                    <div class="price-label">${contractMonthStr}월 아라비카 선물 (KC${contractMonthStr}${contractYearStr}25)</div>
                     <div class="price-value">--.--¢</div>
                     <div class="price-change">전주 대비</div>
                     <div style="font-size: 0.85em; margin-top: 10px; opacity: 0.9;">업데이트 필요</div>
@@ -418,12 +430,7 @@ REPORT_META-->
             <div class="news-section">
                 <h3 class="section-title">주간 주요 뉴스</h3>
                 
-                <div class="placeholder">
-                    주간 주요 뉴스 항목을 여기에 추가하세요.
-                    <br>각 뉴스 항목은 news-item 클래스를 사용하여 추가합니다.
-                </div>
-                
-                <!-- 예시 뉴스 항목 (복사하여 사용):
+                <!-- 뉴스 항목 추가 예시:
                 <div class="news-item">
                     <div class="news-date">2025.XX.XX</div>
                     <div class="news-content">
@@ -432,31 +439,56 @@ REPORT_META-->
                     </div>
                 </div>
                 -->
+                
+                <p style="color: #6c757d; font-style: italic; padding: 20px;">
+                    주간 주요 뉴스 항목을 여기에 추가하세요. 각 뉴스 항목은 위 주석의 형식을 따라 추가합니다.
+                </p>
             </div>
             
             <div class="news-section">
-                <h3 class="section-title">시장 분석</h3>
+                <h3 class="section-title">배경 정보</h3>
                 
-                <div class="placeholder">
-                    시장 분석 및 배경 정보를 여기에 추가하세요.
+                <!-- 배경 정보 뉴스 항목 추가 예시:
+                <div class="news-item">
+                    <div class="news-date">2025.XX.XX</div>
+                    <div class="news-content">
+                        <strong>이벤트 제목:</strong> 배경 정보 내용을 여기에 작성하세요.
+                        <a href="출처URL" target="_blank">출처</a>
+                    </div>
                 </div>
+                -->
+                
+                <p style="color: #6c757d; font-style: italic; padding: 20px;">
+                    시장 배경 정보 및 관련 이벤트를 여기에 추가하세요.
+                </p>
             </div>
         </div>
 
         <div class="content-section">
-            <h3>상세 분석</h3>
-            <p>
-                여기에 이번 주 커피 시장의 상세 분석을 작성하세요. 
-                가격 동향, 수급 현황, 기후 영향, 투기 포지션 분석 등을 포함할 수 있습니다.
+            <h3>시장 전망 및 투자 시사점</h3>
+            <p style="line-height: 1.8; margin-bottom: 15px;">
+                <strong>단기 전망 (향후 1-2주):</strong> 여기에 단기 시장 전망을 작성하세요.
+            </p>
+            <p style="line-height: 1.8; margin-bottom: 15px;">
+                <strong>중기 전망 (향후 3-6개월):</strong> 여기에 중기 시장 전망을 작성하세요.
+            </p>
+            <p style="line-height: 1.8;">
+                <strong>구조적 리스크:</strong> 여기에 구조적 리스크 요인을 작성하세요.
             </p>
         </div>
 
-        <div class="highlight">
-            <h3>전망 및 시사점</h3>
-            <p style="line-height: 1.8;">
-                향후 시장 전망과 주요 시사점을 여기에 작성하세요.
-            </p>
+        <div class="tags">
+            <span class="tag">주간동향</span>
+            <span class="tag">커피선물</span>
+            <span class="tag">시장분석</span>
+            <!-- 추가 태그를 여기에 추가하세요 -->
         </div>
+
+        <footer>
+            <p><strong>Published by Align Commodities (james.baek@aligncommodities.com)</strong> | 
+            데이터 출처: ICE, Barchart, Trading Economics, Nasdaq, Bloomberg, USDA, Volcafe, ICO | 
+            본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.</p>
+        </footer>
     </div>
 </body>
 </html>`;
