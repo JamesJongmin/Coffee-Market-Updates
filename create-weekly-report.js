@@ -1,9 +1,11 @@
 const fs = require('fs');
 const path = require('path');
+const { fetchAllCoffeeNews, formatNewsAsHTML } = require('./fetch-coffee-news');
 
 /**
  * 주간 리포트 자동 생성 스크립트
  * 매주 토요일에 실행되어 다음 주 토요일 리포트 템플릿을 생성합니다.
+ * RSS 피드에서 최근 뉴스를 자동 수집하여 포함합니다.
  */
 
 // 다음 토요일 날짜 계산
@@ -34,7 +36,7 @@ function formatKoreanDate(date) {
 }
 
 // 리포트 HTML 템플릿 생성 (기존 리포트 형식 그대로 반영)
-function generateReportTemplate(targetDate) {
+async function generateReportTemplate(targetDate, newsItems = []) {
     const dateStr = formatDate(targetDate);
     const koreanDate = formatKoreanDate(targetDate);
     const year = targetDate.getFullYear();
@@ -430,7 +432,7 @@ REPORT_META-->
             <div class="news-section">
                 <h3 class="section-title">주간 주요 뉴스</h3>
                 
-                <!-- 뉴스 항목 추가 예시:
+${newsItems.length > 0 ? newsItems : `                <!-- 뉴스 항목 추가 예시:
                 <div class="news-item">
                     <div class="news-date">2025.XX.XX</div>
                     <div class="news-content">
@@ -442,7 +444,7 @@ REPORT_META-->
                 
                 <p style="color: #6c757d; font-style: italic; padding: 20px;">
                     주간 주요 뉴스 항목을 여기에 추가하세요. 각 뉴스 항목은 위 주석의 형식을 따라 추가합니다.
-                </p>
+                </p>`}
             </div>
             
             <div class="news-section">
@@ -497,7 +499,7 @@ REPORT_META-->
 }
 
 // 메인 함수
-function main() {
+async function main() {
     // 다음 토요일 계산
     const today = new Date();
     const nextSaturday = getNextSaturday(today);
@@ -525,24 +527,44 @@ function main() {
         return;
     }
     
+    // RSS 뉴스 수집
+    console.log(`\n📰 최근 커피 뉴스 수집 중...`);
+    let newsHTML = '';
+    try {
+        const news = await fetchAllCoffeeNews();
+        if (news.length > 0) {
+            newsHTML = formatNewsAsHTML(news, 6);
+            console.log(`✅ ${news.length}개 뉴스 수집 완료 (상위 6개 사용)`);
+        } else {
+            console.log(`⚠️  수집된 뉴스가 없습니다. 빈 템플릿을 생성합니다.`);
+        }
+    } catch (error) {
+        console.error(`❌ 뉴스 수집 실패:`, error.message);
+        console.log(`   빈 템플릿을 생성합니다.`);
+    }
+    
     // 리포트 템플릿 생성
-    const html = generateReportTemplate(nextSaturday);
+    const html = await generateReportTemplate(nextSaturday, newsHTML);
     
     // 파일 저장
     fs.writeFileSync(reportPath, html, 'utf8');
     
-    console.log(`✅ 주간 리포트 템플릿 생성 완료!`);
+    console.log(`\n✅ 주간 리포트 템플릿 생성 완료!`);
     console.log(`   파일: ${dateStr}.html`);
     console.log(`\n📝 다음 단계:`);
-    console.log(`   1. 리포트 파일을 열어 내용을 작성하세요`);
+    console.log(`   1. 리포트 파일을 열어 내용을 확인하세요`);
     console.log(`   2. REPORT_META 블록의 summary와 tags를 업데이트하세요`);
-    console.log(`   3. 가격 데이터와 뉴스 항목을 추가하세요`);
-    console.log(`   4. 변경사항을 커밋하고 푸시하세요`);
+    console.log(`   3. 가격 데이터를 업데이트하세요`);
+    console.log(`   4. 필요시 추가 뉴스나 분석을 작성하세요`);
+    console.log(`   5. 변경사항을 커밋하고 푸시하세요`);
 }
 
 // 스크립트 실행
 if (require.main === module) {
-    main();
+    main().catch(error => {
+        console.error('오류 발생:', error);
+        process.exit(1);
+    });
 }
 
 module.exports = { getNextSaturday, formatDate, generateReportTemplate };
