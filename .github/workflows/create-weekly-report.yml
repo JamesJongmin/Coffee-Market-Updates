@@ -23,8 +23,12 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
+    
+    - name: Install dependencies
+      run: |
+        npm install
         
-    - name: Create weekly report template
+    - name: Create weekly report with auto-generated content
       run: |
         node create-weekly-report.js
         

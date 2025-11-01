@@ -1,11 +1,20 @@
 const fs = require('fs');
 const path = require('path');
 const { fetchAllCoffeeNews, formatNewsAsHTML } = require('./fetch-coffee-news');
+const { fetchCoffeePrice, fetchICEInventory } = require('./fetch-price-data');
+const { generateFullAnalysis } = require('./generate-analysis');
 
 /**
- * 주간 리포트 자동 생성 스크립트
- * 매주 토요일에 실행되어 다음 주 토요일 리포트 템플릿을 생성합니다.
- * RSS 피드에서 최근 뉴스를 자동 수집하여 포함합니다.
+ * 주간 리포트 완전 자동 생성 스크립트
+ * 매주 토요일에 실행되어 다음 주 토요일 리포트를 자동 생성합니다.
+ * 
+ * 자동 생성 항목:
+ * - RSS 뉴스 수집 (최근 7일, 상위 6개)
+ * - 커피 선물 가격 (Yahoo Finance API)
+ * - ICE 재고 데이터 (추정)
+ * - 주요 헤드라인 (뉴스 기반 자동 생성)
+ * - 핵심 요약 (가격+뉴스 기반)
+ * - 시장 전망 (AI 분석)
  */
 
 // 다음 토요일 날짜 계산
@@ -35,8 +44,8 @@ function formatKoreanDate(date) {
     });
 }
 
-// 리포트 HTML 템플릿 생성 (기존 리포트 형식 그대로 반영)
-async function generateReportTemplate(targetDate, newsItems = []) {
+// 리포트 HTML 템플릿 생성 (완전 자동화 버전)
+async function generateReportTemplate(targetDate, newsItems = [], priceData = null, inventory = null, analysis = null) {
     const dateStr = formatDate(targetDate);
     const koreanDate = formatKoreanDate(targetDate);
     const year = targetDate.getFullYear();
@@ -44,9 +53,26 @@ async function generateReportTemplate(targetDate, newsItems = []) {
     const day = String(targetDate.getDate()).padStart(2, '0');
     const weekday = targetDate.toLocaleDateString('ko-KR', { weekday: 'long' });
     
-    // REPORT_META 기본값
+    // REPORT_META (자동 생성 또는 기본값)
     const defaultTags = ['아라비카', '로부스타', '시장분석', '주간동향'];
-    const defaultSummary = `${year}년 ${parseInt(month)}월 ${parseInt(day)}일 커피 선물 시장 주간 동향 분석 보고서입니다. 시장 동향과 가격 변동을 종합적으로 분석합니다.`;
+    const defaultSummary = analysis?.summary || `${year}년 ${parseInt(month)}월 ${parseInt(day)}일 커피 선물 시장 주간 동향 분석 보고서입니다. 시장 동향과 가격 변동을 종합적으로 분석합니다.`;
+    
+    // 가격 정보
+    const priceValue = priceData?.price || '--.--';
+    const priceChange = priceData?.changePercent || '0.00';
+    const priceChangeClass = priceData && parseFloat(priceData.changePercent) >= 0 ? 'positive' : 'negative';
+    const priceChangeSign = priceData && parseFloat(priceData.changePercent) >= 0 ? '+' : '';
+    
+    // 재고 정보
+    const inventoryValue = inventory?.arabica ? inventory.arabica.toLocaleString() : '업데이트 필요';
+    const inventoryChange = inventory?.change ? inventory.change.toLocaleString() : '--';
+    
+    // 헤드라인
+    const headline = analysis?.headline || '여기에 주요 헤드라인을 작성하세요';
+    const summaryText = analysis?.summary || '여기에 이번 주 커피 시장의 핵심 요약을 작성하세요. 주요 가격 변동, 시장 동향, 중요한 이벤트를 간략히 정리합니다.';
+    
+    // JSON에서 안전하게 사용하기 위해 큰따옴표 이스케이프
+    const summaryForJSON = summaryText.replace(/"/g, '\\"');
     
     // 계약월 계산 (다음 달 기준)
     const nextMonth = targetDate.getMonth() + 1;
@@ -70,7 +96,7 @@ async function generateReportTemplate(targetDate, newsItems = []) {
     "title": "커피 선물 시장 주간 동향",
     "subtitle": "Coffee Futures Market Weekly Update",
     "date": "${dateStr}",
-    "summary": "${defaultSummary}",
+    "summary": "${summaryForJSON}",
     "tags": ${JSON.stringify(defaultTags)},
     "type": "weekly",
     "authors": ["Align Commodities"],
@@ -384,16 +410,15 @@ REPORT_META-->
 
         <div class="news-grid">
             <div class="main-story">
-                <h2>주요 헤드라인: 여기에 주요 헤드라인을 작성하세요</h2>
+                <h2>주요 헤드라인: ${headline}</h2>
                 <p style="margin-bottom: 15px;">
-                    <strong>여기에 이번 주 주요 헤드라인에 대한 설명을 작성하세요.</strong> 
-                    주요 가격 변동, 시장 동향, 중요한 이벤트를 간략히 설명합니다.
+                    <strong>${summaryText}</strong>
                 </p>
                 
                 <div class="content-section">
                     <h3>핵심 요약</h3>
                     <p style="line-height: 1.8;">
-                        여기에 이번 주 커피 시장의 핵심 요약을 작성하세요. 주요 가격 변동, 시장 동향, 중요한 이벤트를 간략히 정리합니다.
+                        ${summaryText}
                     </p>
                 </div>
             </div>
@@ -401,20 +426,20 @@ REPORT_META-->
             <div class="sidebar">
                 <div class="price-box">
                     <div class="price-label">${contractMonthStr}월 아라비카 선물 (KC${contractMonthStr}${contractYearStr}25)</div>
-                    <div class="price-value">--.--¢</div>
-                    <div class="price-change">전주 대비</div>
-                    <div style="font-size: 0.85em; margin-top: 10px; opacity: 0.9;">업데이트 필요</div>
+                    <div class="price-value">${priceValue}¢</div>
+                    <div class="price-change ${priceChangeClass}">${priceChangeSign}${priceChange}%</div>
+                    <div style="font-size: 0.85em; margin-top: 10px; opacity: 0.9;">전주 대비</div>
                 </div>
                 
                 <div class="quick-stats">
                     <h3>주요 지표</h3>
                     <div class="stat-item">
                         <span class="stat-label">ICE 재고</span>
-                        <span class="stat-value">업데이트 필요</span>
+                        <span class="stat-value">${inventoryValue}백</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">전주 대비</span>
-                        <span class="stat-value">--</span>
+                        <span class="stat-value">${inventoryChange}백</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">브라질 관세</span>
@@ -422,7 +447,7 @@ REPORT_META-->
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">시장 상태</span>
-                        <span class="stat-value">업데이트 필요</span>
+                        <span class="stat-value">${priceData ? (parseFloat(priceData.changePercent) > 0 ? '강세' : '약세') : '관망'}</span>
                     </div>
                 </div>
             </div>
@@ -469,13 +494,13 @@ ${newsItems.length > 0 ? newsItems : `                <!-- 뉴스 항목 추가 
         <div class="content-section">
             <h3>시장 전망 및 투자 시사점</h3>
             <p style="line-height: 1.8; margin-bottom: 15px;">
-                <strong>단기 전망 (향후 1-2주):</strong> 여기에 단기 시장 전망을 작성하세요.
+                <strong>단기 전망 (향후 1-2주):</strong> ${analysis?.outlook?.shortTerm || '여기에 단기 시장 전망을 작성하세요.'}
             </p>
             <p style="line-height: 1.8; margin-bottom: 15px;">
-                <strong>중기 전망 (향후 3-6개월):</strong> 여기에 중기 시장 전망을 작성하세요.
+                <strong>중기 전망 (향후 3-6개월):</strong> ${analysis?.outlook?.midTerm || '여기에 중기 시장 전망을 작성하세요.'}
             </p>
             <p style="line-height: 1.8;">
-                <strong>구조적 리스크:</strong> 여기에 구조적 리스크 요인을 작성하세요.
+                <strong>구조적 리스크:</strong> ${analysis?.outlook?.risks || '여기에 구조적 리스크 요인을 작성하세요.'}
             </p>
         </div>
 
@@ -527,24 +552,60 @@ async function main() {
         return;
     }
     
-    // RSS 뉴스 수집
+    // 1. RSS 뉴스 수집
     console.log(`\n📰 최근 커피 뉴스 수집 중...`);
+    let news = [];
     let newsHTML = '';
     try {
-        const news = await fetchAllCoffeeNews();
+        news = await fetchAllCoffeeNews();
         if (news.length > 0) {
             newsHTML = formatNewsAsHTML(news, 6);
             console.log(`✅ ${news.length}개 뉴스 수집 완료 (상위 6개 사용)`);
         } else {
-            console.log(`⚠️  수집된 뉴스가 없습니다. 빈 템플릿을 생성합니다.`);
+            console.log(`⚠️  수집된 뉴스가 없습니다.`);
         }
     } catch (error) {
         console.error(`❌ 뉴스 수집 실패:`, error.message);
-        console.log(`   빈 템플릿을 생성합니다.`);
     }
     
-    // 리포트 템플릿 생성
-    const html = await generateReportTemplate(nextSaturday, newsHTML);
+    // 2. 가격 데이터 수집
+    console.log(`\n💰 커피 가격 데이터 수집 중...`);
+    let priceData = null;
+    try {
+        priceData = await fetchCoffeePrice();
+        if (priceData) {
+            console.log(`✅ 가격: ${priceData.price}¢ (${priceData.changePercent}%)`);
+        }
+    } catch (error) {
+        console.error(`❌ 가격 수집 실패:`, error.message);
+    }
+    
+    // 3. 재고 데이터 추정
+    console.log(`\n📦 ICE 재고 데이터 추정 중...`);
+    let inventory = null;
+    try {
+        inventory = await fetchICEInventory();
+        if (inventory) {
+            console.log(`✅ 재고: ${inventory.arabica.toLocaleString()}백 (추정)`);
+        }
+    } catch (error) {
+        console.error(`❌ 재고 추정 실패:`, error.message);
+    }
+    
+    // 4. 자동 분석 생성
+    console.log(`\n🤖 AI 분석 생성 중...`);
+    let analysis = null;
+    try {
+        analysis = generateFullAnalysis(news, priceData, inventory);
+        console.log(`✅ 헤드라인: ${analysis.headline}`);
+        console.log(`✅ 요약 생성 완료`);
+        console.log(`✅ 시장 전망 생성 완료`);
+    } catch (error) {
+        console.error(`❌ 분석 생성 실패:`, error.message);
+    }
+    
+    // 5. 리포트 템플릿 생성
+    const html = await generateReportTemplate(nextSaturday, newsHTML, priceData, inventory, analysis);
     
     // 파일 저장
     fs.writeFileSync(reportPath, html, 'utf8');

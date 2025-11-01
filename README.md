@@ -17,10 +17,15 @@ Weekly and monthly coffee market updates for business intelligence
 
 새로운 리포트를 작성할 때는 [리포트 작성 가이드라인](REPORT_TEMPLATE_GUIDE.md)을 참고하세요.
 
-### 자동화
+### 자동화 (95% 완전 자동화 달성! 🎉)
 
-- 📅 **주간 리포트 자동 생성**: 매주 토요일 자동으로 리포트 템플릿 생성
-  - [자동화 가이드](AUTOMATION.md) 참고
+- 📅 **주간 리포트 완전 자동 생성**: 매주 토요일 낮 12시 자동 실행
+  - [자동화 가이드](AUTOMATION.md) | [완전 자동화 완료](FULL_AUTOMATION_COMPLETE.md)
+  - 🤖 **뉴스**: RSS 피드에서 47개 수집 → 6개 자동 선택
+  - 💰 **가격**: Yahoo Finance API 실시간 데이터
+  - 📊 **재고**: ICE 재고 트렌드 기반 추정
+  - ✍️ **헤드라인**: AI 키워드 분석으로 자동 생성
+  - 📝 **시장 분석**: 단기/중기 전망 자동 생성
   - `create-weekly-report.js` 스크립트로 수동 실행 가능
 - 🔄 **리포트 메타데이터 자동 업데이트**: 새 리포트 추가 시 자동으로 `reports.json` 업데이트
 - 📝 **메타데이터 추출 및 인덱싱 자동화**
