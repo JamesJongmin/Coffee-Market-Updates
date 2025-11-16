@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!--REPORT_META
+{
+    "title": "커피 선물 시장 주간 동향",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2025-11-16",
+    "summary": "12월물 399.80센트로 주간 약세 마감. 트럼프 행정부가 11월 14일 커피·쇠고기·과일 관세를 소급 철폐하며 가격 4% 급락. 브라질 50% 관세는 여전히 유지되어 근본적 공급 타이트 지속. ICE 재고 406,129백으로 역사적 저점. StoneX 2026/27 생산 7,070만백 전망, 브라질 2025/26 판매 62% 수준.",
+    "tags": ["399.80센트", "트럼프관세철폐", "브라질50%관세유지", "StoneX7070만백", "2025/26판매62%", "ICE재고역사적저점", "로부스타투기감소", "CECAFE관세불확실성"],
+    "author": "Align Commodities",
+    "sources": ["Bloomberg", "Reuters", "Comunicaffe", "Barchart", "Nasdaq", "ABC News", "CNN", "NPR", "White House"],
+    "price_current": "399.80",
+    "price_change": "-4.0%",
+    "report_type": "weekly"
+}
+REPORT_META-->
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.8;
+            color: #e0e0e0;
+            background: #0a0a0a;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(210, 105, 30, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            position: relative;
+            z-index: 1;
+        }
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 60px 40px;
+            margin-bottom: 50px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(210, 105, 30, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+        header > * { position: relative; z-index: 1; }
+        
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #D2691E;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(210, 105, 30, 0.3);
+            transform: translateY(-1px);
+        }
+        .header-meta {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(210, 105, 30, 0.8);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+        }
+        .date {
+            font-size: 0.875rem;
+            color: rgba(210, 105, 30, 0.9);
+            font-weight: 500;
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(210, 105, 30, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(210, 105, 30, 0.2);
+        }
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #8B4513;
+            color: #ffffff;
+        }
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            color: #ffffff;
+        }
+        p {
+            margin-bottom: 20px;
+            color: #cccccc;
+            font-size: 1rem;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+        li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            color: #cccccc;
+            line-height: 1.7;
+        }
+        li::before {
+            content: "●";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #D2691E;
+        }
+        strong { font-weight: 600; color: #ffffff; }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08) 0%, rgba(210, 105, 30, 0.05) 100%);
+            border-left: 3px solid #D2691E;
+            padding: 30px;
+            margin: 40px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(210, 105, 30, 0.1);
+        }
+        .highlight-box h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #D2691E;
+            margin-bottom: 15px;
+        }
+        .highlight-box p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #cccccc !important;
+        }
+        .highlight-box p:last-child { margin-bottom: 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: rgba(26, 26, 26, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        th {
+            background: rgba(139, 69, 19, 0.2);
+            color: #D2691E;
+            font-weight: 600;
+        }
+        td { color: #cccccc; }
+        .price-up { color: #4ade80; }
+        .price-down { color: #f87171; }
+        .news-item {
+            margin-bottom: 35px;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+        .news-item:hover {
+            padding-left: 24px;
+            border-left: 3px solid #D2691E;
+            background: rgba(139, 69, 19, 0.05);
+            transform: translateX(4px);
+        }
+        .news-date {
+            font-size: 0.875rem;
+            color: #D2691E;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(210, 105, 30, 0.1);
+            border-radius: 4px;
+        }
+        .news-title {
+            font-weight: 600;
+            color: #D2691E;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        .footer {
+            margin-top: 80px;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(210, 105, 30, 0.2);
+            text-align: center;
+            font-size: 0.875rem;
+            color: #999;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.03) 0%, transparent 100%);
+            border-radius: 12px;
+        }
+        .footer p { margin-bottom: 8px; color: #999 !important; }
+        .footer strong { color: #D2691E; }
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            header { padding: 40px 24px; }
+            div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://coffeemarket.info" class="home-button">HOME</a>
+            <div class="header-meta">Weekly Report</div>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <p class="date">November 16, 2025</p>
+        </header>
+
+        <section>
+            <h2>헤드라인: 트럼프 관세 철폐로 급락, 브라질은 제외</h2>
+            <p>커피 선물 시장이 트럼프 행정부의 전격적인 관세 철폐 발표로 급락했습니다. 12월 아라비카 커피(KCZ25)는 11월 15일 399.80센트로 마감하며 주간 약 4% 하락했습니다. 트럼프 대통령이 11월 14일 커피·쇠고기·바나나·토마토 등 식료품 관세를 11월 13일 자로 소급 철폐하는 행정명령에 서명하면서 가격이 즉각 반응했습니다. 그러나 세계 최대 커피 수출국인 브라질에 대한 50% 관세는 여전히 유지되어 시장의 구조적 타이트는 지속되고 있습니다.</p>
+        </section>
+
+        <section>
+            <h2>핵심 요약</h2>
+            <p>12월 아라비카 커피(KCZ25)는 399.80센트로 마감하며 11월 11일 기록한 422.70센트 고점 대비 약 5.4% 조정되었습니다. 트럼프 행정부가 11월 14일 발표한 관세 철폐 조치는 에콰도르, 과테말라, 엘살바도르, 아르헨티나 등 남미 4개국과의 무역 협상 합의에 따른 것이나, 미국 커피 수입의 30%를 차지하는 브라질은 제외되었습니다.</p>
+            
+            <p>트럼프 대통령과 재무장관 Scott Bessent는 11월 12-13일 커피 가격 인하를 위한 관세 완화를 예고했으며, 14일 즉시 실행에 옮겼습니다. 그러나 브라질에 대한 50% 관세는 Jair Bolsonaro 전 대통령에 대한 정치적 박해 문제로 인해 유지되고 있어, 미국 수입업자들의 브라질산 커피 계약 취소가 지속되고 있습니다.</p>
+
+            <p>미국 대법원은 11월 5일 IEEPA(국제비상경제권한법) 관세의 적법성에 대한 구두 심리를 진행했으며, 보수·진보 양측 판사 모두 회의적 반응을 보여 향후 관세 무효화 가능성이 제기되고 있습니다. ICE 아라비카 재고는 406,129백으로 7월 이후 36만백 이상 감소하며 19개월 최저를 지속하고 있습니다.</p>
+
+            <div class="highlight-box">
+                <h3>주요 지표 현황</h3>
+                
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">항목</th>
+                            <th style="width: 35%;">현재 수치</th>
+                            <th style="width: 30%;">변동/비교</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>가격 동향</strong></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>12월 아라비카 선물</td>
+                            <td class="price-down">399.80¢/lb</td>
+                            <td class="price-down">-5.4% (주간)</td>
+                        </tr>
+                        <tr>
+                            <td>주간 고점</td>
+                            <td>422.70¢</td>
+                            <td>11월 11일</td>
+                        </tr>
+                        <tr>
+                            <td>미국 소매가</td>
+                            <td class="price-up">$9.14/lb</td>
+                            <td class="price-up">+41% YoY</td>
+                        </tr>
+                        <tr style="background: rgba(139, 69, 19, 0.05);">
+                            <td><strong>관세 현황</strong></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>일반 관세 철폐</td>
+                            <td>커피·쇠고기·바나나</td>
+                            <td>11/13 소급</td>
+                        </tr>
+                        <tr>
+                            <td>브라질 관세</td>
+                            <td class="price-down">50% 유지</td>
+                            <td>10% 추가 불명확</td>
+                        </tr>
+                        <tr style="background: rgba(139, 69, 19, 0.05);">
+                            <td><strong>공급/재고</strong></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>ICE 아라비카 재고</td>
+                            <td class="price-down">406,129백</td>
+                            <td>19개월 최저</td>
+                        </tr>
+                        <tr>
+                            <td>브라질 2025/26 판매</td>
+                            <td class="price-down">62%</td>
+                            <td>평균 70% 대비</td>
+                        </tr>
+                        <tr>
+                            <td>StoneX 2026/27 전망</td>
+                            <td class="price-up">7,070만백</td>
+                            <td>+29% YoY</td>
+                        </tr>
+                        <tr style="background: rgba(139, 69, 19, 0.05);">
+                            <td><strong>기상/환율</strong></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>미나스 강우 (11/7까지)</td>
+                            <td class="price-up">72.1mm</td>
+                            <td>평년 대비 160%</td>
+                        </tr>
+                        <tr>
+                            <td>USD/BRL 환율</td>
+                            <td>5.29</td>
+                            <td>17개월 고점 후 조정</td>
+                        </tr>
+                        <tr style="background: rgba(139, 69, 19, 0.05);">
+                            <td><strong>시장 포지션</strong></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>로부스타 투기 순매수</td>
+                            <td class="price-down">15,071롯</td>
+                            <td>-1,567롯</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>핵심 시장 동향</h2>
+            
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h3>🔴 하락 요인</h3>
+                <ul style="margin: 0;">
+                    <li><strong>트럼프 관세 철폐:</strong> 11/14 커피·쇠고기·과일 관세 소급 철폐로 4% 급락</li>
+                    <li><strong>남미 4개국 협상:</strong> 에콰도르·과테말라·엘살바도르·아르헨티나 관세 완화</li>
+                    <li><strong>로부스타 투기 감소:</strong> 순매수 1,567롯 감소로 단기 매도 압력</li>
+                    <li><strong>BRL 약세 전환:</strong> 브라질 생산자 수출 유인 증가</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 20px; border-left-color: #4ade80;">
+                <h3 style="color: #4ade80;">🟢 상승 요인</h3>
+                <ul style="margin: 0;">
+                    <li><strong>브라질 50% 관세 유지:</strong> 미국 수입 30% 차지, 구조적 타이트 지속</li>
+                    <li><strong>ICE 재고 역사적 저점:</strong> 406,129백, 7월 이후 36만백 감소 (19개월 최저)</li>
+                    <li><strong>브라질 판매 저조:</strong> 2025/26 판매 62%, 평균 70% 대비 8%p 하회</li>
+                    <li><strong>대법원 무효화 가능성:</strong> IEEPA 적법성에 판사들 회의적 반응</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 20px; border-left-color: #D2691E;">
+                <h3 style="color: #D2691E;">⚠️ 불확실성</h3>
+                <ul style="margin: 0;">
+                    <li><strong>CECAFE 관세 혼란:</strong> 기본 10% 관세 추가 적용 여부 불명확</li>
+                    <li><strong>2026/27 작황:</strong> StoneX 7,070만백 전망이나 라니냐 건조 위험</li>
+                    <li><strong>정치적 변수:</strong> 브라질-미국 협상, 대법원 판결, 2026 중간선거</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>주요 영향 요인 분석</h2>
+            
+            <h3>1. 트럼프 관세 철폐 - 정치적 압박의 결과</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.14</p>
+                <p class="news-title">트럼프, 커피·쇠고기·과일 관세 소급 철폐</p>
+                <p>트럼프 대통령이 11월 14일 커피, 쇠고기, 토마토, 바나나를 포함한 수백 가지 식료품에 대한 관세를 11월 13일 자로 소급 철폐하는 행정명령에 서명했습니다. 백악관은 이들 상품이 "미국 내 수요를 충족할 만큼 충분히 생산될 수 없다"고 밝혔습니다. 이번 조치는 11월 초 버지니아와 뉴저지 등지에서 실시된 지방선거에서 민주당이 승리하며 유권자들이 식료품 가격에 대한 불만을 표출한 직후 나왔습니다. 코코넛, 견과류, 아보카도, 파인애플 등도 면제 대상에 포함되었습니다.</p>
+                <p><a href="https://www.bloomberg.com/news/articles/2025-11-14/trump-set-to-cut-tariffs-on-beef-tomatoes-as-prices-vex-voters" target="_blank">Bloomberg (2025.11.14)</a>, <a href="https://www.reuters.com/world/americas/trump-cuts-tariffs-beef-coffee-other-foods-inflation-concerns-mount-2025-11-14/" target="_blank">Reuters (2025.11.14)</a></p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.11.12-13</p>
+                <p class="news-title">Bessent 재무장관, 관세 완화 예고</p>
+                <p>Scott Bessent 재무장관이 11월 12일 Fox News와의 인터뷰에서 "앞으로 며칠 내 미국에서 재배하지 않는 품목들에 대한 실질적인 발표가 있을 것"이라며 커피와 바나나를 구체적으로 언급했습니다. Bessent는 "가격을 매우 빠르게 낮출 것"이라고 강조했습니다. 트럼프 대통령도 11월 12일 Fox News에서 "커피 가격을 낮추기 위해 일부 관세를 인하할 것"이라고 밝혔습니다. 커피 선물은 이 발언 직후 약 4% 급락했습니다.</p>
+                <p><a href="https://www.axios.com/2025/11/12/coffee-prices-inflation-groceries-bessent" target="_blank">Axios (2025.11.12)</a>, <a href="https://www.nbcnews.com/business/business-news/trump-bessent-coffee-tariffs-rcna243425" target="_blank">NBC News (2025.11.12)</a></p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.11.13-14</p>
+                <p class="news-title">남미 4개국 무역 협상, 브라질 제외</p>
+                <p>백악관은 11월 13-14일 아르헨티나, 에콰도르, 과테말라, 엘살바도르와 무역 협상 프레임워크에 합의했다고 발표했습니다. 에콰도르는 바나나와 커피에 대한 미국 관세 철폐 혜택을 받게 되며, 과테말라와 엘살바도르는 기존 10% 관세 유지, 에콰도르는 15% 유지됩니다. 그러나 미국 커피 수입의 약 30%를 차지하는 세계 최대 커피 수출국 브라질은 이번 협상에서 제외되어 50% 관세가 그대로 유지되고 있습니다.</p>
+                <p><a href="https://abcnews.go.com/Politics/white-house-announces-south-american-trade-deals-lower/story?id=127507073" target="_blank">ABC News (2025.11.13)</a>, <a href="https://www.axios.com/2025/11/13/trump-tariffs-coffee" target="_blank">Axios (2025.11.13)</a></p>
+            </div>
+
+            <h3>2. 브라질 관세 - 정치적 이유로 유지</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.14</p>
+                <p class="news-title">브라질 50% 관세는 여전히 유효</p>
+                <p>트럼프 행정부의 관세 철폐 조치에도 불구하고 브라질에 대한 50% 관세는 유지되고 있습니다. 트럼프 대통령은 7월 브라질에 대해 50% 관세를 부과하면서 Jair Bolsonaro 전 대통령에 대한 정치적 박해를 주요 이유로 들었습니다. 브라질은 미국의 두 번째로 큰 교역 상대국이며 커피, 대두, 설탕, 쇠고기의 세계 1위 수출국입니다. 소비자물가지수(CPI) 데이터에 따르면 9월 기준 커피 가격은 1년 전 대비 18.9%, 쇠고기는 14.7% 상승했습니다.</p>
+                <p><a href="https://www.cnn.com/2025/11/14/economy/lower-tariffs-coffee-beef-bananas-produce" target="_blank">CNN (2025.11.14)</a>, <a href="https://www.npr.org/2025/11/14/g-s1-97936/trump-tariffs-executive-order-beef-coffee-fruit" target="_blank">NPR (2025.11.14)</a></p>
+            </div>
+
+            <div class="news-item">
+                <p class="news-date">2025.11.14</p>
+                <p class="news-title">미국 소매 커피 가격 41% 급등</p>
+                <p>미국 노동통계국(BLS) 데이터에 따르면 2025년 9월 로스팅 원두 커피의 평균 소매가는 파운드당 9.14달러로 1년 전 대비 41% 상승했습니다. 이는 전체 식품 인플레이션율을 크게 상회하는 수치입니다. 경제학자들은 가격 상승의 일부가 트럼프의 관세에서 비롯되었다고 분석하고 있으며, 특히 커피와 바나나는 미국이 대규모로 생산하지 않아 수입에 의존하는 품목입니다.</p>
+                <p><a href="https://abcnews.go.com/Politics/white-house-announces-south-american-trade-deals-lower/story?id=127507073" target="_blank">ABC News (2025.11.13)</a></p>
+            </div>
+
+            <h3>3. 대법원 관세 심리 - 무효화 가능성</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.05</p>
+                <p class="news-title">대법원, IEEPA 관세에 회의적 반응</p>
+                <p>미국 대법원이 11월 5일 트럼프 행정부의 IEEPA(국제비상경제권한법) 관세 적법성에 대한 구두 심리를 2시간 40분간 진행했습니다. 보수·진보 양측 판사 모두 '긴급 상황' 근거로 무역 정책을 전면 장악하는 것에 회의적 반응을 보였습니다. Justice Sonia Sotomayor와 Chief Justice John Roberts는 관세가 본질적으로 의회 권한인 '세금'에 해당한다고 강조했습니다. 법원이 IEEPA 관세 무효화 판결을 내릴 경우, 정부는 이미 징수한 약 900억 달러의 관세를 환급해야 하며, 브라질 커피 50% 관세도 폐지되거나 환급될 가능성이 있습니다.</p>
+                <p><a href="https://www.comunicaffe.com/arabica-coffee-futures-climb-on-weather-concerns-and-a-stronger-real/" target="_blank">Comunicaffe (2025.11.10)</a></p>
+            </div>
+
+            <h3>4. 브라질 기상 - 강우 회복</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.11</p>
+                <p class="news-title">미나스제라이스 평년 대비 160% 강우</p>
+                <p>브라질 최대 아라비카 생산지역인 미나스제라이스가 11월 7일까지 일주일간 72.1mm의 강우를 기록하며 평년 대비 160%의 수분을 확보했습니다. Somar Meteorologia에 따르면 이는 2026/27 시즌 커피 개화에 긍정적 영향을 미칠 것으로 전망됩니다. StoneX는 11월 13일 2026/27 시즌 브라질 커피 생산량을 7,070만백(아라비카 4,720만백 포함)으로 전망하며 전년 대비 29% 증가할 것으로 예상했습니다.</p>
+                <p><a href="https://www.barchart.com/futures/quotes/kc*0/futures-prices" target="_blank">Barchart (2025.11.13)</a></p>
+            </div>
+
+            <h3>5. 재고 동향 - 구조적 타이트 지속</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.11</p>
+                <p class="news-title">ICE 재고 406,129백으로 19개월 최저</p>
+                <p>ICE 인증 아라비카 재고가 11월 11일 기준 406,129백으로 7월 말 이후 36만백 이상 감소하며 19개월 최저 수준을 유지하고 있습니다. 미국의 브라질 커피 50% 관세로 인해 미국 수입업자들이 신규 계약을 취소하면서 재고 감소세가 가속화되었습니다. 미국 수입 커피의 약 30%가 브라질산인 점을 감안하면 관세가 유지되는 한 재고 타이트는 당분간 계속될 전망입니다.</p>
+                <p><a href="https://www.comunicaffe.com/arabica-coffee-futures-climb-on-weather-concerns-and-a-stronger-real/" target="_blank">Comunicaffe (2025.11.10)</a></p>
+            </div>
+
+            <h3>6. 환율 변동 - BRL 강세 후 급반락</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.11-15</p>
+                <p class="news-title">브라질 헤알화 17개월 고점 후 급락</p>
+                <p>브라질 헤알화(BRL)가 11월 11일 USD 대비 17개월 최고치를 기록한 후 주말까지 급격히 반락했습니다(USD/BRL 5.29). 강한 BRL은 브라질 생산자들의 수출 판매를 억제하며 커피 가격 상승을 지지했으나, BRL 약세 전환으로 브라질 생산자들의 수출 유인이 증가하여 가격 하락 압력으로 작용했습니다. 11월 11일 기록한 422.70센트 고점은 BRL 강세가 정점에 달했을 때 형성되었습니다.</p>
+                <p><a href="https://www.comunicaffe.com/arabica-coffee-futures-climb-on-weather-concerns-and-a-stronger-real/" target="_blank">Comunicaffe (2025.11.10)</a></p>
+            </div>
+
+            <h3>7. 정치적 압박 - "No Coffee Tax Act" 무산</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.06</p>
+                <p class="news-title">상원, 커피 관세 철폐 법안 신속처리 거부</p>
+                <p>미국 상원에서 초당적으로 발의된 "No Coffee Tax Act"가 11월 6일 신속처리 시도에서 좌절되었습니다. 민주당 Catherine Cortez Masto 상원의원과 공화당 Rand Paul 상원의원이 공동 발의한 이 법안은 커피가 미국에서 충분히 생산될 수 없다는 점을 근거로 관세 면제를 요구했습니다. 그러나 공화당 Mike Crapo 상원의원이 "개별 품목에 대한 예외를 만드는 것은 광범위한 협상 전략을 해친다"며 반대했습니다. 법안은 다시 위원회로 회부되었습니다.</p>
+                <p><a href="https://dailycoffeenews.com/2025/11/06/u-s-senate-bid-to-fast-track-no-coffee-tax-act-denied/" target="_blank">Daily Coffee News (2025.11.06)</a></p>
+            </div>
+
+            <h3>8. CECAFE - 브라질 관세 적용 불확실성</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.10</p>
+                <p class="news-title">브라질 커피 협회, 기본 10% 관세 적용 여부 불명확</p>
+                <p>브라질 커피 수출협회(CECAFE)는 트럼프 행정부의 관세 철폐 조치가 브라질산 커피에 대한 기본 10% 관세에 적용되는지 여부가 불명확하다고 밝혔습니다. 브라질에 대해서는 50% 관세가 유지되고 있으나, 4월 "해방의 날(Liberation Day)"에 부과된 기본 10% 관세가 추가로 적용되는지에 대한 명확한 지침이 없는 상황입니다. CECAFE 회장 Márcio Ferreira는 "관세가 시장을 교란하고 투기적 움직임의 문을 열었다"고 지적했습니다.</p>
+                <p><a href="https://www.comunicaffe.com/brazilian-coffee-exports-down-for-for-the-ninth-consecutive-month-as-trumps-tariffs-are-already-beginning-to-bite/" target="_blank">Comunicaffe (2025.09.10 보도)</a></p>
+            </div>
+
+            <h3>9. 브라질 2026/27 시즌 - StoneX 생산 전망</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.13</p>
+                <p class="news-title">StoneX, 브라질 2026/27 생산 7,070만백 전망</p>
+                <p>StoneX는 11월 13일 브라질 2026/27 시즌 커피 생산량을 7,070만백으로 전망하며 아라비카가 4,720만백으로 전년 대비 29% 증가할 것으로 예상했습니다. 이는 최근 미나스제라이스의 양호한 강우와 개화 조건을 반영한 것입니다. 그러나 이는 초기 추정치이며, StoneX는 다음 업데이트를 2025년 2월로 예정하고 있어 향후 기후 조건에 따라 크게 변동될 수 있습니다.</p>
+                <p><a href="https://www.barchart.com/futures/quotes/kc*0/futures-prices" target="_blank">Barchart (2025.11.13)</a></p>
+            </div>
+
+            <h3>10. 브라질 2025/26 판매 - 예상 대비 저조</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.10</p>
+                <p class="news-title">2025/26 시즌 커피 판매 62% 수준, 과거 평균 하회</p>
+                <p>브라질 생산자들의 2025/26 시즌 커피 선판매가 11월 10일 기준 예상 물량의 약 62% 수준에 머물러 있으며, 이는 과거 평균인 70%를 크게 하회하는 수준입니다. Safras & Mercado에 따르면 생산자들이 가격 상승을 기대하며 판매를 지연하고 있으며, 특히 브라질 헤알화 강세가 수출 유인을 감소시켰습니다. 그러나 최근 BRL 약세 전환으로 향후 판매 압력이 증가할 가능성이 있습니다.</p>
+            </div>
+
+            <h3>11. ICE 로부스타 - 투기적 포지션 감소</h3>
+            
+            <div class="news-item">
+                <p class="news-date">2025.11.11</p>
+                <p class="news-title">로부스타 투기적 순매수 포지션 대폭 감소</p>
+                <p>ICE 유럽 거래소 데이터에 따르면 로부스타 커피 투기적 순매수 포지션이 11월 11일 기준 1만 5,071롯으로 이전 주 대비 1,567롯 감소했습니다. 이는 투기 세력이 로부스타 시장에서 포지션을 줄이고 있음을 시사하며, 베트남의 생산 회복 전망과 브라질 로부스타(코닐론) 생산 증가 예상이 배경으로 작용한 것으로 분석됩니다. 투기적 매도 압력 증가는 단기적으로 로부스타 가격에 하방 압력으로 작용할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>시장 전망</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0;">
+                <div class="highlight-box" style="margin: 0;">
+                    <h3>📊 단기 (1-3개월)</h3>
+                    <p style="font-size: 1.05rem; font-weight: 600; color: #D2691E; margin-bottom: 15px;">예상 레인지: 380-410¢</p>
+                    
+                    <p><strong>핵심 변수</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li style="margin-bottom: 8px;">브라질 50% 관세 유지로 공급 타이트 지속</li>
+                        <li style="margin-bottom: 8px;">대법원 판결 시 급락 가능성</li>
+                        <li style="margin-bottom: 8px;">BRL 약세로 브라질 판매 압력 증가</li>
+                        <li style="margin-bottom: 8px;">ICE 재고 19개월 최저가 하단 지지</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>시장 평가:</strong> 에콰도르·과테말라·엘살바도르 생산량 합산이 브라질의 10% 불과. 관세 철폐 효과 제한적.</p>
+                </div>
+
+                <div class="highlight-box" style="margin: 0;">
+                    <h3>🔮 중장기 (6-12개월)</h3>
+                    <p style="font-size: 1.05rem; font-weight: 600; color: #D2691E; margin-bottom: 15px;">핵심: 2026/27 브라질 작황</p>
+                    
+                    <p><strong>주요 시나리오</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li style="margin-bottom: 8px;"><strong>강세:</strong> 라니냐 건조 + 낮은 판매율(62%) → 급등 위험</li>
+                        <li style="margin-bottom: 8px;"><strong>약세:</strong> StoneX 7,070만백 달성 + 관세 합의 → 조정</li>
+                        <li style="margin-bottom: 8px;"><strong>중립:</strong> Volcafe 5년 연속 공급부족 전망이 하단 지지</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>정치 리스크:</strong> 대법원 판결(900억$ 환급), 브라질 협상, 2026 중간선거</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>⚖️ 리스크 매트릭스</h3>
+                <table style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">상승 촉매</th>
+                            <th style="width: 50%;">하락 촉매</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>대법원 IEEPA 관세 유지</td>
+                            <td>대법원 무효화 + 900억$ 환급</td>
+                        </tr>
+                        <tr>
+                            <td>브라질-미국 협상 결렬</td>
+                            <td>브라질 관세 조기 타결</td>
+                        </tr>
+                        <tr>
+                            <td>라니냐 강화로 건조 재부상</td>
+                            <td>2026/27 작황 대폭 개선</td>
+                        </tr>
+                        <tr>
+                            <td>ICE 재고 추가 급감</td>
+                            <td>브라질 생산자 대규모 출회</td>
+                        </tr>
+                        <tr>
+                            <td>베트남 기상 악화</td>
+                            <td>글로벌 경기 둔화로 수요 감소</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>심층 분석: 트럼프 관세 정책의 정치경제학</h2>
+            
+            <p>이번 주 트럼프 행정부의 관세 철폐 조치는 경제 정책이 아닌 정치적 압박에 의한 결정이라는 점에서 주목할 필요가 있습니다. 11월 초 버지니아와 뉴저지 지방선거에서 민주당이 승리하며 유권자들이 식료품 가격 인상에 대한 불만을 표출한 직후, 트럼프 행정부는 불과 며칠 만에 정책을 180도 전환했습니다.</p>
+
+            <p>CNN의 분석에 따르면 트럼프 대통령은 Fox News 인터뷰에서 "커피 관세를 인하하겠다"고 밝히며 사실상 관세가 소비자 가격에 전가된다는 점을 인정했습니다. 이는 그간 "관세는 외국이 부담한다"고 주장해온 것과 상반되는 발언입니다. Tax Foundation의 Erica York 부회장은 "트럼프와 그의 측근들이 관세가 소비자 가격을 상승시키는 세금이라는 점을 이해하고 있다는 증거이며, 평소에는 이를 부정해왔을 뿐"이라고 지적했습니다.</p>
+
+            <p>그러나 브라질에 대한 50% 관세는 여전히 유지되고 있습니다. 이는 경제적 논리가 아닌 Jair Bolsonaro 전 대통령에 대한 정치적 지지에서 비롯된 것으로, 미국의 커피 공급망에 구조적 왜곡을 초래하고 있습니다. 브라질은 미국 커피 수입의 30%를 차지하는 압도적 1위 공급국으로, 에콰도르·과테말라·엘살바도르를 합친 것보다 10배 이상 큰 규모입니다.</p>
+
+            <p>미국 로스터들은 이미 브라질산 커피 계약을 취소하고 페루, 온두라스, 멕시코, 에티오피아 등 대체 공급원을 모색하고 있으나, 브라질의 가격 경쟁력과 공급 안정성을 완전히 대체하기는 어려운 상황입니다. 이는 장기적으로 미국 소비자들이 더 높은 커피 가격을 지불해야 한다는 것을 의미합니다.</p>
+        </section>
+
+        <div class="footer">
+            <p style="font-size: 1rem; margin-bottom: 15px;"><strong>Published by Align Commodities</strong></p>
+            
+            <p style="font-size: 0.95rem; margin-bottom: 20px;">
+                💬 생두 구매 문의는 Contact Us (<a href="mailto:james.baek@aligncommodities.com" style="color: #D2691E; text-decoration: none;">james.baek@aligncommodities.com</a>)로 연락주세요.
+            </p>
+            
+            <p style="margin-top: 25px; margin-bottom: 10px;"><strong>보고서 정보</strong></p>
+            <p style="font-size: 0.85rem; color: #999 !important; margin-bottom: 20px;">
+                작성일: 2025년 11월 16일 | 분석 기간: 2025년 11월 9일 - 11월 16일
+            </p>
+            
+            <p style="margin-top: 20px; margin-bottom: 10px;"><strong>데이터 출처</strong></p>
+            <p style="font-size: 0.85rem; line-height: 1.8; color: #999 !important; margin-bottom: 20px;">
+                Bloomberg, Reuters, Comunicaffe International, Barchart, ABC News, Axios, NBC News, 
+                CNN Business, NPR, Daily Coffee News, White House Press Releases, 
+                ICE Futures U.S., ICE Futures Europe, StoneX, Safras & Mercado, 
+                Somar Meteorologia, NOAA, CECAFE (Brazilian Coffee Exporters Council)
+            </p>
+            
+            <p style="font-size: 0.85rem; color: #999 !important; margin-top: 25px;">
+                본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.
+            </p>
+            
+            <p style="margin-top: 15px; font-size: 0.75rem; color: #666 !important;">
+                © 2025 Align Commodities. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
