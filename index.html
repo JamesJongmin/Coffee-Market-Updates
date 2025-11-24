@@ -540,39 +540,54 @@
 
         /* 차트 미리보기 */
         .featured-chart {
-            background: var(--steam);
-            border-radius: 12px;
-            padding: 24px;
+            background: linear-gradient(135deg, rgba(232, 226, 217, 0.5), rgba(245, 240, 232, 0.3));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 28px;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(26, 15, 10, 0.03);
         }
 
         .chart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .chart-title {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--ink);
-            opacity: 0.5;
-        }
-
-        .chart-period {
-            font-size: 0.7rem;
             color: var(--ink);
             opacity: 0.4;
         }
 
+        .chart-period {
+            font-size: 0.65rem;
+            color: var(--ink);
+            opacity: 0.3;
+            letter-spacing: 0.05em;
+        }
+
         .chart-container {
             flex: 1;
-            min-height: 200px;
+            min-height: 180px;
             position: relative;
+            padding: 10px 0;
+        }
+        
+        .chart-container canvas {
+            opacity: 0;
+            animation: fadeInChart 0.8s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes fadeInChart {
+            to { opacity: 1; }
         }
 
         /* ========== 리포트 그리드 ========== */
@@ -705,9 +720,20 @@
 
         /* ========== 차트 대시보드 섹션 ========== */
         .dashboard-section {
-            padding: 60px 0;
-            background: var(--steam);
+            padding: 80px 0;
+            background: linear-gradient(180deg, rgba(232, 226, 217, 0.2) 0%, rgba(250, 248, 245, 0.5) 100%);
             margin: 60px 0;
+            position: relative;
+        }
+        
+        .dashboard-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(184, 115, 51, 0.1), transparent);
         }
 
         .dashboard-grid {
@@ -717,38 +743,49 @@
         }
 
         .dashboard-card {
-            background: white;
-            border-radius: 16px;
-            padding: 28px;
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 32px 28px 24px;
+            border: 1px solid rgba(26, 15, 10, 0.04);
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(26, 15, 10, 0.04);
         }
 
         .dashboard-card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            align-items: baseline;
+            margin-bottom: 24px;
         }
 
         .dashboard-card-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--ink);
-            opacity: 0.6;
+            opacity: 0.4;
         }
 
         .dashboard-card-value {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.3rem;
+            font-weight: 600;
             color: var(--espresso);
+            letter-spacing: -0.02em;
         }
 
         .chart-wrapper {
-            height: 180px;
+            height: 160px;
             position: relative;
+            padding: 10px 0;
         }
 
         .chart-loading {
@@ -756,9 +793,20 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--ink);
-            opacity: 0.4;
+            opacity: 0.3;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+        
+        .chart-wrapper canvas {
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
         /* ========== 뉴스레터 섹션 ========== */
@@ -1360,19 +1408,25 @@
                         datasets: [{
                             data: demoData,
                             borderColor: '#b87333',
-                            backgroundColor: 'rgba(184, 115, 51, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
+                            backgroundColor: 'transparent',
+                            borderWidth: 1.5,
+                            fill: false,
                             tension: 0.4,
                             pointRadius: 0,
-                            pointHoverRadius: 4
+                            pointHoverRadius: 0,
+                            pointHitRadius: 10
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
                         plugins: {
-                            legend: { display: false }
+                            legend: { display: false },
+                            tooltip: { enabled: false }
                         },
                         scales: {
                             x: { display: false },
@@ -1395,10 +1449,16 @@
                 const loading = document.getElementById(config.loading);
                 
                 if (canvas && loading) {
-                    // 데모 데이터 생성
-                    const demoData = Array.from({ length: 20 }, () => 
-                        Math.random() * 50 + (config.id === 'stocksChart' ? 350 : 100)
-                    );
+                    // 더 부드러운 데모 데이터 생성
+                    const points = 30;
+                    const demoData = [];
+                    let value = 100 + Math.random() * 20;
+                    
+                    for (let i = 0; i < points; i++) {
+                        value += (Math.random() - 0.5) * 10;
+                        value = Math.max(80, Math.min(150, value)); // 범위 제한
+                        demoData.push(value);
+                    }
 
                     setTimeout(() => {
                         loading.style.display = 'none';
@@ -1411,20 +1471,44 @@
                                 datasets: [{
                                     data: demoData,
                                     borderColor: config.color,
-                                    backgroundColor: `${config.color}15`,
-                                    borderWidth: 2,
-                                    fill: true,
-                                    tension: 0.3,
-                                    pointRadius: 0
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 1,
+                                    fill: false,
+                                    tension: 0.4,
+                                    pointRadius: 0,
+                                    pointHoverRadius: 0,
+                                    pointHitRadius: 0
                                 }]
                             },
                             options: {
                                 responsive: true,
                                 maintainAspectRatio: false,
-                                plugins: { legend: { display: false } },
+                                animation: {
+                                    duration: 1000,
+                                    easing: 'easeInOutQuart'
+                                },
+                                interaction: {
+                                    intersect: false,
+                                    mode: 'nearest'
+                                },
+                                plugins: { 
+                                    legend: { display: false },
+                                    tooltip: { enabled: false }
+                                },
                                 scales: {
-                                    x: { display: false },
-                                    y: { display: false }
+                                    x: { 
+                                        display: false,
+                                        grid: { display: false }
+                                    },
+                                    y: { 
+                                        display: false,
+                                        grid: { display: false }
+                                    }
+                                },
+                                elements: {
+                                    line: {
+                                        capBezierPoints: true
+                                    }
                                 }
                             }
                         });
