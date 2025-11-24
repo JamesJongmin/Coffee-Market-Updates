@@ -100,20 +100,27 @@
             letter-spacing: -0.02em;
         }
 
-        .nav-links {
+        /* 오른쪽 상단 네비게이션 메뉴 */
+        .nav-menu {
             display: flex;
             align-items: center;
-            gap: 32px;
+            gap: 40px;
+        }
+
+        .nav-item {
+            position: relative;
         }
 
         .nav-link {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
             color: var(--ink);
             text-decoration: none;
-            opacity: 0.6;
+            opacity: 0.7;
             transition: all 0.2s;
             letter-spacing: 0.01em;
+            text-transform: uppercase;
+            cursor: pointer;
         }
 
         .nav-link:hover {
@@ -121,20 +128,45 @@
             color: var(--copper);
         }
 
-        .nav-cta {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--paper);
-            background: var(--espresso);
-            padding: 10px 20px;
+        /* 드롭다운 메뉴 */
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 10px;
+            background: white;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 8px 0;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
 
-        .nav-cta:hover {
-            background: var(--roast);
-            transform: translateY(-1px);
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            margin-top: 20px;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            color: var(--ink);
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .dropdown-item:hover {
+            background: var(--steam);
+            color: var(--copper);
         }
 
         /* ========== 히어로 섹션 ========== */
@@ -246,137 +278,136 @@
         .stat-change.positive { color: var(--positive); }
         .stat-change.negative { color: var(--negative); }
 
-        /* ========== 가격 대시보드 카드 ========== */
-        .price-dashboard {
-            background: var(--espresso);
+        /* ========== 이벤트 캘린더 ========== */
+        .events-calendar {
+            background: white;
             border-radius: 20px;
-            padding: 32px;
-            color: var(--crema);
-            position: relative;
-            overflow: hidden;
+            padding: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(26, 15, 10, 0.05);
+            max-width: 420px;
         }
 
-        .price-dashboard::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            right: -30%;
-            width: 60%;
-            height: 60%;
-            background: radial-gradient(circle, rgba(184, 115, 51, 0.2) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .dashboard-header {
+        .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
-            position: relative;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .dashboard-title {
-            font-size: 0.7rem;
+        .calendar-title {
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            opacity: 0.6;
+            color: var(--espresso);
+            opacity: 0.8;
         }
 
-        .live-badge {
+        .calendar-month {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--copper);
+        }
+
+        .events-list {
             display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .event-item {
+            display: flex;
+            gap: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            transition: all 0.2s;
+            background: rgba(245, 240, 232, 0.3);
+        }
+
+        .event-item:hover {
+            background: rgba(245, 240, 232, 0.6);
+            transform: translateX(4px);
+        }
+
+        .event-item.upcoming {
+            background: rgba(184, 115, 51, 0.05);
+            border-left: 3px solid var(--copper);
+        }
+
+        .event-date {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: #4ade80;
-            letter-spacing: 0.05em;
+            justify-content: center;
+            min-width: 50px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
         }
 
-        .live-badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: #4ade80;
-            border-radius: 50%;
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        .price-main {
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .price-value {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 3rem;
+        .event-day {
+            font-size: 1.3rem;
             font-weight: 700;
-            letter-spacing: -0.02em;
+            color: var(--espresso);
             line-height: 1;
         }
 
-        .price-unit {
-            font-size: 1rem;
-            font-weight: 400;
-            opacity: 0.5;
-            margin-left: 4px;
-        }
-
-        .price-change {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.9rem;
+        .event-weekday {
+            font-size: 0.6rem;
             font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 6px;
-            margin-top: 8px;
+            letter-spacing: 0.08em;
+            color: var(--ink);
+            opacity: 0.5;
+            margin-top: 2px;
         }
 
-        .price-change.positive {
-            background: rgba(74, 222, 128, 0.15);
-            color: #4ade80;
+        .event-month-label {
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--copper);
+            margin-top: 4px;
         }
 
-        .price-change.negative {
-            background: rgba(248, 113, 113, 0.15);
-            color: #f87171;
-        }
-
-        .price-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .price-item {
+        .event-details {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            justify-content: center;
+            gap: 4px;
         }
 
-        .price-item-label {
-            font-size: 0.65rem;
-            opacity: 0.5;
-            letter-spacing: 0.05em;
-        }
-
-        .price-item-value {
-            font-size: 1.1rem;
+        .event-type {
+            display: inline-block;
+            font-size: 0.6rem;
             font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink);
+            opacity: 0.5;
         }
 
-        .price-item-change {
-            font-size: 0.75rem;
-            opacity: 0.7;
+        .event-type.coffee {
+            color: var(--copper);
+            opacity: 0.8;
+        }
+
+        .event-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin: 0;
+        }
+
+        .event-desc {
+            font-size: 0.8rem;
+            color: var(--ink);
+            opacity: 0.6;
+            margin: 0;
         }
 
         /* ========== 메인 콘텐츠 ========== */
@@ -955,8 +986,9 @@
                 gap: 40px;
             }
 
-            .price-dashboard {
+            .events-calendar {
                 max-width: 400px;
+                margin: 0 auto;
             }
 
             .featured-report {
@@ -975,7 +1007,7 @@
         }
 
         @media (max-width: 768px) {
-            .nav-links {
+            .nav-menu {
                 display: none;
             }
 
@@ -990,6 +1022,10 @@
             .hero-stats {
                 flex-wrap: wrap;
                 gap: 24px;
+            }
+
+            .events-calendar {
+                max-width: 100%;
             }
 
             .reports-grid {
@@ -1069,11 +1105,22 @@
             <a href="/" class="nav-brand">
                 <span class="nav-logo">Coffee Market</span>
             </a>
-            <div class="nav-links">
-                <a href="#reports" class="nav-link">Weekly Reports</a>
-                <a href="#dashboard" class="nav-link">Market Data</a>
-                <a href="#newsletter" class="nav-link">Newsletter</a>
-                <a href="mailto:james.baek@aligncommodities.com" class="nav-cta">Contact</a>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-link">Service</span>
+                    <div class="nav-dropdown">
+                        <a href="/weekly-report.html" class="dropdown-item">Weekly Report</a>
+                        <a href="/in-depth-analysis.html" class="dropdown-item">In-Depth Analysis</a>
+                        <a href="/fundamentals/fundamentals.html" class="dropdown-item">Fundamentals</a>
+                        <a href="/dashboards.html" class="dropdown-item">Dashboard</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -1101,30 +1148,57 @@
                     </div>
                 </div>
 
-                <!-- 가격 대시보드 -->
-                <div class="price-dashboard animate-in delay-2">
-                    <div class="dashboard-header">
-                        <span class="dashboard-title">ICE Arabica · KCZ25</span>
-                        <span class="live-badge">Live</span>
+                <!-- 이벤트 캘린더 -->
+                <div class="events-calendar animate-in delay-2">
+                    <div class="calendar-header">
+                        <span class="calendar-title">매크로/커피시장 주요 이벤트</span>
+                        <span class="calendar-month">November 2025</span>
                     </div>
-                    <div class="price-main">
-                        <span class="price-value" id="mainPrice">401.03</span>
-                        <span class="price-unit">¢/lb</span>
-                        <div class="price-change positive" id="mainChange">
-                            <span>↑</span>
-                            <span>+0.26%</span>
+                    <div class="events-list">
+                        <div class="event-item upcoming">
+                            <div class="event-date">
+                                <span class="event-day">25</span>
+                                <span class="event-weekday">MON</span>
+                            </div>
+                            <div class="event-details">
+                                <span class="event-type">MACRO</span>
+                                <h4 class="event-title">FOMC 회의록 공개</h4>
+                                <p class="event-desc">연준 금리 정책 향후 방향성</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="price-grid">
-                        <div class="price-item">
-                            <span class="price-item-label">3월물 (KCH26)</span>
-                            <span class="price-item-value" id="marchPrice">369.45¢</span>
-                            <span class="price-item-change">-1.91%</span>
+                        <div class="event-item upcoming">
+                            <div class="event-date">
+                                <span class="event-day">27</span>
+                                <span class="event-weekday">WED</span>
+                            </div>
+                            <div class="event-details">
+                                <span class="event-type coffee">COFFEE</span>
+                                <h4 class="event-title">브라질 수확 진행 보고서</h4>
+                                <p class="event-desc">CONAB 11월 작황 업데이트</p>
+                            </div>
                         </div>
-                        <div class="price-item">
-                            <span class="price-item-label">백워데이션</span>
-                            <span class="price-item-value" id="spreadValue">31.58¢</span>
-                            <span class="price-item-change">극심한 수준</span>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="event-day">29</span>
+                                <span class="event-weekday">FRI</span>
+                            </div>
+                            <div class="event-details">
+                                <span class="event-type">MACRO</span>
+                                <h4 class="event-title">미국 PCE 물가지수</h4>
+                                <p class="event-desc">인플레이션 핵심 지표</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="event-day">03</span>
+                                <span class="event-weekday">TUE</span>
+                                <span class="event-month-label">DEC</span>
+                            </div>
+                            <div class="event-details">
+                                <span class="event-type coffee">COFFEE</span>
+                                <h4 class="event-title">ICO 월간 보고서</h4>
+                                <p class="event-desc">글로벌 수급 밸런스 전망</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1148,7 +1222,7 @@
                 <div class="featured-content">
                     <span class="featured-tag">Latest Weekly</span>
                     <h3 class="featured-title">
-                        <a href="coffee-market-update-2025-11-23.html">관세 철폐 이후, 시장은 어디로</a>
+                        <a href="/Reports/2025/11/2025-11-23.html">관세 철폐 이후, 시장은 어디로</a>
                     </h3>
                     <p class="featured-summary">
                         트럼프 행정부의 브라질 커피 관세 완전 철폐에도 불구하고, 
@@ -1157,7 +1231,7 @@
                     </p>
                     <div class="featured-meta">
                         <span class="meta-date">2025년 11월 23일</span>
-                        <a href="coffee-market-update-2025-11-23.html" class="read-link">
+                        <a href="/Reports/2025/11/2025-11-23.html" class="read-link">
                             Read Report <span>→</span>
                         </a>
                     </div>
@@ -1201,19 +1275,19 @@
             <div class="dashboard-grid">
                 <div class="dashboard-card">
                     <div class="dashboard-card-header">
-                        <span class="dashboard-card-title">ICE Arabica (KC)</span>
-                        <span class="dashboard-card-value" id="arabicaValue">401.03¢</span>
+                        <span class="dashboard-card-title">Coffee Futures (KC)</span>
+                        <span class="dashboard-card-value" id="coffeeValue">401.03¢</span>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="chart-loading" id="arabicaLoading">Loading...</div>
-                        <canvas id="arabicaChart" style="display: none;"></canvas>
+                        <div class="chart-loading" id="coffeeLoading">Loading...</div>
+                        <canvas id="coffeeChart" style="display: none;"></canvas>
                     </div>
                 </div>
 
                 <div class="dashboard-card">
                     <div class="dashboard-card-header">
                         <span class="dashboard-card-title">USD/BRL</span>
-                        <span class="dashboard-card-value" id="brlValue">5.33</span>
+                        <span class="dashboard-card-value" id="brlValue">5.78</span>
                     </div>
                     <div class="chart-wrapper">
                         <div class="chart-loading" id="brlLoading">Loading...</div>
@@ -1223,23 +1297,23 @@
 
                 <div class="dashboard-card">
                     <div class="dashboard-card-header">
-                        <span class="dashboard-card-title">ICE Robusta (RM)</span>
-                        <span class="dashboard-card-value" id="robustaValue">$4,565</span>
+                        <span class="dashboard-card-title">CFTC Money Managed</span>
+                        <span class="dashboard-card-value" id="cftcValue">+45.2K</span>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="chart-loading" id="robustaLoading">Loading...</div>
-                        <canvas id="robustaChart" style="display: none;"></canvas>
+                        <div class="chart-loading" id="cftcLoading">Loading...</div>
+                        <canvas id="cftcChart" style="display: none;"></canvas>
                     </div>
                 </div>
 
                 <div class="dashboard-card">
                     <div class="dashboard-card-header">
-                        <span class="dashboard-card-title">ICE Certified Stocks</span>
-                        <span class="dashboard-card-value" id="stocksValue">405K bags</span>
+                        <span class="dashboard-card-title">NVDI</span>
+                        <span class="dashboard-card-value" id="nvdiValue">108.5</span>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="chart-loading" id="stocksLoading">Loading...</div>
-                        <canvas id="stocksChart" style="display: none;"></canvas>
+                        <div class="chart-loading" id="nvdiLoading">Loading...</div>
+                        <canvas id="nvdiChart" style="display: none;"></canvas>
                     </div>
                 </div>
             </div>
@@ -1334,35 +1408,63 @@
                 date: "2025-11-23",
                 type: "weekly",
                 summary: "트럼프 행정부 브라질 관세 완전 철폐. 26년 3월물 369.45센트, 베트남 홍수로 수확 10-15% 진행. 극심한 백워데이션 지속.",
-                url: "coffee-market-update-2025-11-23.html"
+                url: "/Reports/2025/11/2025-11-23.html"
             },
             {
                 title: "커피 선물 시장 주간 동향",
                 date: "2025-11-16",
                 type: "weekly",
                 summary: "브라질 관세 부분 철폐 기대감, ICE 재고 40만백 저점 지속. 베트남 태풍 칼마에기 영향 분석.",
-                url: "coffee-market-update-2025-11-16.html"
+                url: "/Reports/2025/11/2025-11-16.html"
+            },
+            {
+                title: "커피 선물 시장 주간 동향", 
+                date: "2025-11-08",
+                type: "weekly",
+                summary: "아라비카 400센트 돌파 후 조정. CFTC 투기적 롱 포지션 역사적 고점, 베트남 로부스타 수확 본격화.",
+                url: "/Reports/2025/11/2025-11-08.html"
+            },
+            {
+                title: "커피 선물 시장 주간 동향",
+                date: "2025-11-01",
+                type: "weekly",
+                summary: "3개월 백워데이션 35센트 기록. 브라질 아라비카 프리미엄 상승, 베트남 태풍 피해 평가 진행 중.",
+                url: "/Reports/2025/11/2025-11-01.html"
             },
             {
                 title: "커피 선물 시장 주간 동향",
                 date: "2025-10-31",
                 type: "weekly",
                 summary: "아라비카 선물 급등세 지속, ICE 재고 38만백으로 24년래 최저. 브라질 건조 지속 우려.",
-                url: "coffee-market-update-2025-10-31.html"
+                url: "/Reports/2025/10/2025-10-31.html"
             },
             {
                 title: "커피 선물 시장 주간 동향",
                 date: "2025-10-27",
                 type: "weekly",
                 summary: "관세 불확실성 속 가격 변동성 확대. 베트남 수확 시작, 브라질 날씨 모니터링 지속.",
-                url: "coffee-market-update-2025-10-27.html"
+                url: "/Reports/2025/10/2025-10-27.html"
             },
             {
                 title: "커피 가격 급등 딥다이브",
                 date: "2025-10-18",
                 type: "indepth",
                 summary: "퍼펙트 스톰: 기후 변화, 공급망 위기, 수요 급증이 동시에 발생하며 역사적인 가격 급등을 초래한 요인들을 심층 분석.",
-                url: "2025-10-18.html"
+                url: "/Reports/2025/10/2025-10-18.html"
+            },
+            {
+                title: "커피 선물 시장 주간 동향",
+                date: "2025-10-11",
+                type: "weekly",
+                summary: "백워데이션 심화로 근월물 강세. 브라질 강우량 평년 대비 70% 수준, 콜롬비아 생산 회복 지연.",
+                url: "/Reports/2025/10/2025-10-11.html"
+            },
+            {
+                title: "커피 선물 시장 주간 동향", 
+                date: "2025-10-04",
+                type: "weekly",
+                summary: "ICE 재고 40만백 하향 돌파. 베트남 태풍 피해 우려, 글로벌 수급 타이트 지속.",
+                url: "/Reports/2025/10/2025-10-04.html"
             }
         ];
 
@@ -1393,6 +1495,209 @@
                     </div>
                 </article>
             `).join('');
+        }
+
+        // ========== 구글 스프레드시트 연동 ==========
+        const GOOGLE_SHEETS_URLS = {
+            coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
+            usdbrl: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
+            cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
+            nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
+        };
+
+        // CSV 파싱 함수
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const result = [];
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) {
+                    const cells = line.split(',');
+                    result.push(cells);
+                }
+            }
+            return result;
+        }
+
+        // 날짜 변환 함수
+        function parseDate(dateValue) {
+            if (typeof dateValue === 'number') {
+                const date = new Date((dateValue - 25569) * 86400 * 1000);
+                return date;
+            } else if (typeof dateValue === 'string') {
+                return new Date(dateValue);
+            }
+            return new Date(dateValue);
+        }
+
+        // 구글 시트에서 데이터 읽기 함수
+        async function readGoogleSheetData(sheetKey) {
+            try {
+                const url = GOOGLE_SHEETS_URLS[sheetKey];
+                if (!url) {
+                    throw new Error(`Unknown sheet key: ${sheetKey}`);
+                }
+
+                console.log(`Fetching data from Google Sheets: ${sheetKey}`);
+                
+                let csvText;
+                
+                // CORS 프록시 사용 (AllOrigins)
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                
+                const proxyResponse = await fetch(proxyUrl);
+                if (!proxyResponse.ok) {
+                    throw new Error(`Failed to fetch: ${proxyResponse.status}`);
+                }
+                
+                const proxyData = await proxyResponse.json();
+                csvText = proxyData.contents;
+                
+                const data = parseCSV(csvText);
+                const dataRows = data.slice(1); // 헤더 제외
+                
+                const processedData = dataRows.map(row => ({
+                    date: row[0],
+                    value: row[1]
+                })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
+                
+                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                
+                console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
+                return processedData;
+                
+            } catch (error) {
+                console.error(`Error reading Google Sheet ${sheetKey}:`, error);
+                return null;
+            }
+        }
+
+        // 차트 생성 함수
+        async function createChart(chartId, loadingId, sheetKey, color, label) {
+            const canvas = document.getElementById(chartId);
+            const loading = document.getElementById(loadingId);
+            
+            if (!canvas || !loading) return;
+
+            try {
+                const data = await readGoogleSheetData(sheetKey);
+                
+                if (!data || data.length === 0) {
+                    // 데이터가 없으면 데모 데이터 사용
+                    const points = 30;
+                    const demoData = [];
+                    let value = 100 + Math.random() * 20;
+                    
+                    for (let i = 0; i < points; i++) {
+                        value += (Math.random() - 0.5) * 10;
+                        value = Math.max(80, Math.min(150, value));
+                        demoData.push(value);
+                    }
+
+                    loading.style.display = 'none';
+                    canvas.style.display = 'block';
+
+                    new Chart(canvas, {
+                        type: 'line',
+                        data: {
+                            labels: demoData.map((_, i) => ''),
+                            datasets: [{
+                                data: demoData,
+                                borderColor: color,
+                                backgroundColor: 'transparent',
+                                borderWidth: 1.5,
+                                fill: false,
+                                tension: 0.4,
+                                pointRadius: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { 
+                                legend: { display: false },
+                                tooltip: { enabled: false }
+                            },
+                            scales: {
+                                x: { display: false },
+                                y: { display: false }
+                            }
+                        }
+                    });
+                } else {
+                    // 실제 데이터 사용
+                    const chartData = data.slice(-60).map((row) => ({
+                        x: parseDate(row.date),
+                        y: parseFloat(row.value)
+                    })).filter(point => !isNaN(point.y));
+
+                    // 최신 값 업데이트
+                    if (chartData.length > 0) {
+                        const latestValue = chartData[chartData.length - 1].y;
+                        const valueElement = document.getElementById(chartId.replace('Chart', 'Value'));
+                        if (valueElement) {
+                            if (sheetKey === 'coffeefutures') {
+                                valueElement.textContent = `${latestValue.toFixed(2)}¢`;
+                            } else if (sheetKey === 'usdbrl') {
+                                valueElement.textContent = latestValue.toFixed(2);
+                            } else if (sheetKey === 'cftcpositions') {
+                                valueElement.textContent = latestValue > 0 ? `+${(latestValue/1000).toFixed(1)}K` : `${(latestValue/1000).toFixed(1)}K`;
+                            } else if (sheetKey === 'nvdi') {
+                                valueElement.textContent = latestValue.toFixed(1);
+                            }
+                        }
+                    }
+
+                    loading.style.display = 'none';
+                    canvas.style.display = 'block';
+
+                    new Chart(canvas, {
+                        type: sheetKey === 'cftcpositions' ? 'bar' : 'line',
+                        data: {
+                            datasets: [{
+                                label: label,
+                                data: chartData,
+                                borderColor: sheetKey === 'cftcpositions' ? undefined : color,
+                                backgroundColor: sheetKey === 'cftcpositions' 
+                                    ? chartData.map(d => d.y >= 0 ? 'rgba(74, 124, 89, 0.7)' : 'rgba(194, 58, 58, 0.7)')
+                                    : 'transparent',
+                                borderWidth: 1.5,
+                                fill: false,
+                                tension: 0.3,
+                                pointRadius: 0,
+                                pointHoverRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { 
+                                legend: { display: false },
+                                tooltip: {
+                                    enabled: true,
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            return new Date(tooltipItems[0].parsed.x).toLocaleDateString('ko-KR');
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: { 
+                                    type: 'time',
+                                    display: false
+                                },
+                                y: { 
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(`Error creating chart ${chartId}:`, error);
+                loading.innerHTML = '<span style="color: #999; font-size: 0.7rem;">Loading...</span>';
+            }
         }
 
         // ========== 차트 초기화 ==========
@@ -1436,85 +1741,11 @@
                 });
             }
 
-            // 대시보드 차트들
-            const chartConfigs = [
-                { id: 'arabicaChart', loading: 'arabicaLoading', color: '#b87333' },
-                { id: 'brlChart', loading: 'brlLoading', color: '#4a7c59' },
-                { id: 'robustaChart', loading: 'robustaLoading', color: '#3d2314' },
-                { id: 'stocksChart', loading: 'stocksLoading', color: '#c23a3a' }
-            ];
-
-            chartConfigs.forEach(config => {
-                const canvas = document.getElementById(config.id);
-                const loading = document.getElementById(config.loading);
-                
-                if (canvas && loading) {
-                    // 더 부드러운 데모 데이터 생성
-                    const points = 30;
-                    const demoData = [];
-                    let value = 100 + Math.random() * 20;
-                    
-                    for (let i = 0; i < points; i++) {
-                        value += (Math.random() - 0.5) * 10;
-                        value = Math.max(80, Math.min(150, value)); // 범위 제한
-                        demoData.push(value);
-                    }
-
-                    setTimeout(() => {
-                        loading.style.display = 'none';
-                        canvas.style.display = 'block';
-
-                        new Chart(canvas, {
-                            type: 'line',
-                            data: {
-                                labels: demoData.map((_, i) => ''),
-                                datasets: [{
-                                    data: demoData,
-                                    borderColor: config.color,
-                                    backgroundColor: 'transparent',
-                                    borderWidth: 1,
-                                    fill: false,
-                                    tension: 0.4,
-                                    pointRadius: 0,
-                                    pointHoverRadius: 0,
-                                    pointHitRadius: 0
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                animation: {
-                                    duration: 1000,
-                                    easing: 'easeInOutQuart'
-                                },
-                                interaction: {
-                                    intersect: false,
-                                    mode: 'nearest'
-                                },
-                                plugins: { 
-                                    legend: { display: false },
-                                    tooltip: { enabled: false }
-                                },
-                                scales: {
-                                    x: { 
-                                        display: false,
-                                        grid: { display: false }
-                                    },
-                                    y: { 
-                                        display: false,
-                                        grid: { display: false }
-                                    }
-                                },
-                                elements: {
-                                    line: {
-                                        capBezierPoints: true
-                                    }
-                                }
-                            }
-                        });
-                    }, 500 + Math.random() * 500);
-                }
-            });
+            // 대시보드 차트들 - 구글 스프레드시트 연동
+            createChart('coffeeChart', 'coffeeLoading', 'coffeefutures', '#b87333', 'Coffee Futures');
+            createChart('brlChart', 'brlLoading', 'usdbrl', '#4a7c59', 'USD/BRL');
+            createChart('cftcChart', 'cftcLoading', 'cftcpositions', '#3d2314', 'CFTC Positions');
+            createChart('nvdiChart', 'nvdiLoading', 'nvdi', '#c23a3a', 'NVDI');
         }
 
         // ========== 초기화 ==========
