@@ -1,384 +1,699 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GX9R36120J');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>In-depth Analysis - Coffee Market Updates</title>
+    <title>In-depth Analysis | Coffee Market Info</title>
+    <meta name="description" content="커피 시장 심층 분석 보고서. 특별 이슈와 구조적 변화에 대한 깊이 있는 분석을 제공합니다.">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            line-height: 1.7;
-            color: #1e293b;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            min-height: 100vh;
-            font-weight: 400;
-            letter-spacing: -0.01em;
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --border: rgba(26, 15, 10, 0.08);
         }
-        
-        .container {
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== 상단 네비게이션 ========== */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 56px;
+            box-shadow: 0 1px 30px rgba(0,0,0,0.06);
+        }
+
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px 20px;
-        }
-        
-        h1 {
-            font-size: 2.8em;
-            color: #0f172a;
-            margin-bottom: 24px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #0f172a 0%, #7c3aed 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            font-size: 1.4em;
-            color: #64748b;
-            margin-bottom: 32px;
-            font-weight: 400;
-            letter-spacing: -0.01em;
-        }
-        
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-            color: white;
-            padding: 14px 28px;
-            border-radius: 32px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-bottom: 40px;
-            box-shadow: 0 8px 25px -8px rgba(124, 58, 237, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            letter-spacing: -0.01em;
-        }
-        
-        .back-button:hover {
-            transform: translateX(-6px);
-            box-shadow: 0 12px 35px -8px rgba(124, 58, 237, 0.7);
-        }
-        
-        .info-section {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            padding: 48px;
-            border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            margin-bottom: 40px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .info-title {
-            font-size: 2em;
-            color: #7c3aed;
-            margin-bottom: 24px;
+            padding: 0 clamp(20px, 5vw, 48px);
+            height: 100%;
             display: flex;
             align-items: center;
-            gap: 16px;
-            font-weight: 700;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
             letter-spacing: -0.02em;
         }
-        
-        .info-content {
-            color: #64748b;
-            line-height: 1.8;
-            font-weight: 400;
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
         }
-        
-        /* 리포트 그리드 스타일 (index.html과 동일) */
-        .reports-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
         }
-        
-        .report-card {
-            background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(196, 181, 253, 0.2);
+
+        .nav-link:hover,
+        .nav-link.active {
+            opacity: 1;
+            color: var(--copper);
+        }
+
+        .nav-cta {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--paper);
+            background: var(--espresso);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--roast);
+            transform: translateY(-1px);
+        }
+
+        /* 모바일 메뉴 버튼 */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
             cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--espresso);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        /* ========== 페이지 헤더 ========== */
+        .page-header {
+            padding: 140px 0 60px;
+            background: linear-gradient(180deg, var(--paper) 0%, var(--steam) 100%);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
-        
-        .report-card::before {
+
+        .page-header::before {
             content: '';
             position: absolute;
             top: -50%;
-            right: -50%;
-            width: 200%;
+            right: -20%;
+            width: 80%;
             height: 200%;
-            background-image: url('coffee-beans-pattern.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.08;
-            transform: rotate(45deg);
-            transition: opacity 0.3s ease;
+            background: radial-gradient(ellipse, rgba(184, 115, 51, 0.06) 0%, transparent 60%);
+            pointer-events: none;
         }
-        
-        .report-card:hover::before {
-            opacity: 0.15;
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            text-align: center;
         }
-        
-        .report-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(124, 58, 237, 0.25);
-            border-color: rgba(124, 58, 237, 0.4);
-        }
-        
-        .report-date {
-            font-size: 0.875em;
-            color: #7c3aed;
+
+        .page-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
             font-weight: 600;
-            margin-bottom: 12px;
-            letter-spacing: 0.025em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 20px;
         }
-        
-        .report-title {
-            font-size: 1.375em;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 16px;
-            line-height: 1.4;
-            position: relative;
+
+        .page-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--copper);
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--espresso);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--ink);
+            opacity: 0.7;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ========== 메인 컨텐츠 ========== */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px clamp(20px, 5vw, 48px);
+        }
+
+        /* ========== 정보 섹션 ========== */
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 48px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            margin-bottom: 60px;
+        }
+
+        .info-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            letter-spacing: -0.025em;
+            gap: 16px;
+            margin-bottom: 32px;
         }
-        
+
+        .info-icon {
+            font-size: 2rem;
+        }
+
+        .info-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--espresso);
+        }
+
+        .info-content {
+            color: var(--ink);
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .info-content ul {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .info-content li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .info-content li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            background: var(--copper);
+            border-radius: 50%;
+        }
+
+        .info-content strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        /* ========== 리포트 그리드 ========== */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .report-card:hover {
+            border-color: rgba(184, 115, 51, 0.2);
+            box-shadow: 0 8px 30px rgba(26, 15, 10, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .report-type {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--positive);
+            margin-bottom: 12px;
+        }
+
+        .report-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--espresso);
+            margin-bottom: 12px;
+            line-height: 1.35;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
         .new-badge {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
-            font-size: 0.7em;
+            font-size: 0.6rem;
             font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 16px;
+            padding: 4px 10px;
+            border-radius: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.39);
-            animation: pulse 2s infinite;
+            letter-spacing: 0.5px;
+            animation: pulse-badge 2s infinite;
             flex-shrink: 0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 4px 8px rgba(231, 76, 60, 0.5);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
-            }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
-        
+
         .report-summary {
-            font-size: 0.95em;
-            color: #64748b;
-            line-height: 1.7;
-            margin-bottom: 18px;
-            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--ink);
+            opacity: 0.65;
+            line-height: 1.65;
+            margin-bottom: 20px;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
-        
+
         .report-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
+            gap: 6px;
+            margin-bottom: 16px;
         }
-        
+
         .tag {
-            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-            letter-spacing: 0.025em;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--steam);
+            color: var(--ink);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
         }
-        
-        .read-more {
-            display: inline-flex;
+
+        .report-footer {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            color: #7c3aed;
-            font-weight: 700;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .report-date {
+            font-size: 0.8rem;
+            color: var(--ink);
+            opacity: 0.4;
+        }
+
+        .read-link {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--espresso);
             text-decoration: none;
-            font-size: 0.95em;
-            transition: all 0.3s ease;
-            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
         }
-        
-        .read-more:hover {
-            color: #5b21b6;
-            transform: translateX(4px);
+
+        .read-link:hover {
+            color: var(--copper);
+            gap: 10px;
         }
-        
-        .read-more::after {
-            content: " →";
-            margin-left: 5px;
-            transition: margin-left 0.3s ease;
-        }
-        
-        .read-more:hover::after {
-            margin-left: 10px;
-        }
-        
+
+        /* ========== 로딩 상태 ========== */
         .loading-spinner {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 200px;
-            font-size: 1.1em;
-            color: #666;
+            font-size: 0.9rem;
+            color: var(--ink);
+            opacity: 0.5;
         }
-        
+
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #8B4513;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--border);
+            border-top-color: var(--copper);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
             animation: spin 1s linear infinite;
             margin-right: 15px;
         }
-        
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
-        
+
         .no-results {
             text-align: center;
             padding: 60px 20px;
-            color: #666;
-            font-size: 1.1em;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            color: var(--ink);
         }
-        
+
+        .no-results h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--espresso);
+            margin-bottom: 12px;
+        }
+
+        .no-results p {
+            opacity: 0.6;
+        }
+
+        /* ========== 푸터 ========== */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .footer-desc {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            max-width: 400px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-link {
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            font-size: 0.75rem;
+            opacity: 0.4;
+            text-align: center;
+        }
+
+        /* ========== 반응형 ========== */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+            .nav-links {
+                display: none;
             }
-            
-            h1 {
-                font-size: 1.8em;
-                line-height: 1.3;
+
+            .mobile-menu-btn {
+                display: flex;
             }
-            
-            .subtitle {
-                font-size: 1.1em;
-                line-height: 1.5;
+
+            .page-header {
+                padding: 100px 0 40px;
             }
-            
-            .info-content {
-                font-size: 0.95em;
-                line-height: 1.6;
+
+            .info-section {
+                padding: 32px 24px;
             }
-            
+
             .reports-grid {
                 grid-template-columns: 1fr;
             }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
         }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5em;
+
+        /* ========== 애니메이션 ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            
-            .subtitle {
-                font-size: 1em;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
-            
-            .info-content {
-                font-size: 0.9em;
-                line-height: 1.7;
-            }
-            
-            .report-card h3 {
-                font-size: 1.1em;
-                line-height: 1.4;
-            }
-            
-            .report-card p {
-                font-size: 0.9em;
-                line-height: 1.6;
-            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* 스크롤 진행바 */
+        .scroll-progress {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            height: 2px;
+            background: var(--copper);
+            z-index: 999;
+            transition: width 0.1s;
+        }
+
+        .top-nav.scrolled + .scroll-progress,
+        .top-nav.scrolled ~ .scroll-progress {
+            top: 56px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-button">
-            ← 메인 페이지로 돌아가기
-        </a>
-        
-        <div class="header">
-            <h1> In-depth Analysis</h1>
-            <p class="subtitle">커피 시장 심층 분석 보고서</p>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-logo">Coffee Market Info</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="weekly-report.html" class="nav-link">Weekly Report</a>
+                <a href="in-depth-analysis.html" class="nav-link active">In-depth Analysis</a>
+                <a href="fundamentals/fundamentals.html" class="nav-link">Fundamentals</a>
+                <a href="mailto:james.baek@aligncommodities.com" class="nav-cta">Contact</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
-        
-        <div class="info-section">
-            <h2 class="info-title">
-                🔍 In-depth 분석 리포트
-            </h2>
+    </nav>
+
+    <!-- 페이지 헤더 -->
+    <header class="page-header">
+        <div class="page-container">
+            <div class="page-tag">Special Analysis</div>
+            <h1 class="page-title">커피 시장 심층 분석</h1>
+            <p class="page-subtitle">
+                특별 이슈와 구조적 변화에 대한 깊이 있는 분석. 
+                장기 트렌드와 시장 충격 요인을 전문적으로 다룹니다.
+            </p>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-container">
+        <!-- 정보 섹션 -->
+        <section class="info-section">
+            <div class="info-header">
+                <span class="info-icon">🔍</span>
+                <h2 class="info-title">In-depth 분석 리포트</h2>
+            </div>
             <div class="info-content">
                 <p>커피 시장의 특별 이슈와 심층 분석을 다루는 보고서들입니다. 주간 동향 외에 특정 주제에 대한 깊이 있는 분석을 제공합니다.</p>
-                           
+                
                 <ul>
-                    <li></strong>단기 가격 전망과 방향성 분석</li>
-                    <li></strong>기술적 분석과 차트 패턴</li>
-                    <li></strong>특별 이벤트 및 시장 충격 분석</li>
-                    <li></strong>장기 트렌드와 구조적 변화</li>
-                    <li></strong>인포 그래픽 및 시각화 자료</li> 
+                    <li><strong>단기 가격 전망과 방향성 분석</strong></li>
+                    <li><strong>기술적 분석과 차트 패턴</strong></li>
+                    <li><strong>특별 이벤트 및 시장 충격 분석</strong></li>
+                    <li><strong>장기 트렌드와 구조적 변화</strong></li>
+                    <li><strong>인포그래픽 및 시각화 자료</strong></li>
                 </ul>
             </div>
-        </div>
-        
+        </section>
+
+        <!-- 로딩 스피너 -->
         <div id="loadingSpinner" class="loading-spinner">
             <div class="spinner"></div>
             리포트를 불러오는 중...
         </div>
-        
+
+        <!-- 리포트 그리드 -->
         <div class="reports-grid" id="reportsGrid" style="display: none;">
             <!-- 심층 분석 리포트들이 여기에 동적으로 추가됩니다 -->
         </div>
-        
+
+        <!-- 결과 없음 -->
         <div class="no-results" id="noResults" style="display: none;">
             <h3>심층 분석 리포트가 없습니다</h3>
             <p>아직 심층 분석 리포트가 등록되지 않았습니다.</p>
         </div>
-    </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다.
+                        Align Commodities & Yellowknife 발행.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html" class="footer-link">Home</a>
+                    <a href="weekly-report.html" class="footer-link">Weekly Report</a>
+                    <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
+                    <a href="https://github.com/jamesjongmin/Coffee-Market-Updates" class="footer-link" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2025 Align Commodities. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
     <script>
+        // 스크롤 효과
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const topNav = document.getElementById('topNav');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+            scrollProgress.style.width = (scrollTop / scrollHeight) * 100 + '%';
+            topNav.classList.toggle('scrolled', scrollTop > 100);
+        });
+
         // 동적으로 리포트 파일 목록 가져오기
         async function getReportFiles() {
             try {
@@ -398,6 +713,9 @@
             
             // 폴백: 하드코딩된 파일 목록
             return [
+                'Reports/2025/08/2025-08-17.html',
+                'Reports/2025/08/2025-08-11.html',
+                'Reports/2025/08/2025-08-04.html',
                 'Reports/2025/07/2025-07-29.html',
                 'Reports/2025/07/2025-07-26.html',       
                 'Reports/2025/07/2025-07-25.html',       
@@ -701,7 +1019,7 @@
         // 리포트 카드 생성 함수
         function createReportCard(report) {
             const card = document.createElement('div');
-            card.className = 'report-card';
+            card.className = 'report-card animate-in';
             card.onclick = () => window.location.href = report.link;
             
             const tagsHtml = report.tags ? report.tags.map(tag => 
@@ -712,14 +1030,17 @@
             const isLatest = new Date().getTime() - new Date(report.date).getTime() < 7 * 24 * 60 * 60 * 1000; // 7일 이내
             
             card.innerHTML = `
+                <span class="report-type">Analysis</span>
                 <h3 class="report-title">
                     <span>${report.title || '제목 없음'}</span>
                     ${isLatest ? '<span class="new-badge">NEW</span>' : ''}
                 </h3>
-                <p class="report-date">${report.displayDate || report.date}</p>
                 <p class="report-summary">${report.summary || '요약 정보가 없습니다.'}</p>
-                <div class="report-tags">${tagsHtml}</div>
-                <a href="${report.link}" class="read-more">자세히 보기 →</a>
+                ${tagsHtml ? `<div class="report-tags">${tagsHtml}</div>` : ''}
+                <div class="report-footer">
+                    <span class="report-date">${report.displayDate || report.date}</span>
+                    <a href="${report.link}" class="read-link">Read Report <span>→</span></a>
+                </div>
             `;
             
             return card;

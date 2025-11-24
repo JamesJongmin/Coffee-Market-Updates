@@ -1,305 +1,357 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GX9R36120J');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fundamentals - Coffee Market Updates</title>
+    <title>Fundamentals | Coffee Market Info</title>
+    <meta name="description" content="글로벌 커피 시장의 수급 동향 및 펀더멘털 분석. 주요국 수출입 데이터와 시장 흐름을 시각화합니다.">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            line-height: 1.7;
-            color: #1e293b;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            min-height: 100vh;
-            font-weight: 400;
-            letter-spacing: -0.01em;
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --border: rgba(26, 15, 10, 0.08);
         }
-        
-        .container {
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== 상단 네비게이션 ========== */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 56px;
+            box-shadow: 0 1px 30px rgba(0,0,0,0.06);
+        }
+
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 clamp(20px, 5vw, 48px);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px 20px;
-            margin-top: 20px;
-        }
-        
-        h1 {
-            font-size: 2.8em;
-            color: #0f172a;
-            margin-bottom: 24px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #0f172a 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            font-size: 1.4em;
-            color: #64748b;
-            margin-bottom: 32px;
-            font-weight: 400;
-            letter-spacing: -0.01em;
-        }
-        
-        .fundamentals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-        
-        .fundamental-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-            border-radius: 20px;
-            padding: 36px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            backdrop-filter: blur(10px);
-        }
-        
-        .fundamental-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(5, 150, 105, 0.25);
-            border-color: rgba(5, 150, 105, 0.4);
-        }
-        
-        .card-icon {
-            font-size: 3em;
-            margin-bottom: 20px;
-            text-align: center;
-            display: block;
-        }
-        
-        .card-title {
-            font-size: 1.625em;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 18px;
-            text-align: center;
-            letter-spacing: -0.025em;
-        }
-        
-        .card-content {
-            color: #64748b;
-            line-height: 1.7;
-            font-weight: 400;
-        }
-        
-        .stat-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.875em;
-            font-weight: 800;
-            color: #059669;
-            letter-spacing: -0.02em;
-        }
-        
-        .stat-label {
-            font-size: 0.875em;
-            color: #64748b;
-            margin-top: 6px;
-            font-weight: 500;
-        }
-        
-        .back-button {
-            display: inline-flex;
+
+        .nav-brand {
+            display: flex;
             align-items: center;
             gap: 12px;
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            color: white;
-            padding: 14px 28px;
-            border-radius: 32px;
             text-decoration: none;
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
             font-weight: 600;
-            transition: all 0.3s ease;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            opacity: 1;
+            color: var(--copper);
+        }
+
+        .nav-cta {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--paper);
+            background: var(--espresso);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--roast);
+            transform: translateY(-1px);
+        }
+
+        /* 모바일 메뉴 버튼 */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--espresso);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        /* ========== 페이지 헤더 ========== */
+        .page-header {
+            padding: 140px 0 60px;
+            background: linear-gradient(180deg, var(--paper) 0%, var(--steam) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(184, 115, 51, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            text-align: center;
+        }
+
+        .page-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 20px;
+        }
+
+        .page-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--copper);
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--espresso);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--ink);
+            opacity: 0.7;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ========== 메인 컨테이너 ========== */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px clamp(20px, 5vw, 48px);
+        }
+
+        /* ========== 섹션 헤더 ========== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 40px;
-            box-shadow: 0 8px 25px -8px rgba(5, 150, 105, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            letter-spacing: -0.01em;
         }
-        
-        .back-button:hover {
-            transform: translateX(-6px);
-            box-shadow: 0 12px 35px -8px rgba(5, 150, 105, 0.7);
-        }
-        
-        .supply-demand-section {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .section-title {
-            font-size: 2.25em;
-            color: #059669;
-            margin-bottom: 24px;
+
+        .section-title-group {
             display: flex;
             align-items: center;
             gap: 16px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
         }
-        
-        .balance-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .balance-table th {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            color: white;
-            padding: 14px;
-            text-align: left;
+
+        .section-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
             font-weight: 600;
+            color: var(--copper);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--espresso);
             letter-spacing: -0.01em;
         }
-        
-        .balance-table td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border), transparent);
+            margin-left: 24px;
         }
-        
-        .balance-table tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .trend-indicator {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-        
-        .trend-up {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .trend-down {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .trend-neutral {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        /* Dashboard specific styles */
+
+        /* ========== 대시보드 컨테이너 ========== */
         .dashboard-container {
-            margin-top: 50px;
+            margin-top: 60px;
         }
-        
+
         .dashboard-header {
             text-align: center;
-            margin-bottom: 40px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            margin-bottom: 48px;
+            background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
         }
-        
+
         .dashboard-title {
-            font-size: 1.75em;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 16px;
-            letter-spacing: -0.025em;
-            word-break: keep-all;
-            line-height: 1.3;
-            background: linear-gradient(135deg, #0f172a 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .dashboard-subtitle {
-            font-size: 1em;
-            color: #64748b;
-            margin-bottom: 16px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
             font-weight: 500;
-            letter-spacing: -0.015em;
-            word-break: keep-all;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1rem;
+            color: var(--ink);
+            opacity: 0.6;
+            margin-bottom: 16px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
             line-height: 1.4;
         }
-        
+
+        /* ========== 차트 그리드 ========== */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 30px;
+            gap: 32px;
         }
-        
+
         .chart-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            background: white;
             border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            backdrop-filter: blur(10px);
+            padding: 36px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
         }
-        
+
         .chart-header {
             text-align: center;
             margin-bottom: 35px;
         }
-        
+
         .chart-title {
-            font-size: 1.875em;
-            font-weight: 800;
-            color: #0f172a;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--espresso);
             margin-bottom: 12px;
-            letter-spacing: -0.025em;
-            background: linear-gradient(135deg, #0f172a 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: -0.01em;
         }
-        
+
         .chart-subtitle {
-            font-size: 1em;
-            color: #64748b;
+            font-size: 0.9rem;
+            color: var(--ink);
+            opacity: 0.5;
             margin-bottom: 6px;
-            font-weight: 500;
+            font-weight: 400;
         }
-        
+
         .chart-source {
-            font-size: 0.875em;
-            color: #94a3b8;
-            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--ink);
+            opacity: 0.3;
+            font-weight: 400;
             font-style: normal;
         }
-        
+
         .chart-container {
             position: relative;
             height: 450px;
             margin-bottom: 20px;
         }
-        
+
+        /* ========== 레전드 커스텀 ========== */
         .legend-custom {
             display: flex;
             justify-content: center;
@@ -307,115 +359,194 @@
             margin-top: 25px;
             flex-wrap: wrap;
             padding: 20px;
-            background: rgba(248, 250, 252, 0.8);
+            background: var(--steam);
             border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            border: 1px solid var(--border);
         }
-        
+
         .legend-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.875em;
+            font-size: 0.8rem;
             font-weight: 500;
-            color: #334155;
+            color: var(--ink);
         }
-        
+
         .legend-color {
             width: 20px;
             height: 20px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
         .legend-line {
             width: 32px;
             height: 4px;
             border-radius: 2px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
+        /* ========== 트렌드 분석 ========== */
         .trend-analysis {
             margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #fef3e2 0%, #fed7aa 100%);
+            padding: 28px;
+            background: linear-gradient(135deg, var(--crema) 0%, var(--steam) 100%);
             border-radius: 16px;
-            border-left: 5px solid #f59e0b;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--copper);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
         }
-        
+
         .trend-title {
-            font-size: 1.125em;
-            font-weight: 700;
-            color: #0f172a;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--espresso);
             margin-bottom: 15px;
-            letter-spacing: -0.015em;
+            letter-spacing: -0.01em;
         }
-        
+
         .trend-content {
             font-size: 0.95em;
             line-height: 1.7;
-            color: #374151;
+            color: var(--ink);
             margin: 0;
-            font-weight: 500;
+            font-weight: 400;
         }
-        
+
         .trend-content strong {
-            color: #b45309;
-            font-weight: 700;
+            color: var(--copper);
+            font-weight: 600;
         }
-        
+
+        /* ========== 통계 섹션 ========== */
         .stats-section {
             margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            padding: 28px;
+            background: white;
             border-radius: 16px;
-            border: 1px solid rgba(148, 163, 184, 0.2);
+            border: 1px solid var(--border);
         }
-        
+
         .stats-title {
-            font-size: 1.25em;
-            font-weight: 700;
-            margin-bottom: 18px;
-            color: #0f172a;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+            color: var(--espresso);
             text-align: center;
-            letter-spacing: -0.015em;
+            letter-spacing: -0.01em;
         }
-        
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
+            gap: 20px;
         }
-        
+
         .stat-item {
             text-align: center;
             padding: 20px 16px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            background: var(--paper);
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
+
         .stat-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
         }
-        
+
+        .stat-value {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--ink);
+            opacity: 0.5;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        /* ========== 업데이트 노트 ========== */
         .update-note {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border: 1px solid #f59e0b;
+            background: linear-gradient(135deg, var(--crema) 0%, var(--steam) 100%);
+            border: 1px solid var(--copper);
             border-radius: 12px;
             padding: 16px;
             margin-top: 20px;
             text-align: center;
-            color: #92400e;
-            font-size: 0.875em;
-            font-weight: 600;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            color: var(--copper);
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
         }
-        
+
+        /* ========== 푸터 ========== */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .footer-desc {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            max-width: 400px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-link {
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            font-size: 0.75rem;
+            opacity: 0.4;
+            text-align: center;
+        }
+
+        /* ========== 반응형 ========== */
         @media (max-width: 1024px) {
             .dashboard-container {
                 padding: 10px;
@@ -425,36 +556,27 @@
                 height: 400px;
             }
         }
-        
+
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
             .page-header {
-                margin: 40px 0 30px 0;
-                padding: 30px 15px;
+                padding: 100px 0 40px;
             }
             
             .page-title {
-                font-size: 2.2em;
-            }
-            
-            .page-subtitle {
-                font-size: 1.1em;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .fundamentals-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .balance-table {
-                font-size: 0.9em;
+                font-size: 2rem;
             }
             
             .dashboard-header,
             .chart-card {
-                padding: 20px;
+                padding: 24px;
             }
             
             .chart-container {
@@ -468,36 +590,113 @@
             .stats-grid {
                 grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+        }
+
+        /* ========== 애니메이션 ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* 스크롤 진행바 */
+        .scroll-progress {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            height: 2px;
+            background: var(--copper);
+            z-index: 999;
+            transition: width 0.1s;
+        }
+
+        .top-nav.scrolled + .scroll-progress,
+        .top-nav.scrolled ~ .scroll-progress {
+            top: 56px;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <a href="../index.html" class="back-button">
-            <span>←</span>
-            <span>메인으로 돌아가기</span>
-        </a>
-        
-        <div class="header">
-            <h1>Coffee Market Fundamentals</h1>
-            <p class="subtitle">글로벌 수급 동향 및 Flow</p>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-brand">
+                <span class="nav-logo">Coffee Market Info</span>
+            </a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../weekly-report.html" class="nav-link">Weekly Report</a>
+                <a href="../in-depth-analysis.html" class="nav-link">In-depth Analysis</a>
+                <a href="fundamentals.html" class="nav-link active">Fundamentals</a>
+                <a href="mailto:james.baek@aligncommodities.com" class="nav-cta">Contact</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
-        
+    </nav>
+
+    <!-- 페이지 헤더 -->
+    <header class="page-header">
+        <div class="page-container">
+            <div class="page-tag">Market Fundamentals</div>
+            <h1 class="page-title">Coffee Market Fundamentals</h1>
+            <p class="page-subtitle">
+                글로벌 커피 시장의 수급 동향과 주요국 수출입 데이터. 
+                실시간 차트로 시장 흐름을 분석합니다.
+            </p>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-container">
         <!-- 주요국 수출입 동향 섹션 -->
-        <div class="dashboard-container">
+        <section class="dashboard-container">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-number">01</span>
+                    <h2 class="section-title">주요국 수출입 동향</h2>
+                    <div class="section-line"></div>
+                </div>
+            </div>
+            
             <!-- 대시보드 헤더 -->
             <div class="dashboard-header">
-                <h1 class="dashboard-title">주요국 수출입 동향</h1>
-                <p class="dashboard-subtitle">브라질 커피 수출입 동향 및 전년 동기 대비 분석</p>
+                <h2 class="dashboard-title">브라질 커피 수출입 동향</h2>
+                <p class="dashboard-subtitle">2024년 vs 2025년 월별 비교 및 전년 동기 대비 분석</p>
             </div>
             
             <!-- 차트 그리드 -->
             <div class="charts-grid">
-                <!-- 미국향 브라질 수출 차트 -->
-                <div class="chart-card">
+                <!-- 브라질 수출 차트 -->
+                <div class="chart-card animate-in">
                     <div class="chart-header">
-                        <h2 class="chart-title">브라질 생두 수출량</h2>
+                        <h3 class="chart-title">브라질 생두 수출량</h3>
                         <p class="chart-subtitle">2024년 vs 2025년 월별 비교 및 전년 동기 대비 변화율</p>
                         <p class="chart-source">출처: LSEG</p>
                     </div>
@@ -512,12 +711,12 @@
                             <span>2024년 (10만톤)</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-color" style="background-color: #8B4513;"></div>
+                            <div class="legend-color" style="background-color: var(--copper);"></div>
                             <span>2025년 (10만톤)</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-line" style="background: linear-gradient(to right, #3498db, #FF6B35); height: 4px;"></div>
-                            <span>전년 동기 대비 변화율 (+ 파란색, - 주황색)</span>
+                            <div class="legend-line" style="background: linear-gradient(to right, var(--positive), var(--negative)); height: 4px;"></div>
+                            <span>전년 동기 대비 변화율</span>
                         </div>
                     </div>
                     
@@ -535,15 +734,15 @@
                         <h3 class="stats-title">📊 주요 통계</h3>
                         <div class="stats-grid">
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #FF6B35;">-16.8%</div>
+                                <div class="stat-value" style="color: var(--negative);">-16.8%</div>
                                 <div class="stat-label">평균 변화율</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #8B4513;">246천톤</div>
+                                <div class="stat-value" style="color: var(--copper);">246천톤</div>
                                 <div class="stat-label">2025년 최고 (1월)</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #8B4513;">134천톤</div>
+                                <div class="stat-value" style="color: var(--copper);">134천톤</div>
                                 <div class="stat-label">2025년 최저 (6월)</div>
                             </div>
                             <div class="stat-item">
@@ -555,9 +754,9 @@
                 </div>
                 
                 <!-- 한국의 브라질 수입 차트 -->
-                <div class="chart-card">
+                <div class="chart-card animate-in" style="animation-delay: 0.1s;">
                     <div class="chart-header">
-                        <h2 class="chart-title">한국 브라질 생두 수입량</h2>
+                        <h3 class="chart-title">한국 브라질 생두 수입량</h3>
                         <p class="chart-subtitle">2024년 vs 2025년 월별 비교 및 전년 동기 대비 변화율</p>
                         <p class="chart-source">출처: 식품의약품안전처</p>
                     </div>
@@ -572,12 +771,12 @@
                             <span>2024년 (톤)</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-color" style="background-color: #8B4513;"></div>
+                            <div class="legend-color" style="background-color: var(--copper);"></div>
                             <span>2025년 (톤)</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-line" style="background: linear-gradient(to right, #3498db, #FF6B35); height: 4px;"></div>
-                            <span>전년 동기 대비 변화율 (+ 파란색, - 주황색)</span>
+                            <div class="legend-line" style="background: linear-gradient(to right, var(--positive), var(--negative)); height: 4px;"></div>
+                            <span>전년 동기 대비 변화율</span>
                         </div>
                     </div>
                     
@@ -600,15 +799,15 @@
                         <h3 class="stats-title">📊 주요 통계</h3>
                         <div class="stats-grid">
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #FF6B35;" id="koreaAvgChange">+5.6%</div>
+                                <div class="stat-value" style="color: var(--positive);" id="koreaAvgChange">+5.6%</div>
                                 <div class="stat-label">평균 변화율 (1-7월)</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #8B4513;">7.0천톤</div>
+                                <div class="stat-value" style="color: var(--copper);">7.0천톤</div>
                                 <div class="stat-label">2025년 최고 (2월)</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" style="color: #8B4513;">3.8천톤</div>
+                                <div class="stat-value" style="color: var(--copper);">3.8천톤</div>
                                 <div class="stat-label">2025년 최저 (1월)</div>
                             </div>
                             <div class="stat-item">
@@ -619,10 +818,45 @@
                     </div>
                 </div>
             </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다.
+                        Align Commodities & Yellowknife 발행.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="../index.html" class="footer-link">Home</a>
+                    <a href="../weekly-report.html" class="footer-link">Weekly Report</a>
+                    <a href="../in-depth-analysis.html" class="footer-link">In-depth Analysis</a>
+                    <a href="https://github.com/jamesjongmin/Coffee-Market-Updates" class="footer-link" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2025 Align Commodities. All rights reserved.
+            </div>
         </div>
-    </div>
+    </footer>
 
     <script>
+        // 스크롤 효과
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const topNav = document.getElementById('topNav');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+            scrollProgress.style.width = (scrollTop / scrollHeight) * 100 + '%';
+            topNav.classList.toggle('scrolled', scrollTop > 100);
+        });
+
         // 구글 시트 URL 설정
         const EXPORT_IMPORT_SHEETS = {
             brazilTotalExport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=0',
@@ -798,12 +1032,17 @@
             return gradient;
         }
 
+        // CSS 변수 가져오기
+        function getCSSVariable(varName) {
+            return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+        }
+
         // 차트 생성/업데이트 함수
         function createOrUpdateCharts(brazilExportData, koreaImportData) {
             // 브라질 전체 수출 차트
             const brazilCtx = document.getElementById('brazilExportChart').getContext('2d');
             const brazil2024Gradient = createGradient(brazilCtx, '#d5dbdb', '#bdc3c7');
-            const brazil2025Gradient = createGradient(brazilCtx, '#A0522D', '#6B2C0F');
+            const brazil2025Gradient = createGradient(brazilCtx, getCSSVariable('--copper'), getCSSVariable('--roast'));
             
             const brazilChartData = {
                 labels: months,
@@ -821,7 +1060,7 @@
                         label: '2025년',
                         data: brazilExportData.data2025,
                         backgroundColor: brazil2025Gradient,
-                        borderColor: '#8B4513',
+                        borderColor: getCSSVariable('--copper'),
                         borderWidth: 1,
                         yAxisID: 'y',
                         order: 2
@@ -830,10 +1069,10 @@
                         label: '전년 동기 대비 변화율',
                         data: brazilExportData.yoyChangeRate,
                         type: 'line',
-                        borderColor: '#FF6B35',
-                        backgroundColor: 'rgba(255, 107, 53, 0.2)',
+                        borderColor: getCSSVariable('--negative'),
+                        backgroundColor: 'rgba(194, 58, 58, 0.2)',
                         borderWidth: 4,
-                        pointBackgroundColor: brazilExportData.yoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
+                        pointBackgroundColor: brazilExportData.yoyChangeRate.map(rate => rate >= 0 ? getCSSVariable('--positive') : getCSSVariable('--negative')),
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 3,
                         pointRadius: 8,
@@ -895,7 +1134,7 @@
             // 한국 수입 차트
             const koreaCtx = document.getElementById('koreaImportChart').getContext('2d');
             const korea2024Gradient = createGradient(koreaCtx, '#d5dbdb', '#bdc3c7');
-            const korea2025Gradient = createGradient(koreaCtx, '#A0522D', '#6B2C0F');
+            const korea2025Gradient = createGradient(koreaCtx, getCSSVariable('--copper'), getCSSVariable('--roast'));
             
             const koreaChartData = {
                 labels: months,
@@ -913,7 +1152,7 @@
                         label: '2025년',
                         data: koreaImportData.data2025,
                         backgroundColor: korea2025Gradient,
-                        borderColor: '#8B4513',
+                        borderColor: getCSSVariable('--copper'),
                         borderWidth: 1,
                         yAxisID: 'y',
                         order: 2
@@ -922,10 +1161,10 @@
                         label: '전년 동기 대비 변화율',
                         data: koreaImportData.yoyChangeRate,
                         type: 'line',
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        borderColor: getCSSVariable('--positive'),
+                        backgroundColor: 'rgba(74, 124, 89, 0.2)',
                         borderWidth: 4,
-                        pointBackgroundColor: koreaImportData.yoyChangeRate.map(rate => rate >= 0 ? '#3498db' : '#FF6B35'),
+                        pointBackgroundColor: koreaImportData.yoyChangeRate.map(rate => rate >= 0 ? getCSSVariable('--positive') : getCSSVariable('--negative')),
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 3,
                         pointRadius: 8,
@@ -1135,6 +1374,7 @@
                 const element = document.getElementById('koreaAvgChange');
                 if (element) {
                     element.textContent = (koreaAvgChangeRate >= 0 ? '+' : '') + koreaAvgChangeRate.toFixed(1) + '%';
+                    element.style.color = koreaAvgChangeRate >= 0 ? getCSSVariable('--positive') : getCSSVariable('--negative');
                 }
             }
         }
