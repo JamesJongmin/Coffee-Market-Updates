@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboards - Coffee Market Updates</title>
+    <title>Dashboards | Coffee Market Info</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -413,13 +413,26 @@
             }
         }
 
+        // 1년 데이터만 필터링하는 함수
+        function filterLastYear(data) {
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+            return data.filter(row => parseDate(row.date) >= oneYearAgo);
+        }
+
+        // 심플한 날짜 레이블 포맷 함수
+        function formatSimpleDate(date) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} '${String(date.getFullYear()).slice(-2)}`;
+        }
+
         // Coffee Futures 차트
         async function createCoffeeChart() {
             const loadingElement = document.getElementById('loading-coffee');
             const chartElement = document.getElementById('coffeeChart');
             
             try {
-                const data = await Promise.race([
+                let data = await Promise.race([
                     readGoogleSheetData('coffeefutures'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
@@ -427,6 +440,9 @@
                 if (!data) {
                     throw new Error('No data received');
                 }
+
+                // 1년 데이터만 필터링
+                data = filterLastYear(data);
 
                 const chartData = data.map((row, index) => ({
                     x: index,
@@ -490,35 +506,38 @@
                                 type: 'linear',
                                 position: 'bottom',
                                 title: {
-                                    display: true,
-                                    text: 'Date'
+                                    display: false
                                 },
                                 ticks: {
                                     callback: function(value) {
                                         const index = Math.round(value);
                                         if (chartData[index] && index >= 0 && index < chartData.length) {
                                             const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 8));
+                                            const step = Math.max(1, Math.floor(totalPoints / 6));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
+                                                return formatSimpleDate(chartData[index].date);
                                             }
                                         }
                                         return '';
                                     },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / 8)),
-                                    maxTicksLimit: 10,
-                                    maxRotation: 45,
-                                    minRotation: 0
+                                    maxTicksLimit: 7,
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    font: { size: 11 }
+                                },
+                                grid: {
+                                    display: false
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'Price (cents/lb)'
+                                    text: 'cents/lb',
+                                    font: { size: 11 }
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.05)'
                                 }
                             }
                         }
@@ -536,7 +555,7 @@
             const chartElement = document.getElementById('usdChart');
             
             try {
-                const data = await Promise.race([
+                let data = await Promise.race([
                     readGoogleSheetData('usdbrl'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
@@ -544,6 +563,9 @@
                 if (!data) {
                     throw new Error('No data received');
                 }
+
+                // 1년 데이터만 필터링
+                data = filterLastYear(data);
 
                 const chartData = data.map((row, index) => ({
                     x: index,
@@ -607,35 +629,38 @@
                                 type: 'linear',
                                 position: 'bottom',
                                 title: {
-                                    display: true,
-                                    text: 'Date'
+                                    display: false
                                 },
                                 ticks: {
                                     callback: function(value) {
                                         const index = Math.round(value);
                                         if (chartData[index] && index >= 0 && index < chartData.length) {
                                             const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 8));
+                                            const step = Math.max(1, Math.floor(totalPoints / 6));
                                             
                                             if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return chartData[index].date.toLocaleDateString('ko-KR', { 
-                                                    year: '2-digit', 
-                                                    month: 'short' 
-                                                });
+                                                return formatSimpleDate(chartData[index].date);
                                             }
                                         }
                                         return '';
                                     },
-                                    stepSize: Math.max(1, Math.floor(chartData.length / 8)),
-                                    maxTicksLimit: 10,
-                                    maxRotation: 45,
-                                    minRotation: 0
+                                    maxTicksLimit: 7,
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    font: { size: 11 }
+                                },
+                                grid: {
+                                    display: false
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'BRL per USD'
+                                    text: 'BRL/USD',
+                                    font: { size: 11 }
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.05)'
                                 }
                             }
                         }
@@ -653,7 +678,7 @@
             const chartElement = document.getElementById('cftcChart');
             
             try {
-                const data = await Promise.race([
+                let data = await Promise.race([
                     readGoogleSheetData('cftcpositions'),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
@@ -661,6 +686,9 @@
                 if (!data) {
                     throw new Error('No data received');
                 }
+
+                // 1년 데이터만 필터링
+                data = filterLastYear(data);
 
                 const chartData = data.map((row) => ({
                     y: parseInt(row.value),
@@ -676,29 +704,16 @@
 
                 const ctx = chartElement.getContext('2d');
                 
-                // 모바일 여부 확인
-                const isMobile = window.innerWidth <= 768;
-                
-                // 3개월 간격으로 레이블 인덱스 선택
+                // 간격 계산
                 const totalData = chartData.length;
                 const step = Math.max(Math.floor(totalData / 6), 1);
                 
-                // 바 차트용 레이블을 모든 데이터 포인트에 대해 생성
+                // 바 차트용 레이블 (심플하게)
                 const labels = chartData.map((item, index) => {
                     if (index === 0 || index === totalData - 1 || index % step === 0) {
-                        if (isMobile) {
-                            return item.date.toLocaleDateString('ko-KR', { 
-                                year: '2-digit',
-                                month: 'short'
-                            });
-                        } else {
-                            return item.date.toLocaleDateString('ko-KR', { 
-                                year: 'numeric', 
-                                month: 'long'
-                            });
-                        }
+                        return formatSimpleDate(item.date);
                     }
-                    return ' ';
+                    return '';
                 });
                 
                 charts.cftc = new Chart(ctx, {
@@ -743,33 +758,31 @@
                         scales: {
                             x: {
                                 title: {
-                                    display: true,
-                                    text: 'Date (3개월 단위)'
+                                    display: false
                                 },
                                 ticks: {
-                                    maxRotation: 45,
+                                    maxRotation: 0,
                                     minRotation: 0,
-                                    font: {
-                                        size: isMobile ? 11 : 13,
-                                        weight: 'bold'
-                                    },
-                                    color: '#333',
+                                    font: { size: 11 },
                                     autoSkip: false
                                 },
                                 grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
+                                    display: false
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'Net Long Positions'
+                                    text: 'Contracts',
+                                    font: { size: 11 }
                                 },
                                 ticks: {
                                     callback: function(value) {
-                                        return value.toLocaleString();
+                                        return (value / 1000).toFixed(0) + 'K';
                                     }
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.05)'
                                 }
                             }
                         }
