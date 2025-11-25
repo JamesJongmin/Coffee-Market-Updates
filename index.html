@@ -1238,11 +1238,12 @@
                 </div>
                 <div class="featured-chart">
                     <div class="chart-header">
-                        <span class="chart-title">Arabica Futures (예시)</span>
-                        <span class="chart-period">Demo Data</span>
+                        <span class="chart-title">Arabica Futures (KC)</span>
+                        <span class="chart-period">최근 1개월</span>
                     </div>
                     <div class="chart-container">
-                        <canvas id="featuredChart"></canvas>
+                        <div class="chart-loading" id="featuredLoading">Loading...</div>
+                        <canvas id="featuredChart" style="display: none;"></canvas>
                     </div>
                 </div>
             </article>
@@ -1638,6 +1639,13 @@
             }
         }
 
+        // 날짜 포맷 함수 (MM/DD)
+        function formatChartDate(date) {
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${month}/${day}`;
+        }
+
         // 차트 생성 함수
         async function createChart(chartId, loadingId, sheetKey, color, label) {
             const canvas = document.getElementById(chartId);
@@ -1652,12 +1660,16 @@
                     // 데이터가 없으면 데모 데이터 사용
                     const points = 30;
                     const demoData = [];
+                    const demoLabels = [];
                     let value = 100 + Math.random() * 20;
                     
                     for (let i = 0; i < points; i++) {
                         value += (Math.random() - 0.5) * 10;
                         value = Math.max(80, Math.min(150, value));
                         demoData.push(value);
+                        const date = new Date();
+                        date.setDate(date.getDate() - (points - 1 - i));
+                        demoLabels.push(formatChartDate(date));
                     }
 
                     loading.style.display = 'none';
@@ -1666,7 +1678,7 @@
                     new Chart(canvas, {
                         type: 'line',
                         data: {
-                            labels: demoData.map((_, i) => ''),
+                            labels: demoLabels,
                             datasets: [{
                                 data: demoData,
                                 borderColor: color,
@@ -1685,17 +1697,30 @@
                                 tooltip: { enabled: false }
                             },
                             scales: {
-                                x: { display: false },
+                                x: { 
+                                    display: true,
+                                    grid: { display: false },
+                                    ticks: {
+                                        color: 'rgba(44, 36, 32, 0.4)',
+                                        font: { size: 9 },
+                                        maxTicksLimit: 5,
+                                        maxRotation: 0
+                                    }
+                                },
                                 y: { display: false }
                             }
                         }
                     });
                 } else {
-                    // 실제 데이터 사용
+                    // 실제 데이터 사용 - 최근 60일
                     const chartData = data.slice(-60).map((row) => ({
                         x: parseDate(row.date),
                         y: parseFloat(row.value)
                     })).filter(point => !isNaN(point.y));
+                    
+                    // 라벨 생성
+                    const labels = chartData.map(d => formatChartDate(d.x));
+                    const values = chartData.map(d => d.y);
 
                     // 최신 값 업데이트
                     if (chartData.length > 0) {
@@ -1720,12 +1745,13 @@
                     new Chart(canvas, {
                         type: sheetKey === 'cftcpositions' ? 'bar' : 'line',
                         data: {
+                            labels: labels,
                             datasets: [{
                                 label: label,
-                                data: chartData,
+                                data: values,
                                 borderColor: sheetKey === 'cftcpositions' ? undefined : color,
                                 backgroundColor: sheetKey === 'cftcpositions' 
-                                    ? chartData.map(d => d.y >= 0 ? 'rgba(74, 124, 89, 0.7)' : 'rgba(194, 58, 58, 0.7)')
+                                    ? values.map(v => v >= 0 ? 'rgba(74, 124, 89, 0.7)' : 'rgba(194, 58, 58, 0.7)')
                                     : 'transparent',
                                 borderWidth: 1.5,
                                 fill: false,
@@ -1743,15 +1769,21 @@
                                     enabled: true,
                                     callbacks: {
                                         title: function(tooltipItems) {
-                                            return new Date(tooltipItems[0].parsed.x).toLocaleDateString('ko-KR');
+                                            return labels[tooltipItems[0].dataIndex];
                                         }
                                     }
                                 }
                             },
                             scales: {
                                 x: { 
-                                    type: 'time',
-                                    display: false
+                                    display: true,
+                                    grid: { display: false },
+                                    ticks: {
+                                        color: 'rgba(44, 36, 32, 0.4)',
+                                        font: { size: 9 },
+                                        maxTicksLimit: 5,
+                                        maxRotation: 0
+                                    }
                                 },
                                 y: { 
                                     display: false
@@ -1766,46 +1798,178 @@
             }
         }
 
+        // ========== 피처드 차트 생성 (최근 1개월 커피 선물 데이터) ==========
+        async function createFeaturedChart() {
+            const featuredCtx = document.getElementById('featuredChart');
+            const featuredLoading = document.getElementById('featuredLoading');
+            
+            if (!featuredCtx) return;
+            
+            try {
+                const data = await readGoogleSheetData('coffeefutures');
+                
+                if (data && data.length > 0) {
+                    // 최근 1개월 (약 30일) 데이터만 사용
+                    const chartData = data.slice(-30).map((row) => ({
+                        x: parseDate(row.date),
+                        y: parseFloat(row.value)
+                    })).filter(point => !isNaN(point.y));
+                    
+                    const labels = chartData.map(d => formatChartDate(d.x));
+                    const values = chartData.map(d => d.y);
+                    
+                    if (featuredLoading) featuredLoading.style.display = 'none';
+                    featuredCtx.style.display = 'block';
+                    
+                    new Chart(featuredCtx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: values,
+                                borderColor: '#b87333',
+                                backgroundColor: 'rgba(184, 115, 51, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 0,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: '#b87333'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                intersect: false,
+                                mode: 'index'
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    enabled: true,
+                                    backgroundColor: 'rgba(26, 15, 10, 0.9)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    padding: 10,
+                                    displayColors: false,
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            return labels[tooltipItems[0].dataIndex];
+                                        },
+                                        label: function(context) {
+                                            return `${context.parsed.y.toFixed(2)}¢/lb`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: { 
+                                    display: true,
+                                    grid: { display: false },
+                                    ticks: {
+                                        color: 'rgba(44, 36, 32, 0.5)',
+                                        font: { size: 10 },
+                                        maxTicksLimit: 6,
+                                        maxRotation: 0
+                                    }
+                                },
+                                y: { 
+                                    display: true,
+                                    position: 'right',
+                                    grid: { 
+                                        display: true,
+                                        color: 'rgba(44, 36, 32, 0.05)'
+                                    },
+                                    ticks: {
+                                        color: 'rgba(44, 36, 32, 0.5)',
+                                        font: { size: 10 },
+                                        maxTicksLimit: 4,
+                                        callback: function(value) {
+                                            return value.toFixed(0) + '¢';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    // 데이터가 없으면 데모 데이터 사용
+                    const demoData = [380, 385, 392, 388, 395, 402, 398, 405, 410, 395, 388, 392, 401, 385, 378, 369];
+                    const demoLabels = [];
+                    for (let i = demoData.length - 1; i >= 0; i--) {
+                        const date = new Date();
+                        date.setDate(date.getDate() - i);
+                        demoLabels.push(formatChartDate(date));
+                    }
+                    
+                    if (featuredLoading) featuredLoading.style.display = 'none';
+                    featuredCtx.style.display = 'block';
+                    
+                    new Chart(featuredCtx, {
+                        type: 'line',
+                        data: {
+                            labels: demoLabels,
+                            datasets: [{
+                                data: demoData,
+                                borderColor: '#b87333',
+                                backgroundColor: 'rgba(184, 115, 51, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: false }
+                            },
+                            scales: {
+                                x: { 
+                                    display: true,
+                                    grid: { display: false },
+                                    ticks: {
+                                        color: 'rgba(44, 36, 32, 0.5)',
+                                        font: { size: 10 },
+                                        maxTicksLimit: 6,
+                                        maxRotation: 0
+                                    }
+                                },
+                                y: { 
+                                    display: true,
+                                    position: 'right',
+                                    grid: { 
+                                        display: true,
+                                        color: 'rgba(44, 36, 32, 0.05)'
+                                    },
+                                    ticks: {
+                                        color: 'rgba(44, 36, 32, 0.5)',
+                                        font: { size: 10 },
+                                        maxTicksLimit: 4,
+                                        callback: function(value) {
+                                            return value.toFixed(0) + '¢';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Featured chart error:', error);
+                if (featuredLoading) {
+                    featuredLoading.innerHTML = '<span style="color: #999; font-size: 0.7rem;">차트 로딩 실패</span>';
+                }
+            }
+        }
+
         // ========== 차트 초기화 ==========
         function initCharts() {
-            // 피처드 차트 (간단한 데모 데이터)
-            const featuredCtx = document.getElementById('featuredChart');
-            if (featuredCtx) {
-                const demoData = [380, 385, 392, 388, 395, 402, 398, 405, 410, 395, 388, 392, 401];
-                new Chart(featuredCtx, {
-                    type: 'line',
-                    data: {
-                        labels: demoData.map((_, i) => ''),
-                        datasets: [{
-                            data: demoData,
-                            borderColor: '#b87333',
-                            backgroundColor: 'transparent',
-                            borderWidth: 1.5,
-                            fill: false,
-                            tension: 0.4,
-                            pointRadius: 0,
-                            pointHoverRadius: 0,
-                            pointHitRadius: 10
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: false }
-                        },
-                        scales: {
-                            x: { display: false },
-                            y: { display: false }
-                        }
-                    }
-                });
-            }
+            // 피처드 차트 - 실제 커피 선물 데이터 (최근 1개월)
+            createFeaturedChart();
 
             // 대시보드 차트들 - 구글 스프레드시트 연동
             createChart('coffeeChart', 'coffeeLoading', 'coffeefutures', '#b87333', 'Coffee Futures');
