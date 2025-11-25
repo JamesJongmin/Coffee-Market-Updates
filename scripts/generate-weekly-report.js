@@ -37,7 +37,14 @@ async function generateReport() {
 매주 커피 시장 주간 동향 리포트를 작성합니다.
 객관적이고 전문적인 톤을 유지하며, 구체적인 수치를 포함합니다.
 과장된 표현("폭등", "급락")을 피하고 "상승", "하락" 등 중립적 표현을 사용합니다.
-모든 정보에는 반드시 출처를 명시합니다.`;
+모든 정보에는 반드시 출처를 명시합니다.
+
+중요한 작성 원칙:
+1. 단순 뉴스 나열이 아닌, 시장 영향과 인사이트를 제공합니다
+2. 주요 이슈에 대해 "심층 분석" 섹션을 포함합니다
+3. 시장의 핵심 질문에 대한 시나리오 분석을 제공합니다
+4. 각 뉴스 항목에 날짜를 명시하고 출처 링크를 제공합니다
+5. 공정 가치 분석과 투자 시사점을 포함합니다`;
 
   const userPrompt = `오늘 날짜: ${date.koreanDate}
 데이터 수집 기간: ${weekRange.start} ~ ${weekRange.end}
@@ -73,46 +80,108 @@ async function generateReport() {
 
 ## 리포트 구조
 
-다음 구조로 HTML 리포트를 생성해주세요:
+다음 구조로 풍부하고 상세한 HTML 리포트를 생성해주세요:
 
-1. **시장 개요**: 핵심 요약 3-4줄 + 현재 가격
-2. **주요 가격 동향**: 아라비카/로부스타/환율/재고
-3. **주간 핵심 뉴스**: 뉴스별 소제목 + 2-3문장 요약 + 출처 링크
-4. **산지별 동향**: 브라질/베트남/콜롬비아
-5. **수급 전망**: 주요 기관 전망치
-6. **기술적 분석**: 지지/저항선, 단기 전망
-7. **리스크 요인**: 상방 3개, 하방 3개
-8. **출처**: 모든 참조 링크
+### 1. 시장 개요
+- 핵심 요약 3-4줄
+- 이번 주 가장 중요한 이벤트를 highlight-box로 강조
+- 주력 계약월물(현재 3월물 KCH26) 중심 분석
+
+### 2. 주요 가격 동향
+- price-card 형식으로 4개 핵심 지표 표시
+- 아라비카 근월물/차근월물 가격표(테이블)
+- 각 계약월물별 종가, 변동률, 거래량, 미결제약정 포함
+
+### 3. 주요 뉴스 분석 (5-8개 항목)
+- 각 뉴스에 날짜(YYYY.MM.DD 형식) 명시
+- 뉴스 제목 + 상세 분석 (2-4문단)
+- 실제 출처 URL 링크 포함
+- 시장에 미치는 영향 분석
+
+### 4. 심층 분석 섹션 (중요!)
+- 이번 주 가장 중요한 시장 이슈에 대한 깊이 있는 분석
+- 예: 백워데이션 구조, 관세 영향, 기상 리스크 등
+- 왜 이런 일이 벌어지는지 배경 설명
+- 향후 전개 시나리오
+
+### 5. 핵심 질문 & 시나리오 분석
+- 시장의 핵심 질문 제시 (예: "3월물은 400센트로 재상승할 것인가?")
+- 시나리오 A/B/C 제시 (각각 확률과 전제조건)
+- 공정 가치(fair value) 분석
+- 투자/헤지 전략적 시사점 (로스터, 트레이더, 생산자별)
+
+### 6. 산지별 동향
+- 브라질/베트남/콜롬비아 각각 상세 분석
+- 날씨, 환율, 수출 현황 포함
+
+### 7. 시장 전망
+- 단기(1-3개월) / 중장기(6-12개월) 전망
+- grid 레이아웃으로 시각적 구분
+- 리스크 매트릭스 테이블 (상승/하락 촉매 비교)
+
+### 8. 출처
+- 모든 참조 링크 목록
+- footer에 연락처 정보 포함
 
 ## 출력 형식
 
 완전한 HTML 파일을 생성해주세요. 다음 조건을 충족해야 합니다:
 
-1. 메타데이터 블록 포함:
+1. 메타데이터 블록 포함 (상세하게):
 <!--REPORT_META
 {
-    "title": "커피 선물 시장 주간 동향 | ${date.koreanDate}",
+    "title": "커피 선물 시장 주간 동향",
+    "subtitle": "Coffee Futures Market Weekly Update",
     "date": "${date.dateStr}",
-    "summary": "핵심 요약 1-2문장",
-    "tags": ["주간동향", "아라비카", "관련태그들"]
+    "summary": "핵심 요약 2-3문장 (주요 가격 변동, 핵심 이슈 포함)",
+    "tags": ["3월물가격", "관련이슈태그들", "ICE재고", "브라질", "베트남"],
+    "author": "Align Commodities",
+    "contact": "james.baek@aligncommodities.com",
+    "sources": ["Bloomberg", "Reuters", "Comunicaffe", "Perfect Daily Grind", "기타출처들"],
+    "price_current": "현재 3월물 가격",
+    "price_change": "주간 변동",
+    "fair_value": "공정가치 범위",
+    "report_type": "weekly",
+    "analysis_period": "${weekRange.start} to ${weekRange.end}"
 }
 REPORT_META-->
 
 2. Google Analytics 포함: G-GX9R36120J
 
-3. 디자인 시스템:
-- 폰트: Cormorant Garamond (헤드라인), Pretendard (본문)
-- 컬러: --espresso: #1a0f0a, --copper: #b87333, --paper: #faf8f5 등
-- 밝은 에디토리얼 스타일
+3. 디자인 시스템 (다크 테마):
+- 폰트: Pretendard (본문), 필요시 sans-serif fallback
+- 컬러 스킴:
+  * 배경: #0a0a0a (body), #1a1a1a ~ #2d2d2d (cards)
+  * 텍스트: #e0e0e0 (본문), #ffffff (헤드라인), #cccccc (서브텍스트)
+  * 액센트: #8B4513 (border), #D2691E (chocolate/copper), rgba(139, 69, 19, 0.x) (투명도)
+  * 상승: #2ecc71, 하락: #e74c3c
+- body::before에 radial-gradient로 은은한 배경 효과
+- header에 gradient 배경과 장식적 ::before 요소
+- highlight-box: gradient 배경 + 좌측 border
+- price-card: grid 레이아웃, 4개 카드
+- news-item: 좌측 border 강조
+- 테이블: 다크 테마, hover 효과
+- 반응형 디자인
 
-4. 반응형 디자인
+4. 필수 UI 요소:
+- header에 "← 홈으로" 버튼 (index.html 링크)
+- footer에 Align Commodities 연락처
+- 면책조항 포함
+
+5. CSS 클래스 참고:
+- .container: max-width 800px, padding
+- .highlight-box: 중요 내용 강조
+- .price-snapshot: 가격 카드 grid
+- .price-card: 개별 가격 표시
+- .news-item: 뉴스 아이템 스타일
+- .price-change.up / .price-change.down: 상승/하락 색상
 
 HTML 코드만 출력하세요. 설명이나 마크다운 코드블록 없이 순수 HTML만 출력합니다.`;
 
   try {
     const response = await client.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 16000,
+      max_tokens: 32000,
       system: systemPrompt,
       messages: [
         {
@@ -138,8 +207,8 @@ HTML 코드만 출력하세요. 설명이나 마크다운 코드블록 없이 �
     fs.writeFileSync(filePath, htmlContent, "utf8");
     console.log(`Report saved: ${filePath}`);
 
-    // reports.json 업데이트 (있는 경우)
-    updateReportsJson(date, fileName);
+    // reports.json 업데이트 (HTML에서 메타데이터 추출)
+    updateReportsJson(date, fileName, htmlContent);
 
     return filePath;
   } catch (error) {
@@ -148,8 +217,21 @@ HTML 코드만 출력하세요. 설명이나 마크다운 코드블록 없이 �
   }
 }
 
+// HTML에서 REPORT_META 추출
+function extractReportMeta(htmlContent) {
+  const metaMatch = htmlContent.match(/<!--REPORT_META\s*([\s\S]*?)\s*REPORT_META-->/);
+  if (metaMatch) {
+    try {
+      return JSON.parse(metaMatch[1]);
+    } catch (e) {
+      console.log("Failed to parse REPORT_META:", e.message);
+    }
+  }
+  return null;
+}
+
 // reports.json 업데이트
-function updateReportsJson(date, fileName) {
+function updateReportsJson(date, fileName, htmlContent) {
   const reportsJsonPath = "reports.json";
 
   let reportsData = { reports: [] };
@@ -162,23 +244,35 @@ function updateReportsJson(date, fileName) {
     }
   }
 
+  // HTML에서 메타데이터 추출
+  const meta = extractReportMeta(htmlContent);
+
   const newReport = {
-    title: `커피 선물 시장 주간 동향 | ${date.koreanDate}`,
+    title: meta?.title || `커피 선물 시장 주간 동향 | ${date.koreanDate}`,
     date: date.dateStr,
     link: `Reports/${date.year}/${date.month}/${fileName}`,
-    summary: "커피 시장 주간 동향 분석 리포트",
-    tags: ["주간동향", "아라비카", "ICE선물"],
+    summary: meta?.summary || "커피 시장 주간 동향 분석 리포트",
+    tags: meta?.tags || ["주간동향", "아라비카", "ICE선물"],
     year: date.year.toString(),
     month: date.month,
+    // 추가 메타데이터
+    ...(meta?.price_current && { price_current: meta.price_current }),
+    ...(meta?.price_change && { price_change: meta.price_change }),
+    ...(meta?.fair_value && { fair_value: meta.fair_value }),
+    ...(meta?.sources && { sources: meta.sources }),
   };
 
-  // 중복 체크
-  const exists = reportsData.reports.some((r) => r.date === date.dateStr);
-  if (!exists) {
+  // 중복 체크 - 같은 날짜 리포트가 있으면 업데이트
+  const existingIndex = reportsData.reports.findIndex((r) => r.date === date.dateStr);
+  if (existingIndex >= 0) {
+    reportsData.reports[existingIndex] = newReport;
+    console.log("reports.json entry updated");
+  } else {
     reportsData.reports.unshift(newReport);
-    fs.writeFileSync(reportsJsonPath, JSON.stringify(reportsData, null, 2), "utf8");
-    console.log("reports.json updated");
+    console.log("reports.json new entry added");
   }
+  
+  fs.writeFileSync(reportsJsonPath, JSON.stringify(reportsData, null, 2), "utf8");
 }
 
 // 실행
