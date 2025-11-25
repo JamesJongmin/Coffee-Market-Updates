@@ -1,0 +1,37 @@
+name: Weekly Coffee Market Report
+
+on:
+  schedule:
+    # 매주 금요일 23:00 UTC = 토요일 08:00 KST
+    - cron: '0 23 * * 5'
+  workflow_dispatch:  # 수동 실행 옵션
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Generate weekly report
+        run: node scripts/generate-weekly-report.js
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          
+      - name: Commit and push report
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Reports/
+          git add reports.json
+          git commit -m "📊 Weekly Report $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push
