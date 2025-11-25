@@ -1,326 +1,820 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GX9R36120J');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboards | Coffee Market Info</title>
+    <title>Market Dashboards | Coffee Market Info</title>
+    <meta name="description" content="커피 선물, 환율, CFTC 포지션, NVDI 등 커피 시장 핵심 지표를 한눈에. 실시간 데이터 시각화 대시보드.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
-            line-height: 1.7;
-            color: #2c3e50;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --border: rgba(26, 15, 10, 0.08);
         }
-        
-        .container {
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== 상단 네비게이션 ========== */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 56px;
+            box-shadow: 0 1px 30px rgba(0,0,0,0.06);
+        }
+
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px 20px;
-        }
-        
-        h1 {
-            font-size: 3em;
-            color: #8B4513;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-        
-        .subtitle {
-            font-size: 1.3em;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .back-button {
-            display: inline-flex;
+            padding: 0 clamp(20px, 5vw, 48px);
+            height: 100%;
+            display: flex;
             align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             text-decoration: none;
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
             font-weight: 600;
-            transition: all 0.3s ease;
-            margin-bottom: 30px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
         }
-        
-        .back-button:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
         }
-        
-        /* 차트 대시보드 스타일 (index.html과 동일) */
-        .dashboard-section {
-            margin-bottom: 50px;
+
+        .nav-item {
             position: relative;
         }
-        
-        .dashboard-section::before {
+
+        .nav-link {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+            color: var(--copper);
+        }
+
+        .nav-link.active {
+            opacity: 1;
+            color: var(--copper);
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 10px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 8px 0;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            margin-top: 20px;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            color: var(--ink);
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .dropdown-item:hover {
+            background: var(--steam);
+            color: var(--copper);
+        }
+
+        .dropdown-item.active {
+            background: rgba(184, 115, 51, 0.08);
+            color: var(--copper);
+        }
+
+        /* ========== 페이지 헤더 ========== */
+        .page-header {
+            padding: 120px 0 60px;
+            background: linear-gradient(180deg, var(--paper) 0%, var(--steam) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
             content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(184, 115, 51, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            position: relative;
+        }
+
+        .header-content {
+            max-width: 700px;
+        }
+
+        .header-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 16px;
+        }
+
+        .header-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--copper);
+        }
+
+        .header-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .header-subtitle {
+            font-size: 1rem;
+            color: var(--ink);
+            opacity: 0.65;
+            line-height: 1.7;
+        }
+
+        /* ========== 메인 콘텐츠 ========== */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+        }
+
+        /* ========== 대시보드 섹션 ========== */
+        .dashboard-section {
+            padding: 60px 0 100px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .section-title-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--copper);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--espresso);
+            letter-spacing: -0.01em;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border), transparent);
+            margin-left: 24px;
+        }
+
+        /* ========== 대시보드 그리드 ========== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            box-shadow: 0 12px 40px rgba(26, 15, 10, 0.08);
+            border-color: rgba(184, 115, 51, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .card-title-group {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink);
+            opacity: 0.45;
+            margin-bottom: 6px;
+        }
+
+        .card-value {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .card-change {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        .card-source {
+            font-size: 0.7rem;
+            color: var(--ink);
+            opacity: 0.35;
+            text-align: right;
+        }
+
+        .chart-wrapper {
+            height: 280px;
+            position: relative;
+            margin: 24px 0;
+        }
+
+        .chart-loading {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 600px;
-            height: 600px;
-            background-image: url('coffee-beans-pattern.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.06;
-            transform: translate(-50%, -50%) rotate(15deg);
-            z-index: -1;
-        }
-        
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        .chart-container {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .chart-container:hover {
-            transform: translateY(-5px);
-        }
-        
-        .chart-header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .chart-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .chart-source {
-            font-size: 0.9em;
-            color: #666;
-            font-style: italic;
-        }
-        
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-        }
-        
-        .chart-analysis {
-            margin-top: 15px;
-            padding: 12px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 8px;
-            border-left: 4px solid #8B4513;
-            font-size: 0.9em;
-            line-height: 1.5;
-            color: #495057;
-        }
-        
-        .chart-analysis .analysis-title {
-            font-weight: 600;
-            color: #8B4513;
-            margin-bottom: 6px;
-            font-size: 0.95em;
-        }
-        
-        .chart-analysis .analysis-text {
-            font-size: 0.85em;
-            color: #6c757d;
-        }
-        
-        .loading-spinner {
+            transform: translate(-50%, -50%);
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 400px;
-            font-size: 1.1em;
-            color: #666;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--ink);
+            opacity: 0.4;
         }
-        
+
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #8B4513;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--steam);
+            border-top-color: var(--copper);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-right: 15px;
+            animation: spin 0.8s linear infinite;
         }
-        
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 2.2em;
-                line-height: 1.3;
-            }
-            
-            .subtitle {
-                font-size: 1.1em;
-                line-height: 1.5;
-            }
-            
-            .charts-grid {
+
+        .chart-wrapper canvas {
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .card-analysis {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(232, 226, 217, 0.4) 0%, rgba(245, 240, 232, 0.3) 100%);
+            border-radius: 12px;
+            border-left: 3px solid var(--copper);
+        }
+
+        .analysis-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--copper);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .analysis-text {
+            font-size: 0.85rem;
+            color: var(--ink);
+            opacity: 0.7;
+            line-height: 1.65;
+        }
+
+        .analysis-text strong {
+            color: var(--espresso);
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        /* ========== 푸터 ========== */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            opacity: 0.5;
+            line-height: 1.7;
+            max-width: 280px;
+        }
+
+        .footer-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.4;
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--crema);
+            text-decoration: none;
+            opacity: 0.6;
+            margin-bottom: 12px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            opacity: 0.4;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.75rem;
+            opacity: 0.35;
+            max-width: 480px;
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        /* ========== 스크롤 진행바 ========== */
+        .scroll-progress {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            height: 2px;
+            background: var(--copper);
+            z-index: 999;
+            transition: width 0.1s;
+        }
+
+        /* ========== 반응형 ========== */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
                 grid-template-columns: 1fr;
             }
-        }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .subtitle {
-                font-size: 1em;
-            }
-            
-            .chart-header h3 {
-                font-size: 1.1em;
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
             }
         }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .page-header {
+                padding: 100px 0 40px;
+            }
+
+            .header-title {
+                font-size: 1.8rem;
+            }
+
+            .dashboard-section {
+                padding: 40px 0 80px;
+            }
+
+            .dashboard-card {
+                padding: 24px;
+            }
+
+            .chart-wrapper {
+                height: 240px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-disclaimer {
+                text-align: center;
+            }
+        }
+
+        /* ========== 애니메이션 ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-button">
-            ← 메인 페이지로 돌아가기
-        </a>
-        
-        <div class="header">
-            <h1>Market Dashboards</h1>
-            <p class="subtitle">커피 시장 핵심 지표 대시보드</p>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <span class="nav-logo">Coffee Market Info</span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-link active">Service</span>
+                    <div class="nav-dropdown">
+                        <a href="weekly-report.html" class="dropdown-item">Weekly Report</a>
+                        <a href="in-depth-analysis.html" class="dropdown-item">In-Depth Analysis</a>
+                        <a href="fundamentals/fundamentals.html" class="dropdown-item">Fundamentals</a>
+                        <a href="dashboards.html" class="dropdown-item active">Dashboard</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a>
+                </div>
+            </div>
         </div>
-        
-        <!-- 차트 대시보드 섹션 -->
-        <div class="dashboard-section">
-            <div class="charts-grid">
+    </nav>
+
+    <!-- 페이지 헤더 -->
+    <header class="page-header">
+        <div class="header-container">
+            <div class="header-content animate-in">
+                <div class="header-tag">Data Intelligence</div>
+                <h1 class="header-title">Market Dashboards</h1>
+                <p class="header-subtitle">
+                    커피 선물 가격, USD/BRL 환율, CFTC 투기 포지션, 브라질 NVDI 식생지수 등 
+                    커피 시장 분석에 필수적인 핵심 지표들을 실시간으로 시각화합니다.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- 대시보드 섹션 -->
+    <section class="dashboard-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-number">01</span>
+                    <h2 class="section-title">Key Indicators</h2>
+                    <div class="section-line"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
                 <!-- Coffee Futures Chart -->
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">Coffee Futures</div>
-                        <div class="chart-source">출처: ICE</div>
+                <div class="dashboard-card animate-in delay-1">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">Coffee Futures (KC)</div>
+                            <div class="card-value" id="coffeeValue">—</div>
+                            <div class="card-change" id="coffeeChange"></div>
+                        </div>
+                        <div class="card-source">출처: ICE</div>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="loading-spinner" id="loading-coffee">
+                        <div class="chart-loading" id="loading-coffee">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span>Loading data...</span>
                         </div>
                         <canvas id="coffeeChart" style="display: none;"></canvas>
                     </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">📊 차트 분석</div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">📊 Analysis</div>
                         <div class="analysis-text">
                             <strong>커피 선물 가격</strong>은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
-                            브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다. 
-                            현재 추세는 시장의 공급/수요 균형과 투기적 포지션 변화를 나타냅니다.
+                            브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다.
                         </div>
                     </div>
                 </div>
 
                 <!-- USD/BRL Chart -->
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">미국달러-브라질헤알 환율</div>
-                        <div class="chart-source">출처: LSEG</div>
+                <div class="dashboard-card animate-in delay-2">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">USD/BRL Exchange Rate</div>
+                            <div class="card-value" id="usdValue">—</div>
+                            <div class="card-change" id="usdChange"></div>
+                        </div>
+                        <div class="card-source">출처: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="loading-spinner" id="loading-usd">
+                        <div class="chart-loading" id="loading-usd">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span>Loading data...</span>
                         </div>
                         <canvas id="usdChart" style="display: none;"></canvas>
                     </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">💱 차트 분석</div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">💱 Analysis</div>
                         <div class="analysis-text">
-                            <strong>USD/BRL 환율</strong>은 커피 시장에 중요한 영향을 미칩니다. 
-                            헤알화 약세(USD/BRL 상승) 시 브라질 농민들의 달러 수취액이 증가해 수출 경쟁력이 강화되고, 
-                            반대로 헤알화 강세 시에는 브라질 커피의 국제 경쟁력이 약화됩니다. 
-                            브라질이 세계 최대 커피 생산국이므로 환율 변동은 글로벌 커피 가격에 직접적 영향을 줍니다.
+                            <strong>USD/BRL 환율</strong>은 브라질 커피 수출 경쟁력에 직접적 영향을 미칩니다. 
+                            헤알화 약세 시 브라질 농민들의 달러 수취액이 증가해 수출이 활성화됩니다.
                         </div>
                     </div>
                 </div>
 
                 <!-- CFTC Positions Chart -->
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">CFTC 투기 포지션 (순매수)</div>
-                        <div class="chart-source">출처: LSEG</div>
+                <div class="dashboard-card animate-in delay-3">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">CFTC Money Managed (Net Long)</div>
+                            <div class="card-value" id="cftcValue">—</div>
+                            <div class="card-change" id="cftcChange"></div>
+                        </div>
+                        <div class="card-source">출처: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="loading-spinner" id="loading-cftc">
+                        <div class="chart-loading" id="loading-cftc">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span>Loading data...</span>
                         </div>
                         <canvas id="cftcChart" style="display: none;"></canvas>
                     </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">📈 차트 분석</div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">📈 Analysis</div>
                         <div class="analysis-text">
-                            <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 커피 시장 심리를 보여줍니다. 
-                            양수는 강세 베팅(매수 우세), 음수는 약세 베팅(매도 우세)을 의미합니다. 
-                            극단적 포지션은 종종 시장 전환점의 신호가 되며, 
-                            현재 포지션 수준은 투기 자금의 방향성과 시장 과열/과매도 상태를 판단하는 중요한 지표입니다.
+                            <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 시장 심리를 나타냅니다. 
+                            양수는 강세 베팅, 음수는 약세 베팅을 의미하며, 극단적 포지션은 전환점 신호가 됩니다.
                         </div>
                     </div>
                 </div>
 
                 <!-- NVDI Chart -->
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">브라질 남동부 NVDI (식물활력도)</div>
-                        <div class="chart-source">출처: LSEG</div>
+                <div class="dashboard-card animate-in delay-4">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">Brazil Southeast NVDI</div>
+                            <div class="card-value" id="nvdiValue">—</div>
+                            <div class="card-change" id="nvdiChange"></div>
+                        </div>
+                        <div class="card-source">출처: LSEG</div>
                     </div>
                     <div class="chart-wrapper">
-                        <div class="loading-spinner" id="loading-nvdi">
+                        <div class="chart-loading" id="loading-nvdi">
                             <div class="spinner"></div>
-                            데이터 로딩 중...
+                            <span>Loading data...</span>
                         </div>
                         <canvas id="nvdiChart" style="display: none;"></canvas>
                     </div>
-                    <div class="chart-analysis">
-                        <div class="analysis-title">🌱 차트 분석</div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">🌱 Analysis</div>
                         <div class="analysis-text">
-                            <strong>NVDI (정규식생지수)</strong>는 위성 데이터로 측정한 식물의 건강도와 활력도를 나타냅니다. 
-                            브라질 남동부는 세계 최대 아라비카 커피 생산지역으로, NVDI 수치가 높을수록 커피나무가 건강하고 
-                            수확량 증가가 예상됩니다. 역사적 범위 대비 현재 수치를 통해 
-                            올해 작황 상태와 향후 공급량 전망을 예측할 수 있는 핵심 지표입니다.
+                            <strong>NVDI (정규식생지수)</strong>는 위성으로 측정한 식물 건강도입니다. 
+                            브라질 남동부는 세계 최대 아라비카 생산지역으로, 높은 NVDI는 좋은 작황을 예고합니다.
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다. 
+                        Align Commodities 발행.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Reports</div>
+                    <a href="weekly-report.html" class="footer-link">Weekly Updates</a>
+                    <a href="in-depth-analysis.html" class="footer-link">In-depth Analysis</a>
+                    <a href="about.html" class="footer-link">About</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data</div>
+                    <a href="dashboards.html" class="footer-link">Market Dashboard</a>
+                    <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
+                    <a href="index.html#dashboard" class="footer-link">Quick View</a>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <span class="footer-link" style="cursor: default; opacity: 0.4;">
+                        Align Commodities
+                    </span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    본 사이트의 모든 콘텐츠는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.
+                </p>
+            </div>
+        </div>
+    </footer>
 
     <script>
+        // ========== 스크롤 효과 ==========
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const topNav = document.getElementById('topNav');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            
+            // 스크롤 진행바
+            const progress = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+            
+            // 네비게이션 스크롤 효과
+            if (scrollTop > 100) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+        });
+
+        // ========== 차트 설정 ==========
         let charts = {};
 
-        // 구글 시트 URL 설정 (index.html과 동일)
         const GOOGLE_SHEETS_URLS = {
             coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
             usdbrl: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
@@ -332,7 +826,6 @@
         function parseCSV(csvText) {
             const lines = csvText.split('\n');
             const result = [];
-            
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (line) {
@@ -340,14 +833,12 @@
                     result.push(cells);
                 }
             }
-            
             return result;
         }
 
         // 날짜 변환 함수
         function parseDate(dateValue) {
             if (typeof dateValue === 'number') {
-                // Excel 날짜 시리얼 번호인 경우
                 const date = new Date((dateValue - 25569) * 86400 * 1000);
                 return date;
             } else if (typeof dateValue === 'string') {
@@ -356,55 +847,42 @@
             return new Date(dateValue);
         }
 
-        // 구글 시트에서 데이터 읽기 함수 (2컬럼: Date, Value)
+        // 구글 시트에서 데이터 읽기
         async function readGoogleSheetData(sheetKey) {
             try {
                 const url = GOOGLE_SHEETS_URLS[sheetKey];
-                if (!url) {
-                    throw new Error(`Unknown sheet key: ${sheetKey}`);
-                }
+                if (!url) throw new Error(`Unknown sheet key: ${sheetKey}`);
 
                 console.log(`Fetching data from Google Sheets: ${sheetKey}`);
                 
                 let csvText;
                 
-                // 먼저 직접 접근 시도
                 try {
                     const directResponse = await fetch(url);
                     if (directResponse.ok) {
                         csvText = await directResponse.text();
-                        console.log(`Direct access successful for ${sheetKey}`);
                     } else {
                         throw new Error('Direct access failed');
                     }
                 } catch (directError) {
-                    // 직접 접근 실패시 AllOrigins 프록시 사용
-                    console.log(`Direct access failed for ${sheetKey}, trying proxy...`);
                     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    
                     const proxyResponse = await fetch(proxyUrl);
-                    if (!proxyResponse.ok) {
-                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
-                    }
-                    
+                    if (!proxyResponse.ok) throw new Error(`Proxy failed: ${proxyResponse.status}`);
                     const proxyData = await proxyResponse.json();
                     csvText = proxyData.contents;
-                    console.log(`Proxy access successful for ${sheetKey}`);
                 }
-                const data = parseCSV(csvText);
                 
-                // 첫 번째 행은 헤더이므로 제외하고 데이터 처리
+                const data = parseCSV(csvText);
                 const dataRows = data.slice(1);
                 
                 const processedData = dataRows.map(row => ({
-                    date: row[0], // 첫 번째 컬럼은 항상 Date
-                    value: row[1] // 두 번째 컬럼은 해당 값
+                    date: row[0],
+                    value: row[1]
                 })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
                 
-                // 날짜순으로 정렬 (오래된 것 → 최신 순서로)
                 processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
                 
-                console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
+                console.log(`Loaded ${processedData.length} data points from ${sheetKey}`);
                 return processedData;
                 
             } catch (error) {
@@ -413,23 +891,33 @@
             }
         }
 
-        // 1년 데이터만 필터링하는 함수
+        // 1년 데이터 필터링
         function filterLastYear(data) {
             const oneYearAgo = new Date();
             oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
             return data.filter(row => parseDate(row.date) >= oneYearAgo);
         }
 
-        // 심플한 날짜 레이블 포맷 함수
+        // 날짜 포맷
         function formatSimpleDate(date) {
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             return `${months[date.getMonth()]} '${String(date.getFullYear()).slice(-2)}`;
         }
 
+        // 차트 공통 옵션
+        const chartColors = {
+            coffee: '#b87333',
+            usd: '#4a7c59',
+            cftc: { positive: '#4a7c59', negative: '#c23a3a' },
+            nvdi: { range: 'rgba(184, 115, 51, 0.15)', y2024: '#c23a3a', y2025: '#3498db' }
+        };
+
         // Coffee Futures 차트
         async function createCoffeeChart() {
             const loadingElement = document.getElementById('loading-coffee');
             const chartElement = document.getElementById('coffeeChart');
+            const valueElement = document.getElementById('coffeeValue');
+            const changeElement = document.getElementById('coffeeChange');
             
             try {
                 let data = await Promise.race([
@@ -437,11 +925,7 @@
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
                 
-                if (!data) {
-                    throw new Error('No data received');
-                }
-
-                // 1년 데이터만 필터링
+                if (!data) throw new Error('No data received');
                 data = filterLastYear(data);
 
                 const chartData = data.map((row, index) => ({
@@ -449,6 +933,17 @@
                     y: parseFloat(row.value),
                     date: parseDate(row.date)
                 })).filter(point => !isNaN(point.y));
+
+                // 값 업데이트
+                if (chartData.length > 0) {
+                    const latestValue = chartData[chartData.length - 1].y;
+                    const prevValue = chartData.length > 1 ? chartData[chartData.length - 2].y : latestValue;
+                    const change = ((latestValue - prevValue) / prevValue * 100).toFixed(2);
+                    
+                    valueElement.textContent = `${latestValue.toFixed(2)}¢`;
+                    changeElement.textContent = change >= 0 ? `+${change}%` : `${change}%`;
+                    changeElement.className = `card-change ${change >= 0 ? 'positive' : 'negative'}`;
+                }
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -460,92 +955,63 @@
                         datasets: [{
                             label: 'Coffee Futures Price',
                             data: chartData,
-                            borderColor: '#8B4513',
-                            backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                            borderColor: chartColors.coffee,
+                            backgroundColor: 'rgba(184, 115, 51, 0.08)',
                             borderWidth: 2,
                             fill: true,
-                            tension: 0.2,
+                            tension: 0.3,
                             pointRadius: 0,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#8B4513' : 'transparent'
-                            ),
-                            pointBorderColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#FFFFFF' : 'transparent'
-                            ),
-                            pointBorderWidth: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 2 : 0
-                            ),
-                            pointRadius: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 4 : 0
-                            )
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: chartColors.coffee
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
+                        interaction: { intersect: false, mode: 'index' },
                         plugins: {
-                            legend: {
-                                display: false
-                            },
+                            legend: { display: false },
                             tooltip: {
+                                backgroundColor: 'rgba(26, 15, 10, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                padding: 12,
+                                displayColors: false,
                                 callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
-                                    }
+                                    title: (items) => chartData[items[0].dataIndex].date.toLocaleDateString('ko-KR'),
+                                    label: (context) => `${context.parsed.y.toFixed(2)} ¢/lb`
                                 }
                             }
                         },
                         scales: {
                             x: {
                                 type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: false
-                                },
                                 ticks: {
-                                    callback: function(value) {
+                                    callback: (value) => {
                                         const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
-                                            const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 6));
-                                            
-                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return formatSimpleDate(chartData[index].date);
-                                            }
+                                        if (chartData[index] && (index === 0 || index === chartData.length - 1 || index % Math.floor(chartData.length / 5) === 0)) {
+                                            return formatSimpleDate(chartData[index].date);
                                         }
                                         return '';
                                     },
-                                    maxTicksLimit: 7,
-                                    maxRotation: 0,
-                                    minRotation: 0,
-                                    font: { size: 11 }
+                                    color: 'rgba(44, 36, 32, 0.4)',
+                                    font: { size: 11 },
+                                    maxTicksLimit: 6,
+                                    maxRotation: 0
                                 },
-                                grid: {
-                                    display: false
-                                }
+                                grid: { display: false }
                             },
                             y: {
-                                title: {
-                                    display: true,
-                                    text: 'cents/lb',
-                                    font: { size: 11 }
-                                },
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
+                                title: { display: true, text: 'cents/lb', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' },
+                                grid: { color: 'rgba(44, 36, 32, 0.05)' },
+                                ticks: { color: 'rgba(44, 36, 32, 0.5)', font: { size: 11 } }
                             }
                         }
                     }
                 });
             } catch (error) {
                 console.error('Coffee chart error:', error);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
             }
         }
 
@@ -553,6 +1019,8 @@
         async function createUSDChart() {
             const loadingElement = document.getElementById('loading-usd');
             const chartElement = document.getElementById('usdChart');
+            const valueElement = document.getElementById('usdValue');
+            const changeElement = document.getElementById('usdChange');
             
             try {
                 let data = await Promise.race([
@@ -560,11 +1028,7 @@
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
                 
-                if (!data) {
-                    throw new Error('No data received');
-                }
-
-                // 1년 데이터만 필터링
+                if (!data) throw new Error('No data received');
                 data = filterLastYear(data);
 
                 const chartData = data.map((row, index) => ({
@@ -572,6 +1036,16 @@
                     y: parseFloat(row.value),
                     date: parseDate(row.date)
                 })).filter(point => !isNaN(point.y));
+
+                if (chartData.length > 0) {
+                    const latestValue = chartData[chartData.length - 1].y;
+                    const prevValue = chartData.length > 1 ? chartData[chartData.length - 2].y : latestValue;
+                    const change = ((latestValue - prevValue) / prevValue * 100).toFixed(2);
+                    
+                    valueElement.textContent = latestValue.toFixed(4);
+                    changeElement.textContent = change >= 0 ? `+${change}%` : `${change}%`;
+                    changeElement.className = `card-change ${change >= 0 ? 'positive' : 'negative'}`;
+                }
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
@@ -583,99 +1057,72 @@
                         datasets: [{
                             label: 'USD/BRL Rate',
                             data: chartData,
-                            borderColor: '#2E8B57',
-                            backgroundColor: 'rgba(46, 139, 87, 0.1)',
+                            borderColor: chartColors.usd,
+                            backgroundColor: 'rgba(74, 124, 89, 0.08)',
                             borderWidth: 2,
                             fill: true,
-                            tension: 0.2,
+                            tension: 0.3,
                             pointRadius: 0,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#2E8B57' : 'transparent'
-                            ),
-                            pointBorderColor: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? '#FFFFFF' : 'transparent'
-                            ),
-                            pointBorderWidth: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 2 : 0
-                            ),
-                            pointRadius: chartData.map((_, index) => 
-                                index === chartData.length - 1 ? 4 : 0
-                            )
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: chartColors.usd
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
+                        interaction: { intersect: false, mode: 'index' },
                         plugins: {
-                            legend: {
-                                display: false
-                            },
+                            legend: { display: false },
                             tooltip: {
+                                backgroundColor: 'rgba(26, 15, 10, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                padding: 12,
+                                displayColors: false,
                                 callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR');
-                                    }
+                                    title: (items) => chartData[items[0].dataIndex].date.toLocaleDateString('ko-KR'),
+                                    label: (context) => `BRL ${context.parsed.y.toFixed(4)}`
                                 }
                             }
                         },
                         scales: {
                             x: {
                                 type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: false
-                                },
                                 ticks: {
-                                    callback: function(value) {
+                                    callback: (value) => {
                                         const index = Math.round(value);
-                                        if (chartData[index] && index >= 0 && index < chartData.length) {
-                                            const totalPoints = chartData.length;
-                                            const step = Math.max(1, Math.floor(totalPoints / 6));
-                                            
-                                            if (index === 0 || index === totalPoints - 1 || index % step === 0) {
-                                                return formatSimpleDate(chartData[index].date);
-                                            }
+                                        if (chartData[index] && (index === 0 || index === chartData.length - 1 || index % Math.floor(chartData.length / 5) === 0)) {
+                                            return formatSimpleDate(chartData[index].date);
                                         }
                                         return '';
                                     },
-                                    maxTicksLimit: 7,
-                                    maxRotation: 0,
-                                    minRotation: 0,
-                                    font: { size: 11 }
+                                    color: 'rgba(44, 36, 32, 0.4)',
+                                    font: { size: 11 },
+                                    maxTicksLimit: 6,
+                                    maxRotation: 0
                                 },
-                                grid: {
-                                    display: false
-                                }
+                                grid: { display: false }
                             },
                             y: {
-                                title: {
-                                    display: true,
-                                    text: 'BRL/USD',
-                                    font: { size: 11 }
-                                },
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
+                                title: { display: true, text: 'BRL/USD', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' },
+                                grid: { color: 'rgba(44, 36, 32, 0.05)' },
+                                ticks: { color: 'rgba(44, 36, 32, 0.5)', font: { size: 11 } }
                             }
                         }
                     }
                 });
             } catch (error) {
                 console.error('USD chart error:', error);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
             }
         }
 
-        // CFTC 포지션 차트 (바 차트)
+        // CFTC 포지션 차트
         async function createCFTCChart() {
             const loadingElement = document.getElementById('loading-cftc');
             const chartElement = document.getElementById('cftcChart');
+            const valueElement = document.getElementById('cftcValue');
+            const changeElement = document.getElementById('cftcChange');
             
             try {
                 let data = await Promise.race([
@@ -683,39 +1130,40 @@
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
                 
-                if (!data) {
-                    throw new Error('No data received');
-                }
-
-                // 1년 데이터만 필터링
+                if (!data) throw new Error('No data received');
                 data = filterLastYear(data);
 
-                const chartData = data.map((row) => ({
+                const chartData = data.map(row => ({
                     y: parseInt(row.value),
-                    date: parseDate(row.date),
-                    dateString: row.date
+                    date: parseDate(row.date)
                 })).filter(point => !isNaN(point.y) && point.date);
 
-                // 날짜 기준으로 정렬
                 chartData.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+                if (chartData.length > 0) {
+                    const latestValue = chartData[chartData.length - 1].y;
+                    const prevValue = chartData.length > 1 ? chartData[chartData.length - 2].y : latestValue;
+                    const change = latestValue - prevValue;
+                    
+                    valueElement.textContent = latestValue >= 0 ? `+${(latestValue/1000).toFixed(1)}K` : `${(latestValue/1000).toFixed(1)}K`;
+                    changeElement.textContent = change >= 0 ? `+${(change/1000).toFixed(1)}K` : `${(change/1000).toFixed(1)}K`;
+                    changeElement.className = `card-change ${change >= 0 ? 'positive' : 'negative'}`;
+                }
 
                 loadingElement.style.display = 'none';
                 chartElement.style.display = 'block';
 
                 const ctx = chartElement.getContext('2d');
-                
-                // 간격 계산
                 const totalData = chartData.length;
                 const step = Math.max(Math.floor(totalData / 6), 1);
                 
-                // 바 차트용 레이블 (심플하게)
                 const labels = chartData.map((item, index) => {
                     if (index === 0 || index === totalData - 1 || index % step === 0) {
                         return formatSimpleDate(item.date);
                     }
                     return '';
                 });
-                
+
                 charts.cftc = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -723,159 +1171,113 @@
                         datasets: [{
                             label: 'Net Long Positions',
                             data: chartData.map(d => d.y),
-                            backgroundColor: chartData.map(point => point.y >= 0 ? '#27AE60' : '#E74C3C'),
-                            borderColor: chartData.map(point => point.y >= 0 ? '#229954' : '#C0392B'),
-                            borderWidth: 1
+                            backgroundColor: chartData.map(point => point.y >= 0 ? chartColors.cftc.positive : chartColors.cftc.negative),
+                            borderRadius: 2,
+                            borderSkipped: false
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
+                        interaction: { intersect: false, mode: 'index' },
                         plugins: {
-                            legend: {
-                                display: false
-                            },
+                            legend: { display: false },
                             tooltip: {
+                                backgroundColor: 'rgba(26, 15, 10, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                padding: 12,
+                                displayColors: false,
                                 callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return chartData[index].date.toLocaleDateString('ko-KR', {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric'
-                                        });
-                                    },
-                                    label: function(context) {
-                                        return 'Net Long: ' + context.parsed.y.toLocaleString();
-                                    }
+                                    title: (items) => chartData[items[0].dataIndex].date.toLocaleDateString('ko-KR'),
+                                    label: (context) => `Net Long: ${context.parsed.y.toLocaleString()} contracts`
                                 }
                             }
                         },
                         scales: {
                             x: {
-                                title: {
-                                    display: false
-                                },
                                 ticks: {
-                                    maxRotation: 0,
-                                    minRotation: 0,
+                                    color: 'rgba(44, 36, 32, 0.4)',
                                     font: { size: 11 },
+                                    maxRotation: 0,
                                     autoSkip: false
                                 },
-                                grid: {
-                                    display: false
-                                }
+                                grid: { display: false }
                             },
                             y: {
-                                title: {
-                                    display: true,
-                                    text: 'Contracts',
-                                    font: { size: 11 }
-                                },
+                                title: { display: true, text: 'Contracts', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' },
+                                grid: { color: 'rgba(44, 36, 32, 0.05)' },
                                 ticks: {
-                                    callback: function(value) {
-                                        return (value / 1000).toFixed(0) + 'K';
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
+                                    color: 'rgba(44, 36, 32, 0.5)',
+                                    font: { size: 11 },
+                                    callback: (value) => (value / 1000).toFixed(0) + 'K'
                                 }
                             }
                         }
                     }
                 });
-                
             } catch (error) {
                 console.error('CFTC chart error:', error);
-                loadingElement.innerHTML = '<div style="color: #e74c3c;">데이터 로딩 실패: ' + error.message + '</div>';
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
             }
         }
 
-        // NVDI 구글 시트 읽기 함수
+        // NVDI 데이터 읽기
         async function readNVDIGoogleSheet() {
             try {
                 const url = GOOGLE_SHEETS_URLS.nvdi;
-                console.log('Fetching NVDI data from Google Sheets');
-                
                 let csvText;
                 
-                // 먼저 직접 접근 시도
                 try {
                     const directResponse = await fetch(url);
                     if (directResponse.ok) {
                         csvText = await directResponse.text();
-                        console.log('Direct access successful for NVDI');
                     } else {
                         throw new Error('Direct access failed');
                     }
                 } catch (directError) {
-                    // 직접 접근 실패시 AllOrigins 프록시 사용
-                    console.log('Direct access failed for NVDI, trying proxy...');
                     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    
                     const proxyResponse = await fetch(proxyUrl);
-                    if (!proxyResponse.ok) {
-                        throw new Error(`Proxy also failed: ${proxyResponse.status}`);
-                    }
-                    
+                    if (!proxyResponse.ok) throw new Error(`Proxy failed: ${proxyResponse.status}`);
                     const proxyData = await proxyResponse.json();
                     csvText = proxyData.contents;
-                    console.log('Proxy access successful for NVDI');
                 }
-                const data = parseCSV(csvText);
                 
-                // 첫 번째 행은 헤더
+                const data = parseCSV(csvText);
                 const headers = data[0];
                 const yearColumns = {};
                 
-                // 헤더에서 년도 컬럼 인덱스 찾기
                 headers.forEach((header, index) => {
-                    if (index > 0) { // 첫 번째 컬럼은 Date
+                    if (index > 0) {
                         const year = parseInt(header.toString().trim());
-                        if (!isNaN(year)) {
-                            yearColumns[year] = index;
-                        }
+                        if (!isNaN(year)) yearColumns[year] = index;
                     }
                 });
                 
-                console.log('Found year columns:', Object.keys(yearColumns));
-                
-                // 월별 데이터 집계
                 const monthlyData = [];
                 
                 for (let month = 1; month <= 12; month++) {
                     const monthRows = [];
                     
-                    // 해당 월의 모든 행 찾기
                     for (let i = 1; i < data.length; i++) {
                         const row = data[i];
                         if (row && row[0]) {
-                            // DD/MM 형식에서 월 추출
                             const dateParts = row[0].toString().split('/');
                             if (dateParts.length === 2) {
                                 const rowMonth = parseInt(dateParts[1]);
-                                if (rowMonth === month) {
-                                    monthRows.push(row);
-                                }
+                                if (rowMonth === month) monthRows.push(row);
                             }
                         }
                     }
                     
                     if (monthRows.length > 0) {
-                        // 2010-2023년 데이터에서 min/max 계산
                         const allValues = [];
                         for (const row of monthRows) {
                             for (let year = 2010; year <= 2023; year++) {
                                 const colIndex = yearColumns[year];
                                 if (colIndex && row[colIndex] !== undefined && row[colIndex] !== null && row[colIndex] !== "") {
                                     const value = parseFloat(row[colIndex]);
-                                    if (!isNaN(value)) {
-                                        allValues.push(value);
-                                    }
+                                    if (!isNaN(value)) allValues.push(value);
                                 }
                             }
                         }
@@ -883,9 +1285,7 @@
                         const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
                         const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
                         
-                        // 2024년과 2025년 데이터 (평균값 계산)
-                        let year2024Values = [];
-                        let year2025Values = [];
+                        let year2024Values = [], year2025Values = [];
                         
                         for (const row of monthRows) {
                             const val2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
@@ -895,22 +1295,13 @@
                             if (!isNaN(val2025) && val2025 !== null) year2025Values.push(val2025);
                         }
                         
-                        const avg2024 = year2024Values.length > 0 ? 
-                            year2024Values.reduce((sum, val) => sum + val, 0) / year2024Values.length : null;
-                        const avg2025 = year2025Values.length > 0 ? 
-                            year2025Values.reduce((sum, val) => sum + val, 0) / year2025Values.length : null;
+                        const avg2024 = year2024Values.length > 0 ? year2024Values.reduce((sum, val) => sum + val, 0) / year2024Values.length : null;
+                        const avg2025 = year2025Values.length > 0 ? year2025Values.reduce((sum, val) => sum + val, 0) / year2025Values.length : null;
                         
-                        monthlyData.push({
-                            month: month,
-                            minValue: minValue,
-                            maxValue: maxValue,
-                            year2024: avg2024,
-                            year2025: avg2025
-                        });
+                        monthlyData.push({ month, minValue, maxValue, year2024: avg2024, year2025: avg2025 });
                     }
                 }
                 
-                console.log('Successfully processed NVDI data:', monthlyData.length, 'months');
                 return monthlyData;
                 
             } catch (error) {
@@ -923,6 +1314,8 @@
         async function createNVDIChart() {
             const loadingElement = document.getElementById('loading-nvdi');
             const chartElement = document.getElementById('nvdiChart');
+            const valueElement = document.getElementById('nvdiValue');
+            const changeElement = document.getElementById('nvdiChange');
             
             try {
                 const nvdiData = await Promise.race([
@@ -930,94 +1323,84 @@
                     new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
                 ]);
                 
-                if (!nvdiData || nvdiData.length === 0) {
-                    throw new Error('NVDI 데이터를 읽을 수 없습니다');
-                }
+                if (!nvdiData || nvdiData.length === 0) throw new Error('NVDI 데이터를 읽을 수 없습니다');
 
-                const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', 
-                               '7월', '8월', '9월', '10월', '11월', '12월'];
-
+                const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
                 const datasets = [];
 
-                // Min-Max 범위 상한선
-                const maxData = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.maxValue
-                })).filter(point => point.y !== null);
+                // 최신 값 업데이트
+                const currentMonth = new Date().getMonth();
+                const currentData = nvdiData.find(d => d.month === currentMonth + 1);
+                if (currentData && currentData.year2025) {
+                    valueElement.textContent = currentData.year2025.toFixed(3);
+                    if (currentData.year2024) {
+                        const diff = ((currentData.year2025 - currentData.year2024) / currentData.year2024 * 100).toFixed(1);
+                        changeElement.textContent = diff >= 0 ? `+${diff}% vs 2024` : `${diff}% vs 2024`;
+                        changeElement.className = `card-change ${diff >= 0 ? 'positive' : 'negative'}`;
+                    }
+                }
+
+                // Historical Range
+                const maxData = nvdiData.map((item, index) => ({ x: index, y: item.maxValue })).filter(p => p.y !== null);
+                const minData = nvdiData.map((item, index) => ({ x: index, y: item.minValue })).filter(p => p.y !== null);
 
                 datasets.push({
                     label: 'Historical Range (2010-2023)',
                     data: maxData,
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
+                    borderColor: 'rgba(184, 115, 51, 0.3)',
+                    backgroundColor: chartColors.nvdi.range,
                     borderWidth: 1,
                     fill: '+1',
                     tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 0
+                    pointRadius: 0
                 });
-
-                // Min-Max 범위 하한선
-                const minData = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.minValue
-                })).filter(point => point.y !== null);
 
                 datasets.push({
                     label: '',
                     data: minData,
-                    borderColor: 'rgba(149, 165, 166, 0.8)',
-                    backgroundColor: 'rgba(149, 165, 166, 0.3)',
+                    borderColor: 'rgba(184, 115, 51, 0.3)',
+                    backgroundColor: chartColors.nvdi.range,
                     borderWidth: 1,
                     fill: false,
                     tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 0
+                    pointRadius: 0
                 });
 
-                // 2024년 라인
-                const data2024 = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.year2024
-                })).filter(point => point.y !== null && !isNaN(point.y));
-
+                // 2024년
+                const data2024 = nvdiData.map((item, index) => ({ x: index, y: item.year2024 })).filter(p => p.y !== null && !isNaN(p.y));
                 if (data2024.length > 0) {
                     datasets.push({
                         label: '2024',
                         data: data2024,
-                        borderColor: '#E74C3C',
+                        borderColor: chartColors.nvdi.y2024,
                         backgroundColor: 'transparent',
-                        borderWidth: 3,
+                        borderWidth: 2.5,
                         fill: false,
                         tension: 0.4,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#E74C3C',
-                        pointBorderColor: '#FFFFFF',
-                        pointBorderWidth: 2
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        pointBackgroundColor: chartColors.nvdi.y2024,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1.5
                     });
                 }
 
-                // 2025년 라인
-                const data2025 = nvdiData.map((item, index) => ({
-                    x: index,
-                    y: item.year2025
-                })).filter(point => point.y !== null && !isNaN(point.y));
-
+                // 2025년
+                const data2025 = nvdiData.map((item, index) => ({ x: index, y: item.year2025 })).filter(p => p.y !== null && !isNaN(p.y));
                 if (data2025.length > 0) {
                     datasets.push({
                         label: '2025',
                         data: data2025,
-                        borderColor: '#3498DB',
+                        borderColor: chartColors.nvdi.y2025,
                         backgroundColor: 'transparent',
-                        borderWidth: 3,
+                        borderWidth: 2.5,
                         fill: false,
                         tension: 0.4,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#3498DB',
-                        pointBorderColor: '#FFFFFF',
-                        pointBorderWidth: 2
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        pointBackgroundColor: chartColors.nvdi.y2025,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1.5
                     });
                 }
 
@@ -1027,38 +1410,28 @@
                 const ctx = chartElement.getContext('2d');
                 charts.nvdi = new Chart(ctx, {
                     type: 'line',
-                    data: {
-                        datasets: datasets
-                    },
+                    data: { datasets },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
+                        interaction: { intersect: false, mode: 'index' },
                         plugins: {
                             legend: {
                                 display: true,
                                 position: 'bottom',
                                 labels: {
-                                    filter: function(item) {
-                                        return item.text !== '';
-                                    },
+                                    filter: (item) => item.text !== '',
+                                    padding: 16,
+                                    font: { size: 11 },
                                     usePointStyle: false,
-                                    padding: 20,
-                                    font: {
-                                        size: 12
-                                    },
-                                    generateLabels: function(chart) {
-                                        const datasets = chart.data.datasets;
-                                        return datasets.map((dataset, i) => {
+                                    generateLabels: (chart) => {
+                                        return chart.data.datasets.map((dataset, i) => {
                                             if (dataset.label && dataset.label !== '') {
                                                 return {
                                                     text: dataset.label,
                                                     fillStyle: dataset.borderColor,
                                                     strokeStyle: dataset.borderColor,
-                                                    lineWidth: 3,
+                                                    lineWidth: 2,
                                                     hidden: !chart.isDatasetVisible(i),
                                                     datasetIndex: i
                                                 };
@@ -1068,23 +1441,22 @@
                                 }
                             },
                             tooltip: {
+                                backgroundColor: 'rgba(26, 15, 10, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                padding: 12,
+                                displayColors: false,
                                 callbacks: {
-                                    title: function(tooltipItems) {
-                                        const index = tooltipItems[0].dataIndex;
-                                        return monthKR[index] || `월 ${index + 1}`;
-                                    },
-                                    label: function(context) {
+                                    title: (items) => monthKR[items[0].dataIndex] || '',
+                                    label: (context) => {
                                         if (context.datasetIndex === 0) {
-                                            const index = context.dataIndex;
-                                            const dataPoint = nvdiData[index];
-                                            if (dataPoint) {
-                                                return `Range: ${dataPoint.minValue?.toFixed(3)} - ${dataPoint.maxValue?.toFixed(3)}`;
-                                            }
-                                            return 'Range data';
+                                            const idx = context.dataIndex;
+                                            const d = nvdiData[idx];
+                                            return d ? `Range: ${d.minValue?.toFixed(3)} - ${d.maxValue?.toFixed(3)}` : '';
                                         } else if (context.datasetIndex === 1) {
                                             return '';
                                         }
-                                        return context.dataset.label + ': ' + (context.parsed.y ? context.parsed.y.toFixed(3) : 'N/A');
+                                        return `${context.dataset.label}: ${context.parsed.y?.toFixed(3) || 'N/A'}`;
                                     }
                                 }
                             }
@@ -1092,90 +1464,52 @@
                         scales: {
                             x: {
                                 type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: '월',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                },
                                 ticks: {
-                                    callback: function(value) {
-                                        const index = Math.round(value);
-                                        return monthKR[index] || '';
-                                    },
+                                    callback: (value) => monthKR[Math.round(value)] || '',
+                                    color: 'rgba(44, 36, 32, 0.4)',
+                                    font: { size: 11 },
                                     maxTicksLimit: 12,
                                     stepSize: 1
                                 },
                                 min: 0,
                                 max: 11,
-                                grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                }
+                                grid: { display: true, color: 'rgba(44, 36, 32, 0.05)' }
                             },
                             y: {
-                                title: {
-                                    display: true,
-                                    text: 'NVDI Index',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                },
-                                grid: {
-                                    display: true,
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                },
+                                title: { display: true, text: 'NVDI Index', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' },
+                                grid: { color: 'rgba(44, 36, 32, 0.05)' },
                                 ticks: {
-                                    callback: function(value) {
-                                        return value.toFixed(2);
-                                    }
+                                    color: 'rgba(44, 36, 32, 0.5)',
+                                    font: { size: 11 },
+                                    callback: (value) => value.toFixed(2)
                                 }
                             }
                         }
                     }
                 });
                 
-                console.log('NVDI 차트 생성 완료');
-                
             } catch (error) {
                 console.error('NVDI chart error:', error);
-                loadingElement.innerHTML = `
-                    <div style="color: #e74c3c; text-align: center;">
-                        <strong>NVDI 데이터 로딩 실패</strong><br>
-                        <small>${error.message}</small><br>
-                        <small style="margin-top: 10px; display: block;">
-                            구글 시트에서 데이터를 읽을 수 없습니다.
-                        </small>
-                    </div>
-                `;
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
             }
         }
 
-        // 메인 초기화 함수
+        // 초기화
         async function init() {
             try {
-                console.log('대시보드 초기화 시작...');
-                
-                // 차트들 병렬로 로드
+                console.log('Dashboard 초기화 시작...');
                 await Promise.all([
                     createCoffeeChart(),
                     createUSDChart(),
                     createCFTCChart(),
                     createNVDIChart()
                 ]);
-                
-                console.log('대시보드 초기화 완료');
-                
+                console.log('Dashboard 초기화 완료');
             } catch (error) {
-                console.error('대시보드 초기화 중 오류:', error);
+                console.error('Dashboard 초기화 오류:', error);
             }
         }
 
-        // 페이지 로드시 초기화 실행
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
