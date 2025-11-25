@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GX9R36120J');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Coffee Market Info</title>
+    <meta name="description" content="Coffee Market Info 소개 - 10년 이상의 원자재 시장 분석 경험을 바탕으로 커피 시장 인사이트를 제공합니다.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --border: rgba(26, 15, 10, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== 상단 네비게이션 ========== */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 56px;
+            box-shadow: 0 1px 30px rgba(0,0,0,0.06);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            opacity: 1;
+            color: var(--copper);
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 10px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 8px 0;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            margin-top: 20px;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            color: var(--ink);
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .dropdown-item:hover {
+            background: var(--steam);
+            color: var(--copper);
+        }
+
+        /* ========== 페이지 헤더 ========== */
+        .page-header {
+            padding: 140px 0 80px;
+            background: linear-gradient(180deg, var(--paper) 0%, var(--steam) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(184, 115, 51, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            text-align: center;
+        }
+
+        .page-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 20px;
+        }
+
+        .page-tag::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--copper);
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--espresso);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--ink);
+            opacity: 0.7;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ========== 메인 콘텐츠 ========== */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px clamp(20px, 5vw, 48px);
+        }
+
+        /* ========== 섹션 스타일 ========== */
+        .about-section {
+            background: white;
+            border-radius: 20px;
+            padding: 48px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--espresso);
+            margin-bottom: 24px;
+        }
+
+        .section-content {
+            color: var(--ink);
+            opacity: 0.85;
+            line-height: 1.9;
+        }
+
+        .section-content p {
+            margin-bottom: 20px;
+        }
+
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ========== 경험 하이라이트 ========== */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .experience-item {
+            text-align: center;
+            padding: 32px 20px;
+            background: var(--steam);
+            border-radius: 16px;
+        }
+
+        .experience-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--copper);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .experience-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--ink);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ========== 분석 방법론 ========== */
+        .methodology-list {
+            list-style: none;
+            padding: 0;
+            margin: 24px 0;
+        }
+
+        .methodology-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .methodology-list li:last-child {
+            border-bottom: none;
+        }
+
+        .methodology-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .methodology-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .methodology-content p {
+            font-size: 0.95rem;
+            color: var(--ink);
+            opacity: 0.7;
+            margin: 0;
+        }
+
+        /* ========== 데이터 소스 ========== */
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--steam);
+            border-radius: 10px;
+        }
+
+        .source-icon {
+            font-size: 1.3rem;
+        }
+
+        .source-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--espresso);
+        }
+
+        /* ========== CTA 섹션 ========== */
+        .cta-section {
+            text-align: center;
+            padding: 60px 48px;
+            background: linear-gradient(135deg, var(--espresso) 0%, var(--roast) 100%);
+            border-radius: 20px;
+            color: var(--crema);
+        }
+
+        .cta-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .cta-desc {
+            font-size: 1rem;
+            opacity: 0.7;
+            margin-bottom: 32px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--copper);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .cta-button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* ========== 푸터 ========== */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .footer-desc {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            max-width: 400px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-link {
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            font-size: 0.75rem;
+            opacity: 0.4;
+            text-align: center;
+        }
+
+        /* ========== 반응형 ========== */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .page-header {
+                padding: 100px 0 60px;
+            }
+
+            .about-section {
+                padding: 32px 24px;
+            }
+
+            .experience-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .sources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+        }
+
+        /* ========== 애니메이션 ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-logo">Coffee Market Info</span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="about.html" class="nav-link active">About</a>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-link">Service</span>
+                    <div class="nav-dropdown">
+                        <a href="weekly-report.html" class="dropdown-item">Weekly Report</a>
+                        <a href="in-depth-analysis.html" class="dropdown-item">In-Depth Analysis</a>
+                        <a href="fundamentals/fundamentals.html" class="dropdown-item">Fundamentals</a>
+                        <a href="dashboards.html" class="dropdown-item">Dashboard</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 페이지 헤더 -->
+    <header class="page-header">
+        <div class="page-container">
+            <div class="page-tag">About Us</div>
+            <h1 class="page-title">커피 시장 전문 분석</h1>
+            <p class="page-subtitle">
+                10년 이상의 원자재 시장 분석 경험을 바탕으로<br>
+                깊이 있는 커피 시장 인사이트를 제공합니다.
+            </p>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-container">
+        <!-- 소개 섹션 -->
+        <section class="about-section animate-in">
+            <div class="section-icon">☕</div>
+            <h2 class="section-title">Coffee Market Info</h2>
+            <div class="section-content">
+                <p>
+                    Coffee Market Info는 글로벌 커피 선물 시장의 심층 분석과 인사이트를 제공하는 전문 마켓 인텔리전스 플랫폼입니다. 
+                    트레이더, 로스터, 투자자, 그리고 커피 산업 종사자들을 위한 체계적이고 전문적인 시장 정보를 제공합니다.
+                </p>
+                <p>
+                    10년 이상의 원자재 시장 분석 경험을 바탕으로, 단순한 가격 동향을 넘어 
+                    시장의 구조적 변화와 펀더멘털 요인을 깊이 있게 분석합니다. 
+                    브라질, 베트남, 콜롬비아 등 주요 생산국의 현지 정보와 글로벌 매크로 환경을 종합하여 
+                    실질적인 시장 인사이트를 전달합니다.
+                </p>
+            </div>
+
+            <div class="experience-grid">
+                <div class="experience-item">
+                    <div class="experience-number">10+</div>
+                    <div class="experience-label">Years Experience</div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-number">50+</div>
+                    <div class="experience-label">Reports Published</div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-number">24/7</div>
+                    <div class="experience-label">Market Monitoring</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 분석 방법론 -->
+        <section class="about-section animate-in delay-1">
+            <div class="section-icon">🔍</div>
+            <h2 class="section-title">분석 방법론</h2>
+            <div class="section-content">
+                <p>
+                    정확하고 깊이 있는 분석을 위해 다각적인 접근 방식을 활용합니다. 
+                    펀더멘털 분석, 기술적 분석, 그리고 시장 심리 분석을 종합하여 
+                    균형 잡힌 시각을 제공합니다.
+                </p>
+            </div>
+
+            <ul class="methodology-list">
+                <li>
+                    <span class="methodology-icon">📊</span>
+                    <div class="methodology-content">
+                        <h4>펀더멘털 분석</h4>
+                        <p>생산량, 재고, 수출입 데이터, 기후 패턴, 환율 등 시장의 근본적인 수급 요인을 분석합니다.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="methodology-icon">📈</span>
+                    <div class="methodology-content">
+                        <h4>기술적 분석</h4>
+                        <p>차트 패턴, 지지/저항선, 모멘텀 지표 등을 활용한 가격 방향성과 진입/청산 타이밍 분석을 제공합니다.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="methodology-icon">🧠</span>
+                    <div class="methodology-content">
+                        <h4>시장 심리 분석</h4>
+                        <p>CFTC 포지션 데이터, 옵션 시장 동향, 투기적 자금 흐름 등을 통해 시장 참여자들의 심리를 파악합니다.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="methodology-icon">🌍</span>
+                    <div class="methodology-content">
+                        <h4>매크로 환경 분석</h4>
+                        <p>달러 인덱스, 금리 정책, 글로벌 경기 흐름 등 거시 경제 요인이 커피 시장에 미치는 영향을 분석합니다.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 데이터 소스 -->
+        <section class="about-section animate-in delay-2">
+            <div class="section-icon">📡</div>
+            <h2 class="section-title">데이터 소스 & 정보원</h2>
+            <div class="section-content">
+                <p>
+                    신뢰할 수 있는 다양한 출처로부터 데이터를 수집하고 분석합니다. 
+                    공식 통계 기관, 거래소 데이터, 주요 생산국 현지 정보 등을 종합하여 
+                    정확하고 시의적절한 분석을 제공합니다.
+                </p>
+            </div>
+
+            <div class="sources-grid">
+                <div class="source-item">
+                    <span class="source-icon">🏛️</span>
+                    <span class="source-name">ICE (Intercontinental Exchange)</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-icon">📊</span>
+                    <span class="source-name">CFTC (선물거래위원회)</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-icon">🌐</span>
+                    <span class="source-name">ICO (국제커피기구)</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-icon">🇧🇷</span>
+                    <span class="source-name">CONAB (브라질 통계청)</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-icon">📈</span>
+                    <span class="source-name">Refinitiv / LSEG</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-icon">🛰️</span>
+                    <span class="source-name">위성 기반 작황 데이터</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-icon">📰</span>
+                    <span class="source-name">Reuters / Bloomberg</span>
+                </div>
+                <div class="source-item">
+                    <span class="source-icon">🌱</span>
+                    <span class="source-name">주요 생산국 현지 정보</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA 섹션 -->
+        <section class="cta-section animate-in delay-3">
+            <h2 class="cta-title">문의 및 협업</h2>
+            <p class="cta-desc">
+                커피 시장 분석에 대한 문의, 맞춤형 리포트 요청, 
+                또는 협업 제안이 있으시면 연락해 주세요.
+            </p>
+            <a href="mailto:james.baek@aligncommodities.com" class="cta-button">
+                <span>Contact Us</span>
+                <span>→</span>
+            </a>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다.
+                        Align Commodities 발행.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html" class="footer-link">Home</a>
+                    <a href="weekly-report.html" class="footer-link">Weekly Report</a>
+                    <a href="in-depth-analysis.html" class="footer-link">In-depth Analysis</a>
+                    <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2025 Align Commodities. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 효과
+        window.addEventListener('scroll', () => {
+            const topNav = document.getElementById('topNav');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            
+            if (scrollTop > 100) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
