@@ -148,20 +148,18 @@ REPORT_META-->
 
 2. Google Analytics 포함: G-GX9R36120J
 
-3. 디자인 시스템 (다크 테마):
-- 폰트: Pretendard (본문), 필요시 sans-serif fallback
-- 컬러 스킴:
-  * 배경: #0a0a0a (body), #1a1a1a ~ #2d2d2d (cards)
-  * 텍스트: #e0e0e0 (본문), #ffffff (헤드라인), #cccccc (서브텍스트)
-  * 액센트: #8B4513 (border), #D2691E (chocolate/copper), rgba(139, 69, 19, 0.x) (투명도)
-  * 상승: #2ecc71, 하락: #e74c3c
-- body::before에 radial-gradient로 은은한 배경 효과
-- header에 gradient 배경과 장식적 ::before 요소
-- highlight-box: gradient 배경 + 좌측 border
-- price-card: grid 레이아웃, 4개 카드
-- news-item: 좌측 border 강조
-- 테이블: 다크 테마, hover 효과
-- 반응형 디자인
+3. 디자인 시스템 (다크 또는 라이트 테마 자유롭게 선택):
+- 폰트: Pretendard (본문), sans-serif fallback
+- 컬러 스킴 (둘 중 선택):
+  * 라이트 테마: --paper: #faf8f5, --cream: #f5f1eb, --espresso: #1a0f0a, --copper: #b87333, --mocha: #8b4513
+  * 다크 테마: 배경 #0a0a0a, 카드 #1a1a1a~#2d2d2d, 텍스트 #e0e0e0, 액센트 #D2691E
+  * 공통: 상승 #2ecc71 또는 #9caf88, 하락 #e74c3c 또는 #c5554a
+- 핵심 UI 컴포넌트:
+  * highlight-box: 중요 내용 강조 (좌측 border 또는 배경색)
+  * price-card: grid 레이아웃, 4개 카드
+  * news-item: 카드 형태, 날짜/제목/내용/출처 구조
+  * 테이블: hover 효과, 헤더 구분
+- 반응형 디자인 (모바일 대응)
 
 4. 필수 UI 요소:
 - header에 "← 홈으로" 버튼 (index.html 링크)
