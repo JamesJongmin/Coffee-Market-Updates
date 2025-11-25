@@ -1,0 +1,197 @@
+name: Weekly Coffee Market Report
+
+on:
+  schedule:
+    # 매주 금요일 23:00 UTC = 토요일 08:00 KST
+    - cron: '0 23 * * 5'
+  
+  # 수동 실행 옵션
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: '리포트 날짜 (YYYY-MM-DD 형식, 비워두면 오늘 날짜)'
+        required: false
+        default: ''
+      dry_run:
+        description: '테스트 모드 (파일 생성 안함)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+      
+      - name: Generate weekly report
+        id: generate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          # 옵션 설정
+          ARGS=""
+          
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          
+          if [ -n "${{ github.event.inputs.target_date }}" ]; then
+            ARGS="$ARGS --date ${{ github.event.inputs.target_date }}"
+          fi
+          
+          # 리포트 생성 실행
+          echo "🚀 주간 리포트 생성 시작..."
+          echo "옵션: $ARGS"
+          
+          node scripts/generate-weekly-report.js $ARGS
+          
+          echo "✅ 리포트 생성 완료"
+      
+      - name: Update reports.json index
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          # 기존 update-reports.js 실행하여 인덱스 업데이트
+          if [ -f update-reports.js ]; then
+            echo "📊 reports.json 인덱스 업데이트..."
+            node update-reports.js
+          fi
+      
+      - name: Commit and push changes
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # 변경된 파일 확인
+          git add Reports/
+          git add reports.json
+          
+          # 변경사항이 있으면 커밋
+          if git diff --staged --quiet; then
+            echo "변경사항이 없습니다."
+          else
+            REPORT_DATE=$(date +'%Y-%m-%d')
+            if [ -n "${{ github.event.inputs.target_date }}" ]; then
+              REPORT_DATE="${{ github.event.inputs.target_date }}"
+            fi
+            
+            git commit -m "📊 Add weekly coffee market report (${REPORT_DATE})"
+            git push
+            
+            echo "✅ 리포트가 커밋되었습니다: ${REPORT_DATE}"
+          fi
+      
+      - name: Send notification (optional)
+        if: github.event.inputs.dry_run != 'true' && success()
+        run: |
+          REPORT_DATE=$(date +'%Y-%m-%d')
+          if [ -n "${{ github.event.inputs.target_date }}" ]; then
+            REPORT_DATE="${{ github.event.inputs.target_date }}"
+          fi
+          
+          echo "📧 리포트 생성 완료: ${REPORT_DATE}"
+          
+          # Slack 알림 (선택적, SLACK_WEBHOOK_URL 시크릿 필요)
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"✅ 커피 시장 주간 리포트 생성 완료: ${REPORT_DATE}\"}" \
+              ${{ secrets.SLACK_WEBHOOK_URL }} || true
+          fi
+      
+      - name: Report generation failed
+        if: failure()
+        run: |
+          echo "❌ 리포트 생성에 실패했습니다."
+          echo "로그를 확인해주세요."
+          
+          # 실패 알림 (선택적)
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            curl -X POST -H 'Content-type: application/json' \
+              --data '{"text":"❌ 커피 시장 주간 리포트 생성 실패! GitHub Actions 로그를 확인하세요."}' \
+              ${{ secrets.SLACK_WEBHOOK_URL }} || true
+          fi
+
+  # 리포트 검증 작업 (선택적)
+  validate-report:
+    needs: generate-report
+    runs-on: ubuntu-latest
+    if: github.event.inputs.dry_run != 'true'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 1
+      
+      - name: Validate generated report
+        run: |
+          REPORT_DATE=$(date +'%Y-%m-%d')
+          if [ -n "${{ github.event.inputs.target_date }}" ]; then
+            REPORT_DATE="${{ github.event.inputs.target_date }}"
+          fi
+          
+          YEAR=$(echo $REPORT_DATE | cut -d'-' -f1)
+          MONTH=$(echo $REPORT_DATE | cut -d'-' -f2)
+          
+          REPORT_PATH="Reports/${YEAR}/${MONTH}/${REPORT_DATE}.html"
+          
+          echo "🔍 리포트 검증: ${REPORT_PATH}"
+          
+          if [ -f "$REPORT_PATH" ]; then
+            # 기본 검증
+            echo "✓ 파일 존재 확인"
+            
+            # 파일 크기 확인
+            SIZE=$(stat -f%z "$REPORT_PATH" 2>/dev/null || stat -c%s "$REPORT_PATH")
+            echo "✓ 파일 크기: ${SIZE} bytes"
+            
+            # REPORT_META 블록 확인
+            if grep -q "REPORT_META" "$REPORT_PATH"; then
+              echo "✓ REPORT_META 블록 존재"
+            else
+              echo "⚠️ REPORT_META 블록 없음"
+            fi
+            
+            # HTML 구조 확인
+            if grep -q "</html>" "$REPORT_PATH"; then
+              echo "✓ HTML 구조 정상"
+            else
+              echo "❌ HTML 구조 오류"
+              exit 1
+            fi
+            
+            echo "✅ 리포트 검증 완료"
+          else
+            echo "⚠️ 리포트 파일을 찾을 수 없습니다: ${REPORT_PATH}"
+          fi
