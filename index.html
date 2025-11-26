@@ -895,6 +895,117 @@
             transform: rotate(180deg);
         }
 
+        /* ========== 대시보드 프리뷰 섹션 ========== */
+        .dashboard-preview-section {
+            padding: 60px 0;
+            background: linear-gradient(180deg, rgba(232, 226, 217, 0.3) 0%, rgba(250, 248, 245, 0.5) 100%);
+        }
+
+        .dashboard-preview {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 48px;
+            padding: 40px 48px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 30px rgba(26, 15, 10, 0.04);
+        }
+
+        .dashboard-preview-content {
+            flex: 1;
+        }
+
+        .dashboard-preview-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 12px;
+        }
+
+        .dashboard-preview-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--espresso);
+            margin-bottom: 12px;
+        }
+
+        .dashboard-preview-desc {
+            font-size: 0.95rem;
+            color: var(--ink);
+            opacity: 0.65;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            max-width: 400px;
+        }
+
+        .dashboard-preview-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            background: var(--espresso);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .dashboard-preview-btn:hover {
+            background: var(--roast);
+            gap: 12px;
+        }
+
+        .dashboard-preview-indicators {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .indicator-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: rgba(245, 240, 232, 0.5);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .indicator-item:hover {
+            background: rgba(245, 240, 232, 0.8);
+            transform: translateX(4px);
+        }
+
+        .indicator-icon {
+            font-size: 1.4rem;
+        }
+
+        .indicator-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-preview {
+                flex-direction: column;
+                padding: 32px 24px;
+                gap: 32px;
+            }
+
+            .dashboard-preview-indicators {
+                width: 100%;
+            }
+        }
+
         /* ========== 뉴스레터 섹션 ========== */
         .newsletter-section {
             padding: 80px 0;
@@ -1452,6 +1563,42 @@
         </div>
     </section>
 
+    <!-- 대시보드 프리뷰 섹션 -->
+    <section class="dashboard-preview-section">
+        <div class="main-container">
+            <div class="dashboard-preview">
+                <div class="dashboard-preview-content">
+                    <span class="dashboard-preview-tag">Market Data</span>
+                    <h2 class="dashboard-preview-title">실시간 시장 데이터</h2>
+                    <p class="dashboard-preview-desc">
+                        아라비카 선물, USD/BRL 환율, CFTC 포지션, 브라질 NDVI 등 
+                        커피 시장 핵심 지표를 한눈에 확인하세요.
+                    </p>
+                    <a href="dashboards.html" class="dashboard-preview-btn">
+                        대시보드 바로가기 <span>→</span>
+                    </a>
+                </div>
+                <div class="dashboard-preview-indicators">
+                    <div class="indicator-item">
+                        <span class="indicator-icon">☕</span>
+                        <span class="indicator-label">Arabica (KC)</span>
+                    </div>
+                    <div class="indicator-item">
+                        <span class="indicator-icon">💱</span>
+                        <span class="indicator-label">USD/BRL</span>
+                    </div>
+                    <div class="indicator-item">
+                        <span class="indicator-icon">📊</span>
+                        <span class="indicator-label">CFTC 포지션</span>
+                    </div>
+                    <div class="indicator-item">
+                        <span class="indicator-icon">🌱</span>
+                        <span class="indicator-label">Brazil NDVI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- 뉴스레터 섹션 -->
     <section class="newsletter-section" id="newsletter">
@@ -1491,6 +1638,7 @@
                     <div class="footer-title">Data</div>
                     <a href="dashboards.html" class="footer-link">Market Dashboard</a>
                     <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
+                    <a href="dashboards.html" class="footer-link">Quick Charts</a>
                 </div>
                 <div>
                     <div class="footer-title">Contact</div>
