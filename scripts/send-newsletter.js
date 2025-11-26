@@ -49,6 +49,8 @@ function extractMetadata(htmlContent, filePath) {
  * HTML을 이메일 친화적으로 변환
  * - CSS를 인라인 스타일로 변환 (juice 사용)
  * - 이메일 클라이언트 호환성 최적화
+ * - 그라디언트를 단색으로 변환
+ * - 모든 색상을 명시적으로 인라인
  */
 function convertToEmailHtml(htmlContent, reportUrl) {
     let emailHtml = htmlContent;
@@ -68,9 +70,10 @@ function convertToEmailHtml(htmlContent, reportUrl) {
     emailHtml = emailHtml.replace(/<!--REPORT_META[\s\S]*?REPORT_META-->/gi, '');
     
     // 4. 폰트 스택을 시스템 폰트로 대체 (CSS에서)
+    const systemFontStack = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
     emailHtml = emailHtml.replace(
         /font-family:\s*['"]?Pretendard['"]?[^;]*/gi,
-        "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        `font-family: ${systemFontStack}`
     );
     emailHtml = emailHtml.replace(
         /font-family:\s*['"]?Cormorant Garamond['"]?[^;]*/gi,
@@ -78,21 +81,53 @@ function convertToEmailHtml(htmlContent, reportUrl) {
     );
     emailHtml = emailHtml.replace(
         /font-family:\s*['"]?Plus Jakarta Sans['"]?[^;]*/gi,
-        "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        `font-family: ${systemFontStack}`
     );
     
-    // 5. 이메일에서 지원하지 않는 CSS 속성 제거/수정
+    // 5. CSS 그라디언트를 단색으로 변환 (이메일 클라이언트 호환성)
+    // 헤더/카드용 그라디언트 -> 단색 배경
+    emailHtml = emailHtml.replace(
+        /background:\s*linear-gradient\s*\([^)]*#1a1a1a[^)]*#2d2d2d[^)]*\)/gi,
+        'background-color: #1f1f1f'
+    );
+    emailHtml = emailHtml.replace(
+        /background:\s*linear-gradient\s*\([^)]*#1a1a1a[^)]*#242424[^)]*\)/gi,
+        'background-color: #1e1e1e'
+    );
+    emailHtml = emailHtml.replace(
+        /background:\s*linear-gradient\s*\([^)]*#2d2d2d[^)]*#3a3a3a[^)]*\)/gi,
+        'background-color: #333333'
+    );
+    emailHtml = emailHtml.replace(
+        /background:\s*linear-gradient\s*\([^)]*#2d1810[^)]*#1a1a1a[^)]*\)/gi,
+        'background-color: #231510'
+    );
+    // 나머지 그라디언트도 단색으로
+    emailHtml = emailHtml.replace(
+        /background:\s*linear-gradient\s*\([^)]+\)/gi,
+        'background-color: #1a1a1a'
+    );
+    
+    // radial-gradient도 제거
+    emailHtml = emailHtml.replace(
+        /background:\s*radial-gradient\s*\([^)]+\)/gi,
+        ''
+    );
+    
+    // 6. 이메일에서 지원하지 않는 CSS 속성 제거/수정
     // position: fixed는 이메일에서 작동 안함 - body::before pseudo element 제거
     emailHtml = emailHtml.replace(/body::before\s*\{[^}]*\}/gi, '');
+    // header::before도 제거
+    emailHtml = emailHtml.replace(/header::before\s*\{[^}]*\}/gi, '');
     
-    // 6. 상대 경로 이미지를 절대 경로로 변환
+    // 7. 상대 경로 이미지를 절대 경로로 변환
     emailHtml = emailHtml.replace(/src="(?!http|data:)([^"]+)"/gi, `src="${SITE_URL}/$1"`);
     emailHtml = emailHtml.replace(/src='(?!http|data:)([^']+)'/gi, `src='${SITE_URL}/$1'`);
     
-    // 7. 상대 경로 링크를 절대 경로로 변환
+    // 8. 상대 경로 링크를 절대 경로로 변환
     emailHtml = emailHtml.replace(/href="(?!http|mailto|#|tel:)([^"]+)"/gi, `href="${SITE_URL}/$1"`);
     
-    // 8. ★핵심★ juice로 CSS를 인라인 스타일로 변환
+    // 9. ★핵심★ juice로 CSS를 인라인 스타일로 변환
     console.log('   🔄 CSS를 인라인 스타일로 변환 중...');
     try {
         emailHtml = juice(emailHtml, {
@@ -115,24 +150,232 @@ function convertToEmailHtml(htmlContent, reportUrl) {
         console.error('   ⚠️ CSS 인라인 변환 실패, 원본 사용:', error.message);
     }
     
-    // 9. 웹에서 보기 링크 추가 (상단에)
+    // 10. ★중요★ 이메일 클라이언트용 색상 강화 (juice 후 처리)
+    // 일부 이메일 클라이언트가 색상을 무시하는 경우가 있으므로 명시적으로 보강
+    
+    // body 태그에 배경색 추가 (기존 style 속성과 합치기)
+    emailHtml = emailHtml.replace(
+        /<body([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<body$1bgcolor="#0a0a0a" style="$2; background-color: #0a0a0a !important; margin: 0; padding: 0;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<body(?![^>]*style=)([^>]*)>/gi,
+        '<body$1 bgcolor="#0a0a0a" style="background-color: #0a0a0a !important; margin: 0; padding: 0;">'
+    );
+    
+    // 주요 색상 클래스 강화 - 가격 변동 표시 (더 명확한 색상)
+    emailHtml = emailHtml.replace(
+        /class="price-change down"/gi,
+        'class="price-change down" style="color: #ff6b6b !important; font-weight: 600;"'
+    );
+    emailHtml = emailHtml.replace(
+        /class="price-change up"/gi,
+        'class="price-change up" style="color: #51cf66 !important; font-weight: 600;"'
+    );
+    
+    // 테이블 셀 내 가격 변동 색상 (td 내부) - 더 밝은 빨간색/초록색
+    emailHtml = emailHtml.replace(
+        /<td([^>]*)class="price-change down"([^>]*)>/gi,
+        '<td$1class="price-change down"$2 style="color: #ff6b6b !important; padding: 15px; text-align: left; border-bottom: 1px solid #3d2a1a; font-weight: 600;">'
+    );
+    emailHtml = emailHtml.replace(
+        /<td([^>]*)class="price-change up"([^>]*)>/gi,
+        '<td$1class="price-change up"$2 style="color: #51cf66 !important; padding: 15px; text-align: left; border-bottom: 1px solid #3d2a1a; font-weight: 600;">'
+    );
+    
+    // 11. 모든 주요 요소에 명시적 색상 추가
+    // 헤딩에 이미 style이 있는 경우 색상 추가
+    emailHtml = emailHtml.replace(
+        /<h1([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<h1$1style="$2; color: #ffffff !important;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<h1(?![^>]*style=)([^>]*)>/gi,
+        '<h1$1 style="color: #ffffff !important; font-weight: 700;">'
+    );
+    
+    emailHtml = emailHtml.replace(
+        /<h2([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<h2$1style="$2; color: #ffffff !important;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<h2(?![^>]*style=)([^>]*)>/gi,
+        '<h2$1 style="color: #ffffff !important; font-weight: 700; border-bottom: 3px solid #D2691E; padding-bottom: 15px;">'
+    );
+    
+    emailHtml = emailHtml.replace(
+        /<h3([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<h3$1style="$2; color: #ffffff !important;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<h3(?![^>]*style=)([^>]*)>/gi,
+        '<h3$1 style="color: #ffffff !important; font-weight: 600;">'
+    );
+    
+    // p 태그 기본 색상 - 더 밝은 회색으로
+    emailHtml = emailHtml.replace(
+        /<p([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<p$1style="$2; color: #e0e0e0 !important;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<p(?![^>]*style=)([^>]*)>/gi,
+        '<p$1 style="color: #e0e0e0 !important; margin-bottom: 20px; line-height: 1.8;">'
+    );
+    
+    // li 태그 색상 - 더 밝게
+    emailHtml = emailHtml.replace(
+        /<li([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<li$1style="$2; color: #e0e0e0 !important;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<li(?![^>]*style=)([^>]*)>/gi,
+        '<li$1 style="color: #e0e0e0 !important; margin-bottom: 10px;">'
+    );
+    
+    // strong 태그 - 밝은 흰색으로
+    emailHtml = emailHtml.replace(
+        /<strong([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<strong$1style="$2; color: #ffffff !important;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<strong(?![^>]*style=)([^>]*)>/gi,
+        '<strong$1 style="color: #ffffff !important; font-weight: 600;">'
+    );
+    
+    // 테이블 전체에 배경색 추가
+    emailHtml = emailHtml.replace(
+        /<table([^>]*)>/gi,
+        '<table$1 bgcolor="#1a1a1a" style="background-color: #1a1a1a; width: 100%; border-collapse: collapse;">'
+    );
+    
+    // 테이블 헤더 색상 강화 - 더 눈에 띄는 오렌지색
+    emailHtml = emailHtml.replace(
+        /<th([^>]*)>/gi,
+        '<th$1 bgcolor="#333333" style="color: #ff9f43 !important; background-color: #333333 !important; padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; border-bottom: 2px solid #D2691E;">'
+    );
+    
+    // 테이블 데이터 셀 색상
+    emailHtml = emailHtml.replace(
+        /<td([^>]*)style="([^"]*)"([^>]*)>/gi,
+        '<td$1style="$2; color: #e0e0e0 !important;"$3>'
+    );
+    emailHtml = emailHtml.replace(
+        /<td(?![^>]*style=)([^>]*)>/gi,
+        '<td$1 style="color: #e0e0e0 !important; padding: 15px; text-align: left; border-bottom: 1px solid #3d2a1a;">'
+    );
+    
+    // tbody tr에 배경색 추가
+    emailHtml = emailHtml.replace(
+        /<tr([^>]*)>/gi,
+        '<tr$1 bgcolor="#1a1a1a" style="background-color: #1a1a1a;">'
+    );
+    
+    // thead tr에 다른 배경색
+    emailHtml = emailHtml.replace(
+        /<thead([^>]*)>[\s\S]*?<tr/gi,
+        (match) => match.replace(/<tr([^>]*)>/gi, '<tr$1 bgcolor="#2d2d2d" style="background-color: #2d2d2d;">')
+    );
+    
+    // 링크 색상 강화 - 더 밝은 오렌지색
+    emailHtml = emailHtml.replace(
+        /<a([^>]*)style="([^"]*)"([^>]*)href=/gi,
+        '<a$1style="$2; color: #ff9f43 !important; text-decoration: underline;"$3href='
+    );
+    emailHtml = emailHtml.replace(
+        /<a(?![^>]*style=)([^>]*)href=/gi,
+        '<a$1 style="color: #ff9f43 !important; text-decoration: underline;" href='
+    );
+    
+    // 12. highlight-box 스타일 강화 - 배경 더 밝게
+    emailHtml = emailHtml.replace(
+        /<div([^>]*)class="highlight-box"([^>]*)>/gi,
+        '<div$1class="highlight-box"$2 bgcolor="#252525" style="background-color: #252525 !important; border-left: 4px solid #D2691E; padding: 25px; margin: 30px 0;">'
+    );
+    
+    // news-item 스타일 강화
+    emailHtml = emailHtml.replace(
+        /<div([^>]*)class="news-item"([^>]*)>/gi,
+        '<div$1class="news-item"$2 bgcolor="#252525" style="background-color: #252525 !important; padding: 20px; margin: 20px 0; border-left: 3px solid #D2691E;">'
+    );
+    
+    // price-card 스타일 강화
+    emailHtml = emailHtml.replace(
+        /<div([^>]*)class="price-card"([^>]*)>/gi,
+        '<div$1class="price-card"$2 bgcolor="#252525" style="background-color: #252525 !important; padding: 25px; border: 1px solid #D2691E;">'
+    );
+    
+    // price-label 색상 강화
+    emailHtml = emailHtml.replace(
+        /<div([^>]*)class="price-label"([^>]*)>/gi,
+        '<div$1class="price-label"$2 style="color: #ff9f43 !important; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">'
+    );
+    
+    // price-value 색상 강화
+    emailHtml = emailHtml.replace(
+        /<div([^>]*)class="price-value"([^>]*)>/gi,
+        '<div$1class="price-value"$2 style="color: #ffffff !important; font-size: 32px; font-weight: 700; margin-bottom: 5px;">'
+    );
+    
+    // news-date 색상 강화
+    emailHtml = emailHtml.replace(
+        /<p([^>]*)class="news-date"([^>]*)>/gi,
+        '<p$1class="news-date"$2 style="color: #ff9f43 !important; font-size: 13px; font-weight: 600; margin-bottom: 8px;">'
+    );
+    
+    // news-title 색상 강화
+    emailHtml = emailHtml.replace(
+        /<p([^>]*)class="news-title"([^>]*)>/gi,
+        '<p$1class="news-title"$2 style="color: #ffffff !important; font-size: 18px; font-weight: 600; margin-bottom: 12px;">'
+    );
+    
+    // header 스타일 강화
+    emailHtml = emailHtml.replace(
+        /<header([^>]*)>/gi,
+        '<header$1 bgcolor="#1f1f1f" style="background-color: #1f1f1f !important; padding: 60px 40px; margin-bottom: 50px; border: 1px solid #3d2a1a;">'
+    );
+    
+    // header-meta 색상
+    emailHtml = emailHtml.replace(
+        /<div([^>]*)class="header-meta"([^>]*)>/gi,
+        '<div$1class="header-meta"$2 style="color: #ff9f43 !important; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; font-weight: 600;">'
+    );
+    
+    // subtitle 색상
+    emailHtml = emailHtml.replace(
+        /<p([^>]*)class="subtitle"([^>]*)>/gi,
+        '<p$1class="subtitle"$2 style="color: #b0b0b0 !important; font-size: 16px; margin-bottom: 10px;">'
+    );
+    
+    // date 스타일
+    emailHtml = emailHtml.replace(
+        /<p([^>]*)class="date"([^>]*)>/gi,
+        '<p$1class="date"$2 style="color: #ff9f43 !important; font-size: 14px; font-weight: 500; display: inline-block; padding: 6px 16px; background-color: rgba(210, 105, 30, 0.2); border: 1px solid #D2691E;">'
+    );
+    
+    // container 스타일 (배경색 추가)
+    emailHtml = emailHtml.replace(
+        /<div([^>]*)class="container"([^>]*)>/gi,
+        '<div$1class="container"$2 bgcolor="#0a0a0a" style="background-color: #0a0a0a !important; max-width: 800px; margin: 0 auto; padding: 60px 40px;">'
+    );
+    
+    // 13. 웹에서 보기 링크 추가 (상단에) - 더 눈에 띄는 디자인
     const viewOnlineLink = `
-    <div style="background-color: #f5f0e8; padding: 15px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #666666; margin: 0;">
+    <div style="background-color: #2d1810; padding: 15px; text-align: center; font-family: ${systemFontStack}; font-size: 14px; color: #cccccc; margin: 0; border-bottom: 2px solid #8B4513;">
         이메일이 제대로 표시되지 않나요? 
-        <a href="${reportUrl}" style="color: #b87333; text-decoration: underline;">웹브라우저에서 보기</a>
+        <a href="${reportUrl}" style="color: #D2691E; text-decoration: underline; font-weight: 600;">웹브라우저에서 보기</a>
     </div>
     `;
     
     // body 태그 바로 뒤에 삽입
     emailHtml = emailHtml.replace(/<body[^>]*>/i, (match) => match + viewOnlineLink);
     
-    // 10. 구독 해지 링크 추가 (하단에)
+    // 14. 구독 해지 링크 추가 (하단에)
     const unsubscribeLink = `
-    <div style="background-color: #1a0f0a; padding: 20px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #999999; margin-top: 40px;">
-        <p style="margin: 0 0 10px 0; color: #999999;">Coffee Market Info | Align Commodities</p>
+    <div style="background-color: #1a0f0a; padding: 30px 20px; text-align: center; font-family: ${systemFontStack}; font-size: 12px; color: #999999; margin-top: 40px; border-top: 2px solid #8B4513;">
+        <p style="margin: 0 0 10px 0; color: #D2691E; font-weight: 600; font-size: 14px;">Coffee Market Info | Align Commodities</p>
         <p style="margin: 0; color: #999999;">
-            이 이메일은 coffeemarketinfo.com 뉴스레터 구독자에게 발송되었습니다.<br>
-            <a href="https://buttondown.com/coffeemarketinfo/unsubscribe/{{ subscriber.id }}" style="color: #b87333;">구독 해지</a>
+            이 이메일은 coffeemarketinfo.com 뉴스레터 구독자에게 발송되었습니다.<br><br>
+            <a href="https://buttondown.com/coffeemarketinfo/unsubscribe/{{ subscriber.id }}" style="color: #D2691E; text-decoration: underline;">구독 해지</a>
         </p>
     </div>
     `;
@@ -140,10 +383,16 @@ function convertToEmailHtml(htmlContent, reportUrl) {
     // </body> 태그 바로 전에 삽입
     emailHtml = emailHtml.replace(/<\/body>/i, unsubscribeLink + '</body>');
     
-    // 11. 이메일용 DOCTYPE 및 기본 설정 보장
+    // 15. 이메일용 DOCTYPE 및 기본 설정 보장
     if (!emailHtml.includes('<!DOCTYPE')) {
         emailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n' + emailHtml;
     }
+    
+    // 16. HTML 태그에 배경색 추가 (일부 클라이언트용)
+    emailHtml = emailHtml.replace(
+        /<html([^>]*)>/gi,
+        '<html$1 style="background-color: #0a0a0a;">'
+    );
     
     console.log('   ✅ 이메일용 HTML 변환 완료');
     
