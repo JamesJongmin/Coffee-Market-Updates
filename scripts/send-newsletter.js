@@ -6,6 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const juice = require('juice');
 
 // 설정
 const BUTTONDOWN_API_KEY = process.env.BUTTONDOWN_API_KEY;
@@ -46,47 +47,77 @@ function extractMetadata(htmlContent, filePath) {
 
 /**
  * HTML을 이메일 친화적으로 변환
+ * - CSS를 인라인 스타일로 변환 (juice 사용)
+ * - 이메일 클라이언트 호환성 최적화
  */
 function convertToEmailHtml(htmlContent, reportUrl) {
     let emailHtml = htmlContent;
+    
+    console.log('📧 이메일용 HTML 변환 시작...');
     
     // 1. 외부 폰트 링크 제거 (이메일 클라이언트에서 로드 안됨)
     emailHtml = emailHtml.replace(/<link[^>]*fonts\.googleapis\.com[^>]*>/gi, '');
     emailHtml = emailHtml.replace(/<link[^>]*fonts\.gstatic\.com[^>]*>/gi, '');
     emailHtml = emailHtml.replace(/<link[^>]*pretendard[^>]*>/gi, '');
+    emailHtml = emailHtml.replace(/<link[^>]*cdn\.jsdelivr[^>]*pretendard[^>]*>/gi, '');
     
-    // 2. Google Analytics 스크립트 제거
-    emailHtml = emailHtml.replace(/<script[^>]*gtag[^>]*>[\s\S]*?<\/script>/gi, '');
-    emailHtml = emailHtml.replace(/<script[^>]*googletagmanager[^>]*>[\s\S]*?<\/script>/gi, '');
-    emailHtml = emailHtml.replace(/window\.dataLayer[\s\S]*?gtag\('config'[^)]*\);/gi, '');
-    
-    // 3. 모든 script 태그 제거 (이메일에서 JS 실행 안됨)
+    // 2. 모든 script 태그 제거 (이메일에서 JS 실행 안됨)
     emailHtml = emailHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
     
-    // 4. 상대 경로 이미지를 절대 경로로 변환
-    emailHtml = emailHtml.replace(/src="(?!http)([^"]+)"/gi, `src="${SITE_URL}/$1"`);
-    emailHtml = emailHtml.replace(/src='(?!http)([^']+)'/gi, `src='${SITE_URL}/$1'`);
+    // 3. 메타 코멘트 제거
+    emailHtml = emailHtml.replace(/<!--REPORT_META[\s\S]*?REPORT_META-->/gi, '');
     
-    // 5. 상대 경로 링크를 절대 경로로 변환
-    emailHtml = emailHtml.replace(/href="(?!http|mailto|#)([^"]+)"/gi, `href="${SITE_URL}/$1"`);
-    
-    // 6. 폰트 스택을 시스템 폰트로 대체
+    // 4. 폰트 스택을 시스템 폰트로 대체 (CSS에서)
+    emailHtml = emailHtml.replace(
+        /font-family:\s*['"]?Pretendard['"]?[^;]*/gi,
+        "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+    );
     emailHtml = emailHtml.replace(
         /font-family:\s*['"]?Cormorant Garamond['"]?[^;]*/gi,
         "font-family: Georgia, 'Times New Roman', serif"
     );
     emailHtml = emailHtml.replace(
-        /font-family:\s*['"]?Pretendard['"]?[^;]*/gi,
-        "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    );
-    emailHtml = emailHtml.replace(
         /font-family:\s*['"]?Plus Jakarta Sans['"]?[^;]*/gi,
-        "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
     );
     
-    // 7. 웹에서 보기 링크 추가 (상단에)
+    // 5. 이메일에서 지원하지 않는 CSS 속성 제거/수정
+    // position: fixed는 이메일에서 작동 안함 - body::before pseudo element 제거
+    emailHtml = emailHtml.replace(/body::before\s*\{[^}]*\}/gi, '');
+    
+    // 6. 상대 경로 이미지를 절대 경로로 변환
+    emailHtml = emailHtml.replace(/src="(?!http|data:)([^"]+)"/gi, `src="${SITE_URL}/$1"`);
+    emailHtml = emailHtml.replace(/src='(?!http|data:)([^']+)'/gi, `src='${SITE_URL}/$1'`);
+    
+    // 7. 상대 경로 링크를 절대 경로로 변환
+    emailHtml = emailHtml.replace(/href="(?!http|mailto|#|tel:)([^"]+)"/gi, `href="${SITE_URL}/$1"`);
+    
+    // 8. ★핵심★ juice로 CSS를 인라인 스타일로 변환
+    console.log('   🔄 CSS를 인라인 스타일로 변환 중...');
+    try {
+        emailHtml = juice(emailHtml, {
+            removeStyleTags: true,        // <style> 태그 제거
+            preserveMediaQueries: false,  // 미디어쿼리 제거 (이메일에서 제한적 지원)
+            preserveFontFaces: false,     // @font-face 제거
+            preserveKeyFrames: false,     // @keyframes 제거
+            applyWidthAttributes: true,   // width를 HTML 속성으로도 적용
+            applyHeightAttributes: true,  // height를 HTML 속성으로도 적용
+            applyAttributesTableElements: true, // 테이블 요소에 속성 적용
+            inlinePseudoElements: false,  // pseudo element는 처리 안함
+            preserveImportant: true       // !important 유지
+        });
+        
+        // juice가 남긴 hover 등 pseudo-class 스타일 태그 제거
+        emailHtml = emailHtml.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+        
+        console.log('   ✅ CSS 인라인 변환 완료');
+    } catch (error) {
+        console.error('   ⚠️ CSS 인라인 변환 실패, 원본 사용:', error.message);
+    }
+    
+    // 9. 웹에서 보기 링크 추가 (상단에)
     const viewOnlineLink = `
-    <div style="background: #f5f0e8; padding: 15px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; color: #666;">
+    <div style="background-color: #f5f0e8; padding: 15px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #666666; margin: 0;">
         이메일이 제대로 표시되지 않나요? 
         <a href="${reportUrl}" style="color: #b87333; text-decoration: underline;">웹브라우저에서 보기</a>
     </div>
@@ -95,11 +126,11 @@ function convertToEmailHtml(htmlContent, reportUrl) {
     // body 태그 바로 뒤에 삽입
     emailHtml = emailHtml.replace(/<body[^>]*>/i, (match) => match + viewOnlineLink);
     
-    // 8. 구독 해지 링크 추가 (하단에)
+    // 10. 구독 해지 링크 추가 (하단에)
     const unsubscribeLink = `
-    <div style="background: #1a0f0a; padding: 20px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; color: #999; margin-top: 40px;">
-        <p style="margin: 0 0 10px 0;">Coffee Market Info | Align Commodities</p>
-        <p style="margin: 0;">
+    <div style="background-color: #1a0f0a; padding: 20px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #999999; margin-top: 40px;">
+        <p style="margin: 0 0 10px 0; color: #999999;">Coffee Market Info | Align Commodities</p>
+        <p style="margin: 0; color: #999999;">
             이 이메일은 coffeemarketinfo.com 뉴스레터 구독자에게 발송되었습니다.<br>
             <a href="https://buttondown.com/coffeemarketinfo/unsubscribe/{{ subscriber.id }}" style="color: #b87333;">구독 해지</a>
         </p>
@@ -108,6 +139,13 @@ function convertToEmailHtml(htmlContent, reportUrl) {
     
     // </body> 태그 바로 전에 삽입
     emailHtml = emailHtml.replace(/<\/body>/i, unsubscribeLink + '</body>');
+    
+    // 11. 이메일용 DOCTYPE 및 기본 설정 보장
+    if (!emailHtml.includes('<!DOCTYPE')) {
+        emailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n' + emailHtml;
+    }
+    
+    console.log('   ✅ 이메일용 HTML 변환 완료');
     
     return emailHtml;
 }
