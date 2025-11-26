@@ -10,7 +10,7 @@ const juice = require('juice');
 
 // 설정
 const BUTTONDOWN_API_KEY = process.env.BUTTONDOWN_API_KEY;
-const SITE_URL = 'https://coffeemarketinfo.com';
+const SITE_URL = 'https://www.coffeemarket.info';
 
 // 디버그 정보 출력
 console.log('🔧 환경 정보:');
@@ -120,20 +120,17 @@ function convertToEmailHtml(htmlContent, reportUrl) {
     // header::before도 제거
     emailHtml = emailHtml.replace(/header::before\s*\{[^}]*\}/gi, '');
     
-    // 7. 상대 경로 이미지를 절대 경로로 변환 (Reports -> reports 소문자)
+    // 7. 상대 경로 이미지를 절대 경로로 변환
     emailHtml = emailHtml.replace(/src="(?!http|data:)([^"]+)"/gi, (match, p1) => {
-        const fixedPath = p1.replace(/^Reports/, 'reports');
-        return `src="${SITE_URL}/${fixedPath}"`;
+        return `src="${SITE_URL}/${p1}"`;
     });
     emailHtml = emailHtml.replace(/src='(?!http|data:)([^']+)'/gi, (match, p1) => {
-        const fixedPath = p1.replace(/^Reports/, 'reports');
-        return `src='${SITE_URL}/${fixedPath}'`;
+        return `src='${SITE_URL}/${p1}'`;
     });
     
-    // 8. 상대 경로 링크를 절대 경로로 변환 (Reports -> reports 소문자)
+    // 8. 상대 경로 링크를 절대 경로로 변환
     emailHtml = emailHtml.replace(/href="(?!http|mailto|#|tel:)([^"]+)"/gi, (match, p1) => {
-        const fixedPath = p1.replace(/^Reports/, 'reports');
-        return `href="${SITE_URL}/${fixedPath}"`;
+        return `href="${SITE_URL}/${p1}"`;
     });
     
     // 9. ★핵심★ juice로 CSS를 인라인 스타일로 변환
@@ -568,10 +565,10 @@ async function main() {
     console.log(`   제목: ${metadata.title}`);
     console.log(`   날짜: ${metadata.date}`);
     
-    // 리포트 URL 생성 (Reports -> reports 소문자로 변환)
+    // 리포트 URL 생성
     let relativePath = path.relative(path.join(__dirname, '..'), reportPath);
-    // Windows 경로 구분자 처리 및 Reports를 reports로 변환
-    relativePath = relativePath.replace(/\\/g, '/').replace(/^Reports/, 'reports');
+    // Windows 경로 구분자 처리
+    relativePath = relativePath.replace(/\\/g, '/');
     const reportUrl = `${SITE_URL}/${relativePath}`;
     console.log(`   URL: ${reportUrl}`);
     
