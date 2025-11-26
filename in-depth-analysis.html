@@ -128,14 +128,19 @@
         }
 
         /* 모바일 메뉴 버튼 */
+        /* ========== 모바일 메뉴 ========== */
         .mobile-menu-btn {
             display: none;
             flex-direction: column;
+            justify-content: center;
             gap: 5px;
+            width: 40px;
+            height: 40px;
             background: none;
             border: none;
             cursor: pointer;
             padding: 8px;
+            z-index: 1001;
         }
 
         .mobile-menu-btn span {
@@ -144,6 +149,113 @@
             height: 2px;
             background: var(--espresso);
             border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 15, 10, 0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: var(--paper);
+            z-index: 999;
+            transition: right 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-menu-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .mobile-menu-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--ink);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .mobile-menu-close:hover {
+            opacity: 1;
+        }
+
+        .mobile-menu-nav {
+            padding: 16px 0;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .mobile-menu-link:hover {
+            background: var(--steam);
+            color: var(--copper);
+        }
+
+        .mobile-menu-link.active {
+            color: var(--copper);
+            background: rgba(184, 115, 51, 0.08);
             transition: all 0.3s;
         }
 
@@ -602,13 +714,32 @@
                     <a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a>
                 </div>
             </div>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="메뉴 열기">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
         </div>
     </nav>
+    
+    <!-- 모바일 메뉴 오버레이 -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    
+    <!-- 모바일 메뉴 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-title">Menu</span>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="메뉴 닫기">×</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="about.html" class="mobile-menu-link">About</a>
+            <a href="weekly-report.html" class="mobile-menu-link">Weekly Report</a>
+            <a href="in-depth-analysis.html" class="mobile-menu-link active">In-Depth Analysis</a>
+            <a href="fundamentals/fundamentals.html" class="mobile-menu-link">Fundamentals</a>
+            <a href="dashboards.html" class="mobile-menu-link">Dashboards</a>
+            <a href="mailto:james.baek@aligncommodities.com" class="mobile-menu-link">Contact</a>
+        </nav>
+    </div>
 
     <!-- 페이지 헤더 -->
     <header class="page-header">
@@ -1120,8 +1251,51 @@
             }
         }
         
+        // ========== 모바일 메뉴 ==========
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+            function openMenu() {
+                mobileMenuBtn.classList.add('active');
+                mobileMenu.classList.add('active');
+                mobileMenuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                mobileMenuBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    if (mobileMenu.classList.contains('active')) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+            }
+
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', closeMenu);
+            }
+
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', closeMenu);
+            }
+        }
+        
         // 페이지 로드시 실행
-        document.addEventListener('DOMContentLoaded', loadAnalysisReports);
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileMenu();
+            loadAnalysisReports();
+        });
     </script>
 </body>
 </html>
