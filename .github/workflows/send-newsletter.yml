@@ -1,0 +1,77 @@
+name: Send Newsletter
+
+on:
+  # 수동 실행 - 특정 리포트 파일 지정 가능
+  workflow_dispatch:
+    inputs:
+      report_path:
+        description: '발송할 리포트 경로 (비워두면 최신 리포트 자동 선택)'
+        required: false
+        default: ''
+      
+  # Reports 폴더에 새 HTML 파일이 push되면 자동 실행
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'Reports/**/*.html'
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    
+    # push 이벤트일 때는 test 파일 제외
+    if: |
+      github.event_name == 'workflow_dispatch' || 
+      (github.event_name == 'push' && !contains(github.event.head_commit.message, 'test'))
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # 이전 커밋과 비교하기 위해
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Find new report file
+        id: find-report
+        run: |
+          if [ -n "${{ github.event.inputs.report_path }}" ]; then
+            # 수동 실행 시 지정된 파일 사용
+            echo "report_path=${{ github.event.inputs.report_path }}" >> $GITHUB_OUTPUT
+            echo "📄 수동 지정 파일: ${{ github.event.inputs.report_path }}"
+          elif [ "${{ github.event_name }}" == "push" ]; then
+            # push 이벤트 시 새로 추가된 HTML 파일 찾기
+            NEW_FILE=$(git diff --name-only HEAD~1 HEAD -- 'Reports/**/*.html' | grep -v test | head -1)
+            if [ -n "$NEW_FILE" ]; then
+              echo "report_path=$NEW_FILE" >> $GITHUB_OUTPUT
+              echo "📄 새로 추가된 파일: $NEW_FILE"
+            else
+              echo "report_path=" >> $GITHUB_OUTPUT
+              echo "⚠️ 새로운 리포트 파일 없음"
+            fi
+          else
+            # 그 외의 경우 최신 파일 자동 선택
+            echo "report_path=" >> $GITHUB_OUTPUT
+            echo "📄 최신 파일 자동 선택"
+          fi
+          
+      - name: Send newsletter
+        if: steps.find-report.outputs.report_path != '' || github.event_name == 'workflow_dispatch'
+        run: |
+          if [ -n "${{ steps.find-report.outputs.report_path }}" ]; then
+            node scripts/send-newsletter.js "${{ steps.find-report.outputs.report_path }}"
+          else
+            node scripts/send-newsletter.js
+          fi
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          
+      - name: Skip notification
+        if: steps.find-report.outputs.report_path == '' && github.event_name != 'workflow_dispatch'
+        run: |
+          echo "⏭️ 새로운 리포트 파일이 없어 뉴스레터 발송을 건너뜁니다."
