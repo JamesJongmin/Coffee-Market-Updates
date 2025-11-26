@@ -11,6 +11,12 @@ const https = require('https');
 const BUTTONDOWN_API_KEY = process.env.BUTTONDOWN_API_KEY;
 const SITE_URL = 'https://coffeemarketinfo.com';
 
+// 디버그 정보 출력
+console.log('🔧 환경 정보:');
+console.log(`   Node.js 버전: ${process.version}`);
+console.log(`   작업 디렉토리: ${process.cwd()}`);
+console.log(`   API 키 설정됨: ${BUTTONDOWN_API_KEY ? '✅ 예' : '❌ 아니오'}`);
+
 /**
  * HTML에서 메타데이터 추출
  */
@@ -145,6 +151,27 @@ async function sendEmail(subject, htmlBody) {
                     console.error('❌ 이메일 발송 실패');
                     console.error('상태 코드:', res.statusCode);
                     console.error('응답:', responseData);
+                    
+                    // 일반적인 오류에 대한 설명 추가
+                    if (res.statusCode === 401) {
+                        console.error('');
+                        console.error('💡 401 Unauthorized: API 키가 유효하지 않습니다.');
+                        console.error('   - Buttondown 계정에서 API 키 확인: https://buttondown.email/settings');
+                        console.error('   - GitHub Secrets에 올바른 키가 저장되었는지 확인');
+                    } else if (res.statusCode === 403) {
+                        console.error('');
+                        console.error('💡 403 Forbidden: API 접근 권한이 없습니다.');
+                        console.error('   - Buttondown 유료 플랜이 필요할 수 있습니다.');
+                    } else if (res.statusCode === 400) {
+                        console.error('');
+                        console.error('💡 400 Bad Request: 요청 형식이 잘못되었습니다.');
+                        console.error('   - HTML 컨텐츠에 문제가 있을 수 있습니다.');
+                    } else if (res.statusCode === 429) {
+                        console.error('');
+                        console.error('💡 429 Too Many Requests: API 호출 제한 초과');
+                        console.error('   - 잠시 후 다시 시도해주세요.');
+                    }
+                    
                     reject(new Error(`API 오류: ${res.statusCode} - ${responseData}`));
                 }
             });
@@ -198,8 +225,24 @@ function findLatestReport() {
  * 특정 파일 또는 최신 리포트 발송
  */
 async function main() {
+    console.log('\n📧 Buttondown Newsletter 발송 스크립트 시작\n');
+    
     if (!BUTTONDOWN_API_KEY) {
         console.error('❌ BUTTONDOWN_API_KEY 환경변수가 설정되지 않았습니다.');
+        console.error('');
+        console.error('💡 해결 방법:');
+        console.error('   1. GitHub Repository Settings > Secrets and variables > Actions 이동');
+        console.error('   2. "New repository secret" 클릭');
+        console.error('   3. Name: BUTTONDOWN_API_KEY');
+        console.error('   4. Value: Buttondown 계정의 API 키 입력');
+        console.error('   5. Buttondown API 키는 https://buttondown.email/settings 에서 확인 가능');
+        console.error('');
+        process.exit(1);
+    }
+    
+    // API 키 유효성 간단 체크
+    if (BUTTONDOWN_API_KEY.length < 10) {
+        console.error('❌ BUTTONDOWN_API_KEY가 너무 짧습니다. 올바른 API 키인지 확인하세요.');
         process.exit(1);
     }
     

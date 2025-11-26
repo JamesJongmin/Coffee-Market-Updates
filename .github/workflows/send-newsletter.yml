@@ -37,22 +37,47 @@ jobs:
         with:
           node-version: '20'
           
+      - name: Check API Key
+        run: |
+          if [ -z "${{ secrets.BUTTONDOWN_API_KEY }}" ]; then
+            echo "❌ BUTTONDOWN_API_KEY 시크릿이 설정되지 않았습니다!"
+            echo ""
+            echo "💡 설정 방법:"
+            echo "   1. GitHub Repository Settings > Secrets and variables > Actions"
+            echo "   2. 'New repository secret' 클릭"
+            echo "   3. Name: BUTTONDOWN_API_KEY"
+            echo "   4. Value: Buttondown API 키 (https://buttondown.email/settings 에서 확인)"
+            exit 1
+          else
+            echo "✅ BUTTONDOWN_API_KEY 시크릿이 설정되어 있습니다."
+          fi
+          
       - name: Find new report file
         id: find-report
         run: |
+          echo "🔍 이벤트 유형: ${{ github.event_name }}"
+          echo "🔍 입력된 경로: ${{ github.event.inputs.report_path }}"
+          
           if [ -n "${{ github.event.inputs.report_path }}" ]; then
             # 수동 실행 시 지정된 파일 사용
             echo "report_path=${{ github.event.inputs.report_path }}" >> $GITHUB_OUTPUT
             echo "📄 수동 지정 파일: ${{ github.event.inputs.report_path }}"
           elif [ "${{ github.event_name }}" == "push" ]; then
             # push 이벤트 시 새로 추가된 HTML 파일 찾기
-            NEW_FILE=$(git diff --name-only HEAD~1 HEAD -- 'Reports/**/*.html' | grep -v test | head -1)
-            if [ -n "$NEW_FILE" ]; then
-              echo "report_path=$NEW_FILE" >> $GITHUB_OUTPUT
-              echo "📄 새로 추가된 파일: $NEW_FILE"
+            # HEAD~1이 존재하는지 확인
+            if git rev-parse HEAD~1 >/dev/null 2>&1; then
+              NEW_FILE=$(git diff --name-only HEAD~1 HEAD -- 'Reports/**/*.html' | grep -v test | head -1 || echo "")
+              if [ -n "$NEW_FILE" ]; then
+                echo "report_path=$NEW_FILE" >> $GITHUB_OUTPUT
+                echo "📄 새로 추가된 파일: $NEW_FILE"
+              else
+                echo "report_path=" >> $GITHUB_OUTPUT
+                echo "⚠️ 새로운 리포트 파일 없음 (변경된 HTML 없음)"
+              fi
             else
+              # 첫 번째 커밋이거나 이전 커밋이 없는 경우
+              echo "⚠️ 이전 커밋이 없어 diff 비교 불가, 최신 파일 자동 선택"
               echo "report_path=" >> $GITHUB_OUTPUT
-              echo "⚠️ 새로운 리포트 파일 없음"
             fi
           else
             # 그 외의 경우 최신 파일 자동 선택
