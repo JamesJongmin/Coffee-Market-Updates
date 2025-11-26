@@ -1609,8 +1609,16 @@
                     매주 발행되는 커피 시장 분석 리포트를 이메일로 받아보세요. 
                     시장 참여자들을 위한 핵심 인사이트를 제공합니다.
                 </p>
-                <form class="newsletter-form" id="newsletterForm">
-                    <input type="email" class="newsletter-input" placeholder="your@email.com" required>
+                <form 
+                    class="newsletter-form" 
+                    id="newsletterForm"
+                    action="https://buttondown.com/api/emails/embed-subscribe/coffeemarketinfo"
+                    method="post"
+                    target="popupwindow"
+                    onsubmit="window.open('https://buttondown.com/coffeemarketinfo', 'popupwindow')"
+                >
+                    <input type="email" name="email" class="newsletter-input" placeholder="your@email.com" required>
+                    <input type="hidden" name="tag" value="website">
                     <button type="submit" class="newsletter-btn">Subscribe</button>
                 </form>
             </div>
@@ -2168,12 +2176,27 @@
                 });
             }
 
-            // 뉴스레터 폼
+            // 뉴스레터 폼 (Buttondown 연동)
             const newsletterForm = document.getElementById('newsletterForm');
             if (newsletterForm) {
                 newsletterForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    alert('구독 신청이 완료되었습니다. 감사합니다!');
+                    // Buttondown으로 폼 제출 허용 (preventDefault 제거)
+                    const emailInput = newsletterForm.querySelector('input[name="email"]');
+                    const submitBtn = newsletterForm.querySelector('button[type="submit"]');
+                    
+                    if (emailInput && submitBtn) {
+                        // 버튼 텍스트 변경으로 피드백 제공
+                        const originalText = submitBtn.textContent;
+                        submitBtn.textContent = '✓ Subscribed!';
+                        submitBtn.style.background = 'var(--positive, #4a7c59)';
+                        
+                        // 3초 후 원래대로 복원
+                        setTimeout(() => {
+                            submitBtn.textContent = originalText;
+                            submitBtn.style.background = '';
+                            emailInput.value = '';
+                        }, 3000);
+                    }
                 });
             }
         });
