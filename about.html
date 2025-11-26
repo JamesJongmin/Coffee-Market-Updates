@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About | Coffee Market Info</title>
-    <meta name="description" content="Coffee Market Info 소개 - 10년 이상의 원자재 시장 분석 경험을 바탕으로 커피 시장 인사이트를 제공합니다.">
+    <meta name="description" content="Coffee Market Info 소개 - 석유, LNG, 전력 및 신재생에너지 등 원자재 시장 분석 10년 이상의 경험을 바탕으로 커피 시장 인사이트를 제공합니다.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -185,6 +185,175 @@
             pointer-events: none;
         }
 
+        /* ========== 히어로 이미지 섹션 ========== */
+        .hero-image-section {
+            max-width: 1200px;
+            margin: -40px auto 0;
+            padding: 0 clamp(20px, 5vw, 48px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-image-container {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(26, 15, 10, 0.85) 0%, transparent 100%);
+            color: var(--crema);
+        }
+
+        .hero-image-caption {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .hero-image-subcaption {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* ========== 이미지 갤러리 그리드 ========== */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(to top, rgba(26, 15, 10, 0.8) 0%, transparent 100%);
+            color: var(--crema);
+        }
+
+        .gallery-item-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* ========== 섹션 이미지 ========== */
+        .section-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 32px;
+        }
+
+        .section-with-image {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .section-image-side {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .expertise-item {
+            text-align: center;
+            padding: 24px 16px;
+            background: var(--steam);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .expertise-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .expertise-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .expertise-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 6px;
+        }
+
+        .expertise-desc {
+            font-size: 0.8rem;
+            color: var(--ink);
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .hero-image {
+                height: 280px;
+            }
+
+            .hero-image-overlay {
+                padding: 24px;
+            }
+
+            .image-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .section-with-image {
+                grid-template-columns: 1fr;
+            }
+
+            .expertise-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         .page-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -226,7 +395,7 @@
             color: var(--ink);
             opacity: 0.7;
             line-height: 1.7;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
@@ -726,11 +895,24 @@
             <div class="page-tag">About Us</div>
             <h1 class="page-title">커피 시장 전문 분석</h1>
             <p class="page-subtitle">
-                10년 이상의 원자재 시장 분석 경험을 바탕으로<br>
+                석유, LNG, 전력 및 신재생에너지 등 원자재 시장 분석 10년 이상의 경험을 바탕으로<br>
                 깊이 있는 커피 시장 인사이트를 제공합니다.
             </p>
         </div>
     </header>
+
+    <!-- 히어로 이미지 섹션 -->
+    <section class="hero-image-section">
+        <div class="hero-image-container">
+            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&h=600&fit=crop" 
+                 alt="Global commodity trading and market analysis" 
+                 class="hero-image">
+            <div class="hero-image-overlay">
+                <div class="hero-image-caption">글로벌 원자재 시장 전문 분석</div>
+                <div class="hero-image-subcaption">석유 · LNG · 전력 · 신재생에너지 · 커피</div>
+            </div>
+        </div>
+    </section>
 
     <!-- 메인 콘텐츠 -->
     <main class="main-container">
@@ -744,11 +926,36 @@
                     트레이더, 로스터, 투자자, 그리고 커피 산업 종사자들을 위한 체계적이고 전문적인 시장 정보를 제공합니다.
                 </p>
                 <p>
-                    10년 이상의 원자재 시장 분석 경험을 바탕으로, 단순한 가격 동향을 넘어 
+                    석유, LNG, 전력 및 신재생에너지 등 원자재 시장 분석 10년 이상의 경험을 바탕으로, 단순한 가격 동향을 넘어 
                     시장의 구조적 변화와 펀더멘털 요인을 깊이 있게 분석합니다. 
                     브라질, 베트남, 콜롬비아 등 주요 생산국의 현지 정보와 글로벌 매크로 환경을 종합하여 
                     실질적인 시장 인사이트를 전달합니다.
                 </p>
+            </div>
+
+            <!-- 전문 분야 이미지 갤러리 -->
+            <div class="image-gallery">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&h=450&fit=crop" 
+                         alt="석유 및 에너지 시장 분석">
+                    <div class="gallery-item-overlay">
+                        <div class="gallery-item-title">석유 · 가스</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&h=450&fit=crop" 
+                         alt="전력 및 신재생에너지">
+                    <div class="gallery-item-overlay">
+                        <div class="gallery-item-title">전력 · 신재생</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&h=450&fit=crop" 
+                         alt="커피 원자재 시장">
+                    <div class="gallery-item-overlay">
+                        <div class="gallery-item-title">커피</div>
+                    </div>
+                </div>
             </div>
 
             <div class="experience-grid">
@@ -769,6 +976,9 @@
 
         <!-- 분석 방법론 -->
         <section class="about-section animate-in delay-1">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&h=400&fit=crop" 
+                 alt="Data analysis and market research" 
+                 class="section-image">
             <div class="section-icon">🔍</div>
             <h2 class="section-title">분석 방법론</h2>
             <div class="section-content">
@@ -813,6 +1023,9 @@
 
         <!-- 데이터 소스 -->
         <section class="about-section animate-in delay-2">
+            <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1000&h=400&fit=crop" 
+                 alt="Global data network and information sources" 
+                 class="section-image">
             <div class="section-icon">📡</div>
             <h2 class="section-title">데이터 소스 & 정보원</h2>
             <div class="section-content">
