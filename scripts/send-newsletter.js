@@ -120,7 +120,7 @@ async function sendEmail(subject, htmlBody) {
         const data = JSON.stringify({
             subject: subject,
             body: htmlBody,
-            status: 'sent'  // 즉시 발송
+            status: 'about_to_send'  // 즉시 발송 (Buttondown API는 새 이메일에 'sent' 상태를 허용하지 않음)
         });
         
         const options = {
