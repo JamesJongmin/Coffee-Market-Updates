@@ -1617,6 +1617,9 @@
                     <input type="hidden" name="tag" value="website">
                     <button type="submit" class="newsletter-btn">Subscribe</button>
                 </form>
+                <p class="newsletter-notice" style="margin-top: 12px; font-size: 13px; color: #a89580; text-align: center;">
+                    📬 구독 신청 후 이메일로 발송되는 확인 링크를 클릭해야 구독이 완료됩니다.
+                </p>
             </div>
         </div>
     </section>
@@ -2203,9 +2206,12 @@
                         
                         if (response.ok || response.status === 201 || response.status === 200) {
                             // 성공
-                            submitBtn.textContent = '✓ Subscribed!';
+                            submitBtn.textContent = '✓ Check Email!';
                             submitBtn.style.background = 'var(--positive, #4a7c59)';
                             emailInput.value = '';
+                            
+                            // 확인 안내 알림
+                            alert('📬 구독 신청이 완료되었습니다!\n\n입력하신 이메일로 확인 메일이 발송되었습니다.\n메일의 확인 링크를 클릭해야 구독이 활성화됩니다.\n\n(스팸함도 확인해주세요)');
                             
                             setTimeout(() => {
                                 submitBtn.textContent = originalText;
