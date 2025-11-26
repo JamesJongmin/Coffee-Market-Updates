@@ -332,6 +332,21 @@
             margin-bottom: 6px;
         }
 
+        .card-value-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .card-value-label {
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--copper);
+            opacity: 0.9;
+        }
+        
         .card-value {
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.8rem;
@@ -420,13 +435,19 @@
             font-size: 0.85rem;
             color: var(--ink);
             opacity: 0.7;
-            line-height: 1.65;
+            line-height: 1.75;
         }
 
         .analysis-text strong {
             color: var(--espresso);
             opacity: 1;
             font-weight: 600;
+        }
+        
+        .analysis-text em {
+            color: var(--copper);
+            font-style: normal;
+            font-weight: 500;
         }
 
         /* ========== 푸터 ========== */
@@ -501,6 +522,136 @@
             line-height: 1.5;
         }
 
+        /* ========== 모바일 메뉴 ========== */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--espresso);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 15, 10, 0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: var(--paper);
+            z-index: 999;
+            transition: right 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-menu-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .mobile-menu-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--ink);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .mobile-menu-close:hover {
+            opacity: 1;
+        }
+
+        .mobile-menu-nav {
+            padding: 16px 0;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .mobile-menu-link:hover {
+            background: var(--steam);
+            color: var(--copper);
+        }
+
+        .mobile-menu-link.active {
+            color: var(--copper);
+            background: rgba(184, 115, 51, 0.08);
+        }
+
         /* ========== 스크롤 진행바 ========== */
         .scroll-progress {
             position: fixed;
@@ -527,6 +678,10 @@
         @media (max-width: 768px) {
             .nav-menu {
                 display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
             }
 
             .page-header {
@@ -615,8 +770,33 @@
                     <a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a>
                 </div>
             </div>
+            <!-- 모바일 메뉴 버튼 -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="메뉴 열기">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+    
+    <!-- 모바일 메뉴 오버레이 -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    
+    <!-- 모바일 메뉴 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-title">Menu</span>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="메뉴 닫기">×</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="about.html" class="mobile-menu-link">About</a>
+            <a href="weekly-report.html" class="mobile-menu-link">Weekly Report</a>
+            <a href="in-depth-analysis.html" class="mobile-menu-link">In-Depth Analysis</a>
+            <a href="fundamentals/fundamentals.html" class="mobile-menu-link">Fundamentals</a>
+            <a href="dashboards.html" class="mobile-menu-link active">Dashboards</a>
+            <a href="mailto:james.baek@aligncommodities.com" class="mobile-menu-link">Contact</a>
+        </nav>
+    </div>
 
     <!-- 페이지 헤더 -->
     <header class="page-header">
@@ -648,8 +828,11 @@
                 <div class="dashboard-card animate-in delay-1">
                     <div class="card-header">
                         <div class="card-title-group">
-                            <div class="card-title">Coffee Futures (KC)</div>
-                            <div class="card-value" id="coffeeValue">—</div>
+                            <div class="card-title">아라비카 선물 (KC)</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">현재가</span>
+                                <div class="card-value" id="coffeeValue">—</div>
+                            </div>
                             <div class="card-change" id="coffeeChange"></div>
                         </div>
                         <div class="card-source">출처: ICE</div>
@@ -662,10 +845,12 @@
                         <canvas id="coffeeChart" style="display: none;"></canvas>
                     </div>
                     <div class="card-analysis">
-                        <div class="analysis-title">📊 Analysis</div>
+                        <div class="analysis-title">📊 시장 해석 가이드</div>
                         <div class="analysis-text">
-                            <strong>커피 선물 가격</strong>은 글로벌 커피 시장의 미래 가격 기대치를 반영합니다. 
-                            브라질/베트남 등 주요 생산국의 작황, 기후 변화, 글로벌 수요 변화가 주요 변동 요인입니다.
+                            <strong>아라비카 선물 가격</strong>은 ICE(Intercontinental Exchange)에서 거래되는 세계 기준 가격입니다. 
+                            <strong>가격 상승 요인:</strong> 브라질 가뭄/서리, 공급 부족, ICE 재고 감소, 달러 약세. 
+                            <strong>가격 하락 요인:</strong> 풍작 전망, 수요 둔화, 달러 강세. 
+                            <em>300¢/lb 이상은 역사적 고가 수준으로, 로스터/바이어의 비용 부담이 크게 증가합니다.</em>
                         </div>
                     </div>
                 </div>
@@ -674,8 +859,11 @@
                 <div class="dashboard-card animate-in delay-2">
                     <div class="card-header">
                         <div class="card-title-group">
-                            <div class="card-title">USD/BRL Exchange Rate</div>
-                            <div class="card-value" id="usdValue">—</div>
+                            <div class="card-title">USD/BRL 환율</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">현재가</span>
+                                <div class="card-value" id="usdValue">—</div>
+                            </div>
                             <div class="card-change" id="usdChange"></div>
                         </div>
                         <div class="card-source">출처: LSEG</div>
@@ -688,10 +876,12 @@
                         <canvas id="usdChart" style="display: none;"></canvas>
                     </div>
                     <div class="card-analysis">
-                        <div class="analysis-title">💱 Analysis</div>
+                        <div class="analysis-title">💱 시장 해석 가이드</div>
                         <div class="analysis-text">
-                            <strong>USD/BRL 환율</strong>은 브라질 커피 수출 경쟁력에 직접적 영향을 미칩니다. 
-                            헤알화 약세 시 브라질 농민들의 달러 수취액이 증가해 수출이 활성화됩니다.
+                            <strong>USD/BRL 환율</strong>은 브라질 커피 수출 경쟁력과 농민 판매 의향을 결정합니다. 
+                            <strong>헤알화 약세(환율↑):</strong> 브라질 농민의 달러 수취액 증가 → 수출 촉진 → 선물 가격 하락 압력. 
+                            <strong>헤알화 강세(환율↓):</strong> 수출 매력 감소 → 농민 판매 유보 → 공급 감소로 가격 상승 가능. 
+                            <em>브라질이 세계 아라비카의 40%를 생산하므로, 환율은 가격 예측의 핵심 변수입니다.</em>
                         </div>
                     </div>
                 </div>
@@ -700,11 +890,14 @@
                 <div class="dashboard-card animate-in delay-3">
                     <div class="card-header">
                         <div class="card-title-group">
-                            <div class="card-title">CFTC Money Managed (Net Long)</div>
-                            <div class="card-value" id="cftcValue">—</div>
+                            <div class="card-title">CFTC 순매수 포지션</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">계약수</span>
+                                <div class="card-value" id="cftcValue">—</div>
+                            </div>
                             <div class="card-change" id="cftcChange"></div>
                         </div>
-                        <div class="card-source">출처: LSEG</div>
+                        <div class="card-source">출처: CFTC/LSEG</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="chart-loading" id="loading-cftc">
@@ -714,10 +907,12 @@
                         <canvas id="cftcChart" style="display: none;"></canvas>
                     </div>
                     <div class="card-analysis">
-                        <div class="analysis-title">📈 Analysis</div>
+                        <div class="analysis-title">📈 시장 해석 가이드</div>
                         <div class="analysis-text">
-                            <strong>CFTC 머니매니저 순매수 포지션</strong>은 대형 펀드들의 시장 심리를 나타냅니다. 
-                            양수는 강세 베팅, 음수는 약세 베팅을 의미하며, 극단적 포지션은 전환점 신호가 됩니다.
+                            <strong>CFTC 머니매니저 순매수</strong>는 헤지펀드·투기자본의 방향성 베팅을 보여줍니다. 
+                            <strong>양수(+):</strong> 롱 포지션 > 숏 포지션 → 시장이 가격 상승을 예상. 
+                            <strong>음수(-):</strong> 숏 포지션 > 롱 포지션 → 하락을 베팅 중. 
+                            <strong>주의:</strong> 극단적 포지션(+50K 이상 또는 -30K 이하)은 <em>숏커버링 랠리</em> 또는 <em>이익실현 매도</em>로 가격 반전을 촉발할 수 있습니다.
                         </div>
                     </div>
                 </div>
@@ -726,11 +921,14 @@
                 <div class="dashboard-card animate-in delay-4">
                     <div class="card-header">
                         <div class="card-title-group">
-                            <div class="card-title">Brazil Southeast NVDI</div>
-                            <div class="card-value" id="nvdiValue">—</div>
+                            <div class="card-title">브라질 남동부 NDVI</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">식생지수</span>
+                                <div class="card-value" id="nvdiValue">—</div>
+                            </div>
                             <div class="card-change" id="nvdiChange"></div>
                         </div>
-                        <div class="card-source">출처: LSEG</div>
+                        <div class="card-source">출처: 위성데이터/LSEG</div>
                     </div>
                     <div class="chart-wrapper">
                         <div class="chart-loading" id="loading-nvdi">
@@ -740,10 +938,14 @@
                         <canvas id="nvdiChart" style="display: none;"></canvas>
                     </div>
                     <div class="card-analysis">
-                        <div class="analysis-title">🌱 Analysis</div>
+                        <div class="analysis-title">🌱 시장 해석 가이드</div>
                         <div class="analysis-text">
-                            <strong>NVDI (정규식생지수)</strong>는 위성으로 측정한 식물 건강도입니다. 
-                            브라질 남동부는 세계 최대 아라비카 생산지역으로, 높은 NVDI는 좋은 작황을 예고합니다.
+                            <strong>NDVI(정규식생지수)</strong>는 위성으로 측정한 식물 건강도로, 커피나무의 생육 상태를 파악합니다. 
+                            <strong>시기별 의미:</strong> 
+                            • <strong>8-10월 (개화기)</strong>: NDVI 하락 → 개화 부진 → <em>다음 해(26년) 작황 감소</em> 가능성. 
+                            • <strong>11-2월 (결실기)</strong>: 저조한 NDVI → 열매 발육 불량 → 생산량·품질 저하. 
+                            • <strong>3-7월 (수확기)</strong>: NDVI는 이미 결정된 작황 반영, 가격 영향 제한적. 
+                            <em>회색 영역은 2010-2023년 역사적 범위이며, 이 범위를 벗어나면 이상 기후를 의미합니다.</em>
                         </div>
                     </div>
                 </div>
@@ -759,7 +961,7 @@
                     <div class="footer-brand">Coffee Market Info</div>
                     <p class="footer-desc">
                         글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다. 
-                        Align Commodities 발행.
+                        Align Commodities X Yellowknife Roasters 발행.
                     </p>
                 </div>
                 <div>
@@ -1497,6 +1699,46 @@
             }
         }
 
+        // ========== 모바일 메뉴 ==========
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+            function openMenu() {
+                mobileMenuBtn.classList.add('active');
+                mobileMenu.classList.add('active');
+                mobileMenuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                mobileMenuBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    if (mobileMenu.classList.contains('active')) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+            }
+
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', closeMenu);
+            }
+
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', closeMenu);
+            }
+        }
+
         // 초기화
         async function init() {
             try {
@@ -1513,7 +1755,10 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileMenu();
+            init();
+        });
     </script>
 </body>
 </html>
