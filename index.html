@@ -285,7 +285,8 @@
             padding: 28px;
             border: 1px solid var(--border);
             box-shadow: 0 10px 40px rgba(26, 15, 10, 0.05);
-            max-width: 420px;
+            max-width: 480px;
+            width: 100%;
         }
 
         .calendar-header {
@@ -408,6 +409,151 @@
             color: var(--ink);
             opacity: 0.6;
             margin: 0;
+        }
+
+        /* 캘린더 탭 */
+        .calendar-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .calendar-tab {
+            padding: 8px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            color: var(--ink);
+            opacity: 0.5;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calendar-tab:hover {
+            opacity: 0.8;
+            background: rgba(245, 240, 232, 0.5);
+        }
+
+        .calendar-tab.active {
+            opacity: 1;
+            color: var(--copper);
+            background: rgba(184, 115, 51, 0.08);
+            border-color: rgba(184, 115, 51, 0.2);
+        }
+
+        .calendar-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .calendar-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--copper);
+            background: transparent;
+            border: 1px solid rgba(184, 115, 51, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calendar-more-btn:hover {
+            background: rgba(184, 115, 51, 0.08);
+            border-color: var(--copper);
+        }
+
+        .calendar-more-btn.expanded .calendar-more-icon {
+            transform: rotate(180deg);
+        }
+
+        .calendar-more-icon {
+            transition: transform 0.2s;
+        }
+
+        /* 이벤트 아이템 확장 스타일 */
+        .event-item.past {
+            opacity: 0.5;
+        }
+
+        .event-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+
+        .event-badge.important {
+            background: rgba(194, 58, 58, 0.1);
+            color: var(--negative);
+        }
+
+        .event-badge.new {
+            background: rgba(74, 124, 89, 0.1);
+            color: var(--positive);
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .events-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .events-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .events-list::-webkit-scrollbar-thumb {
+            background: rgba(184, 115, 51, 0.2);
+            border-radius: 2px;
+        }
+
+        .events-list.expanded {
+            max-height: 600px;
+        }
+
+        /* 월 구분선 */
+        .month-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+            padding: 8px 0;
+        }
+
+        .month-divider-text {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--copper);
+            white-space: nowrap;
+        }
+
+        .month-divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border), transparent);
         }
 
         /* ========== 메인 콘텐츠 ========== */
@@ -747,113 +893,6 @@
 
         .load-more-btn.expanded .icon {
             transform: rotate(180deg);
-        }
-
-        /* ========== 차트 대시보드 섹션 ========== */
-        .dashboard-section {
-            padding: 80px 0;
-            background: linear-gradient(180deg, rgba(232, 226, 217, 0.2) 0%, rgba(250, 248, 245, 0.5) 100%);
-            margin: 60px 0;
-            position: relative;
-        }
-        
-        .dashboard-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(184, 115, 51, 0.1), transparent);
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .dashboard-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 32px 28px 24px;
-            border: 1px solid rgba(26, 15, 10, 0.04);
-            transition: all 0.3s ease;
-        }
-        
-        .dashboard-card:hover {
-            background: rgba(255, 255, 255, 0.95);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(26, 15, 10, 0.04);
-        }
-
-        .dashboard-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 24px;
-        }
-
-        .dashboard-card-title {
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--ink);
-            opacity: 0.4;
-        }
-
-        .dashboard-card-value-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 2px;
-        }
-        
-        .dashboard-card-label {
-            font-size: 0.6rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--copper);
-            opacity: 0.8;
-        }
-        
-        .dashboard-card-value {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--espresso);
-            letter-spacing: -0.02em;
-        }
-
-        .chart-wrapper {
-            height: 160px;
-            position: relative;
-            padding: 10px 0;
-        }
-
-        .chart-loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 0.75rem;
-            color: var(--ink);
-            opacity: 0.3;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-        }
-        
-        .chart-wrapper canvas {
-            opacity: 0;
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            to { opacity: 1; }
         }
 
         /* ========== 뉴스레터 섹션 ========== */
@@ -1329,55 +1368,28 @@
                 <!-- 이벤트 캘린더 -->
                 <div class="events-calendar animate-in delay-2">
                     <div class="calendar-header">
-                        <span class="calendar-title">매크로/커피시장 주요 이벤트</span>
-                        <span class="calendar-month">November 2025</span>
+                        <span class="calendar-title">주요 이벤트 캘린더</span>
+                        <span class="calendar-month" id="calendarMonth">November 2025</span>
                     </div>
-                    <div class="events-list">
-                        <div class="event-item upcoming">
-                            <div class="event-date">
-                                <span class="event-day">25</span>
-                                <span class="event-weekday">MON</span>
-                            </div>
-                            <div class="event-details">
-                                <span class="event-type">MACRO</span>
-                                <h4 class="event-title">FOMC 회의록 공개</h4>
-                                <p class="event-desc">연준 금리 정책 향후 방향성</p>
-                            </div>
-                        </div>
-                        <div class="event-item upcoming">
-                            <div class="event-date">
-                                <span class="event-day">27</span>
-                                <span class="event-weekday">WED</span>
-                            </div>
-                            <div class="event-details">
-                                <span class="event-type coffee">COFFEE</span>
-                                <h4 class="event-title">브라질 수확 진행 보고서</h4>
-                                <p class="event-desc">CONAB 11월 작황 업데이트</p>
-                            </div>
-                        </div>
-                        <div class="event-item">
-                            <div class="event-date">
-                                <span class="event-day">29</span>
-                                <span class="event-weekday">FRI</span>
-                            </div>
-                            <div class="event-details">
-                                <span class="event-type">MACRO</span>
-                                <h4 class="event-title">미국 PCE 물가지수</h4>
-                                <p class="event-desc">인플레이션 핵심 지표</p>
-                            </div>
-                        </div>
-                        <div class="event-item">
-                            <div class="event-date">
-                                <span class="event-day">03</span>
-                                <span class="event-weekday">TUE</span>
-                                <span class="event-month-label">DEC</span>
-                            </div>
-                            <div class="event-details">
-                                <span class="event-type coffee">COFFEE</span>
-                                <h4 class="event-title">ICO 월간 보고서</h4>
-                                <p class="event-desc">글로벌 수급 밸런스 전망</p>
-                            </div>
-                        </div>
+                    
+                    <!-- 탭 네비게이션 -->
+                    <div class="calendar-tabs">
+                        <button class="calendar-tab active" data-tab="all">전체</button>
+                        <button class="calendar-tab" data-tab="macro">매크로</button>
+                        <button class="calendar-tab" data-tab="coffee">커피시장</button>
+                    </div>
+                    
+                    <!-- 이벤트 리스트 -->
+                    <div class="events-list" id="eventsList">
+                        <!-- 동적으로 로드됨 -->
+                    </div>
+                    
+                    <!-- 더보기 버튼 -->
+                    <div class="calendar-footer">
+                        <button class="calendar-more-btn" id="calendarMoreBtn">
+                            <span>더 많은 일정 보기</span>
+                            <span class="calendar-more-icon">↓</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1440,76 +1452,6 @@
         </div>
     </section>
 
-    <!-- 차트 대시보드 섹션 -->
-    <section class="dashboard-section" id="dashboard">
-        <div class="main-container">
-            <div class="section-header" style="margin-bottom: 32px;">
-                <div class="section-title-group">
-                    <span class="section-number">02</span>
-                    <h2 class="section-title">Market Dashboard</h2>
-                    <div class="section-line"></div>
-                </div>
-            </div>
-
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <span class="dashboard-card-title">아라비카 선물 (KC)</span>
-                        <div class="dashboard-card-value-group">
-                            <span class="dashboard-card-label">현재가</span>
-                            <span class="dashboard-card-value" id="coffeeValue">—</span>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div class="chart-loading" id="coffeeLoading">Loading...</div>
-                        <canvas id="coffeeChart" style="display: none;"></canvas>
-                    </div>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <span class="dashboard-card-title">USD/BRL 환율</span>
-                        <div class="dashboard-card-value-group">
-                            <span class="dashboard-card-label">현재가</span>
-                            <span class="dashboard-card-value" id="brlValue">—</span>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div class="chart-loading" id="brlLoading">Loading...</div>
-                        <canvas id="brlChart" style="display: none;"></canvas>
-                    </div>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <span class="dashboard-card-title">CFTC 순매수 포지션</span>
-                        <div class="dashboard-card-value-group">
-                            <span class="dashboard-card-label">계약수</span>
-                            <span class="dashboard-card-value" id="cftcValue">—</span>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div class="chart-loading" id="cftcLoading">Loading...</div>
-                        <canvas id="cftcChart" style="display: none;"></canvas>
-                    </div>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <span class="dashboard-card-title">브라질 NDVI 식생지수</span>
-                        <div class="dashboard-card-value-group">
-                            <span class="dashboard-card-label">최신값</span>
-                            <span class="dashboard-card-value" id="nvdiValue">—</span>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper">
-                        <div class="chart-loading" id="nvdiLoading">Loading...</div>
-                        <canvas id="nvdiChart" style="display: none;"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- 뉴스레터 섹션 -->
     <section class="newsletter-section" id="newsletter">
@@ -1549,7 +1491,6 @@
                     <div class="footer-title">Data</div>
                     <a href="dashboards.html" class="footer-link">Market Dashboard</a>
                     <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
-                    <a href="#dashboard" class="footer-link">Quick View</a>
                 </div>
                 <div>
                     <div class="footer-title">Contact</div>
@@ -1836,158 +1777,6 @@
             return `${month}/${day}`;
         }
 
-        // 차트 생성 함수
-        async function createChart(chartId, loadingId, sheetKey, color, label) {
-            const canvas = document.getElementById(chartId);
-            const loading = document.getElementById(loadingId);
-            
-            if (!canvas || !loading) return;
-
-            try {
-                const data = await readGoogleSheetData(sheetKey);
-                
-                if (!data || data.length === 0) {
-                    // 데이터가 없으면 데모 데이터 사용
-                    const points = 180;
-                    const demoData = [];
-                    const demoLabels = [];
-                    let value = 100 + Math.random() * 20;
-                    
-                    for (let i = 0; i < points; i++) {
-                        value += (Math.random() - 0.5) * 10;
-                        value = Math.max(80, Math.min(150, value));
-                        demoData.push(value);
-                        const date = new Date();
-                        date.setDate(date.getDate() - (points - 1 - i));
-                        demoLabels.push(formatChartDate(date));
-                    }
-
-                    loading.style.display = 'none';
-                    canvas.style.display = 'block';
-
-                    new Chart(canvas, {
-                        type: 'line',
-                        data: {
-                            labels: demoLabels,
-                            datasets: [{
-                                data: demoData,
-                                borderColor: color,
-                                backgroundColor: 'transparent',
-                                borderWidth: 1.5,
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { 
-                                legend: { display: false },
-                                tooltip: { enabled: false }
-                            },
-                            scales: {
-                                x: { 
-                                    display: true,
-                                    grid: { display: false },
-                                    ticks: {
-                                        color: 'rgba(44, 36, 32, 0.4)',
-                                        font: { size: 9 },
-                                        maxTicksLimit: 5,
-                                        maxRotation: 0
-                                    }
-                                },
-                                y: { display: false }
-                            }
-                        }
-                    });
-                } else {
-                    // 실제 데이터 사용 - 최근 6개월 (약 180일)
-                    const chartData = data.slice(-180).map((row) => ({
-                        x: parseDate(row.date),
-                        y: parseFloat(row.value)
-                    })).filter(point => !isNaN(point.y));
-                    
-                    // 라벨 생성
-                    const labels = chartData.map(d => formatChartDate(d.x));
-                    const values = chartData.map(d => d.y);
-
-                    // 최신 값 업데이트
-                    if (chartData.length > 0) {
-                        const latestValue = chartData[chartData.length - 1].y;
-                        const valueElement = document.getElementById(chartId.replace('Chart', 'Value'));
-                        if (valueElement) {
-                            if (sheetKey === 'coffeefutures') {
-                                valueElement.textContent = `${latestValue.toFixed(2)}¢`;
-                            } else if (sheetKey === 'usdbrl') {
-                                valueElement.textContent = latestValue.toFixed(2);
-                            } else if (sheetKey === 'cftcpositions') {
-                                valueElement.textContent = latestValue > 0 ? `+${(latestValue/1000).toFixed(1)}K` : `${(latestValue/1000).toFixed(1)}K`;
-                            } else if (sheetKey === 'nvdi') {
-                                valueElement.textContent = latestValue.toFixed(1);
-                            }
-                        }
-                    }
-
-                    loading.style.display = 'none';
-                    canvas.style.display = 'block';
-
-                    new Chart(canvas, {
-                        type: sheetKey === 'cftcpositions' ? 'bar' : 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: label,
-                                data: values,
-                                borderColor: sheetKey === 'cftcpositions' ? undefined : color,
-                                backgroundColor: sheetKey === 'cftcpositions' 
-                                    ? values.map(v => v >= 0 ? 'rgba(74, 124, 89, 0.7)' : 'rgba(194, 58, 58, 0.7)')
-                                    : 'transparent',
-                                borderWidth: 1.5,
-                                fill: false,
-                                tension: 0.3,
-                                pointRadius: 0,
-                                pointHoverRadius: 4
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { 
-                                legend: { display: false },
-                                tooltip: {
-                                    enabled: true,
-                                    callbacks: {
-                                        title: function(tooltipItems) {
-                                            return labels[tooltipItems[0].dataIndex];
-                                        }
-                                    }
-                                }
-                            },
-                            scales: {
-                                x: { 
-                                    display: true,
-                                    grid: { display: false },
-                                    ticks: {
-                                        color: 'rgba(44, 36, 32, 0.4)',
-                                        font: { size: 9 },
-                                        maxTicksLimit: 5,
-                                        maxRotation: 0
-                                    }
-                                },
-                                y: { 
-                                    display: false
-                                }
-                            }
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error(`Error creating chart ${chartId}:`, error);
-                loading.innerHTML = '<span style="color: #999; font-size: 0.7rem;">Loading...</span>';
-            }
-        }
-
         // ========== 피처드 차트 생성 (최근 6개월 커피 선물 데이터) ==========
         async function createFeaturedChart() {
             const featuredCtx = document.getElementById('featuredChart');
@@ -2158,14 +1947,8 @@
 
         // ========== 차트 초기화 ==========
         function initCharts() {
-            // 피처드 차트 - 실제 커피 선물 데이터 (최근 1개월)
+            // 피처드 차트 - 실제 커피 선물 데이터 (최근 6개월)
             createFeaturedChart();
-
-            // 대시보드 차트들 - 구글 스프레드시트 연동
-            createChart('coffeeChart', 'coffeeLoading', 'coffeefutures', '#b87333', 'Coffee Futures');
-            createChart('brlChart', 'brlLoading', 'usdbrl', '#4a7c59', 'USD/BRL');
-            createChart('cftcChart', 'cftcLoading', 'cftcpositions', '#3d2314', 'CFTC Positions');
-            createChart('nvdiChart', 'nvdiLoading', 'nvdi', '#c23a3a', 'NVDI');
         }
 
         // ========== 초기화 ==========
@@ -2247,114 +2030,223 @@
             }
         });
 
-        // ========== 동적 캘린더 ==========
+        // ========== 동적 캘린더 (2026년 3월까지) ==========
+        let allCalendarEvents = [];
+        let currentCalendarFilter = 'all';
+        let isCalendarExpanded = false;
+        const INITIAL_EVENT_COUNT = 6;
+        
         function initCalendar() {
             const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
             
             // 캘린더 월 표시 업데이트
-            const calendarMonth = document.querySelector('.calendar-month');
+            const calendarMonth = document.getElementById('calendarMonth');
             if (calendarMonth) {
                 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                                    'July', 'August', 'September', 'October', 'November', 'December'];
-                calendarMonth.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+                calendarMonth.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()} ~ March 2026`;
             }
             
-            // 커피 시장 주요 일정 데이터 (월별 동적 생성)
-            const events = generateMonthlyEvents(currentYear, currentMonth);
+            // 2025년 11월부터 2026년 3월까지의 모든 이벤트 생성
+            allCalendarEvents = generateAllEvents();
             
-            // 이벤트 리스트 업데이트
-            const eventsList = document.querySelector('.events-list');
-            if (eventsList && events.length > 0) {
-                eventsList.innerHTML = events.map(event => {
-                    const eventDate = new Date(event.date);
-                    const isUpcoming = eventDate >= now;
-                    const day = eventDate.getDate();
-                    const weekday = eventDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-                    const showNextMonth = eventDate.getMonth() !== currentMonth;
-                    const monthLabel = showNextMonth ? eventDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase() : '';
-                    
-                    return `
-                        <div class="event-item ${isUpcoming ? 'upcoming' : ''}">
-                            <div class="event-date">
-                                <span class="event-day">${String(day).padStart(2, '0')}</span>
-                                <span class="event-weekday">${weekday}</span>
-                                ${monthLabel ? `<span class="event-month-label">${monthLabel}</span>` : ''}
-                            </div>
-                            <div class="event-details">
-                                <span class="event-type ${event.type === 'coffee' ? 'coffee' : ''}">${event.type === 'coffee' ? 'COFFEE' : 'MACRO'}</span>
-                                <h4 class="event-title">${event.title}</h4>
-                                <p class="event-desc">${event.description}</p>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+            // 초기 렌더링
+            renderCalendarEvents();
+            
+            // 탭 이벤트 리스너
+            document.querySelectorAll('.calendar-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.calendar-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentCalendarFilter = tab.dataset.tab;
+                    isCalendarExpanded = false;
+                    renderCalendarEvents();
+                });
+            });
+            
+            // 더보기 버튼
+            const moreBtn = document.getElementById('calendarMoreBtn');
+            if (moreBtn) {
+                moreBtn.addEventListener('click', () => {
+                    isCalendarExpanded = !isCalendarExpanded;
+                    moreBtn.classList.toggle('expanded', isCalendarExpanded);
+                    moreBtn.querySelector('span:first-child').textContent = 
+                        isCalendarExpanded ? '접기' : '더 많은 일정 보기';
+                    document.getElementById('eventsList').classList.toggle('expanded', isCalendarExpanded);
+                    renderCalendarEvents();
+                });
             }
         }
         
-        function generateMonthlyEvents(year, month) {
+        function generateAllEvents() {
             const events = [];
             const now = new Date();
             
-            // 현재 월의 주요 일정
-            const monthlyEvents = {
-                // 매월 반복 이벤트
-                recurring: [
-                    { dayOfWeek: 2, week: 2, type: 'macro', title: 'FOMC 회의록 공개', description: '연준 금리 정책 향후 방향성' },
-                    { dayOfWeek: 5, week: -1, type: 'macro', title: '미국 PCE 물가지수', description: '인플레이션 핵심 지표' },
-                    { dayOfWeek: 2, week: 1, type: 'coffee', title: 'ICO 월간 보고서', description: '글로벌 수급 밸런스 전망' },
-                ],
-                // 특정 월 이벤트
-                monthly: {
-                    1: [{ day: 10, type: 'coffee', title: 'USDA WASDE 보고서', description: '미국 농무부 수급 전망' }],
-                    2: [{ day: 15, type: 'coffee', title: 'CONAB 2차 작황 전망', description: '브라질 2025/26 예비 전망' }],
-                    3: [{ day: 18, type: 'macro', title: 'FOMC 금리 결정', description: '3월 금리 정책 발표' }],
-                    4: [{ day: 10, type: 'coffee', title: '브라질 수확 시작', description: '2025/26 시즌 수확 개시' }],
-                    5: [{ day: 20, type: 'coffee', title: 'CONAB 작황 업데이트', description: '브라질 수확 진행 보고' }],
-                    6: [{ day: 15, type: 'macro', title: 'FOMC 금리 결정', description: '6월 금리 정책 발표' }],
-                    7: [{ day: 10, type: 'coffee', title: '베트남 로부스타 전망', description: '2025/26 생산 예비 전망' }],
-                    8: [{ day: 15, type: 'coffee', title: 'ICO 연간 보고서', description: '글로벌 커피 시장 연례 분석' }],
-                    9: [{ day: 20, type: 'macro', title: 'FOMC 금리 결정', description: '9월 금리 정책 발표' }],
-                    10: [{ day: 15, type: 'coffee', title: '베트남 수확 시작', description: '로부스타 2025/26 수확' }],
-                    11: [{ day: 27, type: 'coffee', title: 'CONAB 작황 보고서', description: '브라질 11월 작황 업데이트' }],
-                    12: [{ day: 15, type: 'macro', title: 'FOMC 금리 결정', description: '12월 금리 정책 발표' }]
-                }
-            };
+            // ========== 매크로 이벤트 ==========
+            const macroEvents = [
+                // 2025년 11월
+                { date: new Date(2025, 10, 26), type: 'macro', title: 'FOMC 회의록 공개', desc: '11월 회의 상세 내용', important: true },
+                { date: new Date(2025, 10, 27), type: 'macro', title: '미국 3분기 GDP 수정치', desc: '경제 성장률 2차 추정' },
+                { date: new Date(2025, 10, 29), type: 'macro', title: '미국 PCE 물가지수', desc: '연준 선호 인플레 지표', important: true },
+                
+                // 2025년 12월
+                { date: new Date(2025, 11, 6), type: 'macro', title: '미국 고용보고서', desc: '11월 비농업 고용 발표', important: true },
+                { date: new Date(2025, 11, 11), type: 'macro', title: '미국 CPI', desc: '11월 소비자물가지수' },
+                { date: new Date(2025, 11, 18), type: 'macro', title: 'FOMC 금리 결정', desc: '12월 정책 금리 발표', important: true },
+                { date: new Date(2025, 11, 20), type: 'macro', title: '미국 PCE 물가지수', desc: '11월 개인소비지출' },
+                
+                // 2026년 1월
+                { date: new Date(2026, 0, 3), type: 'macro', title: '미국 ISM 제조업 PMI', desc: '12월 제조업 경기 지표' },
+                { date: new Date(2026, 0, 8), type: 'macro', title: 'FOMC 회의록 공개', desc: '12월 회의 상세 내용' },
+                { date: new Date(2026, 0, 10), type: 'macro', title: '미국 고용보고서', desc: '12월 비농업 고용 발표', important: true },
+                { date: new Date(2026, 0, 15), type: 'macro', title: '미국 CPI', desc: '12월 소비자물가지수', important: true },
+                { date: new Date(2026, 0, 29), type: 'macro', title: 'FOMC 금리 결정', desc: '1월 정책 금리 발표', important: true },
+                { date: new Date(2026, 0, 31), type: 'macro', title: '미국 PCE 물가지수', desc: '12월 개인소비지출' },
+                
+                // 2026년 2월
+                { date: new Date(2026, 1, 7), type: 'macro', title: '미국 고용보고서', desc: '1월 비농업 고용 발표', important: true },
+                { date: new Date(2026, 1, 12), type: 'macro', title: '미국 CPI', desc: '1월 소비자물가지수' },
+                { date: new Date(2026, 1, 19), type: 'macro', title: 'FOMC 회의록 공개', desc: '1월 회의 상세 내용' },
+                { date: new Date(2026, 1, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '1월 개인소비지출' },
+                
+                // 2026년 3월
+                { date: new Date(2026, 2, 6), type: 'macro', title: '미국 고용보고서', desc: '2월 비농업 고용 발표', important: true },
+                { date: new Date(2026, 2, 12), type: 'macro', title: '미국 CPI', desc: '2월 소비자물가지수' },
+                { date: new Date(2026, 2, 18), type: 'macro', title: 'FOMC 금리 결정', desc: '3월 정책 금리 발표', important: true },
+                { date: new Date(2026, 2, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '2월 개인소비지출' },
+            ];
             
-            // 현재 월의 특정 이벤트 추가
-            const monthNum = month + 1;
-            if (monthlyEvents.monthly[monthNum]) {
-                monthlyEvents.monthly[monthNum].forEach(evt => {
-                    const eventDate = new Date(year, month, evt.day);
-                    if (eventDate >= now || eventDate.getMonth() === now.getMonth()) {
-                        events.push({
-                            date: eventDate,
-                            type: evt.type,
-                            title: evt.title,
-                            description: evt.description
-                        });
+            // ========== 커피 시장 이벤트 ==========
+            const coffeeEvents = [
+                // 2025년 11월
+                { date: new Date(2025, 10, 27), type: 'coffee', title: 'CONAB 11월 작황 보고서', desc: '브라질 25/26 수확 진행 업데이트' },
+                { date: new Date(2025, 10, 28), type: 'coffee', title: 'GCA 재고 보고서', desc: '미국 그린커피 재고 현황' },
+                
+                // 2025년 12월
+                { date: new Date(2025, 11, 3), type: 'coffee', title: 'ICO 월간 보고서', desc: '11월 글로벌 수급 분석', important: true },
+                { date: new Date(2025, 11, 5), type: 'coffee', title: 'ICE 선물 만기', desc: '12월물 최종 거래일' },
+                { date: new Date(2025, 11, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 전망', important: true },
+                { date: new Date(2025, 11, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '11월 로부스타 수출 실적' },
+                { date: new Date(2025, 11, 20), type: 'coffee', title: 'CONAB 12월 보고서', desc: '브라질 작황 최종 전망' },
+                { date: new Date(2025, 11, 28), type: 'coffee', title: 'GCA 재고 보고서', desc: '12월 그린커피 재고' },
+                
+                // 2026년 1월
+                { date: new Date(2026, 0, 7), type: 'coffee', title: 'ICO 월간 보고서', desc: '12월 글로벌 시장 분석', important: true },
+                { date: new Date(2026, 0, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true },
+                { date: new Date(2026, 0, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '12월 로부스타 수출 실적' },
+                { date: new Date(2026, 0, 20), type: 'coffee', title: 'CONAB 1차 전망', desc: '브라질 26/27 예비 전망', important: true },
+                { date: new Date(2026, 0, 25), type: 'coffee', title: 'GCA 재고 보고서', desc: '1월 그린커피 재고' },
+                
+                // 2026년 2월
+                { date: new Date(2026, 1, 4), type: 'coffee', title: 'ICO 월간 보고서', desc: '1월 글로벌 시장 분석', important: true },
+                { date: new Date(2026, 1, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트' },
+                { date: new Date(2026, 1, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '1월 로부스타 수출 실적' },
+                { date: new Date(2026, 1, 18), type: 'coffee', title: 'CONAB 2차 전망', desc: '브라질 26/27 상세 전망', important: true },
+                { date: new Date(2026, 1, 25), type: 'coffee', title: 'GCA 재고 보고서', desc: '2월 그린커피 재고' },
+                
+                // 2026년 3월
+                { date: new Date(2026, 2, 4), type: 'coffee', title: 'ICO 월간 보고서', desc: '2월 글로벌 시장 분석', important: true },
+                { date: new Date(2026, 2, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true },
+                { date: new Date(2026, 2, 15), type: 'coffee', title: '브라질 수확 준비', desc: '26/27 시즌 수확 임박' },
+                { date: new Date(2026, 2, 20), type: 'coffee', title: 'CONAB 3월 보고서', desc: '브라질 수확 전 최종 전망', important: true },
+                { date: new Date(2026, 2, 25), type: 'coffee', title: 'GCA 재고 보고서', desc: '3월 그린커피 재고' },
+            ];
+            
+            // 모든 이벤트 합치기
+            const allEvents = [...macroEvents, ...coffeeEvents];
+            
+            // 현재 시간 이후의 이벤트만 필터링하고 정렬
+            return allEvents
+                .filter(e => e.date >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+                .sort((a, b) => a.date - b.date);
+        }
+        
+        function renderCalendarEvents() {
+            const eventsList = document.getElementById('eventsList');
+            if (!eventsList) return;
+            
+            // 필터링
+            let filteredEvents = allCalendarEvents;
+            if (currentCalendarFilter !== 'all') {
+                filteredEvents = allCalendarEvents.filter(e => e.type === currentCalendarFilter);
+            }
+            
+            // 표시 개수 결정
+            const displayCount = isCalendarExpanded ? filteredEvents.length : INITIAL_EVENT_COUNT;
+            const eventsToShow = filteredEvents.slice(0, displayCount);
+            
+            // 월별 그룹화
+            let currentMonth = -1;
+            let currentYear = -1;
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            let html = '';
+            
+            eventsToShow.forEach((event, index) => {
+                const eventDate = event.date;
+                const eventMonth = eventDate.getMonth();
+                const eventYear = eventDate.getFullYear();
+                
+                // 월이 바뀌면 구분선 추가
+                if (eventMonth !== currentMonth || eventYear !== currentYear) {
+                    if (index > 0) {
+                        html += `
+                            <div class="month-divider">
+                                <span class="month-divider-text">${monthNames[eventMonth]} ${eventYear}</span>
+                                <div class="month-divider-line"></div>
+                            </div>
+                        `;
                     }
-                });
-            }
+                    currentMonth = eventMonth;
+                    currentYear = eventYear;
+                }
+                
+                const now = new Date();
+                const isUpcoming = eventDate >= now;
+                const day = eventDate.getDate();
+                const weekday = eventDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+                
+                // 일주일 이내 이벤트인지 확인
+                const oneWeekLater = new Date(now);
+                oneWeekLater.setDate(oneWeekLater.getDate() + 7);
+                const isWithinWeek = eventDate <= oneWeekLater && eventDate >= now;
+                
+                html += `
+                    <div class="event-item ${isUpcoming ? 'upcoming' : 'past'}" data-type="${event.type}">
+                        <div class="event-date">
+                            <span class="event-day">${String(day).padStart(2, '0')}</span>
+                            <span class="event-weekday">${weekday}</span>
+                            <span class="event-month-label">${monthNames[eventMonth].substring(0, 3).toUpperCase()}</span>
+                        </div>
+                        <div class="event-details">
+                            <span class="event-type ${event.type === 'coffee' ? 'coffee' : ''}">${event.type === 'coffee' ? 'COFFEE' : 'MACRO'}</span>
+                            ${event.important ? '<span class="event-badge important">중요</span>' : ''}
+                            ${isWithinWeek ? '<span class="event-badge new">이번주</span>' : ''}
+                            <h4 class="event-title">${event.title}</h4>
+                            <p class="event-desc">${event.desc}</p>
+                        </div>
+                    </div>
+                `;
+            });
             
-            // 다음 달 이벤트도 일부 추가 (최대 2개)
-            const nextMonth = (month + 1) % 12;
-            const nextYear = month === 11 ? year + 1 : year;
-            const nextMonthNum = nextMonth + 1;
-            if (monthlyEvents.monthly[nextMonthNum]) {
-                monthlyEvents.monthly[nextMonthNum].slice(0, 2).forEach(evt => {
-                    events.push({
-                        date: new Date(nextYear, nextMonth, evt.day),
-                        type: evt.type,
-                        title: evt.title,
-                        description: evt.description
-                    });
-                });
-            }
+            eventsList.innerHTML = html;
             
-            // 날짜순 정렬 후 향후 4개 이벤트만 반환
-            return events.sort((a, b) => a.date - b.date).slice(0, 4);
+            // 더보기 버튼 업데이트
+            const moreBtn = document.getElementById('calendarMoreBtn');
+            if (moreBtn) {
+                const remainingCount = filteredEvents.length - displayCount;
+                if (remainingCount <= 0 && isCalendarExpanded) {
+                    moreBtn.style.display = 'inline-flex';
+                } else if (remainingCount <= 0) {
+                    moreBtn.style.display = 'none';
+                } else {
+                    moreBtn.style.display = 'inline-flex';
+                    if (!isCalendarExpanded) {
+                        moreBtn.querySelector('span:first-child').textContent = `더 많은 일정 보기 (+${remainingCount})`;
+                    }
+                }
+            }
         }
     </script>
 </body>
