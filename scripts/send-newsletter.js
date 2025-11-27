@@ -1,14 +1,13 @@
 /**
  * Buttondown Newsletter 발송 스크립트
- * 새 리포트 HTML을 구독자들에게 이메일로 발송합니다.
+ * 리포트의 Summary만 추출하여 깔끔한 이메일로 발송합니다.
  * 
- * 업데이트: 원본 HTML 스타일 유지 (라이트/다크 테마 모두 지원)
+ * 업데이트: 전체 HTML 대신 Summary + 링크 방식으로 변경
  */
 
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const juice = require('juice');
 
 // 설정
 const BUTTONDOWN_API_KEY = process.env.BUTTONDOWN_API_KEY;
@@ -29,9 +28,11 @@ function extractMetadata(htmlContent, filePath) {
     
     if (metaMatch) {
         try {
-            return JSON.parse(metaMatch[1].trim());
+            const meta = JSON.parse(metaMatch[1].trim());
+            console.log('✅ REPORT_META에서 메타데이터 추출 성공');
+            return meta;
         } catch (e) {
-            console.log('메타데이터 파싱 실패, 레거시 추출 시도');
+            console.log('⚠️ 메타데이터 파싱 실패, 레거시 추출 시도');
         }
     }
     
@@ -41,256 +42,273 @@ function extractMetadata(htmlContent, filePath) {
     
     const dateMatch = filePath.match(/(\d{4})-(\d{2})-(\d{2})/);
     
+    // Hero 섹션에서 subtitle 추출 시도
+    const subtitleMatch = htmlContent.match(/<p[^>]*class="[^"]*hero-subtitle[^"]*"[^>]*>([^<]+)<\/p>/i);
+    
     return {
-        title: titleMatch ? titleMatch[1].trim() : '커피 선물 시장 주간 동향',
-        date: dateMatch ? `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}` : new Date().toISOString().split('T')[0]
+        title: titleMatch ? titleMatch[1].trim().replace(' | Coffee Market Info', '') : '커피 선물 시장 주간 동향',
+        subtitle: subtitleMatch ? subtitleMatch[1].trim() : '',
+        date: dateMatch ? `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}` : new Date().toISOString().split('T')[0],
+        summary: '',
+        tags: []
     };
 }
 
 /**
- * HTML 테마 감지 (라이트/다크)
+ * HTML에서 주요 통계 (Key Stats) 추출
  */
-function detectTheme(htmlContent) {
-    // CSS 변수나 배경색으로 테마 감지
-    const darkPatterns = [
-        /--paper:\s*#[0-2][0-9a-f]{5}/i,     // 어두운 paper 색상
-        /background:\s*#[0-2][0-9a-f]{5}/i,   // 어두운 배경
-        /background-color:\s*#[0-2][0-9a-f]{5}/i
-    ];
+function extractKeyStats(htmlContent, metadata = {}) {
+    const stats = [];
     
-    const lightPatterns = [
-        /--paper:\s*#[f][a-f0-9]{5}/i,        // 밝은 paper 색상 (#faf8f5 등)
-        /background:\s*#[f][a-f0-9]{5}/i,
-        /background-color:\s*#[f][a-f0-9]{5}/i
-    ];
+    // stat-box 패턴 추출
+    const statBoxPattern = /<div[^>]*class="[^"]*stat-box[^"]*"[^>]*>[\s\S]*?<span[^>]*class="[^"]*stat-number[^"]*"[^>]*>([^<]+)<\/span>[\s\S]*?<span[^>]*class="[^"]*stat-label[^"]*"[^>]*>([^<]+)<\/span>[\s\S]*?<\/div>/gi;
     
-    for (const pattern of lightPatterns) {
-        if (pattern.test(htmlContent)) {
-            return 'light';
+    let match;
+    while ((match = statBoxPattern.exec(htmlContent)) !== null) {
+        stats.push({
+            value: match[1].trim(),
+            label: match[2].trim()
+        });
+    }
+    
+    // stat-box가 없고 메타데이터에 가격 정보가 있는 경우 (주간 리포트)
+    if (stats.length === 0 && metadata.price_current) {
+        // 현재 가격
+        stats.push({
+            value: `${metadata.price_current}¢`,
+            label: '현재가 (3월물)'
+        });
+        
+        // 가격 변동
+        if (metadata.price_change) {
+            const changeMatch = metadata.price_change.match(/([-+]?\d+\.?\d*)/);
+            if (changeMatch) {
+                stats.push({
+                    value: metadata.price_change,
+                    label: '주간 변동'
+                });
+            }
+        }
+        
+        // 공정가치
+        if (metadata.fair_value) {
+            stats.push({
+                value: `${metadata.fair_value}¢`,
+                label: '공정가치 추정'
+            });
+        }
+        
+        // 분석 기간
+        if (metadata.analysis_period) {
+            const period = metadata.analysis_period.split(' to ');
+            if (period.length === 2) {
+                const endDate = period[1].split('-');
+                stats.push({
+                    value: `${endDate[1]}/${endDate[2]}`,
+                    label: '분석 기준일'
+                });
+            }
         }
     }
     
-    for (const pattern of darkPatterns) {
-        if (pattern.test(htmlContent)) {
-            return 'dark';
-        }
-    }
-    
-    return 'light'; // 기본값
+    return stats;
 }
 
 /**
- * HTML을 이메일 친화적으로 변환
- * - CSS를 인라인 스타일로 변환 (juice 사용)
- * - 원본 색상/스타일 최대한 유지
- * - 이메일 클라이언트 호환성 최적화
+ * HTML에서 Executive Summary 섹션 추출
  */
-function convertToEmailHtml(htmlContent, reportUrl) {
-    let emailHtml = htmlContent;
+function extractExecutiveSummary(htmlContent) {
+    // Executive Summary 섹션 찾기
+    const summaryMatch = htmlContent.match(/<section[^>]*>[\s\S]*?<h2[^>]*>(?:Executive Summary|요약)[^<]*<\/h2>([\s\S]*?)(?=<section|<\/section>)/i);
     
-    console.log('📧 이메일용 HTML 변환 시작...');
-    
-    // 테마 감지
-    const theme = detectTheme(htmlContent);
-    console.log(`   🎨 감지된 테마: ${theme}`);
-    
-    // 시스템 폰트 스택
-    const systemFontStack = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
-    const serifFontStack = "Georgia, 'Times New Roman', Times, serif";
-    
-    // 1. 외부 폰트 링크 제거 (이메일 클라이언트에서 로드 안됨)
-    emailHtml = emailHtml.replace(/<link[^>]*fonts\.googleapis\.com[^>]*>/gi, '');
-    emailHtml = emailHtml.replace(/<link[^>]*fonts\.gstatic\.com[^>]*>/gi, '');
-    emailHtml = emailHtml.replace(/<link[^>]*pretendard[^>]*>/gi, '');
-    emailHtml = emailHtml.replace(/<link[^>]*cdn\.jsdelivr[^>]*pretendard[^>]*>/gi, '');
-    
-    // 2. 모든 script 태그 제거 (이메일에서 JS 실행 안됨)
-    emailHtml = emailHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-    
-    // 3. 메타 코멘트 제거
-    emailHtml = emailHtml.replace(/<!--REPORT_META[\s\S]*?REPORT_META-->/gi, '');
-    
-    // 4. 폰트 스택을 시스템 폰트로 대체 (CSS에서)
-    emailHtml = emailHtml.replace(
-        /font-family:\s*['"]?Pretendard['"]?[^;]*/gi,
-        `font-family: ${systemFontStack}`
-    );
-    emailHtml = emailHtml.replace(
-        /font-family:\s*['"]?Cormorant Garamond['"]?[^;]*/gi,
-        `font-family: ${serifFontStack}`
-    );
-    emailHtml = emailHtml.replace(
-        /font-family:\s*['"]?Plus Jakarta Sans['"]?[^;]*/gi,
-        `font-family: ${systemFontStack}`
-    );
-    
-    // 5. CSS 그라디언트를 단색으로 변환 (이메일 클라이언트 호환성)
-    // linear-gradient에서 첫 번째 색상 추출하여 단색으로
-    emailHtml = emailHtml.replace(
-        /background:\s*linear-gradient\s*\([^,]+,\s*(#[a-f0-9]{3,6})[^)]*\)/gi,
-        'background-color: $1'
-    );
-    
-    // radial-gradient도 첫 번째 색상으로
-    emailHtml = emailHtml.replace(
-        /background:\s*radial-gradient\s*\([^,]+,\s*(#[a-f0-9]{3,6}|rgba?\([^)]+\))[^)]*\)/gi,
-        'background-color: $1'
-    );
-    
-    // 남은 그라디언트 제거 (인라인에서)
-    emailHtml = emailHtml.replace(
-        /background:\s*(linear|radial)-gradient\s*\([^)]+\)\s*;?/gi,
-        ''
-    );
-    
-    // 6. 이메일에서 지원하지 않는 CSS 속성 제거
-    // position: fixed, sticky 등
-    emailHtml = emailHtml.replace(/position:\s*(fixed|sticky)[^;]*;?/gi, '');
-    // backdrop-filter
-    emailHtml = emailHtml.replace(/backdrop-filter:[^;]*;?/gi, '');
-    emailHtml = emailHtml.replace(/-webkit-backdrop-filter:[^;]*;?/gi, '');
-    // CSS 애니메이션
-    emailHtml = emailHtml.replace(/animation:[^;]*;?/gi, '');
-    emailHtml = emailHtml.replace(/transition:[^;]*;?/gi, '');
-    // ::before, ::after pseudo element 스타일 (CSS에서)
-    emailHtml = emailHtml.replace(/[^{}]*::before\s*\{[^}]*\}/gi, '');
-    emailHtml = emailHtml.replace(/[^{}]*::after\s*\{[^}]*\}/gi, '');
-    
-    // 7. 상대 경로 이미지를 절대 경로로 변환
-    emailHtml = emailHtml.replace(/src="(?!http|data:)([^"]+)"/gi, (match, p1) => {
-        return `src="${SITE_URL}/${p1}"`;
-    });
-    emailHtml = emailHtml.replace(/src='(?!http|data:)([^']+)'/gi, (match, p1) => {
-        return `src='${SITE_URL}/${p1}'`;
-    });
-    
-    // 8. 상대 경로 링크를 절대 경로로 변환
-    emailHtml = emailHtml.replace(/href="(?!http|mailto|#|tel:)([^"]+)"/gi, (match, p1) => {
-        return `href="${SITE_URL}/${p1}"`;
-    });
-    
-    // 9. ★핵심★ juice로 CSS를 인라인 스타일로 변환
-    console.log('   🔄 CSS를 인라인 스타일로 변환 중...');
-    try {
-        emailHtml = juice(emailHtml, {
-            removeStyleTags: true,        // <style> 태그 제거
-            preserveMediaQueries: false,  // 미디어쿼리 제거
-            preserveFontFaces: false,     // @font-face 제거
-            preserveKeyFrames: false,     // @keyframes 제거
-            applyWidthAttributes: true,   // width를 HTML 속성으로도 적용
-            applyHeightAttributes: true,  // height를 HTML 속성으로도 적용
-            applyAttributesTableElements: true,
-            inlinePseudoElements: false,
-            preserveImportant: true
-        });
-        
-        // juice가 남긴 style 태그 제거
-        emailHtml = emailHtml.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
-        
-        console.log('   ✅ CSS 인라인 변환 완료');
-    } catch (error) {
-        console.error('   ⚠️ CSS 인라인 변환 실패, 원본 사용:', error.message);
+    if (summaryMatch) {
+        // 첫 번째 단락만 추출
+        const paragraphMatch = summaryMatch[1].match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+        if (paragraphMatch) {
+            // HTML 태그 제거하고 텍스트만 추출
+            return paragraphMatch[1]
+                .replace(/<[^>]+>/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
     }
     
-    // 10. 테이블에 기본 속성 추가 (이메일 클라이언트 호환성)
-    emailHtml = emailHtml.replace(
-        /<table([^>]*)>/gi,
-        (match, attrs) => {
-            if (!attrs.includes('cellpadding')) {
-                attrs += ' cellpadding="0"';
-            }
-            if (!attrs.includes('cellspacing')) {
-                attrs += ' cellspacing="0"';
-            }
-            if (!attrs.includes('border')) {
-                attrs += ' border="0"';
-            }
-            return `<table${attrs} style="border-collapse: collapse; width: 100%;">`;
-        }
-    );
+    return '';
+}
+
+/**
+ * HTML에서 Core Insight 추출
+ */
+function extractCoreInsight(htmlContent) {
+    // insight-box 패턴 추출
+    const insightMatch = htmlContent.match(/<div[^>]*class="[^"]*insight-box[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
     
-    // 11. 이미지에 display: block 추가 (이메일에서 여백 방지)
-    emailHtml = emailHtml.replace(
-        /<img([^>]*)>/gi,
-        (match, attrs) => {
-            if (attrs.includes('style=')) {
-                return match.replace(/style="([^"]*)"/, 'style="$1; display: block;"');
-            }
-            return `<img${attrs} style="display: block; max-width: 100%; height: auto;">`;
-        }
-    );
-    
-    // 12. 웹에서 보기 링크 추가 (상단에)
-    const viewOnlineStyle = theme === 'dark' 
-        ? 'background-color: #2d1810; color: #cccccc; border-bottom: 2px solid #8B4513;'
-        : 'background-color: #f5f0e8; color: #3d2314; border-bottom: 2px solid #b87333;';
-    
-    const viewLinkColor = theme === 'dark' ? '#D2691E' : '#b87333';
-    
-    const viewOnlineLink = `
-    <div style="${viewOnlineStyle} padding: 15px; text-align: center; font-family: ${systemFontStack}; font-size: 14px; margin: 0;">
-        이메일이 제대로 표시되지 않나요? 
-        <a href="${reportUrl}" style="color: ${viewLinkColor}; text-decoration: underline; font-weight: 600;">웹브라우저에서 보기</a>
-    </div>
-    `;
-    
-    // body 태그 바로 뒤에 삽입
-    emailHtml = emailHtml.replace(/<body([^>]*)>/i, (match, attrs) => {
-        return `${match}${viewOnlineLink}`;
-    });
-    
-    // 13. 구독 해지 링크 추가 (하단에)
-    const footerStyle = theme === 'dark'
-        ? 'background-color: #1a0f0a; border-top: 2px solid #8B4513; color: #999999;'
-        : 'background-color: #f5f0e8; border-top: 2px solid #b87333; color: #666666;';
-    
-    const footerTitleColor = theme === 'dark' ? '#D2691E' : '#b87333';
-    
-    const unsubscribeLink = `
-    <div style="${footerStyle} padding: 30px 20px; text-align: center; font-family: ${systemFontStack}; font-size: 12px; margin-top: 40px;">
-        <p style="margin: 0 0 10px 0; color: ${footerTitleColor}; font-weight: 600; font-size: 14px;">Coffee Market Info | Align Commodities</p>
-        <p style="margin: 0;">
-            이 이메일은 coffeemarket.info 뉴스레터 구독자에게 발송되었습니다.<br><br>
-            <a href="https://buttondown.com/coffeemarketinfo/unsubscribe/{{ subscriber.id }}" style="color: ${footerTitleColor}; text-decoration: underline;">구독 해지</a>
-        </p>
-    </div>
-    `;
-    
-    // </body> 태그 바로 전에 삽입
-    emailHtml = emailHtml.replace(/<\/body>/i, unsubscribeLink + '</body>');
-    
-    // 14. 이메일용 DOCTYPE 보장
-    if (!emailHtml.includes('<!DOCTYPE')) {
-        emailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n' + emailHtml;
+    if (insightMatch) {
+        // HTML 태그 제거
+        return insightMatch[1]
+            .replace(/<[^>]+>/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
     }
     
-    // 15. <html> 태그에 xmlns 추가 (XHTML 호환)
-    emailHtml = emailHtml.replace(
-        /<html([^>]*)>/gi,
-        '<html xmlns="http://www.w3.org/1999/xhtml"$1>'
-    );
+    return '';
+}
+
+/**
+ * 깔끔한 Summary 이메일 HTML 생성
+ */
+function createSummaryEmail(metadata, stats, executiveSummary, coreInsight, reportUrl) {
+    const { title, subtitle, date, summary, tags } = metadata;
     
-    // 16. nav 요소를 div로 변환 (일부 이메일 클라이언트 호환성)
-    emailHtml = emailHtml.replace(/<nav([^>]*)>/gi, '<div$1>');
-    emailHtml = emailHtml.replace(/<\/nav>/gi, '</div>');
+    // 날짜 포맷팅
+    const dateObj = new Date(date);
+    const formattedDate = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`;
     
-    // 17. header, footer, section, article을 div로 변환
-    emailHtml = emailHtml.replace(/<header([^>]*)>/gi, '<div$1>');
-    emailHtml = emailHtml.replace(/<\/header>/gi, '</div>');
-    emailHtml = emailHtml.replace(/<footer([^>]*)>/gi, '<div$1>');
-    emailHtml = emailHtml.replace(/<\/footer>/gi, '</div>');
-    emailHtml = emailHtml.replace(/<section([^>]*)>/gi, '<div$1>');
-    emailHtml = emailHtml.replace(/<\/section>/gi, '</div>');
-    emailHtml = emailHtml.replace(/<article([^>]*)>/gi, '<div$1>');
-    emailHtml = emailHtml.replace(/<\/article>/gi, '</div>');
+    // 사용할 요약 텍스트 결정
+    const displaySummary = summary || executiveSummary || '';
     
-    // 18. canvas 요소 제거 (차트는 이메일에서 작동 안함)
-    emailHtml = emailHtml.replace(/<canvas[^>]*>[\s\S]*?<\/canvas>/gi, 
-        '<p style="color: #999; font-style: italic; text-align: center; padding: 20px; background: #f5f5f5; border-radius: 8px;">[차트는 웹에서 확인하세요]</p>');
+    // 태그 HTML 생성
+    const tagsHtml = tags && tags.length > 0 
+        ? tags.map(tag => `<span style="display: inline-block; background-color: #f5f0e8; color: #8B4513; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#${tag}</span>`).join('')
+        : '';
     
-    console.log('   ✅ 이메일용 HTML 변환 완료');
+    // Key Stats HTML 생성 (2x2 그리드로 모바일 친화적)
+    const statsHtml = stats.length > 0 ? `
+        <table cellpadding="0" cellspacing="8" border="0" width="100%" style="margin: 20px 0;">
+            <tr>
+                ${stats.slice(0, 2).map(stat => `
+                <td width="50%" style="text-align: center; padding: 18px 12px; background-color: #fefefe; border: 1px solid #e8e2d9; border-radius: 8px;">
+                    <div style="font-size: 22px; font-weight: 700; color: #b87333; font-family: Georgia, serif; margin-bottom: 6px;">${stat.value}</div>
+                    <div style="font-size: 10px; color: #666666; text-transform: uppercase; letter-spacing: 0.3px; line-height: 1.3;">${stat.label}</div>
+                </td>
+                `).join('')}
+            </tr>
+            ${stats.length > 2 ? `
+            <tr>
+                ${stats.slice(2, 4).map(stat => `
+                <td width="50%" style="text-align: center; padding: 18px 12px; background-color: #fefefe; border: 1px solid #e8e2d9; border-radius: 8px;">
+                    <div style="font-size: 22px; font-weight: 700; color: #b87333; font-family: Georgia, serif; margin-bottom: 6px;">${stat.value}</div>
+                    <div style="font-size: 10px; color: #666666; text-transform: uppercase; letter-spacing: 0.3px; line-height: 1.3;">${stat.label}</div>
+                </td>
+                `).join('')}
+            </tr>
+            ` : ''}
+        </table>
+    ` : '';
     
-    return emailHtml;
+    // Core Insight HTML 생성
+    const insightHtml = coreInsight ? `
+        <div style="background-color: rgba(184, 115, 51, 0.08); border-left: 4px solid #b87333; padding: 20px; margin: 25px 0; border-radius: 4px;">
+            <p style="margin: 0; font-size: 15px; line-height: 1.7; color: #3d2314;">${coreInsight}</p>
+        </div>
+    ` : '';
+    
+    return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #faf8f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    
+    <!-- Email Container -->
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #faf8f5;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                
+                <!-- Main Content -->
+                <table cellpadding="0" cellspacing="0" border="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 2px solid #b87333;">
+                            <a href="${SITE_URL}" style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #b87333; text-decoration: none; font-weight: 600; letter-spacing: 1px;">☕ Coffee Market Info</a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Title Section -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px 40px;">
+                            <p style="margin: 0 0 15px 0; font-size: 12px; color: #888888; text-transform: uppercase; letter-spacing: 2px;">NEW REPORT</p>
+                            <h1 style="margin: 0 0 12px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 32px; font-weight: 700; color: #1a0f0a; line-height: 1.2;">${title}</h1>
+                            ${subtitle ? `<p style="margin: 0 0 15px 0; font-size: 18px; color: #b87333; font-weight: 500;">${subtitle}</p>` : ''}
+                            <p style="margin: 0; font-size: 14px; color: #888888;">📅 ${formattedDate}</p>
+                        </td>
+                    </tr>
+                    
+                    ${tagsHtml ? `
+                    <!-- Tags -->
+                    <tr>
+                        <td style="padding: 0 40px 20px 40px;">
+                            ${tagsHtml}
+                        </td>
+                    </tr>
+                    ` : ''}
+                    
+                    <!-- Summary -->
+                    ${displaySummary ? `
+                    <tr>
+                        <td style="padding: 20px 40px;">
+                            <p style="margin: 0; font-size: 16px; line-height: 1.8; color: #3d2314;">${displaySummary}</p>
+                        </td>
+                    </tr>
+                    ` : ''}
+                    
+                    <!-- Key Stats -->
+                    ${stats.length > 0 ? `
+                    <tr>
+                        <td style="padding: 10px 30px;">
+                            ${statsHtml}
+                        </td>
+                    </tr>
+                    ` : ''}
+                    
+                    <!-- Core Insight -->
+                    ${coreInsight ? `
+                    <tr>
+                        <td style="padding: 10px 40px;">
+                            ${insightHtml}
+                        </td>
+                    </tr>
+                    ` : ''}
+                    
+                    <!-- CTA Button -->
+                    <tr>
+                        <td style="padding: 30px 40px; text-align: center;">
+                            <a href="${reportUrl}" style="display: inline-block; background-color: #b87333; color: #ffffff; padding: 16px 40px; font-size: 16px; font-weight: 600; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(184, 115, 51, 0.3);">📖 전체 리포트 읽기</a>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="padding: 0 40px 30px 40px; text-align: center;">
+                            <p style="margin: 0; font-size: 13px; color: #888888;">웹브라우저에서 최적의 경험을 제공합니다</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 40px; background-color: #f5f0e8; border-radius: 0 0 12px 12px; text-align: center;">
+                            <p style="margin: 0 0 10px 0; font-size: 14px; color: #b87333; font-weight: 600;">Align Commodities</p>
+                            <p style="margin: 0 0 15px 0; font-size: 12px; color: #888888;">
+                                글로벌 커피 선물 시장 인사이트
+                            </p>
+                            <p style="margin: 0; font-size: 11px; color: #aaaaaa;">
+                                <a href="${SITE_URL}" style="color: #b87333; text-decoration: none;">웹사이트</a> · 
+                                <a href="mailto:james.baek@aligncommodities.com" style="color: #b87333; text-decoration: none;">문의하기</a> · 
+                                <a href="https://buttondown.com/coffeemarketinfo/unsubscribe/{{ subscriber.id }}" style="color: #888888; text-decoration: underline;">구독 해지</a>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                </table>
+                
+            </td>
+        </tr>
+    </table>
+    
+</body>
+</html>`;
 }
 
 /**
@@ -394,24 +412,20 @@ function findLatestReport() {
  */
 async function main() {
     console.log('\n📧 Buttondown Newsletter 발송 스크립트 시작\n');
+    console.log('📝 모드: Summary 이메일 (전체 HTML 대신 요약본 발송)\n');
     
-    if (!BUTTONDOWN_API_KEY) {
-        console.error('❌ BUTTONDOWN_API_KEY 환경변수가 설정되지 않았습니다.');
-        console.error('\n💡 해결 방법:');
-        console.error('   1. GitHub Repository Settings > Secrets and variables > Actions 이동');
-        console.error('   2. "New repository secret" 클릭');
-        console.error('   3. Name: BUTTONDOWN_API_KEY');
-        console.error('   4. Value: Buttondown 계정의 API 키 입력');
-        process.exit(1);
+    // dry-run 모드 체크 (--dry-run 또는 API 키 없을 때)
+    const isDryRun = process.argv.includes('--dry-run');
+    
+    if (!BUTTONDOWN_API_KEY && !isDryRun) {
+        console.log('⚠️ BUTTONDOWN_API_KEY 없음 - Dry Run 모드로 전환합니다.\n');
     }
     
-    if (BUTTONDOWN_API_KEY.length < 10) {
-        console.error('❌ BUTTONDOWN_API_KEY가 너무 짧습니다. 올바른 API 키인지 확인하세요.');
-        process.exit(1);
-    }
+    const shouldSend = BUTTONDOWN_API_KEY && BUTTONDOWN_API_KEY.length >= 10 && !isDryRun;
     
     // 명령줄 인자로 파일 경로 받기, 없으면 최신 파일
-    let reportPath = process.argv[2];
+    // --dry-run 플래그는 제외
+    let reportPath = process.argv.slice(2).find(arg => !arg.startsWith('--'));
     
     if (!reportPath) {
         reportPath = findLatestReport();
@@ -434,7 +448,27 @@ async function main() {
     const metadata = extractMetadata(htmlContent, reportPath);
     console.log(`📊 리포트 정보:`);
     console.log(`   제목: ${metadata.title}`);
+    console.log(`   부제: ${metadata.subtitle || '(없음)'}`);
     console.log(`   날짜: ${metadata.date}`);
+    console.log(`   요약: ${metadata.summary ? metadata.summary.substring(0, 50) + '...' : '(메타데이터에 없음)'}`);
+    console.log(`   태그: ${metadata.tags?.join(', ') || '(없음)'}`);
+    
+    // Key Stats 추출
+    const stats = extractKeyStats(htmlContent, metadata);
+    console.log(`   핵심 통계: ${stats.length}개 발견`);
+    stats.forEach(s => console.log(`      - ${s.label}: ${s.value}`));
+    
+    // Executive Summary 추출
+    const executiveSummary = extractExecutiveSummary(htmlContent);
+    if (executiveSummary) {
+        console.log(`   Executive Summary: ${executiveSummary.substring(0, 50)}...`);
+    }
+    
+    // Core Insight 추출
+    const coreInsight = extractCoreInsight(htmlContent);
+    if (coreInsight) {
+        console.log(`   Core Insight: ${coreInsight.substring(0, 50)}...`);
+    }
     
     // 리포트 URL 생성
     let relativePath = path.relative(path.join(__dirname, '..'), reportPath);
@@ -442,20 +476,32 @@ async function main() {
     const reportUrl = `${SITE_URL}/${relativePath}`;
     console.log(`   URL: ${reportUrl}`);
     
-    // 이메일용 HTML 변환
-    const emailHtml = convertToEmailHtml(htmlContent, reportUrl);
+    // Summary 이메일 생성
+    console.log('\n📧 Summary 이메일 생성 중...');
+    const emailHtml = createSummaryEmail(metadata, stats, executiveSummary, coreInsight, reportUrl);
     
     // 이메일 제목 생성
-    const emailSubject = `📊 ${metadata.title}`;
+    const emailSubject = `📊 ${metadata.title}${metadata.subtitle ? ' - ' + metadata.subtitle : ''}`;
     
-    // 발송
-    console.log(`\n📧 이메일 발송 중...`);
-    try {
-        await sendEmail(emailSubject, emailHtml);
-        console.log('\n✅ 뉴스레터 발송 완료!');
-    } catch (error) {
-        console.error('\n❌ 발송 실패:', error.message);
-        process.exit(1);
+    // 발송 또는 미리보기 저장
+    if (shouldSend) {
+        console.log(`\n📧 이메일 발송 중...`);
+        console.log(`   제목: ${emailSubject}`);
+        try {
+            await sendEmail(emailSubject, emailHtml);
+            console.log('\n✅ 뉴스레터 발송 완료!');
+        } catch (error) {
+            console.error('\n❌ 발송 실패:', error.message);
+            process.exit(1);
+        }
+    } else {
+        // Dry Run 모드 - 미리보기 HTML 파일로 저장
+        const previewPath = path.join(__dirname, '..', 'newsletter-preview.html');
+        fs.writeFileSync(previewPath, emailHtml, 'utf-8');
+        console.log(`\n🔍 Dry Run 모드`);
+        console.log(`   제목: ${emailSubject}`);
+        console.log(`   미리보기 저장됨: ${previewPath}`);
+        console.log(`\n💡 브라우저에서 newsletter-preview.html 파일을 열어 확인하세요.`);
     }
 }
 
