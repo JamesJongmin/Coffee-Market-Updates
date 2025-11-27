@@ -1545,7 +1545,8 @@
                 <div class="featured-content">
                     <span class="featured-tag">Latest Weekly <span class="new-badge" id="featuredNewBadge">NEW</span></span>
                     <h3 class="featured-title">
-                        <a href="/Reports/2025/11/2025-11-23.html">관세 철폐 이후, 시장은 어디로</a>
+                        <a href="/Reports/2025/11/2025-11-23.html" id="featuredTitleLink">관세 철폐 이후, 시장은 어디로</a>
+                        <span class="new-badge" id="featuredTitleNewBadge" style="margin-left: 10px; vertical-align: middle;">NEW</span>
                     </h3>
                     <p class="featured-summary">
                         트럼프 행정부의 브라질 커피 관세 완전 철폐에도 불구하고, 
@@ -1867,11 +1868,17 @@
             }
             
             // NEW 배지 표시 여부 (7일 이내 리포트인 경우에만 표시)
+            const featuredTitleNewBadge = document.getElementById('featuredTitleNewBadge');
+            const reportDate = new Date(featured.date);
+            const now = new Date();
+            const diffDays = (now - reportDate) / (1000 * 60 * 60 * 24);
+            const showBadge = diffDays <= 7 ? 'inline-block' : 'none';
+            
             if (featuredNewBadge) {
-                const reportDate = new Date(featured.date);
-                const now = new Date();
-                const diffDays = (now - reportDate) / (1000 * 60 * 60 * 24);
-                featuredNewBadge.style.display = diffDays <= 7 ? 'inline-block' : 'none';
+                featuredNewBadge.style.display = showBadge;
+            }
+            if (featuredTitleNewBadge) {
+                featuredTitleNewBadge.style.display = showBadge;
             }
             
             // 리포트 개수 업데이트
