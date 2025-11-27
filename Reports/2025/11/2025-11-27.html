@@ -1,0 +1,917 @@
+<!--REPORT_META
+{
+    "title": "2026 Coffee Market Outlook",
+    "subtitle": "2026년 커피 시장 연간 전망",
+    "date": "2025-11-27",
+    "type": "in-depth-analysis",
+    "summary": "2026년 커피 시장은 라니냐 전환, EUDR 비용 현실화, 구조적 물류난으로 인해 고비용 뉴노멀 시대에 진입합니다. 5대 핵심 동인 분석과 시나리오별 가격 전망, 로스터/트레이더를 위한 대응 전략을 심층 분석합니다.",
+    "tags": ["2026전망", "심층분석", "아라비카", "EUDR", "가격전망"]
+}
+REPORT_META-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Coffee Market Outlook | Coffee Market Info</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Design System */
+        :root {
+            --espresso: #1a0f0a;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --positive: #2d5f3f;
+            --negative: #9c2b2e;
+            --neutral: #5b6b7a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--roast);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+
+        /* Navigation */
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            background: rgba(250, 248, 245, 0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08); z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem; font-weight: 600;
+            color: var(--roast); text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 60px); }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px; text-align: center;
+            background: linear-gradient(135deg, #f5f0e8 0%, #faf8f5 100%);
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .report-label {
+            display: inline-block; background: var(--steam);
+            padding: 8px 20px; border-radius: 24px;
+            font-size: 0.85rem; font-weight: 700;
+            color: var(--roast); margin-bottom: 24px;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1; margin-bottom: 24px; color: var(--espresso);
+            word-break: keep-all; max-width: 900px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--copper); margin-bottom: 40px;
+            font-weight: 500; font-family: 'Pretendard', sans-serif;
+            border-top: 1px solid rgba(184, 115, 51, 0.3);
+            border-bottom: 1px solid rgba(184, 115, 51, 0.3);
+            padding: 10px 0; display: inline-block;
+        }
+
+        .hero-meta {
+            display: flex; justify-content: center; gap: 30px;
+            flex-wrap: wrap; color: var(--roast); opacity: 0.7; font-size: 0.95rem;
+        }
+
+        /* Key Stats */
+        .key-stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px; margin: 60px 0;
+        }
+
+        .stat-box {
+            background: #fff; border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px; padding: 24px; text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-box:hover { transform: translateY(-5px); }
+
+        .stat-number {
+            font-size: 2.2rem; font-weight: 800;
+            color: var(--copper); font-family: 'Cormorant Garamond', serif;
+            display: block; margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem; color: var(--roast); opacity: 0.7;
+            text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0; border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        section h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 50px; position: relative; padding-bottom: 20px;
+            color: var(--espresso);
+        }
+
+        section h2::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 60px; height: 3px; background: var(--copper);
+        }
+
+        section h3 {
+            font-size: 1.8rem; margin: 35px 0 20px; color: var(--espresso);
+        }
+
+        p { 
+            margin-bottom: 1.5em; 
+            text-align: justify; 
+            word-break: keep-all; 
+            letter-spacing: -0.01em;
+            color: #4a4a4a;
+        }
+        
+        ul, ol { padding-left: 20px; margin-bottom: 1.5em; }
+        li { margin-bottom: 0.5em; text-align: justify; word-break: keep-all; }
+        strong { color: var(--espresso); font-weight: 700; }
+
+        /* Driver Cards */
+        .driver-card {
+            background: #fff; border: 2px solid var(--accent);
+            border-radius: 16px; padding: 40px; margin-bottom: 40px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            position: relative; overflow: hidden;
+        }
+
+        .driver-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 30px; padding-bottom: 20px;
+            border-bottom: 2px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .driver-number {
+            font-size: 3rem; font-weight: 800;
+            color: var(--copper); font-family: 'Cormorant Garamond', serif;
+            opacity: 0.2; position: absolute; top: 20px; right: 30px;
+        }
+
+        .driver-title { flex: 1; padding-right: 60px; }
+        .driver-title h3 { margin: 0 0 8px 0; font-size: 2rem; }
+
+        .tag {
+            display: inline-block; background: var(--steam);
+            padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--roast); text-transform: uppercase; margin-top: 10px;
+        }
+        .tag.high { background: rgba(156, 43, 46, 0.1); color: var(--negative); }
+        .tag.medium { background: rgba(184, 115, 51, 0.1); color: var(--copper); }
+
+        /* Scenario Grid */
+        .scenario-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 20px; margin: 40px 0;
+        }
+
+        .scenario-box {
+            background: #fefdfb; border: 2px solid;
+            border-radius: 12px; padding: 30px;
+            display: flex; flex-direction: column;
+        }
+
+        .scenario-box.optimistic { border-color: var(--positive); }
+        .scenario-box.base { border-color: var(--neutral); }
+        .scenario-box.pessimistic { border-color: var(--negative); }
+
+        .scenario-label {
+            font-weight: 700; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .scenario-box.optimistic .scenario-label { color: var(--positive); }
+        .scenario-box.base .scenario-label { color: var(--neutral); }
+        .scenario-box.pessimistic .scenario-label { color: var(--negative); }
+
+        .scenario-prob {
+            font-size: 2rem; font-weight: 800;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--espresso); margin-bottom: 15px;
+        }
+
+        .scenario-price {
+            font-size: 1.4rem; font-weight: 700;
+            color: var(--roast); margin-bottom: 20px;
+        }
+
+        .scenario-desc {
+            font-size: 0.95rem; line-height: 1.6; color: var(--neutral);
+            text-align: left;
+        }
+        .scenario-desc ul {
+            padding-left: 15px; margin: 0;
+        }
+
+        /* Risk Section */
+        .risk-section {
+            background: #fff0f0; border-radius: 16px; padding: 40px;
+            border: 1px solid rgba(156, 43, 46, 0.2);
+        }
+        .risk-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(156, 43, 46, 0.1); }
+        .risk-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .risk-title { font-weight: 700; color: var(--negative); font-size: 1.1rem; margin-bottom: 8px; display: block;}
+
+        /* Pain Points Section */
+        .pain-point-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; margin-top: 30px;
+        }
+        .pain-point-card {
+            background: #fff; border: 1px solid rgba(156, 43, 46, 0.15);
+            border-radius: 12px; padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+        .pain-point-card:hover { transform: translateY(-3px); }
+        .pain-point-card h4 {
+            color: var(--negative); margin-bottom: 15px; font-size: 1.25rem;
+            border-bottom: 1px solid rgba(156, 43, 46, 0.1); padding-bottom: 10px;
+        }
+        .pain-point-card p {
+            font-weight: 700; color: var(--espresso); margin-bottom: 15px;
+        }
+
+        /* Impact Table */
+        .impact-table {
+            width: 100%; border-collapse: collapse; margin: 30px 0;
+            background: #fff; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            table-layout: fixed;
+        }
+
+        .impact-table th {
+            background: var(--steam); padding: 18px;
+            text-align: left; font-weight: 700;
+            border-bottom: 2px solid rgba(26, 15, 10, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .impact-table td {
+            padding: 18px; border-bottom: 1px solid rgba(26, 15, 10, 0.05);
+            vertical-align: top; word-break: keep-all; font-size: 0.95rem;
+        }
+        .impact-table tr:last-child td { border-bottom: none; }
+
+        /* Insight Box */
+        .insight-box {
+            background: rgba(184, 115, 51, 0.08);
+            border-left: 4px solid var(--copper);
+            padding: 24px; margin: 30px 0; border-radius: 8px;
+        }
+
+        .insight-box strong { color: var(--copper); }
+
+        /* Chart Wrapper */
+        .chart-wrapper {
+            background: #fff; border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 16px; padding: 30px; margin: 40px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .chart-container {
+            position: relative; width: 100%; height: 750px;
+        }
+
+        /* Strategy Cards */
+        .strategy-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px;
+        }
+        .strategy-card {
+            background: #fff; border: 1px solid rgba(184, 115, 51, 0.2);
+            border-radius: 12px; padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .strategy-header {
+            display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+        .strategy-icon { font-size: 1.8rem; margin-right: 12px; }
+        .strategy-title { font-size: 1.3rem; font-weight: 700; color: var(--espresso); font-family: 'Cormorant Garamond', serif; }
+        .action-list li { margin-bottom: 12px; line-height: 1.6; }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 40px; text-align: center;
+            border-top: 1px solid rgba(26, 15, 10, 0.08);
+            margin-top: 80px; background: rgba(255, 255, 255, 0.5);
+        }
+
+        footer p { color: var(--roast); opacity: 0.6; font-size: 0.9rem; text-align: center; margin-bottom: 8px; }
+        footer a { color: var(--copper); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        footer a:hover { color: var(--roast); text-decoration: underline; }
+
+        @media (max-width: 900px) {
+            .scenario-grid { grid-template-columns: 1fr; }
+            .strategy-grid { grid-template-columns: 1fr; }
+            .pain-point-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.8rem; }
+            .chart-container { height: 500px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="#" class="nav-brand">Coffee Market Info</a>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="report-label">Published by Align Commodities</div>
+            <h1>2026 Coffee Market Outlook</h1>
+            <p class="hero-subtitle">2026년 커피 시장 연간 전망</p>
+            <div class="hero-meta">
+                <span>📅 발행일: 2025년 11월 27일</span>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        <section>
+            <h2>Executive Summary: 불확실성 속의 질서</h2>
+            <p>2025년 글로벌 커피 시장은 기후 위기, 지정학적 갈등, 무역 장벽이 동시에 발생한 <strong>'퍼펙트 스톰(Perfect Storm)'</strong>의 한가운데에 있었습니다. 브라질 미나스제라이스의 기록적 가뭄과 베트남의 흉작은 아라비카와 로부스타 가격을 역사적 고점으로 견인했습니다.</p>
+            
+            <p>2026년 시장은 단순한 수급 회복을 넘어선 새로운 국면에 진입합니다. <strong>① 라니냐(La Niña)로의 기후 전환, ② EUDR(삼림벌채규정)의 실질적 비용 청구, ③ 구조적인 물류 비용 상승</strong>이 가격의 하방 경직성을 강화하고 있습니다. 생산 원가(Cost of Production) 자체가 구조적으로 상승한 '고비용 시대'가 뉴노멀로 자리 잡을 것입니다.</p>
+
+            <div class="key-stats">
+                <div class="stat-box">
+                    <span class="stat-number">440.85¢</span>
+                    <span class="stat-label">2025 아라비카 최고점</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">$5,000</span>
+                    <span class="stat-label">로부스타 톤당 최고가</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">398,645백</span>
+                    <span class="stat-label">ICE 인증 재고 (1.75년 최저)</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">61%</span>
+                    <span class="stat-label">2026년 라니냐 발생 확률</span>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <strong>Core Insight:</strong> 2026년 가격의 바닥(Floor)은 구조적으로 높아졌습니다. 기후 리스크 프리미엄과 EUDR 준수 비용으로 인해 200센트 미만의 저가 시대로 회귀하기는 어렵습니다.
+            </div>
+        </section>
+
+        <!-- 2025 Recap -->
+        <section>
+            <h2>2025년 시장 회고: 공급망의 붕괴</h2>
+            <p>2025년은 가격의 레벨(Level)이 한 단계 격상된 해였습니다. 아라비카 선물은 파운드당 400센트를 돌파하며 1970년대 이후 가장 강력한 강세장을 연출했습니다. <strong>'패닉 바잉(Panic Buying)'</strong>이 시장을 지배하며 전통적인 수확기 가격 하락(Seasonality) 패턴이 실종되었습니다.</p>
+            
+            <table class="impact-table">
+                <thead>
+                    <tr>
+                        <th width="15%">시기</th>
+                        <th width="20%">아라비카 (¢/lb)</th>
+                        <th width="20%">로부스타 ($/ton)</th>
+                        <th>핵심 드라이버 (Key Drivers)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>2025. 02</strong></td>
+                        <td style="color: var(--negative); font-weight:700;">440.85 (최고)</td>
+                        <td>3,800~4,000</td>
+                        <td>브라질 초기 가뭄 우려, 투기 자본의 공격적 유입</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2025. 07</strong></td>
+                        <td>320~350</td>
+                        <td>4,200</td>
+                        <td>베트남 수확 지연, 파나마 운하 슬롯 축소에 따른 물류난</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2025. 11</strong></td>
+                        <td style="color: var(--copper); font-weight:700;">411.60</td>
+                        <td style="color: var(--negative); font-weight:700;">4,693 (최고)</td>
+                        <td>미나스제라이스 강수량 평년 49% 수준, 미국 관세 이슈</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 50px;">2025년 시장 참여자별 고충 (Pain Points)</h3>
+            <div class="pain-point-grid">
+                <!-- Producer Card -->
+                <div class="pain-point-card">
+                    <h4>🌱 생두 생산자 (Producers)</h4>
+                    <p>"풍요 속의 빈곤 (Paradox of Price)"</p>
+                    <ul>
+                        <li><strong>허상뿐인 수익:</strong> 시장 가격은 높았으나 가뭄으로 수확량이 20~30% 급감하여 농가의 실질 소득은 오히려 감소했습니다.</li>
+                        <li><strong>디폴트 위기:</strong> 과거 낮은 가격에 체결한 선도 계약(Forward Contract) 이행을 포기하고 현물 시장에 매도하려는 유혹과 위약금 분쟁으로 신용 위기가 발생했습니다.</li>
+                        <li><strong>비용 급등:</strong> 비료 및 인건비 상승으로 손익분기점이 역사적 최고 수준으로 높아졌습니다.</li>
+                    </ul>
+                </div>
+                <!-- Roaster Card -->
+                <div class="pain-point-card">
+                    <h4>☕ 로스터리 (Roasteries)</h4>
+                    <p>"흑자 도산의 공포 (Cash Crunch)"</p>
+                    <ul>
+                        <li><strong>운전 자본 고갈:</strong> 원두 가격이 2배 오르면서 동일한 재고를 유지하기 위해 2배의 현금이 필요해져, 건실한 중소형 로스터리들이 유동성 부족으로 파산했습니다.</li>
+                        <li><strong>마진 압박:</strong> 원가 상승분을 소비자 가격에 100% 전가하지 못해 영업이익률이 한 자릿수로 급락했습니다.</li>
+                        <li><strong>강제적 품질 타협:</strong> 생존을 위해 아라비카 비중을 줄이고 로부스타 혼합 비율을 높이는 '다운그레이딩'이 강요되었습니다.</li>
+                    </ul>
+                </div>
+                <!-- Trader Card -->
+                <div class="pain-point-card">
+                    <h4>📈 트레이더 (Traders)</h4>
+                    <p>"유동성 위기와 살얼음판"</p>
+                    <ul>
+                        <li><strong>마진콜 폭탄:</strong> 선물 가격 급등으로 거래소에 납부해야 할 증거금(Margin Call)이 폭증하여 중소형 트레이더들의 자금줄이 말랐습니다.</li>
+                        <li><strong>카운터파티 리스크:</strong> 산지에서는 선적 지연/거부, 소비지에서는 로스터의 대금 연체/파산이라는 이중고(Double Default Risk)에 직면했습니다.</li>
+                        <li><strong>구조조정 가속화:</strong> 자금력이 부족한 트레이더들이 시장에서 퇴출되며 대형사 위주로 시장이 재편되었습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Key Drivers for 2026 (Updated) -->
+        <section>
+            <h2>2026년 시장을 결정할 5대 핵심 동인</h2>
+
+            <!-- Driver 1: Brazil Production -->
+            <div class="driver-card">
+                <span class="driver-number">01</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>브라질 커피 생산량</h3>
+                        <span class="tag high">가격 영향도: 매우 높음</span>
+                    </div>
+                </div>
+                <p><strong>현황 분석:</strong> 2025/26 시즌 브라질 아라비카 생산량은 <strong>3,440만~3,700만 백</strong>으로 추정되며(Volcafe-Conab), 역사상 최악의 가뭄과 40°C 극단 고온으로 전년 대비 약 10% 감소했습니다. 특히 전체 생산의 70%를 차지하는 미나스제라이스주가 평균 강수량의 70%만 기록했습니다.</p>
+                <p>2026/27 크롭은 온년(on-year) 사이클로 증산이 예상되나, <strong>2025년 8월 서리 피해(41.2만 백 손실)</strong>와 5년간 누적된 나무 스트레스로 회복력이 불확실합니다.</p>
+
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">낙관 시나리오 (20%)</div>
+                        <div class="scenario-desc">
+                            <strong>2026/27 크롭 7,200만 백+</strong>
+                            <ul>
+                                <li>9-10월 적정 강수</li>
+                                <li>서리 피해 없음</li>
+                                <li>비료 투입 정상화</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">기본 시나리오 (50%)</div>
+                        <div class="scenario-desc">
+                            <strong>2026/27 크롭 6,800~7,000만 백</strong>
+                            <ul>
+                                <li>온년 사이클 증산</li>
+                                <li>나무 약화로 제한적 회복</li>
+                                <li>한계적 기후 조건</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">비관 시나리오 (30%)</div>
+                        <div class="scenario-desc">
+                            <strong>2026/27 크롭 6,500만 백 미만</strong>
+                            <ul>
+                                <li>라니냐 강화 → 가뭄</li>
+                                <li>추가 서리 피해</li>
+                                <li>개화기 불리한 조건</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <table class="impact-table">
+                    <tr>
+                        <th>시나리오</th><th>생산량 전망</th><th>가격 영향 (Impact)</th><th>목표 범위</th>
+                    </tr>
+                    <tr>
+                        <td>낙관</td><td>7,200만 백+</td><td style="color:var(--negative)">-35 ~ -50¢</td><td>300-330¢/lb</td>
+                    </tr>
+                    <tr>
+                        <td>기본</td><td>6,800~7,000만 백</td><td>-10 ~ +10¢</td><td>350-380¢/lb</td>
+                    </tr>
+                    <tr>
+                        <td>비관</td><td>6,500만 백 미만</td><td style="color:var(--positive)">+30 ~ +60¢</td><td>410-440¢/lb</td>
+                    </tr>
+                </table>
+                <p><strong>핵심 모니터링:</strong> 2025년 9-10월 개화기 강수량, 2026년 6-7월 서리 위험, Conab 1차 추정(26년 5월).</p>
+            </div>
+
+            <!-- Driver 2: ICE Stocks -->
+            <div class="driver-card">
+                <span class="driver-number">02</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>ICE 재고 수준 & 공급망 정상화</h3>
+                        <span class="tag high">가격 영향도: 높음</span>
+                    </div>
+                </div>
+                <p><strong>현황 분석:</strong> 2025년 11월 ICE 인증 재고는 <strong>39.8만 백</strong>으로 1.75년래 최저입니다. 관세 기간 동안 미국 로스터 재고가 고갈되었으며, 관세 철폐 후에도 물류 정상화에 6~8주가 소요됩니다. 역사적으로 재고 50만 백 미만 시 <strong>20~40센트의 구조적 프리미엄</strong>이 형성되었습니다.</p>
+
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">빠른 회복 (25%)</div>
+                        <div class="scenario-desc">
+                            <strong>재고 70만 백+ (26년 하반기)</strong>
+                            <ul>
+                                <li>브라질 수출 급증</li>
+                                <li>베트남 사재기 해소</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">점진적 회복 (55%)</div>
+                        <div class="scenario-desc">
+                            <strong>재고 50~60만 백 (26년 말)</strong>
+                            <ul>
+                                <li>물류 정상화 지연</li>
+                                <li>공급 증가 제한적</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">추가 감소 (20%)</div>
+                        <div class="scenario-desc">
+                            <strong>재고 40만 백 미만 지속</strong>
+                            <ul>
+                                <li>생산 부족 심화</li>
+                                <li>인도(Delivery) 압박 증가</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <table class="impact-table">
+                    <tr>
+                        <th>시나리오</th><th>재고 전망</th><th>가격 영향</th><th>구조적 프리미엄</th>
+                    </tr>
+                    <tr>
+                        <td>빠른 회복</td><td>70만 백+</td><td style="color:var(--negative)">-20 ~ -30¢</td><td>소멸</td>
+                    </tr>
+                    <tr>
+                        <td>점진적 회복</td><td>50~60만 백</td><td>+5 ~ +15¢</td><td>10~20¢ 유지</td>
+                    </tr>
+                    <tr>
+                        <td>추가 감소</td><td>40만 백 미만</td><td style="color:var(--positive)">+25 ~ +40¢</td><td>30~50¢ 확대</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Driver 3: US Tariffs -->
+            <div class="driver-card">
+                <span class="driver-number">03</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>미국 관세 정책 (철폐 후 영향)</h3>
+                        <span class="tag medium">가격 영향도: 중간</span>
+                    </div>
+                </div>
+                <p><strong>현황 분석:</strong> 2025년 11월 20일 트럼프 행정명령으로 관세가 <strong>50% → 0%</strong>로 철폐되었습니다. 이는 단기적 가격 하방 요인이나, 3개월간 형성된 <strong>공급망 왜곡</strong>(재고 고갈, 계약 파기)의 여진은 2026년 상반기까지 지속될 것입니다.</p>
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">정책 안정 (60%)</div>
+                        <div class="scenario-desc">
+                            <strong>0% 관세 유지</strong>
+                            <ul><li>미-브라질 관계 개선</li><li>추가 위협 없음</li></ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">제한적 재도입 (30%)</div>
+                        <div class="scenario-desc">
+                            <strong>10~20% 관세 부과</strong>
+                            <ul><li>무역 협상 난항</li><li>정치적 압박</li></ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">고율 관세 복귀 (10%)</div>
+                        <div class="scenario-desc">
+                            <strong>30%+ 관세 재부과</strong>
+                            <ul><li>무역 전쟁 재개</li><li>외교 관계 악화</li></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-box">
+                    <strong>핵심 판단:</strong> 관세 철폐는 2026년 가격의 <strong>베이스라인</strong>입니다. 재부과 리스크(상방)보다는 현상 유지 가능성이 높으나, 정치적 변수 모니터링이 필요합니다.
+                </div>
+            </div>
+
+            <!-- Driver 4: EUDR -->
+            <div class="driver-card">
+                <span class="driver-number">04</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>EU 산림파괴방지규정(EUDR) 시행</h3>
+                        <span class="tag high">가격 영향도: 높음 (26년 하반기)</span>
+                    </div>
+                </div>
+                <p><strong>현황 분석:</strong> 2025년 12월 30일(대기업)부터 시행되는 EUDR은 지리적 데이터와 추적가능성을 요구합니다. 비용은 매출의 0.03~0.07% 수준이나, <strong>소농 배제와 오리진 리스크</strong>가 핵심 위협입니다.</p>
+                
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">순조로운 시행 (30%)</div>
+                        <div class="scenario-desc">공급 차질 최소화 (<3% 감소)</div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">부분적 차질 (50%)</div>
+                        <div class="scenario-desc">EU향 공급 5~10% 감소<br>프리미엄 상승</div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">공급 쇼크 (20%)</div>
+                        <div class="scenario-desc">EU향 공급 15%+ 감소<br>글로벌 재분배 혼란</div>
+                    </div>
+                </div>
+                <table class="impact-table">
+                    <tr>
+                        <th>시나리오</th><th>EU 공급 감소</th><th>시기</th><th>가격 영향</th>
+                    </tr>
+                    <tr>
+                        <td>순조로운 시행</td><td>< 3%</td><td>26년 하반기</td><td>+2 ~ +5¢</td>
+                    </tr>
+                    <tr>
+                        <td>부분적 차질</td><td>5~10%</td><td>26년 Q2~Q4</td><td>+15 ~ +30¢</td>
+                    </tr>
+                    <tr>
+                        <td>심각한 쇼크</td><td>15%+</td><td>26년 Q2부터</td><td>+40 ~ +70¢</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Driver 5: Currency -->
+            <div class="driver-card">
+                <span class="driver-number">05</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>USD/BRL 환율 Dynamics</h3>
+                        <span class="tag medium">가격 영향도: 중간</span>
+                    </div>
+                </div>
+                <p><strong>현황 분석:</strong> 2025년 11월 환율은 <strong>5.38</strong>입니다. 헤알화 약세는 수출 유인이 되지만, 강세는 수출 억제 요인이 됩니다. 2026년 컨센서스는 5.40~5.80 범위입니다.</p>
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">헤알화 강세 (25%)</div>
+                        <div class="scenario-desc">
+                            <strong>4.80 ~ 5.20</strong><br>
+                            공급 타이트 → 가격 상승 (+10~20¢)
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">제한적 약세 (50%)</div>
+                        <div class="scenario-desc">
+                            <strong>5.40 ~ 5.80</strong><br>
+                            중립적 영향 (±5¢)
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">헤알화 급락 (25%)</div>
+                        <div class="scenario-desc">
+                            <strong>6.00+</strong><br>
+                            매물 급증 → 가격 하락 (-15~25¢)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Black Swan Risks -->
+        <section>
+            <h2>잠재적 블랙 스완 (Black Swan Risks)</h2>
+            <div class="risk-section">
+                <div class="risk-item">
+                    <span class="risk-title">🚨 슈퍼 라니냐와 브라질의 개화 실패</span>
+                    <p>라니냐가 강력하게 발달하여 2026년 9~10월 개화기에 브라질 남동부에 비가 오지 않는다면, 연속 흉작이 확정됩니다. 이 경우 아라비카 선물은 <strong>500센트를 돌파하며 미지의 영역</strong>으로 진입할 수 있습니다.</p>
+                </div>
+                <div class="risk-item">
+                    <span class="risk-title">🍂 커피 녹병(Leaf Rust)의 변이와 확산</span>
+                    <p>기후 변화로 병충해 활동성이 높아져, 베트남과 중미에서 저항성 품종 발병 사례가 늘고 있습니다. 베트남 회복 기대감이 녹병으로 무너진다면 <strong>로부스타 공급망은 치명타</strong>를 입게 됩니다.</p>
+                </div>
+                <div class="risk-item">
+                    <span class="risk-title">🚢 지정학적 복합 위기에 따른 물류 마비</span>
+                    <p>파나마 운하, 홍해 봉쇄 등이 겹칠 경우 극심한 <strong>가격 괴리(Price Dislocation)</strong>를 초래할 것입니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scenarios -->
+        <section>
+            <h2>2026년 가격 전망 시나리오 (¢/lb)</h2>
+            <p>데이터를 종합하여 도출한 2026년 아라비카(KC) 가격에 대한 세 가지 시나리오입니다. (단위: ¢/lb)</p>
+
+            <div class="scenario-grid">
+                <div class="scenario-box base">
+                    <div class="scenario-label">Base Case (50%)</div>
+                    <div class="scenario-prob">완만한 조정</div>
+                    <div class="scenario-price">KC: 320 ~ 360¢</div>
+                    <div class="scenario-desc">
+                        • 브라질 26/27 풍작 (7천만 백+)<br>
+                        • 베트남 생산 정상화<br>
+                        • 라니냐 영향 제한적<br>
+                        • 상반기 고점 후 하반기 하향 안정
+                    </div>
+                </div>
+
+                <div class="scenario-box optimistic">
+                    <div class="scenario-label">Bear Case (30%)</div>
+                    <div class="scenario-prob">급락 및 안정</div>
+                    <div class="scenario-price">KC: 250 ~ 300¢</div>
+                    <div class="scenario-desc">
+                        • 브라질/베트남 대풍작<br>
+                        • 글로벌 경기 침체로 수요 위축<br>
+                        • 투기 자본의 대규모 청산<br>
+                        • 2024년 이전 수준 회귀 시도
+                    </div>
+                </div>
+
+                <div class="scenario-box pessimistic">
+                    <div class="scenario-label">Bull Case (20%)</div>
+                    <div class="scenario-prob">슈퍼 사이클 지속</div>
+                    <div class="scenario-price">KC: 450 ~ 520¢</div>
+                    <div class="scenario-desc">
+                        • 강력한 라니냐로 브라질 가뭄 지속<br>
+                        • 녹병 확산으로 베트남 회복 실패<br>
+                        • 인플레이션 헤지 수요 폭발<br>
+                        • 사상 최고치 경신 가능성
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="chart-wrapper">
+                <canvas id="priceChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section>
+            <h2>결론 및 전략적 제언</h2>
+            <div class="impact-table" style="background: var(--paper); border: 2px solid var(--accent); padding: 30px; margin-bottom: 0;">
+                <h3 style="margin-top: 0; text-align: center; margin-bottom: 20px;">"하산길은 험난하다 (The Descent is Rough)"</h3>
+                <p>2026/27 시즌 공급 잉여 전환 가능성이 높으나, 생산 원가 상승으로 인해 가격이 과거의 저렴했던 시대로 돌아가기는 어렵습니다.</p>
+                <div class="strategy-grid">
+                    <!-- Roaster Strategy -->
+                    <div class="strategy-card">
+                        <div class="strategy-header">
+                            <span class="strategy-icon">☕</span>
+                            <span class="strategy-title">로스터(Roaster) 전략</span>
+                        </div>
+                        <ul class="action-list">
+                            <li><strong>재고 선확보:</strong> EUDR 시행(26년 6월) 전인 1분기에 상반기 필요 물량의 60~70% 선확보 권장.</li>
+                            <li><strong>소싱 다변화:</strong> 브라질 의존도를 낮추고 데이터 추적이 확실한 콜롬비아/중미 물량 확대.</li>
+                            <li><strong>비용 관리:</strong> 고가 시대 장기화에 대비, 로부스타 블렌딩 비율을 유연하게 조정할 수 있는 R&D 준비.</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Trader Strategy -->
+                    <div class="strategy-card">
+                        <div class="strategy-header">
+                            <span class="strategy-icon">📈</span>
+                            <span class="strategy-title">트레이더(Trader) 전략</span>
+                        </div>
+                        <ul class="action-list">
+                            <li><strong>스프레드 매매:</strong> 상반기 타이트한 수급(백워데이션) vs 하반기 잉여 전환(콘탱고)을 노린 캘린더 스프레드(Long Mar/Short Jul).</li>
+                            <li><strong>변동성 플레이:</strong> 라니냐 뉴스 플로우에 따른 급등락 대비 옵션 매수(Straddle) 유효.</li>
+                            <li><strong>주요 레벨:</strong> 330¢ 지지선에서 매수, 400¢ 저항선 돌파 실패 시 매도 대응.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section style="border-bottom: none;">
+            <div style="background: rgba(194, 58, 58, 0.05); border: 1px solid rgba(194, 58, 58, 0.2); padding: 30px; border-radius: 12px; font-size: 0.9rem; font-style: italic; color: var(--neutral);">
+                <p style="margin-bottom: 0;"><strong>면책조항:</strong> 본 리포트는 2025년 11월 27일 기준 공개 정보를 바탕으로 한 시장 분석이며, 투자 자문이 아닙니다. 커피 선물 거래는 원금 손실 위험을 수반합니다. 과거 실적이 미래 수익을 보장하지 않습니다.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Align Commodities. All rights reserved.</p>
+            <p>Contact: <a href="mailto:james.baek@aligncommodities.com">james.baek@aligncommodities.com</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Chart.js Setup
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        
+        // Data updated to cents/lb (Original $ * 100)
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2025 Q4', '2026 Q1', '2026 Q2', '2026 Q3', '2026 Q4'],
+                datasets: [
+                    {
+                        label: 'Bull Case (강력한 라니냐)',
+                        data: [411, 440, 480, 500, 520],
+                        borderColor: '#9c2b2e', // Red
+                        backgroundColor: 'rgba(156, 43, 46, 0.1)',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Base Case (완만한 조정)',
+                        data: [411, 380, 350, 330, 340],
+                        borderColor: '#b87333', // Copper
+                        backgroundColor: 'rgba(184, 115, 51, 0.2)',
+                        borderWidth: 4,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Bear Case (경기 침체)',
+                        data: [411, 350, 300, 270, 250],
+                        borderColor: '#5b6b7a', // Neutral/Blue
+                        backgroundColor: 'rgba(91, 107, 122, 0.1)',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '2026 아라비카 가격 시나리오 (¢/lb)',
+                        font: { size: 16, family: "'Cormorant Garamond', serif" }
+                    },
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#1a0f0a',
+                        bodyColor: '#3d2314',
+                        borderColor: 'rgba(0,0,0,0.1)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + '¢';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: '¢/lb' },
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: {
+                            font: { family: "'Pretendard', sans-serif" }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: "'Pretendard', sans-serif" }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+    </script>
+</body>
+</html>
