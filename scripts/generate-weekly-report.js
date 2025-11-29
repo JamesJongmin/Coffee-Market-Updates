@@ -224,18 +224,26 @@ async function generateReport() {
 
 **중요**: ${activeContract.name} 가격이 300센트 이상인지 확인하세요. 최근 커피 가격은 역사적 고점 수준입니다.
 
-### 2단계: 뉴스 및 펀더멘털 수집 (최근 7일)
+### 2단계: 뉴스 및 펀더멘털 수집 (발행일 기준 최근 1주일만)
 
-다음 키워드로 검색:
-- "coffee market weekly" ${date.year}
-- "Brazil coffee crop weather" ${date.year}
-- "Vietnam robusta coffee production" ${date.year}
-- "Colombia coffee exports FNC"
-- "Volcafe coffee deficit forecast"
-- "StoneX coffee production estimate"
-- "Rabobank coffee market"
-- "EUDR coffee deforestation regulation"
-- "coffee import tariff"
+**중요**: 반드시 ${weekRange.start} ~ ${weekRange.end} 기간 내 뉴스만 검색하고 분석하세요.
+발행일(${date.dateStr}) 기준으로 최근 7일 이내의 기사만 포함해야 합니다.
+오래된 뉴스(1주일 이상 지난 기사)는 제외하세요.
+
+다음 키워드로 검색 (날짜 범위 포함):
+- "coffee market news ${weekRange.end}" - 최신 커피 시장 뉴스
+- "coffee price ${date.year} ${date.month}" - 이번 달 커피 가격 뉴스
+- "Brazil coffee ${weekRange.end}" - 브라질 최신 뉴스
+- "Vietnam robusta coffee ${date.year}" - 베트남 로부스타 뉴스
+- "Colombia coffee exports"
+- "Volcafe coffee"
+- "StoneX coffee"
+- "EUDR coffee regulation ${date.year}"
+- "coffee tariff ${date.year}"
+
+**검색 결과 필터링**: 
+- 각 뉴스 항목의 날짜를 확인하고, ${weekRange.start} 이전의 기사는 제외
+- 리포트에 포함하는 뉴스는 반드시 해당 주간(${weekRange.start} ~ ${weekRange.end}) 내 발행된 것만 선택
 
 ### 3단계: 종합 분석 및 전망 작성
 
