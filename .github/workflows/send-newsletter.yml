@@ -1,30 +1,25 @@
 name: Send Newsletter
 
 on:
-  # 수동 실행 - 특정 리포트 파일 지정 가능
+  # ⚠️ 수동 실행만 가능 - 리포트 품질 확인 후 발송
   workflow_dispatch:
     inputs:
       report_path:
         description: '발송할 리포트 경로 (비워두면 최신 리포트 자동 선택)'
         required: false
         default: ''
-      
-  # Reports 폴더에 새 HTML 파일이 push되면 자동 실행
-  push:
-    branches:
-      - main
-      - master
-    paths:
-      - 'Reports/**/*.html'
+      confirm_send:
+        description: '리포트 품질을 확인했습니까? (yes 입력 필수)'
+        required: true
+        default: ''
+        type: string
 
 jobs:
   send-newsletter:
     runs-on: ubuntu-latest
     
-    # push 이벤트일 때는 test 파일 제외
-    if: |
-      github.event_name == 'workflow_dispatch' || 
-      (github.event_name == 'push' && !contains(github.event.head_commit.message, 'test'))
+    # confirm_send가 'yes'일 때만 실행
+    if: github.event.inputs.confirm_send == 'yes'
     
     steps:
       - name: Checkout repository
@@ -55,41 +50,42 @@ jobs:
             echo "✅ BUTTONDOWN_API_KEY 시크릿이 설정되어 있습니다."
           fi
           
-      - name: Find new report file
+      - name: Find report file
         id: find-report
         run: |
-          echo "🔍 이벤트 유형: ${{ github.event_name }}"
+          echo "🔍 수동 발송 모드"
           echo "🔍 입력된 경로: ${{ github.event.inputs.report_path }}"
           
           if [ -n "${{ github.event.inputs.report_path }}" ]; then
-            # 수동 실행 시 지정된 파일 사용
+            # 지정된 파일 사용
             echo "report_path=${{ github.event.inputs.report_path }}" >> $GITHUB_OUTPUT
-            echo "📄 수동 지정 파일: ${{ github.event.inputs.report_path }}"
-          elif [ "${{ github.event_name }}" == "push" ]; then
-            # push 이벤트 시 새로 추가된 HTML 파일 찾기
-            # HEAD~1이 존재하는지 확인
-            if git rev-parse HEAD~1 >/dev/null 2>&1; then
-              NEW_FILE=$(git diff --name-only HEAD~1 HEAD -- 'Reports/**/*.html' | grep -v test | head -1 || echo "")
-              if [ -n "$NEW_FILE" ]; then
-                echo "report_path=$NEW_FILE" >> $GITHUB_OUTPUT
-                echo "📄 새로 추가된 파일: $NEW_FILE"
-              else
-                echo "report_path=" >> $GITHUB_OUTPUT
-                echo "⚠️ 새로운 리포트 파일 없음 (변경된 HTML 없음)"
-              fi
-            else
-              # 첫 번째 커밋이거나 이전 커밋이 없는 경우
-              echo "⚠️ 이전 커밋이 없어 diff 비교 불가, 최신 파일 자동 선택"
-              echo "report_path=" >> $GITHUB_OUTPUT
-            fi
+            echo "📄 지정 파일: ${{ github.event.inputs.report_path }}"
           else
-            # 그 외의 경우 최신 파일 자동 선택
-            echo "report_path=" >> $GITHUB_OUTPUT
-            echo "📄 최신 파일 자동 선택"
+            # 최신 파일 자동 선택
+            LATEST=$(find Reports -name "*.html" ! -name "*test*" -type f | sort -r | head -1)
+            echo "report_path=$LATEST" >> $GITHUB_OUTPUT
+            echo "📄 최신 파일 자동 선택: $LATEST"
+          fi
+          
+      - name: Validate report before sending
+        run: |
+          REPORT_PATH="${{ steps.find-report.outputs.report_path }}"
+          
+          if [ ! -f "$REPORT_PATH" ]; then
+            echo "❌ 리포트 파일을 찾을 수 없습니다: $REPORT_PATH"
+            exit 1
+          fi
+          
+          echo "✅ 리포트 파일 확인: $REPORT_PATH"
+          
+          # 가격 데이터 유효성 체크 (300-450 센트 범위)
+          if grep -qE "[3-4][0-9]{2}\.[0-9]{1,2}" "$REPORT_PATH"; then
+            echo "✅ 가격 데이터 유효성 확인됨"
+          else
+            echo "⚠️ 경고: 가격 데이터가 예상 범위를 벗어날 수 있습니다"
           fi
           
       - name: Send newsletter
-        if: steps.find-report.outputs.report_path != '' || github.event_name == 'workflow_dispatch'
         run: |
           if [ -n "${{ steps.find-report.outputs.report_path }}" ]; then
             node scripts/send-newsletter.js "${{ steps.find-report.outputs.report_path }}"
@@ -99,7 +95,7 @@ jobs:
         env:
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
           
-      - name: Skip notification
-        if: steps.find-report.outputs.report_path == '' && github.event_name != 'workflow_dispatch'
+      - name: Success notification
         run: |
-          echo "⏭️ 새로운 리포트 파일이 없어 뉴스레터 발송을 건너뜁니다."
+          echo "✅ 뉴스레터 발송 완료!"
+          echo "📄 발송된 리포트: ${{ steps.find-report.outputs.report_path }}"

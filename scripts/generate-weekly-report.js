@@ -5,23 +5,47 @@ const path = require("path");
 const client = new Anthropic();
 
 // 날짜 유틸리티
-function getToday() {
-  const today = new Date();
+function getToday(overrideDate = null) {
+  // 명령줄 인자로 날짜 지정 가능: node script.js 2025-11-28
+  const dateArg = overrideDate || process.argv[2];
+  let today;
+  
+  if (dateArg && /^\d{4}-\d{2}-\d{2}$/.test(dateArg)) {
+    // 지정된 날짜 사용
+    const [year, month, day] = dateArg.split('-').map(Number);
+    today = new Date(year, month - 1, day);
+    console.log(`📅 지정된 날짜로 리포트 생성: ${dateArg}`);
+  } else {
+    today = new Date();
+  }
+  
   return {
     year: today.getFullYear(),
     month: String(today.getMonth() + 1).padStart(2, "0"),
     day: String(today.getDate()).padStart(2, "0"),
-    dateStr: today.toISOString().split("T")[0],
+    dateStr: `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`,
     koreanDate: `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`,
   };
 }
 
-function getLastWeekRange() {
-  const today = new Date();
+function getLastWeekRange(baseDate = null) {
+  const dateArg = baseDate || process.argv[2];
+  let today;
+  
+  if (dateArg && /^\d{4}-\d{2}-\d{2}$/.test(dateArg)) {
+    const [year, month, day] = dateArg.split('-').map(Number);
+    today = new Date(year, month - 1, day);
+  } else {
+    today = new Date();
+  }
+  
   const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+  
+  const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  
   return {
-    start: lastWeek.toISOString().split("T")[0],
-    end: today.toISOString().split("T")[0],
+    start: formatDate(lastWeek),
+    end: formatDate(today),
   };
 }
 
@@ -191,9 +215,20 @@ async function generateReport() {
 
 8. **출처**: 모든 참조 링크
 
+9. **푸터**: 반드시 포함
+   - Align Commodities 브랜드
+   - 문의 이메일: james.baek@aligncommodities.com
+   - 웹사이트 링크: https://www.coffeemarket.info
+   - 면책 조항: "본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다."
+
 ## 출력 형식
 
 완전한 HTML 파일을 생성해주세요. 다음 조건을 충족해야 합니다:
+
+0. 헤더에 홈 버튼 필수:
+<a href="https://www.coffeemarket.info" class="home-button">← 홈으로</a>
+- 헤더 오른쪽 상단에 위치
+- coffeemarket.info로 링크
 
 1. 메타데이터 블록 포함:
 <!--REPORT_META
