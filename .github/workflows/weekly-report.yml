@@ -9,6 +9,7 @@ on:
 jobs:
   generate-report:
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # 웹 검색 포함으로 타임아웃 증가
     
     steps:
       - name: Checkout repository
@@ -22,10 +23,32 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Generate weekly report
+      - name: Generate weekly report with web search
         run: node scripts/generate-weekly-report.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        timeout-minutes: 10  # API 호출 타임아웃
+          
+      - name: Validate generated report
+        run: |
+          # 오늘 날짜의 리포트가 생성되었는지 확인
+          YEAR=$(date +'%Y')
+          MONTH=$(date +'%m')
+          DATE=$(date +'%Y-%m-%d')
+          REPORT_PATH="Reports/${YEAR}/${MONTH}/coffee-market-update-${DATE}.html"
+          
+          if [ -f "$REPORT_PATH" ]; then
+            echo "✅ Report generated: $REPORT_PATH"
+            # 가격이 합리적인 범위인지 간단 체크 (300-450센트)
+            if grep -qE "[3-4][0-9]{2}\.[0-9]{1,2}" "$REPORT_PATH"; then
+              echo "✅ Price data appears valid"
+            else
+              echo "⚠️ Warning: Price data may be incorrect"
+            fi
+          else
+            echo "❌ Report not found: $REPORT_PATH"
+            exit 1
+          fi
           
       - name: Commit and push report
         run: |
@@ -33,5 +56,5 @@ jobs:
           git config --local user.name "GitHub Action"
           git add Reports/
           git add reports.json
-          git commit -m "📊 Weekly Report $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git diff --cached --quiet || git commit -m "📊 Weekly Report $(date +'%Y-%m-%d')"
           git push
