@@ -4,6 +4,67 @@ const path = require("path");
 
 const client = new Anthropic();
 
+// 재시도 설정
+const RETRY_CONFIG = {
+  maxRetries: 5,
+  initialDelayMs: 5000, // 5초
+  maxDelayMs: 60000, // 최대 60초
+  backoffMultiplier: 2,
+  retryableErrors: ["overloaded_error", "rate_limit_error", "api_error"],
+};
+
+// 지수 백오프를 사용한 재시도 함수
+async function withRetry(fn, operationName = "API call") {
+  let lastError;
+  
+  for (let attempt = 1; attempt <= RETRY_CONFIG.maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      
+      // 재시도 가능한 오류인지 확인
+      const errorType = error?.error?.type || error?.type || "";
+      const isRetryable = RETRY_CONFIG.retryableErrors.some(
+        (type) => errorType.includes(type) || error.message?.includes(type)
+      );
+      
+      // 상태 코드로도 확인 (529 = overloaded, 529 = rate limit)
+      const statusCode = error?.status || error?.statusCode;
+      const isRetryableStatus = [429, 529, 500, 502, 503].includes(statusCode);
+      
+      if (!isRetryable && !isRetryableStatus) {
+        console.error(`❌ Non-retryable error in ${operationName}:`, error.message || error);
+        throw error;
+      }
+      
+      if (attempt === RETRY_CONFIG.maxRetries) {
+        console.error(`❌ Max retries (${RETRY_CONFIG.maxRetries}) exceeded for ${operationName}`);
+        throw error;
+      }
+      
+      // 지수 백오프 계산
+      const delay = Math.min(
+        RETRY_CONFIG.initialDelayMs * Math.pow(RETRY_CONFIG.backoffMultiplier, attempt - 1),
+        RETRY_CONFIG.maxDelayMs
+      );
+      
+      console.log(`⚠️ ${operationName} failed (attempt ${attempt}/${RETRY_CONFIG.maxRetries})`);
+      console.log(`   Error: ${errorType || error.message || "Unknown error"}`);
+      console.log(`   Retrying in ${delay / 1000} seconds...`);
+      
+      await sleep(delay);
+    }
+  }
+  
+  throw lastError;
+}
+
+// sleep 함수
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // 날짜 유틸리티
 function getToday(overrideDate = null) {
   // 명령줄 인자로 날짜 지정 가능: node script.js 2025-11-28
@@ -340,19 +401,23 @@ ${cssTemplate}
       },
     ];
 
-    let response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 16000,
-      system: systemPrompt,
-      tools: [
-        {
-          type: "web_search_20250305",
-          name: "web_search",
-          max_uses: 15,
-        },
-      ],
-      messages: messages,
-    });
+    let response = await withRetry(
+      () =>
+        client.messages.create({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 16000,
+          system: systemPrompt,
+          tools: [
+            {
+              type: "web_search_20250305",
+              name: "web_search",
+              max_uses: 15,
+            },
+          ],
+          messages: messages,
+        }),
+      "Initial API call"
+    );
 
     console.log(`Initial response - Stop reason: ${response.stop_reason}`);
 
@@ -374,20 +439,24 @@ ${cssTemplate}
         }
       }
 
-      // 다음 응답 요청
-      response = await client.messages.create({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 16000,
-        system: systemPrompt,
-        tools: [
-          {
-            type: "web_search_20250305",
-            name: "web_search",
-            max_uses: 15,
-          },
-        ],
-        messages: messages,
-      });
+      // 다음 응답 요청 (재시도 로직 포함)
+      response = await withRetry(
+        () =>
+          client.messages.create({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 16000,
+            system: systemPrompt,
+            tools: [
+              {
+                type: "web_search_20250305",
+                name: "web_search",
+                max_uses: 15,
+              },
+            ],
+            messages: messages,
+          }),
+        "Agentic loop API call"
+      );
 
       console.log(`Loop response - Stop reason: ${response.stop_reason}`);
     }
