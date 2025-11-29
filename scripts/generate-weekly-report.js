@@ -178,7 +178,7 @@ async function generateReport() {
   console.log(`Analysis period: ${weekRange.start} to ${weekRange.end}`);
   console.log(`Active contract: ${activeContract.symbol} (${activeContract.name})`);
 
-  const systemPrompt = `당신은 커피 선물 시장 전문 애널리스트이자 Align Commodities의 시니어 리서치 담당입니다.
+  const systemPrompt = `당신은 커피 선물 시장 전문 애널리스트이자 Coffee Market Info의 시니어 리서치 담당입니다.
 매주 기관 투자자 및 업계 전문가를 위한 프리미엄 커피 시장 주간 동향 리포트를 작성합니다.
 
 ## 핵심 원칙
@@ -190,10 +190,11 @@ async function generateReport() {
 - 모든 수치는 웹 검색으로 확인된 실제 데이터만 사용
 
 ### 2. 체계적 분석 프레임워크
-- **매크로 환경**: 글로벌 경제, 달러 강세/약세, 원자재 전반
-- **펀더멘털**: 수급 균형, 재고, 산지별 작황, 수출입 동향
-- **테크니컬**: 주요 지지/저항선, 이동평균, 거래량
-- **센티먼트**: COT 포지션, 투기자 동향, 시장 심리
+- **매크로 환경**: 글로벌 경제, 달러 강세/약세, 원자재 전반, 금리 정책
+- **펀더멘털**: 수급 균형, 재고, 산지별 작황, 수출입 동향, 생산량 전망
+- **테크니컬**: 주요 지지/저항선, 이동평균, 거래량, 차트 패턴
+- **센티먼트**: COT 포지션, 투기자 동향, 시장 심리, 옵션 시장 분석
+- **종합 분석**: 모든 요인을 통합한 다면적 시장 진단
 
 ### 3. 균형 잡힌 시각
 - 강세/약세 요인을 균형 있게 분석
@@ -203,7 +204,8 @@ async function generateReport() {
 ### 4. 전문성과 신뢰성
 - 모든 정보에 출처 명시
 - 주요 기관 전망 인용 (USDA, ICO, Volcafe, StoneX, Rabobank)
-- 산지 현지 정보 반영 (Cepea, Cecafé, ICO 보고서)`;
+- 산지 현지 정보 반영 (Cepea, Cecafé, ICO 보고서)
+- 다양한 시나리오 분석 및 확률 기반 전망 제시`;
 
   const userPrompt = `오늘 날짜: ${date.koreanDate}
 데이터 수집 기간: ${weekRange.start} ~ ${weekRange.end}
@@ -310,6 +312,15 @@ async function generateReport() {
 - 재고 동향 분석
 - 글로벌 수출입 동향
 
+### 7.5. 종합 분석 (Comprehensive Analysis)
+이 섹션은 리포트의 핵심으로, 모든 분석을 통합하여 시장의 전체 그림을 제시합니다:
+- **시장 구조 진단**: 현재 시장이 강세/약세/중립 국면인지 구조적 평가
+- **핵심 동인 순위**: 가격에 영향을 미치는 요인들의 상대적 중요도 (1위~5위)
+- **상관관계 분석**: USD/BRL, 달러지수, 재고 수준과 가격의 상관관계
+- **시장 컨센서스 vs 독자 견해**: 시장의 일반적 전망과 분석가의 차별화된 시각
+- **핵심 변수 모니터링**: 향후 1-2주 주목해야 할 데이터/이벤트
+- analysis-grid 또는 comprehensive-box 클래스 사용
+
 ### 8. 가격 전망 (Price Outlook)
 - **시나리오 그리드** (scenario-grid 사용):
   - 낙관 시나리오: 확률, 예상 가격, 조건
@@ -331,7 +342,7 @@ async function generateReport() {
 - 모든 참조 URL 목록
 
 ### 12. 푸터 (Footer)
-- Align Commodities 브랜드
+- Coffee Market Info 브랜드 (by Align Commodities)
 - 문의: james.baek@aligncommodities.com
 - 웹사이트: https://www.coffeemarket.info
 - 면책조항: "본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다."
@@ -364,7 +375,7 @@ async function generateReport() {
 ### 네비게이션 바:
 \`\`\`html
 <nav class="top-nav">
-    <a href="https://www.coffeemarket.info" class="nav-brand">☕ Align Commodities</a>
+    <a href="https://www.coffeemarket.info" class="nav-brand">☕ Coffee Market Info</a>
     <a href="https://www.coffeemarket.info" class="home-btn">← 홈으로</a>
 </nav>
 \`\`\`
