@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GX9R36120J');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-depth Analysis | Coffee Market Info</title>
+    <meta name="description" content="Coffee market in-depth analysis reports. Deep analysis of special issues and structural changes.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --border: rgba(26, 15, 10, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 64px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 56px; box-shadow: 0 1px 30px rgba(0,0,0,0.06); }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            height: 100%; display: flex;
+            align-items: center; justify-content: space-between;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--espresso); letter-spacing: -0.02em;
+        }
+        .nav-menu { display: flex; align-items: center; gap: 28px; }
+        .nav-item { position: relative; }
+        .nav-link {
+            font-size: 0.9rem; font-weight: 500;
+            color: var(--ink); text-decoration: none;
+            opacity: 0.7; transition: all 0.2s;
+            letter-spacing: 0.01em; text-transform: uppercase;
+        }
+        .nav-link:hover, .nav-link.active { opacity: 1; color: var(--copper); }
+        .nav-link.lang-switch {
+            background: rgba(184, 115, 51, 0.1);
+            padding: 6px 12px; border-radius: 6px;
+            border: 1px solid rgba(184, 115, 51, 0.2);
+            font-size: 0.8rem;
+        }
+        .nav-link.lang-switch:hover {
+            background: rgba(184, 115, 51, 0.2);
+            border-color: var(--copper);
+        }
+        .mobile-menu-link.lang-switch-mobile {
+            background: rgba(184, 115, 51, 0.08);
+            color: var(--copper); font-weight: 600;
+        }
+
+        .mobile-menu-btn {
+            display: none; flex-direction: column; justify-content: center;
+            gap: 5px; width: 40px; height: 40px;
+            background: none; border: none; cursor: pointer; padding: 8px; z-index: 1001;
+        }
+        .mobile-menu-btn span {
+            display: block; width: 24px; height: 2px;
+            background: var(--espresso); border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(26, 15, 10, 0.5); z-index: 998;
+        }
+        .mobile-menu-overlay.active { display: block; opacity: 1; }
+        .mobile-menu {
+            position: fixed; top: 0; right: -300px;
+            width: 280px; height: 100vh;
+            background: var(--paper); z-index: 999;
+            transition: right 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 24px; border-bottom: 1px solid var(--border);
+        }
+        .mobile-menu-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem; font-weight: 600; color: var(--espresso);
+        }
+        .mobile-menu-close {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            background: none; border: none;
+            font-size: 1.8rem; color: var(--ink);
+            cursor: pointer; opacity: 0.6;
+        }
+        .mobile-menu-nav { padding: 16px 0; }
+        .mobile-menu-link {
+            display: block; padding: 16px 24px;
+            font-size: 1rem; font-weight: 500;
+            color: var(--ink); text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .mobile-menu-link:hover { background: var(--steam); color: var(--copper); }
+        .mobile-menu-link.active { color: var(--copper); background: rgba(184, 115, 51, 0.08); }
+
+        .page-header {
+            padding: 140px 0 60px;
+            background: linear-gradient(180deg, var(--paper) 0%, var(--steam) 100%);
+            position: relative; overflow: hidden;
+        }
+        .page-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            text-align: center;
+        }
+        .page-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--copper); margin-bottom: 20px;
+        }
+        .page-tag::before { content: ''; width: 24px; height: 1px; background: var(--copper); }
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 400; line-height: 1.15;
+            color: var(--espresso); margin-bottom: 20px;
+        }
+        .page-subtitle {
+            font-size: 1.1rem; color: var(--ink);
+            opacity: 0.7; line-height: 1.7; max-width: 600px; margin: 0 auto;
+        }
+
+        .main-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 80px clamp(20px, 5vw, 48px);
+        }
+
+        .info-section {
+            background: white; border-radius: 20px; padding: 48px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border); margin-bottom: 60px;
+        }
+        .info-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+        .info-icon { font-size: 2rem; }
+        .info-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem; font-weight: 500; color: var(--espresso);
+        }
+        .info-content { color: var(--ink); opacity: 0.8; line-height: 1.8; }
+        .info-content ul { margin-top: 20px; margin-left: 20px; list-style: none; }
+        .info-content li { margin-bottom: 12px; position: relative; padding-left: 20px; }
+        .info-content li::before {
+            content: ''; position: absolute; left: 0; top: 10px;
+            width: 6px; height: 6px; background: var(--copper); border-radius: 50%;
+        }
+        .info-content strong { color: var(--espresso); font-weight: 600; }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px; margin-bottom: 40px;
+        }
+        .report-card {
+            background: white; border-radius: 12px; padding: 28px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            display: flex; flex-direction: column; cursor: pointer;
+        }
+        .report-card:hover {
+            border-color: rgba(184, 115, 51, 0.2);
+            box-shadow: 0 8px 30px rgba(26, 15, 10, 0.06);
+            transform: translateY(-2px);
+        }
+        .report-type {
+            font-size: 0.65rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--positive); margin-bottom: 12px;
+        }
+        .report-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem; font-weight: 500;
+            color: var(--espresso); margin-bottom: 12px; line-height: 1.35;
+        }
+        .report-summary {
+            font-size: 0.9rem; color: var(--ink); opacity: 0.65;
+            line-height: 1.65; margin-bottom: 20px; flex: 1;
+        }
+        .report-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 16px; border-top: 1px solid var(--border);
+        }
+        .report-date { font-size: 0.8rem; color: var(--ink); opacity: 0.4; }
+        .read-link {
+            font-size: 0.8rem; font-weight: 600;
+            color: var(--espresso); text-decoration: none;
+        }
+        .read-link:hover { color: var(--copper); }
+
+        .loading-spinner {
+            display: flex; justify-content: center; align-items: center;
+            height: 200px; font-size: 0.9rem; color: var(--ink); opacity: 0.5;
+        }
+        .spinner {
+            width: 30px; height: 30px;
+            border: 2px solid var(--border); border-top-color: var(--copper);
+            border-radius: 50%; animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .no-results {
+            text-align: center; padding: 60px 20px;
+            background: white; border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .no-results h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem; color: var(--espresso); margin-bottom: 12px;
+        }
+        .no-results p { opacity: 0.6; }
+
+        .footer {
+            background: var(--espresso); color: var(--crema);
+            padding: 60px 0 40px;
+        }
+        .footer-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+        }
+        .footer-content {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 32px;
+        }
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem; font-weight: 600; margin-bottom: 8px;
+        }
+        .footer-desc { font-size: 0.85rem; opacity: 0.5; max-width: 400px; }
+        .footer-links { display: flex; gap: 32px; }
+        .footer-link {
+            color: var(--crema); text-decoration: none;
+            font-size: 0.85rem; opacity: 0.6; transition: opacity 0.2s;
+        }
+        .footer-link:hover { opacity: 1; }
+        .footer-bottom { font-size: 0.75rem; opacity: 0.4; text-align: center; }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .page-header { padding: 100px 0 40px; }
+            .info-section { padding: 32px 24px; }
+            .reports-grid { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; text-align: center; gap: 24px; }
+            .footer-links { flex-direction: column; gap: 12px; text-align: center; }
+        }
+
+        .scroll-progress {
+            position: fixed; top: 64px; left: 0; height: 2px;
+            background: var(--copper); z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <a href="index-en.html" class="nav-brand">
+                <span class="nav-logo">Coffee Market Info</span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-item"><a href="about-en.html" class="nav-link">About</a></div>
+                <div class="nav-item"><a href="weekly-report-en.html" class="nav-link">Weekly Report</a></div>
+                <div class="nav-item"><a href="in-depth-analysis-en.html" class="nav-link active">In-Depth Analysis</a></div>
+                <div class="nav-item"><a href="fundamentals/fundamentals.html" class="nav-link">Fundamentals</a></div>
+                <div class="nav-item"><a href="dashboards.html" class="nav-link">Dashboards</a></div>
+                <div class="nav-item"><a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a></div>
+                <div class="nav-item"><a href="in-depth-analysis.html" class="nav-link lang-switch" title="한국어로 전환">🌐 KR</a></div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-title">Menu</span>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">×</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="about-en.html" class="mobile-menu-link">About</a>
+            <a href="weekly-report-en.html" class="mobile-menu-link">Weekly Report</a>
+            <a href="in-depth-analysis-en.html" class="mobile-menu-link active">In-Depth Analysis</a>
+            <a href="fundamentals/fundamentals.html" class="mobile-menu-link">Fundamentals</a>
+            <a href="dashboards.html" class="mobile-menu-link">Dashboards</a>
+            <a href="mailto:james.baek@aligncommodities.com" class="mobile-menu-link">Contact</a>
+            <a href="in-depth-analysis.html" class="mobile-menu-link lang-switch-mobile">🌐 한국어 버전</a>
+        </nav>
+    </div>
+
+    <header class="page-header">
+        <div class="page-container">
+            <div class="page-tag">Special Analysis</div>
+            <h1 class="page-title">Coffee Market In-Depth Analysis</h1>
+            <p class="page-subtitle">
+                Deep analysis of special issues and structural changes. 
+                Professional coverage of long-term trends and market shock factors.
+            </p>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="info-section">
+            <div class="info-header">
+                <span class="info-icon">🔍</span>
+                <h2 class="info-title">In-depth Analysis Reports</h2>
+            </div>
+            <div class="info-content">
+                <p>Reports covering special issues and in-depth analysis of the coffee market. Beyond weekly trends, providing deep analysis on specific topics.</p>
+                
+                <ul>
+                    <li><strong>Short-term price outlook and direction analysis</strong></li>
+                    <li><strong>Technical analysis and chart patterns</strong></li>
+                    <li><strong>Special events and market shock analysis</strong></li>
+                    <li><strong>Long-term trends and structural changes</strong></li>
+                    <li><strong>Infographics and visualizations</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner"></div>
+            Loading reports...
+        </div>
+
+        <div class="reports-grid" id="reportsGrid" style="display: none;"></div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <h3>No In-depth Analysis Reports</h3>
+            <p>In-depth analysis reports have not been published yet.</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        Providing in-depth analysis and insights on the global coffee market.
+                        Published by Align Commodities X Yellowknife Roasters.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="index-en.html" class="footer-link">Home</a>
+                    <a href="weekly-report-en.html" class="footer-link">Weekly Report</a>
+                    <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2025 Align Commodities. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const topNav = document.getElementById('topNav');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            scrollProgress.style.width = (scrollTop / scrollHeight) * 100 + '%';
+            topNav.classList.toggle('scrolled', scrollTop > 100);
+        });
+
+        async function loadReportsFromJSON() {
+            try {
+                const response = await fetch('reports.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.reports || [];
+                }
+            } catch (error) {
+                console.log('Failed to load reports.json:', error.message);
+            }
+            return [];
+        }
+
+        function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch (error) {
+                return dateString;
+            }
+        }
+
+        function createReportCard(report) {
+            const card = document.createElement('div');
+            card.className = 'report-card';
+            card.onclick = () => window.location.href = report.link;
+            card.innerHTML = `
+                <span class="report-type">In-depth Analysis</span>
+                <h3 class="report-title">${report.title || 'Untitled'}</h3>
+                <p class="report-summary">${report.summary || 'No summary available.'}</p>
+                <div class="report-footer">
+                    <span class="report-date">${formatDate(report.date)}</span>
+                    <a href="${report.link}" class="read-link">Read Report →</a>
+                </div>
+            `;
+            return card;
+        }
+
+        async function loadInDepthReports() {
+            const grid = document.getElementById('reportsGrid');
+            const noResults = document.getElementById('noResults');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            try {
+                let allReports = await loadReportsFromJSON();
+                
+                const inDepthReports = allReports.filter(report => {
+                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth') return true;
+                    if (report.title && !report.title.includes('주간 동향')) return true;
+                    return false;
+                });
+
+                inDepthReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+                loadingSpinner.style.display = 'none';
+
+                if (inDepthReports.length > 0) {
+                    grid.innerHTML = '';
+                    noResults.style.display = 'none';
+                    grid.style.display = 'grid';
+                    inDepthReports.forEach(report => {
+                        grid.appendChild(createReportCard(report));
+                    });
+                } else {
+                    grid.style.display = 'none';
+                    noResults.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Failed to load reports:', error);
+                loadingSpinner.style.display = 'none';
+                noResults.style.display = 'block';
+            }
+        }
+
+        function initMobileMenu() {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const close = document.getElementById('mobileMenuClose');
+
+            function openMenu() {
+                menu.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeMenu() {
+                menu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            if (btn) btn.addEventListener('click', () => menu.classList.contains('active') ? closeMenu() : openMenu());
+            if (close) close.addEventListener('click', closeMenu);
+            if (overlay) overlay.addEventListener('click', closeMenu);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileMenu();
+            loadInDepthReports();
+        });
+    </script>
+</body>
+</html>
