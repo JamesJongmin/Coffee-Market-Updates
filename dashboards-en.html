@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GX9R36120J');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Dashboards | Coffee Market Info</title>
+    <meta name="description" content="Coffee futures, USD/BRL exchange rate, CFTC positions, NDVI - key coffee market indicators at a glance. Real-time data visualization dashboards.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --border: rgba(26, 15, 10, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 64px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 56px; box-shadow: 0 1px 30px rgba(0,0,0,0.06); }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            height: 100%; display: flex;
+            align-items: center; justify-content: space-between;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--espresso); letter-spacing: -0.02em;
+        }
+        .nav-menu { display: flex; align-items: center; gap: 28px; }
+        .nav-item { position: relative; }
+        .nav-link {
+            font-size: 0.9rem; font-weight: 500;
+            color: var(--ink); text-decoration: none;
+            opacity: 0.7; transition: all 0.2s;
+            letter-spacing: 0.01em; text-transform: uppercase;
+        }
+        .nav-link:hover, .nav-link.active { opacity: 1; color: var(--copper); }
+        .nav-link.lang-switch {
+            background: rgba(184, 115, 51, 0.1);
+            padding: 6px 12px; border-radius: 6px;
+            border: 1px solid rgba(184, 115, 51, 0.2);
+            font-size: 0.8rem;
+        }
+        .nav-link.lang-switch:hover {
+            background: rgba(184, 115, 51, 0.2);
+            border-color: var(--copper);
+        }
+        .mobile-menu-link.lang-switch-mobile {
+            background: rgba(184, 115, 51, 0.08);
+            color: var(--copper); font-weight: 600;
+        }
+
+        .mobile-menu-btn {
+            display: none; flex-direction: column; justify-content: center;
+            gap: 5px; width: 40px; height: 40px;
+            background: none; border: none; cursor: pointer; padding: 8px; z-index: 1001;
+        }
+        .mobile-menu-btn span {
+            display: block; width: 24px; height: 2px;
+            background: var(--espresso); border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(26, 15, 10, 0.5); z-index: 998;
+        }
+        .mobile-menu-overlay.active { display: block; opacity: 1; }
+        .mobile-menu {
+            position: fixed; top: 0; right: -300px;
+            width: 280px; height: 100vh;
+            background: var(--paper); z-index: 999;
+            transition: right 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 24px; border-bottom: 1px solid var(--border);
+        }
+        .mobile-menu-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem; font-weight: 600; color: var(--espresso);
+        }
+        .mobile-menu-close {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            background: none; border: none;
+            font-size: 1.8rem; color: var(--ink);
+            cursor: pointer; opacity: 0.6;
+        }
+        .mobile-menu-nav { padding: 16px 0; }
+        .mobile-menu-link {
+            display: block; padding: 16px 24px;
+            font-size: 1rem; font-weight: 500;
+            color: var(--ink); text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .mobile-menu-link:hover { background: var(--steam); color: var(--copper); }
+        .mobile-menu-link.active { color: var(--copper); background: rgba(184, 115, 51, 0.08); }
+
+        .page-header {
+            padding: 120px 0 60px;
+            background: linear-gradient(180deg, var(--paper) 0%, var(--steam) 100%);
+            position: relative; overflow: hidden;
+        }
+        .page-header::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 80%; height: 200%;
+            background: radial-gradient(ellipse, rgba(184, 115, 51, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .header-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px); position: relative;
+        }
+        .header-content { max-width: 700px; }
+        .header-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--copper); margin-bottom: 16px;
+        }
+        .header-tag::before { content: ''; width: 24px; height: 1px; background: var(--copper); }
+        .header-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 400; line-height: 1.2;
+            color: var(--espresso); margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        .header-subtitle {
+            font-size: 1rem; color: var(--ink);
+            opacity: 0.65; line-height: 1.7;
+        }
+
+        .main-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+        }
+
+        .dashboard-section { padding: 60px 0 100px; }
+        .section-header {
+            display: flex; align-items: center;
+            justify-content: space-between; margin-bottom: 40px;
+        }
+        .section-title-group { display: flex; align-items: center; gap: 16px; }
+        .section-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem; font-weight: 600; color: var(--copper);
+        }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem; font-weight: 500;
+            color: var(--espresso); letter-spacing: -0.01em;
+        }
+        .section-line {
+            flex: 1; height: 1px;
+            background: linear-gradient(90deg, var(--border), transparent);
+            margin-left: 24px;
+        }
+
+        .dashboard-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px;
+        }
+        .dashboard-card {
+            background: white; border-radius: 20px; padding: 32px;
+            border: 1px solid var(--border); transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 12px 40px rgba(26, 15, 10, 0.08);
+            border-color: rgba(184, 115, 51, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .card-header {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 8px;
+        }
+        .card-title-group { flex: 1; }
+        .card-title {
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--ink); opacity: 0.45; margin-bottom: 6px;
+        }
+        .card-value-wrapper { display: flex; flex-direction: column; gap: 2px; }
+        .card-value-label {
+            font-size: 0.65rem; font-weight: 500;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--copper); opacity: 0.9;
+        }
+        .card-value {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem; font-weight: 700;
+            color: var(--espresso); letter-spacing: -0.02em; line-height: 1.2;
+        }
+        .card-change { font-size: 0.85rem; font-weight: 600; margin-top: 4px; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+        .card-source { font-size: 0.7rem; color: var(--ink); opacity: 0.35; text-align: right; }
+
+        .chart-wrapper { height: 280px; position: relative; margin: 24px 0; }
+        .chart-loading {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex; align-items: center; gap: 12px;
+            font-size: 0.85rem; color: var(--ink); opacity: 0.4;
+        }
+        .spinner {
+            width: 20px; height: 20px;
+            border: 2px solid var(--steam); border-top-color: var(--copper);
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .chart-wrapper canvas { opacity: 0; animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .card-analysis {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(232, 226, 217, 0.4) 0%, rgba(245, 240, 232, 0.3) 100%);
+            border-radius: 12px; border-left: 3px solid var(--copper);
+        }
+        .analysis-title {
+            font-size: 0.75rem; font-weight: 600;
+            letter-spacing: 0.05em; color: var(--copper);
+            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        }
+        .analysis-text {
+            font-size: 0.85rem; color: var(--ink);
+            opacity: 0.7; line-height: 1.75;
+        }
+        .analysis-text strong { color: var(--espresso); opacity: 1; font-weight: 600; }
+        .analysis-text em { color: var(--copper); font-style: normal; font-weight: 500; }
+
+        .footer {
+            background: var(--espresso); color: var(--crema); padding: 60px 0 40px;
+        }
+        .footer-grid {
+            display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 48px; margin-bottom: 48px;
+        }
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem; font-weight: 600; margin-bottom: 16px;
+        }
+        .footer-desc { font-size: 0.9rem; opacity: 0.5; line-height: 1.7; max-width: 280px; }
+        .footer-title {
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            opacity: 0.4; margin-bottom: 20px;
+        }
+        .footer-link {
+            display: block; font-size: 0.9rem;
+            color: var(--crema); text-decoration: none;
+            opacity: 0.6; margin-bottom: 12px; transition: opacity 0.2s;
+        }
+        .footer-link:hover { opacity: 1; }
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-copyright { font-size: 0.8rem; opacity: 0.4; }
+        .footer-disclaimer {
+            font-size: 0.75rem; opacity: 0.35;
+            max-width: 480px; text-align: right; line-height: 1.5;
+        }
+
+        .scroll-progress {
+            position: fixed; top: 64px; left: 0; height: 2px;
+            background: var(--copper); z-index: 999; transition: width 0.1s;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .page-header { padding: 100px 0 40px; }
+            .header-title { font-size: 1.8rem; }
+            .dashboard-section { padding: 40px 0 80px; }
+            .dashboard-card { padding: 24px; }
+            .chart-wrapper { height: 240px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-disclaimer { text-align: center; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <a href="index-en.html" class="nav-brand">
+                <span class="nav-logo">Coffee Market Info</span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-item"><a href="about-en.html" class="nav-link">About</a></div>
+                <div class="nav-item"><a href="weekly-report-en.html" class="nav-link">Weekly Report</a></div>
+                <div class="nav-item"><a href="in-depth-analysis-en.html" class="nav-link">In-Depth Analysis</a></div>
+                <div class="nav-item"><a href="fundamentals/fundamentals.html" class="nav-link">Fundamentals</a></div>
+                <div class="nav-item"><a href="dashboards-en.html" class="nav-link active">Dashboards</a></div>
+                <div class="nav-item"><a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a></div>
+                <div class="nav-item"><a href="dashboards.html" class="nav-link lang-switch" title="한국어로 전환">🌐 KR</a></div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-title">Menu</span>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">×</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="about-en.html" class="mobile-menu-link">About</a>
+            <a href="weekly-report-en.html" class="mobile-menu-link">Weekly Report</a>
+            <a href="in-depth-analysis-en.html" class="mobile-menu-link">In-Depth Analysis</a>
+            <a href="fundamentals/fundamentals.html" class="mobile-menu-link">Fundamentals</a>
+            <a href="dashboards-en.html" class="mobile-menu-link active">Dashboards</a>
+            <a href="mailto:james.baek@aligncommodities.com" class="mobile-menu-link">Contact</a>
+            <a href="dashboards.html" class="mobile-menu-link lang-switch-mobile">🌐 한국어 버전</a>
+        </nav>
+    </div>
+
+    <header class="page-header">
+        <div class="header-container">
+            <div class="header-content animate-in">
+                <div class="header-tag">Data Intelligence</div>
+                <h1 class="header-title">Market Dashboards</h1>
+                <p class="header-subtitle">
+                    Real-time visualization of key coffee market indicators: Arabica futures prices, 
+                    USD/BRL exchange rates, CFTC speculative positions, and Brazil NDVI vegetation index.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <section class="dashboard-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-number">01</span>
+                    <h2 class="section-title">Key Indicators</h2>
+                    <div class="section-line"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Coffee Futures Chart -->
+                <div class="dashboard-card animate-in delay-1">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">Arabica Futures (KC)</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">Current Price</span>
+                                <div class="card-value" id="coffeeValue">—</div>
+                            </div>
+                            <div class="card-change" id="coffeeChange"></div>
+                        </div>
+                        <div class="card-source">Source: ICE</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="chart-loading" id="loading-coffee">
+                            <div class="spinner"></div>
+                            <span>Loading data...</span>
+                        </div>
+                        <canvas id="coffeeChart" style="display: none;"></canvas>
+                    </div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">📊 Market Interpretation Guide</div>
+                        <div class="analysis-text">
+                            <strong>Arabica futures prices</strong> are the global benchmark traded on ICE (Intercontinental Exchange). 
+                            <strong>Price drivers (up):</strong> Brazilian drought/frost, supply shortage, ICE inventory decline, USD weakness. 
+                            <strong>Price drivers (down):</strong> Good harvest outlook, demand slowdown, USD strength. 
+                            <em>Levels above 300¢/lb are historically high, significantly increasing costs for roasters and buyers.</em>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USD/BRL Chart -->
+                <div class="dashboard-card animate-in delay-2">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">USD/BRL Exchange Rate</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">Current Rate</span>
+                                <div class="card-value" id="usdValue">—</div>
+                            </div>
+                            <div class="card-change" id="usdChange"></div>
+                        </div>
+                        <div class="card-source">Source: LSEG</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="chart-loading" id="loading-usd">
+                            <div class="spinner"></div>
+                            <span>Loading data...</span>
+                        </div>
+                        <canvas id="usdChart" style="display: none;"></canvas>
+                    </div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">💱 Market Interpretation Guide</div>
+                        <div class="analysis-text">
+                            <strong>USD/BRL exchange rate</strong> determines Brazilian coffee export competitiveness and farmer selling incentives. 
+                            <strong>Weak Real (rate↑):</strong> Higher USD income for Brazilian farmers → encourages exports → downward pressure on futures. 
+                            <strong>Strong Real (rate↓):</strong> Less export incentive → farmers hold back sales → reduced supply may push prices up. 
+                            <em>Brazil produces ~40% of world Arabica, making this rate a key variable for price forecasting.</em>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CFTC Positions Chart -->
+                <div class="dashboard-card animate-in delay-3">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">CFTC Net Long Positions</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">Contracts</span>
+                                <div class="card-value" id="cftcValue">—</div>
+                            </div>
+                            <div class="card-change" id="cftcChange"></div>
+                        </div>
+                        <div class="card-source">Source: CFTC/LSEG</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="chart-loading" id="loading-cftc">
+                            <div class="spinner"></div>
+                            <span>Loading data...</span>
+                        </div>
+                        <canvas id="cftcChart" style="display: none;"></canvas>
+                    </div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">📈 Market Interpretation Guide</div>
+                        <div class="analysis-text">
+                            <strong>CFTC Money Manager Net Long</strong> shows directional bets by hedge funds and speculators. 
+                            <strong>Positive (+):</strong> Long positions > Short positions → market expects price increase. 
+                            <strong>Negative (-):</strong> Short positions > Long positions → betting on decline. 
+                            <strong>Warning:</strong> Extreme positions (+50K or below -30K) can trigger <em>short-covering rallies</em> or <em>profit-taking selloffs</em> leading to price reversals.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NVDI Chart -->
+                <div class="dashboard-card animate-in delay-4">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <div class="card-title">Brazil Southeast NDVI</div>
+                            <div class="card-value-wrapper">
+                                <span class="card-value-label">Vegetation Index</span>
+                                <div class="card-value" id="nvdiValue">—</div>
+                            </div>
+                            <div class="card-change" id="nvdiChange"></div>
+                        </div>
+                        <div class="card-source">Source: Satellite/LSEG</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="chart-loading" id="loading-nvdi">
+                            <div class="spinner"></div>
+                            <span>Loading data...</span>
+                        </div>
+                        <canvas id="nvdiChart" style="display: none;"></canvas>
+                    </div>
+                    <div class="card-analysis">
+                        <div class="analysis-title">🌱 Market Interpretation Guide</div>
+                        <div class="analysis-text">
+                            <strong>NDVI (Normalized Difference Vegetation Index)</strong> measures plant health via satellite, tracking coffee tree conditions. 
+                            <strong>Seasonal significance:</strong> 
+                            • <strong>Aug-Oct (Flowering):</strong> NDVI decline → poor flowering → <em>potential yield reduction for next year (26 crop)</em>. 
+                            • <strong>Nov-Feb (Fruit development):</strong> Low NDVI → poor cherry development → reduced yield & quality. 
+                            • <strong>Mar-Jul (Harvest):</strong> NDVI reflects already-determined crop; limited price impact. 
+                            <em>Gray band shows 2010-2023 historical range; values outside indicate weather anomalies.</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        Providing in-depth analysis and insights on the global coffee market. 
+                        Published by Align Commodities X Yellowknife Roasters.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Reports</div>
+                    <a href="weekly-report-en.html" class="footer-link">Weekly Updates</a>
+                    <a href="in-depth-analysis-en.html" class="footer-link">In-depth Analysis</a>
+                    <a href="about-en.html" class="footer-link">About</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data</div>
+                    <a href="dashboards-en.html" class="footer-link">Market Dashboard</a>
+                    <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
+                    <a href="index-en.html#dashboard" class="footer-link">Quick View</a>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <span class="footer-link" style="cursor: default; opacity: 0.4;">
+                        Align Commodities
+                    </span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    All content on this site is for informational purposes only and does not constitute investment advice.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const topNav = document.getElementById('topNav');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            scrollProgress.style.width = (scrollTop / scrollHeight) * 100 + '%';
+            if (scrollTop > 100) { topNav.classList.add('scrolled'); } else { topNav.classList.remove('scrolled'); }
+        });
+
+        let charts = {};
+        const GOOGLE_SHEETS_URLS = {
+            coffeefutures: 'https://docs.google.com/spreadsheets/d/1lnRrdQynfk-XrgYsKmf1_XFCBDa9jLr2XVRib-2lpTk/export?format=csv&gid=442491515',
+            usdbrl: 'https://docs.google.com/spreadsheets/d/1FvqTjVTw_iCtZ9pQOHc1UBN7ghYvrdp_MOLTxsSLTyM/export?format=csv&gid=88171284',
+            cftcpositions: 'https://docs.google.com/spreadsheets/d/1IgfIFB60VC2f3IGnU5m9xmqkmfOCnnAOYItj9SWKMxc/export?format=csv&gid=0',
+            nvdi: 'https://docs.google.com/spreadsheets/d/1oxXXeBQDZmiq9te6fNkKTs9D1X8ruwUI0_yy8UOj7gI/export?format=csv&gid=0'
+        };
+
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const result = [];
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) { result.push(line.split(',')); }
+            }
+            return result;
+        }
+
+        function parseDate(dateValue) {
+            if (typeof dateValue === 'number') { return new Date((dateValue - 25569) * 86400 * 1000); }
+            return new Date(dateValue);
+        }
+
+        async function readGoogleSheetData(sheetKey) {
+            try {
+                const url = GOOGLE_SHEETS_URLS[sheetKey];
+                if (!url) throw new Error(`Unknown sheet key: ${sheetKey}`);
+                let csvText;
+                try {
+                    const directResponse = await fetch(url);
+                    if (directResponse.ok) { csvText = await directResponse.text(); }
+                    else { throw new Error('Direct access failed'); }
+                } catch (directError) {
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                    const proxyResponse = await fetch(proxyUrl);
+                    if (!proxyResponse.ok) throw new Error(`Proxy failed: ${proxyResponse.status}`);
+                    const proxyData = await proxyResponse.json();
+                    csvText = proxyData.contents;
+                }
+                const data = parseCSV(csvText);
+                const processedData = data.slice(1).map(row => ({
+                    date: row[0], value: row[1]
+                })).filter(row => row.date && row.value !== undefined && row.value !== '');
+                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                return processedData;
+            } catch (error) {
+                console.error(`Error reading Google Sheet ${sheetKey}:`, error);
+                return null;
+            }
+        }
+
+        function filterLastYear(data) {
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+            return data.filter(row => parseDate(row.date) >= oneYearAgo);
+        }
+
+        function formatSimpleDate(date) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} '${String(date.getFullYear()).slice(-2)}`;
+        }
+
+        const chartColors = {
+            coffee: '#b87333', usd: '#4a7c59',
+            cftc: { positive: '#4a7c59', negative: '#c23a3a' },
+            nvdi: { range: 'rgba(184, 115, 51, 0.15)', y2024: '#c23a3a', y2025: '#3498db' }
+        };
+
+        async function createCoffeeChart() {
+            const loadingElement = document.getElementById('loading-coffee');
+            const chartElement = document.getElementById('coffeeChart');
+            const valueElement = document.getElementById('coffeeValue');
+            const changeElement = document.getElementById('coffeeChange');
+            try {
+                let data = await Promise.race([
+                    readGoogleSheetData('coffeefutures'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                ]);
+                if (!data) throw new Error('No data received');
+                data = filterLastYear(data);
+                const chartData = data.map((row, index) => ({
+                    x: index, y: parseFloat(row.value), date: parseDate(row.date)
+                })).filter(point => !isNaN(point.y));
+                if (chartData.length > 0) {
+                    const latestValue = chartData[chartData.length - 1].y;
+                    const prevValue = chartData.length > 1 ? chartData[chartData.length - 2].y : latestValue;
+                    const change = ((latestValue - prevValue) / prevValue * 100).toFixed(2);
+                    valueElement.textContent = `${latestValue.toFixed(2)}¢`;
+                    changeElement.textContent = change >= 0 ? `+${change}%` : `${change}%`;
+                    changeElement.className = `card-change ${change >= 0 ? 'positive' : 'negative'}`;
+                }
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+                const ctx = chartElement.getContext('2d');
+                charts.coffee = new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets: [{ label: 'Coffee Futures Price', data: chartData, borderColor: chartColors.coffee, backgroundColor: 'rgba(184, 115, 51, 0.08)', borderWidth: 2, fill: true, tension: 0.3, pointRadius: 0, pointHoverRadius: 5, pointHoverBackgroundColor: chartColors.coffee }] },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: 'index' },
+                        plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(26, 15, 10, 0.9)', titleColor: '#fff', bodyColor: '#fff', padding: 12, displayColors: false, callbacks: { title: (items) => chartData[items[0].dataIndex].date.toLocaleDateString('en-US'), label: (context) => `${context.parsed.y.toFixed(2)} ¢/lb` } } },
+                        scales: { x: { type: 'linear', ticks: { callback: (value) => { const index = Math.round(value); if (chartData[index] && (index === 0 || index === chartData.length - 1 || index % Math.floor(chartData.length / 5) === 0)) { return formatSimpleDate(chartData[index].date); } return ''; }, color: 'rgba(44, 36, 32, 0.4)', font: { size: 11 }, maxTicksLimit: 6, maxRotation: 0 }, grid: { display: false } }, y: { title: { display: true, text: 'cents/lb', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' }, grid: { color: 'rgba(44, 36, 32, 0.05)' }, ticks: { color: 'rgba(44, 36, 32, 0.5)', font: { size: 11 } } } }
+                    }
+                });
+            } catch (error) {
+                console.error('Coffee chart error:', error);
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">Data loading failed</span>';
+            }
+        }
+
+        async function createUSDChart() {
+            const loadingElement = document.getElementById('loading-usd');
+            const chartElement = document.getElementById('usdChart');
+            const valueElement = document.getElementById('usdValue');
+            const changeElement = document.getElementById('usdChange');
+            try {
+                let data = await Promise.race([readGoogleSheetData('usdbrl'), new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))]);
+                if (!data) throw new Error('No data received');
+                data = filterLastYear(data);
+                const chartData = data.map((row, index) => ({ x: index, y: parseFloat(row.value), date: parseDate(row.date) })).filter(point => !isNaN(point.y));
+                if (chartData.length > 0) {
+                    const latestValue = chartData[chartData.length - 1].y;
+                    const prevValue = chartData.length > 1 ? chartData[chartData.length - 2].y : latestValue;
+                    const change = ((latestValue - prevValue) / prevValue * 100).toFixed(2);
+                    valueElement.textContent = latestValue.toFixed(4);
+                    changeElement.textContent = change >= 0 ? `+${change}%` : `${change}%`;
+                    changeElement.className = `card-change ${change >= 0 ? 'positive' : 'negative'}`;
+                }
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+                const ctx = chartElement.getContext('2d');
+                charts.usd = new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets: [{ label: 'USD/BRL Rate', data: chartData, borderColor: chartColors.usd, backgroundColor: 'rgba(74, 124, 89, 0.08)', borderWidth: 2, fill: true, tension: 0.3, pointRadius: 0, pointHoverRadius: 5, pointHoverBackgroundColor: chartColors.usd }] },
+                    options: {
+                        responsive: true, maintainAspectRatio: false, interaction: { intersect: false, mode: 'index' },
+                        plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(26, 15, 10, 0.9)', titleColor: '#fff', bodyColor: '#fff', padding: 12, displayColors: false, callbacks: { title: (items) => chartData[items[0].dataIndex].date.toLocaleDateString('en-US'), label: (context) => `BRL ${context.parsed.y.toFixed(4)}` } } },
+                        scales: { x: { type: 'linear', ticks: { callback: (value) => { const index = Math.round(value); if (chartData[index] && (index === 0 || index === chartData.length - 1 || index % Math.floor(chartData.length / 5) === 0)) { return formatSimpleDate(chartData[index].date); } return ''; }, color: 'rgba(44, 36, 32, 0.4)', font: { size: 11 }, maxTicksLimit: 6, maxRotation: 0 }, grid: { display: false } }, y: { title: { display: true, text: 'BRL/USD', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' }, grid: { color: 'rgba(44, 36, 32, 0.05)' }, ticks: { color: 'rgba(44, 36, 32, 0.5)', font: { size: 11 } } } }
+                    }
+                });
+            } catch (error) {
+                console.error('USD chart error:', error);
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">Data loading failed</span>';
+            }
+        }
+
+        async function createCFTCChart() {
+            const loadingElement = document.getElementById('loading-cftc');
+            const chartElement = document.getElementById('cftcChart');
+            const valueElement = document.getElementById('cftcValue');
+            const changeElement = document.getElementById('cftcChange');
+            try {
+                let data = await Promise.race([readGoogleSheetData('cftcpositions'), new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))]);
+                if (!data) throw new Error('No data received');
+                data = filterLastYear(data);
+                const chartData = data.map(row => ({ y: parseInt(row.value), date: parseDate(row.date) })).filter(point => !isNaN(point.y) && point.date);
+                chartData.sort((a, b) => a.date.getTime() - b.date.getTime());
+                if (chartData.length > 0) {
+                    const latestValue = chartData[chartData.length - 1].y;
+                    const prevValue = chartData.length > 1 ? chartData[chartData.length - 2].y : latestValue;
+                    const change = latestValue - prevValue;
+                    valueElement.textContent = latestValue >= 0 ? `+${(latestValue/1000).toFixed(1)}K` : `${(latestValue/1000).toFixed(1)}K`;
+                    changeElement.textContent = change >= 0 ? `+${(change/1000).toFixed(1)}K` : `${(change/1000).toFixed(1)}K`;
+                    changeElement.className = `card-change ${change >= 0 ? 'positive' : 'negative'}`;
+                }
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+                const ctx = chartElement.getContext('2d');
+                const totalData = chartData.length;
+                const step = Math.max(Math.floor(totalData / 6), 1);
+                const labels = chartData.map((item, index) => (index === 0 || index === totalData - 1 || index % step === 0) ? formatSimpleDate(item.date) : '');
+                charts.cftc = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: labels, datasets: [{ label: 'Net Long Positions', data: chartData.map(d => d.y), backgroundColor: chartData.map(point => point.y >= 0 ? chartColors.cftc.positive : chartColors.cftc.negative), borderRadius: 2, borderSkipped: false }] },
+                    options: {
+                        responsive: true, maintainAspectRatio: false, interaction: { intersect: false, mode: 'index' },
+                        plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(26, 15, 10, 0.9)', titleColor: '#fff', bodyColor: '#fff', padding: 12, displayColors: false, callbacks: { title: (items) => chartData[items[0].dataIndex].date.toLocaleDateString('en-US'), label: (context) => `Net Long: ${context.parsed.y.toLocaleString()} contracts` } } },
+                        scales: { x: { ticks: { color: 'rgba(44, 36, 32, 0.4)', font: { size: 11 }, maxRotation: 0, autoSkip: false }, grid: { display: false } }, y: { title: { display: true, text: 'Contracts', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' }, grid: { color: 'rgba(44, 36, 32, 0.05)' }, ticks: { color: 'rgba(44, 36, 32, 0.5)', font: { size: 11 }, callback: (value) => (value / 1000).toFixed(0) + 'K' } } }
+                    }
+                });
+            } catch (error) {
+                console.error('CFTC chart error:', error);
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">Data loading failed</span>';
+            }
+        }
+
+        async function readNVDIGoogleSheet() {
+            try {
+                const url = GOOGLE_SHEETS_URLS.nvdi;
+                let csvText;
+                try {
+                    const directResponse = await fetch(url);
+                    if (directResponse.ok) { csvText = await directResponse.text(); } else { throw new Error('Direct access failed'); }
+                } catch (directError) {
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                    const proxyResponse = await fetch(proxyUrl);
+                    if (!proxyResponse.ok) throw new Error(`Proxy failed: ${proxyResponse.status}`);
+                    const proxyData = await proxyResponse.json();
+                    csvText = proxyData.contents;
+                }
+                const data = parseCSV(csvText);
+                const headers = data[0];
+                const yearColumns = {};
+                headers.forEach((header, index) => { if (index > 0) { const year = parseInt(header.toString().trim()); if (!isNaN(year)) yearColumns[year] = index; } });
+                const monthlyData = [];
+                for (let month = 1; month <= 12; month++) {
+                    const monthRows = [];
+                    for (let i = 1; i < data.length; i++) {
+                        const row = data[i];
+                        if (row && row[0]) {
+                            const dateParts = row[0].toString().split('/');
+                            if (dateParts.length === 2 && parseInt(dateParts[1]) === month) monthRows.push(row);
+                        }
+                    }
+                    if (monthRows.length > 0) {
+                        const allValues = [];
+                        for (const row of monthRows) {
+                            for (let year = 2010; year <= 2023; year++) {
+                                const colIndex = yearColumns[year];
+                                if (colIndex && row[colIndex] !== undefined && row[colIndex] !== '') {
+                                    const value = parseFloat(row[colIndex]);
+                                    if (!isNaN(value)) allValues.push(value);
+                                }
+                            }
+                        }
+                        const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
+                        const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
+                        let year2024Values = [], year2025Values = [];
+                        for (const row of monthRows) {
+                            const val2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
+                            const val2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
+                            if (!isNaN(val2024) && val2024 !== null) year2024Values.push(val2024);
+                            if (!isNaN(val2025) && val2025 !== null) year2025Values.push(val2025);
+                        }
+                        const avg2024 = year2024Values.length > 0 ? year2024Values.reduce((sum, val) => sum + val, 0) / year2024Values.length : null;
+                        const avg2025 = year2025Values.length > 0 ? year2025Values.reduce((sum, val) => sum + val, 0) / year2025Values.length : null;
+                        monthlyData.push({ month, minValue, maxValue, year2024: avg2024, year2025: avg2025 });
+                    }
+                }
+                return monthlyData;
+            } catch (error) {
+                console.error('Error reading NVDI Google Sheet:', error);
+                return null;
+            }
+        }
+
+        async function createNVDIChart() {
+            const loadingElement = document.getElementById('loading-nvdi');
+            const chartElement = document.getElementById('nvdiChart');
+            const valueElement = document.getElementById('nvdiValue');
+            const changeElement = document.getElementById('nvdiChange');
+            try {
+                const nvdiData = await Promise.race([readNVDIGoogleSheet(), new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))]);
+                if (!nvdiData || nvdiData.length === 0) throw new Error('Unable to read NVDI data');
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const datasets = [];
+                const currentMonth = new Date().getMonth();
+                const currentData = nvdiData.find(d => d.month === currentMonth + 1);
+                if (currentData && currentData.year2025) {
+                    valueElement.textContent = currentData.year2025.toFixed(3);
+                    if (currentData.year2024) {
+                        const diff = ((currentData.year2025 - currentData.year2024) / currentData.year2024 * 100).toFixed(1);
+                        changeElement.textContent = diff >= 0 ? `+${diff}% vs 2024` : `${diff}% vs 2024`;
+                        changeElement.className = `card-change ${diff >= 0 ? 'positive' : 'negative'}`;
+                    }
+                }
+                const maxData = nvdiData.map((item, index) => ({ x: index, y: item.maxValue })).filter(p => p.y !== null);
+                const minData = nvdiData.map((item, index) => ({ x: index, y: item.minValue })).filter(p => p.y !== null);
+                datasets.push({ label: 'Historical Range (2010-2023)', data: maxData, borderColor: 'rgba(184, 115, 51, 0.3)', backgroundColor: chartColors.nvdi.range, borderWidth: 1, fill: '+1', tension: 0.4, pointRadius: 0 });
+                datasets.push({ label: '', data: minData, borderColor: 'rgba(184, 115, 51, 0.3)', backgroundColor: chartColors.nvdi.range, borderWidth: 1, fill: false, tension: 0.4, pointRadius: 0 });
+                const data2024 = nvdiData.map((item, index) => ({ x: index, y: item.year2024 })).filter(p => p.y !== null && !isNaN(p.y));
+                if (data2024.length > 0) { datasets.push({ label: '2024', data: data2024, borderColor: chartColors.nvdi.y2024, backgroundColor: 'transparent', borderWidth: 2.5, fill: false, tension: 0.4, pointRadius: 3, pointHoverRadius: 5, pointBackgroundColor: chartColors.nvdi.y2024, pointBorderColor: '#fff', pointBorderWidth: 1.5 }); }
+                const data2025 = nvdiData.map((item, index) => ({ x: index, y: item.year2025 })).filter(p => p.y !== null && !isNaN(p.y));
+                if (data2025.length > 0) { datasets.push({ label: '2025', data: data2025, borderColor: chartColors.nvdi.y2025, backgroundColor: 'transparent', borderWidth: 2.5, fill: false, tension: 0.4, pointRadius: 3, pointHoverRadius: 5, pointBackgroundColor: chartColors.nvdi.y2025, pointBorderColor: '#fff', pointBorderWidth: 1.5 }); }
+                loadingElement.style.display = 'none';
+                chartElement.style.display = 'block';
+                const ctx = chartElement.getContext('2d');
+                charts.nvdi = new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets },
+                    options: {
+                        responsive: true, maintainAspectRatio: false, interaction: { intersect: false, mode: 'index' },
+                        plugins: { legend: { display: true, position: 'bottom', labels: { filter: (item) => item.text !== '', padding: 16, font: { size: 11 }, usePointStyle: false, generateLabels: (chart) => chart.data.datasets.map((dataset, i) => { if (dataset.label && dataset.label !== '') { return { text: dataset.label, fillStyle: dataset.borderColor, strokeStyle: dataset.borderColor, lineWidth: 2, hidden: !chart.isDatasetVisible(i), datasetIndex: i }; } }).filter(item => item) } }, tooltip: { backgroundColor: 'rgba(26, 15, 10, 0.9)', titleColor: '#fff', bodyColor: '#fff', padding: 12, displayColors: false, callbacks: { title: (items) => months[items[0].dataIndex] || '', label: (context) => { if (context.datasetIndex === 0) { const idx = context.dataIndex; const d = nvdiData[idx]; return d ? `Range: ${d.minValue?.toFixed(3)} - ${d.maxValue?.toFixed(3)}` : ''; } else if (context.datasetIndex === 1) { return ''; } return `${context.dataset.label}: ${context.parsed.y?.toFixed(3) || 'N/A'}`; } } } },
+                        scales: { x: { type: 'linear', ticks: { callback: (value) => months[Math.round(value)] || '', color: 'rgba(44, 36, 32, 0.4)', font: { size: 11 }, maxTicksLimit: 12, stepSize: 1 }, min: 0, max: 11, grid: { display: true, color: 'rgba(44, 36, 32, 0.05)' } }, y: { title: { display: true, text: 'NDVI Index', font: { size: 11 }, color: 'rgba(44, 36, 32, 0.5)' }, grid: { color: 'rgba(44, 36, 32, 0.05)' }, ticks: { color: 'rgba(44, 36, 32, 0.5)', font: { size: 11 }, callback: (value) => value.toFixed(2) } } }
+                    }
+                });
+            } catch (error) {
+                console.error('NVDI chart error:', error);
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">Data loading failed</span>';
+            }
+        }
+
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            function openMenu() { mobileMenuBtn.classList.add('active'); mobileMenu.classList.add('active'); mobileMenuOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+            function closeMenu() { mobileMenuBtn.classList.remove('active'); mobileMenu.classList.remove('active'); mobileMenuOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+            if (mobileMenuBtn) { mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.contains('active') ? closeMenu() : openMenu()); }
+            if (mobileMenuClose) { mobileMenuClose.addEventListener('click', closeMenu); }
+            if (mobileMenuOverlay) { mobileMenuOverlay.addEventListener('click', closeMenu); }
+        }
+
+        async function init() {
+            try {
+                console.log('Dashboard initialization...');
+                await Promise.all([createCoffeeChart(), createUSDChart(), createCFTCChart(), createNVDIChart()]);
+                console.log('Dashboard initialization complete');
+            } catch (error) { console.error('Dashboard init error:', error); }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); init(); });
+    </script>
+</body>
+</html>
