@@ -1791,9 +1791,9 @@
                 const response = await fetch('reports.json');
                 if (response.ok) {
                     const data = await response.json();
-                    // 날짜순 정렬 (최신순) 및 test 파일 제외
+                    // 날짜순 정렬 (최신순), test 파일 제외, 영문 리포트(-en.html) 제외
                     allReports = (data.reports || [])
-                        .filter(r => r.date && !r.link.includes('test.html'))
+                        .filter(r => r.date && !r.link.includes('test.html') && !r.link.endsWith('-en.html'))
                         .sort((a, b) => new Date(b.date) - new Date(a.date));
                     return allReports;
                 }
