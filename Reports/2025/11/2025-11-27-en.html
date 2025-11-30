@@ -1,0 +1,912 @@
+<!--REPORT_META
+{
+    "title": "2026 Coffee Market Outlook",
+    "subtitle": "Annual Coffee Market Forecast for 2026",
+    "date": "2025-11-27",
+    "type": "in-depth-analysis",
+    "summary": "The 2026 coffee market enters a high-cost new normal era due to La Niña transition, EUDR 1-year delay, and structural logistics challenges. While EUDR delay reduces regulatory supply shock risk, this report analyzes 5 key drivers, scenario-based price forecasts, and strategic responses for roasters/traders.",
+    "tags": ["2026 Outlook", "In-Depth Analysis", "Arabica", "EUDR Delay", "Price Forecast", "La Niña"]
+}
+REPORT_META-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Coffee Market Outlook | Coffee Market Info</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Design System */
+        :root {
+            --espresso: #1a0f0a;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --positive: #2d5f3f;
+            --negative: #9c2b2e;
+            --neutral: #5b6b7a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--roast);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+
+        /* Navigation */
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            background: rgba(250, 248, 245, 0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08); z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem; font-weight: 600;
+            color: var(--roast); text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--copper);
+            background: rgba(184, 115, 51, 0.08);
+            border: 1px solid rgba(184, 115, 51, 0.2);
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .home-btn:hover {
+            background: rgba(184, 115, 51, 0.15);
+            border-color: var(--copper);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 60px); }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px; text-align: center;
+            background: linear-gradient(135deg, #f5f0e8 0%, #faf8f5 100%);
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .report-label {
+            display: inline-block; background: var(--steam);
+            padding: 8px 20px; border-radius: 24px;
+            font-size: 0.85rem; font-weight: 700;
+            color: var(--roast); margin-bottom: 24px;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1; margin-bottom: 24px; color: var(--espresso);
+            word-break: keep-all; max-width: 900px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--copper); margin-bottom: 40px;
+            font-weight: 500; font-family: 'Pretendard', sans-serif;
+            border-top: 1px solid rgba(184, 115, 51, 0.3);
+            border-bottom: 1px solid rgba(184, 115, 51, 0.3);
+            padding: 10px 0; display: inline-block;
+        }
+
+        .hero-meta {
+            display: flex; justify-content: center; gap: 30px;
+            flex-wrap: wrap; color: var(--roast); opacity: 0.7; font-size: 0.95rem;
+        }
+
+        /* Key Stats */
+        .key-stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px; margin: 60px 0;
+        }
+
+        .stat-box {
+            background: #fff; border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px; padding: 24px; text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-box:hover { transform: translateY(-5px); }
+
+        .stat-number {
+            font-size: 2.2rem; font-weight: 800;
+            color: var(--copper); font-family: 'Cormorant Garamond', serif;
+            display: block; margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem; color: var(--roast); opacity: 0.7;
+            text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0; border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        section h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 50px; position: relative; padding-bottom: 20px;
+            color: var(--espresso);
+        }
+
+        section h2::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 60px; height: 3px; background: var(--copper);
+        }
+
+        section h3 {
+            font-size: 1.8rem; margin: 35px 0 20px; color: var(--espresso);
+        }
+
+        p { 
+            margin-bottom: 1.5em; 
+            text-align: justify; 
+            word-break: keep-all; 
+            letter-spacing: -0.01em;
+            color: #4a4a4a;
+        }
+        
+        ul, ol { padding-left: 20px; margin-bottom: 1.5em; }
+        li { margin-bottom: 0.5em; text-align: justify; word-break: keep-all; }
+        strong { color: var(--espresso); font-weight: 700; }
+
+        /* Driver Cards */
+        .driver-card {
+            background: #fff; border: 2px solid var(--accent);
+            border-radius: 16px; padding: 40px; margin-bottom: 40px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            position: relative; overflow: hidden;
+        }
+
+        .driver-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 30px; padding-bottom: 20px;
+            border-bottom: 2px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .driver-number {
+            font-size: 3rem; font-weight: 800;
+            color: var(--copper); font-family: 'Cormorant Garamond', serif;
+            opacity: 0.2; position: absolute; top: 20px; right: 30px;
+        }
+
+        .driver-title { flex: 1; padding-right: 60px; }
+        .driver-title h3 { margin: 0 0 8px 0; font-size: 2rem; }
+
+        .tag {
+            display: inline-block; background: var(--steam);
+            padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--roast); text-transform: uppercase; margin-top: 10px;
+        }
+        .tag.high { background: rgba(156, 43, 46, 0.1); color: var(--negative); }
+        .tag.medium { background: rgba(184, 115, 51, 0.1); color: var(--copper); }
+
+        /* Scenario Grid */
+        .scenario-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 20px; margin: 40px 0;
+        }
+
+        .scenario-box {
+            background: #fefdfb; border: 2px solid;
+            border-radius: 12px; padding: 30px;
+            display: flex; flex-direction: column;
+        }
+
+        .scenario-box.optimistic { border-color: var(--positive); }
+        .scenario-box.base { border-color: var(--neutral); }
+        .scenario-box.pessimistic { border-color: var(--negative); }
+
+        .scenario-label {
+            font-weight: 700; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .scenario-box.optimistic .scenario-label { color: var(--positive); }
+        .scenario-box.base .scenario-label { color: var(--neutral); }
+        .scenario-box.pessimistic .scenario-label { color: var(--negative); }
+
+        .scenario-prob {
+            font-size: 2rem; font-weight: 800;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--espresso); margin-bottom: 15px;
+        }
+
+        .scenario-price {
+            font-size: 1.4rem; font-weight: 700;
+            color: var(--roast); margin-bottom: 20px;
+        }
+
+        .scenario-desc {
+            font-size: 0.95rem; line-height: 1.6; color: var(--neutral);
+            text-align: left;
+        }
+        .scenario-desc ul {
+            padding-left: 15px; margin: 0;
+        }
+
+        /* Risk Section */
+        .risk-section {
+            background: #fff0f0; border-radius: 16px; padding: 40px;
+            border: 1px solid rgba(156, 43, 46, 0.2);
+        }
+        .risk-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(156, 43, 46, 0.1); }
+        .risk-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .risk-title { font-weight: 700; color: var(--negative); font-size: 1.1rem; margin-bottom: 8px; display: block;}
+
+        /* Pain Points Section */
+        .pain-point-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; margin-top: 30px;
+        }
+        .pain-point-card {
+            background: #fff; border: 1px solid rgba(156, 43, 46, 0.15);
+            border-radius: 12px; padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+        .pain-point-card:hover { transform: translateY(-3px); }
+        .pain-point-card h4 {
+            color: var(--negative); margin-bottom: 15px; font-size: 1.25rem;
+            border-bottom: 1px solid rgba(156, 43, 46, 0.1); padding-bottom: 10px;
+        }
+        .pain-point-card p {
+            font-weight: 700; color: var(--espresso); margin-bottom: 15px;
+        }
+
+        /* Impact Table */
+        .impact-table {
+            width: 100%; border-collapse: collapse; margin: 30px 0;
+            background: #fff; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            table-layout: fixed;
+        }
+
+        .impact-table th {
+            background: var(--steam); padding: 18px;
+            text-align: left; font-weight: 700;
+            border-bottom: 2px solid rgba(26, 15, 10, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .impact-table td {
+            padding: 18px; border-bottom: 1px solid rgba(26, 15, 10, 0.05);
+            vertical-align: top; word-break: keep-all; font-size: 0.95rem;
+        }
+        .impact-table tr:last-child td { border-bottom: none; }
+
+        /* Insight Box */
+        .insight-box {
+            background: rgba(184, 115, 51, 0.08);
+            border-left: 4px solid var(--copper);
+            padding: 24px; margin: 30px 0; border-radius: 8px;
+        }
+
+        .insight-box strong { color: var(--copper); }
+
+        /* Chart Wrapper */
+        .chart-wrapper {
+            background: #fff;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            max-width: 800px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+        }
+
+        /* Strategy Cards */
+        .strategy-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px;
+        }
+        .strategy-card {
+            background: #fff; border: 1px solid rgba(184, 115, 51, 0.2);
+            border-radius: 12px; padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .strategy-header {
+            display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 15px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+        .strategy-icon { font-size: 1.8rem; margin-right: 12px; }
+        .strategy-title { font-size: 1.3rem; font-weight: 700; color: var(--espresso); font-family: 'Cormorant Garamond', serif; }
+        .action-list li { margin-bottom: 12px; line-height: 1.6; }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 40px; text-align: center;
+            border-top: 1px solid rgba(26, 15, 10, 0.08);
+            margin-top: 80px; background: rgba(255, 255, 255, 0.5);
+        }
+
+        footer p { color: var(--roast); opacity: 0.6; font-size: 0.9rem; text-align: center; margin-bottom: 8px; }
+        footer a { color: var(--copper); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        footer a:hover { color: var(--roast); text-decoration: underline; }
+
+        @media (max-width: 900px) {
+            .scenario-grid { grid-template-columns: 1fr; }
+            .strategy-grid { grid-template-columns: 1fr; }
+            .pain-point-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.8rem; }
+            .chart-container { height: 350px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="#" class="nav-brand">Coffee Market Info</a>
+        <a href="https://coffeemarket.info/index-en.html" class="home-btn">← Home</a>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="report-label">Published by Align Commodities</div>
+            <h1>2026 Coffee Market Outlook</h1>
+            <p class="hero-subtitle">Annual Coffee Market Forecast for 2026</p>
+            <div class="hero-meta">
+                <span>📅 Published: November 27, 2025</span>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        <section>
+            <h2>Executive Summary: Order Amid Uncertainty</h2>
+            <p>In 2025, the global coffee market found itself in the midst of a <strong>'Perfect Storm'</strong> where climate crisis, geopolitical conflict, and trade barriers occurred simultaneously. Historic droughts in Brazil's Minas Gerais and poor harvests in Vietnam drove both Arabica and Robusta prices to historic highs.</p>
+            
+            <p>The 2026 market enters a new phase beyond simple supply-demand recovery. <strong>① La Niña climate transition, ② EUDR (Deforestation Regulation) 1-year implementation delay leading to short-term supply stabilization, ③ Structural logistics cost increases</strong> are all working in combination. The EU's EUDR 1-year delay decision has significantly reduced the possibility of regulatory supply shocks in 2026, but a 'high-cost era' where the cost of production itself has structurally increased will become the new normal.</p>
+
+            <div class="key-stats">
+                <div class="stat-box">
+                    <span class="stat-number">440.85¢</span>
+                    <span class="stat-label">2025 Arabica Peak</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">$5,000</span>
+                    <span class="stat-label">Robusta Peak per Ton</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">398,645</span>
+                    <span class="stat-label">ICE Certified Stock (bags) - 1.75yr Low</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">61%</span>
+                    <span class="stat-label">2026 La Niña Probability</span>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <strong>Core Insight:</strong> The price floor for 2026 has structurally risen. While the EU's EUDR 1-year delay has eased short-term regulatory shocks, climate risk premiums and rising production costs make a return to sub-200 cent pricing unlikely.
+            </div>
+        </section>
+
+        <!-- 2025 Recap -->
+        <section>
+            <h2>2025 Market Review: Supply Chain Breakdown</h2>
+            <p>2025 was a year when price levels stepped up a notch. Arabica futures broke through 400 cents per pound, staging the most powerful bull market since the 1970s. <strong>'Panic Buying'</strong> dominated the market, and the traditional harvest-season price decline (Seasonality) pattern disappeared.</p>
+            
+            <table class="impact-table">
+                <thead>
+                    <tr>
+                        <th width="15%">Period</th>
+                        <th width="20%">Arabica (¢/lb)</th>
+                        <th width="20%">Robusta ($/ton)</th>
+                        <th>Key Drivers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Feb 2025</strong></td>
+                        <td style="color: var(--negative); font-weight:700;">440.85 (Peak)</td>
+                        <td>3,800~4,000</td>
+                        <td>Early Brazil drought concerns, aggressive speculative capital inflows</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jul 2025</strong></td>
+                        <td>320~350</td>
+                        <td>4,200</td>
+                        <td>Vietnam harvest delays, logistics difficulties from Panama Canal slot reductions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nov 2025</strong></td>
+                        <td style="color: var(--copper); font-weight:700;">411.60</td>
+                        <td style="color: var(--negative); font-weight:700;">4,693 (Peak)</td>
+                        <td>Minas Gerais rainfall at 49% of normal, US tariff issues</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 50px;">2025 Pain Points by Market Participant</h3>
+            <div class="pain-point-grid">
+                <!-- Producer Card -->
+                <div class="pain-point-card">
+                    <h4>🌱 Green Bean Producers</h4>
+                    <p>"Paradox of Price: Plenty of Poverty"</p>
+                    <ul>
+                        <li><strong>Illusory Profits:</strong> While market prices were high, harvest volumes dropped 20-30% due to drought, actually reducing farmers' real incomes.</li>
+                        <li><strong>Default Risk:</strong> Temptation to abandon forward contracts made at lower prices and sell on spot markets led to credit crises and penalty disputes.</li>
+                        <li><strong>Cost Surge:</strong> Rising fertilizer and labor costs pushed break-even points to historic highs.</li>
+                    </ul>
+                </div>
+                <!-- Roaster Card -->
+                <div class="pain-point-card">
+                    <h4>☕ Roasteries</h4>
+                    <p>"Fear of Profitable Bankruptcy (Cash Crunch)"</p>
+                    <ul>
+                        <li><strong>Working Capital Depletion:</strong> With bean prices doubling, twice as much cash was needed to maintain the same inventory, leading healthy small-medium roasters to bankruptcy from liquidity shortages.</li>
+                        <li><strong>Margin Pressure:</strong> Inability to fully pass cost increases to consumers caused operating margins to plummet to single digits.</li>
+                        <li><strong>Forced Quality Compromise:</strong> Survival required 'downgrading' - reducing Arabica content and increasing Robusta blend ratios.</li>
+                    </ul>
+                </div>
+                <!-- Trader Card -->
+                <div class="pain-point-card">
+                    <h4>📈 Traders</h4>
+                    <p>"Liquidity Crisis on Thin Ice"</p>
+                    <ul>
+                        <li><strong>Margin Call Bombs:</strong> Soaring futures prices caused exchange margin calls to explode, drying up funding for small-medium traders.</li>
+                        <li><strong>Counterparty Risk:</strong> Double Default Risk - shipping delays/refusals at origin, payment delays/bankruptcies from roasters at destination.</li>
+                        <li><strong>Accelerated Restructuring:</strong> Cash-strapped traders exited the market, consolidating around larger players.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Key Drivers for 2026 -->
+        <section>
+            <h2>5 Key Drivers That Will Determine the 2026 Market</h2>
+
+            <!-- Driver 1: Brazil Production -->
+            <div class="driver-card">
+                <span class="driver-number">01</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>Brazil Coffee Production</h3>
+                        <span class="tag high">Price Impact: Very High</span>
+                    </div>
+                </div>
+                <p><strong>Current Analysis:</strong> 2025/26 season Brazil Arabica production is estimated at <strong>34.4-37.0 million bags</strong> (Volcafe-Conab), down about 10% from the previous year due to historically severe drought and extreme 40°C temperatures. Notably, Minas Gerais, which accounts for 70% of total production, recorded only 70% of average rainfall.</p>
+                <p>The 2026/27 crop is expected to increase due to the on-year cycle, but recovery potential is uncertain due to <strong>August 2025 frost damage (412,000 bags loss)</strong> and cumulative tree stress over 5 years.</p>
+
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">Bull Scenario (20%)</div>
+                        <div class="scenario-desc">
+                            <strong>2026/27 Crop 72M+ bags</strong>
+                            <ul>
+                                <li>Adequate Sep-Oct rainfall</li>
+                                <li>No frost damage</li>
+                                <li>Fertilizer input normalization</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">Base Scenario (50%)</div>
+                        <div class="scenario-desc">
+                            <strong>2026/27 Crop 68-70M bags</strong>
+                            <ul>
+                                <li>On-year cycle increase</li>
+                                <li>Limited recovery due to tree weakening</li>
+                                <li>Marginal climate conditions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">Bear Scenario (30%)</div>
+                        <div class="scenario-desc">
+                            <strong>2026/27 Crop below 65M bags</strong>
+                            <ul>
+                                <li>La Niña intensifies → drought</li>
+                                <li>Additional frost damage</li>
+                                <li>Unfavorable flowering conditions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <table class="impact-table">
+                    <tr>
+                        <th>Scenario</th><th>Production Outlook</th><th>Price Impact</th><th>Target Range</th>
+                    </tr>
+                    <tr>
+                        <td>Bull</td><td>72M+ bags</td><td style="color:var(--negative)">-35 to -50¢</td><td>300-330¢/lb</td>
+                    </tr>
+                    <tr>
+                        <td>Base</td><td>68-70M bags</td><td>-10 to +10¢</td><td>350-380¢/lb</td>
+                    </tr>
+                    <tr>
+                        <td>Bear</td><td>Below 65M bags</td><td style="color:var(--positive)">+30 to +60¢</td><td>410-440¢/lb</td>
+                    </tr>
+                </table>
+                <p><strong>Key Monitoring:</strong> Sep-Oct 2025 flowering period rainfall, Jun-Jul 2026 frost risk, Conab 1st estimate (May 2026).</p>
+            </div>
+
+            <!-- Driver 2: ICE Stocks -->
+            <div class="driver-card">
+                <span class="driver-number">02</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>ICE Stock Levels & Supply Chain Normalization</h3>
+                        <span class="tag high">Price Impact: High</span>
+                    </div>
+                </div>
+                <p><strong>Current Analysis:</strong> November 2025 ICE certified stocks are at <strong>398,000 bags</strong>, a 1.75-year low. US roaster inventories were depleted during the tariff period, and even after tariff removal, logistics normalization will take 6-8 weeks. Historically, stocks below 500,000 bags have formed a <strong>structural premium of 20-40 cents</strong>.</p>
+
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">Fast Recovery (25%)</div>
+                        <div class="scenario-desc">
+                            <strong>Stock 700K+ bags (H2 2026)</strong>
+                            <ul>
+                                <li>Brazil exports surge</li>
+                                <li>Vietnam hoarding resolves</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">Gradual Recovery (55%)</div>
+                        <div class="scenario-desc">
+                            <strong>Stock 500-600K bags (end 2026)</strong>
+                            <ul>
+                                <li>Delayed logistics normalization</li>
+                                <li>Limited supply increase</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">Further Decline (20%)</div>
+                        <div class="scenario-desc">
+                            <strong>Stock remains below 400K bags</strong>
+                            <ul>
+                                <li>Production shortfall worsens</li>
+                                <li>Delivery pressure increases</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 3: US Tariffs -->
+            <div class="driver-card">
+                <span class="driver-number">03</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>US Tariff Policy (Post-Removal Impact)</h3>
+                        <span class="tag medium">Price Impact: Medium</span>
+                    </div>
+                </div>
+                <p><strong>Current Analysis:</strong> The November 20, 2025 Trump executive order removed tariffs from <strong>50% to 0%</strong>. While this is a short-term price bearish factor, the <strong>supply chain distortion</strong> formed over 3 months (inventory depletion, contract cancellations) will persist through H1 2026.</p>
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">Policy Stability (60%)</div>
+                        <div class="scenario-desc">
+                            <strong>0% Tariff Maintained</strong>
+                            <ul><li>US-Brazil relations improve</li><li>No additional threats</li></ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">Limited Reimposition (30%)</div>
+                        <div class="scenario-desc">
+                            <strong>10-20% Tariff Imposed</strong>
+                            <ul><li>Trade negotiation difficulties</li><li>Political pressure</li></ul>
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">High Tariff Return (10%)</div>
+                        <div class="scenario-desc">
+                            <strong>30%+ Tariff Reimposed</strong>
+                            <ul><li>Trade war resumes</li><li>Diplomatic breakdown</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver 4: EUDR -->
+            <div class="driver-card">
+                <span class="driver-number">04</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>EU Deforestation Regulation (EUDR) Delay</h3>
+                        <span class="tag medium">Price Impact: Medium (2027 Implementation)</span>
+                    </div>
+                </div>
+                <p><strong>Current Analysis:</strong> In November 2025, the EU Parliament approved a <strong>1-year delay</strong> of EUDR implementation. This means the effective date for large companies is now <strong>December 30, 2026</strong>, and for SMEs <strong>June 30, 2027</strong>. This delay provides preparation time for origin countries and importers, but the fundamental requirements (geographic data, traceability) remain unchanged.</p>
+                
+                <p><strong>Market Impact:</strong> The EUDR delay means <strong>limited direct impact</strong> on the 2026 coffee market. However, as this is a delay not cancellation, the industry must continue building compliance systems. In the short term, continued imports of coffee from deforestation regions in Africa, Indonesia, and South America could be a <strong>supply increase factor</strong>.</p>
+                
+                <div class="insight-box">
+                    <strong>Key Assessment:</strong> The EUDR 1-year delay has significantly reduced the possibility of regulatory supply shocks in the 2026 coffee market. However, origin countries and importers must accelerate traceability system construction ahead of 2027 implementation, and these costs will gradually be reflected in prices.
+                </div>
+            </div>
+
+            <!-- Driver 5: Currency -->
+            <div class="driver-card">
+                <span class="driver-number">05</span>
+                <div class="driver-header">
+                    <div class="driver-title">
+                        <h3>USD/BRL Currency Dynamics</h3>
+                        <span class="tag medium">Price Impact: Medium</span>
+                    </div>
+                </div>
+                <p><strong>Current Analysis:</strong> November 2025 exchange rate is <strong>5.38</strong>. A weak Real incentivizes exports, while a strong Real suppresses them. 2026 consensus is the 5.40-5.80 range.</p>
+                <div class="scenario-grid">
+                    <div class="scenario-box optimistic">
+                        <div class="scenario-label">Real Strength (25%)</div>
+                        <div class="scenario-desc">
+                            <strong>4.80 - 5.20</strong><br>
+                            Supply tightens → Price rise (+10-20¢)
+                        </div>
+                    </div>
+                    <div class="scenario-box base">
+                        <div class="scenario-label">Limited Weakness (50%)</div>
+                        <div class="scenario-desc">
+                            <strong>5.40 - 5.80</strong><br>
+                            Neutral impact (±5¢)
+                        </div>
+                    </div>
+                    <div class="scenario-box pessimistic">
+                        <div class="scenario-label">Real Plunge (25%)</div>
+                        <div class="scenario-desc">
+                            <strong>6.00+</strong><br>
+                            Selling surges → Price drop (-15-25¢)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Black Swan Risks -->
+        <section>
+            <h2>Potential Black Swan Risks</h2>
+            <div class="risk-section">
+                <div class="risk-item">
+                    <span class="risk-title">🚨 Super La Niña and Brazil Flowering Failure</span>
+                    <p>If a strong La Niña develops and prevents rain in southeastern Brazil during the September-October 2026 flowering period, consecutive poor harvests would be confirmed. In this case, Arabica futures could break <strong>500 cents and enter uncharted territory</strong>.</p>
+                </div>
+                <div class="risk-item">
+                    <span class="risk-title">🍂 Coffee Leaf Rust Mutation and Spread</span>
+                    <p>Climate change has increased pest activity, with rising cases of resistant variety infections in Vietnam and Central America. If Vietnam's recovery expectations are dashed by leaf rust, the <strong>Robusta supply chain would face a critical blow</strong>.</p>
+                </div>
+                <div class="risk-item">
+                    <span class="risk-title">🚢 Geopolitical Complex Crisis Leading to Logistics Paralysis</span>
+                    <p>If Panama Canal and Red Sea blockades overlap, severe <strong>Price Dislocation</strong> would result.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scenarios -->
+        <section>
+            <h2>2026 Price Outlook Scenarios (¢/lb)</h2>
+            <p>Based on comprehensive data analysis, here are three scenarios for 2026 Arabica (KC) prices.</p>
+
+            <div class="scenario-grid">
+                <div class="scenario-box base">
+                    <div class="scenario-label">Base Case (50%)</div>
+                    <div class="scenario-prob">Gradual Correction</div>
+                    <div class="scenario-price">KC: 320-360¢</div>
+                    <div class="scenario-desc">
+                        • Brazil 26/27 bumper crop (70M+ bags)<br>
+                        • Vietnam production normalizes<br>
+                        • La Niña impact limited<br>
+                        • H1 peak then H2 downward stabilization
+                    </div>
+                </div>
+
+                <div class="scenario-box optimistic">
+                    <div class="scenario-label">Bear Case (30%)</div>
+                    <div class="scenario-prob">Sharp Drop & Stabilization</div>
+                    <div class="scenario-price">KC: 250-300¢</div>
+                    <div class="scenario-desc">
+                        • Brazil/Vietnam bumper harvests<br>
+                        • Global recession depresses demand<br>
+                        • Large-scale speculative liquidation<br>
+                        • Attempt to return to pre-2024 levels
+                    </div>
+                </div>
+
+                <div class="scenario-box pessimistic">
+                    <div class="scenario-label">Bull Case (20%)</div>
+                    <div class="scenario-prob">Super Cycle Continues</div>
+                    <div class="scenario-price">KC: 450-520¢</div>
+                    <div class="scenario-desc">
+                        • Strong La Niña extends Brazil drought<br>
+                        • Leaf rust halts Vietnam recovery<br>
+                        • Inflation hedge demand explodes<br>
+                        • Potential new all-time highs
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="chart-wrapper">
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section>
+            <h2>Conclusion & Strategic Recommendations</h2>
+            <div class="impact-table" style="background: var(--paper); border: 2px solid var(--accent); padding: 30px; margin-bottom: 0;">
+                <h3 style="margin-top: 0; text-align: center; margin-bottom: 20px;">"The Descent is Rough"</h3>
+                <p>While 2026/27 season supply surplus transition is likely, structurally higher production costs make a return to the cheap prices of the past unlikely.</p>
+                <div class="strategy-grid">
+                    <!-- Roaster Strategy -->
+                    <div class="strategy-card">
+                        <div class="strategy-header">
+                            <span class="strategy-icon">☕</span>
+                            <span class="strategy-title">Roaster Strategy</span>
+                        </div>
+                        <ul class="action-list">
+                            <li><strong>Advance Inventory:</strong> To prepare for H1 2026 price volatility, recommend securing 60-70% of H1 volume in Q1.</li>
+                            <li><strong>Diversify Sourcing:</strong> Reduce Brazil dependency and expand Colombia/Central America volumes with confirmed data tracking. (EUDR 2027 preparation)</li>
+                            <li><strong>Cost Management:</strong> Prepare R&D for flexible Robusta blending ratio adjustment for extended high-cost era.</li>
+                            <li><strong>EUDR Preparation:</strong> Gradually build supply chain traceability systems in preparation for 2027 implementation.</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Trader Strategy -->
+                    <div class="strategy-card">
+                        <div class="strategy-header">
+                            <span class="strategy-icon">📈</span>
+                            <span class="strategy-title">Trader Strategy</span>
+                        </div>
+                        <ul class="action-list">
+                            <li><strong>Spread Trading:</strong> Calendar spreads targeting H1 tight supply (backwardation) vs H2 surplus (contango) - Long Mar/Short Jul.</li>
+                            <li><strong>Volatility Play:</strong> Options buying (Straddle) effective for La Niña news-driven spikes.</li>
+                            <li><strong>Key Levels:</strong> Buy at 330¢ support, sell on failure to break 400¢ resistance.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section style="border-bottom: none;">
+            <div style="background: rgba(194, 58, 58, 0.05); border: 1px solid rgba(194, 58, 58, 0.2); padding: 30px; border-radius: 12px; font-size: 0.9rem; font-style: italic; color: var(--neutral);">
+                <p style="margin-bottom: 0;"><strong>Disclaimer:</strong> This report is market analysis based on publicly available information as of November 27, 2025, and is not investment advice. Coffee futures trading carries risk of principal loss. Past performance does not guarantee future returns.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Align Commodities. All rights reserved.</p>
+            <p>Contact: <a href="mailto:james.baek@aligncommodities.com">james.baek@aligncommodities.com</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Chart.js Setup
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2025 Q4', '2026 Q1', '2026 Q2', '2026 Q3', '2026 Q4'],
+                datasets: [
+                    {
+                        label: 'Bull Case (Strong La Niña)',
+                        data: [411, 440, 480, 500, 520],
+                        borderColor: '#9c2b2e',
+                        backgroundColor: 'rgba(156, 43, 46, 0.1)',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Base Case (Gradual Correction)',
+                        data: [411, 380, 350, 330, 340],
+                        borderColor: '#b87333',
+                        backgroundColor: 'rgba(184, 115, 51, 0.2)',
+                        borderWidth: 4,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Bear Case (Economic Recession)',
+                        data: [411, 350, 300, 270, 250],
+                        borderColor: '#5b6b7a',
+                        backgroundColor: 'rgba(91, 107, 122, 0.1)',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '2026 Arabica Price Scenarios (¢/lb)',
+                        font: { size: 16, family: "'Cormorant Garamond', serif" }
+                    },
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#1a0f0a',
+                        bodyColor: '#3d2314',
+                        borderColor: 'rgba(0,0,0,0.1)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + '¢';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: '¢/lb', font: { size: 14, weight: 'bold' } },
+                        grid: { color: 'rgba(0,0,0,0.08)' },
+                        min: 230,
+                        max: 540,
+                        ticks: {
+                            font: { family: "'Pretendard', sans-serif", size: 13 },
+                            stepSize: 30,
+                            callback: function(value) {
+                                return value + '¢';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: "'Pretendard', sans-serif", size: 13 }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+    </script>
+</body>
+</html>
