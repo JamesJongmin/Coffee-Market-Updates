@@ -458,10 +458,20 @@
             try {
                 let allReports = await loadReportsFromJSON();
                 
+                // Filter in-depth reports - English page only shows English reports
+                // English reports have links ending with -en.html
                 const inDepthReports = allReports.filter(report => {
-                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth') return true;
-                    if (report.title && !report.title.includes('주간 동향')) return true;
-                    return false;
+                    // Only show English reports (file name ends with -en.html)
+                    if (!report.link || !report.link.endsWith('-en.html')) return false;
+                    
+                    // Include in-depth analysis or statistical analysis reports
+                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth' || report.type === 'statistical_analysis') return true;
+                    
+                    // Exclude weekly reports
+                    if (report.type === 'weekly') return false;
+                    
+                    // If not explicitly weekly type, include it as in-depth
+                    return true;
                 });
 
                 inDepthReports.sort((a, b) => new Date(b.date) - new Date(a.date));

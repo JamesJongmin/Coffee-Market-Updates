@@ -1793,8 +1793,9 @@
                 const response = await fetch('reports-en.json');
                 if (response.ok) {
                     const data = await response.json();
+                    // Filter to show only English reports (links ending with -en.html)
                     allReports = (data.reports || [])
-                        .filter(r => r.date && !r.link.includes('test.html'))
+                        .filter(r => r.date && !r.link.includes('test.html') && r.link.endsWith('-en.html'))
                         .sort((a, b) => new Date(b.date) - new Date(a.date));
                     return allReports;
                 }

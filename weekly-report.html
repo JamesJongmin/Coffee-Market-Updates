@@ -1240,9 +1240,13 @@
                 }
                 
                 // 주간 동향 리포트만 필터링 - 개선된 필터링 로직
+                // 한국어 페이지: -en.html로 끝나지 않는 리포트만 표시
                 const weeklyReports = allReports.filter(report => {
+                    // 영문 리포트 제외 (파일명이 -en.html로 끝나는 경우)
+                    if (report.link && report.link.endsWith('-en.html')) return false;
+                    
                     // in-depth-analysis 타입은 명시적으로 제외
-                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth') return false;
+                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth' || report.type === 'statistical_analysis') return false;
                     
                     // type이 weekly로 명시된 경우
                     if (report.type === 'weekly') return true;
