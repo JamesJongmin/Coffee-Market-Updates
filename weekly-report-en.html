@@ -914,14 +914,22 @@
             try {
                 let allReports = await loadReportsFromJSON();
 
-                // Filter weekly reports
+                // Filter weekly reports - English page only shows English reports
+                // English reports have links ending with -en.html
                 const weeklyReports = allReports.filter(report => {
-                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth') return false;
+                    // Only show English reports (file name ends with -en.html)
+                    if (!report.link || !report.link.endsWith('-en.html')) return false;
+                    
+                    // Exclude in-depth analysis reports
+                    if (report.type === 'in-depth-analysis' || report.type === 'in-depth' || report.type === 'statistical_analysis') return false;
+                    
+                    // Include weekly type reports
                     if (report.type === 'weekly') return true;
+                    
+                    // Include reports with weekly-related titles
                     if (report.title && (
-                        report.title.includes('주간 동향') ||
                         report.title.includes('Weekly') ||
-                        report.title.includes('커피 선물 시장 주간 동향')
+                        report.title.includes('weekly')
                     )) {
                         return true;
                     }
