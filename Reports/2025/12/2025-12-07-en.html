@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | December 7, 2025</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "Weekly Market Analysis",
+    "date": "2025-12-07",
+    "displayDate": "December 7, 2025",
+    "summary": "Coffee prices defend post-tariff levels. Rebound to 403¢ on Dec 2 after tariff removal. Structural supply tightness supports elevated pricing. ICE inventory at 24-year low of 406K bags. Brazil drought concerns persist. 2025/26 arabica deficit of 8.5M bags marks 5th consecutive year.",
+    "tags": ["Weekly Update", "Mar 26 Contract", "Arabica", "Tariff Relief", "Supply Deficit"],
+    "type": "weekly"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .nav-date {
+            font-size: 0.85rem;
+            color: var(--ink);
+            opacity: 0.6;
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--copper) 0%, var(--accent) 100%);
+            z-index: 999;
+            transition: width 0.1s ease;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f0e8 0%, #faf8f5 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .report-label {
+            display: inline-block;
+            background: var(--steam);
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--roast);
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--espresso);
+            word-break: keep-all;
+            max-width: 900px;
+            font-weight: 600;
+        }
+
+        .hero-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--copper);
+            margin-bottom: 40px;
+            font-weight: 500;
+            border-top: 1px solid rgba(184, 115, 51, 0.3);
+            border-bottom: 1px solid rgba(184, 115, 51, 0.3);
+            padding: 10px 0;
+            display: inline-block;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: var(--roast);
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--copper);
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-size: 0.95rem;
+            color: var(--espresso);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .content-grid {
+            display: block;
+            max-width: 900px;
+            margin: 60px auto 0;
+            padding-bottom: 120px;
+        }
+
+        .main-article {
+            max-width: 100%;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+
+        .section-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--ink);
+        }
+
+        .section-content p {
+            margin-bottom: 20px;
+        }
+
+        .section-content strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-item {
+            background: var(--steam);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid var(--copper);
+        }
+
+        .data-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--copper);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .data-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 4px;
+        }
+
+        .data-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .data-change.positive {
+            color: var(--positive);
+        }
+
+        .data-change.negative {
+            color: var(--negative);
+        }
+
+        /* Insight Card */
+        .insight-card {
+            background: var(--steam);
+            border-left: 4px solid var(--copper);
+            padding: 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .insight-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 12px;
+        }
+
+        .insight-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--ink);
+        }
+
+        /* Timeline News Styles */
+        .timeline-wrapper {
+            margin: 32px 0;
+        }
+
+        .news-timeline-item {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .news-timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--copper);
+            padding-top: 4px;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .timeline-content p {
+            color: var(--ink);
+            opacity: 0.85;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .timeline-impact {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+
+        .timeline-impact.positive {
+            background: rgba(74, 124, 89, 0.1);
+            color: var(--positive);
+        }
+
+        .timeline-impact.negative {
+            background: rgba(194, 58, 58, 0.1);
+            color: var(--negative);
+        }
+
+        .timeline-impact.neutral {
+            background: rgba(184, 115, 51, 0.1);
+            color: var(--copper);
+        }
+
+        .timeline-impact.mixed {
+            background: rgba(196, 165, 116, 0.1);
+            color: var(--accent);
+        }
+
+        /* Risk Table */
+        .risk-table {
+            width: 100%;
+            margin: 32px 0;
+            border-collapse: collapse;
+        }
+
+        .risk-table thead th {
+            background: var(--steam);
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--espresso);
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .risk-table tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .risk-bull {
+            color: var(--positive);
+        }
+
+        .risk-bear {
+            color: var(--negative);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 32px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-description {
+            opacity: 0.7;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .footer-section h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+            color: var(--copper);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: var(--crema);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.1);
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .price-card {
+                position: relative;
+                top: 0;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: 80px;
+                padding-bottom: 60px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .meta-divider {
+                display: none;
+            }
+
+            .content-title {
+                font-size: 1.3rem;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .news-timeline-item {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div id="scrollProgress" class="scroll-progress"></div>
+
+    <!-- Top Navigation -->
+    <nav id="topNav" class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Updates</a>
+        <div class="nav-links">
+            <span class="nav-date">December 7, 2025</span>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="container">
+                <div class="report-label">WEEKLY MARKET UPDATE</div>
+                <h1>Coffee Futures Market Weekly Update</h1>
+                <p class="hero-subtitle">Structural High Price Era Confirmed</p>
+                <div class="hero-meta">
+                    <span>December 7, 2025</span>
+                    <span>Analysis Period: Nov 30 - Dec 6, 2025</span>
+                    <span>Focus: KCH26 (March 2026 Contract)</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="content-grid">
+                <article class="main-article">
+                    <!-- Summary Section -->
+                    <section id="summary" class="section">
+                        <h2 class="section-title">Coffee Holds Firm Post-Tariff: Structural Shift to Higher Pricing</h2>
+                        <div class="section-content">
+                            <p>
+                                Despite President Trump's full removal of the 40% tariff on Brazilian coffee (announced November 21), 
+                                coffee futures have demonstrated remarkable price resilience, 
+                                rebounding to 403¢ on December 2 after an initial drop to 385¢. 
+                                As of December 5, March 2026 arabica futures closed at 374.85¢, 
+                                still up 36.83% year-over-year and maintaining the 300-400¢ "new normal" range.
+                            </p>
+                            <p>
+                                This price action confirms a fundamental thesis: 
+                                the coffee market has undergone a structural shift to elevated pricing driven by supply tightness, 
+                                not temporary policy distortions. 
+                                ICE arabica inventories at a 24-year low of 406,000 bags, 
+                                Brazil's inventory forecasted to hit a 25-year low of 1.2 million bags, 
+                                and Volcafe's projection of an 8.5 million bag arabica deficit for the 5th consecutive year 
+                                all underscore this structural reality.
+                            </p>
+                            <p>
+                                The tariff removal served as a critical market test. 
+                                The fact that prices dropped only to 385¢ (still 40% above 2024 levels) 
+                                and quickly rebounded demonstrates that fundamentals—not policy—now drive pricing. 
+                                Open Interest at 80,797 contracts indicates sustained market participation, 
+                                while the 71% La Niña probability from NOAA threatens the 2026/27 Brazilian crop.
+                            </p>
+                        </div>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Current Price (12/5)</div>
+                                <div class="data-value">374.85¢</div>
+                                <div class="data-change negative">-1.48% | -5.65¢</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Post-Tariff High (12/2)</div>
+                                <div class="data-value">403.64¢</div>
+                                <div class="data-change positive">+4.8% from low</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Year-over-Year</div>
+                                <div class="data-value">+36.83%</div>
+                                <div class="data-change positive">vs. Dec 2024</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Open Interest</div>
+                                <div class="data-value">80,797</div>
+                                <div class="data-change">contracts</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Recent Headlines -->
+                    <section id="headlines" class="section">
+                        <h2 class="section-title">Past Week Headlines (Nov 30 - Dec 6)</h2>
+                        <div class="section-content">
+                            <p>
+                                The past week witnessed extreme volatility as the market navigated between tariff removal relief 
+                                and persistent supply tightness. Prices surged from the November 21 low of 385¢ to a December 2 high of 403¢, 
+                                before moderating to current levels around 374¢. 
+                                The key question: "Why do prices remain elevated despite tariff removal?"
+                            </p>
+                        </div>
+
+                        <div class="timeline-wrapper">
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Nov 21 (Thu)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Trump Removes 40% Tariff on Brazilian Coffee</h3>
+                                    <p>President Trump fully eliminated the 40% tariff on Brazilian green coffee with retroactive application to shipments arriving after November 13. Instant coffee remains excluded, with ongoing negotiations. Arabica futures immediately dropped 5% to 385¢, the lowest since mid-October.</p>
+                                    <div class="timeline-impact negative">Market Impact: Short-term Bearish (-5%)</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Nov 24 (Sun)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Brazil Rainfall Forecast Creates Bearish Pressure</h3>
+                                    <p>Climatempo forecasted heavy rainfall to continue throughout the week in Brazil's coffee-growing regions, providing favorable conditions for next season's crop development. Market feared additional downside from combined tariff removal and weather improvement, though actual price decline remained limited.</p>
+                                    <div class="timeline-impact negative">Market Impact: Bearish Sentiment</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Dec 1 (Sun)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Vietnam Domestic Prices Drop 6,000 Dong Monthly</h3>
+                                    <p>Vietnam Central Highlands coffee prices fell to 111,300-112,500 dong/kg, down approximately 6,000 dong over November, signaling harvest acceleration. Lam Dong at 111,300, Dak Lak at 112,300, Dak Nong at 112,500. However, robusta futures January contract rose $26 to $4,565/ton, indicating local price drops didn't translate to global weakness.</p>
+                                    <div class="timeline-impact neutral">Market Impact: Mixed</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Dec 1 (Sun)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Volcafe Projects 5th Consecutive Year of Arabica Deficit</h3>
+                                    <p>Global coffee trader Volcafe forecasted an 8.5 million bag arabica supply deficit for 2025/26, marking the 5th consecutive year of shortage. Revised Brazil arabica production down 11 million bags year-over-year to 34.4 million bags. Analysis states "climate change prevents Brazil from recovering 'on-cycle' production above 50 million bags." ICE inventories expected to reach "untenable levels" by Q2 2025.</p>
+                                    <div class="timeline-impact positive">Market Impact: Structural Bull Confirmed</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Dec 2 (Mon)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Arabica Rebounds to 403¢, Tariff Impact Limited</h3>
+                                    <p>Just 9 trading days after the November 21 low of 385¢, futures rebounded to 403.65¢ (+4.8%). December contract at 403.65¢, March at 376.65¢. Brazilian real strength and continued ICE inventory decline supported prices. Market participants noted "tariff removal created less downward pressure than anticipated."</p>
+                                    <div class="timeline-impact positive">Market Impact: Bullish Reversal (+4.8%)</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Dec 4 (Wed)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Futures Break 410¢, Approaching 9-Month High</h3>
+                                    <p>Arabica coffee CFD surged to 410.65¢ (+1.71%), approaching the 9-month high of 423¢ set on November 11. Despite partial tariff relief, Brazil's poor harvest, Vietnam flooding, and ICE inventories at lowest since March 2024 supported prices. Speculative funds and market uncertainty amplified volatility.</p>
+                                    <div class="timeline-impact positive">Market Impact: Sharp Rally</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Dec 5 (Thu)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">USDA Vietnam Production Forecast at 30.8M Bags (-0.6%)</h3>
+                                    <p>USDA released Vietnam 2025/26 coffee production at 30.8 million bags, down 200,000 bags (-0.6%) from June forecast of 31 million. Composition: 29.6M robusta, 1.2M arabica. Up 6.2% year-over-year but below market expectations. Domestic consumption rising to 4.9M bags and exporter inventory declining (93.9M→83.9M bags) constrains actual export capacity.</p>
+                                    <div class="timeline-impact neutral">Market Impact: Neutral</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Dec 5 (Thu)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Brazil Robusta Production Hits Record 20.7M Bags</h3>
+                                    <p>Brazil's Conab estimated 2025/26 robusta production at 20.7 million bags, with USDA forecasting 24.1 million bags—more than double 2016/17 levels. Robusta's drought tolerance and disease resistance highlighted. However, total coffee production at 56.5 million bags reflects 9.7% arabica decline. Robusta futures plunged 19.1% since early December ($5,694→$4,604).</p>
+                                    <div class="timeline-impact mixed">Market Impact: Mixed</div>
+                                </div>
+                            </div>
+
+                            <div class="news-timeline-item">
+                                <div class="timeline-date">Dec 5 (Thu)</div>
+                                <div class="timeline-content">
+                                    <h3 class="timeline-title">Current Price 374.85¢, Correction Phase</h3>
+                                    <p>ICE arabica March contract closed at 374.85¢ (-1.48%, -5.65¢), down approximately 7% from December 2 high of 403¢. Intraday high 378.40¢, low 373.25¢. Previous close 380.50¢. Open Interest maintained at 80,797 contracts, indicating sustained market participation. Still up 36.83% year-over-year.</p>
+                                    <div class="timeline-impact negative">Market Impact: Short-term Correction (-1.48%)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="insight-card">
+                            <div class="insight-title">Weekly Market Summary</div>
+                            <div class="insight-content">
+                                The past week's action demonstrates the market successfully "passing the tariff removal test." Despite the significant November 21 removal of the 40% tariff, prices only declined to 385¢ before immediately rebounding to record 403¢ on December 2, confirming structural market strength. While Vietnamese domestic price drops, improved Brazilian rainfall, and downward USDA production revisions created short-term crosscurrents, Volcafe's 5th consecutive year of 8.5 million bag deficit projection and ICE inventories at 24-year lows support medium-to-long-term elevated pricing. Current levels around 374¢ represent a "healthy correction within a structural bull market."
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Supply Section -->
+                    <section id="supply" class="section">
+                        <h2 class="section-title">Structural Supply Deficit: ICE Inventory at Historic Low</h2>
+                        <div class="section-content">
+                            <p>
+                                ICE arabica certified inventory stands at 406,000 bags as of December 1, 
+                                maintaining 24-year low levels. 
+                                After touching 398,000 bags on November 20, 
+                                inventories have recovered marginally but remain at historically extreme lows. 
+                                Brazilian inventories are forecasted to reach 1.2 million bags by mid-2025, 
+                                a 25-year low.
+                            </p>
+                            <p>
+                                More concerning is Brazil's weather situation. 
+                                Conab has already revised its 2025 arabica production down 4.9% to 35.2 million bags, 
+                                with the 2025/26 season projected to decline 12.4% to 34.7 million bags 
+                                due to drought and high temperatures. 
+                                The critical flowering phase has been exposed to dry and hot conditions, 
+                                causing severe damage.
+                            </p>
+                            <p>
+                                NOAA forecasts a 71% probability of La Niña conditions from October to December, 
+                                which could bring additional dry weather to South America. 
+                                Even the 2026/27 season faces threats. 
+                                Volcafe expects a global arabica deficit of 8.5 million bags for the 2025/26 season, 
+                                marking the 5th consecutive year of supply shortage.
+                            </p>
+                        </div>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">ICE Inventory (12/1)</div>
+                                <div class="data-value">406K bags</div>
+                                <div class="data-change negative">24-year low zone</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Brazil Inventory Forecast</div>
+                                <div class="data-value">1.2M bags</div>
+                                <div class="data-change negative">25-year low</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">25/26 Arabica Deficit</div>
+                                <div class="data-value">8.5M bags</div>
+                                <div class="data-change negative">5th consecutive year</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">La Niña Probability</div>
+                                <div class="data-value">71%</div>
+                                <div class="data-change negative">NOAA forecast</div>
+                            </div>
+                        </div>
+
+                        <div class="insight-card">
+                            <div class="insight-title">Supply Crisis Deepens</div>
+                            <div class="insight-content">
+                                The global coffee market faces a structural supply crisis that cannot be resolved by short-term weather improvements or policy changes. ICE and Brazilian inventories at multi-decade lows, combined with 5 consecutive years of deficits, have eliminated buffer capacity. Any weather shock—particularly La Niña-induced drought in 2026/27—could trigger price spikes. Current elevated pricing reflects this fundamental reality, not speculation.
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- USDA Vietnam Analysis -->
+                    <section id="market" class="section">
+                        <h2 class="section-title">In-Depth USDA Vietnam Report Analysis</h2>
+                        <div class="section-content">
+                            <p>
+                                USDA released Vietnam's 2025/26 season production at 30.8 million bags on December 5. 
+                                This represents a 200,000 bag (-0.6%) downward revision from June's official forecast of 31 million bags, 
+                                tempering market optimism. 
+                                The breakdown shows 29.6 million bags of robusta and 1.2 million bags of arabica, 
+                                up 6.2% from the 2024/25 season's 29 million bags.
+                            </p>
+                            <p>
+                                Several critical factors drove USDA's downward revision. 
+                                First, recent flooding and heavy rainfall have delayed harvest. 
+                                As of mid-December, Central Highlands harvest progress stands at approximately 36%, 
+                                slower than the historical average. 
+                                Second, despite expanded acreage, per-unit productivity gains remain limited. 
+                                Third, rapidly growing domestic consumption (2025/26 forecast at 4.9 million bags) 
+                                reduces export availability below initial expectations.
+                            </p>
+                            <p>
+                                Export projections deserve particular attention. 
+                                USDA forecasts total Vietnamese exports at 27 million bags for 2025/26, 
+                                with green beans accounting for 23.7 million bags 
+                                and instant/roasted coffee at 3.3 million bags. 
+                                While green beans constitute approximately 88% of total exports, 
+                                this percentage has gradually declined from 91.2% in 2022. 
+                                Vietnam is transitioning from simple raw material exports toward value-added products.
+                            </p>
+                            <p>
+                                Ending stocks are projected at 839,000 bags, 
+                                down 100,000 bags from the prior year's 939,000 bags. 
+                                High prices and cash flow constraints have led exporters to reduce inventory holdings. 
+                                This makes Vietnam more vulnerable to supply shocks, 
+                                raising the possibility of sharp export declines in the event of weather disruptions.
+                            </p>
+                            <p>
+                                Regarding pricing, USDA estimated the 2025/26 average export price at $5,630 per ton, 
+                                representing a 143% year-over-year increase. 
+                                Domestic robusta prices also doubled to $4.82 per kilogram compared to 2024 levels. 
+                                This indicates Vietnamese producers operate in an extremely favorable pricing environment, 
+                                with high likelihood of supply reductions in response to any future price declines.
+                            </p>
+                        </div>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">25/26 Production (USDA)</div>
+                                <div class="data-value">30.8M bags</div>
+                                <div class="data-change negative">-0.6% vs June forecast</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">25/26 Export Forecast</div>
+                                <div class="data-value">27M bags</div>
+                                <div class="data-change positive">+4.7% YoY</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">25/26 Ending Stocks</div>
+                                <div class="data-value">839K bags</div>
+                                <div class="data-change negative">-10.6% YoY</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Avg Export Price</div>
+                                <div class="data-value">$5,630/ton</div>
+                                <div class="data-change positive">+143% YoY</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Domestic Consumption</div>
+                                <div class="data-value">4.9M bags</div>
+                                <div class="data-change positive">Continued growth</div>
+                            </div>
+                        </div>
+
+                        <div class="insight-card">
+                            <div class="insight-title">USDA Analysis Implications</div>
+                            <div class="insight-content">
+                                The core message from USDA's report is that Vietnam's production increase falls short of market expectations. The downward revision from June, inventory decline, and domestic consumption growth all point to constrained export capacity. More importantly, no matter how much Vietnam increases production, it's primarily robusta—which cannot substitute for declining Brazilian arabica due to structural limitations. USDA data clearly demonstrates why the simplistic equation "Vietnam production increase = price decline" doesn't function in reality.
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Outlook Section -->
+                    <section id="production" class="section">
+                        <h2 class="section-title">Market Outlook: Structural High Pricing with Continued Volatility</h2>
+                        <div class="section-content">
+                            <p>
+                                Synthesizing the analysis above, the coffee market has clearly entered a "structural level-up" phase. 
+                                The fact that prices only declined to 385¢ following the significant November 21 tariff removal, 
+                                then rebounded to 403¢ within two weeks, 
+                                provides decisive evidence of how tight market fundamentals have become. 
+                                The current 374.85¢ level remains 36.83% above year-ago levels.
+                            </p>
+                            <p>
+                                <strong>6-12 Month Price Outlook:</strong> 
+                                The central scenario targets a <strong>350-420¢ range</strong>. 
+                                Downside support comes from ICE inventory at a 24-year low (406K bags), 
+                                Brazilian inventory forecasted at a 25-year low (1.2M bags), 
+                                and Volcafe's projection of a 5th consecutive year of 8.5 million bag arabica deficit. 
+                                A drop below 300¢ appears highly unlikely, 
+                                with strong buying interest expected to emerge at 320-330¢ even in the event of short-term corrections.
+                            </p>
+                            <p>
+                                <strong>Upside Risks:</strong> 
+                                The biggest variable is Brazilian weather for the 2026/27 season. 
+                                If NOAA's 71% La Niña forecast materializes, 
+                                South American dry weather could intensify, 
+                                potentially causing additional production declines in already-impacted Brazil. 
+                                In this scenario, prices could rise to 450-500¢, 
+                                with the February high of 441¢ potentially being challenged in extreme cases.
+                            </p>
+                            <p>
+                                <strong>Downside Risks:</strong> 
+                                Realistically, factors capable of significantly pulling prices down are limited. 
+                                Vietnam's production increase is already priced in, with USDA forecasts revised downward from June. 
+                                Brazil's 2025/26 "on-year" production, while StoneX forecasts 70.7 million bags, 
+                                assumes normal weather conditions—achievement appears uncertain given current flowering conditions. 
+                                Even with major speculative liquidation, physical demand should emerge at the 350¢ level.
+                            </p>
+                            <p>
+                                <strong>Key Monitoring Indicators:</strong> 
+                                (1) Southern Brazil Minas/São Paulo rainfall (January-March critical period), 
+                                (2) ICE certified inventory trend (rapid rally possible if breaks below 300K bags), 
+                                (3) Brazilian real exchange rate (real weakness could increase short-term supply), 
+                                (4) Speculative positioning (COT data), 
+                                (5) Vietnam export pace (whether monthly 2.5-3 million bag level is maintained).
+                            </p>
+                        </div>
+
+                        <table class="risk-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%;">Upside Scenario (35% probability)</th>
+                                    <th style="width: 50%;">Downside Scenario (20% probability)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="risk-bull">Brazil La Niña drought intensifies</td>
+                                    <td class="risk-bear">StoneX 70.7M bag forecast achieved</td>
+                                </tr>
+                                <tr>
+                                    <td class="risk-bull">ICE inventory falls below 300K bags</td>
+                                    <td class="risk-bear">Vietnam exports exceed expectations</td>
+                                </tr>
+                                <tr>
+                                    <td class="risk-bull">Large speculative fund inflows</td>
+                                    <td class="risk-bear">Further Brazilian real collapse</td>
+                                </tr>
+                                <tr>
+                                    <td class="risk-bull">2026/27 production concerns emerge early</td>
+                                    <td class="risk-bear">Global recession reduces demand</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size: 0.85rem; color: var(--ink); opacity: 0.6; margin-top: 8px;">
+                            * Baseline scenario (45% probability): 350-420¢ range-bound volatility
+                        </p>
+
+                        <div class="insight-card">
+                            <div class="insight-title">Investment Perspective</div>
+                            <div class="insight-content">
+                                Current price levels (370-380¢) present a neutral risk-reward profile. While structural tightness is clear, short-term correction pressure may exist from tariff removal effects and Vietnam harvest acceleration. <strong>Strategic approach:</strong> (1) Consider staged buying below 350¢, (2) Evaluate short-term profit-taking above 420¢, (3) Adjust positioning after monitoring January-March Brazilian weather. Current assessment: "correction phase within a structural bull market." Medium-to-long-term (6-12 month) outlook maintains upside bias.
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-description">
+                        Professional coffee futures market analysis and insights. 
+                        Providing institutional-grade intelligence for traders, roasters, and industry stakeholders.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Weekly Reports</a></li>
+                        <li><a href="#">In-Depth Analysis</a></li>
+                        <li><a href="#">Market Data</a></li>
+                        <li><a href="#">Methodology</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@aligncommodities.com">contact@aligncommodities.com</a></li>
+                        <li><a href="https://coffeemarket.info">coffeemarket.info</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Align Commodities. All rights reserved.</p>
+                <p>Market data sources: ICE, Reuters, Bloomberg, USDA, Conab</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // Top nav scroll effect
+        const topNav = document.getElementById('topNav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
