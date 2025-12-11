@@ -2326,13 +2326,19 @@
                 { date: new Date(2025, 10, 27), type: 'macro', title: 'US Q3 GDP Revision', desc: 'Second estimate of growth rate' },
                 { date: new Date(2025, 10, 29), type: 'macro', title: 'US PCE Price Index', desc: 'Fed\'s preferred inflation gauge', important: true },
                 { date: new Date(2025, 11, 6), type: 'macro', title: 'US Jobs Report', desc: 'November nonfarm payrolls', important: true },
-                { date: new Date(2025, 11, 11), type: 'macro', title: 'US CPI', desc: 'November consumer prices' },
-                { date: new Date(2025, 11, 18), type: 'macro', title: 'FOMC Rate Decision', desc: 'December policy rate', important: true },
+                { date: new Date(2025, 11, 18), type: 'macro', title: 'US CPI', desc: 'November consumer prices' },
+                { date: new Date(2025, 11, 10), type: 'macro', title: 'FOMC Rate Decision', desc: 'December policy rate', important: true },
                 { date: new Date(2025, 11, 20), type: 'macro', title: 'US PCE Price Index', desc: 'November PCE data' },
-                { date: new Date(2026, 0, 10), type: 'macro', title: 'US Jobs Report', desc: 'December nonfarm payrolls', important: true },
-                { date: new Date(2026, 0, 15), type: 'macro', title: 'US CPI', desc: 'December consumer prices', important: true },
-                { date: new Date(2026, 0, 29), type: 'macro', title: 'FOMC Rate Decision', desc: 'January policy rate', important: true },
-                { date: new Date(2026, 1, 7), type: 'macro', title: 'US Jobs Report', desc: 'January nonfarm payrolls', important: true },
+                { date: new Date(2026, 0, 2), type: 'macro', title: 'US Jobs Report', desc: 'December nonfarm payrolls', important: true },
+                { date: new Date(2026, 0, 3), type: 'macro', title: 'US ISM Manufacturing PMI', desc: 'December manufacturing index' },
+                { date: new Date(2026, 0, 8), type: 'macro', title: 'FOMC Minutes Release', desc: 'December meeting details' },
+                { date: new Date(2026, 0, 13), type: 'macro', title: 'US CPI', desc: 'December consumer prices', important: true },
+                { date: new Date(2026, 0, 28), type: 'macro', title: 'FOMC Rate Decision', desc: 'January policy rate', important: true },
+                { date: new Date(2026, 0, 29), type: 'macro', title: 'US PCE Price Index', desc: 'December PCE data' },
+                { date: new Date(2026, 1, 6), type: 'macro', title: 'US Jobs Report', desc: 'January nonfarm payrolls', important: true },
+                { date: new Date(2026, 1, 12), type: 'macro', title: 'US CPI', desc: 'January consumer prices' },
+                { date: new Date(2026, 1, 19), type: 'macro', title: 'FOMC Minutes Release', desc: 'January meeting details' },
+                { date: new Date(2026, 1, 28), type: 'macro', title: 'US PCE Price Index', desc: 'January PCE data' },
                 { date: new Date(2026, 2, 6), type: 'macro', title: 'US Jobs Report', desc: 'February nonfarm payrolls', important: true },
                 { date: new Date(2026, 2, 18), type: 'macro', title: 'FOMC Rate Decision', desc: 'March policy rate', important: true },
             ];
@@ -2340,10 +2346,10 @@
             // Coffee Market Events
             const coffeeEvents = [
                 { date: new Date(2025, 10, 27), type: 'coffee', title: 'CONAB November Report', desc: 'Brazil 25/26 harvest update' },
-                { date: new Date(2025, 10, 28), type: 'coffee', title: 'GCA Stock Report', desc: 'US green coffee inventory' },
                 { date: new Date(2025, 11, 3), type: 'coffee', title: 'ICO Monthly Report', desc: 'November global supply analysis', important: true },
+                { date: new Date(2025, 11, 5), type: 'coffee', title: 'CONAB December Report', desc: 'Brazil final crop outlook' },
                 { date: new Date(2025, 11, 5), type: 'coffee', title: 'ICE Futures Expiry', desc: 'December contract final trading' },
-                { date: new Date(2025, 11, 10), type: 'coffee', title: 'USDA WASDE Report', desc: 'World coffee supply outlook', important: true },
+                { date: new Date(2025, 11, 9), type: 'coffee', title: 'USDA WASDE Report', desc: 'World coffee supply outlook', important: true },
                 { date: new Date(2025, 11, 15), type: 'coffee', title: 'Vietnam Export Data', desc: 'November Robusta exports' },
                 { date: new Date(2026, 0, 7), type: 'coffee', title: 'ICO Monthly Report', desc: 'December global analysis', important: true },
                 { date: new Date(2026, 0, 20), type: 'coffee', title: 'CONAB First Outlook', desc: 'Brazil 26/27 preliminary forecast', important: true },
@@ -2353,10 +2359,19 @@
             ];
             
             const allEvents = [...macroEvents, ...coffeeEvents];
-            
-            return allEvents
-                .filter(e => e.date >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
-                .sort((a, b) => a.date - b.date);
+
+            // Sort all events by date
+            const sortedEvents = allEvents.sort((a, b) => a.date - b.date);
+
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            // Separate past and future events
+            const pastEvents = sortedEvents.filter(e => e.date < today);
+            const futureEvents = sortedEvents.filter(e => e.date >= today);
+
+            // Combine recent 5 past events with all future events
+            const recentPastEvents = pastEvents.slice(-5);
+            return [...recentPastEvents, ...futureEvents];
         }
         
         function renderCalendarEvents() {
@@ -2414,7 +2429,8 @@
                         </div>
                         <div class="event-details">
                             <span class="event-type ${event.type === 'coffee' ? 'coffee' : ''}">${event.type === 'coffee' ? 'COFFEE' : 'MACRO'}</span>
-                            ${event.important ? '<span class="event-badge important">KEY</span>' : ''}
+                            ${!isUpcoming ? '<span class="event-badge">PAST</span>' : ''}
+                            ${event.important && isUpcoming ? '<span class="event-badge important">KEY</span>' : ''}
                             ${isWithinWeek ? '<span class="event-badge new">THIS WEEK</span>' : ''}
                             <h4 class="event-title">${event.title}</h4>
                             <p class="event-desc">${event.desc}</p>
