@@ -2412,15 +2412,15 @@
                 { date: new Date(2025, 11, 20), type: 'macro', title: '미국 PCE 물가지수', desc: '11월 개인소비지출' },
                 
                 // 2026년 1월
+                { date: new Date(2026, 0, 2), type: 'macro', title: '미국 고용보고서', desc: '12월 비농업 고용 발표', important: true },
                 { date: new Date(2026, 0, 3), type: 'macro', title: '미국 ISM 제조업 PMI', desc: '12월 제조업 경기 지표' },
                 { date: new Date(2026, 0, 8), type: 'macro', title: 'FOMC 회의록 공개', desc: '12월 회의 상세 내용' },
-                { date: new Date(2026, 0, 10), type: 'macro', title: '미국 고용보고서', desc: '12월 비농업 고용 발표', important: true },
-                { date: new Date(2026, 0, 15), type: 'macro', title: '미국 CPI', desc: '12월 소비자물가지수', important: true },
-                { date: new Date(2026, 0, 29), type: 'macro', title: 'FOMC 금리 결정', desc: '1월 정책 금리 발표', important: true },
-                { date: new Date(2026, 0, 31), type: 'macro', title: '미국 PCE 물가지수', desc: '12월 개인소비지출' },
+                { date: new Date(2026, 0, 13), type: 'macro', title: '미국 CPI', desc: '12월 소비자물가지수', important: true },
+                { date: new Date(2026, 0, 28), type: 'macro', title: 'FOMC 금리 결정', desc: '1월 정책 금리 발표', important: true },
+                { date: new Date(2026, 0, 29), type: 'macro', title: '미국 PCE 물가지수', desc: '12월 개인소비지출' },
                 
                 // 2026년 2월
-                { date: new Date(2026, 1, 7), type: 'macro', title: '미국 고용보고서', desc: '1월 비농업 고용 발표', important: true },
+                { date: new Date(2026, 1, 6), type: 'macro', title: '미국 고용보고서', desc: '1월 비농업 고용 발표', important: true },
                 { date: new Date(2026, 1, 12), type: 'macro', title: '미국 CPI', desc: '1월 소비자물가지수' },
                 { date: new Date(2026, 1, 19), type: 'macro', title: 'FOMC 회의록 공개', desc: '1월 회의 상세 내용' },
                 { date: new Date(2026, 1, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '1월 개인소비지출' },
@@ -2461,11 +2461,19 @@
             
             // 모든 이벤트 합치기
             const allEvents = [...macroEvents, ...coffeeEvents];
-            
-            // 현재 시간 이후의 이벤트만 필터링하고 정렬
-            return allEvents
-                .filter(e => e.date >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
-                .sort((a, b) => a.date - b.date);
+
+            // 모든 이벤트를 날짜순으로 정렬
+            const sortedEvents = allEvents.sort((a, b) => a.date - b.date);
+
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            // 지나간 이벤트와 미래 이벤트 분리
+            const pastEvents = sortedEvents.filter(e => e.date < today);
+            const futureEvents = sortedEvents.filter(e => e.date >= today);
+
+            // 지나간 이벤트 중 최근 5개와 모든 미래 이벤트 결합
+            const recentPastEvents = pastEvents.slice(-5);
+            return [...recentPastEvents, ...futureEvents];
         }
         
         function renderCalendarEvents() {
@@ -2528,7 +2536,8 @@
                         </div>
                         <div class="event-details">
                             <span class="event-type ${event.type === 'coffee' ? 'coffee' : ''}">${event.type === 'coffee' ? 'COFFEE' : 'MACRO'}</span>
-                            ${event.important ? '<span class="event-badge important">중요</span>' : ''}
+                            ${!isUpcoming ? '<span class="event-badge">완료</span>' : ''}
+                            ${event.important && isUpcoming ? '<span class="event-badge important">중요</span>' : ''}
                             ${isWithinWeek ? '<span class="event-badge new">이번주</span>' : ''}
                             <h4 class="event-title">${event.title}</h4>
                             <p class="event-desc">${event.desc}</p>
