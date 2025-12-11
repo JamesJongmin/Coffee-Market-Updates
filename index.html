@@ -2397,18 +2397,20 @@
         function generateAllEvents() {
             const events = [];
             const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
             // ========== 매크로 이벤트 ==========
             const macroEvents = [
-                // 2025년 11월
-                { date: new Date(2025, 10, 26), type: 'macro', title: 'FOMC 회의록 공개', desc: '11월 회의 상세 내용', important: true },
-                { date: new Date(2025, 10, 27), type: 'macro', title: '미국 3분기 GDP 수정치', desc: '경제 성장률 2차 추정' },
-                { date: new Date(2025, 10, 29), type: 'macro', title: '미국 PCE 물가지수', desc: '연준 선호 인플레 지표', important: true },
+                // 2025년 11월 (지나간 이벤트 - 결과 포함)
+                { date: new Date(2025, 10, 7), type: 'macro', title: 'FOMC 금리 결정', desc: '25bp 인하 (4.50-4.75%)', important: true, result: '25bp 인하 결정' },
+                { date: new Date(2025, 10, 26), type: 'macro', title: 'FOMC 회의록 공개', desc: '점진적 인하 기조 유지 시사', important: true, result: '점진적 인하 확인' },
+                { date: new Date(2025, 10, 27), type: 'macro', title: '미국 3분기 GDP 수정치', desc: 'GDP 2.8% (예비치 동일)', result: '2.8% 확정' },
+                { date: new Date(2025, 10, 27), type: 'macro', title: '미국 PCE 물가지수', desc: '10월 PCE 2.3% YoY', important: true, result: '2.3% (예상 부합)' },
                 
-                // 2025년 12월
-                { date: new Date(2025, 11, 6), type: 'macro', title: '미국 고용보고서', desc: '11월 비농업 고용 발표', important: true },
-                { date: new Date(2025, 11, 11), type: 'macro', title: '미국 CPI', desc: '11월 소비자물가지수' },
-                { date: new Date(2025, 11, 18), type: 'macro', title: 'FOMC 금리 결정', desc: '12월 정책 금리 발표', important: true },
+                // 2025년 12월 (일부 지나간 이벤트)
+                { date: new Date(2025, 11, 6), type: 'macro', title: '미국 고용보고서', desc: '11월 NFP +227K, 실업률 4.2%', important: true, result: '+227K (예상 상회)' },
+                { date: new Date(2025, 11, 11), type: 'macro', title: '미국 CPI', desc: '11월 소비자물가지수 발표', important: true },
+                { date: new Date(2025, 11, 17), type: 'macro', title: 'FOMC 금리 결정', desc: '12월 정책 금리 발표', important: true },
                 { date: new Date(2025, 11, 20), type: 'macro', title: '미국 PCE 물가지수', desc: '11월 개인소비지출' },
                 
                 // 2026년 1월
@@ -2420,60 +2422,63 @@
                 { date: new Date(2026, 0, 31), type: 'macro', title: '미국 PCE 물가지수', desc: '12월 개인소비지출' },
                 
                 // 2026년 2월
-                { date: new Date(2026, 1, 7), type: 'macro', title: '미국 고용보고서', desc: '1월 비농업 고용 발표', important: true },
+                { date: new Date(2026, 1, 6), type: 'macro', title: '미국 고용보고서', desc: '1월 비농업 고용 발표', important: true },
                 { date: new Date(2026, 1, 12), type: 'macro', title: '미국 CPI', desc: '1월 소비자물가지수' },
                 { date: new Date(2026, 1, 19), type: 'macro', title: 'FOMC 회의록 공개', desc: '1월 회의 상세 내용' },
                 { date: new Date(2026, 1, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '1월 개인소비지출' },
                 
                 // 2026년 3월
                 { date: new Date(2026, 2, 6), type: 'macro', title: '미국 고용보고서', desc: '2월 비농업 고용 발표', important: true },
-                { date: new Date(2026, 2, 12), type: 'macro', title: '미국 CPI', desc: '2월 소비자물가지수' },
+                { date: new Date(2026, 2, 11), type: 'macro', title: '미국 CPI', desc: '2월 소비자물가지수' },
                 { date: new Date(2026, 2, 18), type: 'macro', title: 'FOMC 금리 결정', desc: '3월 정책 금리 발표', important: true },
                 { date: new Date(2026, 2, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '2월 개인소비지출' },
             ];
             
             // ========== 커피 시장 이벤트 ==========
             const coffeeEvents = [
-                // 2025년 11월
-                { date: new Date(2025, 10, 27), type: 'coffee', title: 'CONAB 11월 작황 보고서', desc: '브라질 25/26 수확 진행 업데이트' },
-                { date: new Date(2025, 10, 28), type: 'coffee', title: 'GCA 재고 보고서', desc: '미국 그린커피 재고 현황' },
+                // 2025년 11월 (지나간 이벤트 - 결과 포함)
+                { date: new Date(2025, 10, 19), type: 'coffee', title: 'CONAB 11월 작황 보고서', desc: '브라질 25/26 아라비카 34.7백만백', result: '아라비카 -12% 하향' },
+                { date: new Date(2025, 10, 21), type: 'coffee', title: 'GCA 재고 보고서', desc: '미국 그린커피 재고 5.88백만백', result: '5.88백만백 (-4.2%)' },
                 
-                // 2025년 12월
-                { date: new Date(2025, 11, 3), type: 'coffee', title: 'ICO 월간 보고서', desc: '11월 글로벌 수급 분석', important: true },
-                { date: new Date(2025, 11, 5), type: 'coffee', title: 'ICE 선물 만기', desc: '12월물 최종 거래일' },
-                { date: new Date(2025, 11, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 전망', important: true },
+                // 2025년 12월 (일부 지나간 이벤트)
+                { date: new Date(2025, 11, 4), type: 'coffee', title: 'ICO 월간 보고서', desc: '글로벌 수급 타이트, 가격 강세', important: true, result: '수급 타이트 확인' },
+                { date: new Date(2025, 11, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 전망', important: true, result: '브라질 전망 하향' },
                 { date: new Date(2025, 11, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '11월 로부스타 수출 실적' },
+                { date: new Date(2025, 11, 19), type: 'coffee', title: 'ICE 3월물 FND', desc: 'KCH26 First Notice Day', important: true },
                 { date: new Date(2025, 11, 20), type: 'coffee', title: 'CONAB 12월 보고서', desc: '브라질 작황 최종 전망' },
-                { date: new Date(2025, 11, 28), type: 'coffee', title: 'GCA 재고 보고서', desc: '12월 그린커피 재고' },
                 
                 // 2026년 1월
                 { date: new Date(2026, 0, 7), type: 'coffee', title: 'ICO 월간 보고서', desc: '12월 글로벌 시장 분석', important: true },
                 { date: new Date(2026, 0, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true },
                 { date: new Date(2026, 0, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '12월 로부스타 수출 실적' },
-                { date: new Date(2026, 0, 20), type: 'coffee', title: 'CONAB 1차 전망', desc: '브라질 26/27 예비 전망', important: true },
-                { date: new Date(2026, 0, 25), type: 'coffee', title: 'GCA 재고 보고서', desc: '1월 그린커피 재고' },
+                { date: new Date(2026, 0, 21), type: 'coffee', title: 'GCA 재고 보고서', desc: '1월 그린커피 재고' },
+                { date: new Date(2026, 0, 23), type: 'coffee', title: 'CONAB 1차 전망', desc: '브라질 26/27 예비 전망', important: true },
                 
                 // 2026년 2월
                 { date: new Date(2026, 1, 4), type: 'coffee', title: 'ICO 월간 보고서', desc: '1월 글로벌 시장 분석', important: true },
-                { date: new Date(2026, 1, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트' },
+                { date: new Date(2026, 1, 11), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트' },
                 { date: new Date(2026, 1, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '1월 로부스타 수출 실적' },
-                { date: new Date(2026, 1, 18), type: 'coffee', title: 'CONAB 2차 전망', desc: '브라질 26/27 상세 전망', important: true },
-                { date: new Date(2026, 1, 25), type: 'coffee', title: 'GCA 재고 보고서', desc: '2월 그린커피 재고' },
+                { date: new Date(2026, 1, 19), type: 'coffee', title: 'ICE 5월물 FND', desc: 'KCK26 First Notice Day', important: true },
+                { date: new Date(2026, 1, 20), type: 'coffee', title: 'GCA 재고 보고서', desc: '2월 그린커피 재고' },
+                { date: new Date(2026, 1, 26), type: 'coffee', title: 'CONAB 2차 전망', desc: '브라질 26/27 상세 전망', important: true },
                 
                 // 2026년 3월
                 { date: new Date(2026, 2, 4), type: 'coffee', title: 'ICO 월간 보고서', desc: '2월 글로벌 시장 분석', important: true },
-                { date: new Date(2026, 2, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true },
-                { date: new Date(2026, 2, 15), type: 'coffee', title: '브라질 수확 준비', desc: '26/27 시즌 수확 임박' },
-                { date: new Date(2026, 2, 20), type: 'coffee', title: 'CONAB 3월 보고서', desc: '브라질 수확 전 최종 전망', important: true },
-                { date: new Date(2026, 2, 25), type: 'coffee', title: 'GCA 재고 보고서', desc: '3월 그린커피 재고' },
+                { date: new Date(2026, 2, 11), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true },
+                { date: new Date(2026, 2, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '2월 로부스타 수출 실적' },
+                { date: new Date(2026, 2, 20), type: 'coffee', title: 'GCA 재고 보고서', desc: '3월 그린커피 재고' },
+                { date: new Date(2026, 2, 26), type: 'coffee', title: 'CONAB 3월 보고서', desc: '브라질 수확 전 최종 전망', important: true },
             ];
             
             // 모든 이벤트 합치기
             const allEvents = [...macroEvents, ...coffeeEvents];
             
-            // 현재 시간 이후의 이벤트만 필터링하고 정렬
+            // 지나간 이벤트(최근 30일)와 미래 이벤트 모두 포함
+            const thirtyDaysAgo = new Date(today);
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
             return allEvents
-                .filter(e => e.date >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+                .filter(e => e.date >= thirtyDaysAgo)
                 .sort((a, b) => a.date - b.date);
         }
         
