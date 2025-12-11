@@ -547,6 +547,23 @@
             color: var(--positive);
         }
 
+        .event-badge.past-badge {
+            background: rgba(128, 128, 128, 0.1);
+            color: #888;
+        }
+
+        .event-badge.result {
+            display: block;
+            margin-top: 6px;
+            margin-left: 0;
+            padding: 4px 8px;
+            background: rgba(74, 124, 89, 0.08);
+            color: var(--positive);
+            font-size: 0.7rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
         .events-list {
             display: flex;
             flex-direction: column;
@@ -2409,8 +2426,8 @@
                 
                 // 2025년 12월 (일부 지나간 이벤트)
                 { date: new Date(2025, 11, 6), type: 'macro', title: '미국 고용보고서', desc: '11월 NFP +227K, 실업률 4.2%', important: true, result: '+227K (예상 상회)' },
+                { date: new Date(2025, 11, 10), type: 'macro', title: 'FOMC 금리 결정', desc: '25bp 인하 결정 (4.25-4.50%)', important: true, result: '25bp 인하' },
                 { date: new Date(2025, 11, 11), type: 'macro', title: '미국 CPI', desc: '11월 소비자물가지수 발표', important: true },
-                { date: new Date(2025, 11, 17), type: 'macro', title: 'FOMC 금리 결정', desc: '12월 정책 금리 발표', important: true },
                 { date: new Date(2025, 11, 20), type: 'macro', title: '미국 PCE 물가지수', desc: '11월 개인소비지출' },
                 
                 // 2026년 1월
@@ -2486,6 +2503,9 @@
             const eventsList = document.getElementById('eventsList');
             if (!eventsList) return;
             
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
             // 필터링
             let filteredEvents = allCalendarEvents;
             if (currentCalendarFilter !== 'all') {
@@ -2533,6 +2553,10 @@
                 oneWeekLater.setDate(oneWeekLater.getDate() + 7);
                 const isWithinWeek = eventDate <= oneWeekLater && eventDate >= now;
                 
+                // 지나간 이벤트인지 확인
+                const isPast = eventDate < today;
+                const resultBadge = (isPast && event.result) ? `<span class="event-badge result">✓ ${event.result}</span>` : '';
+                
                 html += `
                     <div class="event-item ${isUpcoming ? 'upcoming' : 'past'}" data-type="${event.type}">
                         <div class="event-date">
@@ -2542,10 +2566,12 @@
                         </div>
                         <div class="event-details">
                             <span class="event-type ${event.type === 'coffee' ? 'coffee' : ''}">${event.type === 'coffee' ? 'COFFEE' : 'MACRO'}</span>
-                            ${event.important ? '<span class="event-badge important">중요</span>' : ''}
-                            ${isWithinWeek ? '<span class="event-badge new">이번주</span>' : ''}
+                            ${event.important && !isPast ? '<span class="event-badge important">중요</span>' : ''}
+                            ${isWithinWeek && !isPast ? '<span class="event-badge new">이번주</span>' : ''}
+                            ${isPast ? '<span class="event-badge past-badge">완료</span>' : ''}
                             <h4 class="event-title">${event.title}</h4>
                             <p class="event-desc">${event.desc}</p>
+                            ${resultBadge}
                         </div>
                     </div>
                 `;
