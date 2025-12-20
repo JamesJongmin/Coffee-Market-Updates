@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Market Weekly Update - December 22, 2025 | Align Commodities</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "Professional Market Intelligence",
+    "date": "2025-12-22",
+    "summary": "March arabica (KCH26) plunged 8.66% to 340.65¢ on strong Brazilian rainfall (155% of average) and 2026/27 production forecasts of 71-74.4M bags. USDA projects 2025/26 global production +2.0% but ending stocks -5.4%. ICE inventory recovered to 439K bags (7-week high). Vietnam November exports surged +41% YoY. EUDR delayed 1 year to Dec 2026. US-Brazil tariff normalization supports supply outlook.",
+    "tags": ["340.65¢", "plunge", "Brazil rainfall", "2026/27 forecast", "ICE inventory recovery", "Vietnam exports", "EUDR delay", "tariff relief"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "Trading Economics", "USDA FAS", "Hedgepoint", "Conab", "Vietnam Customs", "EU Parliament"],
+    "price_current": "340.65",
+    "price_change": "-8.66%",
+    "report_type": "weekly"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 네비게이션 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--espresso);
+            color: white;
+            padding: 16px 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--accent));
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* 메인 컨테이너 */
+        .page-wrapper {
+            padding-top: 80px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        /* 히어로 섹션 */
+        .hero-section {
+            background: linear-gradient(135deg, var(--espresso) 0%, var(--roast) 100%);
+            color: white;
+            padding: 64px 0;
+            margin-bottom: 48px;
+        }
+
+        .report-header {
+            margin-bottom: 32px;
+        }
+
+        .report-date {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .report-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .report-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .price-hero {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+            padding: 32px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .price-main {
+            flex: 1;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .price-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .price-change {
+            font-size: 1.3rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .price-change.negative {
+            background: var(--negative);
+            color: white;
+        }
+
+        .price-change.positive {
+            background: var(--positive);
+            color: white;
+        }
+
+        /* 데이터 그리드 */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .data-item {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border-left: 4px solid var(--copper);
+        }
+
+        .data-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .data-subtext {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* 섹션 */
+        .section {
+            background: white;
+            padding: 48px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--espresso);
+            border-bottom: 2px solid var(--copper);
+            padding-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--roast);
+        }
+
+        .section p {
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .section ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .section li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        /* 가격 테이블 */
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        .price-table th {
+            background: var(--steam);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .price-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .price-table tr:hover {
+            background: var(--crema);
+        }
+
+        /* 하이라이트 박스 */
+        .highlight-box {
+            background: linear-gradient(135deg, #fff8f0 0%, #fef6eb 100%);
+            border-left: 4px solid var(--copper);
+            padding: 24px;
+            margin: 24px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box strong {
+            color: var(--roast);
+        }
+
+        .highlight-box p {
+            margin-bottom: 12px;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 뉴스 카드 */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .news-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .news-date {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .news-source {
+            font-size: 0.85rem;
+            color: var(--copper);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .news-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ink);
+            line-height: 1.4;
+        }
+
+        .news-summary {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* 시나리오 카드 */
+        .scenario-grid {
+            display: grid;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .scenario-card {
+            background: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            border-color: var(--copper);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .scenario-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        .scenario-probability {
+            background: var(--copper);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .scenario-card p {
+            margin-bottom: 12px;
+        }
+
+        .scenario-card ul {
+            margin: 16px 0;
+            padding-left: 20px;
+        }
+
+        .scenario-card li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            border-bottom: 2px solid var(--copper);
+            padding-bottom: 12px;
+        }
+
+        .sidebar-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .sidebar-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-highlight {
+            background: var(--crema);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .sidebar-highlight p {
+            margin-bottom: 0;
+        }
+
+        /* 푸터 */
+        .footer {
+            background: var(--espresso);
+            color: white;
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 0.02em;
+        }
+
+        .footer-desc {
+            color: white;
+            opacity: 0.8;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            opacity: 0.7;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-copyright {
+            color: white;
+            margin-bottom: 12px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        .footer-disclaimer {
+            color: white;
+            opacity: 0.5;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .report-title {
+                font-size: 2rem;
+            }
+
+            .price-value {
+                font-size: 3rem;
+            }
+
+            .section {
+                padding: 24px;
+            }
+
+            .price-hero {
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 스크롤 진행 표시 -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 네비게이션 -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <div class="nav-brand">Coffee Market Info</div>
+            <div class="nav-links">
+                <a href="#fundamentals">Fundamentals</a>
+                <a href="#technicals">Technicals</a>
+                <a href="#scenarios">Scenarios</a>
+                <a href="#news">News</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        <!-- 히어로 섹션 -->
+        <div class="hero-section">
+            <div class="main-container">
+                <div class="report-header">
+                    <div class="report-date">December 22, 2025</div>
+                    <h1 class="report-title">Coffee Futures Market<br>Weekly Update</h1>
+                    <p class="report-subtitle">Professional Market Intelligence for Traders, Roasters & Investors</p>
+                </div>
+
+                <div class="price-hero">
+                    <div class="price-main">
+                        <div class="price-label">ICE Arabica Mar 2026 (KCH26)</div>
+                        <div class="price-value">340.65¢</div>
+                        <span class="price-change negative">-8.66% Weekly</span>
+                    </div>
+                </div>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-label">Dec-Mar Spread</div>
+                        <div class="data-value">34.91¢</div>
+                        <div class="data-subtext">Extreme backwardation</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">ICE Arabica Inventory</div>
+                        <div class="data-value">439,257</div>
+                        <div class="data-subtext">bags, 7-week high</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">ICE Robusta Inventory</div>
+                        <div class="data-value">4,012</div>
+                        <div class="data-subtext">lots, 11.5-month low</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Minas Gerais Rainfall</div>
+                        <div class="data-value">79.8mm</div>
+                        <div class="data-subtext">155% of average</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">USD/BRL</div>
+                        <div class="data-value">6.07</div>
+                        <div class="data-subtext">4.5-month high</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Vietnam Nov Exports</div>
+                        <div class="data-value">88,812</div>
+                        <div class="data-subtext">tons, +41% YoY</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="content-grid">
+                <!-- 메인 콘텐츠 -->
+                <main>
+                    <!-- 주간 가격 추이 -->
+                    <section class="section">
+                        <h2 class="section-title">Weekly Price Movement</h2>
+                        
+                        <table class="price-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Mar 2026 (KCH26)</th>
+                                    <th>Change</th>
+                                    <th>Dec-Mar Spread</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Dec 16 (Mon)</td>
+                                    <td>372.50¢</td>
+                                    <td style="color: var(--negative);">-1.20¢</td>
+                                    <td>32.15¢</td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 17 (Tue)</td>
+                                    <td>365.80¢</td>
+                                    <td style="color: var(--negative);">-6.70¢</td>
+                                    <td>33.45¢</td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 18 (Wed)</td>
+                                    <td>351.25¢</td>
+                                    <td style="color: var(--negative);">-14.55¢</td>
+                                    <td>35.20¢</td>
+                                </tr>
+                                <tr>
+                                    <td>Dec 19 (Thu)</td>
+                                    <td>340.65¢</td>
+                                    <td style="color: var(--negative);">-10.60¢</td>
+                                    <td>34.91¢</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="highlight-box">
+                            <p><strong>Key Observation:</strong> March arabica futures plunged 32.20¢ (-8.66%) over four trading sessions from 372.85¢ to 340.65¢, marking the lowest level since mid-August 2024. The selloff accelerated mid-week as Brazilian rainfall forecasts improved and production estimates for 2026/27 were revised upward. Despite the sharp decline, the Dec-Mar spread remains in extreme backwardation at 34.91¢, indicating persistent supply tightness in nearby delivery periods.</p>
+                        </div>
+                    </section>
+
+                    <!-- 펀더멘털 분석 -->
+                    <section class="section" id="fundamentals">
+                        <h2 class="section-title">Fundamental Analysis</h2>
+
+                        <h3 class="section-subtitle">1. Brazilian Production & Weather</h3>
+                        <p>
+                            Hedgepoint Global Markets released updated 2026/27 Brazilian production forecasts ranging from 71.0-74.4 million bags on December 12, with arabica production estimated at 46.5-49.0 million bags—representing a potential 23-30% year-over-year increase. This optimistic outlook is supported by recent rainfall patterns in key growing regions.
+                        </p>
+                        <p>
+                            Minas Gerais received 79.8mm of rainfall in the first half of December, 155% of the historical average. This abundant moisture during the critical flowering period (October-December) supports healthy blossom development for the 2026/27 crop. Climatempo forecasts continued "strong and sustained rainfall" through late December, further reinforcing positive crop prospects.
+                        </p>
+                        <p>
+                            However, Conab's December 4 report projected 2025 production at 56.54 million bags (+2.4% YoY), with robusta reaching a record 20.8 million bags. The 2025/26 harvest outcome remains crucial for near-term supply dynamics.
+                        </p>
+
+                        <h3 class="section-subtitle">2. Global Supply-Demand Balance</h3>
+                        <p>
+                            USDA Foreign Agricultural Service (FAS) released updated global projections on December 19:
+                        </p>
+                        <ul>
+                            <li><strong>2025/26 Production:</strong> 178.848 million bags (+2.0% YoY)</li>
+                            <li><strong>Consumption:</strong> 177.233 million bags (+1.8% YoY)</li>
+                            <li><strong>Ending Stocks:</strong> 20.148 million bags (-5.4% YoY)</li>
+                            <li><strong>Stocks-to-Use Ratio:</strong> 11.4% (down from 12.0%)</li>
+                        </ul>
+                        <p>
+                            The projected decline in ending stocks despite production growth suggests continued structural tightness. The market remains vulnerable to supply disruptions, supporting price floors even amid improved crop prospects.
+                        </p>
+
+                        <h3 class="section-subtitle">3. Vietnam Exports & Asian Supply</h3>
+                        <p>
+                            Vietnam Customs reported November 2024 exports of 88,812 tons (+41.0% YoY), valued at $803 million. Cumulative 11-month exports reached 1.374 million tons (+11.8%) worth $7.94 billion (+24.7%). The robust export performance reflects:
+                        </p>
+                        <ul>
+                            <li>Strong 2024/25 harvest following favorable weather</li>
+                            <li>Competitive pricing versus African origins</li>
+                            <li>Elevated global robusta demand due to arabica tightness</li>
+                        </ul>
+                        <p>
+                            However, ICE robusta inventory fell to 4,012 lots (11.5-month low), indicating that Vietnamese supply increases are being absorbed by strong demand rather than accumulating in exchange warehouses.
+                        </p>
+
+                        <h3 class="section-subtitle">4. Inventory Dynamics</h3>
+                        <p>
+                            ICE arabica certified inventory recovered to 439,257 bags as of December 19, up 10.2% from the November 20 low of 398,645 bags. This marks a 7-week high but remains 45% below the 5-year average of approximately 800,000 bags.
+                        </p>
+                        <p>
+                            The inventory recovery reflects:
+                        </p>
+                        <ul>
+                            <li>Seasonal arrival of Brazilian shipments</li>
+                            <li>Reduced demand for physical delivery at elevated price levels</li>
+                            <li>Improved US-Brazil trade relations reducing tariff uncertainty</li>
+                        </ul>
+                        <p>
+                            Despite the uptick, inventory levels remain critically low by historical standards, supporting the extreme backwardation structure.
+                        </p>
+
+                        <h3 class="section-subtitle">5. Regulatory Developments: EUDR Delay</h3>
+                        <p>
+                            The European Parliament voted 405-242 on December 17 to delay the EU Deforestation Regulation (EUDR) implementation by one year. New deadlines are:
+                        </p>
+                        <ul>
+                            <li><strong>Large companies:</strong> December 30, 2026</li>
+                            <li><strong>Small/micro companies:</strong> June 30, 2027</li>
+                        </ul>
+                        <p>
+                            This delay removes near-term compliance pressure on coffee importers and exporters, potentially normalizing trade flows that were disrupted by uncertainty. However, the market must eventually adapt to stricter traceability requirements, which could structurally increase costs for non-compliant origins.
+                        </p>
+                    </section>
+
+                    <!-- 기술적 분석 -->
+                    <section class="section" id="technicals">
+                        <h2 class="section-title">Technical Analysis</h2>
+
+                        <h3 class="section-subtitle">1. Price Action & Key Levels</h3>
+                        <p>
+                            March 2026 arabica (KCH26) closed at 340.65¢, breaking below the critical 350¢ support level that held through most of November and early December. The 8.66% weekly decline represents the sharpest selloff since early September 2024.
+                        </p>
+                        <p><strong>Key Technical Levels:</strong></p>
+                        <ul>
+                            <li><strong>Immediate Support:</strong> 330-335¢ (August 2024 lows)</li>
+                            <li><strong>Immediate Resistance:</strong> 360-365¢ (recent consolidation zone)</li>
+                            <li><strong>Major Support:</strong> 310-315¢ (July 2024 lows)</li>
+                            <li><strong>Major Resistance:</strong> 390-400¢ (November-December highs)</li>
+                        </ul>
+
+                        <h3 class="section-subtitle">2. Backwardation Structure</h3>
+                        <p>
+                            The Dec-Mar spread closed at 34.91¢ in extreme backwardation, slightly narrowed from the 40¢+ levels seen in November but still indicating severe supply tightness for nearby delivery.
+                        </p>
+                        <p>
+                            Historical context: Normal market conditions typically show a contango of 5-15¢ (deferred contracts trading higher to reflect carrying costs). The current backwardation implies:
+                        </p>
+                        <ul>
+                            <li>Strong demand for immediate physical delivery</li>
+                            <li>Inventory holders reluctant to sell at current prices</li>
+                            <li>Expectations that supply will improve in Q1-Q2 2026</li>
+                        </ul>
+
+                        <h3 class="section-subtitle">3. Currency Impact: USD/BRL Dynamics</h3>
+                        <p>
+                            The USD/BRL exchange rate reached 6.07 on December 19, the highest level since early August 2024. Traditionally, Brazilian real weakness (higher USD/BRL) would pressure coffee prices lower as Brazilian producers sell more aggressively to capture favorable exchange rates.
+                        </p>
+                        <p>
+                            However, the correlation has broken down in recent months. Despite the real's weakness, Brazilian producer margins remain healthy at current coffee price levels, reducing the urgency to sell. This suggests that the market's primary driver has shifted from currency-induced supply pressure to fundamental production outlook and global inventory concerns.
+                        </p>
+                    </section>
+
+                    <!-- 시나리오 분석 -->
+                    <section class="section" id="scenarios">
+                        <h2 class="section-title">Scenario Analysis</h2>
+
+                        <div class="scenario-grid">
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h3 class="scenario-title">Base Case: Range-Bound Consolidation</h3>
+                                    <span class="scenario-probability">Probability 50%</span>
+                                </div>
+                                <p><strong>Key Drivers:</strong></p>
+                                <ul>
+                                    <li>Brazilian rainfall continues through December but January-February uncertainty remains</li>
+                                    <li>ICE inventory recovery continues but remains below historical averages</li>
+                                    <li>USDA ending stocks decline of -5.4% materializes as forecast</li>
+                                    <li>Fund positioning adjustment completes, awaiting new catalysts</li>
+                                </ul>
+                                <p><strong>Price Outlook:</strong> March futures establish a 330-360¢ trading range. Backwardation gradually eases.</p>
+                                <p><strong>Timeframe:</strong> January-March 2026. Market awaits Brazilian flowering (September-October) weather outlooks.</p>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h3 class="scenario-title">Bullish Case: Further Decline</h3>
+                                    <span class="scenario-probability">Probability 30%</span>
+                                </div>
+                                <p><strong>Key Drivers:</strong></p>
+                                <ul>
+                                    <li>Sustained Brazilian rainfall creates ideal conditions for 2026/27 flowering</li>
+                                    <li>Vietnam production achieves +10% growth, boosting global robusta supply</li>
+                                    <li>EUDR delay normalizes EU imports, accelerating inventory accumulation</li>
+                                    <li>Complete normalization of US-Brazil trade increases shipments</li>
+                                </ul>
+                                <p><strong>Price Outlook:</strong> March futures decline to 310-330¢ range. Backwardation eases toward normal contango structure.</p>
+                                <p><strong>Timeframe:</strong> January-February 2026. Bearish pressure could persist until Brazilian harvest (May).</p>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h3 class="scenario-title">Bearish Case: Sharp Rebound</h3>
+                                    <span class="scenario-probability">Probability 20%</span>
+                                </div>
+                                <p><strong>Key Drivers:</strong></p>
+                                <ul>
+                                    <li>January-February Brazilian rainfall sharply declines, stressing flowering period</li>
+                                    <li>Vietnam production revised lower due to flooding or drought</li>
+                                    <li>Major consuming countries accelerate inventory stockpiling (EUDR preparation)</li>
+                                    <li>Geopolitical risks disrupt logistics</li>
+                                </ul>
+                                <p><strong>Price Outlook:</strong> March futures surge to 380-420¢. Extreme backwardation intensifies.</p>
+                                <p><strong>Timeframe:</strong> February-April 2026. Short-term shock scenario.</p>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box">
+                            <p><strong>Base Case Details (50% Probability):</strong></p>
+                            <p>
+                                The market has reacted sharply to improved Brazilian rainfall and upward production revisions for 2026/27, but USDA's projected -5.4% decline in ending stocks and persistently tight inventory conditions should limit downside. A 330-360¢ range-bound consolidation for March futures is the most probable scenario.
+                            </p>
+                            <p>
+                                The critical variable is Brazilian rainfall patterns in January-February 2026. If rainfall continues as forecast, the bullish case (further decline, 30%) becomes more likely. Conversely, if rainfall sharply declines, the bearish case (rebound, 20%) could materialize. CFTC fund positioning changes and ICE inventory trends require close monitoring.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 주요 뉴스 -->
+                    <section class="section" id="news">
+                        <h2 class="section-title">Key Market News (Dec 13-20)</h2>
+
+                        <div class="news-grid">
+                            <div class="news-card">
+                                <div class="news-date">December 19, 2024</div>
+                                <div class="news-source">USDA FAS</div>
+                                <h3 class="news-title">Global Coffee Production +2.0%, Ending Stocks -5.4%</h3>
+                                <p class="news-summary">
+                                    USDA projects 2025/26 global coffee production at 178.848M bags (+2.0% YoY) but ending stocks to decline 5.4% to 20.148M bags. Stocks-to-use ratio falls to 11.4% from 12.0%, maintaining structural tightness despite production growth.
+                                </p>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-date">December 19, 2024</div>
+                                <div class="news-source">ICE</div>
+                                <h3 class="news-title">Arabica Futures Plunge 8.66%, Lowest Since August</h3>
+                                <p class="news-summary">
+                                    March 2026 arabica futures fell to 340.65¢, down 32.20¢ (-8.66%) on the week. Four-month low reflects improved Brazilian rainfall forecasts and upward production revisions for 2026/27 crop.
+                                </p>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-date">December 19, 2024</div>
+                                <div class="news-source">ICE</div>
+                                <h3 class="news-title">Arabica Inventory Recovers to 7-Week High</h3>
+                                <p class="news-summary">
+                                    ICE arabica certified stocks rose to 439,257 bags, up 10.2% from November 20 low of 398,645 bags. Seven-week high reflects seasonal Brazilian shipments but remains 45% below 5-year average.
+                                </p>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-date">December 19, 2024</div>
+                                <div class="news-source">Trading Economics</div>
+                                <h3 class="news-title">USD/BRL Hits 4.5-Month High at 6.07</h3>
+                                <p class="news-summary">
+                                    Brazilian real weakened to 6.07 per USD, highest since early August. Despite currency pressure, producer selling remains limited as margins stay healthy, breaking traditional correlation patterns.
+                                </p>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-date">December 18, 2024</div>
+                                <div class="news-source">Vietnam Customs</div>
+                                <h3 class="news-title">Vietnam November Exports Surge 41% YoY</h3>
+                                <p class="news-summary">
+                                    Vietnam exported 88,812 tons of coffee in November (+41.0% YoY), valued at $803M. Year-to-date exports reach 1.374M tons (+11.8%) worth $7.94B (+24.7%), driven by strong harvest and competitive pricing.
+                                </p>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-date">December 17, 2024</div>
+                                <div class="news-source">EU Parliament</div>
+                                <h3 class="news-title">EUDR Implementation Delayed One Year</h3>
+                                <p class="news-summary">
+                                    European Parliament voted 405-242 to postpone EUDR enforcement to December 30, 2026 (large companies) and June 30, 2027 (small/micro companies). One-year delay removes near-term compliance pressure on coffee trade.
+                                </p>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-date">December 16, 2024</div>
+                                <div class="news-source">Climatempo</div>
+                                <h3 class="news-title">Brazil Forecast: "Strong and Sustained Rainfall"</h3>
+                                <p class="news-summary">
+                                    Climatempo forecasts continued heavy rainfall across Minas Gerais and other key growing regions through late December. Abundant moisture during flowering period (October-December) supports healthy 2026/27 crop development.
+                                </p>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-date">December 13, 2024</div>
+                                <div class="news-source">Weather Data</div>
+                                <h3 class="news-title">Minas Gerais Rainfall 155% of Average</h3>
+                                <p class="news-summary">
+                                    Minas Gerais received 79.8mm of rainfall in early December, 155% of historical average. Optimal moisture levels during critical flowering period enhance prospects for 2026/27 arabica production.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- 사이드바 -->
+                <aside class="sidebar">
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Key Issues</h3>
+                        <div class="sidebar-item">
+                            <strong>Brazilian Rainfall:</strong> 155% of average in Minas Gerais supports 2026/27 flowering. Hedgepoint forecasts 71-74.4M bags total production.
+                        </div>
+                        <div class="sidebar-item">
+                            <strong>Inventory Recovery:</strong> ICE arabica stocks up to 439K bags (7-week high) but still 45% below 5-year average.
+                        </div>
+                        <div class="sidebar-item">
+                            <strong>EUDR Delay:</strong> One-year postponement to Dec 2026 removes near-term trade disruption risks.
+                        </div>
+                        <div class="sidebar-item">
+                            <strong>Vietnam Surge:</strong> November exports +41% YoY to 88,812 tons, supporting global robusta availability.
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Next Week's Focus</h3>
+                        <div class="sidebar-item">
+                            Brazilian weather forecasts for late December/early January
+                        </div>
+                        <div class="sidebar-item">
+                            CFTC Commitments of Traders report (fund positioning)
+                        </div>
+                        <div class="sidebar-item">
+                            ICE inventory changes and certification trends
+                        </div>
+                        <div class="sidebar-item">
+                            USD/BRL exchange rate movements
+                        </div>
+                        <div class="sidebar-item">
+                            Colombia and Central America production updates
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Market Outlook</h3>
+                        <div class="sidebar-highlight">
+                            <p>
+                                <strong>Short-term (1-2 weeks):</strong> March futures likely consolidate in 330-360¢ range as market digests recent selloff. Brazilian rainfall forecasts and ICE inventory trends will drive direction.
+                            </p>
+                            <p style="margin-top: 12px;">
+                                <strong>Medium-term (1-3 months):</strong> Range-bound trading expected unless major weather disruptions emerge. Backwardation should gradually ease as inventory recovery continues.
+                            </p>
+                            <p style="margin-top: 12px;">
+                                <strong>Key Risks:</strong> January-February rainfall deficit in Brazil could trigger sharp rebound. Geopolitical disruptions or demand surge (EUDR stockpiling) could also support prices.
+                            </p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        Providing in-depth analysis and insights on global coffee markets. 
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">Barchart, Trading Economics</span>
+                    <span class="footer-link" style="cursor: default;">USDA FAS, Hedgepoint</span>
+                    <span class="footer-link" style="cursor: default;">Conab, Vietnam Customs</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    This report is provided for informational purposes only and does not constitute investment advice. 
+                    All investment decisions should be made based on the reader's independent judgment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 진행 표시
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+
+            // 네비게이션 스크롤 효과
+            const topNav = document.getElementById('topNav');
+            if (scrollTop > 100) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 요소 페이드인 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section, .data-item, .news-card, .scenario-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
