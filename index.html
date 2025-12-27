@@ -660,6 +660,13 @@
         }
 
         /* ========== 피처드 리포트 ========== */
+        .featured-reports-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
         .featured-report {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
@@ -672,9 +679,54 @@
             transition: all 0.3s ease;
         }
 
+        .featured-report.featured-report-half {
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-bottom: 0;
+            padding: 32px;
+        }
+
+        .featured-report.featured-indepth {
+            border-left: 3px solid var(--positive);
+        }
+
+        .featured-report.featured-report-half .featured-title {
+            font-size: 1.4rem;
+        }
+
+        .featured-report.featured-report-half .featured-summary {
+            font-size: 0.95rem;
+            -webkit-line-clamp: 3;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .featured-chart-section {
+            margin-bottom: 48px;
+        }
+
+        .featured-chart-section .featured-chart {
+            background: linear-gradient(135deg, rgba(232, 226, 217, 0.5), rgba(245, 240, 232, 0.3));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(26, 15, 10, 0.03);
+            min-height: 280px;
+        }
+
         .featured-report:hover {
             box-shadow: 0 12px 40px rgba(26, 15, 10, 0.08);
             border-color: rgba(184, 115, 51, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .featured-reports-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .featured-content {
@@ -1610,24 +1662,49 @@
                 </div>
             </div>
 
-            <!-- 피처드 리포트 -->
-            <article class="featured-report" id="featuredReport">
-                <div class="featured-content">
-                    <span class="featured-tag">Latest Weekly <span class="new-badge" id="featuredNewBadge">NEW</span></span>
-                    <h3 class="featured-title">
-                        <a href="Reports/2025/11/coffee-market-update-2025-11-29.html" id="featuredTitleLink">커피 선물 시장 주간 동향</a>
-                    </h3>
-                    <p class="featured-summary" id="featuredSummary">
-                        KCH26 시세는 376.00센트 부근에서 통합 움직임을 보이며, ICE 인증재고 398,645백으로 1.75년 저점, 
-                        브라질 건조날씨와 미국 관세철회 완료로 시장 변동성 지속. EU EUDR 시행 1년 연기 결정.
-                    </p>
-                    <div class="featured-meta">
-                        <span class="meta-date" id="featuredDate">2025년 11월 29일</span>
-                        <a href="Reports/2025/11/coffee-market-update-2025-11-29.html" class="read-link" id="featuredReadLink">
-                            Read Report <span>→</span>
-                        </a>
+            <!-- 피처드 리포트 2개: Weekly + In-depth -->
+            <div class="featured-reports-grid">
+                <!-- Latest Weekly 리포트 -->
+                <article class="featured-report featured-report-half" id="featuredWeeklyReport">
+                    <div class="featured-content">
+                        <span class="featured-tag">Latest Weekly <span class="new-badge" id="featuredWeeklyNewBadge">NEW</span></span>
+                        <h3 class="featured-title">
+                            <a href="Reports/2025/12/2025-12-29.html" id="featuredWeeklyTitleLink">커피 선물 시장 주간 동향</a>
+                        </h3>
+                        <p class="featured-summary" id="featuredWeeklySummary">
+                            주간 시장 동향 리포트를 로딩 중입니다...
+                        </p>
+                        <div class="featured-meta">
+                            <span class="meta-date" id="featuredWeeklyDate">2025년 12월 29일</span>
+                            <a href="Reports/2025/12/2025-12-29.html" class="read-link" id="featuredWeeklyReadLink">
+                                Read Report <span>→</span>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                </article>
+
+                <!-- Latest In-depth 리포트 -->
+                <article class="featured-report featured-report-half featured-indepth" id="featuredIndepthReport">
+                    <div class="featured-content">
+                        <span class="featured-tag" style="color: var(--positive);">Latest In-Depth <span class="new-badge" id="featuredIndepthNewBadge" style="background: linear-gradient(135deg, #4a7c59 0%, #3a6349 100%);">NEW</span></span>
+                        <h3 class="featured-title">
+                            <a href="Reports/2025/11/2025-11-27.html" id="featuredIndepthTitleLink">2026 Coffee Market Outlook</a>
+                        </h3>
+                        <p class="featured-summary" id="featuredIndepthSummary">
+                            인뎁스 분석 리포트를 로딩 중입니다...
+                        </p>
+                        <div class="featured-meta">
+                            <span class="meta-date" id="featuredIndepthDate">2025년 11월 27일</span>
+                            <a href="Reports/2025/11/2025-11-27.html" class="read-link" id="featuredIndepthReadLink">
+                                Read Report <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- 차트 섹션 (별도로 분리) -->
+            <div class="featured-chart-section">
                 <div class="featured-chart">
                     <div class="chart-header">
                         <span class="chart-title">Arabica Futures (KC)</span>
@@ -1638,7 +1715,7 @@
                         <canvas id="featuredChart" style="display: none;"></canvas>
                     </div>
                 </div>
-            </article>
+            </div>
 
             <!-- 리포트 그리드 -->
             <div class="reports-grid" id="reportsGrid">
@@ -1874,8 +1951,25 @@
 
         function renderReports() {
             const grid = document.getElementById('reportsGrid');
-            // 첫 번째는 피처드이므로 제외, 표시 개수만큼 보여줌
-            const reportsToShow = allReports.slice(1, currentDisplayCount + 1);
+            
+            // 피처드로 표시된 리포트들 제외 (Weekly 최신 1개, In-depth 최신 1개)
+            const latestWeekly = allReports.find(r => r.type === 'weekly');
+            const latestIndepth = allReports.find(r => 
+                r.type === 'in-depth-analysis' || 
+                r.type === 'in-depth' || 
+                r.type === 'statistical_analysis'
+            );
+            
+            const featuredLinks = [];
+            if (latestWeekly) featuredLinks.push(latestWeekly.link || latestWeekly.url);
+            if (latestIndepth) featuredLinks.push(latestIndepth.link || latestIndepth.url);
+            
+            // 피처드 리포트 제외한 나머지
+            const filteredReports = allReports.filter(r => 
+                !featuredLinks.includes(r.link || r.url)
+            );
+            
+            const reportsToShow = filteredReports.slice(0, currentDisplayCount);
             
             grid.innerHTML = reportsToShow.map(report => `
                 <article class="report-card">
@@ -1891,13 +1985,14 @@
                 </article>
             `).join('');
             
-            // 더보기 버튼 상태 업데이트
-            updateLoadMoreButton();
+            // 더보기 버튼 상태 업데이트 (피처드 제외 기준으로)
+            updateLoadMoreButton(filteredReports.length);
         }
 
-        function updateLoadMoreButton() {
+        function updateLoadMoreButton(totalFilteredCount) {
             const loadMoreBtn = document.getElementById('loadMoreBtn');
-            const remainingReports = allReports.length - 1 - currentDisplayCount;
+            const total = totalFilteredCount || allReports.length - 2; // 피처드 2개 제외
+            const remainingReports = total - currentDisplayCount;
             
             if (remainingReports <= 0 && isExpanded) {
                 loadMoreBtn.querySelector('span:first-child').textContent = 'Show Less';
@@ -1905,7 +2000,10 @@
             } else if (isExpanded) {
                 loadMoreBtn.querySelector('span:first-child').textContent = 'Show Less';
                 loadMoreBtn.classList.add('expanded');
+            } else if (remainingReports <= 0) {
+                loadMoreBtn.style.display = 'none';
             } else {
+                loadMoreBtn.style.display = 'inline-flex';
                 loadMoreBtn.querySelector('span:first-child').textContent = `More Reports (${remainingReports} more)`;
                 loadMoreBtn.classList.remove('expanded');
             }
@@ -1914,37 +2012,85 @@
         function updateFeaturedReport() {
             if (allReports.length === 0) return;
             
-            // 최신 weekly 리포트 찾기 (featured-annual은 별도 섹션)
+            // 최신 weekly 리포트 찾기
             const latestWeekly = allReports.find(r => r.type === 'weekly') || allReports[0];
             
-            const featuredTitleLink = document.getElementById('featuredTitleLink');
-            const featuredSummary = document.getElementById('featuredSummary');
-            const featuredDate = document.getElementById('featuredDate');
-            const featuredReadLink = document.getElementById('featuredReadLink');
-            const featuredNewBadge = document.getElementById('featuredNewBadge');
+            // 최신 in-depth 리포트 찾기
+            const latestIndepth = allReports.find(r => 
+                r.type === 'in-depth-analysis' || 
+                r.type === 'in-depth' || 
+                r.type === 'statistical_analysis'
+            );
             
-            if (featuredTitleLink) {
-                featuredTitleLink.textContent = latestWeekly.title;
-                featuredTitleLink.href = latestWeekly.link || latestWeekly.url;
+            // === Weekly 리포트 업데이트 ===
+            const weeklyTitleLink = document.getElementById('featuredWeeklyTitleLink');
+            const weeklySummary = document.getElementById('featuredWeeklySummary');
+            const weeklyDate = document.getElementById('featuredWeeklyDate');
+            const weeklyReadLink = document.getElementById('featuredWeeklyReadLink');
+            const weeklyNewBadge = document.getElementById('featuredWeeklyNewBadge');
+            
+            if (weeklyTitleLink && latestWeekly) {
+                weeklyTitleLink.textContent = latestWeekly.title;
+                weeklyTitleLink.href = latestWeekly.link || latestWeekly.url;
             }
-            if (featuredSummary) {
-                featuredSummary.textContent = latestWeekly.summary || '리포트 요약 정보가 없습니다.';
+            if (weeklySummary && latestWeekly) {
+                weeklySummary.textContent = latestWeekly.summary || '리포트 요약 정보가 없습니다.';
             }
-            if (featuredDate) {
-                featuredDate.textContent = formatDate(latestWeekly.date);
+            if (weeklyDate && latestWeekly) {
+                weeklyDate.textContent = formatDate(latestWeekly.date);
             }
-            if (featuredReadLink) {
-                featuredReadLink.href = latestWeekly.link || latestWeekly.url;
+            if (weeklyReadLink && latestWeekly) {
+                weeklyReadLink.href = latestWeekly.link || latestWeekly.url;
             }
             
-            // NEW 배지 표시 여부 (7일 이내 리포트인 경우에만 표시)
-            const reportDate = new Date(latestWeekly.date);
-            const now = new Date();
-            const diffDays = (now - reportDate) / (1000 * 60 * 60 * 24);
-            const showBadge = diffDays <= 7 ? 'inline-block' : 'none';
+            // Weekly NEW 배지 표시 여부 (7일 이내)
+            if (weeklyNewBadge && latestWeekly) {
+                const weeklyReportDate = new Date(latestWeekly.date);
+                const now = new Date();
+                const diffDays = (now - weeklyReportDate) / (1000 * 60 * 60 * 24);
+                weeklyNewBadge.style.display = diffDays <= 7 ? 'inline-block' : 'none';
+            }
             
-            if (featuredNewBadge) {
-                featuredNewBadge.style.display = showBadge;
+            // === In-depth 리포트 업데이트 ===
+            const indepthTitleLink = document.getElementById('featuredIndepthTitleLink');
+            const indepthSummary = document.getElementById('featuredIndepthSummary');
+            const indepthDate = document.getElementById('featuredIndepthDate');
+            const indepthReadLink = document.getElementById('featuredIndepthReadLink');
+            const indepthNewBadge = document.getElementById('featuredIndepthNewBadge');
+            
+            if (latestIndepth) {
+                if (indepthTitleLink) {
+                    indepthTitleLink.textContent = latestIndepth.title;
+                    indepthTitleLink.href = latestIndepth.link || latestIndepth.url;
+                }
+                if (indepthSummary) {
+                    indepthSummary.textContent = latestIndepth.summary || '리포트 요약 정보가 없습니다.';
+                }
+                if (indepthDate) {
+                    indepthDate.textContent = formatDate(latestIndepth.date);
+                }
+                if (indepthReadLink) {
+                    indepthReadLink.href = latestIndepth.link || latestIndepth.url;
+                }
+                
+                // In-depth NEW 배지 표시 여부 (14일 이내 - 인뎁스는 더 오래 유지)
+                if (indepthNewBadge) {
+                    const indepthReportDate = new Date(latestIndepth.date);
+                    const now = new Date();
+                    const diffDays = (now - indepthReportDate) / (1000 * 60 * 60 * 24);
+                    indepthNewBadge.style.display = diffDays <= 14 ? 'inline-block' : 'none';
+                }
+            } else {
+                // In-depth 리포트가 없을 경우 해당 섹션 숨기기
+                const indepthReport = document.getElementById('featuredIndepthReport');
+                if (indepthReport) {
+                    indepthReport.style.display = 'none';
+                }
+                // 그리드를 1열로 변경
+                const featuredGrid = document.querySelector('.featured-reports-grid');
+                if (featuredGrid) {
+                    featuredGrid.style.gridTemplateColumns = '1fr';
+                }
             }
             
             // 리포트 개수 업데이트
@@ -2266,6 +2412,16 @@
             const loadMoreBtn = document.getElementById('loadMoreBtn');
             if (loadMoreBtn) {
                 loadMoreBtn.addEventListener('click', () => {
+                    // 피처드 리포트들 계산
+                    const latestWeekly = allReports.find(r => r.type === 'weekly');
+                    const latestIndepth = allReports.find(r => 
+                        r.type === 'in-depth-analysis' || 
+                        r.type === 'in-depth' || 
+                        r.type === 'statistical_analysis'
+                    );
+                    const featuredCount = (latestWeekly ? 1 : 0) + (latestIndepth ? 1 : 0);
+                    const totalFiltered = allReports.length - featuredCount;
+                    
                     if (isExpanded) {
                         // 접기
                         isExpanded = false;
@@ -2273,7 +2429,7 @@
                     } else {
                         // 모든 리포트 표시
                         isExpanded = true;
-                        currentDisplayCount = allReports.length - 1;
+                        currentDisplayCount = totalFiltered;
                     }
                     renderReports();
                 });
