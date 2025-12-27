@@ -659,6 +659,13 @@
         }
 
         /* ========== Featured Report ========== */
+        .featured-reports-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
         .featured-report {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
@@ -671,9 +678,54 @@
             transition: all 0.3s ease;
         }
 
+        .featured-report.featured-report-half {
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-bottom: 0;
+            padding: 32px;
+        }
+
+        .featured-report.featured-indepth {
+            border-left: 3px solid var(--positive);
+        }
+
+        .featured-report.featured-report-half .featured-title {
+            font-size: 1.4rem;
+        }
+
+        .featured-report.featured-report-half .featured-summary {
+            font-size: 0.95rem;
+            -webkit-line-clamp: 3;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .featured-chart-section {
+            margin-bottom: 48px;
+        }
+
+        .featured-chart-section .featured-chart {
+            background: linear-gradient(135deg, rgba(232, 226, 217, 0.5), rgba(245, 240, 232, 0.3));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(26, 15, 10, 0.03);
+            min-height: 280px;
+        }
+
         .featured-report:hover {
             box-shadow: 0 12px 40px rgba(26, 15, 10, 0.08);
             border-color: rgba(184, 115, 51, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .featured-reports-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .featured-content {
@@ -1551,55 +1603,6 @@
         </div>
     </section>
 
-    <!-- Featured Report Section (2026 Annual Outlook) -->
-    <section class="reports-section" id="featured-annual">
-        <div class="main-container">
-            <div class="section-header">
-                <div class="section-title-group">
-                    <span class="section-number">★</span>
-                    <h2 class="section-title">Featured Report</h2>
-                    <div class="section-line"></div>
-                </div>
-            </div>
-
-            <!-- 2026 Annual Outlook Report -->
-            <article class="featured-report featured-annual-report">
-                <div class="featured-content">
-                    <span class="featured-tag">
-                        <span style="color: var(--copper);">●</span> In-Depth Analysis 
-                        <span class="new-badge" style="background: linear-gradient(135deg, #c23a3a 0%, #9c2b2b 100%);">MUST READ</span>
-                    </span>
-                    <h3 class="featured-title">
-                        <a href="Reports/2025/11/2025-11-27.html">2026 Coffee Market Outlook</a>
-                    </h3>
-                    <p class="featured-summary">
-                        The 2026 coffee market enters a new era of high-cost normal driven by La Niña transition, 
-                        EUDR 1-year delay, and structural logistics challenges. While EUDR delay reduces regulatory 
-                        supply shock risks, this report provides in-depth analysis of 5 key drivers, scenario-based 
-                        price forecasts, and response strategies for roasters and traders.
-                    </p>
-                    <div class="featured-meta">
-                        <span class="meta-date">November 27, 2025</span>
-                        <a href="Reports/2025/11/2025-11-27.html" class="read-link">
-                            Read Full Report <span>→</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="featured-chart" style="background: linear-gradient(135deg, rgba(184, 115, 51, 0.08), rgba(196, 165, 116, 0.05)); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px;">
-                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.15;">☕</div>
-                    <div style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 600; color: var(--espresso); margin-bottom: 10px;">2026</div>
-                    <div style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--copper); margin-bottom: 20px;">Annual Outlook</div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
-                        <span style="background: rgba(184, 115, 51, 0.1); color: var(--copper); padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 600;">La Niña</span>
-                        <span style="background: rgba(184, 115, 51, 0.1); color: var(--copper); padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 600;">EUDR Delay</span>
-                        <span style="background: rgba(184, 115, 51, 0.1); color: var(--copper); padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 600;">Price Forecast</span>
-                        <span style="background: rgba(184, 115, 51, 0.1); color: var(--copper); padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 600;">Strategy</span>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </section>
-
     <!-- Reports Section -->
     <section class="reports-section" id="reports">
         <div class="main-container">
@@ -1611,25 +1614,49 @@
                 </div>
             </div>
 
-            <!-- Featured Report -->
-            <article class="featured-report" id="featuredReport">
-                <div class="featured-content">
-                    <span class="featured-tag">Latest Weekly <span class="new-badge" id="featuredNewBadge">NEW</span></span>
-                    <h3 class="featured-title">
-                        <a href="Reports/2025/11/coffee-market-update-2025-11-29.html" id="featuredTitleLink">Coffee Futures Market Weekly Update</a>
-                    </h3>
-                    <p class="featured-summary" id="featuredSummary">
-                        KCH26 consolidating near 376.00 cents, ICE certified stocks at 398,645 bags (1.75-year low), 
-                        market volatility continues amid Brazil dry weather and US tariff rollback completion. 
-                        EU EUDR implementation delayed by 1 year.
-                    </p>
-                    <div class="featured-meta">
-                        <span class="meta-date" id="featuredDate">November 29, 2025</span>
-                        <a href="Reports/2025/11/coffee-market-update-2025-11-29.html" class="read-link" id="featuredReadLink">
-                            Read Report <span>→</span>
-                        </a>
+            <!-- Featured Reports: Weekly + In-depth -->
+            <div class="featured-reports-grid">
+                <!-- Latest Weekly Report -->
+                <article class="featured-report featured-report-half" id="featuredWeeklyReport">
+                    <div class="featured-content">
+                        <span class="featured-tag">Latest Weekly <span class="new-badge" id="featuredWeeklyNewBadge">NEW</span></span>
+                        <h3 class="featured-title">
+                            <a href="Reports/2025/12/2025-12-29-en.html" id="featuredWeeklyTitleLink">Coffee Futures Market Weekly Update</a>
+                        </h3>
+                        <p class="featured-summary" id="featuredWeeklySummary">
+                            Loading weekly report...
+                        </p>
+                        <div class="featured-meta">
+                            <span class="meta-date" id="featuredWeeklyDate">December 29, 2025</span>
+                            <a href="Reports/2025/12/2025-12-29-en.html" class="read-link" id="featuredWeeklyReadLink">
+                                Read Report <span>→</span>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                </article>
+
+                <!-- Latest In-depth Report -->
+                <article class="featured-report featured-report-half featured-indepth" id="featuredIndepthReport">
+                    <div class="featured-content">
+                        <span class="featured-tag" style="color: var(--positive);">Latest In-Depth <span class="new-badge" id="featuredIndepthNewBadge" style="background: linear-gradient(135deg, #4a7c59 0%, #3a6349 100%);">NEW</span></span>
+                        <h3 class="featured-title">
+                            <a href="Reports/2025/11/2025-11-27-en.html" id="featuredIndepthTitleLink">2026 Coffee Market Outlook</a>
+                        </h3>
+                        <p class="featured-summary" id="featuredIndepthSummary">
+                            Loading in-depth report...
+                        </p>
+                        <div class="featured-meta">
+                            <span class="meta-date" id="featuredIndepthDate">November 27, 2025</span>
+                            <a href="Reports/2025/11/2025-11-27-en.html" class="read-link" id="featuredIndepthReadLink">
+                                Read Report <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="featured-chart-section">
                 <div class="featured-chart">
                     <div class="chart-header">
                         <span class="chart-title">Arabica Futures (KC)</span>
@@ -1640,7 +1667,7 @@
                         <canvas id="featuredChart" style="display: none;"></canvas>
                     </div>
                 </div>
-            </article>
+            </div>
 
             <!-- Reports Grid -->
             <div class="reports-grid" id="reportsGrid">
@@ -1841,7 +1868,24 @@
 
         function renderReports() {
             const grid = document.getElementById('reportsGrid');
-            const reportsToShow = allReports.slice(1, currentDisplayCount + 1);
+            
+            // Exclude featured reports (Latest Weekly + Latest In-depth)
+            const latestWeekly = allReports.find(r => r.type === 'weekly');
+            const latestIndepth = allReports.find(r => 
+                r.type === 'in-depth-analysis' || 
+                r.type === 'in-depth' || 
+                r.type === 'statistical_analysis'
+            );
+            
+            const featuredLinks = [];
+            if (latestWeekly) featuredLinks.push(latestWeekly.link || latestWeekly.url);
+            if (latestIndepth) featuredLinks.push(latestIndepth.link || latestIndepth.url);
+            
+            const filteredReports = allReports.filter(r => 
+                !featuredLinks.includes(r.link || r.url)
+            );
+            
+            const reportsToShow = filteredReports.slice(0, currentDisplayCount);
             
             grid.innerHTML = reportsToShow.map(report => `
                 <article class="report-card">
@@ -1857,12 +1901,13 @@
                 </article>
             `).join('');
             
-            updateLoadMoreButton();
+            updateLoadMoreButton(filteredReports.length);
         }
 
-        function updateLoadMoreButton() {
+        function updateLoadMoreButton(totalFilteredCount) {
             const loadMoreBtn = document.getElementById('loadMoreBtn');
-            const remainingReports = allReports.length - 1 - currentDisplayCount;
+            const total = totalFilteredCount || allReports.length - 2;
+            const remainingReports = total - currentDisplayCount;
             
             if (remainingReports <= 0 && isExpanded) {
                 loadMoreBtn.querySelector('span:first-child').textContent = 'Show Less';
@@ -1870,7 +1915,10 @@
             } else if (isExpanded) {
                 loadMoreBtn.querySelector('span:first-child').textContent = 'Show Less';
                 loadMoreBtn.classList.add('expanded');
+            } else if (remainingReports <= 0) {
+                loadMoreBtn.style.display = 'none';
             } else {
+                loadMoreBtn.style.display = 'inline-flex';
                 loadMoreBtn.querySelector('span:first-child').textContent = `More Reports (${remainingReports} more)`;
                 loadMoreBtn.classList.remove('expanded');
             }
@@ -1879,37 +1927,87 @@
         function updateFeaturedReport() {
             if (allReports.length === 0) return;
             
+            // Find latest weekly report
             const latestWeekly = allReports.find(r => r.type === 'weekly') || allReports[0];
             
-            const featuredTitleLink = document.getElementById('featuredTitleLink');
-            const featuredSummary = document.getElementById('featuredSummary');
-            const featuredDate = document.getElementById('featuredDate');
-            const featuredReadLink = document.getElementById('featuredReadLink');
-            const featuredNewBadge = document.getElementById('featuredNewBadge');
+            // Find latest in-depth report
+            const latestIndepth = allReports.find(r => 
+                r.type === 'in-depth-analysis' || 
+                r.type === 'in-depth' || 
+                r.type === 'statistical_analysis'
+            );
             
-            if (featuredTitleLink) {
-                featuredTitleLink.textContent = latestWeekly.title;
-                featuredTitleLink.href = latestWeekly.link || latestWeekly.url;
+            // === Weekly Report Update ===
+            const weeklyTitleLink = document.getElementById('featuredWeeklyTitleLink');
+            const weeklySummary = document.getElementById('featuredWeeklySummary');
+            const weeklyDate = document.getElementById('featuredWeeklyDate');
+            const weeklyReadLink = document.getElementById('featuredWeeklyReadLink');
+            const weeklyNewBadge = document.getElementById('featuredWeeklyNewBadge');
+            
+            if (weeklyTitleLink && latestWeekly) {
+                weeklyTitleLink.textContent = latestWeekly.title;
+                weeklyTitleLink.href = latestWeekly.link || latestWeekly.url;
             }
-            if (featuredSummary) {
-                featuredSummary.textContent = latestWeekly.summary || 'No summary available.';
+            if (weeklySummary && latestWeekly) {
+                weeklySummary.textContent = latestWeekly.summary || 'No summary available.';
             }
-            if (featuredDate) {
-                featuredDate.textContent = formatDate(latestWeekly.date);
+            if (weeklyDate && latestWeekly) {
+                weeklyDate.textContent = formatDate(latestWeekly.date);
             }
-            if (featuredReadLink) {
-                featuredReadLink.href = latestWeekly.link || latestWeekly.url;
+            if (weeklyReadLink && latestWeekly) {
+                weeklyReadLink.href = latestWeekly.link || latestWeekly.url;
             }
             
-            const reportDate = new Date(latestWeekly.date);
-            const now = new Date();
-            const diffDays = (now - reportDate) / (1000 * 60 * 60 * 24);
-            const showBadge = diffDays <= 7 ? 'inline-block' : 'none';
-            
-            if (featuredNewBadge) {
-                featuredNewBadge.style.display = showBadge;
+            // Weekly NEW badge (within 7 days)
+            if (weeklyNewBadge && latestWeekly) {
+                const weeklyReportDate = new Date(latestWeekly.date);
+                const now = new Date();
+                const diffDays = (now - weeklyReportDate) / (1000 * 60 * 60 * 24);
+                weeklyNewBadge.style.display = diffDays <= 7 ? 'inline-block' : 'none';
             }
             
+            // === In-depth Report Update ===
+            const indepthTitleLink = document.getElementById('featuredIndepthTitleLink');
+            const indepthSummary = document.getElementById('featuredIndepthSummary');
+            const indepthDate = document.getElementById('featuredIndepthDate');
+            const indepthReadLink = document.getElementById('featuredIndepthReadLink');
+            const indepthNewBadge = document.getElementById('featuredIndepthNewBadge');
+            
+            if (latestIndepth) {
+                if (indepthTitleLink) {
+                    indepthTitleLink.textContent = latestIndepth.title;
+                    indepthTitleLink.href = latestIndepth.link || latestIndepth.url;
+                }
+                if (indepthSummary) {
+                    indepthSummary.textContent = latestIndepth.summary || 'No summary available.';
+                }
+                if (indepthDate) {
+                    indepthDate.textContent = formatDate(latestIndepth.date);
+                }
+                if (indepthReadLink) {
+                    indepthReadLink.href = latestIndepth.link || latestIndepth.url;
+                }
+                
+                // In-depth NEW badge (within 14 days)
+                if (indepthNewBadge) {
+                    const indepthReportDate = new Date(latestIndepth.date);
+                    const now = new Date();
+                    const diffDays = (now - indepthReportDate) / (1000 * 60 * 60 * 24);
+                    indepthNewBadge.style.display = diffDays <= 14 ? 'inline-block' : 'none';
+                }
+            } else {
+                // Hide in-depth section if no reports
+                const indepthReport = document.getElementById('featuredIndepthReport');
+                if (indepthReport) {
+                    indepthReport.style.display = 'none';
+                }
+                const featuredGrid = document.querySelector('.featured-reports-grid');
+                if (featuredGrid) {
+                    featuredGrid.style.gridTemplateColumns = '1fr';
+                }
+            }
+            
+            // Update report count
             const reportCount = document.getElementById('reportCount');
             if (reportCount) {
                 reportCount.textContent = allReports.length;
@@ -2205,12 +2303,22 @@
             const loadMoreBtn = document.getElementById('loadMoreBtn');
             if (loadMoreBtn) {
                 loadMoreBtn.addEventListener('click', () => {
+                    // Calculate featured reports
+                    const latestWeekly = allReports.find(r => r.type === 'weekly');
+                    const latestIndepth = allReports.find(r => 
+                        r.type === 'in-depth-analysis' || 
+                        r.type === 'in-depth' || 
+                        r.type === 'statistical_analysis'
+                    );
+                    const featuredCount = (latestWeekly ? 1 : 0) + (latestIndepth ? 1 : 0);
+                    const totalFiltered = allReports.length - featuredCount;
+                    
                     if (isExpanded) {
                         isExpanded = false;
                         currentDisplayCount = INITIAL_DISPLAY_COUNT;
                     } else {
                         isExpanded = true;
-                        currentDisplayCount = allReports.length - 1;
+                        currentDisplayCount = totalFiltered;
                     }
                     renderReports();
                 });
