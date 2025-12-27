@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUDR Coffee Market Analysis | December 2025</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "EUDR Coffee Market In-Depth Analysis",
+    "subtitle": "EU Deforestation Regulation: Impact Analysis for Korean Coffee Industry",
+    "date": "2025-12-31",
+    "summary": "EU Deforestation Regulation (EUDR) postponed by 1 year, providing final preparation window for Korean coffee industry. Large operators face December 30, 2026 deadline; SMEs face June 30, 2027. Brazil and Colombia show high readiness for EUDR compliance, while Ethiopia and Indonesia struggle with smallholder structures. Global coffee market bifurcating into compliant/non-compliant streams, with Korea facing both price increase pressure and potential influx of non-compliant beans. Estimated $150-290/MT additional compliance costs. Key strategies include supply chain assessment, pricing scenario planning, and strategic positioning decisions.",
+    "tags": ["EUDR", "Deforestation Regulation", "Coffee Supply Chain", "Sustainability", "Traceability", "Brazil", "Vietnam", "Ethiopia", "Colombia", "Green Premium"],
+    "author": "Align Commodities",
+    "sources": ["EU Parliament", "USDA FAS", "Cecafé", "FNC Colombia", "VICOFA", "Korea Forest Service", "Hedgepoint", "TraceX", "ICO"],
+    "report_type": "in-depth"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --forest: #2d5016;
+            --warning: #d4a017;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--forest), var(--positive));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--forest), var(--positive));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--roast);
+            opacity: 0.8;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        .key-stats-hero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        .stat-value.deadline {
+            color: var(--warning);
+        }
+
+        .stat-note {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 60px;
+            padding: clamp(40px, 6vh, 60px) 0;
+        }
+
+        @media (max-width: 1024px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        main {
+            min-width: 0;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--copper), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--roast);
+            margin: 32px 0 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--ink);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.08), rgba(74, 124, 89, 0.08));
+            border-left: 4px solid var(--positive);
+            padding: 20px 24px;
+            border-radius: 0 12px 12px 0;
+            margin: 24px 0;
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, rgba(212, 160, 23, 0.08), rgba(212, 160, 23, 0.04));
+            border-left-color: var(--warning);
+        }
+
+        .highlight-box.negative {
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.08), rgba(194, 58, 58, 0.04));
+            border-left-color: var(--negative);
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 24px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--positive), var(--warning), var(--negative));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 3px solid var(--positive);
+            border-radius: 50%;
+        }
+
+        .timeline-item.warning::before {
+            border-color: var(--warning);
+        }
+
+        .timeline-item.critical::before {
+            border-color: var(--negative);
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--roast);
+            font-size: 0.9rem;
+        }
+
+        .timeline-content {
+            margin-top: 4px;
+            color: var(--ink);
+        }
+
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        @media (max-width: 768px) {
+            .country-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .country-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .country-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .country-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .country-flag {
+            font-size: 2rem;
+        }
+
+        .country-name {
+            font-weight: 600;
+            color: var(--espresso);
+            font-size: 1.1rem;
+        }
+
+        .country-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .status-ready {
+            background: rgba(74, 124, 89, 0.15);
+            color: var(--positive);
+        }
+
+        .status-progress {
+            background: rgba(212, 160, 23, 0.15);
+            color: var(--warning);
+        }
+
+        .status-risk {
+            background: rgba(194, 58, 58, 0.15);
+            color: var(--negative);
+        }
+
+        .country-details {
+            font-size: 0.9rem;
+            color: var(--ink);
+            line-height: 1.7;
+        }
+
+        .country-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .country-stat:last-child {
+            border-bottom: none;
+        }
+
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+        }
+
+        .cost-table th {
+            background: var(--roast);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .cost-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            font-size: 0.95rem;
+        }
+
+        .cost-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cost-table tr:hover {
+            background: rgba(26, 15, 10, 0.02);
+        }
+
+        .cost-table .total-row {
+            background: var(--steam);
+            font-weight: 600;
+        }
+
+        .solution-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            margin: 20px 0;
+        }
+
+        .solution-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .solution-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--copper), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .solution-name {
+            font-weight: 600;
+            color: var(--espresso);
+            font-size: 1.1rem;
+        }
+
+        .solution-tech {
+            font-size: 0.8rem;
+            color: var(--copper);
+        }
+
+        .solution-features {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .solution-features li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--positive);
+            font-weight: 600;
+        }
+
+        .roadmap {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            margin: 24px 0;
+        }
+
+        .roadmap-phase {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .roadmap-phase:last-child {
+            border-bottom: none;
+        }
+
+        .phase-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--copper), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .phase-content {
+            flex: 1;
+        }
+
+        .phase-title {
+            font-weight: 600;
+            color: var(--espresso);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .phase-period {
+            font-size: 0.85rem;
+            color: var(--copper);
+            margin-bottom: 8px;
+        }
+
+        .phase-tasks {
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .toc-item:last-child {
+            border-bottom: none;
+        }
+
+        .toc-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            display: block;
+        }
+
+        .toc-link:hover {
+            color: var(--copper);
+        }
+
+        .key-point {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .key-point:last-child {
+            border-bottom: none;
+        }
+
+        .key-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--steam);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .key-text {
+            font-size: 0.9rem;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            padding: 6px 0;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(245, 240, 232, 0.1);
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 12px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Align Commodities</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#regulation" class="nav-link">Regulation</a>
+            <a href="#supply-chain" class="nav-link">Supply Chain</a>
+            <a href="#strategy" class="nav-link">Strategy</a>
+        </div>
+    </nav>
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <header class="hero-header">
+                <div class="report-badge">
+                    <span>🌳</span>
+                    <span>In-Depth Analysis</span>
+                </div>
+                
+                <div class="report-meta">
+                    <span class="meta-item">December 31, 2025</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">Align Commodities Research</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">15 min read</span>
+                </div>
+                
+                <h1>EUDR Coffee Market In-Depth Analysis</h1>
+                <p class="subtitle">How the EU Deforestation Regulation Will Reshape Global Coffee Supply Chains and What Korean Roasters & Importers Need to Know</p>
+
+                <div class="key-stats-hero">
+                    <div class="stat-card">
+                        <div class="stat-label">Large Operators Deadline</div>
+                        <div class="stat-value deadline">Dec 30, 2026</div>
+                        <div class="stat-note">D-364 days (EU importer basis)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">SME Deadline</div>
+                        <div class="stat-value deadline">Jun 30, 2027</div>
+                        <div class="stat-note">D-546 days (EU importer basis)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">EU Market Share</div>
+                        <div class="stat-value">~30%</div>
+                        <div class="stat-note">of global coffee consumption</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Est. Added Cost</div>
+                        <div class="stat-value">$150-290</div>
+                        <div class="stat-note">per MT compliance</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-layout">
+                <main>
+                    <!-- Section 1: Overview -->
+                    <section id="overview" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📋</div>
+                            <h2>Executive Summary</h2>
+                        </div>
+                        
+                        <p>
+                            On December 4, 2025, the European Parliament adopted an amendment postponing the EU Deforestation Regulation (EUDR) by one year, with an overwhelming vote of 405 to 242. Large operators and traders now face a December 30, 2026 deadline, while SMEs have until June 30, 2027.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">Key Message</div>
+                            <p style="margin-bottom: 0;">
+                                This postponement is not a reprieve—it's the <strong>final window of opportunity</strong> for the Korean coffee industry to prepare. The global coffee supply chain is already bifurcating into 'EUDR-compliant' and 'non-compliant' streams, directly impacting prices and availability in non-EU markets like Korea.
+                            </p>
+                        </div>
+
+                        <h3>Three Key Challenges for the Korean Market</h3>
+                        
+                        <p>
+                            <strong>① Supply Chain Disruption & Cost Increases:</strong> Global traders are investing heavily in EUDR compliance infrastructure, passing these costs through as a 'Green Premium' on green bean prices. Korean importers face price pressure despite not being directly regulated.
+                        </p>
+                        
+                        <p>
+                            <strong>② Export Business Survival:</strong> Korean companies exporting mix coffee, RTD beverages to the EU must prove their coffee is deforestation-free by late 2026. Palm oil (used in creamers) is also covered, creating dual compliance challenges.
+                        </p>
+                        
+                        <p>
+                            <strong>③ ESG & Ethical Consumption Pressure:</strong> If Korea becomes a dumping ground for EU-rejected 'deforestation coffee,' companies face significant brand reputation risks as consumer awareness of sustainability issues grows.
+                        </p>
+                    </section>
+
+                    <!-- Section 2: Regulation Deep Dive -->
+                    <section id="regulation" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">⚖️</div>
+                            <h2>EUDR Regulation Deep Dive</h2>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💡 Large Operator vs SME: Who Does This Apply To?</div>
+                            <p>
+                                EUDR's large/SME distinction applies to <strong>operators placing products on the EU market or traders importing into the EU—not coffee farmers</strong>.
+                            </p>
+                            <table class="cost-table" style="margin: 16px 0 0 0; box-shadow: none;">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>EU Definition</th>
+                                        <th>Deadline</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Large Operators</strong></td>
+                                        <td>250+ employees OR €50M+ annual turnover</td>
+                                        <td>Dec 30, 2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>SMEs</strong></td>
+                                        <td>&lt;250 employees AND &lt;€50M turnover</td>
+                                        <td>Jun 30, 2027</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p style="margin: 12px 0 0 0; font-size: 0.9rem;">
+                                <strong>Coffee farmers are not directly subject to EUDR.</strong> However, they must provide the data (GPS coordinates, traceability information) that EU importers require to continue trading.
+                            </p>
+                        </div>
+
+                        <h3>Implementation Timeline</h3>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">December 31, 2020</div>
+                                <div class="timeline-content">
+                                    <strong>Cut-off Date</strong> — Coffee from land deforested after this date cannot be exported to the EU
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">December 4, 2025</div>
+                                <div class="timeline-content">
+                                    <strong>Postponement Confirmed</strong> — EU Parliament adopts 1-year delay (405 vs 242)
+                                </div>
+                            </div>
+                            <div class="timeline-item warning">
+                                <div class="timeline-date">December 30, 2026</div>
+                                <div class="timeline-content">
+                                    <strong>Large Operators</strong> — Full enforcement for large companies and traders
+                                </div>
+                            </div>
+                            <div class="timeline-item critical">
+                                <div class="timeline-date">June 30, 2027</div>
+                                <div class="timeline-content">
+                                    <strong>SME Extension</strong> — Full enforcement extended to small and medium enterprises
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Core Compliance Requirements</h3>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">1. Geolocation Data</div>
+                            <p>
+                                <strong>Plots under 4 hectares:</strong> Single GPS point identifying farm location<br>
+                                <strong>Plots 4+ hectares:</strong> Polygon mapping of entire farm boundaries required
+                            </p>
+                            <p style="margin-bottom: 0;">
+                                This data is cross-referenced with satellite imagery to verify no deforestation or degradation occurred on the land after December 31, 2020.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">2. Due Diligence Statement (DDS)</div>
+                            <p style="margin-bottom: 0;">
+                                Operators placing products on the EU market must submit a DDS before customs clearance. Upon approval, a Reference Number is issued—without it, goods cannot clear customs. Korean exporters must provide complete data to their EU partners.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">3. Traceability & Segregation</div>
+                            <p style="margin-bottom: 0;">
+                                Physical flow must be tracked from harvest through processing, storage, and export. For blended coffees, if <strong>even one bean</strong> traces to a deforested area, the entire batch may be rejected or destroyed.
+                            </p>
+                        </div>
+
+                        <h3>Risk Benchmarking System</h3>
+                        <p>
+                            The EU Commission will classify countries/regions as <strong>'Low'</strong>, <strong>'Standard'</strong>, or <strong>'High'</strong> risk.
+                        </p>
+                        <ul style="margin-left: 20px; margin-bottom: 16px;">
+                            <li><strong>Low-risk countries:</strong> Simplified due diligence, lower inspection rates</li>
+                            <li><strong>High-risk countries:</strong> Enhanced due diligence, higher inspection rates</li>
+                        </ul>
+                        <p>
+                            This classification will influence which origins Korean importers prefer, as high-risk origins face greater customs delay risks.
+                        </p>
+                    </section>
+
+                    <!-- Section 3: Origin Analysis -->
+                    <section id="supply-chain" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🌍</div>
+                            <h2>Major Origin Readiness Analysis</h2>
+                        </div>
+
+                        <p>
+                            As of late 2025, EUDR readiness varies dramatically across producing countries—a critical variable for future pricing and supply stability.
+                        </p>
+
+                        <div class="country-grid">
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇧🇷</span>
+                                    <span class="country-name">Brazil</span>
+                                    <span class="country-status status-ready">Ready</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        The world's largest producer benefits from large-farm structures. Cecafé's digital traceability platform and pilot tests with JDE Peet's are complete.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>2025/26 Production</span>
+                                        <span><strong>63M bags</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>Polygon Mapping</span>
+                                        <span><strong>Mostly complete</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>Korea Impact</span>
+                                        <span>Price pressure from demand shift</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇨🇴</span>
+                                    <span class="country-name">Colombia</span>
+                                    <span class="country-status status-ready">Ready</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        FNC's strong organizational capacity has secured GPS data for 99% of farms, with 73% producer consent for data usage—among the highest globally.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>GPS Data Coverage</span>
+                                        <span><strong>99%</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>Data Consent Rate</span>
+                                        <span><strong>73%</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>Korea Impact</span>
+                                        <span>Reliable premium supply</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇻🇳</span>
+                                    <span class="country-name">Vietnam</span>
+                                    <span class="country-status status-progress">In Progress</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        The world's largest Robusta producer has MARD working with UNDP on a national farmer database. 2025 exports hit a record $8.4 billion.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>2025 Export Value</span>
+                                        <span><strong>$8.4B</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>EUDR Readiness</span>
+                                        <span>Government-led progress</span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>Korea Impact</span>
+                                        <span>Instant/mix coffee cost rise</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇪🇹</span>
+                                    <span class="country-name">Ethiopia</span>
+                                    <span class="country-status status-risk">High Risk</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        The birthplace of coffee, with ~5 million smallholders growing 'garden coffee' in forest settings. Satellite imagery struggles to distinguish farms from forests.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>Smallholders</span>
+                                        <span><strong>~5 million</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>GPS Data</span>
+                                        <span style="color: var(--negative);">Collection struggling</span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>Korea Impact</span>
+                                        <span>Non-compliant volume inflow risk</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box negative">
+                            <div class="highlight-title">⚠️ Indonesia Flood Damage Alert</div>
+                            <p style="margin-bottom: 0;">
+                                In December 2025, massive floods and landslides hit Sumatra's Gayo Highland coffee region. Approximately 90,000 hectares of Sumatra Gayo Arabica plantations were affected, with exports projected to decline up to 15%. This creates additional obstacles for EUDR compliance efforts.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Section 4: Cost Analysis -->
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💰</div>
+                            <h2>Cost Structure Analysis: The Green Premium</h2>
+                        </div>
+
+                        <p>
+                            EUDR compliance involves significant costs. Industry experts and traders estimate per-metric-ton compliance costs as follows:
+                        </p>
+
+                        <table class="cost-table">
+                            <thead>
+                                <tr>
+                                    <th>Cost Component</th>
+                                    <th>Estimate (USD/MT)</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Data Collection & Mapping</td>
+                                    <td>$30 - $50</td>
+                                    <td>Farm GPS coordinates, labor costs</td>
+                                </tr>
+                                <tr>
+                                    <td>Digital Platform Fees</td>
+                                    <td>$10 - $20</td>
+                                    <td>TraceX, BanQu subscriptions</td>
+                                </tr>
+                                <tr>
+                                    <td>Verification & Audit</td>
+                                    <td>$20 - $40</td>
+                                    <td>Third-party certification costs</td>
+                                </tr>
+                                <tr>
+                                    <td>Logistics Segregation</td>
+                                    <td>$50 - $100</td>
+                                    <td>Separate storage, container inefficiencies</td>
+                                </tr>
+                                <tr>
+                                    <td>Risk Premium</td>
+                                    <td>$40 - $80</td>
+                                    <td>Customs delay & rejection hedging</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td><strong>Total Added Cost</strong></td>
+                                    <td><strong>$150 - $290</strong></td>
+                                    <td>Approx. $0.15-0.29/kg green bean</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>
+                            For a mid-size roaster using 50 MT annually, compliance alone could add <strong>$7,500-14,500 per year</strong> in costs—significant for an industry with typically thin margins.
+                        </p>
+
+                        <h3>Market Bifurcation Scenarios</h3>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">Scenario A: Dumping Ground Effect</div>
+                            <p style="margin-bottom: 0;">
+                                EU-rejected volumes from Ethiopia, Uganda, etc. flood into Korea at lower prices. Budget chains embrace these beans for cost savings, but face international criticism and ESG backlash for consuming "deforestation coffee."
+                            </p>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">Scenario B: Global Synchronization</div>
+                            <p style="margin-bottom: 0;">
+                                Major importers and roasters voluntarily prefer EUDR-compliant coffee for brand protection. Global supply shortage drives Korean prices higher in tandem, squeezing smaller roasters' margins.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">Scenario C: Dual Strategy (Most Likely)</div>
+                            <p style="margin-bottom: 0;">
+                                Large players (Starbucks, Dongsuh Foods, etc.) use 100% traceable coffee and market it as a differentiator. Meanwhile, price-sensitive budget segment continues using non-compliant beans, deepening market polarization.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Section 5: Strategy for Korean Industry -->
+                    <section id="strategy" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🗺️</div>
+                            <h2>Strategy for Korean Roasters & Importers</h2>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">⚠️ Key Understanding: Korea Is NOT Directly Subject to EUDR</div>
+                            <p style="margin-bottom: 0;">
+                                Korea is not an EU member state, so there is no legal obligation to comply with EUDR. However, <strong>global supply chain restructuring will inevitably affect prices and availability</strong>. Our challenge is not regulatory compliance—it's <strong>managing costs and maintaining competitiveness</strong> in a changing market.
+                            </p>
+                        </div>
+
+                        <h3>Expected Market Changes</h3>
+                        
+                        <p>EUDR implementation will restructure the global green coffee market:</p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0;">
+                            <div class="highlight-box" style="margin: 0;">
+                                <div class="highlight-title">Tier 1: EUDR-Compliant Market</div>
+                                <p style="margin-bottom: 0; font-size: 0.95rem;">
+                                    EU, parts of North America, global majors<br>
+                                    → <strong>Green Premium pricing</strong><br>
+                                    → Priority access to quality volumes
+                                </p>
+                            </div>
+                            <div class="highlight-box negative" style="margin: 0;">
+                                <div class="highlight-title">Tier 2: Non-Regulated Market</div>
+                                <p style="margin-bottom: 0; font-size: 0.95rem;">
+                                    Korea, China, Middle East, Russia, etc.<br>
+                                    → Potential non-compliant volume inflow<br>
+                                    → <strong>ESG risk vs cost savings</strong> trade-off
+                                </p>
+                            </div>
+                        </div>
+
+                        <h3>Strategy by Business Type</h3>
+
+                        <div class="solution-card" style="border-left: 4px solid var(--negative);">
+                            <div class="solution-header">
+                                <div class="solution-logo" style="background: var(--negative);">A</div>
+                                <div>
+                                    <div class="solution-name">EU Exporters (Dongsuh, Lotte, etc.)</div>
+                                    <div class="solution-tech">Direct Compliance Required</div>
+                                </div>
+                            </div>
+                            <p style="margin: 12px 0;">
+                                Companies exporting mix coffee, RTD beverages to the EU <strong>must establish EUDR compliance systems by December 2026</strong>.
+                            </p>
+                            <ul class="solution-features">
+                                <li>Secure EUDR-certified raw material suppliers</li>
+                                <li>Implement digital traceability systems with EU partner integration</li>
+                                <li>Leverage Korea Forest Service EUDR TF for documentation support</li>
+                                <li>Build separate tracking for compound ingredients (palm oil in creamers)</li>
+                            </ul>
+                        </div>
+
+                        <div class="solution-card" style="border-left: 4px solid var(--positive);">
+                            <div class="solution-header">
+                                <div class="solution-logo" style="background: var(--positive);">B</div>
+                                <div>
+                                    <div class="solution-name">Premium & Specialty Roasters</div>
+                                    <div class="solution-tech">Differentiation Opportunity</div>
+                                </div>
+                            </div>
+                            <p style="margin: 12px 0;">
+                                Use EUDR as a <strong>brand differentiation opportunity</strong>. "Our coffee is deforestation-free" becomes a powerful marketing message.
+                            </p>
+                            <ul class="solution-features">
+                                <li>Proactively secure EUDR-compliant volumes → build premium lineup</li>
+                                <li>Share supply chain transparency via QR codes (storytelling)</li>
+                                <li>Increase Bird Friendly, Rainforest Alliance certified coffee share</li>
+                                <li>Position price increases as 'conscious consumption'</li>
+                            </ul>
+                        </div>
+
+                        <div class="solution-card" style="border-left: 4px solid var(--warning);">
+                            <div class="solution-header">
+                                <div class="solution-logo" style="background: var(--warning);">C</div>
+                                <div>
+                                    <div class="solution-name">General Roasters, Importers & Distributors</div>
+                                    <div class="solution-tech">Cost Management Focus</div>
+                                </div>
+                            </div>
+                            <p style="margin: 12px 0;">
+                                No direct EUDR obligations, but <strong>global price increases are unavoidable</strong>. Focus on cost management and supply stability.
+                            </p>
+                            <ul class="solution-features">
+                                <li>Assess supplier EUDR readiness → forecast price increase timing & magnitude</li>
+                                <li>Increase Brazil/Colombia (ready) share vs manage Ethiopia (high-risk) exposure</li>
+                                <li>Evaluate ESG risks if handling non-compliant volumes</li>
+                                <li>Review blend ratio adjustments to absorb cost increases</li>
+                            </ul>
+                        </div>
+
+                        <h3>Timeline Checklist</h3>
+
+                        <div class="roadmap">
+                            <div class="roadmap-phase">
+                                <div class="phase-number">1</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">Supply Chain Assessment & Scenario Planning</div>
+                                    <div class="phase-period">H1 2026</div>
+                                    <div class="phase-tasks">
+                                        • Contact current traders/exporters about their EUDR compliance plans<br>
+                                        • Build origin-specific (Brazil/Colombia vs Ethiopia/Indonesia) price scenarios<br>
+                                        • Decide: "Compliant only" vs "Mixed" vs "Non-compliant acceptable" strategy<br>
+                                        • Determine cost pass-through vs absorption ratios
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="roadmap-phase">
+                                <div class="phase-number">2</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">Pricing Strategy & Positioning Adjustment</div>
+                                    <div class="phase-period">H2 2026</div>
+                                    <div class="phase-tasks">
+                                        • Set timing and magnitude of menu/product price increases<br>
+                                        • Develop customer communication strategy ("Why prices went up")<br>
+                                        • Adjust blend recipes: reduce expensive origin share or premiumize<br>
+                                        • Test alternative origins (Vietnam Robusta, Uganda, etc.) if needed
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="roadmap-phase">
+                                <div class="phase-number">3</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">Full Implementation & Monitoring</div>
+                                    <div class="phase-period">December 2026 Onward</div>
+                                    <div class="phase-tasks">
+                                        • Monitor actual market reactions post-EUDR implementation<br>
+                                        • Track EU-rejected volume flows into Asian markets<br>
+                                        • Analyze competitor responses and fine-tune strategy<br>
+                                        • Prepare for additional price shifts ahead of SME deadline (June 2027)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Decision Point: Will You Handle Non-Compliant Volumes?</h3>
+
+                        <p>
+                            After EUDR implementation, EU-rejected 'non-compliant' volumes may flood into Korea at lower prices. How to handle this depends on your <strong>brand identity and customer base</strong>.
+                        </p>
+
+                        <table class="cost-table">
+                            <thead>
+                                <tr>
+                                    <th>Option</th>
+                                    <th>Advantages</th>
+                                    <th>Risks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Compliant volumes only</strong></td>
+                                    <td>ESG branding, premium positioning</td>
+                                    <td>Higher costs, supply constraints</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mixed compliant/non-compliant</strong></td>
+                                    <td>Cost flexibility, multiple price points</td>
+                                    <td>Segregation costs, brand inconsistency</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Actively use non-compliant</strong></td>
+                                    <td>Short-term cost savings, budget market competitiveness</td>
+                                    <td>ESG backlash, future reconversion costs if regulations spread</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💡 Practical Tips</div>
+                            <p>
+                                <strong>Questions to ask your traders:</strong><br>
+                                "What price differential do you expect between EUDR-compliant and non-compliant volumes after December 2026?"<br>
+                                "What's the EUDR readiness status of the origins we currently buy?"<br>
+                                "Can you prioritize compliant volume allocation to us? At what additional cost?"
+                            </p>
+                            <p style="margin-bottom: 0;">
+                                <strong>What you can do right now:</strong><br>
+                                Send EUDR inquiry emails to current suppliers → Build a supplier risk map based on responses
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Conclusion -->
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">✍️</div>
+                            <h2>Conclusion: Prepare for Change, But Avoid Overreaction</h2>
+                        </div>
+
+                        <p>
+                            EUDR does not impose direct legal obligations on Korean roasters and importers. However, global supply chain restructuring has already begun, and its effects will inevitably reach our market.
+                        </p>
+
+                        <p>
+                            The key is <strong>'market change adaptation'—not 'regulatory compliance'</strong>. As EUDR compliance costs are passed through global green bean prices, cost increases are inevitable. Simultaneously, EU-rejected non-compliant volumes may flow into Asian markets.
+                        </p>
+
+                        <div class="highlight-box" style="background: linear-gradient(135deg, rgba(184, 115, 51, 0.1), rgba(196, 165, 116, 0.1)); border-left-color: var(--copper);">
+                            <div class="highlight-title">📌 Key Action Items</div>
+                            <p>
+                                <strong>1. Immediately:</strong> Inquire with key suppliers about EUDR readiness → understand pricing scenarios<br><br>
+                                <strong>2. H1 2026:</strong> Origin-specific risk assessment, blend adjustment plans, pricing strategy<br><br>
+                                <strong>3. H2 2026:</strong> Customer communication preparation, menu/product price adjustments if needed<br><br>
+                                <strong>4. Strategic Decision:</strong> Clearly decide whether your brand will pursue "EUDR-compliant premium" or prioritize "price competitiveness"
+                            </p>
+                        </div>
+
+                        <p>
+                            Overreaction should also be avoided. There's no need to adopt expensive traceability solutions or unnecessarily cut suppliers if you're focused solely on the Korean domestic market. For domestic-only businesses, <strong>flexibly adapting to market price changes</strong> is the best strategy.
+                        </p>
+
+                        <p>
+                            However, if you're targeting the specialty market or prioritizing ESG branding, EUDR can become a <strong>differentiation opportunity</strong>. "Our coffee doesn't destroy forests" will become an increasingly powerful marketing message.
+                        </p>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">⏰ Remember These Dates</div>
+                            <p style="margin-bottom: 0;">
+                                <strong>December 30, 2026</strong> — Large EU operators enforcement<br>
+                                <strong>June 30, 2027</strong> — SME enforcement<br><br>
+                                Expect significant changes in global green bean prices and availability around these dates. Build scenarios now and prepare to respond flexibly as the situation develops.
+                            </p>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Contents</h3>
+                        <ul class="toc-list">
+                            <li class="toc-item"><a href="#overview" class="toc-link">Executive Summary</a></li>
+                            <li class="toc-item"><a href="#regulation" class="toc-link">EUDR Regulation Deep Dive</a></li>
+                            <li class="toc-item"><a href="#supply-chain" class="toc-link">Origin Readiness Analysis</a></li>
+                            <li class="toc-item"><a href="#strategy" class="toc-link">Cost Structure Analysis</a></li>
+                            <li class="toc-item"><a href="#strategy" class="toc-link">Strategy for Korean Industry</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Action Checklist</h3>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">Inquire suppliers about EUDR readiness</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">Build origin-specific price scenarios</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">Decide on non-compliant volume policy</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">Review cost pass-through vs absorption</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">Prepare customer communication</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Origin Readiness</h3>
+                        <div class="key-point">
+                            <div class="key-icon">🇧🇷</div>
+                            <div class="key-text"><strong>Brazil</strong><br>Ready ✅</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇨🇴</div>
+                            <div class="key-text"><strong>Colombia</strong><br>Ready ✅</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇻🇳</div>
+                            <div class="key-text"><strong>Vietnam</strong><br>In Progress ⏳</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇪🇹</div>
+                            <div class="key-text"><strong>Ethiopia</strong><br>High Risk ⚠️</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Sources</h3>
+                        <div class="key-point">
+                            <div class="key-icon">📄</div>
+                            <div class="key-text">EU Parliament EUDR Amendment</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📊</div>
+                            <div class="key-text">USDA FAS Coffee Reports</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🌐</div>
+                            <div class="key-text">Korea Forest Service TF</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📈</div>
+                            <div class="key-text">ICO Coffee Market Report</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        Providing in-depth analysis and insights on global coffee markets. 
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">EU Parliament, USDA FAS</span>
+                    <span class="footer-link" style="cursor: default;">Cecafé, FNC Colombia</span>
+                    <span class="footer-link" style="cursor: default;">VICOFA, ICO</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice. 
+                    All investment decisions should be made based on independent judgment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

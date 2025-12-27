@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUDR 대응 커피 시장 분석 | 2025년 12월</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!--REPORT_META
+{
+    "title": "EUDR 대응 커피 시장 심층 분석",
+    "subtitle": "EU Deforestation Regulation: Impact Analysis for Korean Coffee Industry",
+    "date": "2025-12-31",
+    "summary": "EU 산림벌채방지규정(EUDR)이 2026년 12월로 1년 연기되며 한국 커피 산업에 마지막 대비 기회 부여. 대기업 적용 2026년 12월 30일, 중소기업 2027년 6월 30일로 확정. 브라질·콜롬비아는 높은 준비도로 EUDR 준수 물량 안정 공급 전망, 에티오피아·인도네시아는 소농 구조로 대응 난항. 글로벌 커피 시장은 EUDR 준수/비준수 이원화 진행 중이며, 한국은 비규제 시장으로서 비준수 물량 유입 리스크와 가격 상승 압박 동시 직면. 톤당 $150-290 추가 컴플라이언스 비용 예상. TraceX, BanQu 등 디지털 추적 솔루션 도입과 투명성 마케팅 전략이 핵심 대응 방안.",
+    "tags": ["EUDR", "산림벌채방지규정", "커피공급망", "지속가능성", "추적성", "브라질", "베트남", "에티오피아", "콜롬비아", "그린프리미엄"],
+    "author": "Align Commodities",
+    "sources": ["EU Parliament", "USDA FAS", "Cecafé", "FNC Colombia", "VICOFA", "산림청", "Hedgepoint", "TraceX", "ICO"],
+    "report_type": "in-depth"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --forest: #2d5016;
+            --warning: #d4a017;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 상단 네비게이션 바 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--forest), var(--positive));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* 메인 컨테이너 */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* 히어로 헤더 */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--forest), var(--positive));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--roast);
+            opacity: 0.8;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        /* Key Stats Hero */
+        .key-stats-hero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        .stat-value.deadline {
+            color: var(--warning);
+        }
+
+        .stat-value.positive {
+            color: var(--positive);
+        }
+
+        .stat-note {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        /* 콘텐츠 레이아웃 */
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 60px;
+            padding: clamp(40px, 6vh, 60px) 0;
+        }
+
+        @media (max-width: 1024px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 메인 콘텐츠 */
+        main {
+            min-width: 0;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--copper), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        h3 {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--roast);
+            margin: 32px 0 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--ink);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.08), rgba(74, 124, 89, 0.08));
+            border-left: 4px solid var(--positive);
+            padding: 20px 24px;
+            border-radius: 0 12px 12px 0;
+            margin: 24px 0;
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, rgba(212, 160, 23, 0.08), rgba(212, 160, 23, 0.04));
+            border-left-color: var(--warning);
+        }
+
+        .highlight-box.negative {
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.08), rgba(194, 58, 58, 0.04));
+            border-left-color: var(--negative);
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        /* 타임라인 */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 24px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--positive), var(--warning), var(--negative));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 3px solid var(--positive);
+            border-radius: 50%;
+        }
+
+        .timeline-item.warning::before {
+            border-color: var(--warning);
+        }
+
+        .timeline-item.critical::before {
+            border-color: var(--negative);
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--roast);
+            font-size: 0.9rem;
+        }
+
+        .timeline-content {
+            margin-top: 4px;
+            color: var(--ink);
+        }
+
+        /* 국가별 카드 */
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        @media (max-width: 768px) {
+            .country-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .country-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .country-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .country-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .country-flag {
+            font-size: 2rem;
+        }
+
+        .country-name {
+            font-weight: 600;
+            color: var(--espresso);
+            font-size: 1.1rem;
+        }
+
+        .country-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .status-ready {
+            background: rgba(74, 124, 89, 0.15);
+            color: var(--positive);
+        }
+
+        .status-progress {
+            background: rgba(212, 160, 23, 0.15);
+            color: var(--warning);
+        }
+
+        .status-risk {
+            background: rgba(194, 58, 58, 0.15);
+            color: var(--negative);
+        }
+
+        .country-details {
+            font-size: 0.9rem;
+            color: var(--ink);
+            line-height: 1.7;
+        }
+
+        .country-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .country-stat:last-child {
+            border-bottom: none;
+        }
+
+        /* 비용 테이블 */
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+        }
+
+        .cost-table th {
+            background: var(--roast);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .cost-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            font-size: 0.95rem;
+        }
+
+        .cost-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cost-table tr:hover {
+            background: rgba(26, 15, 10, 0.02);
+        }
+
+        .cost-table .total-row {
+            background: var(--steam);
+            font-weight: 600;
+        }
+
+        /* 솔루션 카드 */
+        .solution-grid {
+            display: grid;
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .solution-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .solution-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .solution-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--copper), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .solution-name {
+            font-weight: 600;
+            color: var(--espresso);
+            font-size: 1.1rem;
+        }
+
+        .solution-tech {
+            font-size: 0.8rem;
+            color: var(--copper);
+        }
+
+        .solution-features {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .solution-features li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--positive);
+            font-weight: 600;
+        }
+
+        /* 로드맵 */
+        .roadmap {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            margin: 24px 0;
+        }
+
+        .roadmap-phase {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .roadmap-phase:last-child {
+            border-bottom: none;
+        }
+
+        .phase-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--copper), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .phase-content {
+            flex: 1;
+        }
+
+        .phase-title {
+            font-weight: 600;
+            color: var(--espresso);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .phase-period {
+            font-size: 0.85rem;
+            color: var(--copper);
+            margin-bottom: 8px;
+        }
+
+        .phase-tasks {
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .toc-item:last-child {
+            border-bottom: none;
+        }
+
+        .toc-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            display: block;
+        }
+
+        .toc-link:hover {
+            color: var(--copper);
+        }
+
+        .key-point {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .key-point:last-child {
+            border-bottom: none;
+        }
+
+        .key-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--steam);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .key-text {
+            font-size: 0.9rem;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        /* 푸터 */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            padding: 6px 0;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(245, 240, 232, 0.1);
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 12px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Align Commodities</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">개요</a>
+            <a href="#regulation" class="nav-link">규제 분석</a>
+            <a href="#supply-chain" class="nav-link">공급망</a>
+            <a href="#strategy" class="nav-link">대응 전략</a>
+        </div>
+    </nav>
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- 히어로 헤더 -->
+            <header class="hero-header">
+                <div class="report-badge">
+                    <span>🌳</span>
+                    <span>In-Depth Analysis</span>
+                </div>
+                
+                <div class="report-meta">
+                    <span class="meta-item">2025년 12월 31일</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">Align Commodities Research</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">읽기 시간 약 15분</span>
+                </div>
+                
+                <h1>EUDR 대응 커피 시장 심층 분석</h1>
+                <p class="subtitle">EU 산림벌채방지규정이 한국 로스터리와 생두 수입사에 미치는 영향 및 대응 전략</p>
+
+                <div class="key-stats-hero">
+                    <div class="stat-card">
+                        <div class="stat-label">대기업 적용일</div>
+                        <div class="stat-value deadline">2026.12.30</div>
+                        <div class="stat-note">D-364일 (EU 수입업체 기준)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">중소기업 적용일</div>
+                        <div class="stat-value deadline">2027.06.30</div>
+                        <div class="stat-note">D-546일 (EU 수입업체 기준)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">EU 시장 비중</div>
+                        <div class="stat-value">~30%</div>
+                        <div class="stat-note">글로벌 커피 소비</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">예상 추가 비용</div>
+                        <div class="stat-value">$150-290</div>
+                        <div class="stat-note">톤당 컴플라이언스</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 콘텐츠 레이아웃 -->
+            <div class="content-layout">
+                <main>
+                    <!-- 섹션 1: 개요 -->
+                    <section id="overview" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📋</div>
+                            <h2>Executive Summary</h2>
+                        </div>
+                        
+                        <p>
+                            2025년 12월 4일 유럽 의회는 EU 산림벌채방지규정(EUDR)의 시행을 1년 연기하는 수정안을 
+                            405대 242의 압도적 표차로 최종 채택했습니다. 이로써 대기업 및 트레이더에 대한 적용은 
+                            2026년 12월 30일로, 중소기업에 대한 적용은 2027년 6월 30일로 확정되었습니다.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">핵심 메시지</div>
+                            <p style="margin-bottom: 0;">
+                                이번 연기는 단순한 유예가 아닌, 한국 커피 산업에 주어진 <strong>'마지막 골든타임'</strong>입니다. 
+                                글로벌 커피 공급망은 이미 'EUDR 준수(Compliant)'와 '비준수(Non-compliant)' 물량으로 
+                                양분되기 시작했으며, 이는 비(非)EU 국가인 한국의 시장 가격과 수급 구조에도 직접적인 영향을 미치고 있습니다.
+                            </p>
+                        </div>
+
+                        <h3>한국 시장의 3대 도전 과제</h3>
+                        
+                        <p>
+                            <strong>① 공급망 교란과 비용 상승:</strong> 글로벌 트레이더들의 EUDR 준수 인프라 투자 비용이 
+                            '그린 프리미엄(Green Premium)'으로 생두 가격에 전가되고 있습니다. 한국 수입사들은 규제 대상이 
+                            아님에도 글로벌 표준 변화에 따른 가격 상승 압박을 받고 있습니다.
+                        </p>
+                        
+                        <p>
+                            <strong>② 수출 기업의 생존 문제:</strong> 믹스커피, RTD 음료 등을 EU로 수출하는 기업들은 
+                            2026년 말부터 원두의 산림 파괴 무관성을 입증해야 합니다. 특히 팜유(프림)도 EUDR 대상이므로 
+                            복합 원재료 추적이라는 이중고를 겪게 됩니다.
+                        </p>
+                        
+                        <p>
+                            <strong>③ 윤리적 소비와 ESG 압박:</strong> 만약 한국 시장이 EU에서 퇴출당한 '산림 파괴 커피'의 
+                            도피처가 된다면, 해당 기업은 치명적인 브랜드 평판 리스크에 직면하게 됩니다.
+                        </p>
+                    </section>
+
+                    <!-- 섹션 2: 규제 상세 분석 -->
+                    <section id="regulation" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">⚖️</div>
+                            <h2>EUDR 규제 심층 분석</h2>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💡 대기업/중소기업 구분 기준</div>
+                            <p>
+                                EUDR의 대기업/중소기업 구분은 <strong>커피 농가가 아니라 EU 시장에 제품을 출시하는 사업자(Operator) 또는 수입업체(Trader) 기준</strong>입니다.
+                            </p>
+                            <table class="cost-table" style="margin: 16px 0 0 0; box-shadow: none;">
+                                <thead>
+                                    <tr>
+                                        <th>구분</th>
+                                        <th>EU 기준</th>
+                                        <th>적용일</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>대기업</strong></td>
+                                        <td>직원 250명 이상 또는 연매출 €50M 이상</td>
+                                        <td>2026.12.30</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>중소기업(SME)</strong></td>
+                                        <td>직원 250명 미만 및 연매출 €50M 미만</td>
+                                        <td>2027.06.30</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p style="margin: 12px 0 0 0; font-size: 0.9rem;">
+                                <strong>커피 농가에는 EUDR이 직접 적용되지 않습니다.</strong> 다만, EU 수입업체가 요구하는 데이터(GPS 좌표, 추적성 정보)를 제공해야 거래가 가능해집니다.
+                            </p>
+                        </div>
+
+                        <h3>시행 타임라인</h3>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">2020년 12월 31일</div>
+                                <div class="timeline-content">
+                                    <strong>컷오프 데이트(Cut-off Date)</strong> - 이 날짜 이후 산림 벌채가 발생한 토지에서 
+                                    생산된 커피는 EU 수출 불가
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2025년 12월 4일</div>
+                                <div class="timeline-content">
+                                    <strong>연기 확정</strong> - EU 의회, 1년 연기 수정안 최종 채택 (405 vs 242)
+                                </div>
+                            </div>
+                            <div class="timeline-item warning">
+                                <div class="timeline-date">2026년 12월 30일</div>
+                                <div class="timeline-content">
+                                    <strong>대기업 적용</strong> - 대기업 및 트레이더 대상 본격 시행
+                                </div>
+                            </div>
+                            <div class="timeline-item critical">
+                                <div class="timeline-date">2027년 6월 30일</div>
+                                <div class="timeline-content">
+                                    <strong>중소기업 적용</strong> - 중소기업까지 전면 확대 시행
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>핵심 준수 요건</h3>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">1. 지리적 위치 정보 (Geolocation)</div>
+                            <p>
+                                <strong>4헥타르 미만 소농:</strong> 농장 위치를 특정하는 단일 GPS 포인트 필요<br>
+                                <strong>4헥타르 이상 농장:</strong> 농장 전체 경계를 나타내는 다각형(Polygon) 매핑 필수
+                            </p>
+                            <p style="margin-bottom: 0;">
+                                이 데이터는 위성 이미지와 대조하여 2020년 12월 31일 이후 해당 토지에서 
+                                산림 벌채나 황폐화가 발생하지 않았음을 증명하는 데 사용됩니다.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">2. 실사 성명서 (Due Diligence Statement, DDS)</div>
+                            <p style="margin-bottom: 0;">
+                                EU 시장 출시 운영자는 제품 통관 전 DDS를 제출해야 합니다. 
+                                승인 시 발급되는 참조 번호(Reference Number)가 있어야만 세관 통과가 가능합니다. 
+                                한국 수출 기업은 EU 파트너에게 이 데이터를 완벽하게 제공해야 할 의무가 생깁니다.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">3. 추적성 및 분리 (Traceability & Segregation)</div>
+                            <p style="margin-bottom: 0;">
+                                체리 수확부터 로스터리 도착까지 모든 단계에서 물리적 흐름이 추적되어야 합니다. 
+                                블렌딩된 커피 중 <strong>단 하나의 원두라도</strong> 산림 파괴 지역 생산으로 확인되면, 
+                                해당 배치 전체가 폐기되거나 판매 금지될 수 있습니다.
+                            </p>
+                        </div>
+
+                        <h3>리스크 벤치마킹 시스템</h3>
+                        <p>
+                            EU 집행위원회는 국가/지역을 <strong>'저위험(Low)'</strong>, <strong>'표준위험(Standard)'</strong>, 
+                            <strong>'고위험(High)'</strong>으로 분류합니다.
+                        </p>
+                        <ul style="margin-left: 20px; margin-bottom: 16px;">
+                            <li><strong>저위험 국가:</strong> 실사 의무 간소화, 무작위 검사 비율 하향</li>
+                            <li><strong>고위험 국가:</strong> 엄격한 실사 의무, 검사 비율 상향</li>
+                        </ul>
+                        <p>
+                            이 분류에 따라 한국 수입사들이 선호하는 산지가 변화할 것이며, 
+                            고위험 지역 커피는 통관 지연 리스크로 기피 대상이 될 가능성이 높습니다.
+                        </p>
+                    </section>
+
+                    <!-- 섹션 3: 주요 생산국 분석 -->
+                    <section id="supply-chain" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🌍</div>
+                            <h2>주요 생산국별 대응 현황</h2>
+                        </div>
+
+                        <p>
+                            2025년 말 현재, 각 생산국의 EUDR 대응 수준은 극명한 차이를 보이고 있으며, 
+                            이는 향후 커피 가격과 수급의 결정적 변수가 될 것입니다.
+                        </p>
+
+                        <div class="country-grid">
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇧🇷</span>
+                                    <span class="country-name">브라질</span>
+                                    <span class="country-status status-ready">준비 완료</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        세계 최대 커피 생산국으로 대규모 농장 중심 구조 덕분에 EUDR 대응에서 가장 앞서 있습니다. 
+                                        Cecafé의 디지털 추적 플랫폼과 JDE Peet's와의 협력 실증 테스트를 완료했습니다.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>2025/26 생산량</span>
+                                        <span><strong>63백만 포대</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>Polygon 매핑</span>
+                                        <span><strong>대부분 완료</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>한국 시장 영향</span>
+                                        <span>수요 쏠림에 따른 가격 상승</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇨🇴</span>
+                                    <span class="country-name">콜롬비아</span>
+                                    <span class="country-status status-ready">준비 완료</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        강력한 FNC(콜롬비아 커피생산자연맹)의 조직력으로 전체 농장의 99%에 대한 지리 정보를 확보, 
+                                        73% 생산자로부터 데이터 사용 동의를 획득했습니다.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>GPS 데이터 확보</span>
+                                        <span><strong>99%</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>데이터 동의율</span>
+                                        <span><strong>73%</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>한국 시장 영향</span>
+                                        <span>안정적 고품질 공급처</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇻🇳</span>
+                                    <span class="country-name">베트남</span>
+                                    <span class="country-status status-progress">대응 중</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        세계 최대 로부스타 생산국으로 정부(MARD)가 UNDP와 협력하여 국가 차원 농가 DB를 구축 중입니다. 
+                                        2025년 커피 수출이 84억 달러로 사상 최고를 기록했습니다.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>2025년 수출액</span>
+                                        <span><strong>84억 달러</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>EUDR 준비</span>
+                                        <span>정부 주도 진행 중</span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>한국 시장 영향</span>
+                                        <span>인스턴트/믹스 원가 상승</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="country-card">
+                                <div class="country-header">
+                                    <span class="country-flag">🇪🇹</span>
+                                    <span class="country-name">에티오피아</span>
+                                    <span class="country-status status-risk">고위험</span>
+                                </div>
+                                <div class="country-details">
+                                    <p>
+                                        커피 발상지로 약 500만 소농이 '가든 커피' 형태로 재배합니다. 
+                                        위성으로 숲과 농장 구별이 어려워 산림 황폐화로 오인될 소지가 큽니다.
+                                    </p>
+                                    <div class="country-stat">
+                                        <span>소농 수</span>
+                                        <span><strong>~500만 명</strong></span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>GPS 데이터</span>
+                                        <span style="color: var(--negative);">수집 난항</span>
+                                    </div>
+                                    <div class="country-stat">
+                                        <span>한국 시장 영향</span>
+                                        <span>비준수 물량 유입 가능</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box negative">
+                            <div class="highlight-title">⚠️ 인도네시아 홍수 피해 주의</div>
+                            <p style="margin-bottom: 0;">
+                                2025년 12월 수마트라 가요 하이랜드 커피 산지에 대규모 홍수와 산사태 발생. 
+                                약 90,000ha의 수마트라 가요 아라비카 플랜테이션이 영향을 받았으며, 
+                                수출량 최대 15% 감소가 전망됩니다. EUDR 대응에 추가적인 장애 요인으로 작용할 것입니다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 섹션 4: 비용 분석 -->
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💰</div>
+                            <h2>비용 구조 분석: 그린 프리미엄의 실체</h2>
+                        </div>
+
+                        <p>
+                            EUDR 준수는 막대한 비용을 수반합니다. 업계 전문가들과 트레이더들의 분석에 따르면, 
+                            톤당 컴플라이언스 비용은 다음과 같이 추산됩니다.
+                        </p>
+
+                        <table class="cost-table">
+                            <thead>
+                                <tr>
+                                    <th>비용 항목</th>
+                                    <th>추산 비용 (USD/MT)</th>
+                                    <th>비고</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>데이터 수집 및 매핑</td>
+                                    <td>$30 - $50</td>
+                                    <td>농장 GPS 좌표 수집 및 인력 비용</td>
+                                </tr>
+                                <tr>
+                                    <td>디지털 플랫폼 사용료</td>
+                                    <td>$10 - $20</td>
+                                    <td>TraceX, BanQu 등 추적 솔루션 구독료</td>
+                                </tr>
+                                <tr>
+                                    <td>검증 및 감사 (Audit)</td>
+                                    <td>$20 - $40</td>
+                                    <td>제3자 검증 기관 비용</td>
+                                </tr>
+                                <tr>
+                                    <td>물류 분리 (Segregation)</td>
+                                    <td>$50 - $100</td>
+                                    <td>창고 및 컨테이너 분리 보관 효율 저하</td>
+                                </tr>
+                                <tr>
+                                    <td>리스크 프리미엄</td>
+                                    <td>$40 - $80</td>
+                                    <td>통관 지연 및 반송 리스크 헤징</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td><strong>총 추가 비용</strong></td>
+                                    <td><strong>$150 - $290</strong></td>
+                                    <td>생두 kg당 약 200~400원 원가 상승</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>
+                            연간 50톤을 사용하는 중소 로스터의 경우, 단순히 규제 준수만으로도 
+                            <strong>연간 약 1,500만 원 이상</strong>의 추가 비용이 발생할 수 있습니다. 
+                            이는 영업이익률이 낮은 커피 제조업 특성상 상당한 타격입니다.
+                        </p>
+
+                        <h3>시장 이원화 시나리오</h3>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">시나리오 A: 덤핑 그라운드 효과</div>
+                            <p style="margin-bottom: 0;">
+                                유럽 수출이 불가능해진 에티오피아, 우간다 등의 물량이 한국으로 쏟아져 일시적으로 생두 가격 하락. 
+                                저가 프랜차이즈들이 이 물량을 수용하나, "한국이 산림 파괴 커피를 소비한다"는 국제적 비난과 
+                                ESG 반발에 직면할 가능성.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">시나리오 B: 글로벌 동조화</div>
+                            <p style="margin-bottom: 0;">
+                                주요 수입사와 로스터들이 브랜드 이미지를 위해 자발적으로 EUDR 준수 커피를 선호. 
+                                글로벌 공급 부족으로 한국 내 생두 가격도 동반 상승하며, 영세 로스터들의 경영난 가중.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">시나리오 C: 이중 전략 (Hybrid) - 가장 유력</div>
+                            <p style="margin-bottom: 0;">
+                                대기업(스타벅스, 동서식품 등)은 글로벌 기준에 맞춰 100% 추적 가능한 커피를 사용하고 마케팅에 활용. 
+                                반면 가격 민감도가 높은 저가 시장은 비준수 커피를 사용하는 양극화 심화.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 섹션 5: 기술 솔루션 -->
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💻</div>
+                            <h2>디지털 추적성 솔루션</h2>
+                        </div>
+
+                        <p>
+                            수기 장부나 엑셀 파일로는 수천, 수만 개의 농장 좌표와 이동 경로 관리가 불가능합니다. 
+                            2025년 커피 산업은 '테크 산업'으로 변모하고 있습니다.
+                        </p>
+
+                        <div class="solution-grid">
+                            <div class="solution-card">
+                                <div class="solution-header">
+                                    <div class="solution-logo">TX</div>
+                                    <div>
+                                        <div class="solution-name">TraceX</div>
+                                        <div class="solution-tech">블록체인 기반</div>
+                                    </div>
+                                </div>
+                                <ul class="solution-features">
+                                    <li>농장부터 로스터리까지 End-to-End 추적</li>
+                                    <li>EU 정보 시스템(EU-DDS)과 API 연동</li>
+                                    <li>실사 성명서 자동 생성 및 참조 번호 발급</li>
+                                    <li><strong>추천:</strong> 직접 무역을 하는 중대형 로스터리, 생두 수입사</li>
+                                </ul>
+                            </div>
+
+                            <div class="solution-card">
+                                <div class="solution-header">
+                                    <div class="solution-logo">BQ</div>
+                                    <div>
+                                        <div class="solution-name">BanQu</div>
+                                        <div class="solution-tech">비암호화 분산 원장</div>
+                                    </div>
+                                </div>
+                                <ul class="solution-features">
+                                    <li>소스 레벨(Source-level) 데이터 수집 특화</li>
+                                    <li>오프라인 환경에서도 데이터 수집 가능</li>
+                                    <li>SAP, Oracle 등 기존 ERP와 원활한 통합</li>
+                                    <li><strong>추천:</strong> 복잡한 공급망을 가진 대기업, 트레이더</li>
+                                </ul>
+                            </div>
+
+                            <div class="solution-card">
+                                <div class="solution-header">
+                                    <div class="solution-logo">MV</div>
+                                    <div>
+                                        <div class="solution-name">Meridia Verify</div>
+                                        <div class="solution-tech">GIS 및 AI 기반</div>
+                                    </div>
+                                </div>
+                                <ul class="solution-features">
+                                    <li>농장 경계 데이터(Polygon) 품질 검증</li>
+                                    <li>위성 이미지 분석으로 산림 벌채 리스크 자동 평가</li>
+                                    <li>데이터 포맷 변환 지원</li>
+                                    <li><strong>추천:</strong> 협동조합, 산지 수출업체, 데이터 검증 필요 수입사</li>
+                                </ul>
+                            </div>
+
+                            <div class="solution-card">
+                                <div class="solution-header">
+                                    <div class="solution-logo">KT</div>
+                                    <div>
+                                        <div class="solution-name">Koltiva</div>
+                                        <div class="solution-tech">농업 기술 (Agri-tech)</div>
+                                    </div>
+                                </div>
+                                <ul class="solution-features">
+                                    <li>농가 교육 및 생산성 향상 기능 포함</li>
+                                    <li>종자에서 식탁까지(Seed-to-Table) 추적</li>
+                                    <li>지속가능성 중시 공급망 관리에 적합</li>
+                                    <li><strong>추천:</strong> 지속가능성을 중시하는 공급망 관리자</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💡 기술 도입 시 고려사항</div>
+                            <p>
+                                <strong>API 연동:</strong> 입고되는 생두의 로트 번호가 ERP에 입력되는 순간, 
+                                해당 로트의 지리적 정보와 산림 벌채 리스크 분석 결과가 자동으로 매칭되어야 합니다.
+                            </p>
+                            <p style="margin-bottom: 0;">
+                                <strong>데이터 주권 및 보안:</strong> 농부들의 개인정보와 농장 위치 정보는 민감한 데이터입니다. 
+                                클라우드 기반 솔루션 선택 시 ISO 27001 등 데이터 보안 표준 준수 여부를 확인해야 합니다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 섹션 6: 마케팅 전략 -->
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📢</div>
+                            <h2>마케팅 전략: 위기를 브랜딩의 기회로</h2>
+                        </div>
+
+                        <p>
+                            비용 상승을 피할 수 없다면, 이를 가치 상승으로 전환해야 합니다. 
+                            한국 소비자들의 높은 눈높이에 맞춰 '규제 준수'를 '프리미엄 가치'로 포장하는 전략이 필요합니다.
+                        </p>
+
+                        <h3>1. 투명성 리포트 (Transparency Report)</h3>
+                        <p>
+                            미국 스페셜티 커피 시장에서는 이미 '급진적 투명성(Radical Transparency)'이 표준으로 자리 잡고 있습니다.
+                        </p>
+                        <ul style="margin-left: 20px; margin-bottom: 16px;">
+                            <li><strong>Onyx Coffee Lab:</strong> 생두 원가, 운송비, 생산비, 인건비, 마진까지 1센트 단위로 공개</li>
+                            <li><strong>Counter Culture Coffee:</strong> 연례 투명성 보고서 발행, 파트너십 지속 기간과 재구매율을 핵심 지표로 활용</li>
+                        </ul>
+                        <p>
+                            한국 로스터들도 QR코드를 통해 커피의 수입 원가 구조와 농장 데이터를 공개함으로써, 
+                            높아진 커피 가격이 "비싼 것이 아니라 정당한 것"임을 설득해야 합니다.
+                        </p>
+
+                        <h3>2. 생물다양성 마케팅</h3>
+                        <p>
+                            EUDR의 복잡한 법적 용어보다는 감성적인 접근이 소비자에게 더 효과적입니다. 
+                            '산림 벌채 방지'는 곧 '야생동물 서식지 보호'와 직결됩니다.
+                        </p>
+                        
+                        <div class="highlight-box">
+                            <div class="highlight-title">🐦 Bird Friendly 인증 활용</div>
+                            <p style="margin-bottom: 0;">
+                                스미소니언 Bird Friendly 인증은 100% 유기농 그늘 재배(Shade-grown) 커피에만 부여됩니다. 
+                                "이 커피 한 잔이 철새의 쉼터를 지킵니다"라는 캠페인으로 환경 단체나 동물원과의 협업이 가능합니다.
+                            </p>
+                        </div>
+
+                        <h3>3. 스마트 패키징</h3>
+                        <p>
+                            EUDR은 포장재(종이)에도 적용되므로 패키징의 친환경 전환도 필수적입니다. 
+                            커피 봉투에 인쇄된 QR코드를 통해 소비자는 커피의 여행 경로를 확인하고, 
+                            블록체인에 기록된 '산림 파괴 0%' 인증서를 직접 열람할 수 있습니다.
+                        </p>
+                    </section>
+
+                    <!-- 섹션 7: 실행 로드맵 -->
+                    <section id="strategy" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🗺️</div>
+                            <h2>한국 로스터리·수입사를 위한 대응 전략</h2>
+                        </div>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">⚠️ 핵심 인식: 한국은 EUDR 직접 적용 대상이 아닙니다</div>
+                            <p style="margin-bottom: 0;">
+                                한국은 EU 회원국이 아니므로 EUDR을 직접 준수할 법적 의무가 없습니다. 
+                                그러나 <strong>글로벌 공급망 재편에 따른 가격 상승과 수급 변화</strong>는 피할 수 없습니다. 
+                                우리의 과제는 규제 준수가 아니라, <strong>변화하는 시장에서 원가를 관리하고 경쟁력을 유지</strong>하는 것입니다.
+                            </p>
+                        </div>
+
+                        <h3>예상되는 시장 변화</h3>
+                        
+                        <p>EUDR 시행으로 글로벌 생두 시장은 다음과 같이 재편됩니다:</p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0;">
+                            <div class="highlight-box" style="margin: 0;">
+                                <div class="highlight-title">Tier 1: EUDR 준수 시장</div>
+                                <p style="margin-bottom: 0; font-size: 0.95rem;">
+                                    EU, 북미 일부, 글로벌 대기업<br>
+                                    → <strong>그린 프리미엄 형성</strong><br>
+                                    → 고품질 물량 우선 배정
+                                </p>
+                            </div>
+                            <div class="highlight-box negative" style="margin: 0;">
+                                <div class="highlight-title">Tier 2: 비규제 시장</div>
+                                <p style="margin-bottom: 0; font-size: 0.95rem;">
+                                    한국, 중국, 중동, 러시아 등<br>
+                                    → 비준수 물량 유입 가능<br>
+                                    → <strong>ESG 리스크 vs 원가 절감</strong> 트레이드오프
+                                </p>
+                            </div>
+                        </div>
+
+                        <h3>비즈니스 유형별 대응 전략</h3>
+
+                        <!-- EU 수출 기업 -->
+                        <div class="solution-card" style="margin: 20px 0; border-left: 4px solid var(--negative);">
+                            <div class="solution-header">
+                                <div class="solution-logo" style="background: var(--negative);">A</div>
+                                <div>
+                                    <div class="solution-name">EU 수출 기업 (동서식품, 롯데 등)</div>
+                                    <div class="solution-tech">직접 대응 필수</div>
+                                </div>
+                            </div>
+                            <p style="margin: 12px 0;">
+                                믹스커피, RTD 음료 등을 EU로 수출하는 기업은 <strong>2026년 12월까지 EUDR 준수 체계 구축이 필수</strong>입니다.
+                            </p>
+                            <ul class="solution-features">
+                                <li>원재료(커피, 팜유) 공급처의 EUDR 인증 확보</li>
+                                <li>디지털 추적 시스템 도입 및 EU 파트너와 데이터 연동</li>
+                                <li>산림청 EUDR TF 활용하여 합법성 입증 서류 준비</li>
+                                <li>복합 원재료(프림=팜유) 추적 체계 별도 구축</li>
+                            </ul>
+                        </div>
+
+                        <!-- 프리미엄/스페셜티 로스터 -->
+                        <div class="solution-card" style="margin: 20px 0; border-left: 4px solid var(--positive);">
+                            <div class="solution-header">
+                                <div class="solution-logo" style="background: var(--positive);">B</div>
+                                <div>
+                                    <div class="solution-name">프리미엄·스페셜티 로스터</div>
+                                    <div class="solution-tech">차별화 기회</div>
+                                </div>
+                            </div>
+                            <p style="margin: 12px 0;">
+                                EUDR을 <strong>브랜드 차별화의 기회</strong>로 활용할 수 있습니다. 
+                                "우리 커피는 산림 파괴와 무관합니다"라는 메시지는 강력한 마케팅 포인트가 됩니다.
+                            </p>
+                            <ul class="solution-features">
+                                <li>EUDR 준수 물량 선제적 확보 → 프리미엄 라인업 구축</li>
+                                <li>공급처 투명성 정보를 QR코드로 공개 (스토리텔링)</li>
+                                <li>Bird Friendly, Rainforest Alliance 등 인증 커피 비중 확대</li>
+                                <li>가격 인상분을 '가치 소비'로 포지셔닝</li>
+                            </ul>
+                        </div>
+
+                        <!-- 일반 로스터/수입사 -->
+                        <div class="solution-card" style="margin: 20px 0; border-left: 4px solid var(--warning);">
+                            <div class="solution-header">
+                                <div class="solution-logo" style="background: var(--warning);">C</div>
+                                <div>
+                                    <div class="solution-name">일반 로스터·수입사·유통사</div>
+                                    <div class="solution-tech">원가 관리 중심</div>
+                                </div>
+                            </div>
+                            <p style="margin: 12px 0;">
+                                직접적인 EUDR 의무는 없지만, <strong>글로벌 가격 상승의 영향은 피할 수 없습니다</strong>. 
+                                원가 관리와 수급 안정성 확보가 핵심입니다.
+                            </p>
+                            <ul class="solution-features">
+                                <li>공급처별 EUDR 대응 현황 파악 → 가격 인상 시기·폭 예측</li>
+                                <li>브라질·콜롬비아(준비 완료) 비중 확대 vs 에티오피아(고위험) 리스크 관리</li>
+                                <li>비준수 물량 취급 시 ESG 리스크 평가 필수</li>
+                                <li>블렌드 비율 조정으로 원가 상승 흡수 검토</li>
+                            </ul>
+                        </div>
+
+                        <h3>타임라인별 체크리스트</h3>
+
+                        <div class="roadmap">
+                            <div class="roadmap-phase">
+                                <div class="phase-number">1</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">공급망 진단 & 시나리오 분석</div>
+                                    <div class="phase-period">2026년 상반기</div>
+                                    <div class="phase-tasks">
+                                        • 현재 거래 중인 트레이더·수출업체에 EUDR 대응 계획 문의<br>
+                                        • 산지별(브라질/콜롬비아 vs 에티오피아/인도네시아) 가격 변동 시나리오 수립<br>
+                                        • "EUDR 준수 물량만 취급" vs "혼용" vs "비준수 물량 활용" 전략 결정<br>
+                                        • 원가 상승분 전가 vs 흡수 비율 검토
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="roadmap-phase">
+                                <div class="phase-number">2</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">가격 전략 & 포지셔닝 조정</div>
+                                    <div class="phase-period">2026년 하반기</div>
+                                    <div class="phase-tasks">
+                                        • 메뉴/제품 가격 인상 시기 및 폭 결정<br>
+                                        • 가격 인상 시 고객 커뮤니케이션 전략 수립 ("왜 비싸졌나")<br>
+                                        • 블렌드 레시피 조정: 고가 산지 비중 축소 또는 프리미엄화<br>
+                                        • 필요시 대체 산지(베트남 로부스타, 우간다 등) 테스트
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="roadmap-phase">
+                                <div class="phase-number">3</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">본격 시행 대응 & 모니터링</div>
+                                    <div class="phase-period">2026년 12월 이후</div>
+                                    <div class="phase-tasks">
+                                        • EUDR 시행 후 실제 시장 반응 모니터링<br>
+                                        • EU 퇴출 물량의 아시아 시장 유입 상황 추적<br>
+                                        • 경쟁사 대응 현황 분석 및 전략 미세 조정<br>
+                                        • 2027년 중소기업 적용(6월) 전 추가 가격 변동 대비
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>의사결정 포인트: 비준수 물량을 취급할 것인가?</h3>
+
+                        <p>
+                            EUDR 시행 후, EU에서 퇴출된 '비준수 물량'이 한국 시장에 저가로 유입될 가능성이 있습니다. 
+                            이를 어떻게 다룰지는 각 기업의 <strong>브랜드 정체성과 고객층</strong>에 따라 결정해야 합니다.
+                        </p>
+
+                        <table class="cost-table">
+                            <thead>
+                                <tr>
+                                    <th>선택지</th>
+                                    <th>장점</th>
+                                    <th>리스크</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>EUDR 준수 물량만 취급</strong></td>
+                                    <td>ESG 브랜딩, 프리미엄 포지셔닝</td>
+                                    <td>원가 상승, 공급 부족 시 물량 확보 난항</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>준수/비준수 혼용</strong></td>
+                                    <td>원가 유연성, 다양한 가격대 대응</td>
+                                    <td>분리 관리 비용, 브랜드 일관성 저하</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>비준수 물량 적극 활용</strong></td>
+                                    <td>단기 원가 절감, 저가 시장 경쟁력</td>
+                                    <td>ESG 리스크, 향후 규제 확산 시 재전환 비용</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💡 실무 팁</div>
+                            <p>
+                                <strong>트레이더에게 물어볼 질문:</strong><br>
+                                "2026년 12월 이후 EUDR 준수 물량과 비준수 물량의 가격 차이가 어느 정도로 예상되나요?"<br>
+                                "현재 저희가 구매하는 오리진의 EUDR 준비 상태는 어떤가요?"<br>
+                                "EUDR 준수 물량 우선 배정이 가능한가요? 추가 비용은?"
+                            </p>
+                            <p style="margin-bottom: 0;">
+                                <strong>지금 당장 할 수 있는 것:</strong><br>
+                                기존 거래처에 EUDR 관련 문의 메일 발송 → 답변을 바탕으로 공급처 리스크 맵 작성
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 결론 -->
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="section-icon">✍️</div>
+                            <h2>결론: 변화에 대비하되, 과잉 대응은 경계하라</h2>
+                        </div>
+
+                        <p>
+                            EUDR은 한국 로스터리와 수입사에게 직접적인 법적 의무를 부과하지 않습니다. 
+                            그러나 글로벌 공급망의 재편은 이미 시작되었고, 그 영향은 우리 시장에도 반드시 도달합니다.
+                        </p>
+
+                        <p>
+                            핵심은 <strong>'규제 준수'가 아니라 '시장 변화 대응'</strong>입니다. 
+                            EUDR 준수 비용이 글로벌 생두 가격에 전가되면서 원가 상승은 불가피하고, 
+                            동시에 EU에서 밀려난 비준수 물량이 아시아 시장으로 유입될 가능성도 있습니다.
+                        </p>
+
+                        <div class="highlight-box" style="background: linear-gradient(135deg, rgba(184, 115, 51, 0.1), rgba(196, 165, 116, 0.1)); border-left-color: var(--copper);">
+                            <div class="highlight-title">📌 핵심 액션 아이템</div>
+                            <p>
+                                <strong>1. 지금 당장:</strong> 주요 거래처에 EUDR 대응 현황 문의 → 가격 변동 시나리오 파악<br><br>
+                                <strong>2. 2026년 상반기:</strong> 산지별 리스크 평가, 블렌드 조정안 검토, 가격 전략 수립<br><br>
+                                <strong>3. 2026년 하반기:</strong> 고객 커뮤니케이션 준비, 필요시 메뉴/제품 가격 조정<br><br>
+                                <strong>4. 전략적 선택:</strong> 우리 브랜드가 "EUDR 준수 프리미엄"을 추구할 것인지, 
+                                "가격 경쟁력"을 우선할 것인지 명확히 결정
+                            </p>
+                        </div>
+
+                        <p>
+                            과잉 대응도 경계해야 합니다. 비싼 추적 솔루션을 도입하거나, 
+                            불필요하게 공급처를 정리할 필요는 없습니다. 
+                            한국 내수 시장만을 대상으로 하는 기업이라면, 
+                            <strong>시장 가격 변화에 유연하게 대응하는 것</strong>이 최선의 전략입니다.
+                        </p>
+
+                        <p>
+                            다만, 스페셜티 시장을 겨냥하거나 ESG 브랜딩을 중시하는 기업이라면, 
+                            EUDR을 <strong>차별화의 기회</strong>로 삼을 수 있습니다. 
+                            "우리 커피는 산림을 파괴하지 않습니다"라는 메시지는 
+                            점점 더 강력한 마케팅 포인트가 될 것입니다.
+                        </p>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">⏰ 기억하세요</div>
+                            <p style="margin-bottom: 0;">
+                                <strong>2026년 12월 30일</strong> — EU 대기업 적용<br>
+                                <strong>2027년 6월 30일</strong> — EU 중소기업 적용<br><br>
+                                이 시점 전후로 글로벌 생두 가격과 수급에 유의미한 변화가 예상됩니다. 
+                                미리 시나리오를 그려두고, 상황에 따라 유연하게 대응할 준비를 하세요.
+                            </p>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- 사이드바 -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">목차</h3>
+                        <ul class="toc-list">
+                            <li class="toc-item"><a href="#overview" class="toc-link">Executive Summary</a></li>
+                            <li class="toc-item"><a href="#regulation" class="toc-link">EUDR 규제 심층 분석</a></li>
+                            <li class="toc-item"><a href="#supply-chain" class="toc-link">주요 생산국별 대응 현황</a></li>
+                            <li class="toc-item"><a href="#strategy" class="toc-link">비용 구조 분석</a></li>
+                            <li class="toc-item"><a href="#strategy" class="toc-link">디지털 추적성 솔루션</a></li>
+                            <li class="toc-item"><a href="#strategy" class="toc-link">마케팅 전략</a></li>
+                            <li class="toc-item"><a href="#strategy" class="toc-link">한국 로스터리·수입사 대응 전략</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">체크리스트</h3>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">거래처에 EUDR 대응 현황 문의</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">산지별 가격 변동 시나리오 수립</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">비준수 물량 취급 여부 결정</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">가격 전가 vs 흡수 전략 검토</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">☐</div>
+                            <div class="key-text">고객 커뮤니케이션 메시지 준비</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">국가별 준비도</h3>
+                        <div class="key-point">
+                            <div class="key-icon">🇧🇷</div>
+                            <div class="key-text"><strong>브라질</strong><br>준비 완료 ✅</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇨🇴</div>
+                            <div class="key-text"><strong>콜롬비아</strong><br>준비 완료 ✅</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇻🇳</div>
+                            <div class="key-text"><strong>베트남</strong><br>대응 진행 중 ⏳</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇪🇹</div>
+                            <div class="key-text"><strong>에티오피아</strong><br>고위험 ⚠️</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">참고 자료</h3>
+                        <div class="key-point">
+                            <div class="key-icon">📄</div>
+                            <div class="key-text">EU Parliament EUDR 수정안</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📊</div>
+                            <div class="key-text">USDA FAS Coffee Reports</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🌐</div>
+                            <div class="key-text">산림청 EUDR TF</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📈</div>
+                            <div class="key-text">ICO Coffee Market Report</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다. 
+                        트레이더, 로스터, 투자자를 위한 전문 시장 인텔리전스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">문의</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">데이터 출처</div>
+                    <span class="footer-link" style="cursor: default;">EU Parliament, USDA FAS</span>
+                    <span class="footer-link" style="cursor: default;">Cecafé, FNC Colombia</span>
+                    <span class="footer-link" style="cursor: default;">VICOFA, 산림청, ICO</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 
+                    모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 프로그레스 바
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // 네비게이션 스크롤 효과
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
