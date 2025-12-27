@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | December 29, 2025</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "Professional Market Intelligence for Traders & Roasters",
+    "date": "2025-12-29",
+    "summary": "March Arabica (KCH26) rebounded +2.82% to 350.25¢. Indonesian flooding damaged 1/3 of Arabica farms, threatening 15% export decline for 2025/26. Brazil's Minas Gerais received 76% of average rainfall, easing supply concerns. ICE inventories recovered to 2-month high of 456k bags. USDA projects 2025/26 global production +2.0% but ending stocks -5.4%. Vietnam November exports surged +39% despite ongoing farmer retention. USD/BRL maintains weakness at 5.55 level. Market transitions to 350¢-centered consolidation.",
+    "tags": ["350.25cents", "rebound", "Indonesia-flooding", "Arabica-damage", "Brazil-rainfall", "ICE-inventory-recovery", "Vietnam-exports", "Real-weakness"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "Trading Economics", "USDA FAS", "Indonesia Coffee Exporters", "Somar Meteorologia", "Vietnam Statistics Office"],
+    "price_current": "350.25",
+    "price_change": "+2.82%",
+    "report_type": "weekly"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--accent));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* Main Container */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* Hero Header */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--roast);
+            opacity: 0.8;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        .price-hero {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .price-current {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .price-change {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 8px;
+            background: rgba(74, 124, 89, 0.1);
+            color: var(--positive);
+        }
+
+        .price-change.negative {
+            background: rgba(194, 58, 58, 0.1);
+            color: var(--negative);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, var(--crema) 0%, var(--steam) 100%);
+            padding: clamp(28px, 4vw, 40px);
+            border-radius: 16px;
+            border: 1px solid rgba(61, 35, 20, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .summary-text {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: var(--roast);
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 60px;
+            padding: clamp(40px, 8vh, 80px) 0;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            min-width: 0;
+        }
+
+        section {
+            margin-bottom: clamp(48px, 8vh, 80px);
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--accent);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            font-weight: 600;
+            color: var(--roast);
+            margin: 32px 0 20px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--ink);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .stat-change {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .stat-change.positive {
+            color: var(--positive);
+        }
+
+        .stat-change.negative {
+            color: var(--negative);
+        }
+
+        /* News Cards */
+        .news-grid {
+            display: grid;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .news-card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            border-color: var(--copper);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .news-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+            gap: 16px;
+        }
+
+        .news-card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .news-card-date {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.6;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .news-card-content {
+            color: var(--ink);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .news-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--steam);
+            color: var(--roast);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 4px 6px 4px 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .news-item {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-date {
+            font-size: 0.75rem;
+            color: var(--copper);
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .news-title {
+            font-size: 0.95rem;
+            color: var(--roast);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: rgba(245, 240, 232, 0.9);
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.2);
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: rgba(245, 240, 232, 0.85);
+            margin-bottom: 12px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            color: rgba(245, 240, 232, 0.8);
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <a href="#" class="nav-brand">Coffee Market Intelligence</a>
+        <div class="nav-links">
+            <a href="#market-overview" class="nav-link">Market Overview</a>
+            <a href="#fundamentals" class="nav-link">Fundamentals</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+
+    <!-- Main Page -->
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- Hero Header -->
+            <header class="hero-header">
+                <div class="report-meta">
+                    <span class="meta-item">📅 December 29, 2025</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">📊 ICE March Contract</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">⏰ December 26 Settlement</span>
+                </div>
+
+                <h1>Coffee Futures Weekly Update</h1>
+                <p class="subtitle">Professional Market Intelligence for Traders & Roasters</p>
+
+                <div class="price-hero">
+                    <div class="price-current">350.25¢</div>
+                    <div class="price-change positive">+2.82%</div>
+                </div>
+
+                <div class="summary-box">
+                    <p class="summary-text">
+                        ICE March Arabica (KCH26) settled at 350.25 cents, rebounding +2.82% for the week. 
+                        While Brazil's Minas Gerais received 76% of average rainfall, easing drought concerns, 
+                        widespread flooding in Indonesia's Northern Sumatra damaged approximately one-third of Arabica farms, 
+                        threatening a 15% decline in 2025/26 season exports. ICE certified inventories recovered to a 2-month high 
+                        of 456k bags. USDA projects 2025/26 global production to increase +2.0% but ending stocks to decline -5.4%, 
+                        indicating persistent structural tightness. Vietnam's November exports surged +39% y/y, though continued farmer 
+                        retention resulted in a -14.8% decline for the January-November period.
+                    </p>
+                </div>
+            </header>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <main class="main-content">
+                    <!-- Market Overview -->
+                    <section id="market-overview">
+                        <h2>Market Overview</h2>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">March Settlement</div>
+                                <div class="stat-value">350.25¢</div>
+                                <div class="stat-change positive">+9.45¢ (+2.82%)</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Weekly High</div>
+                                <div class="stat-value">350.70¢</div>
+                                <div class="stat-change">December 26</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Weekly Low</div>
+                                <div class="stat-value">344.30¢</div>
+                                <div class="stat-change">December 26</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Volume (March)</div>
+                                <div class="stat-value">7,348</div>
+                                <div class="stat-change">December 26</div>
+                            </div>
+                        </div>
+
+                        <h3>Weekly Price Action</h3>
+                        <p>
+                            Coffee markets navigated conflicting signals this week, ultimately rebounding +2.82% amid 
+                            Indonesian flood damage and improved Brazilian rainfall. The week ending December 19 saw 
+                            Minas Gerais receive 38.3mm of rainfall (76% of average), alleviating extreme drought concerns. 
+                            However, widespread flooding in Indonesia's Northern Sumatra damaged approximately one-third 
+                            of Arabica farms, with the Association of Indonesian Coffee Exporters and Industry projecting 
+                            a potential 15% decline in 2025/26 season exports.
+                        </p>
+
+                        <p>
+                            ICE certified inventories have steadily recovered from the November 20 low of 398k bags 
+                            (1.75-year low) to reach 456k bags on December 25 (2-month high). Robusta inventories similarly 
+                            recovered from the December 10 low of 4,012 lots (11.5-month low) to 4,278 lots on December 24-25. 
+                            Despite the removal of US-Brazil tariffs, US inventories remain tight, as August-October Brazilian 
+                            coffee purchases plummeted -52% y/y to 984k bags during the period when President Trump's tariffs 
+                            were in effect.
+                        </p>
+                    </section>
+
+                    <!-- Fundamental Analysis -->
+                    <section id="fundamentals">
+                        <h2>Fundamental Analysis</h2>
+
+                        <h3>Production Outlook: USDA 2025/26 Forecast</h3>
+                        <p>
+                            The December 19 USDA FAS semi-annual report projects 2025/26 global coffee production to increase 
+                            +2.0% y/y to a record 178.85 million bags. Arabica production is forecast to decline -4.7% to 
+                            95.52 million bags, while Robusta is expected to surge +10.9% to 83.33 million bags.
+                        </p>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Brazil 2025/26</div>
+                                <div class="stat-value">63M bags</div>
+                                <div class="stat-change negative">-3.1% y/y</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Vietnam 2025/26</div>
+                                <div class="stat-value">30.8M bags</div>
+                                <div class="stat-change positive">+6.2% y/y (4-year high)</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Ending Stocks 2025/26</div>
+                                <div class="stat-value">20.15M bags</div>
+                                <div class="stat-change negative">-5.4% y/y</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            The projected -5.4% decline in ending stocks from 21.31 million to 20.15 million bags suggests 
+                            structural tightness will persist despite production growth. On December 4, Conab raised its 
+                            2025 Brazilian total production estimate by +2.4% to 56.54 million bags (from 55.20 million in 
+                            September), though this remains below historical averages.
+                        </p>
+
+                        <h3>Indonesian Flood Impact</h3>
+                        <p>
+                            According to the chairman of the Association of Indonesian Coffee Exporters and Industry, 
+                            widespread flooding in recent weeks damaged approximately one-third of Arabica coffee farms in 
+                            Northern Sumatra. While Indonesia ranks as the world's third-largest Robusta producer, Northern 
+                            Sumatra also cultivates some Arabica. The damage is projected to reduce total 2025/26 season exports 
+                            by up to 15%, with Robusta-growing regions experiencing relatively less impact.
+                        </p>
+
+                        <h3>Brazilian Weather Trends</h3>
+                        <p>
+                            Somar Meteorologia reported on December 23 that Minas Gerais, Brazil's largest Arabica-growing region, 
+                            received 38.3mm of rainfall during the week ending December 19, achieving 76% of the historical average. 
+                            While improved from severe drought conditions, this still falls below average levels. Brazil is currently 
+                            entering the critical flowering period for the 2025/26 season, making rainfall patterns over the next 
+                            1-2 months crucial determinants of production volume.
+                        </p>
+
+                        <h3>Vietnam Export Dynamics</h3>
+                        <p>
+                            Vietnam's General Statistics Office reported on December 5 that November coffee exports surged +39% y/y 
+                            to 88,000 MT, with cumulative January-November exports rising +14.8% to 1.398 MMT. However, conflicting 
+                            data from Trading Economics indicates January-November total exports declined -14.3% to 1.2 MMT. 
+                            This discrepancy reflects farmer retention strategies limiting actual exportable volumes despite high prices.
+                        </p>
+
+                        <p>
+                            Vietnam's 2024 coffee export prices reached record highs, averaging 5,450 USD/ton in December 
+                            (-2.3% from November but +88.8% y/y). The annual average export price reached 4,158 USD/ton, 
+                            up +59.1% from 2023. USDA projects Vietnam's 2025/26 production at 30.8 million bags (+6.2% y/y, 4-year high), 
+                            though continued farmer retention may limit actual market supply.
+                        </p>
+
+                        <h3>Currency Developments</h3>
+                        <p>
+                            USD/BRL exchange rates reached a 2024 peak of 6.73 on December 25 before settling around 5.55. 
+                            The Brazilian Real continues to weaken amid political uncertainty and fiscal concerns. Unlike historical 
+                            patterns, Real weakness is not translating to immediate export volume increases due to improved producer 
+                            financial conditions. Instead, producers are strategically retaining inventory, awaiting further price appreciation.
+                        </p>
+                    </section>
+
+                    <!-- Market Outlook -->
+                    <section id="outlook">
+                        <h2>Market Outlook & Risk Assessment</h2>
+
+                        <h3>Near-Term Outlook (1 Month)</h3>
+                        <p>
+                            Indonesian flood damage and persistently tight ICE inventories provide downside support, while 
+                            improved Brazilian rainfall and Vietnam's production growth forecast cap upside potential. 
+                            We anticipate consolidation within a 340-360 cent range. The critical variable remains Brazil's 
+                            January-February rainfall patterns. Continued favorable rainfall could strengthen 2026/27 production 
+                            outlooks and pressure prices lower, while a sudden rainfall deficit could trigger a sharp rebound scenario.
+                        </p>
+
+                        <h3>Medium-Term Outlook (3 Months)</h3>
+                        <p>
+                            USDA's -5.4% ending stocks forecast indicates persistent structural tightness. Vietnam's production 
+                            increase (+6.2%) will offset Brazil's decline (-3.1%), maintaining delicate global supply-demand balance. 
+                            Indonesia's 15% export reduction, while limited in scope, may support Arabica premiums specifically.
+                        </p>
+
+                        <h3>Key Risk Factors</h3>
+                        <p>
+                            <strong>Upside Risks:</strong> Sudden Brazilian rainfall deficit in January-February causing flowering 
+                            failure and sharp 2026/27 production downgrades; additional Indonesian weather events spreading to 
+                            Robusta regions; prolonged Vietnamese farmer retention intensifying actual supply tightness.
+                        </p>
+
+                        <p>
+                            <strong>Downside Risks:</strong> Sustained Brazilian rainfall bolstering 2026/27 bumper crop expectations; 
+                            large-scale Vietnamese farmer selling; USD/BRL Real strengthening increasing Brazilian export pressure; 
+                            global demand decline from economic slowdown.
+                        </p>
+
+                        <h3>Base Case Scenario</h3>
+                        <p>
+                            Markets are currently seeking equilibrium between improved supply outlooks and structural tightness. 
+                            Near-term consolidation around 350 cents appears likely, with directional clarity dependent on 
+                            Brazil's flowering period (January-February) rainfall patterns. Structurally, USDA's projected ending 
+                            stocks decline provides downside support, while Indonesian damage and Vietnamese retention offer 
+                            additional bullish reinforcement.
+                        </p>
+                    </section>
+
+                    <!-- Key News -->
+                    <section>
+                        <h2>Key News Briefing</h2>
+                        
+                        <div class="news-grid">
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">Indonesian Flooding Damages 1/3 of Arabica Farms</h4>
+                                    <span class="news-card-date">December 25</span>
+                                </div>
+                                <p class="news-card-content">
+                                    The chairman of Indonesia's Association of Coffee Exporters and Industry reported that 
+                                    widespread flooding in Northern Sumatra damaged approximately one-third of Arabica farms, 
+                                    threatening a 15% decline in 2025/26 season exports. Robusta-growing regions experienced 
+                                    relatively less impact. Indonesia ranks as the world's third-largest Robusta producer.
+                                </p>
+                                <div>
+                                    <span class="news-tag">Indonesia</span>
+                                    <span class="news-tag">Flooding</span>
+                                    <span class="news-tag">Export Decline</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">ICE Arabica Inventories Reach 2-Month High of 456k Bags</h4>
+                                    <span class="news-card-date">December 25</span>
+                                </div>
+                                <p class="news-card-content">
+                                    ICE certified Arabica inventories recovered from the November 20 low of 398k bags 
+                                    (1.75-year low) to 456k bags on December 25 (2-month high). Robusta inventories similarly 
+                                    increased from the December 10 low of 4,012 lots (11.5-month low) to 4,278 lots 
+                                    (3-week high) on December 24-25. Despite tariff removal, US inventories remain tight.
+                                </p>
+                                <div>
+                                    <span class="news-tag">ICE Inventories</span>
+                                    <span class="news-tag">Recovery</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">Brazil's Minas Gerais Records 76% of Average Rainfall</h4>
+                                    <span class="news-card-date">December 23</span>
+                                </div>
+                                <p class="news-card-content">
+                                    Somar Meteorologia reported that Minas Gerais, Brazil's largest Arabica-growing region, 
+                                    received 38.3mm of rainfall during the week ending December 19, achieving 76% of the 
+                                    historical average. While improved from severe drought, this remains below average. 
+                                    Rainfall patterns during the 2025/26 flowering period will be critical for production outcomes.
+                                </p>
+                                <div>
+                                    <span class="news-tag">Brazil</span>
+                                    <span class="news-tag">Rainfall Improvement</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">USDA Projects 2025/26 Global Production +2.0%</h4>
+                                    <span class="news-card-date">December 19</span>
+                                </div>
+                                <p class="news-card-content">
+                                    USDA FAS forecasts 2025/26 global coffee production at 178.85 million bags (+2.0% y/y, record high). 
+                                    Arabica is projected at 95.52 million bags (-4.7%), Robusta at 83.33 million bags (+10.9%). 
+                                    Brazil is forecast at 63 million bags (-3.1%), Vietnam at 30.8 million bags (+6.2%, 4-year high). 
+                                    Ending stocks are expected to decline to 20.15 million bags (-5.4%).
+                                </p>
+                                <div>
+                                    <span class="news-tag">USDA</span>
+                                    <span class="news-tag">Production Forecast</span>
+                                    <span class="news-tag">Stocks Decline</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">This Week's Key Issues</h3>
+                        <div class="news-item">
+                            <div class="news-date">Indonesia</div>
+                            <div class="news-title">Flooding damages 1/3 of Arabica farms, threatens 15% export decline</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">Inventory Recovery</div>
+                            <div class="news-title">ICE Arabica inventories reach 2-month high of 456k bags</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">Vietnam Strength</div>
+                            <div class="news-title">November exports surge +39%, prices reach record highs</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">Brazil Weather</div>
+                            <div class="news-title">Minas rainfall at 76% of average, flowering outlook improving</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Next Week's Focus</h3>
+                        <div class="news-item">
+                            <div class="news-title">Monitor Brazil January rainfall patterns: critical for flowering success</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">Assess additional Indonesian damage scope and Robusta impact evaluation</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">Vietnam December export data: confirm continued farmer retention</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">ICE inventory trends: recovery sustainability determines near-term direction</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Analysis & Outlook</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 16px;">
+                            Indonesian flood damage emerges as a new supply risk, balanced by improved Brazilian rainfall 
+                            and Vietnam production growth forecasts. Markets transition to consolidation around 350 cents. 
+                            USDA's -5.4% ending stocks forecast indicates persistent structural tightness.
+                        </p>
+                        <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 16px;">
+                            Near-term consolidation within 340-360 cent range appears likely, with Brazil's January-February 
+                            flowering rainfall as the critical variable. Continued rainfall supports further weakness; sudden 
+                            deficit triggers rebound scenario.
+                        </p>
+                        <div style="background: var(--steam); padding: 16px; border-radius: 8px; margin-top: 20px;">
+                            <div style="font-weight: 600; color: var(--roast); margin-bottom: 8px;">Base Case Outlook</div>
+                            <div style="font-size: 0.9rem; color: var(--ink);">
+                                <strong>Near-term (1 month):</strong> 340-360¢ range<br>
+                                <strong>Medium-term (3 months):</strong> Direction determined by Brazil rainfall patterns<br>
+                                <strong>Risk:</strong> Sudden January-February rainfall deficit triggers sharp rebound
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        Providing in-depth analysis and insights into global coffee markets. 
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">Barchart, Trading Economics</span>
+                    <span class="footer-link" style="cursor: default;">USDA FAS, Conab</span>
+                    <span class="footer-link" style="cursor: default;">Vietnam Statistics Office</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    This report is provided for informational purposes only and does not constitute investment advice. 
+                    All investment decisions should be made based on independent judgment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // Navigation scroll effect
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
