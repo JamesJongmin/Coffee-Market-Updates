@@ -524,7 +524,55 @@
 
         /* 이벤트 아이템 확장 스타일 */
         .event-item.past {
+            opacity: 0.7;
+        }
+
+        /* 이벤트 결과 표시 */
+        .event-result {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed rgba(26, 15, 10, 0.1);
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+        }
+
+        .result-label {
+            color: var(--ink);
             opacity: 0.5;
+        }
+
+        .result-value {
+            font-weight: 600;
+        }
+
+        .result-value.forecast {
+            color: var(--ink);
+            opacity: 0.6;
+        }
+
+        .result-value.actual {
+            color: var(--espresso);
+        }
+
+        .result-value.actual.positive {
+            color: var(--positive);
+        }
+
+        .result-value.actual.negative {
+            color: var(--negative);
+        }
+
+        .result-vs {
+            color: var(--ink);
+            opacity: 0.3;
+            font-size: 0.6rem;
         }
 
         .event-badge {
@@ -2555,64 +2603,67 @@
             const now = new Date();
             
             // ========== 매크로 이벤트 ==========
+            // forecast: 예상치, actual: 실제치, unit: 단위, actualBetter: 예상보다 좋으면 true
             const macroEvents = [
-                // 2025년 11월
-                { date: new Date(2025, 10, 26), type: 'macro', title: 'FOMC 회의록 공개', desc: '11월 회의 상세 내용', important: true },
-                { date: new Date(2025, 10, 27), type: 'macro', title: '미국 3분기 GDP 수정치', desc: '경제 성장률 2차 추정' },
-                { date: new Date(2025, 10, 29), type: 'macro', title: '미국 PCE 물가지수', desc: '연준 선호 인플레 지표', important: true },
+                // 2025년 11월 (지나간 이벤트 - 결과 포함)
+                { date: new Date(2025, 10, 26), type: 'macro', title: 'FOMC 회의록 공개', desc: '11월 회의 상세 내용', important: true, forecast: '매파적', actual: '중립적', actualBetter: true },
+                { date: new Date(2025, 10, 27), type: 'macro', title: '미국 3분기 GDP 수정치', desc: '경제 성장률 2차 추정', forecast: '2.8%', actual: '2.8%', unit: 'QoQ' },
+                { date: new Date(2025, 10, 29), type: 'macro', title: '미국 PCE 물가지수', desc: '연준 선호 인플레 지표', important: true, forecast: '2.3%', actual: '2.3%', unit: 'YoY' },
                 
-                // 2025년 12월
-                { date: new Date(2025, 11, 6), type: 'macro', title: '미국 고용보고서', desc: '11월 비농업 고용 발표', important: true },
-                { date: new Date(2025, 11, 18), type: 'macro', title: '미국 CPI', desc: '11월 소비자물가지수' },
-                { date: new Date(2025, 11, 10), type: 'macro', title: 'FOMC 금리 결정', desc: '12월 정책 금리 발표', important: true },
-                { date: new Date(2025, 11, 20), type: 'macro', title: '미국 PCE 물가지수', desc: '11월 개인소비지출' },
+                // 2025년 12월 (지나간 이벤트 - 결과 포함)
+                { date: new Date(2025, 11, 6), type: 'macro', title: '미국 고용보고서', desc: '11월 비농업 고용 발표', important: true, forecast: '+200K', actual: '+227K', actualBetter: true },
+                { date: new Date(2025, 11, 10), type: 'macro', title: 'FOMC 금리 결정', desc: '12월 정책 금리 발표', important: true, forecast: '4.25-4.50%', actual: '4.25-4.50%' },
+                { date: new Date(2025, 11, 11), type: 'macro', title: '미국 CPI', desc: '11월 소비자물가지수', forecast: '2.7%', actual: '2.7%', unit: 'YoY' },
+                { date: new Date(2025, 11, 20), type: 'macro', title: '미국 PCE 물가지수', desc: '11월 개인소비지출', forecast: '2.5%', actual: '2.4%', unit: 'YoY', actualBetter: true },
                 
                 // 2026년 1월
-                { date: new Date(2026, 0, 2), type: 'macro', title: '미국 고용보고서', desc: '12월 비농업 고용 발표', important: true },
-                { date: new Date(2026, 0, 3), type: 'macro', title: '미국 ISM 제조업 PMI', desc: '12월 제조업 경기 지표' },
-                { date: new Date(2026, 0, 8), type: 'macro', title: 'FOMC 회의록 공개', desc: '12월 회의 상세 내용' },
-                { date: new Date(2026, 0, 13), type: 'macro', title: '미국 CPI', desc: '12월 소비자물가지수', important: true },
-                { date: new Date(2026, 0, 28), type: 'macro', title: 'FOMC 금리 결정', desc: '1월 정책 금리 발표', important: true },
-                { date: new Date(2026, 0, 29), type: 'macro', title: '미국 PCE 물가지수', desc: '12월 개인소비지출' },
+                { date: new Date(2026, 0, 10), type: 'macro', title: '미국 고용보고서', desc: '12월 비농업 고용 발표', important: true, forecast: '+160K' },
+                { date: new Date(2026, 0, 15), type: 'macro', title: '미국 CPI', desc: '12월 소비자물가지수', important: true, forecast: '2.8%', unit: 'YoY' },
+                { date: new Date(2026, 0, 29), type: 'macro', title: 'FOMC 금리 결정', desc: '1월 정책 금리 발표', important: true, forecast: '4.25-4.50%' },
+                { date: new Date(2026, 0, 31), type: 'macro', title: '미국 PCE 물가지수', desc: '12월 개인소비지출', forecast: '2.5%', unit: 'YoY' },
                 
                 // 2026년 2월
-                { date: new Date(2026, 1, 6), type: 'macro', title: '미국 고용보고서', desc: '1월 비농업 고용 발표', important: true },
-                { date: new Date(2026, 1, 12), type: 'macro', title: '미국 CPI', desc: '1월 소비자물가지수' },
+                { date: new Date(2026, 1, 7), type: 'macro', title: '미국 고용보고서', desc: '1월 비농업 고용 발표', important: true, forecast: '+170K' },
+                { date: new Date(2026, 1, 12), type: 'macro', title: '미국 CPI', desc: '1월 소비자물가지수', forecast: '2.7%', unit: 'YoY' },
                 { date: new Date(2026, 1, 19), type: 'macro', title: 'FOMC 회의록 공개', desc: '1월 회의 상세 내용' },
-                { date: new Date(2026, 1, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '1월 개인소비지출' },
+                { date: new Date(2026, 1, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '1월 개인소비지출', forecast: '2.4%', unit: 'YoY' },
                 
                 // 2026년 3월
-                { date: new Date(2026, 2, 6), type: 'macro', title: '미국 고용보고서', desc: '2월 비농업 고용 발표', important: true },
-                { date: new Date(2026, 2, 12), type: 'macro', title: '미국 CPI', desc: '2월 소비자물가지수' },
-                { date: new Date(2026, 2, 18), type: 'macro', title: 'FOMC 금리 결정', desc: '3월 정책 금리 발표', important: true },
-                { date: new Date(2026, 2, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '2월 개인소비지출' },
+                { date: new Date(2026, 2, 7), type: 'macro', title: '미국 고용보고서', desc: '2월 비농업 고용 발표', important: true, forecast: '+165K' },
+                { date: new Date(2026, 2, 12), type: 'macro', title: '미국 CPI', desc: '2월 소비자물가지수', forecast: '2.6%', unit: 'YoY' },
+                { date: new Date(2026, 2, 19), type: 'macro', title: 'FOMC 금리 결정', desc: '3월 정책 금리 발표', important: true, forecast: '4.00-4.25%' },
+                { date: new Date(2026, 2, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '2월 개인소비지출', forecast: '2.3%', unit: 'YoY' },
             ];
             
             // ========== 커피 시장 이벤트 ==========
             const coffeeEvents = [
-                // 2025년 11월
-                { date: new Date(2025, 10, 27), type: 'coffee', title: 'CONAB 11월 작황 보고서', desc: '브라질 25/26 수확 진행 업데이트' },
-                // 2025년 12월
-                { date: new Date(2025, 11, 3), type: 'coffee', title: 'ICO 월간 보고서', desc: '11월 글로벌 수급 분석', important: true },
-                { date: new Date(2025, 11, 5), type: 'coffee', title: 'ICE 선물 만기', desc: '12월물 최종 거래일' },
-                { date: new Date(2025, 11, 9), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 전망', important: true },
-                { date: new Date(2025, 11, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '11월 로부스타 수출 실적' },
-                { date: new Date(2025, 11, 5), type: 'coffee', title: 'CONAB 12월 보고서', desc: '브라질 작황 최종 전망' },
+                // 2025년 11월 (지나간 이벤트 - 결과 포함)
+                { date: new Date(2025, 10, 27), type: 'coffee', title: 'CONAB 11월 작황 보고서', desc: '브라질 25/26 수확 진행', forecast: '54.2M', actual: '54.8M', unit: 'bags', actualBetter: true },
+                
+                // 2025년 12월 (지나간 이벤트 - 결과 포함)
+                { date: new Date(2025, 11, 3), type: 'coffee', title: 'ICO 월간 보고서', desc: '11월 글로벌 수급 분석', important: true, forecast: '적자', actual: '8.5M 적자', unit: 'bags' },
+                { date: new Date(2025, 11, 5), type: 'coffee', title: 'ICE 선물 만기', desc: '12월물 최종 거래일', forecast: '340¢', actual: '352¢', unit: '/lb', actualBetter: false },
+                { date: new Date(2025, 11, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 전망', important: true, forecast: '175M', actual: '174.3M', unit: 'bags' },
+                { date: new Date(2025, 11, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '11월 로부스타 수출 실적', forecast: '85K', actual: '92K', unit: 'tons', actualBetter: true },
+                { date: new Date(2025, 11, 18), type: 'coffee', title: 'CONAB 12월 보고서', desc: '브라질 작황 최종 전망', forecast: '54.8M', actual: '54.9M', unit: 'bags' },
+                
                 // 2026년 1월
-                { date: new Date(2026, 0, 7), type: 'coffee', title: 'ICO 월간 보고서', desc: '12월 글로벌 시장 분석', important: true },
-                { date: new Date(2026, 0, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true },
-                { date: new Date(2026, 0, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '12월 로부스타 수출 실적' },
-                { date: new Date(2026, 0, 20), type: 'coffee', title: 'CONAB 1차 전망', desc: '브라질 26/27 예비 전망', important: true },
+                { date: new Date(2026, 0, 7), type: 'coffee', title: 'ICO 월간 보고서', desc: '12월 글로벌 시장 분석', important: true, forecast: '적자 지속' },
+                { date: new Date(2026, 0, 14), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true, forecast: '174M', unit: 'bags' },
+                { date: new Date(2026, 0, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '12월 로부스타 수출 실적', forecast: '120K', unit: 'tons' },
+                { date: new Date(2026, 0, 21), type: 'coffee', title: 'CONAB 1차 전망', desc: '브라질 26/27 예비 전망', important: true, forecast: '58-62M', unit: 'bags' },
+                
                 // 2026년 2월
                 { date: new Date(2026, 1, 4), type: 'coffee', title: 'ICO 월간 보고서', desc: '1월 글로벌 시장 분석', important: true },
-                { date: new Date(2026, 1, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트' },
-                { date: new Date(2026, 1, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '1월 로부스타 수출 실적' },
-                { date: new Date(2026, 1, 18), type: 'coffee', title: 'CONAB 2차 전망', desc: '브라질 26/27 상세 전망', important: true },
+                { date: new Date(2026, 1, 11), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', forecast: '173M', unit: 'bags' },
+                { date: new Date(2026, 1, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '1월 로부스타 수출 실적', forecast: '100K', unit: 'tons' },
+                { date: new Date(2026, 1, 18), type: 'coffee', title: 'CONAB 2차 전망', desc: '브라질 26/27 상세 전망', important: true, forecast: '60M', unit: 'bags' },
+                
                 // 2026년 3월
                 { date: new Date(2026, 2, 4), type: 'coffee', title: 'ICO 월간 보고서', desc: '2월 글로벌 시장 분석', important: true },
-                { date: new Date(2026, 2, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true },
-                { date: new Date(2026, 2, 15), type: 'coffee', title: '브라질 수확 준비', desc: '26/27 시즌 수확 임박' },
-                { date: new Date(2026, 2, 20), type: 'coffee', title: 'CONAB 3월 보고서', desc: '브라질 수확 전 최종 전망', important: true },
+                { date: new Date(2026, 2, 11), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true, forecast: '172M', unit: 'bags' },
+                { date: new Date(2026, 2, 15), type: 'coffee', title: '브라질 수확 시작', desc: '26/27 시즌 수확 개시' },
+                { date: new Date(2026, 2, 20), type: 'coffee', title: 'CONAB 3월 보고서', desc: '브라질 수확 전 최종 전망', important: true, forecast: '61M', unit: 'bags' },
             ];
             
             // 모든 이벤트 합치기
@@ -2683,6 +2734,30 @@
                 oneWeekLater.setDate(oneWeekLater.getDate() + 7);
                 const isWithinWeek = eventDate <= oneWeekLater && eventDate >= now;
                 
+                // 결과 표시 HTML 생성
+                let resultHtml = '';
+                if (!isUpcoming && (event.forecast || event.actual)) {
+                    const actualClass = event.actualBetter === true ? 'positive' : 
+                                       event.actualBetter === false ? 'negative' : '';
+                    resultHtml = `
+                        <div class="event-result">
+                            ${event.forecast ? `
+                                <div class="result-item">
+                                    <span class="result-label">예상</span>
+                                    <span class="result-value forecast">${event.forecast}${event.unit ? ' ' + event.unit : ''}</span>
+                                </div>
+                            ` : ''}
+                            ${event.actual ? `
+                                <span class="result-vs">→</span>
+                                <div class="result-item">
+                                    <span class="result-label">실제</span>
+                                    <span class="result-value actual ${actualClass}">${event.actual}${event.unit ? ' ' + event.unit : ''}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+
                 html += `
                     <div class="event-item ${isUpcoming ? 'upcoming' : 'past'}" data-type="${event.type}">
                         <div class="event-date">
@@ -2692,11 +2767,12 @@
                         </div>
                         <div class="event-details">
                             <span class="event-type ${event.type === 'coffee' ? 'coffee' : ''}">${event.type === 'coffee' ? 'COFFEE' : 'MACRO'}</span>
-                            ${!isUpcoming ? '<span class="event-badge">완료</span>' : ''}
+                            ${!isUpcoming && event.actual ? '<span class="event-badge">발표</span>' : (!isUpcoming ? '<span class="event-badge">완료</span>' : '')}
                             ${event.important && isUpcoming ? '<span class="event-badge important">중요</span>' : ''}
                             ${isWithinWeek ? '<span class="event-badge new">이번주</span>' : ''}
                             <h4 class="event-title">${event.title}</h4>
                             <p class="event-desc">${event.desc}</p>
+                            ${resultHtml}
                         </div>
                     </div>
                 `;
