@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 | 2026년 1월 5일</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!--REPORT_META
+{
+    "title": "커피 선물 시장 주간 동향",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2026-01-05",
+    "summary": "3월물 아라비카(KCH26) 357.30센트로 주간 +8.55센트(+2.45%) 상승. 브라질 미나스 주 강우량 평년 17% 불과(12월 26일 종료주)하며 극심한 건조 지속. 폭염 예보로 작황 우려 증가. ICE 재고 45.6만백(12/29)으로 전년比 54% 급감. 베트남 2025년 수출 84억달러 기록(+60.7% y/y). Itaú BBA는 12월 말~1월 초 강우 전망 긍정적으로 평가하나 Sucafina는 2026/27 생산 49.7백만백(아라비카) 예상하며 2분기 공급 압력 전망. 시장은 350-360센트 범위에서 변동성 확대.",
+    "tags": ["357.30센트", "상승세", "미나스폭염", "극심한건조", "ICE재고급감", "베트남사상최고", "공급우려", "변동성확대"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "Trading Economics", "DTN Progressive Farmer", "Comunicaffe", "Sucafina", "Itaú BBA", "VICOFA", "Somar Meteorologia"],
+    "price_current": "357.30",
+    "price_change": "+8.55¢ (+2.45%)",
+    "report_type": "weekly"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 상단 네비게이션 바 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--accent));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* 메인 컨테이너 */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* 히어로 헤더 */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--roast);
+            opacity: 0.8;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        /* 시장 개요 카드 */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, var(--crema) 0%, var(--steam) 100%);
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        .card-label {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .card-change {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .card-change.positive {
+            color: var(--positive);
+        }
+
+        .card-change.negative {
+            color: var(--negative);
+        }
+
+        .card-change.neutral {
+            color: var(--roast);
+            opacity: 0.6;
+        }
+
+        /* 레이아웃 */
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 섹션 */
+        .section {
+            margin-bottom: 56px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.75rem, 3vw, 2.2rem);
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        /* 본문 */
+        .content p {
+            margin-bottom: 24px;
+            color: var(--ink);
+            font-size: 1.05rem;
+        }
+
+        .content strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        .content a {
+            color: var(--copper);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .content a:hover {
+            border-bottom-color: var(--copper);
+        }
+
+        /* 하이라이트 박스 */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(196, 165, 116, 0.08) 0%, rgba(196, 165, 116, 0.04) 100%);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 뉴스 카드 */
+        .news-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .news-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .news-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 16px;
+        }
+
+        .news-card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.4;
+        }
+
+        .news-card-date {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.5;
+            white-space: nowrap;
+        }
+
+        .news-card-content {
+            color: var(--ink);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .news-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--steam);
+            color: var(--roast);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 6px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--steam);
+        }
+
+        .news-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-date {
+            font-size: 0.8rem;
+            color: var(--copper);
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .news-title {
+            font-size: 0.95rem;
+            color: var(--ink);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* 푸터 */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 48px 0 32px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.15);
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <a href="#" class="nav-brand">Align Commodities</a>
+        <div class="nav-links">
+            <a href="#market" class="nav-link">시장 현황</a>
+            <a href="#analysis" class="nav-link">분석</a>
+            <a href="#news" class="nav-link">뉴스</a>
+        </div>
+    </nav>
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- 히어로 헤더 -->
+            <header class="hero-header">
+                <div class="report-meta">
+                    <span class="meta-item">Weekly Report</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">2026년 1월 5일</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">Align Commodities</span>
+                </div>
+                <h1>커피 선물 시장 주간 동향</h1>
+                <p class="subtitle">Coffee Futures Market Weekly Update</p>
+
+                <!-- 시장 개요 카드 -->
+                <div class="market-overview" id="market">
+                    <div class="overview-card">
+                        <div class="card-label">ICE 아라비카 3월물</div>
+                        <div class="card-value">357.30¢</div>
+                        <div class="card-change positive">+8.55¢ (+2.45%)</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-label">ICE 재고 (12/29)</div>
+                        <div class="card-value">45.6만백</div>
+                        <div class="card-change negative">-54% 전년比</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-label">베트남 2025 수출</div>
+                        <div class="card-value">$84억</div>
+                        <div class="card-change positive">+60.7% y/y</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-label">미나스 강우 (12/26주)</div>
+                        <div class="card-value">17%</div>
+                        <div class="card-change negative">평년比 수준</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 메인 콘텐츠 -->
+            <div class="content-layout">
+                <main>
+                    <!-- 시장 개요 -->
+                    <section class="section" id="analysis">
+                        <div class="section-header">
+                            <h2 class="section-title">시장 개요</h2>
+                            <span class="section-subtitle">Market Overview</span>
+                        </div>
+                        <div class="content">
+                            <p>
+                                1월 2일 <a href="https://www.barchart.com/futures/quotes/KC*0/futures-prices" target="_blank">Barchart</a> 데이터에 따르면 
+                                ICE 아라비카 3월물(KCH26)은 357.30센트를 기록하며 전일比 +8.55센트(+2.45%) 상승했습니다. 
+                                ICE 로부스타 3월물(RMH26)은 +5센트(+0.13%) 상승했습니다. 금요일 커피 가격은 장중 하락세를 보였으나 
+                                브라질 헤알 강세에 따른 숏커버링으로 반등하여 상승 마감했습니다.
+                            </p>
+
+                            <div class="highlight-box">
+                                <p>
+                                    <strong>브라질 헤알 강세가 핵심 동인:</strong> 
+                                    Barchart의 Rich Asplund 애널리스트에 따르면 브라질 헤알(USD/BRL)이 금요일 2주래 최고치로 상승하며 
+                                    브라질 커피 생산자들의 수출 판매를 억제했고, 이는 커피 선물 시장에서 숏커버링을 촉발했습니다. 
+                                    헤알 강세는 브라질 생산자들이 달러로 환산한 커피 판매 수익이 감소함을 의미하여 
+                                    수출 물량 출하를 지연시키는 효과를 가져왔습니다.
+                                </p>
+                            </div>
+
+                            <p>
+                                <a href="https://finance.yahoo.com/news/coffee-prices-settle-higher-slack-193128253.html" target="_blank">Yahoo Finance</a>에 따르면 
+                                12월 30일 월요일 커피 가격은 1.5주래 최고치로 상승했으며, Somar Meteorologia는 
+                                브라질 최대 아라비카 재배지역인 미나스 제라이스가 12월 26일 종료 주간 11.1mm 강우를 기록하여 
+                                역사적 평균의 17% 불과했다고 보고했습니다. <a href="https://www.tridge.com/news/coffee-prices-today-december-27-2025-arabica-psfsyi" target="_blank">Tridge</a>는 
+                                브라질 주요 커피 재배지역에서 심각한 폭염이 지속될 것으로 예상되어 시장 우려가 증폭되고 있다고 전했습니다.
+                            </p>
+
+                            <p>
+                                <a href="https://tradingeconomics.com/commodity/coffee" target="_blank">Trading Economics</a>에 따르면 
+                                ICE 인증 아라비카 재고는 12월 29일 기준 45.6만백으로 1년 전 99.1만백 대비 54% 급감했습니다. 
+                                인도네시아 북부 수마트라 홍수로 아라비카 농장 약 1/3이 피해를 입어 2025-26 시즌 수출이 최대 15% 감소할 전망이며, 
+                                미국의 브라질산 커피에 대한 50% 관세가 지속되며 공급 타이트니스를 더욱 심화시키고 있습니다.
+                            </p>
+
+                            <p>
+                                2025년 커피 가격은 불규칙한 기후, 낮은 재고, 주요 생산국의 생산 리스크로 인해 
+                                최근 역사상 가장 변동성이 크고 복잡한 해 중 하나로 기록되었습니다. 
+                                2026년에도 브라질 기후 조건에 대한 시장의 민감도로 인해 변동성이 지속될 것으로 보이나, 
+                                중장기적으로는 글로벌 공급 개선이 예상됩니다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 공급 펀더멘털 분석 -->
+                    <section class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">공급 펀더멘털 분석</h2>
+                            <span class="section-subtitle">Supply Fundamentals</span>
+                        </div>
+                        <div class="content">
+                            <p>
+                                <strong>브라질 폭염 및 건조 심화:</strong> 
+                                <a href="https://www.dtnpf.com/agriculture/web/ag/blogs/ag-weather-forum/blog-post/2025/12/30/erratic-weather-keeps-brazil-coffee" target="_blank">DTN Progressive Farmer</a>(12월 30일)에 따르면 
+                                브라질은 가뭄, 불충분한 강우량, 주요 생산지역의 서리와 우박을 초래할 수 있는 한랭전선을 특징으로 하는 
+                                불규칙하고 예측 불가능한 기상 패턴을 계속 경험하고 있습니다. 미나스 제라이스 주의 건조 조건과 
+                                커피나무 및 원두에 대한 열 스트레스 가능성이 주목받고 있으며, 2025/26 브라질 수확기에 
+                                아라비카 커피 생산량이 크게 감소할 것으로 예상됩니다.
+                            </p>
+
+                            <p>
+                                <a href="https://finance.yahoo.com/news/coffee-prices-settle-higher-slack-193128253.html" target="_blank">Barchart</a>(12월 30일)에 따르면 
+                                Somar Meteorologia는 브라질 최대 아라비카 재배지역인 미나스 제라이스가 12월 26일 종료 주간 
+                                11.1mm 강우를 기록하여 역사적 평균의 17% 불과했다고 보고했습니다. 
+                                <a href="https://www.tridge.com/news/coffee-prices-today-december-27-2025-arabica-psfsyi" target="_blank">Tridge</a>(12월 27일) 보도에 따르면 
+                                브라질 주요 커피 재배지역에서 최소 다음 월요일까지 지속될 것으로 예상되는 심각한 폭염이 예보되어 
+                                시장 우려가 증폭되고 있습니다.
+                            </p>
+
+                            <div class="highlight-box">
+                                <p>
+                                    <strong>2026/27 생산 전망 - 대비되는 전망:</strong> 
+                                    <a href="https://tradingeconomics.com/commodity/coffee" target="_blank">Trading Economics</a>가 인용한 Itaú BBA 보고서에 따르면 
+                                    12월 말과 2026년 초의 기후 전망이 긍정적이며, 작물이 개화 단계에 있고 예상되는 강우가 
+                                    생산의 이 중요한 시기에 이상적인 조건을 제공한다고 평가했습니다. 그러나 5년간의 기후 변동성으로 
+                                    브라질 생산은 여전히 어려움을 겪고 있으며, 작황의 격년 주기가 단기 공급 증가를 더욱 제한하고 있습니다.
+                                </p>
+                            </div>
+
+                            <p>
+                                <a href="https://sucafina.com/na/lp/market-report" target="_blank">Sucafina</a> 최신 마켓 리포트에 따르면 
+                                브라질 현지 작황 조사를 마친 결과 2026/27 시즌 생산량을 아라비카 49.7백만백, 로부스타 25.9백만백으로 
+                                상향 조정했습니다. Cerrado와 Rondonia 지역 모두 기록적인 생산량이 예상되며, 
+                                모든 지역의 기상 조건이 거의 이상적이라고 평가했습니다. 다만 이 작황의 압력은 2026년 2분기에나 
+                                나타날 것으로 보이나, 향후 커피 공급에 대한 인식을 크게 변화시킬 수 있다고 전망했습니다.
+                            </p>
+
+                            <p>
+                                <strong>베트남 수출 기록 경신:</strong> 
+                                <a href="https://en.sggp.org.vn/vietnams-coffee-industry-brews-record-year-as-exports-surpass-us8-billion-post122937.html" target="_blank">Saigon Giai Phong</a>(1월 2일)에 따르면 
+                                베트남의 2025년 커피 수출은 150만톤 이상, 84억달러의 가치를 기록하며 사상 최고치를 달성했습니다. 
+                                이는 2024년 동기 대비 물량 16.9%, 가치 60.7% 증가한 수준입니다. 수출 가격은 평균 5,600달러/톤을 기록했으며, 
+                                때로는 5,850달러/톤까지 치솟았습니다. 유럽연합과 미국이 주요 시장이며, 알제리와 멕시코 등 
+                                신흥 시장도 크게 성장했습니다.
+                            </p>
+
+                            <p>
+                                <a href="https://news.tuoitre.vn/vietnams-coffee-exports-reach-a-record-high-yet-questions-loom-over-2026-103251102170854856.htm" target="_blank">Tuoi Tre News</a>에 따르면 
+                                2024-25 작황년도(2024년 10월~2025년 9월) 동안 베트남은 150만톤 이상을 수출하여 물량은 1.8% 증가, 
+                                가치는 55.5% 증가했습니다. VICOFA 회장 Nguyen Nam Hai는 2025-26 시즌 수확량이 약 5-10% 증가할 수 있으나, 
+                                이전 시즌만큼 강한 가격은 지속되기 어려울 것으로 전망했습니다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 재고 및 수급 동향 -->
+                    <section class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">재고 및 수급 동향</h2>
+                            <span class="section-subtitle">Inventory & Supply-Demand</span>
+                        </div>
+                        <div class="content">
+                            <p>
+                                <strong>ICE 재고 타이트니스 심화:</strong> 
+                                <a href="https://www.comunicaffe.com/coffee-futures-prices-showed-opposite-trends-on-tuesday-ice-futures-u-s-2026-trading-holiday-calendar/" target="_blank">Comunicaffe</a>(12월 31일)에 따르면 
+                                12월 30일 기준 ICE 인증 아라비카 재고는 45.5만백을 기록했으며, 주로 브라질(8.1만백), 멕시코(7.2만백), 
+                                페루(6.9만백), 탄자니아(4.1만백), 온두라스(3.7만백) 산 커피로 구성되어 있습니다. 
+                                재고의 대부분(37.4만백)은 벨기에 앤트워프 항구 창고에 보관되어 있습니다.
+                            </p>
+
+                            <p>
+                                Barchart에 따르면 ICE 아라비카 재고는 11월 20일 39.8만백으로 1.75년래 최저치를 기록한 후 
+                                12월 중순 45.6만백으로 2개월래 최고치로 회복되었습니다. ICE 로부스타 재고는 12월 10일 
+                                4,012랏으로 1년래 최저치를 기록한 후 12월 중순 4,278랏으로 4주래 최고치로 회복되었으나 
+                                여전히 타이트한 수준을 유지하고 있습니다.
+                            </p>
+
+                            <div class="highlight-box">
+                                <p>
+                                    <strong>미국 관세 영향 지속:</strong> 
+                                    Barchart에 따르면 미국의 브라질산 커피에 대한 높은 관세로 미국 구매자들이 
+                                    브라질 커피 구매를 기피했습니다. 트럼프 대통령의 관세가 시행된 8-10월 기간 동안 
+                                    미국의 브라질산 커피 구매는 전년 동기 대비 52% 급감하여 98.3만백에 그쳤습니다. 
+                                    관세는 이후 인하되었으나 미국의 커피 재고는 여전히 타이트한 상태입니다.
+                                </p>
+                            </div>
+
+                            <p>
+                                <strong>USDA 글로벌 수급 전망:</strong> 
+                                USDA 해외농업국(FAS)은 12월 18일 발표한 반기 보고서에서 2025/26 세계 커피 생산량을 
+                                전년比 +2.0% 증가한 178.85백만백(사상 최고)으로 전망했습니다. 아라비카는 95.52백만백(-4.7%), 
+                                로부스타는 83.33백만백(+10.9%)으로 예상됩니다. 브라질 2025/26 생산량은 63백만백(-3.1% y/y), 
+                                베트남은 30.8백만백(+6.2% y/y, 4년래 최고)으로 전망했습니다. 
+                                기말재고는 20.15백만백으로 전년比 -5.4% 감소가 예상됩니다.
+                            </p>
+
+                            <p>
+                                <strong>공급 개선 전망과 현실:</strong> 
+                                <a href="https://tradingeconomics.com/commodity/coffee" target="_blank">Trading Economics</a>에 따르면 
+                                개선된 기상 조건에도 불구하고 낮은 재고와 국내외 수요 증가로 가격이 급락하지 않고 있습니다. 
+                                브라질 생산은 5년간의 기후 변동성으로 여전히 어려움을 겪고 있으며, 작황의 격년 주기가 
+                                단기 공급 증가를 더욱 제한하고 있습니다. ICO는 11월 7일 현 마케팅연도(10-9월) 글로벌 
+                                커피 수출이 전년比 -0.3% 감소한 138.66백만백을 기록했다고 보고하여 타이트한 공급을 시사했습니다.
+                            </p>
+
+                            <p>
+                                <strong>베트남 수출 동향:</strong> 
+                                베트남 통계청에 따르면 11월 커피 수출은 전년比 39% 급증한 8.8만톤을 기록했으며, 
+                                1-11월 누적 수출은 139.8만톤으로 +14.8% y/y 증가했습니다. 베트남 2025/26 커피 생산량은 
+                                176만톤(29.4백만백)으로 전년比 +6% 증가하여 4년래 최고치를 기록할 전망입니다. 
+                                VICOFA는 기상 조건이 우호적으로 유지될 경우 2025/26 생산량이 전년 대비 10% 증가할 것으로 예상했습니다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 주요 뉴스 -->
+                    <section class="section" id="news">
+                        <div class="section-header">
+                            <h2 class="section-title">주요 뉴스</h2>
+                            <span class="section-subtitle">Key Updates</span>
+                        </div>
+                        <div class="news-grid">
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">브라질 헤알 강세로 숏커버링 촉발, +2.45% 급등</h4>
+                                    <span class="news-card-date">1월 2일</span>
+                                </div>
+                                <p class="news-card-content">
+                                    Barchart의 Rich Asplund에 따르면 1월 2일 금요일 커피 가격은 장중 하락세를 보였으나 
+                                    브라질 헤알(USD/BRL)이 2주래 최고치로 강세를 보이며 숏커버링이 촉발되어 
+                                    3월물 아라비카는 +8.55센트(+2.45%) 상승 마감했습니다. 헤알 강세는 브라질 커피 생산자들의 
+                                    수출 판매를 억제하여 공급 타이트니스를 심화시켰습니다. 3월물 로부스타는 +5센트(+0.13%) 상승했습니다.
+                                </p>
+                                <div>
+                                    <span class="news-tag">헤알강세</span>
+                                    <span class="news-tag">숏커버링</span>
+                                    <span class="news-tag">급등</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">베트남 2025년 커피 수출 84억달러 기록</h4>
+                                    <span class="news-card-date">1월 2일</span>
+                                </div>
+                                <p class="news-card-content">
+                                    베트남 농업환경부에 따르면 2025년 말 커피 수출은 150만톤 이상, 84억달러를 기록하며 
+                                    2024년 동기 대비 물량 16.9%, 가치 60.7% 증가했습니다. 수출 가격은 평균 5,600달러/톤, 
+                                    최고 5,850달러/톤까지 상승했습니다. 유럽연합과 미국이 주요 시장이며, 알제리와 멕시코 등 
+                                    신흥 시장도 크게 성장했습니다. 처음으로 가공 커피 수출액이 10억달러를 돌파했습니다.
+                                </p>
+                                <div>
+                                    <span class="news-tag">베트남</span>
+                                    <span class="news-tag">사상최고</span>
+                                    <span class="news-tag">수출증가</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">브라질 아라비카 2025/26 생산 13% 감소 전망</h4>
+                                    <span class="news-card-date">12월 30일</span>
+                                </div>
+                                <p class="news-card-content">
+                                    DTN Progressive Farmer에 따르면 브라질은 가뭄, 불충분한 강우량, 한랭전선으로 인한 
+                                    불규칙한 기상 패턴을 경험하고 있으며, 2025/26 브라질 수확기에 아라비카 커피 생산량이 
+                                    2024-25 대비 13% 감소할 것으로 예상됩니다. 전체 생산량은 63백만백으로 전년比 3% 감소 전망이며, 
+                                    로부스타는 상대적으로 양호한 성과를 보였습니다.
+                                </p>
+                                <div>
+                                    <span class="news-tag">브라질</span>
+                                    <span class="news-tag">아라비카감소</span>
+                                    <span class="news-tag">기후리스크</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">미나스 제라이스 강우량 평년의 17%, 폭염 예보</h4>
+                                    <span class="news-card-date">12월 30일</span>
+                                </div>
+                                <p class="news-card-content">
+                                    Somar Meteorologia는 브라질 최대 아라비카 재배지역인 미나스 제라이스가 12월 26일 종료 주간 
+                                    11.1mm 강우를 기록하여 역사적 평균의 17% 불과했다고 보고했습니다. Tridge는 브라질 주요 
+                                    커피 재배지역에서 최소 다음 월요일까지 지속될 것으로 예상되는 심각한 폭염이 예보되어 
+                                    시장 우려가 증폭되고 있다고 전했습니다.
+                                </p>
+                                <div>
+                                    <span class="news-tag">미나스</span>
+                                    <span class="news-tag">폭염</span>
+                                    <span class="news-tag">극심한건조</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">ICE 재고 구성 - 멕시코·브라질 중심</h4>
+                                    <span class="news-card-date">12월 30일</span>
+                                </div>
+                                <p class="news-card-content">
+                                    Comunicaffe에 따르면 12월 30일 기준 ICE 인증 아라비카 재고는 45.5만백이며, 
+                                    주로 브라질(8.1만백), 멕시코(7.2만백), 페루(6.9만백), 탄자니아(4.1만백), 온두라스(3.7만백) 산 
+                                    커피로 구성되어 있습니다. 재고의 대부분(37.4만백)은 벨기에 앤트워프 항구 창고에 보관 중입니다.
+                                </p>
+                                <div>
+                                    <span class="news-tag">ICE재고</span>
+                                    <span class="news-tag">구성</span>
+                                    <span class="news-tag">앤트워프</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">USDA, 2025/26 글로벌 생산 +2.0% 전망</h4>
+                                    <span class="news-card-date">12월 18일</span>
+                                </div>
+                                <p class="news-card-content">
+                                    USDA FAS 반기 보고서에 따르면 2025/26 세계 커피 생산량은 178.85백만백(사상 최고)으로 
+                                    전년比 +2.0% 증가 전망입니다. 아라비카는 95.52백만백(-4.7%), 로부스타는 83.33백만백(+10.9%)으로 
+                                    예상됩니다. 브라질은 63백만백(-3.1%), 베트남은 30.8백만백(+6.2%, 4년래 최고)으로 전망되며, 
+                                    기말재고는 20.15백만백으로 -5.4% 감소가 예상됩니다.
+                                </p>
+                                <div>
+                                    <span class="news-tag">USDA</span>
+                                    <span class="news-tag">생산전망</span>
+                                    <span class="news-tag">재고감소</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- 사이드바 -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">이번주 핵심 이슈</h3>
+                        <div class="news-item">
+                            <div class="news-date">헤알 강세</div>
+                            <div class="news-title">브라질 헤알 2주래 최고치, 숏커버링으로 +2.45% 급등</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">브라질 폭염</div>
+                            <div class="news-title">미나스 강우 평년 17%, 심각한 폭염 예보로 작황 우려</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">베트남 수출</div>
+                            <div class="news-title">2025년 84억달러 기록, 가치 +60.7% 폭발적 증가</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">미국 관세</div>
+                            <div class="news-title">8-10월 브라질산 구매 -52%, 재고 타이트니스 지속</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">다음주 주목 포인트</h3>
+                        <div class="news-item">
+                            <div class="news-title">브라질 폭염 지속 여부: 1월 첫째주 기상 패턴이 단기 방향성 결정</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">ICE 재고 변화: 45만백 수준 유지 여부 모니터링</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">베트남 농가 출하: 높은 가격에도 물량 보유 지속 여부</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">투기적 포지션: CFTC 데이터로 펀드 동향 확인</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">종합 분석 및 전망</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 16px;">
+                            신년 첫 주 커피 시장은 357.30센트로 급등하며 강한 상승세를 보였습니다. 
+                            브라질 미나스 주의 극심한 건조와 폭염 예보가 단기 공급 우려를 증폭시키는 반면, 
+                            Itaú BBA의 긍정적인 강우 전망과 Sucafina의 2026/27 생산 상향 조정은 
+                            중장기 공급 개선 기대를 지지합니다.
+                        </p>
+                        <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 16px;">
+                            베트남의 사상 최대 수출 실적(84억달러)은 높은 가격 수준의 지속 가능성을 보여주나, 
+                            Sucafina가 지적한 2026년 2분기 공급 압력은 향후 가격 조정 리스크를 내포합니다. 
+                            단기적으로는 350-370센트 범위에서 변동성이 확대될 전망입니다.
+                        </p>
+                        <div style="background: var(--steam); padding: 16px; border-radius: 8px; margin-top: 20px;">
+                            <div style="font-weight: 600; color: var(--roast); margin-bottom: 8px;">기본 전망</div>
+                            <div style="font-size: 0.9rem; color: var(--ink);">
+                                <strong>단기 (1개월):</strong> 350-370센트 변동성 장세<br>
+                                <strong>중기 (3개월):</strong> 브라질 1-2월 강우 패턴에 따른 방향성 결정<br>
+                                <strong>리스크:</strong> 폭염 지속 시 380센트 재돌파 가능, Q2 공급 압력 주의
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다. 
+                        트레이더, 로스터, 투자자를 위한 전문 시장 인텔리전스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">문의</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">데이터 출처</div>
+                    <span class="footer-link" style="cursor: default;">Barchart, Trading Economics, DTN</span>
+                    <span class="footer-link" style="cursor: default;">Comunicaffe, Sucafina, Itaú BBA</span>
+                    <span class="footer-link" style="cursor: default;">VICOFA, Somar Meteorologia</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2026 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 
+                    모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 프로그레스 바
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // 네비게이션 스크롤 효과
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
