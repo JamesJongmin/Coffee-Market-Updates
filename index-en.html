@@ -1857,16 +1857,16 @@
             }
         });
 
-        // ========== Report Data (dynamically loaded from reports-en.json) ==========
+        // ========== Report Data (dynamically loaded from reports.json) ==========
         let allReports = [];
         const INITIAL_DISPLAY_COUNT = 6;
         let currentDisplayCount = INITIAL_DISPLAY_COUNT;
         let isExpanded = false;
 
-        // Load data from reports-en.json
+        // Load data from reports.json (auto-filters English reports)
         async function loadReportsData() {
             try {
-                const response = await fetch('reports-en.json');
+                const response = await fetch('reports.json');
                 if (response.ok) {
                     const data = await response.json();
                     // Filter to show only English reports (links ending with -en.html)
@@ -1876,7 +1876,7 @@
                     return allReports;
                 }
             } catch (error) {
-                console.error('Failed to load reports-en.json:', error);
+                console.error('Failed to load reports.json:', error);
             }
             
             // Fallback: default report data

@@ -414,13 +414,13 @@
 
         async function loadReportsFromJSON() {
             try {
-                const response = await fetch('reports-en.json');
+                const response = await fetch('reports.json');
                 if (response.ok) {
                     const data = await response.json();
                     return data.reports || [];
                 }
             } catch (error) {
-                console.log('Failed to load reports-en.json:', error.message);
+                console.log('Failed to load reports.json:', error.message);
             }
             return [];
         }
