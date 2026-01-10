@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 South Korea Brazil Coffee Import Analysis | In-Depth Report</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<!--REPORT_META
+{
+    "title": "2025년 한국 브라질 커피 수입 Analysis",
+    "subtitle": "Brazil Green Bean Import Analysis: Price Surge & Currency Impact",
+    "date": "2026-01-11",
+    "summary": "2025년 한국의 브라질 생두 수입 현황 심층 Analysis. Import Volume -3.7% 감소했으나 수입액 +63.5% 급증. USD 단가 +69.6%, KRW 단가 +96.0% 상승으로 로스터리 이중 압박. FX Impact으로 KRW 단가가 USD 단가 대비 평균 7%p 추가 상승. 2025년 2-6월 최고가 매입 시기(평균 $8.2/kg), 하반기 수입 급감(-18.3% in Q3). 원화 약세와 국제 커피 가격 급등이 동시 발생.",
+    "tags": ["한국커피수입", "브라질생두", "커피가격", "환율영향", "로스터리재고", "KRW약세", "아라비카"],
+    "author": "Align Commodities",
+    "sources": ["한국무역협회", "관세청", "Trading Economics", "ICE Futures", "Bloomberg", "USDA"],
+    "report_type": "in-depth"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --warning: #d4a017;
+            --info: #4a7c9c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 상단 네비게이션 바 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--accent));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* 메인 컨테이너 */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* 히어로 헤더 */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--copper), var(--accent));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.95;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--roast);
+            opacity: 1;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* 콘텐츠 레이아웃 */
+        .content-wrapper {
+            padding: clamp(40px, 8vh, 80px) 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 60px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        main {
+            min-width: 0;
+        }
+
+        /* 섹션 */
+        section {
+            margin-bottom: clamp(50px, 8vh, 80px);
+        }
+
+        .section-header {
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--steam);
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.4rem, 3vw, 1.8rem);
+            font-weight: 600;
+            color: var(--roast);
+            margin: 40px 0 20px;
+            letter-spacing: -0.01em;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--roast);
+            margin: 28px 0 16px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--ink);
+        }
+
+        /* Highlight Boxes */
+        .highlight-box {
+            background: var(--crema);
+            border-left: 4px solid var(--copper);
+            padding: 24px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box.warning {
+            background: rgba(212, 160, 23, 0.08);
+            border-left-color: var(--warning);
+        }
+
+        .highlight-box.negative {
+            background: rgba(194, 58, 58, 0.08);
+            border-left-color: var(--negative);
+        }
+
+        .highlight-box.positive {
+            background: rgba(74, 124, 89, 0.08);
+            border-left-color: var(--positive);
+        }
+
+        .highlight-box.info {
+            background: rgba(74, 124, 156, 0.08);
+            border-left-color: var(--info);
+        }
+
+        .highlight-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            color: var(--espresso);
+        }
+
+        /* 통계 카드 */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.95;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 8px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .stat-value.negative {
+            color: var(--negative);
+        }
+
+        .stat-value.positive {
+            color: var(--positive);
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .stat-change.up {
+            color: var(--negative);
+        }
+
+        .stat-change.down {
+            color: var(--positive);
+        }
+
+        /* 테이블 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 32px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .data-table thead {
+            background: var(--roast);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--crema);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 16px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 12px;
+        }
+
+        .toc-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            display: block;
+            padding: 4px 0;
+        }
+
+        .toc-link:hover {
+            color: var(--copper);
+        }
+
+        .key-point {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .key-icon {
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .key-text {
+            color: var(--roast);
+            line-height: 1.6;
+        }
+
+        /* 푸터 */
+        .footer {
+            background: #1a0f0a;
+            color: #f5f0e8;
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            opacity: 1;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            opacity: 0.95;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid rgba(245, 240, 232, 0.2);
+        }
+
+        .footer-copyright {
+            margin-bottom: 12px;
+            opacity: 1;
+            font-size: 0.85rem;
+        }
+
+        .footer-disclaimer {
+            opacity: 0.9;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        /* 비교 박스 */
+        .comparison-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-item {
+            background: white;
+            border: 2px solid var(--steam);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .comparison-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-flag {
+            font-size: 1.5rem;
+        }
+
+        ul {
+            margin-left: 24px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        /* 차트 컨테이너 */
+        .chart-container {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .chart-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .chart-note {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.95;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        @media (max-width: 968px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Updates</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#analysis" class="nav-link">Analysis</a>
+            <a href="#strategy" class="nav-link">Strategy</a>
+        </div>
+    </nav>
+    <div class="scroll-progress"></div>
+
+    <!-- 페이지 래퍼 -->
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- 히어로 헤더 -->
+            <header class="hero-header">
+                <div class="report-badge">
+                    🇧🇷 Brazil In-Depth
+                </div>
+                <div class="report-meta">
+                    <span class="meta-item">January 11, 2026</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">Align Commodities</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">한국 커피 시장 수입 Analysis</span>
+                </div>
+                <h1>2025년 한국 브라질 커피 수입 Analysis:<br>가격 급등과 환율 이중 압박</h1>
+                <p class="subtitle">
+                    Brazil Green Bean Import Analysis: 70% Price Surge & Currency Impact
+                </p>
+            </header>
+
+            <!-- 메인 콘텐츠 -->
+            <div class="content-wrapper">
+                <div class="content-grid">
+                    <main>
+                        <!-- Executive Summary -->
+                        <section id="overview">
+                            <div class="section-header">
+                                <h2>Executive Summary</h2>
+                            </div>
+
+                            <div class="highlight-box negative">
+                                <div class="highlight-title">🚨 Key Highlights</div>
+                                <p>
+                                    2025년 한국 로스터리들은 <strong>국제 커피 가격 급등</strong>과 <strong>원화 약세</strong>라는 이중 압박에 직면했습니다. 
+                                    브라질 생두 USD 단가는 전년 대비 +69.6% 상승했으나, 원화 환산 시 <strong>+96.0%</strong> 폭등했습니다. 
+                                    같은 금액으로 2024년의 절반 수준만 수입할 수 있는 상황입니다.
+                                </p>
+                            </div>
+
+                            <div class="stat-grid">
+                                
+                                
+                                
+                                
+                                <div class="stat-card">
+                                    <div class="stat-label">환율 100원 상승 시</div>
+                                    <div class="stat-value">₩770/kg</div>
+                                    <div class="stat-change">브라질 생두 추가 부담</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">2025년 총 환율 비용</div>
+                                    <div class="stat-value negative">약 ₩200억</div>
+                                    <div class="stat-change up">브라질 생두 추정</div>
+                                </div>
+                            </div>
+
+                            <p>
+                                환율이 2024년 수준(1,366원)으로 유지되었다면, 로스터리들은 약 <strong>300억원을 절감</strong>할 수 있었습니다. 
+                                이는 국제 커피 가격 상승과는 별개로 발생한 순수한 환율 리스크입니다.
+                            </p>
+
+                            <div class="highlight-box warning">
+                                <div class="highlight-title">💰 환율 헤지 필요성</div>
+                                <p>
+                                    2025년 경험은 <strong>환율 리스크 관리의 중요성</strong>을 보여줍니다. 
+                                    특히 대량 수입이 예정된 시점(2-6월)에 환율이 급등하면서 
+                                    로스터리들의 부담이 크게 증가했습니다.
+                                </p>
+                                
+                            </div>
+
+                            <h3>하반기 수입 감소의 의미</h3>
+
+                            <p>
+                                브라질 3-4분기 Import Volume 급감(-18.3%, -9.2%)은 두 가지로 해석 가능합니다.
+                            </p>
+
+                            <div class="comparison-box">
+                                <div class="comparison-item">
+                                    <div class="comparison-header">
+                                        해석 1: 재고 충분
+                                    </div>
+                                    <ul style="margin-left: 20px; font-size: 0.95rem;">
+                                        <li>상반기 대량 매입으로 재고 충분</li>
+                                        <li>추가 매입 필요성 낮음</li>
+                                        <li>기존 재고 소진 우선</li>
+                                    </ul>
+                                </div>
+                                <div class="comparison-item">
+                                    <div class="comparison-header">
+                                        해석 2: 고가 회피
+                                    </div>
+                                    <ul style="margin-left: 20px; font-size: 0.95rem;">
+                                        <li>USD $7.5-7.9/kg 여전히 고가</li>
+                                        <li>추가 하락 기대하며 대기</li>
+                                        <li>최소 필수 물량만 확보</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <p>
+                                실제로는 <strong>두 요인이 복합적으로 작용</strong>했을 가능성이 높습니다. 
+                                상반기 매입분으로 일정 재고를 확보했으나, 
+                                추가 매입 시 여전히 고가라고 판단하여 신중한 접근을 유지한 것으로 보입니다.
+                            </p>
+
+                            <h3>2026년 1분기 재고 전망</h3>
+
+                            <div class="highlight-box warning">
+                                <div class="highlight-title">⚠️ 2026년 초 재고 압박 가능성</div>
+                                <p>
+                                    2025년 하반기 수입 감소(특히 브라질)로 인해, 
+                                    2026년 1분기에 <strong>재고 부족 리스크</strong>가 발생할 수 있습니다.
+                                </p>
+                                <p style="margin-top: 12px;">
+                                    만약 2026년 1분기에도 커피 가격이 고공행진을 이어가고 
+                                    재고가 부족해지면, 로스터리들은 <strong>원치 않는 타이밍에 고가 매입</strong>을 
+                                    강요받을 수 있습니다.
+                                </p>
+                                <p style="margin-top: 12px;">
+                                    반대로 2026년 초 가격이 하락한다면, 
+                                    2025년 고가 재고와의 <strong>가격 차이로 인한 손실</strong>이 
+                                    더욱 명확해질 것입니다.
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- 2026년 전망 -->
+                                                <!-- 로스터리 Strategy -->
+                        <section id="strategy">
+                            <div class="section-header">
+                                <h2>💡 로스터리 Strategy</h2>
+                            </div>
+
+                            <h3>Brazil Coffee Procurement Strategy</h3>
+
+                            <div class="highlight-box info">
+                                <div class="highlight-title">📌 Strategic Recommendations</div>
+                                
+                                <p><strong>1. Dollar-Cost Averaging</strong></p>
+                                <ul style="margin-left: 20px;">
+                                    <li>Avoid lump-sum bulk purchases</li>
+                                    <li>Optimize average cost through monthly/quarterly distribution</li>
+                                    <li>Maintain flexibility to pause during price spikes</li>
+                                    <li><strong>2025 Lesson</strong>: Feb-Jun concentrated buying resulted in high-cost inventory burden</li>
+                                </ul>
+
+                                <p style="margin-top: 16px;"><strong>2. FX Risk Hedging</strong></p>
+                                <ul style="margin-left: 20px;">
+                                    <li>Forward contracts 3-6 months ahead for planned bulk purchases</li>
+                                    <li>Review currency options if KRW/USD exceeds 1,500</li>
+                                    <li>Negotiate USD-fixed price contracts</li>
+                                    <li><strong>2025 Lesson</strong>: Average 7%p additional burden from FX</li>
+                                </ul>
+
+                                <p style="margin-top: 16px;"><strong>3. Strategic Combination with Colombia</strong></p>
+                                <ul style="margin-left: 20px;">
+                                    <li><strong>Brazil</strong>: Bulk procurement on dips, for base blends</li>
+                                    <li><strong>Colombia</strong>: Stable base volume, for premium blends</li>
+                                    <li>Increase Colombia share when Brazil expensive (2025 Q3 pattern)</li>
+                                    <li>Prioritize Colombia when price gap < $1/kg</li>
+                                </ul>
+
+                                <p style="margin-top: 16px;"><strong>4. Inventory Management Principles</strong></p>
+                                <ul style="margin-left: 20px;">
+                                    <li>Optimal inventory: 3-4 months coverage</li>
+                                    <li>Aggressive buying on dips, minimal on spikes</li>
+                                    <li>Strict FIFO (First-In-First-Out) discipline</li>
+                                    <li>Allocate high-cost purchases to premium product lines first</li>
+                                </ul>
+
+                                <p style="margin-top: 16px;"><strong>5. Pricing Policy</strong></p>
+                                <ul style="margin-left: 20px;">
+                                    <li>Gradual cost pass-through (avoid sudden spikes)</li>
+                                    <li>Enhanced customer communication (explain global market dynamics)</li>
+                                    <li>Dual-tier structure: premium vs. budget lines</li>
+                                    <li>Long-term fixed-price options for existing customers</li>
+                                </ul>
+                            </div>
+
+                            <h3>Market Monitoring Indicators</h3>
+
+                            <p>Monitor these indicators to determine Brazil coffee procurement timing:</p>
+
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Indicator</th>
+                                        <th>Buy Signal</th>
+                                        <th>Reduce Signal</th>
+                                        <th>Check Frequency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>ICE Arabica Futures</strong></td>
+                                        <td>&lt; 300¢/lb</td>
+                                        <td>&gt; 450¢/lb</td>
+                                        <td>Daily</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ICE Inventory</strong></td>
+                                        <td>&gt; 1.2M bags</td>
+                                        <td>&lt; 700k bags</td>
+                                        <td>Weekly</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Brazil Rainfall</strong></td>
+                                        <td>+20% 이상</td>
+                                        <td>-30% 이하</td>
+                                        <td>Monthly</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>USD/KRW FX Rate</strong></td>
+                                        <td>&lt; 1,350원</td>
+                                        <td>&gt; 1,500원</td>
+                                        <td>Daily</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Colombia Premium</strong></td>
+                                        <td>&gt; $1.5/kg</td>
+                                        <td>&lt; $0.5/kg</td>
+                                        <td>Weekly</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="highlight-box warning">
+                                <div class="highlight-title">⚠️ Checkpoints</div>
+                                <p>
+                                    <strong>2026년 1-2월</strong>: 브라질 강우 패턴, 1분기 Inventory Status 점검<br>
+                                    <strong>2026 Mar-Apr</strong>: Brazil flowering climate, ICE inventory trends<br>
+                                    <strong>2026 May-Jun</strong>: Brazil frost risk in key regions, FX direction<br>
+                                    <strong>2026 Jul-Aug</strong>: Early 2026/27 season outlook<br>
+                                    <strong>2026 Sep-Oct</strong>: Brazil harvest begins, supply increase confirmation<br>
+                                    <strong>2026 Nov-Dec</strong>: Year-end inventory adjustment, 2027 strategy
+                                </p>
+                            </div>
+
+                            <h3>Action Checklist</h3>
+
+                            <div class="stat-grid">
+                                <div class="stat-card">
+                                    <div class="stat-label">✅ Before Purchase</div>
+                                    <div class="stat-value" style="font-size: 1.2rem;">5 Checks</div>
+                                    <div class="stat-change">Current futures / FX rate / ICE inventory / Current stock / Colombia gap</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">✅ FX Hedge</div>
+                                    <div class="stat-value" style="font-size: 1.2rem;">3 months ahead</div>
+                                    <div class="stat-change">Forward contracts for bulk purchase plans</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">✅ Inventory Level</div>
+                                    <div class="stat-value" style="font-size: 1.2rem;">3-4 months</div>
+                                    <div class="stat-change">Optimal turnover period</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">✅ Price Adjustment</div>
+                                    <div class="stat-value" style="font-size: 1.2rem;">Gradual</div>
+                                    <div class="stat-change">Cost +10% → 2 rounds of +5% increase</div>
+                                </div>
+                            </div>
+                        </section>
+
+
+                        <!-- 결론 -->
+                        
+
+                        <section id="appendix">
+                            <div class="section-header">
+                                <h2>Appendix: Data Visualization</h2>
+                            </div>
+
+                            <h3>Brazil Green Bean Trends</h3>
+
+                            <div class="chart-grid">
+                                <div class="chart-container">
+                                    <div class="chart-title">브라질 Import Volume 추이 (MT)</div>
+                                    <div class="chart-wrapper">
+                                        <canvas id="brazilVolumeChart"></canvas>
+                                    </div>
+                                    <div class="chart-note">2024년 vs 2025년 월별 Import Volume 비교</div>
+                                </div>
+
+                                <div class="chart-container">
+                                    <div class="chart-title">브라질 Import Volume YoY 증가율</div>
+                                    <div class="chart-wrapper">
+                                        <canvas id="brazilVolumeYoyChart"></canvas>
+                                    </div>
+                                    <div class="chart-note">YoY change vs. prior year (%)</div>
+                                </div>
+                            </div>
+
+                            <div class="chart-grid">
+                                <div class="chart-container">
+                                    <div class="chart-title">Brazil USD Price Trend</div>
+                                    <div class="chart-wrapper">
+                                        <canvas id="brazilUsdChart"></canvas>
+                                    </div>
+                                    <div class="chart-note">$/kg, 2024 vs 2025</div>
+                                </div>
+
+                                <div class="chart-container">
+                                    <div class="chart-title">Brazil KRW Price Trend</div>
+                                    <div class="chart-wrapper">
+                                        <canvas id="brazilKrwChart"></canvas>
+                                    </div>
+                                    <div class="chart-note">₩/kg, 2024 vs 2025</div>
+                                </div>
+                            </div>
+
+                            <div class="chart-container">
+                                <div class="chart-title">Brazil Price YoY Comparison</div>
+                                <div class="chart-wrapper">
+                                    <canvas id="brazilPriceYoyChart"></canvas>
+                                </div>
+                                <div class="chart-note">USD 단가 vs KRW 단가 증가율 - FX Amplification 시각화</div>
+                            </div>
+
+                            <h3>Brazil vs Colombia Comparison</h3>
+
+                            <div class="chart-grid">
+                                <div class="chart-container">
+                                    <div class="chart-title">2025 USD Price Comparison</div>
+                                    <div class="chart-wrapper">
+                                        <canvas id="comparisonUsdChart"></canvas>
+                                    </div>
+                                    <div class="chart-note">Brazil vs Colombia monthly USD price ($/kg)</div>
+                                </div>
+
+                                <div class="chart-container">
+                                    <div class="chart-title">2025년 Import Volume 비교</div>
+                                    <div class="chart-wrapper">
+                                        <canvas id="comparisonVolumeChart"></canvas>
+                                    </div>
+                                    <div class="chart-note">브라질 vs 콜롬비아 월별 Import Volume (MT)</div>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+
+                    <!-- 사이드바 -->
+                    <aside class="sidebar">
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Table of Contents</h3>
+                            <ul class="toc-list">
+                                <li class="toc-item"><a href="#overview" class="toc-link">Executive Summary</a></li>
+                                <li class="toc-item"><a href="#brazil" class="toc-link">브라질 생두 Analysis</a></li>
+                                <li class="toc-item"><a href="#colombia" class="toc-link">콜롬비아 생두 Analysis</a></li>
+                                <li class="toc-item"><a href="#comparison" class="toc-link">종합 비교</a></li>
+                                <li class="toc-item"><a href="#currency" class="toc-link">FX Impact</a></li>
+                                <li class="toc-item"><a href="#inventory" class="toc-link">Inventory Status</a></li>
+                                <li class="toc-item"><a href="#outlook" class="toc-link">2026년 전망</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Key Figures</h3>
+                            <div class="key-point">
+                                <div class="key-icon">📊</div>
+                                <div class="key-text"><strong>Import Volume</strong><br>-3.7% (56,982톤)</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">💵</div>
+                                <div class="key-text"><strong>USD 단가</strong><br>+69.6% ($7.48/kg)</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">💰</div>
+                                <div class="key-text"><strong>KRW 단가</strong><br>+96.0% (₩10,714/kg)</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">💱</div>
+                                <div class="key-text"><strong>환율 효과</strong><br>+7%p 추가 부담</div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Action Checklist</h3>
+                            <div class="key-point">
+                                <div class="key-icon">☑</div>
+                                <div class="key-text">Daily ICE futures monitoring</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">☑</div>
+                                <div class="key-text">Review FX hedge at 1,500 KRW/USD</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">☑</div>
+                                <div class="key-text">Maintain 3-4 month inventory</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">☑</div>
+                                <div class="key-text">Dollar-cost averaging</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">☑</div>
+                                <div class="key-text">Monitor Colombia price gap</div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-widget">
+                            <h3 class="widget-title">Data Sources</h3>
+                            <div class="key-point">
+                                <div class="key-icon">📄</div>
+                                <div class="key-text">한국무역협회 수입 통계</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">📊</div>
+                                <div class="key-text">관세청 무역 데이터</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">💱</div>
+                                <div class="key-text">Trading Economics 환율</div>
+                            </div>
+                            <div class="key-point">
+                                <div class="key-icon">📈</div>
+                                <div class="key-text">ICE Futures 선물가</div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 Analysis과 인사이트를 제공합니다. 
+                        트레이더, 로스터, 투자자를 위한 전문 시장 인텔리전스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="/cdn-cgi/l/email-protection#6309020e06104d0102060823020f0a040d000c0e0e0c070a170a06104d000c0e" class="footer-link">
+                        <span class="__cf_email__" data-cfemail="107a717d75633e7271757b50717c79777e737f7d7d7f7479647975633e737f7d">[email&#160;protected]</span>
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">KITA, Korea Customs</span>
+                    <span class="footer-link" style="cursor: default;">Trading Economics</span>
+                    <span class="footer-link" style="cursor: default;">ICE Futures, Bloomberg, USDA</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2026 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 
+                    모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // 스크롤 프로그레스 바
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // 네비게이션 스크롤 효과
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+
+        // 차트 데이터
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        
+        const brazilData = {
+            volume2024: [6889.81, 4185.71, 3503.19, 5721.36, 4445.76, 4980.18, 5330.91, 6420.28, 4327.47, 5144.04, 2457.25, 5752.22],
+            volume2025: [3829.50, 7009.28, 5072.39, 5672.69, 5779.15, 4815.05, 5225.30, 3978.18, 3686.84, 4364.61, 3630.43, 3918.56],
+            volumeYoy: [-44, 67, 45, -1, 30, -3, -2, -38, -15, -15, 48, -32],
+            usd2024: [3.5, 3.7, 3.8, 3.9, 4.1, 4.3, 4.5, 4.6, 4.8, 5.1, 5.4, 5.5],
+            usd2025: [5.6, 6.2, 7.4, 8.1, 8.2, 8.4, 7.9, 7.5, 7.7, 7.5, 7.5, 7.7],
+            krw2024: [4713, 4950, 5107, 5359, 5622, 5918, 6264, 6251, 6391, 6925, 7606, 7898],
+            krw2025: [8151, 8976, 10800, 11656, 11402, 11466, 10941, 10453, 10759, 10754, 10947, 11257],
+            usdYoy: [58, 67, 93, 107, 99, 96, 75, 63, 61, 49, 38, 40],
+            krwYoy: [73, 81, 111, 117, 103, 94, 75, 67, 68, 55, 44, 43]
+        };
+
+        const colombiaData = {
+            volume2024: [2860.01, 1239.20, 2885.05, 2889.05, 2396.97, 2286.87, 2239.78, 3143.68, 1675.22, 3464.60, 2234.59, 2608.86],
+            volume2025: [1685.90, 2945.69, 2792.95, 2462.09, 2314.62, 2825.39, 2416.73, 2714.29, 2363.82, 3247.52, 2476.55, 2769.19],
+            volumeYoy: [-41, 138, -3, -15, -3, 24, 8, -14, 41, -6, 11, 6],
+            usd2024: [4.6, 4.8, 4.6, 4.7, 4.7, 4.9, 5.4, 5.6, 5.6, 5.8, 6.1, 6.2],
+            usd2025: [6.4, 6.7, 8.3, 8.8, 9.0, 8.9, 8.5, 8.6, 8.3, 8.1, 8.4, 8.7],
+            krw2024: [6134, 6453, 6186, 6408, 6482, 6792, 7468, 7543, 7455, 7919, 8532, 8903],
+            krw2025: [9385, 9678, 12170, 12739, 12469, 12233, 11778, 11904, 11638, 11615, 12275, 12733],
+            usdYoy: [39, 38, 80, 89, 89, 82, 58, 53, 49, 41, 37, 40],
+            krwYoy: [53, 50, 97, 99, 92, 80, 58, 58, 56, 47, 44, 43]
+        };
+
+        // 차트 공통 설정
+        const chartColors = {
+            brazil: '#c4a574',
+            colombia: '#b87333',
+            year2024: '#9ca3af',
+            year2025: '#3d2314',
+            positive: '#4a7c59',
+            negative: '#c23a3a'
+        };
+
+        Chart.defaults.font.family = "'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif";
+        Chart.defaults.color = '#2c2420';
+
+        // 브라질 Import Volume
+        new Chart(document.getElementById('brazilVolumeChart'), {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{label: '2024', data: brazilData.volume2024, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3},
+                           {label: '2025', data: brazilData.volume2025, borderColor: chartColors.brazil, backgroundColor: chartColors.brazil + '20', borderWidth: 3, tension: 0.3}]
+            },
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true, position: 'top'}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString() + ' MT'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => v.toLocaleString() + ' MT'}}}}
+        });
+
+        // 브라질 Import Volume YoY
+        new Chart(document.getElementById('brazilVolumeYoyChart'), {
+            type: 'bar',
+            data: {labels: months, datasets: [{label: 'YoY Growth', data: brazilData.volumeYoy, backgroundColor: brazilData.volumeYoy.map(v => v >= 0 ? chartColors.positive + '80' : chartColors.negative + '80'), borderColor: brazilData.volumeYoy.map(v => v >= 0 ? chartColors.positive : chartColors.negative), borderWidth: 2}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}, tooltip: {callbacks: {label: ctx => ctx.parsed.y + '%'}}}, scales: {y: {ticks: {callback: v => v + '%'}, grid: {color: ctx => ctx.tick.value === 0 ? '#2c2420' : '#e8e2d9'}}}}
+        });
+
+        // 브라질 USD 단가
+        new Chart(document.getElementById('brazilUsdChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: '2024', data: brazilData.usd2024, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3}, {label: '2025', data: brazilData.usd2025, borderColor: chartColors.brazil, backgroundColor: chartColors.brazil + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + '/kg'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => '$' + v.toFixed(1)}}}}
+        });
+
+        // 브라질 KRW 단가
+        new Chart(document.getElementById('brazilKrwChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: '2024', data: brazilData.krw2024, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3}, {label: '2025', data: brazilData.krw2025, borderColor: chartColors.brazil, backgroundColor: chartColors.brazil + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': ₩' + ctx.parsed.y.toLocaleString() + '/kg'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => '₩' + v.toLocaleString()}}}}
+        });
+
+        // 브라질 YoY 비교
+        new Chart(document.getElementById('brazilPriceYoyChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: 'USD Price YoY', data: brazilData.usdYoy, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3}, {label: 'KRW Price YoY', data: brazilData.krwYoy, borderColor: chartColors.negative, backgroundColor: chartColors.negative + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': +' + ctx.parsed.y + '%'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => '+' + v + '%'}}}}
+        });
+
+        // 콜롬비아 Import Volume
+        new Chart(document.getElementById('colombiaVolumeChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: '2024', data: colombiaData.volume2024, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3}, {label: '2025', data: colombiaData.volume2025, borderColor: chartColors.colombia, backgroundColor: chartColors.colombia + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString() + ' MT'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => v.toLocaleString() + ' MT'}}}}
+        });
+
+        // 콜롬비아 Import Volume YoY
+        new Chart(document.getElementById('colombiaVolumeYoyChart'), {
+            type: 'bar',
+            data: {labels: months, datasets: [{label: 'YoY Growth', data: colombiaData.volumeYoy, backgroundColor: colombiaData.volumeYoy.map(v => v >= 0 ? chartColors.positive + '80' : chartColors.negative + '80'), borderColor: colombiaData.volumeYoy.map(v => v >= 0 ? chartColors.positive : chartColors.negative), borderWidth: 2}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}, tooltip: {callbacks: {label: ctx => ctx.parsed.y + '%'}}}, scales: {y: {ticks: {callback: v => v + '%'}, grid: {color: ctx => ctx.tick.value === 0 ? '#2c2420' : '#e8e2d9'}}}}
+        });
+
+        // 콜롬비아 USD 단가
+        new Chart(document.getElementById('colombiaUsdChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: '2024', data: colombiaData.usd2024, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3}, {label: '2025', data: colombiaData.usd2025, borderColor: chartColors.colombia, backgroundColor: chartColors.colombia + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + '/kg'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => '$' + v.toFixed(1)}}}}
+        });
+
+        // 콜롬비아 KRW 단가
+        new Chart(document.getElementById('colombiaKrwChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: '2024', data: colombiaData.krw2024, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3}, {label: '2025', data: colombiaData.krw2025, borderColor: chartColors.colombia, backgroundColor: chartColors.colombia + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': ₩' + ctx.parsed.y.toLocaleString() + '/kg'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => '₩' + v.toLocaleString()}}}}
+        });
+
+        // 콜롬비아 YoY 비교
+        new Chart(document.getElementById('colombiaPriceYoyChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: 'USD Price YoY', data: colombiaData.usdYoy, borderColor: chartColors.year2024, backgroundColor: chartColors.year2024 + '20', borderWidth: 2, tension: 0.3}, {label: 'KRW Price YoY', data: colombiaData.krwYoy, borderColor: chartColors.negative, backgroundColor: chartColors.negative + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': +' + ctx.parsed.y + '%'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => '+' + v + '%'}}}}
+        });
+
+        // 비교 USD 단가
+        new Chart(document.getElementById('comparisonUsdChart'), {
+            type: 'line',
+            data: {labels: months, datasets: [{label: 'Brazil', data: brazilData.usd2025, borderColor: chartColors.brazil, backgroundColor: chartColors.brazil + '20', borderWidth: 3, tension: 0.3}, {label: 'Colombia', data: colombiaData.usd2025, borderColor: chartColors.colombia, backgroundColor: chartColors.colombia + '20', borderWidth: 3, tension: 0.3}]},
+            options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: true}, tooltip: {callbacks: {label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + '/kg'}}}, scales: {y: {beginAtZero: true, ticks: {callback: v => '$' + v.toFixed(1)}}}}
+        });
+
+        // 비교 Import Volume
+        new Chart(document.getElementById('comparisonVolumeChart'), {
+            type: 'bar',
+            data: {labels: months, datasets: [{label: 'Brazil', data: brazilData.volume2025, backgroundColor: chartColors.brazil + '80', borderColor: chartColors.brazil, borderWidth: 2}, {label: 'Colombia', data: colombiaData.volume2025, backgroundColor: chartColors.colombia + '80', borderColor: chartColors.colombia, borderWidth: 2}]},
+            options: {responsive: true, maintainAspectRatio: false, pl
