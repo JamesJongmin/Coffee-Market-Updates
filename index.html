@@ -2550,7 +2550,7 @@
             }
         });
 
-        // ========== 동적 캘린더 (2026년 3월까지) ==========
+        // ========== 동적 캘린더 (2026년 6월까지) ==========
         let allCalendarEvents = [];
         let currentCalendarFilter = 'all';
         let isCalendarExpanded = false;
@@ -2564,10 +2564,10 @@
             if (calendarMonth) {
                 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                                    'July', 'August', 'September', 'October', 'November', 'December'];
-                calendarMonth.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()} ~ March 2026`;
+                calendarMonth.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()} ~ June 2026`;
             }
             
-            // 2025년 11월부터 2026년 3월까지의 모든 이벤트 생성
+            // 2025년 11월부터 2026년 6월까지의 모든 이벤트 생성
             allCalendarEvents = generateAllEvents();
             
             // 초기 렌더링
@@ -2633,6 +2633,23 @@
                 { date: new Date(2026, 2, 12), type: 'macro', title: '미국 CPI', desc: '2월 소비자물가지수', forecast: '2.6%', unit: 'YoY' },
                 { date: new Date(2026, 2, 19), type: 'macro', title: 'FOMC 금리 결정', desc: '3월 정책 금리 발표', important: true, forecast: '4.00-4.25%' },
                 { date: new Date(2026, 2, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '2월 개인소비지출', forecast: '2.3%', unit: 'YoY' },
+                
+                // 2026년 4월
+                { date: new Date(2026, 3, 3), type: 'macro', title: '미국 고용보고서', desc: '3월 비농업 고용 발표', important: true, forecast: '+160K' },
+                { date: new Date(2026, 3, 10), type: 'macro', title: '미국 CPI', desc: '3월 소비자물가지수', forecast: '2.5%', unit: 'YoY' },
+                { date: new Date(2026, 3, 30), type: 'macro', title: '미국 PCE 물가지수', desc: '3월 개인소비지출', forecast: '2.2%', unit: 'YoY' },
+                
+                // 2026년 5월
+                { date: new Date(2026, 4, 1), type: 'macro', title: '미국 고용보고서', desc: '4월 비농업 고용 발표', important: true, forecast: '+155K' },
+                { date: new Date(2026, 4, 7), type: 'macro', title: 'FOMC 금리 결정', desc: '5월 정책 금리 발표', important: true, forecast: '3.75-4.00%' },
+                { date: new Date(2026, 4, 13), type: 'macro', title: '미국 CPI', desc: '4월 소비자물가지수', forecast: '2.4%', unit: 'YoY' },
+                { date: new Date(2026, 4, 30), type: 'macro', title: '미국 PCE 물가지수', desc: '4월 개인소비지출', forecast: '2.1%', unit: 'YoY' },
+                
+                // 2026년 6월
+                { date: new Date(2026, 5, 5), type: 'macro', title: '미국 고용보고서', desc: '5월 비농업 고용 발표', important: true, forecast: '+150K' },
+                { date: new Date(2026, 5, 11), type: 'macro', title: '미국 CPI', desc: '5월 소비자물가지수', forecast: '2.3%', unit: 'YoY' },
+                { date: new Date(2026, 5, 17), type: 'macro', title: 'FOMC 금리 결정', desc: '6월 정책 금리 발표', important: true, forecast: '3.50-3.75%' },
+                { date: new Date(2026, 5, 26), type: 'macro', title: '미국 PCE 물가지수', desc: '5월 개인소비지출', forecast: '2.0%', unit: 'YoY' },
             ];
             
             // ========== 커피 시장 이벤트 ==========
@@ -2664,6 +2681,25 @@
                 { date: new Date(2026, 2, 11), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true, forecast: '172M', unit: 'bags' },
                 { date: new Date(2026, 2, 15), type: 'coffee', title: '브라질 수확 시작', desc: '26/27 시즌 수확 개시' },
                 { date: new Date(2026, 2, 20), type: 'coffee', title: 'CONAB 3월 보고서', desc: '브라질 수확 전 최종 전망', important: true, forecast: '61M', unit: 'bags' },
+                
+                // 2026년 4월
+                { date: new Date(2026, 3, 3), type: 'coffee', title: 'ICO 월간 보고서', desc: '3월 글로벌 시장 분석', important: true },
+                { date: new Date(2026, 3, 9), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', forecast: '171M', unit: 'bags' },
+                { date: new Date(2026, 3, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '3월 로부스타 수출 실적', forecast: '85K', unit: 'tons' },
+                { date: new Date(2026, 3, 22), type: 'coffee', title: 'CONAB 4월 보고서', desc: '브라질 26/27 수확 초기 전망', important: true, forecast: '62M', unit: 'bags' },
+                
+                // 2026년 5월
+                { date: new Date(2026, 4, 6), type: 'coffee', title: 'ICO 월간 보고서', desc: '4월 글로벌 시장 분석', important: true },
+                { date: new Date(2026, 4, 12), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', forecast: '170M', unit: 'bags' },
+                { date: new Date(2026, 4, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '4월 로부스타 수출 실적', forecast: '80K', unit: 'tons' },
+                { date: new Date(2026, 4, 20), type: 'coffee', title: '브라질 수확 진행', desc: '26/27 아라비카 수확 25% 완료', important: true },
+                
+                // 2026년 6월
+                { date: new Date(2026, 5, 3), type: 'coffee', title: 'ICO 월간 보고서', desc: '5월 글로벌 시장 분석', important: true },
+                { date: new Date(2026, 5, 10), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true, forecast: '168M', unit: 'bags' },
+                { date: new Date(2026, 5, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '5월 로부스타 수출 실적', forecast: '75K', unit: 'tons' },
+                { date: new Date(2026, 5, 18), type: 'coffee', title: 'CONAB 6월 보고서', desc: '브라질 26/27 수확 중간 전망', important: true, forecast: '63M', unit: 'bags' },
+                { date: new Date(2026, 5, 25), type: 'coffee', title: '브라질 수확 진행', desc: '26/27 아라비카 수확 50% 완료', important: true },
             ];
             
             // 모든 이벤트 합치기
