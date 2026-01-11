@@ -729,6 +729,7 @@
 
         function processExportImportData(csvData, isBrazilExport = false, isKoreaImport = false) {
             const dataByYear = {
+                '2024': new Array(12).fill(null),
                 '2025': new Array(12).fill(null),
                 '2026': new Array(12).fill(null)
             };
@@ -742,7 +743,7 @@
                 const [year, month] = dateStr.split('-');
                 const value = parseFloat(valueStr);
                 
-                if (!isNaN(value) && year && month) {
+                if (!isNaN(value) && year && month && dataByYear[year]) {
                     let processedValue = value;
                     if (isBrazilExport) processedValue = value / 100000;
                     dataByYear[year][parseInt(month) - 1] = processedValue;
@@ -770,6 +771,7 @@
             }
             
             return {
+                data2024: dataByYear['2024'] || new Array(12).fill(null),
                 data2025: dataByYear['2025'] || new Array(12).fill(null),
                 data2026: dataByYear['2026'] || new Array(12).fill(null),
                 yoyChangeRate: yoyChangeRate
@@ -1037,13 +1039,13 @@
         
         function updateColombiaAvgChange(colombiaImportData) {
             const colombiaYoyChangeRate = colombiaImportData.yoyChangeRate;
-            const validRates = koreaYoyChangeRate.filter(rate => rate !== null);
+            const validRates = colombiaYoyChangeRate.filter(rate => rate !== null);
             if (validRates.length > 0) {
-                const koreaAvgChangeRate = validRates.reduce((sum, rate) => sum + rate, 0) / validRates.length;
-                const element = document.getElementById('koreaAvgChange');
+                const colombiaAvgChangeRate = validRates.reduce((sum, rate) => sum + rate, 0) / validRates.length;
+                const element = document.getElementById('koreaColombiaAvgChange');
                 if (element) {
-                    element.textContent = (koreaAvgChangeRate >= 0 ? '+' : '') + koreaAvgChangeRate.toFixed(1) + '%';
-                    element.style.color = koreaAvgChangeRate >= 0 ? getCSSVariable('--positive') : getCSSVariable('--negative');
+                    element.textContent = (colombiaAvgChangeRate >= 0 ? '+' : '') + colombiaAvgChangeRate.toFixed(1) + '%';
+                    element.style.color = colombiaAvgChangeRate >= 0 ? getCSSVariable('--positive') : getCSSVariable('--negative');
                 }
             }
         }

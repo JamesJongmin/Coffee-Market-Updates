@@ -1148,6 +1148,7 @@
             console.log('CSV data first 5 rows:', csvData.slice(0, 5));
             
             const dataByYear = {
+                '2024': new Array(12).fill(null),
                 '2025': new Array(12).fill(null),
                 '2026': new Array(12).fill(null)
             };
@@ -1163,7 +1164,7 @@
                 const [year, month] = dateStr.split('-');
                 const value = parseFloat(valueStr);
                 
-                if (!isNaN(value) && year && month) {
+                if (!isNaN(value) && year && month && dataByYear[year]) {
                     let processedValue = value;
                     
                     // 브라질 수출은 10만톤 단위로 변환
@@ -1209,6 +1210,7 @@
             }
             
             return {
+                data2024: dataByYear['2024'] || new Array(12).fill(null),
                 data2025: dataByYear['2025'] || new Array(12).fill(null),
                 data2026: dataByYear['2026'] || new Array(12).fill(null),
                 yoyChangeRate: yoyChangeRate
