@@ -825,7 +825,7 @@
             <!-- 대시보드 헤더 -->
             <div class="dashboard-header">
                 <h2 class="dashboard-title">브라질 커피 수출입 동향</h2>
-                <p class="dashboard-subtitle">2025년 vs 2026년 월별 비교 및 전년 동기 대비 분석</p>
+                <p class="dashboard-subtitle">2024년 vs 2025년 vs 2026년 월별 비교 및 전년 동기 대비 분석</p>
             </div>
             
             <!-- 차트 그리드 -->
@@ -834,7 +834,7 @@
                 <div class="chart-card animate-in">
                     <div class="chart-header">
                         <h3 class="chart-title">브라질 생두 수출량</h3>
-                        <p class="chart-subtitle">2025년 vs 2026년 월별 비교 및 전년 동기 대비 변화율</p>
+                        <p class="chart-subtitle">2024년 vs 2025년 vs 2026년 월별 비교 및 전년 동기 대비 변화율</p>
                         <p class="chart-source">출처: LSEG</p>
                     </div>
                     
@@ -843,6 +843,10 @@
                     </div>
                     
                     <div class="legend-custom">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #95a5a6;"></div>
+                            <span>2024년 (10만톤)</span>
+                        </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #bdc3c7;"></div>
                             <span>2025년 (10만톤)</span>
@@ -895,7 +899,7 @@
                 <div class="chart-card animate-in" style="animation-delay: 0.1s;">
                     <div class="chart-header">
                         <h3 class="chart-title">한국 브라질 생두 수입량</h3>
-                        <p class="chart-subtitle">2025년 vs 2026년 월별 비교 및 전년 동기 대비 변화율</p>
+                        <p class="chart-subtitle">2024년 vs 2025년 vs 2026년 월별 비교 및 전년 동기 대비 변화율</p>
                         <p class="chart-source">출처: 식품의약품안전처</p>
                     </div>
                     
@@ -904,6 +908,10 @@
                     </div>
                     
                     <div class="legend-custom">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #95a5a6;"></div>
+                            <span>2024년 (톤)</span>
+                        </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #bdc3c7;"></div>
                             <span>2025년 (톤)</span>
@@ -960,7 +968,7 @@
                 <div class="chart-card animate-in" style="animation-delay: 0.2s;">
                     <div class="chart-header">
                         <h3 class="chart-title">한국 콜롬비아 생두 수입량</h3>
-                        <p class="chart-subtitle">2025년 vs 2026년 월별 비교 및 전년 동기 대비 변화율</p>
+                        <p class="chart-subtitle">2024년 vs 2025년 vs 2026년 월별 비교 및 전년 동기 대비 변화율</p>
                         <p class="chart-source">출처: 식품의약품안전처</p>
                     </div>
                     
@@ -969,6 +977,10 @@
                     </div>
                     
                     <div class="legend-custom">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #95a5a6;"></div>
+                            <span>2024년 (톤)</span>
+                        </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #bdc3c7;"></div>
                             <span>2025년 (톤)</span>
@@ -1114,12 +1126,14 @@
 
         // 하드코딩된 백업 데이터 (한국 브라질 수입 데이터)
         const KOREA_BRAZIL_IMPORT_BACKUP_DATA = {
+            '2024': [4200, 6500, 5600, 5200, 5500, 4600, 3800, 4000, 4300, 4600, 4900, 4700],
             '2025': [3810, 7000, 5800, 5400, 5840, 4830, 4008, 4200, 4500, 4800, 5100, 4900],
             '2026': [null, null, null, null, null, null, null, null, null, null, null, null]
         };
         
         // 하드코딩된 백업 데이터 (한국 콜롬비아 수입 데이터)
         const KOREA_COLOMBIA_IMPORT_BACKUP_DATA = {
+            '2024': [1600, 2800, 2700, 2400, 2200, 2700, 2300, 2400, 2500, 2600, 2700, 2500],
             '2025': [1686, 2946, 2793, 2462, 2315, 2825, 2417, 2500, 2600, 2700, 2800, 2600],
             '2026': [null, null, null, null, null, null, null, null, null, null, null, null]
         };
@@ -1299,12 +1313,22 @@
         function createOrUpdateCharts(brazilExportData, koreaImportData, colombiaImportData) {
             // 브라질 전체 수출 차트
             const brazilCtx = document.getElementById('brazilExportChart').getContext('2d');
+            const brazil2024Gradient = createGradient(brazilCtx, '#7f8c8d', '#95a5a6');
             const brazil2025Gradient = createGradient(brazilCtx, '#d5dbdb', '#bdc3c7');
             const brazil2026Gradient = createGradient(brazilCtx, getCSSVariable('--copper'), getCSSVariable('--roast'));
             
             const brazilChartData = {
                 labels: months,
                 datasets: [
+                    {
+                        label: '2024년',
+                        data: brazilExportData.data2024,
+                        backgroundColor: brazil2024Gradient,
+                        borderColor: '#7f8c8d',
+                        borderWidth: 1,
+                        yAxisID: 'y',
+                        order: 4
+                    },
                     {
                         label: '2025년',
                         data: brazilExportData.data2025,
@@ -1357,7 +1381,7 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        if (context.datasetIndex === 2) {
+                                        if (context.datasetIndex === 3) {
                                             return `변화율: ${context.parsed.y}%`;
                                         } else {
                                             return `${context.dataset.label}: ${context.parsed.y}십만톤`;
@@ -1391,12 +1415,22 @@
 
             // 한국 수입 차트
             const koreaCtx = document.getElementById('koreaImportChart').getContext('2d');
+            const korea2024Gradient = createGradient(koreaCtx, '#7f8c8d', '#95a5a6');
             const korea2025Gradient = createGradient(koreaCtx, '#d5dbdb', '#bdc3c7');
             const korea2026Gradient = createGradient(koreaCtx, getCSSVariable('--copper'), getCSSVariable('--roast'));
             
             const koreaChartData = {
                 labels: months,
                 datasets: [
+                    {
+                        label: '2024년',
+                        data: koreaImportData.data2024,
+                        backgroundColor: korea2024Gradient,
+                        borderColor: '#7f8c8d',
+                        borderWidth: 1,
+                        yAxisID: 'y',
+                        order: 4
+                    },
                     {
                         label: '2025년',
                         data: koreaImportData.data2025,
@@ -1449,7 +1483,7 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        if (context.datasetIndex === 2) {
+                                        if (context.datasetIndex === 3) {
                                             return `변화율: ${context.parsed.y}%`;
                                         } else {
                                             return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}톤`;
@@ -1485,12 +1519,22 @@
             // 콜롬비아 수입 차트
             if (colombiaImportData) {
                 const colombiaCtx = document.getElementById('koreaColombiaImportChart').getContext('2d');
+                const colombia2024Gradient = createGradient(colombiaCtx, '#7f8c8d', '#95a5a6');
                 const colombia2025Gradient = createGradient(colombiaCtx, '#d5dbdb', '#bdc3c7');
                 const colombia2026Gradient = createGradient(colombiaCtx, '#2980b9', '#1a5276');
                 
                 const colombiaChartData = {
                     labels: months,
                     datasets: [
+                        {
+                            label: '2024년',
+                            data: colombiaImportData.data2024,
+                            backgroundColor: colombia2024Gradient,
+                            borderColor: '#7f8c8d',
+                            borderWidth: 1,
+                            yAxisID: 'y',
+                            order: 4
+                        },
                         {
                             label: '2025년',
                             data: colombiaImportData.data2025,
@@ -1543,7 +1587,7 @@
                                 tooltip: {
                                     callbacks: {
                                         label: function(context) {
-                                            if (context.datasetIndex === 2) {
+                                            if (context.datasetIndex === 3) {
                                                 return `변화율: ${context.parsed.y}%`;
                                             } else {
                                                 return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}톤`;
@@ -1719,12 +1763,14 @@
                 // 에러 시 백업 데이터로 표시
                 console.log('Using backup data...');
                 const koreaBackupData = {
+                    data2024: KOREA_BRAZIL_IMPORT_BACKUP_DATA['2024'],
                     data2025: KOREA_BRAZIL_IMPORT_BACKUP_DATA['2025'],
                     data2026: KOREA_BRAZIL_IMPORT_BACKUP_DATA['2026'],
                     yoyChangeRate: []
                 };
                 
                 const colombiaBackupData = {
+                    data2024: KOREA_COLOMBIA_IMPORT_BACKUP_DATA['2024'],
                     data2025: KOREA_COLOMBIA_IMPORT_BACKUP_DATA['2025'],
                     data2026: KOREA_COLOMBIA_IMPORT_BACKUP_DATA['2026'],
                     yoyChangeRate: []
@@ -1757,6 +1803,7 @@
                 }
                 
                 const defaultBrazilData = {
+                    data2024: new Array(12).fill(0),
                     data2025: new Array(12).fill(0),
                     data2026: new Array(12).fill(null),
                     yoyChangeRate: new Array(12).fill(null)
