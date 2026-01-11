@@ -558,6 +558,70 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Korea Colombia Import Chart -->
+                <div class="chart-card animate-in" style="animation-delay: 0.2s;">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Korea's Colombia Green Coffee Imports</h3>
+                        <p class="chart-subtitle">2025 vs 2026 Monthly Comparison and YoY Change Rate</p>
+                        <p class="chart-source">Source: Korea MFDS</p>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="koreaColombiaImportChart"></canvas>
+                    </div>
+                    
+                    <div class="legend-custom">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #bdc3c7;"></div>
+                            <span>2025 (tons)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #2980b9;"></div>
+                            <span>2026 (tons)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line" style="background: linear-gradient(to right, var(--positive), var(--negative)); height: 4px;"></div>
+                            <span>YoY Change Rate</span>
+                        </div>
+                    </div>
+                    
+                    <div class="update-note">
+                        📍 Current month data is being updated as aggregation is in progress.
+                    </div>
+                    
+                    <div class="trend-analysis">
+                        <h4 class="trend-title">💡 Implication - 2025 Korea Colombia Import Summary</h4>
+                        <p class="trend-content">
+                            <strong>Korea's Colombia green coffee imports totaled ~30,000 tons in 2025, remaining the 2nd largest import source</strong> after Brazil. 
+                            Monthly volumes peaked at 2,946 tons in February, then <strong>declined to 2,315 tons in May before rebounding to 2,825 tons in June</strong>. 
+                            Colombian mild Arabica maintains a <strong>premium price position</strong> in the specialty market, with relatively stable import volumes despite rising international prices. 
+                            In 2026, <strong>Colombian weather conditions and harvest volumes will be key variables</strong> for Korea's specialty market supply.
+                        </p>
+                    </div>
+                    
+                    <div class="stats-section">
+                        <h3 class="stats-title">📊 Key Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" style="color: var(--positive);" id="koreaColombiaAvgChange">-</div>
+                                <div class="stat-label">Avg Change Rate</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" style="color: #2980b9;">-</div>
+                                <div class="stat-label">2026 High</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" style="color: #2980b9;">-</div>
+                                <div class="stat-label">2026 Low</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" style="color: #bdc3c7;">2.9k tons</div>
+                                <div class="stat-label">2025 High (Feb)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -637,12 +701,19 @@
         // Google Sheets URLs
         const EXPORT_IMPORT_SHEETS = {
             brazilTotalExport: 'https://docs.google.com/spreadsheets/d/1Q0lYxDRF39TqMzKIo7w9qLbXmLRfMuyxqacPxPArNVQ/export?format=csv&gid=0',
-            koreaBrazilImport: 'https://docs.google.com/spreadsheets/d/1TeeQkangdRDQomgWU3jhFOjkAZvTI48-LJ7wUmad5Gk/export?format=csv&gid=0'
+            koreaBrazilImport: 'https://docs.google.com/spreadsheets/d/1TeeQkangdRDQomgWU3jhFOjkAZvTI48-LJ7wUmad5Gk/export?format=csv&gid=0',
+            koreaColombiaImport: 'https://docs.google.com/spreadsheets/d/1TeeQkangdRDQomgWU3jhFOjkAZvTI48-LJ7wUmad5Gk/export?format=csv&gid=1648327825'
         };
 
-        // Backup data for Korea imports
-        const KOREA_IMPORT_BACKUP_DATA = {
+        // Backup data for Korea Brazil imports
+        const KOREA_BRAZIL_IMPORT_BACKUP_DATA = {
             '2025': [3810, 7000, 5800, 5400, 5840, 4830, 4008, 4200, 4500, 4800, 5100, 4900],
+            '2026': [null, null, null, null, null, null, null, null, null, null, null, null]
+        };
+        
+        // Backup data for Korea Colombia imports
+        const KOREA_COLOMBIA_IMPORT_BACKUP_DATA = {
+            '2025': [1686, 2946, 2793, 2462, 2315, 2825, 2417, 2500, 2600, 2700, 2800, 2600],
             '2026': [null, null, null, null, null, null, null, null, null, null, null, null]
         };
 
@@ -728,6 +799,7 @@
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         let brazilChart = null;
         let koreaChart = null;
+        let colombiaChart = null;
 
         function createGradient(ctx, color1, color2) {
             const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -740,7 +812,7 @@
             return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
         }
 
-        function createOrUpdateCharts(brazilExportData, koreaImportData) {
+        function createOrUpdateCharts(brazilExportData, koreaImportData, colombiaImportData) {
             const brazilCtx = document.getElementById('brazilExportChart').getContext('2d');
             const brazil2025Gradient = createGradient(brazilCtx, '#d5dbdb', '#bdc3c7');
             const brazil2026Gradient = createGradient(brazilCtx, getCSSVariable('--copper'), getCSSVariable('--roast'));
@@ -796,6 +868,39 @@
                     }
                 });
             }
+            
+            // Colombia Import Chart
+            if (colombiaImportData) {
+                const colombiaCtx = document.getElementById('koreaColombiaImportChart').getContext('2d');
+                const colombia2025Gradient = createGradient(colombiaCtx, '#d5dbdb', '#bdc3c7');
+                const colombia2026Gradient = createGradient(colombiaCtx, '#2980b9', '#1a5276');
+                
+                const colombiaChartData = {
+                    labels: months,
+                    datasets: [
+                        { label: '2025', data: colombiaImportData.data2025, backgroundColor: colombia2025Gradient, borderColor: '#95a5a6', borderWidth: 1, yAxisID: 'y', order: 3 },
+                        { label: '2026', data: colombiaImportData.data2026, backgroundColor: colombia2026Gradient, borderColor: '#2980b9', borderWidth: 1, yAxisID: 'y', order: 2 },
+                        { label: 'YoY Change Rate', data: colombiaImportData.yoyChangeRate, type: 'line', borderColor: getCSSVariable('--positive'), backgroundColor: 'rgba(74, 124, 89, 0.2)', borderWidth: 4, pointBackgroundColor: colombiaImportData.yoyChangeRate.map(rate => rate >= 0 ? getCSSVariable('--positive') : getCSSVariable('--negative')), pointBorderColor: '#ffffff', pointBorderWidth: 3, pointRadius: 8, pointHoverRadius: 10, yAxisID: 'y1', tension: 0.3, fill: false, order: 1 }
+                    ]
+                };
+
+                if (colombiaChart) {
+                    colombiaChart.data = colombiaChartData;
+                    colombiaChart.update();
+                } else {
+                    colombiaChart = new Chart(colombiaCtx, {
+                        type: 'bar',
+                        data: colombiaChartData,
+                        options: {
+                            ...commonChartOptions,
+                            plugins: { ...commonChartOptions.plugins, tooltip: { callbacks: { label: function(context) { if (context.datasetIndex === 2) return `Change: ${context.parsed.y}%`; else return `${context.dataset.label}: ${context.parsed.y.toLocaleString()} tons`; } } } },
+                            scales: { ...commonChartOptions.scales, y: { ...commonChartOptions.scales.y, beginAtZero: true, title: { display: true, text: 'Import Volume (tons)', font: { size: 12, weight: '600' } }, ticks: { callback: function(value) { return value.toFixed(0); } } } }
+                        }
+                    });
+                }
+                
+                updateColombiaAvgChange(colombiaImportData);
+            }
         }
 
         async function loadAndCreateCharts() {
@@ -838,15 +943,44 @@
                 const koreaImportCsvData = parseCSV(koreaImportCsv);
                 koreaImportData = processExportImportData(koreaImportCsvData, false, true);
                 
-                createOrUpdateCharts(brazilExportData, koreaImportData);
+                // Load Colombia import data
+                let colombiaImportCsv;
+                let colombiaImportData;
+                
+                try {
+                    const directResponse = await fetch(EXPORT_IMPORT_SHEETS.koreaColombiaImport);
+                    if (directResponse.ok) colombiaImportCsv = await directResponse.text();
+                    else throw new Error('Direct access failed');
+                } catch (directError) {
+                    const colombiaImportProxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(EXPORT_IMPORT_SHEETS.koreaColombiaImport)}`;
+                    const colombiaImportResponse = await fetch(colombiaImportProxyUrl);
+                    if (!colombiaImportResponse.ok) throw new Error(`Colombia import data fetch failed: ${colombiaImportResponse.status}`);
+                    const colombiaImportProxyData = await colombiaImportResponse.json();
+                    colombiaImportCsv = colombiaImportProxyData.contents;
+                }
+                
+                if (colombiaImportCsv.includes('<HTML>') || colombiaImportCsv.includes('<!DOCTYPE')) {
+                    throw new Error('Invalid data format for Colombia: received HTML instead of CSV');
+                }
+                
+                const colombiaImportCsvData = parseCSV(colombiaImportCsv);
+                colombiaImportData = processExportImportData(colombiaImportCsvData, false, true);
+                
+                createOrUpdateCharts(brazilExportData, koreaImportData, colombiaImportData);
                 updateKoreaAvgChange(koreaImportData);
                 
             } catch (error) {
                 console.error('Error loading data:', error);
                 
                 const koreaBackupData = {
-                    data2025: KOREA_IMPORT_BACKUP_DATA['2025'],
-                    data2026: KOREA_IMPORT_BACKUP_DATA['2026'],
+                    data2025: KOREA_BRAZIL_IMPORT_BACKUP_DATA['2025'],
+                    data2026: KOREA_BRAZIL_IMPORT_BACKUP_DATA['2026'],
+                    yoyChangeRate: []
+                };
+                
+                const colombiaBackupData = {
+                    data2025: KOREA_COLOMBIA_IMPORT_BACKUP_DATA['2025'],
+                    data2026: KOREA_COLOMBIA_IMPORT_BACKUP_DATA['2026'],
                     yoyChangeRate: []
                 };
                 
@@ -861,13 +995,24 @@
                     }
                 }
                 
+                for (let i = 0; i < 12; i++) {
+                    const current = colombiaBackupData.data2026[i];
+                    const previous = colombiaBackupData.data2025[i];
+                    if (current !== null && previous !== null && previous !== 0) {
+                        const change = ((current - previous) / previous) * 100;
+                        colombiaBackupData.yoyChangeRate.push(parseFloat(change.toFixed(1)));
+                    } else {
+                        colombiaBackupData.yoyChangeRate.push(null);
+                    }
+                }
+                
                 const defaultBrazilData = {
                     data2025: new Array(12).fill(0),
                     data2026: new Array(12).fill(null),
                     yoyChangeRate: new Array(12).fill(null)
                 };
                 
-                createOrUpdateCharts(defaultBrazilData, koreaBackupData);
+                createOrUpdateCharts(defaultBrazilData, koreaBackupData, colombiaBackupData);
                 updateKoreaAvgChange(koreaBackupData);
             }
         }
@@ -879,6 +1024,19 @@
 
         function updateKoreaAvgChange(koreaImportData) {
             const koreaYoyChangeRate = koreaImportData.yoyChangeRate;
+            const validRates = koreaYoyChangeRate.filter(rate => rate !== null);
+            if (validRates.length > 0) {
+                const koreaAvgChangeRate = validRates.reduce((sum, rate) => sum + rate, 0) / validRates.length;
+                const element = document.getElementById('koreaAvgChange');
+                if (element) {
+                    element.textContent = (koreaAvgChangeRate >= 0 ? '+' : '') + koreaAvgChangeRate.toFixed(1) + '%';
+                    element.style.color = koreaAvgChangeRate >= 0 ? getCSSVariable('--positive') : getCSSVariable('--negative');
+                }
+            }
+        }
+        
+        function updateColombiaAvgChange(colombiaImportData) {
+            const colombiaYoyChangeRate = colombiaImportData.yoyChangeRate;
             const validRates = koreaYoyChangeRate.filter(rate => rate !== null);
             if (validRates.length > 0) {
                 const koreaAvgChangeRate = validRates.reduce((sum, rate) => sum + rate, 0) / validRates.length;
