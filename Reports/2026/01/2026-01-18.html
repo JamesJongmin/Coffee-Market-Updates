@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 가격 결정 요인 분석: 환율, 투기, 작황의 역학관계 | 2026년 1월</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!--REPORT_META
+{
+    "title": "커피 가격 결정 요인 분석: 환율, 투기, 작황의 역학관계",
+    "subtitle": "Random Forest Feature Importance 심층 분석",
+    "date": "2026-01-18",
+    "summary": "2023년 하반기부터 2025년까지 커피 선물 가격의 핵심 결정 요인을 분석합니다. USD/BRL 환율이 전체 기간 75.4%의 중요도로 압도적 영향력을 보이며, 반기별로 CFTC 투기 포지션과 NDVI 작황 지수가 교차하며 영향력을 행사하는 패턴을 발견했습니다. R² 94.3%의 높은 설명력을 보이는 모델 기반 분석.",
+    "tags": ["인뎁스", "데이터분석", "환율", "CFTC", "NDVI", "Feature Importance", "Random Forest", "머신러닝"],
+    "type": "in-depth"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --roast: #3d2b1f;
+            --copper: #b87333;
+            --accent: #8B4513;
+            --crema: #f5f0e8;
+            --steam: #e8e2d9;
+            --paper: #faf8f5;
+            --ink: #2c2c2c;
+            --algorithm: #2563eb;
+            --data: #6366f1;
+            --positive: #4a7c59;
+            --negative: #c23a3a;
+            --warning: #d4a017;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 네비게이션 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            background: rgba(250, 248, 245, 0.98);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        /* 스크롤 프로그레스 */
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--algorithm), var(--data));
+            z-index: 1001;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* 페이지 래퍼 */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 4vw, 60px);
+        }
+
+        /* 헤더 */
+        .hero-header {
+            padding: clamp(40px, 8vh, 80px) 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--algorithm), var(--data));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+
+        .report-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            font-size: 0.9rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-divider {
+            color: var(--roast);
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--roast);
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        /* 핵심 지표 */
+        .key-stats-hero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.7;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        .stat-value.algorithm { color: var(--algorithm); }
+        .stat-value.positive { color: var(--positive); }
+        .stat-value.negative { color: var(--negative); }
+        .stat-value.warning { color: var(--warning); }
+
+        .stat-note {
+            font-size: 0.75rem;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        /* 콘텐츠 레이아웃 */
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 60px;
+            padding: clamp(40px, 6vh, 60px) 0;
+        }
+
+        @media (max-width: 1024px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        /* 메인 콘텐츠 */
+        main {
+            min-width: 0;
+        }
+
+        .section {
+            margin-bottom: 56px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--algorithm), var(--data));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        h3 {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--roast);
+            margin: 28px 0 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--ink);
+        }
+
+        /* 하이라이트 박스 */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(99, 102, 241, 0.06));
+            border-left: 4px solid var(--algorithm);
+            padding: 20px 24px;
+            border-radius: 0 12px 12px 0;
+            margin: 24px 0;
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, rgba(212, 160, 23, 0.06), rgba(212, 160, 23, 0.03));
+            border-left-color: var(--warning);
+        }
+
+        .highlight-box.negative {
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.06), rgba(194, 58, 58, 0.03));
+            border-left-color: var(--negative);
+        }
+
+        .highlight-box.positive {
+            background: linear-gradient(135deg, rgba(74, 124, 89, 0.06), rgba(74, 124, 89, 0.03));
+            border-left-color: var(--positive);
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        /* Feature Importance 바 */
+        .importance-bar {
+            margin: 24px 0;
+        }
+
+        .importance-item {
+            margin-bottom: 18px;
+        }
+
+        .importance-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .importance-track {
+            height: 12px;
+            background: rgba(26, 15, 10, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .importance-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 1s ease-out;
+        }
+
+        .importance-fill.usdbrl {
+            background: linear-gradient(90deg, var(--positive), #5a9c6d);
+        }
+
+        .importance-fill.cftc {
+            background: linear-gradient(90deg, var(--algorithm), #4f8ff5);
+        }
+
+        .importance-fill.ndvi {
+            background: linear-gradient(90deg, #16a085, #1abc9c);
+        }
+
+        /* 테이블 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+        }
+
+        .comparison-table th {
+            background: var(--roast);
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .comparison-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            font-size: 0.9rem;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(26, 15, 10, 0.02);
+        }
+
+        .comparison-table .highlight {
+            background: rgba(139, 69, 19, 0.06);
+            font-weight: 600;
+        }
+
+        /* 히트맵 */
+        .heatmap-container {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .heatmap {
+            display: grid;
+            grid-template-columns: 90px repeat(5, 1fr);
+            gap: 4px;
+            min-width: 480px;
+        }
+
+        .heatmap-header {
+            background: var(--roast);
+            color: white;
+            padding: 10px 6px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border-radius: 6px;
+        }
+
+        .heatmap-label {
+            background: rgba(139, 69, 19, 0.12);
+            color: var(--espresso);
+            padding: 10px 6px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        .heatmap-cell {
+            padding: 12px 6px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 6px;
+        }
+
+        .heat-1 { background: rgba(74, 124, 89, 0.15); color: var(--positive); }
+        .heat-2 { background: rgba(74, 124, 89, 0.3); color: var(--positive); }
+        .heat-3 { background: rgba(74, 124, 89, 0.5); color: white; }
+        .heat-4 { background: rgba(74, 124, 89, 0.7); color: white; }
+        .heat-5 { background: rgba(74, 124, 89, 0.9); color: white; }
+
+        /* 타임라인 */
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+            margin: 24px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--copper), var(--algorithm));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding: 18px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 22px;
+            width: 10px;
+            height: 10px;
+            background: var(--copper);
+            border-radius: 50%;
+            border: 3px solid var(--paper);
+        }
+
+        .timeline-period {
+            font-size: 0.8rem;
+            color: var(--algorithm);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 6px;
+        }
+
+        .timeline-desc {
+            color: var(--roast);
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        /* 비교 그리드 */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        @media (max-width: 600px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .comparison-card h4 {
+            font-size: 0.95rem;
+            color: var(--roast);
+            margin-bottom: 14px;
+        }
+
+        .comparison-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .comparison-note {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .sidebar-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+
+        .toc-list a:hover {
+            color: var(--algorithm);
+        }
+
+        .toc-num {
+            background: var(--copper);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .sidebar-list {
+            list-style: none;
+        }
+
+        .sidebar-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            font-size: 0.9rem;
+        }
+
+        .sidebar-list li:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-list .label {
+            color: var(--roast);
+            opacity: 0.7;
+            font-size: 0.8rem;
+        }
+
+        .sidebar-list .value {
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        /* 푸터 */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #f5f0e8;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            color: #d4cfc5;
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #f5f0e8;
+        }
+
+        .footer-link {
+            display: block;
+            color: #d4cfc5;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 6px 0;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: #f5f0e8;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(245, 240, 232, 0.2);
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: #b8b3a9;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            color: #a09b91;
+            margin-top: 12px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">개요</a>
+            <a href="#methodology" class="nav-link">방법론</a>
+            <a href="#overall" class="nav-link">전체분석</a>
+            <a href="#halfyear" class="nav-link">반기별</a>
+            <a href="#implications" class="nav-link">시사점</a>
+        </div>
+    </nav>
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- 헤더 -->
+            <header class="hero-header">
+                <div class="report-badge">
+                    <span>📊</span>
+                    <span>In-Depth Analysis</span>
+                </div>
+                
+                <div class="report-meta">
+                    <span class="meta-item">📅 2026년 1월 18일</span>
+                    <span class="meta-divider">|</span>
+                    <span class="meta-item">Align Commodities</span>
+                    <span class="meta-divider">|</span>
+                    <span class="meta-item">⏱️ 12분 분량</span>
+                </div>
+
+                <h1>커피 가격 결정 요인 분석:<br>환율, 투기, 작황의 역학관계</h1>
+                <p class="subtitle">Random Forest Feature Importance 심층 분석 리포트</p>
+
+                <div class="key-stats-hero">
+                    <div class="stat-card">
+                        <div class="stat-label">USD/BRL 영향력</div>
+                        <div class="stat-value positive">75.4%</div>
+                        <div class="stat-note">전체 기간 Feature Importance</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">분석 기간</div>
+                        <div class="stat-value">30개월</div>
+                        <div class="stat-note">2023.07 ~ 2025.12</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">모델 설명력 (R²)</div>
+                        <div class="stat-value algorithm">94.3%</div>
+                        <div class="stat-note">Random Forest Regressor</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">가격-환율 상관계수</div>
+                        <div class="stat-value warning">+0.739</div>
+                        <div class="stat-note">강한 양의 상관관계</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">분석 반기 수</div>
+                        <div class="stat-value">5개</div>
+                        <div class="stat-note">H1/H2 패턴 분석</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-layout">
+                <!-- 메인 콘텐츠 -->
+                <main>
+                    <!-- Executive Summary -->
+                    <section id="overview" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📋</div>
+                            <h2>Executive Summary</h2>
+                        </div>
+
+                        <p>
+                            커피 선물 가격은 단순히 수요와 공급의 함수가 아닙니다. 본 분석은 2023년 하반기부터 2025년까지 30개월간의 데이터를 기반으로, 
+                            커피 가격 변동을 설명하는 <strong>세 가지 핵심 변수</strong>의 상대적 중요도를 정량화했습니다.
+                        </p>
+
+                        <div class="highlight-box positive">
+                            <div class="highlight-title">💡 핵심 발견</div>
+                            <p style="margin-bottom: 0;">
+                                <strong>USD/BRL 환율이 커피 가격 변동의 75.4%를 설명합니다.</strong> 
+                                브라질이 세계 최대 커피 생산국(약 40%)이기 때문에, 헤알화 약세 시 달러 기준 수출 수익 감소 → 수출 유인 하락 → 공급 감소 → 가격 상승의 메커니즘이 작동합니다.
+                            </p>
+                        </div>
+
+                        <p>
+                            흥미롭게도, CFTC 투기적 포지션과 NDVI 작황 지수는 <strong>시간대에 따라 영향력이 교차</strong>합니다. 
+                            상반기에는 브라질 우기와 맞물려 작황(NDVI)이 중요해지고, 하반기에는 수확 확정 후 투기적 거래(CFTC)가 가격을 주도합니다.
+                        </p>
+                    </section>
+
+                    <!-- 분석 방법론 -->
+                    <section id="methodology" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🔬</div>
+                            <h2>분석 방법론</h2>
+                        </div>
+
+                        <h3>데이터 및 변수</h3>
+                        
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>구분</th>
+                                    <th>변수</th>
+                                    <th>설명</th>
+                                    <th>출처</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight">
+                                    <td><strong>종속변수</strong></td>
+                                    <td>Coffee Price</td>
+                                    <td>아라비카 커피 선물 가격 (cents/lb)</td>
+                                    <td>ICE Futures</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3"><strong>독립변수</strong></td>
+                                    <td>USD/BRL</td>
+                                    <td>미국 달러 대비 브라질 헤알 환율</td>
+                                    <td>Investing.com</td>
+                                </tr>
+                                <tr>
+                                    <td>CFTC Position</td>
+                                    <td>Non-Commercial 순매수 포지션</td>
+                                    <td>CFTC COT Report</td>
+                                </tr>
+                                <tr>
+                                    <td>NDVI</td>
+                                    <td>브라질 커피 재배지역 식생지수</td>
+                                    <td>NASA MODIS</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Random Forest 모델 설정</h3>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">🌲 모델 파라미터</div>
+                            <ul style="margin: 0; padding-left: 20px;">
+                                <li><strong>n_estimators:</strong> 100 (앙상블 트리 개수)</li>
+                                <li><strong>max_depth:</strong> 3 (과적합 방지)</li>
+                                <li><strong>Feature Importance:</strong> Mean Decrease in Impurity (MDI)</li>
+                                <li><strong>Preprocessing:</strong> StandardScaler 정규화</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 전체 기간 분석 -->
+                    <section id="overall" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <h2>전체 기간 분석 결과</h2>
+                        </div>
+
+                        <h3>Feature Importance 순위</h3>
+
+                        <div class="importance-bar">
+                            <div class="importance-item">
+                                <div class="importance-label">
+                                    <span>🥇 USD/BRL (환율)</span>
+                                    <span style="color: var(--positive); font-weight: 700;">75.37%</span>
+                                </div>
+                                <div class="importance-track">
+                                    <div class="importance-fill usdbrl" style="width: 75.37%;"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="importance-item">
+                                <div class="importance-label">
+                                    <span>🥈 CFTC Position (투기)</span>
+                                    <span style="color: var(--algorithm); font-weight: 700;">12.62%</span>
+                                </div>
+                                <div class="importance-track">
+                                    <div class="importance-fill cftc" style="width: 12.62%;"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="importance-item">
+                                <div class="importance-label">
+                                    <span>🥉 NDVI (작황)</span>
+                                    <span style="color: #16a085; font-weight: 700;">12.01%</span>
+                                </div>
+                                <div class="importance-track">
+                                    <div class="importance-fill ndvi" style="width: 12.01%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>상관관계 행렬</h3>
+
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>변수</th>
+                                    <th>Coffee Price</th>
+                                    <th>USD/BRL</th>
+                                    <th>CFTC Position</th>
+                                    <th>NDVI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight">
+                                    <td><strong>Coffee Price</strong></td>
+                                    <td>1.000</td>
+                                    <td style="color: var(--positive); font-weight: 700;">+0.739</td>
+                                    <td style="color: var(--algorithm);">+0.441</td>
+                                    <td>+0.087</td>
+                                </tr>
+                                <tr>
+                                    <td>USD/BRL</td>
+                                    <td style="color: var(--positive);">+0.739</td>
+                                    <td>1.000</td>
+                                    <td>+0.573</td>
+                                    <td>-0.042</td>
+                                </tr>
+                                <tr>
+                                    <td>CFTC Position</td>
+                                    <td style="color: var(--algorithm);">+0.441</td>
+                                    <td>+0.573</td>
+                                    <td>1.000</td>
+                                    <td>+0.170</td>
+                                </tr>
+                                <tr>
+                                    <td>NDVI</td>
+                                    <td>+0.087</td>
+                                    <td>-0.042</td>
+                                    <td>+0.170</td>
+                                    <td>1.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">⚠️ 해석 시 주의</div>
+                            <p style="margin-bottom: 0;">
+                                USD/BRL과 CFTC Position 간 상관계수가 +0.573으로 높은 편입니다. 이는 <strong>다중공선성</strong>의 가능성을 시사하며, 
+                                개별 변수의 순수 효과가 왜곡될 수 있습니다. Feature Importance는 인과관계가 아닌 상관관계 기반임을 유념하세요.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 반기별 분석 -->
+                    <section id="halfyear" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">📅</div>
+                            <h2>반기별 분석 결과</h2>
+                        </div>
+
+                        <h3>Feature Importance 히트맵</h3>
+
+                        <div class="heatmap-container">
+                            <div class="heatmap">
+                                <div class="heatmap-header"></div>
+                                <div class="heatmap-header">2023-H2</div>
+                                <div class="heatmap-header">2024-H1</div>
+                                <div class="heatmap-header">2024-H2</div>
+                                <div class="heatmap-header">2025-H1</div>
+                                <div class="heatmap-header">2025-H2</div>
+                                
+                                <div class="heatmap-label">USD/BRL</div>
+                                <div class="heatmap-cell heat-1">0.139</div>
+                                <div class="heatmap-cell heat-2">0.327</div>
+                                <div class="heatmap-cell heat-5">0.671</div>
+                                <div class="heatmap-cell heat-2">0.368</div>
+                                <div class="heatmap-cell heat-3">0.446</div>
+                                
+                                <div class="heatmap-label">CFTC</div>
+                                <div class="heatmap-cell heat-3">0.468</div>
+                                <div class="heatmap-cell heat-2">0.311</div>
+                                <div class="heatmap-cell heat-1">0.114</div>
+                                <div class="heatmap-cell heat-2">0.340</div>
+                                <div class="heatmap-cell heat-4">0.503</div>
+                                
+                                <div class="heatmap-label">NDVI</div>
+                                <div class="heatmap-cell heat-2">0.393</div>
+                                <div class="heatmap-cell heat-2">0.361</div>
+                                <div class="heatmap-cell heat-1">0.216</div>
+                                <div class="heatmap-cell heat-2">0.292</div>
+                                <div class="heatmap-cell heat-1">0.052</div>
+                            </div>
+                        </div>
+
+                        <h3>시기별 동인 변화 타임라인</h3>
+
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-period">2023년 하반기</div>
+                                <div class="timeline-title">🔵 CFTC 투기 포지션 주도 (46.8%)</div>
+                                <p class="timeline-desc">
+                                    가격 150-197센트 구간. 투기적 거래가 활발하며 펀드 매니저들의 포지션 변화가 가격 방향성 결정.
+                                </p>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-period">2024년 상반기</div>
+                                <div class="timeline-title">🟢 NDVI 작황 지수 주도 (36.1%)</div>
+                                <p class="timeline-desc">
+                                    브라질 우기 시즌. 188-233센트 구간에서 작황 상태가 가격에 민감하게 반영.
+                                </p>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-period">2024년 하반기</div>
+                                <div class="timeline-title">💚 USD/BRL 환율 압도적 주도 (67.1%)</div>
+                                <p class="timeline-desc">
+                                    헤알화 급격한 약세(5.1→6.2). 237-325센트까지 가격 급등. 환율 변동이 다른 모든 요인을 압도.
+                                </p>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-period">2025년 상반기</div>
+                                <div class="timeline-title">💚 USD/BRL 지속 + 혼합 영향 (36.8%)</div>
+                                <p class="timeline-desc">
+                                    344-392센트 고가 구간. 환율, CFTC, NDVI가 비교적 균형 있게 영향력 행사.
+                                </p>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-period">2025년 하반기</div>
+                                <div class="timeline-title">🔵 CFTC 투기 포지션 재부상 (50.3%)</div>
+                                <p class="timeline-desc">
+                                    300-398센트 변동성 확대 구간. 투기적 자금 흐름이 다시 핵심 동인으로 부상.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 패턴 발견 -->
+                    <section id="pattern" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">🔍</div>
+                            <h2>패턴 발견: H1 vs H2</h2>
+                        </div>
+
+                        <p>
+                            상반기(H1)와 하반기(H2)에 각 변수의 영향력이 체계적으로 다르게 나타납니다. 
+                            이는 브라질 커피의 <strong>생육 주기와 밀접한 관련</strong>이 있습니다.
+                        </p>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-card">
+                                <h4>🌸 상반기 (H1: 1-6월)</h4>
+                                <div class="comparison-value" style="color: #16a085;">32.7%</div>
+                                <p class="comparison-note">NDVI 평균 영향력</p>
+                                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--roast);">
+                                    브라질 우기(생육기) 시즌<br>
+                                    작황 상태가 가격에 민감하게 반영
+                                </p>
+                            </div>
+                            
+                            <div class="comparison-card">
+                                <h4>🍂 하반기 (H2: 7-12월)</h4>
+                                <div class="comparison-value" style="color: var(--algorithm);">36.2%</div>
+                                <p class="comparison-note">CFTC 평균 영향력</p>
+                                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--roast);">
+                                    브라질 건기(수확기) 시즌<br>
+                                    투기적 거래 활동 증가
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box positive">
+                            <div class="highlight-title">🌿 계절성 해석</div>
+                            <p style="margin-bottom: 0;">
+                                <strong>상반기(H1)</strong>는 브라질의 우기 후반과 건기 초입으로, 커피나무의 꽃눈 형성과 열매 발달 시기입니다. 
+                                이때 NDVI(작황 지수)가 가격에 더 민감하게 반영됩니다.<br><br>
+                                <strong>하반기(H2)</strong>는 건기 후반과 수확기(5-9월)로, 수확량이 확정되면서 작황 불확실성이 감소하고 
+                                투기적 거래와 환율 변동이 가격을 주도합니다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 시사점 -->
+                    <section id="implications" class="section">
+                        <div class="section-header">
+                            <div class="section-icon">💡</div>
+                            <h2>실무 시사점</h2>
+                        </div>
+
+                        <h3>트레이딩 전략 제안</h3>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💱 1. 환율 모니터링 강화</div>
+                            <p style="margin-bottom: 0;">
+                                USD/BRL 환율이 커피 가격의 75%를 설명하므로, 브라질 중앙은행(BCB) 정책, 경상수지, 정치적 리스크 등 환율 영향 요인에 대한 모니터링이 필수적입니다.
+                                <br><br>
+                                <strong>실행방안:</strong> 환율 5.5 이상 시 롱 포지션 고려, 환율 급등 시 커피 가격 상승 대비
+                            </p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">📊 2. CFTC 리포트 활용</div>
+                            <p style="margin-bottom: 0;">
+                                하반기에는 CFTC Commitment of Traders 리포트의 Non-Commercial 포지션 변화를 주시해야 합니다. 
+                                특히 극단적 포지션(역대 최대 롱/숏)은 반전 신호가 될 수 있습니다.
+                                <br><br>
+                                <strong>실행방안:</strong> 매주 금요일 COT 리포트 체크, 순매수 60,000계약 이상 시 과열 주의
+                            </p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">🌿 3. 상반기 작황 집중</div>
+                            <p style="margin-bottom: 0;">
+                                1-6월에는 브라질 기상 및 NDVI 데이터에 주목해야 합니다. NASA MODIS, Copernicus 위성 데이터, Conab 작황 보고서가 핵심 정보원입니다.
+                                <br><br>
+                                <strong>실행방안:</strong> 1-3월 우기 강수량, 4-6월 건기 진입 시점, NDVI 0.6 이하 시 공급 우려 반영
+                            </p>
+                        </div>
+
+                        <div class="highlight-box negative">
+                            <div class="highlight-title">⚠️ 분석 한계 및 주의사항</div>
+                            <p style="margin-bottom: 0;">
+                                본 분석은 <strong>30개월</strong>이라는 제한된 기간의 데이터를 기반으로 합니다. 
+                                이 기간은 코로나 이후 공급망 정상화, 브라질 가뭄, 미국 관세 이슈 등 특수한 시장 상황이 반영되어 있어, 
+                                다른 시기에 동일한 패턴이 적용되지 않을 수 있습니다.
+                                <br><br>
+                                Random Forest의 Feature Importance는 <strong>인과관계가 아닌 상관관계</strong>를 나타내며, 
+                                투자 결정 시 추가적인 분석이 필요합니다.
+                            </p>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- 사이드바 -->
+                <aside class="sidebar">
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">📑 목차</h3>
+                        <ul class="toc-list">
+                            <li><a href="#overview"><span class="toc-num">1</span> Executive Summary</a></li>
+                            <li><a href="#methodology"><span class="toc-num">2</span> 분석 방법론</a></li>
+                            <li><a href="#overall"><span class="toc-num">3</span> 전체 기간 분석</a></li>
+                            <li><a href="#halfyear"><span class="toc-num">4</span> 반기별 분석</a></li>
+                            <li><a href="#pattern"><span class="toc-num">5</span> 패턴 발견</a></li>
+                            <li><a href="#implications"><span class="toc-num">6</span> 실무 시사점</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">📊 핵심 수치</h3>
+                        <ul class="sidebar-list">
+                            <li>
+                                <span class="label">분석 기간</span><br>
+                                <span class="value">2023.07 ~ 2025.12</span>
+                            </li>
+                            <li>
+                                <span class="label">총 관측치</span><br>
+                                <span class="value">30개월</span>
+                            </li>
+                            <li>
+                                <span class="label">모델 R²</span><br>
+                                <span class="value" style="color: var(--algorithm);">94.28%</span>
+                            </li>
+                            <li>
+                                <span class="label">USD/BRL 중요도</span><br>
+                                <span class="value" style="color: var(--positive);">75.37%</span>
+                            </li>
+                            <li>
+                                <span class="label">가격 범위</span><br>
+                                <span class="value">150 ~ 398 ¢/lb</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">📧 문의</h3>
+                        <p style="font-size: 0.85rem; color: var(--roast);">
+                            분석에 대한 질문이나 커스텀 리포트 요청은 아래로 연락 주세요.
+                        </p>
+                        <p style="font-size: 0.9rem; font-weight: 600; margin-top: 12px;">
+                            james.baek@aligncommodities.com
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        트레이더, 로스터, 투자자를 위한 전문 시장 인텔리전스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">문의</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">데이터 출처</div>
+                    <span class="footer-link" style="cursor: default;">ICE Futures, CFTC COT</span>
+                    <span class="footer-link" style="cursor: default;">NASA MODIS, Investing.com</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2026 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 
+                    모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 프로그레스 바
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // 네비게이션 스크롤 효과
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
