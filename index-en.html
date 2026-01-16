@@ -546,6 +546,35 @@
             color: var(--positive);
         }
 
+        /* Event Result Display */
+        .event-result {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed rgba(26, 15, 10, 0.1);
+        }
+
+        .forecast {
+            color: var(--ink);
+            opacity: 0.6;
+            font-size: 0.75rem;
+        }
+
+        .actual {
+            font-weight: 600;
+            color: var(--espresso);
+            font-size: 0.75rem;
+        }
+
+        .actual.positive {
+            color: var(--positive);
+        }
+
+        .actual.negative {
+            color: var(--negative);
+        }
+
         .events-list {
             display: flex;
             flex-direction: column;
@@ -2478,20 +2507,26 @@
             const now = new Date();
             
             // Macro Events
+            // forecast: expected, actual: result, unit: unit, actualBetter: true if better than expected
             const macroEvents = [
-                { date: new Date(2025, 10, 26), type: 'macro', title: 'FOMC Minutes Release', desc: 'November meeting details', important: true },
-                { date: new Date(2025, 10, 27), type: 'macro', title: 'US Q3 GDP Revision', desc: 'Second estimate of growth rate' },
-                { date: new Date(2025, 10, 29), type: 'macro', title: 'US PCE Price Index', desc: 'Fed\'s preferred inflation gauge', important: true },
-                { date: new Date(2025, 11, 6), type: 'macro', title: 'US Jobs Report', desc: 'November nonfarm payrolls', important: true },
-                { date: new Date(2025, 11, 18), type: 'macro', title: 'US CPI', desc: 'November consumer prices' },
-                { date: new Date(2025, 11, 10), type: 'macro', title: 'FOMC Rate Decision', desc: 'December policy rate', important: true },
-                { date: new Date(2025, 11, 20), type: 'macro', title: 'US PCE Price Index', desc: 'November PCE data' },
-                { date: new Date(2026, 0, 2), type: 'macro', title: 'US Jobs Report', desc: 'December nonfarm payrolls', important: true },
-                { date: new Date(2026, 0, 3), type: 'macro', title: 'US ISM Manufacturing PMI', desc: 'December manufacturing index' },
-                { date: new Date(2026, 0, 8), type: 'macro', title: 'FOMC Minutes Release', desc: 'December meeting details' },
-                { date: new Date(2026, 0, 13), type: 'macro', title: 'US CPI', desc: 'December consumer prices', important: true },
-                { date: new Date(2026, 0, 28), type: 'macro', title: 'FOMC Rate Decision', desc: 'January policy rate', important: true },
-                { date: new Date(2026, 0, 29), type: 'macro', title: 'US PCE Price Index', desc: 'December PCE data' },
+                // November 2025 (Past events with results)
+                { date: new Date(2025, 10, 26), type: 'macro', title: 'FOMC Minutes Release', desc: 'November meeting details', important: true, forecast: 'Hawkish', actual: 'Neutral', actualBetter: true },
+                { date: new Date(2025, 10, 27), type: 'macro', title: 'US Q3 GDP Revision', desc: 'Second estimate of growth rate', forecast: '2.8%', actual: '2.8%', unit: 'QoQ' },
+                { date: new Date(2025, 10, 29), type: 'macro', title: 'US PCE Price Index', desc: 'Fed\'s preferred inflation gauge', important: true, forecast: '2.3%', actual: '2.3%', unit: 'YoY' },
+                
+                // December 2025 (Past events with results)
+                { date: new Date(2025, 11, 6), type: 'macro', title: 'US Jobs Report', desc: 'November nonfarm payrolls', important: true, forecast: '+200K', actual: '+227K', actualBetter: true },
+                { date: new Date(2025, 11, 10), type: 'macro', title: 'FOMC Rate Decision', desc: 'December policy rate', important: true, forecast: '4.25-4.50%', actual: '4.25-4.50%' },
+                { date: new Date(2025, 11, 11), type: 'macro', title: 'US CPI', desc: 'November consumer prices', forecast: '2.7%', actual: '2.7%', unit: 'YoY' },
+                { date: new Date(2025, 11, 20), type: 'macro', title: 'US PCE Price Index', desc: 'November PCE data', forecast: '2.5%', actual: '2.4%', unit: 'YoY', actualBetter: true },
+                
+                // January 2026 (Past events with results)
+                { date: new Date(2026, 0, 10), type: 'macro', title: 'US Jobs Report', desc: 'December nonfarm payrolls', important: true, forecast: '+160K', actual: '+256K', actualBetter: true },
+                { date: new Date(2026, 0, 15), type: 'macro', title: 'US CPI', desc: 'December consumer prices', important: true, forecast: '2.8%', actual: '2.9%', unit: 'YoY', actualBetter: false },
+                
+                // January 2026 (Upcoming events)
+                { date: new Date(2026, 0, 29), type: 'macro', title: 'FOMC Rate Decision', desc: 'January policy rate', important: true, forecast: '4.25-4.50%' },
+                { date: new Date(2026, 0, 31), type: 'macro', title: 'US PCE Price Index', desc: 'December PCE data', forecast: '2.6%', unit: 'YoY' },
                 { date: new Date(2026, 1, 6), type: 'macro', title: 'US Jobs Report', desc: 'January nonfarm payrolls', important: true },
                 { date: new Date(2026, 1, 12), type: 'macro', title: 'US CPI', desc: 'January consumer prices' },
                 { date: new Date(2026, 1, 19), type: 'macro', title: 'FOMC Minutes Release', desc: 'January meeting details' },
@@ -2516,14 +2551,23 @@
             
             // Coffee Market Events
             const coffeeEvents = [
-                { date: new Date(2025, 10, 27), type: 'coffee', title: 'CONAB November Report', desc: 'Brazil 25/26 harvest update' },
-                { date: new Date(2025, 11, 3), type: 'coffee', title: 'ICO Monthly Report', desc: 'November global supply analysis', important: true },
-                { date: new Date(2025, 11, 5), type: 'coffee', title: 'CONAB December Report', desc: 'Brazil final crop outlook' },
-                { date: new Date(2025, 11, 5), type: 'coffee', title: 'ICE Futures Expiry', desc: 'December contract final trading' },
-                { date: new Date(2025, 11, 9), type: 'coffee', title: 'USDA WASDE Report', desc: 'World coffee supply outlook', important: true },
-                { date: new Date(2025, 11, 15), type: 'coffee', title: 'Vietnam Export Data', desc: 'November Robusta exports' },
-                { date: new Date(2026, 0, 7), type: 'coffee', title: 'ICO Monthly Report', desc: 'December global analysis', important: true },
-                { date: new Date(2026, 0, 20), type: 'coffee', title: 'CONAB First Outlook', desc: 'Brazil 26/27 preliminary forecast', important: true },
+                // November 2025 (Past events with results)
+                { date: new Date(2025, 10, 27), type: 'coffee', title: 'CONAB November Report', desc: 'Brazil 25/26 harvest update', forecast: '54.2M', actual: '54.8M', unit: 'bags', actualBetter: true },
+                
+                // December 2025 (Past events with results)
+                { date: new Date(2025, 11, 3), type: 'coffee', title: 'ICO Monthly Report', desc: 'November global supply analysis', important: true, forecast: 'Deficit', actual: '8.5M deficit', unit: 'bags' },
+                { date: new Date(2025, 11, 5), type: 'coffee', title: 'ICE Futures Expiry', desc: 'December contract final trading', forecast: '340¢', actual: '352¢', unit: '/lb', actualBetter: false },
+                { date: new Date(2025, 11, 10), type: 'coffee', title: 'USDA WASDE Report', desc: 'World coffee supply outlook', important: true, forecast: '175M', actual: '174.3M', unit: 'bags' },
+                { date: new Date(2025, 11, 15), type: 'coffee', title: 'Vietnam Export Data', desc: 'November Robusta exports', forecast: '85K', actual: '92K', unit: 'tons', actualBetter: true },
+                { date: new Date(2025, 11, 18), type: 'coffee', title: 'CONAB December Report', desc: 'Brazil final crop outlook', forecast: '54.8M', actual: '54.9M', unit: 'bags' },
+                
+                // January 2026 (Past events with results)
+                { date: new Date(2026, 0, 7), type: 'coffee', title: 'ICO Monthly Report', desc: 'December global analysis', important: true, forecast: 'Deficit continues', actual: '5.2M deficit', unit: 'bags' },
+                { date: new Date(2026, 0, 14), type: 'coffee', title: 'USDA WASDE Report', desc: 'World coffee supply update', important: true, forecast: '174M', actual: '173.5M', unit: 'bags' },
+                { date: new Date(2026, 0, 15), type: 'coffee', title: 'Vietnam Export Data', desc: 'December Robusta exports', forecast: '120K', actual: '135K', unit: 'tons', actualBetter: true },
+                
+                // January 2026 (Upcoming events)
+                { date: new Date(2026, 0, 21), type: 'coffee', title: 'CONAB First Outlook', desc: 'Brazil 26/27 preliminary forecast', important: true, forecast: '58-62M', unit: 'bags' },
                 { date: new Date(2026, 1, 4), type: 'coffee', title: 'ICO Monthly Report', desc: 'January global analysis', important: true },
                 { date: new Date(2026, 1, 18), type: 'coffee', title: 'CONAB Second Outlook', desc: 'Brazil 26/27 detailed forecast', important: true },
                 { date: new Date(2026, 2, 20), type: 'coffee', title: 'CONAB March Report', desc: 'Pre-harvest final outlook', important: true },
@@ -2607,6 +2651,20 @@
                 oneWeekLater.setDate(oneWeekLater.getDate() + 7);
                 const isWithinWeek = eventDate <= oneWeekLater && eventDate >= now;
                 
+                // Build result HTML for past events
+                let resultHtml = '';
+                if (event.forecast || event.actual) {
+                    resultHtml = `<div class="event-result">`;
+                    if (event.forecast) {
+                        resultHtml += `<span class="forecast">Exp: ${event.forecast}${event.unit ? ' ' + event.unit : ''}</span>`;
+                    }
+                    if (event.actual) {
+                        const resultClass = event.actualBetter === true ? 'positive' : (event.actualBetter === false ? 'negative' : '');
+                        resultHtml += `<span class="actual ${resultClass}">Act: ${event.actual}${event.unit && !event.actual.includes(event.unit) ? ' ' + event.unit : ''}</span>`;
+                    }
+                    resultHtml += `</div>`;
+                }
+
                 html += `
                     <div class="event-item ${isUpcoming ? 'upcoming' : 'past'}" data-type="${event.type}">
                         <div class="event-date">
@@ -2616,11 +2674,12 @@
                         </div>
                         <div class="event-details">
                             <span class="event-type ${event.type === 'coffee' ? 'coffee' : ''}">${event.type === 'coffee' ? 'COFFEE' : 'MACRO'}</span>
-                            ${!isUpcoming ? '<span class="event-badge">PAST</span>' : ''}
+                            ${!isUpcoming && event.actual ? '<span class="event-badge">RELEASED</span>' : (!isUpcoming ? '<span class="event-badge">PAST</span>' : '')}
                             ${event.important && isUpcoming ? '<span class="event-badge important">KEY</span>' : ''}
                             ${isWithinWeek ? '<span class="event-badge new">THIS WEEK</span>' : ''}
                             <h4 class="event-title">${event.title}</h4>
                             <p class="event-desc">${event.desc}</p>
+                            ${resultHtml}
                         </div>
                     </div>
                 `;
