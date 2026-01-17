@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | January 19, 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "커피 선물 시장 주간 동향",
+    "date": "2026-01-19",
+    "type": "weekly",
+    "summary": "March Arabica (KCH26) closed at 355.30 cents, down 2.00 cents (-0.56%) for the week. Brazil's Minas Gerais rainfall at only 29% of historical average, but weekend rain forecasts triggered profit-taking. ICE certified stocks at 462K bags, up slightly but still 54% below year-ago levels. Vietnam recorded all-time high coffee exports of $8.4B in 2024/25 crop year (+60.7% y/y). Indonesia's Sumatra floods damaged 1/3 of arabica farms, potentially cutting 2025-26 exports by up to 15%. US fully removed 50% tariffs on Brazilian coffee (effective Nov 20). StoneX forecasts Brazil 2026/27 production at 70.7M bags (+13.5%), supporting medium-term supply improvement expectations. Near-term range: 350-365 cents.",
+    "tags": ["355.30cents", "correction", "rain-forecast", "tariff-removal", "ICE-stocks", "Vietnam-record", "Indonesia-floods", "supply-outlook"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "Trading Economics", "ICO", "Comunicaffe", "Sucafina", "VICOFA", "Somar Meteorologia", "StoneX", "USDA FAS"],
+    "price_current": "355.30",
+    "price_change": "-2.00¢ (-0.56%)"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--accent));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* Main Container */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* Hero Header */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--roast);
+            opacity: 0.8;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, var(--crema) 0%, var(--steam) 100%);
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        .card-label {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .card-change {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .card-change.positive {
+            color: var(--positive);
+        }
+
+        .card-change.negative {
+            color: var(--negative);
+        }
+
+        .card-change.neutral {
+            color: var(--roast);
+            opacity: 0.6;
+        }
+
+        /* Layout */
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 56px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.75rem, 3vw, 2.2rem);
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        /* Content */
+        .content p {
+            margin-bottom: 24px;
+            color: var(--ink);
+            font-size: 1.05rem;
+        }
+
+        .content strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        .content a {
+            color: var(--copper);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .content a:hover {
+            border-bottom-color: var(--copper);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(196, 165, 116, 0.08) 0%, rgba(196, 165, 116, 0.04) 100%);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-item {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .data-item:hover {
+            border-color: var(--copper);
+            box-shadow: 0 4px 20px rgba(184, 115, 51, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .data-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .data-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .data-change {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 32px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+        }
+
+        .data-table thead {
+            background: var(--roast);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 18px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 18px 16px;
+            border-bottom: 1px solid var(--steam);
+            color: var(--ink);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--crema);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* News Cards */
+        .news-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .news-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .news-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 16px;
+        }
+
+        .news-card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.4;
+        }
+
+        .news-card-date {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.5;
+            white-space: nowrap;
+        }
+
+        .news-card-content {
+            color: var(--ink);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .news-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--steam);
+            color: var(--roast);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 6px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--steam);
+        }
+
+        .news-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .news-date {
+            font-size: 0.75rem;
+            color: var(--copper);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+
+        .news-title {
+            font-size: 0.95rem;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 64px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.7;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            opacity: 0.4;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Scenario Cards */
+        .scenario-grid {
+            display: grid;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .scenario-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 32px;
+            border-left: 4px solid var(--copper);
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .scenario-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .scenario-prob {
+            background: var(--steam);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--roast);
+        }
+
+        .scenario-content {
+            color: var(--ink);
+            line-height: 1.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .market-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#fundamentals" class="nav-link">Fundamentals</a>
+            <a href="#news" class="nav-link">News</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+    
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- Hero Header -->
+            <header class="hero-header">
+                <div class="report-meta">
+                    <span class="meta-item">January 19, 2026</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">Weekly Report</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">Align Commodities</span>
+                </div>
+                <h1>Coffee Futures Market Weekly Update</h1>
+                <p class="subtitle">Profit-taking on Brazil rain forecasts, markets stabilizing post-tariff removal</p>
+            </header>
+
+            <!-- Market Overview Cards -->
+            <section class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">March Arabica (KCH26)</div>
+                    <div class="card-value">355.30¢</div>
+                    <div class="card-change negative">▼ 2.80¢ (-0.78%) Friday close</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">May Arabica (KCK26)</div>
+                    <div class="card-value">337.50¢</div>
+                    <div class="card-change negative">▼ 2.90¢ (-0.85%)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">ICE Certified Stocks</div>
+                    <div class="card-value">462K bags</div>
+                    <div class="card-change negative">-54% y/y</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">USD/BRL</div>
+                    <div class="card-value">5.92</div>
+                    <div class="card-change neutral">Stable</div>
+                </div>
+            </section>
+
+            <!-- Futures Price Table -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Futures Prices</h2>
+                    <span class="section-subtitle">ICE Futures US · As of January 16</span>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Contract</th>
+                            <th>Close</th>
+                            <th>Change</th>
+                            <th>High</th>
+                            <th>Low</th>
+                            <th>Open Interest</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>KCY00 (Cash)</strong></td>
+                            <td>372.17¢</td>
+                            <td style="color: var(--positive);">+2.85¢</td>
+                            <td>372.17¢</td>
+                            <td>372.17¢</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCH26 (Mar)</strong></td>
+                            <td>355.30¢</td>
+                            <td style="color: var(--negative);">-2.80¢</td>
+                            <td>361.30¢</td>
+                            <td>354.60¢</td>
+                            <td>71,170</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCK26 (May)</strong></td>
+                            <td>337.50¢</td>
+                            <td style="color: var(--negative);">-2.90¢</td>
+                            <td>342.85¢</td>
+                            <td>336.75¢</td>
+                            <td>45,648</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCN26 (Jul)</strong></td>
+                            <td>331.35¢</td>
+                            <td style="color: var(--negative);">-2.80¢</td>
+                            <td>336.40¢</td>
+                            <td>330.20¢</td>
+                            <td>21,937</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCU26 (Sep)</strong></td>
+                            <td>325.50¢</td>
+                            <td style="color: var(--negative);">-2.85¢</td>
+                            <td>330.45¢</td>
+                            <td>324.30¢</td>
+                            <td>14,079</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCZ26 (Dec)</strong></td>
+                            <td>320.55¢</td>
+                            <td style="color: var(--negative);">-2.75¢</td>
+                            <td>325.35¢</td>
+                            <td>319.55¢</td>
+                            <td>12,077</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Content Layout -->
+            <div class="content-layout">
+                <main class="content">
+                    <!-- Weekly Summary -->
+                    <section class="section" id="fundamentals">
+                        <div class="section-header">
+                            <h2 class="section-title">Weekly Market Summary</h2>
+                            <span class="section-subtitle">Market Overview</span>
+                        </div>
+                        
+                        <p>
+                            Coffee markets experienced a <strong>modest pullback</strong> this week as profit-taking emerged 
+                            following updated weather forecasts calling for rain in Brazil's coffee-growing regions. 
+                            March Arabica (KCH26) settled at <strong>355.30 cents</strong> on Friday, reversing from an 
+                            intraday high of 361.30 cents.
+                        </p>
+
+                        <div class="highlight-box">
+                            <p>
+                                <strong>Key Issue:</strong> Prices rallied near 1-month highs through Thursday but reversed 
+                                Friday as updated forecasts increased the probability of rainfall in Brazil's coffee regions 
+                                over the coming week. Minas Gerais received only 29% of historical average rainfall 
+                                for the week ending January 9, but weekend rain expectations triggered profit-taking.
+                            </p>
+                        </div>
+
+                        <p>
+                            Markets remain in a structurally tight supply situation. ICE certified Arabica stocks stand at 
+                            462,000 bags, <strong>down 54%</strong> from year-ago levels (991,000 bags). While stocks have 
+                            recovered to a 2.5-month high, they remain near historically low levels.
+                        </p>
+
+                        <p>
+                            On the geopolitical front, the US seizure of Venezuelan President Nicolás Maduro raised tensions 
+                            with Colombia and Brazil—top Arabica producers—though the practical impact on supply chains 
+                            appears limited.
+                        </p>
+                    </section>
+
+                    <!-- Brazil Weather -->
+                    <section class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Brazil Weather Update</h2>
+                            <span class="section-subtitle">Minas Gerais Conditions</span>
+                        </div>
+                        
+                        <p>
+                            Rainfall in <strong>Minas Gerais</strong>, Brazil's largest arabica-growing region, remains 
+                            well below average. According to Somar Meteorologia, precipitation for the week ending 
+                            January 9 totaled just 26.5mm, or 29% of the historical average—worse than the 38.3mm 
+                            (76% of average) recorded for the week ending December 19.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Minas Rainfall</div>
+                                <div class="data-value">26.5mm</div>
+                                <div class="data-change" style="color: var(--negative);">29% of average</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">2026/27 Crop Stage</div>
+                                <div class="data-value">Bean Formation</div>
+                                <div class="data-change" style="color: var(--copper);">Critical period</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            However, weather forecasters are calling for rain to return to Brazil's coffee regions 
+                            starting this weekend. Vaisala expects isolated showers across parts of Brazil over the 
+                            coming days, which should support the 2026/27 crop currently in the 
+                            <strong>bean formation phase</strong>.
+                        </p>
+
+                        <p>
+                            Itaú BBA has characterized the late December/early January weather outlook as positive, 
+                            with forecasted rains providing ideal conditions for crops in the flowering stage. 
+                            However, Sucafina warns that supply pressure may materialize in Q2 2026, 
+                            projecting Brazil's 2026/27 arabica output at 49.7 million bags.
+                        </p>
+                    </section>
+
+                    <!-- Supply Dynamics -->
+                    <section class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Global Supply Dynamics</h2>
+                            <span class="section-subtitle">Production & Trade</span>
+                        </div>
+                        
+                        <p>
+                            <strong>Vietnam</strong> achieved record coffee exports in the 2024/25 crop year. 
+                            According to VICOFA, export value reached <strong>$8.4 billion</strong>, up 60.7% year-over-year. 
+                            Export volume exceeded 1.5 million tons (+6% y/y), with average export prices at 
+                            $5,610/ton (+52.7% y/y).
+                        </p>
+
+                        <div class="highlight-box">
+                            <p>
+                                <strong>Vietnam Export Record:</strong> 2024/25 crop year (Oct-Sep) exports hit $8.4B, 
+                                volume exceeded 1.5M tons. 2025/26 production forecast at 30.8-31M bags (+6-10% y/y). 
+                                Maintains status as world's largest robusta supplier.
+                            </p>
+                        </div>
+
+                        <p>
+                            <strong>Indonesia</strong> suffered severe damage from Cyclone Senyar in late November, 
+                            with floods and landslides affecting approximately one-third of arabica farms in 
+                            northern Sumatra. According to the chairman of the Association of Indonesian Coffee 
+                            Exporters and Industry (AICE), 2025-26 exports could decline by <strong>up to 15%</strong>. 
+                            Indonesia is the world's third-largest robusta producer; the disaster claimed 1,157 lives 
+                            and displaced over 380,000 people.
+                        </p>
+
+                        <p>
+                            <strong>Brazil's</strong> 2026/27 crop outlook is increasingly optimistic. StoneX forecasts 
+                            production at <strong>70.7 million bags</strong>, up 13.5% year-over-year and a potential 
+                            record. Arabica is projected at 47.2M bags (+29.3%), robusta at 23.5M bags (-8.9%). 
+                            Safras & Mercado is also projecting 71 million bags.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Brazil 2026/27</div>
+                                <div class="data-value">70.7M</div>
+                                <div class="data-change" style="color: var(--positive);">+13.5% y/y (StoneX)</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Vietnam 2025/26</div>
+                                <div class="data-value">30.8M</div>
+                                <div class="data-change" style="color: var(--positive);">+6% y/y</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Global 2025/26</div>
+                                <div class="data-value">178.8M</div>
+                                <div class="data-change" style="color: var(--positive);">+2.0% y/y (USDA)</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Global Ending Stocks</div>
+                                <div class="data-value">20.1M</div>
+                                <div class="data-change" style="color: var(--negative);">-5.4% y/y</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Trade Policy -->
+                    <section class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">US Tariff Policy Update</h2>
+                            <span class="section-subtitle">Brazil Tariff Removal</span>
+                        </div>
+                        
+                        <p>
+                            US tariffs on Brazilian coffee have been fully removed. President Trump signed an 
+                            executive order on November 20 exempting Brazilian agricultural products from the 
+                            <strong>40% additional tariff</strong> imposed in August. This followed the November 14 
+                            exemption of the 10% reciprocal tariff on coffee and other products not grown in the US.
+                        </p>
+
+                        <div class="highlight-box">
+                            <p>
+                                <strong>Tariff Timeline:</strong> July - 50% tariff imposed (10% reciprocal + 40% national emergency) → 
+                                November 14 - 10% reciprocal tariff exempted → November 20 - 40% additional tariff fully removed. 
+                                US purchases of Brazilian coffee during Aug-Oct fell 52% y/y to 984,000 bags.
+                            </p>
+                        </div>
+
+                        <p>
+                            Coffee futures plunged on the tariff removal news. On November 21, arabica fell more than 
+                            6% intraday to 2-month lows. However, European traders suggested prices are unlikely to 
+                            fall below $3/lb given the global arabica deficit, low exchange stocks, and La Niña-related 
+                            supply risks.
+                        </p>
+
+                        <p>
+                            National Coffee Association President Bill Murray welcomed the decision: "Two-thirds of 
+                            American adults drink coffee each day, and every cup will cost less thanks to President 
+                            Trump's decision to remove tariffs on coffee imports from Brazil—the world's largest 
+                            coffee producer." Thousands of bags of Brazilian coffee held in bonded warehouses are 
+                            expected to move quickly to US roasters.
+                        </p>
+                    </section>
+
+                    <!-- Key News -->
+                    <section class="section" id="news">
+                        <div class="section-header">
+                            <h2 class="section-title">Key News This Week</h2>
+                            <span class="section-subtitle">Headlines</span>
+                        </div>
+                        
+                        <div class="news-grid">
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">Coffee Prices Slide on Brazil Rain Forecasts</h4>
+                                    <span class="news-card-date">Jan 16</span>
+                                </div>
+                                <p class="news-card-content">
+                                    Coffee futures gave up early gains Friday, settling lower as updated weather 
+                                    forecasts boosted the chance of rain in Brazil's coffee-growing areas over the 
+                                    next week, triggering profit-taking.
+                                </p>
+                                <div>
+                                    <span class="news-tag">Brazil</span>
+                                    <span class="news-tag">Weather</span>
+                                    <span class="news-tag">Profit-taking</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">ICO: December Indicator Price Down 7.8%</h4>
+                                    <span class="news-card-date">Jan 13</span>
+                                </div>
+                                <p class="news-card-content">
+                                    The ICO monthly report shows the December I-CIP monthly average at 304.68 cents/lb, 
+                                    down 7.8% from November. EUDR postponement, US tariff removal on Brazil, and 
+                                    Brazilian real depreciation were cited as bearish factors.
+                                </p>
+                                <div>
+                                    <span class="news-tag">ICO</span>
+                                    <span class="news-tag">Indicator Price</span>
+                                    <span class="news-tag">Monthly Report</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">Arabica Hits 4-Week High at $3.87/lb on Jan 7</h4>
+                                    <span class="news-card-date">Jan 7</span>
+                                </div>
+                                <p class="news-card-content">
+                                    Arabica futures rose for four consecutive sessions in the first week of the new year, 
+                                    reaching a 4-week high of $3.87/lb. Brazilian real strength (1-month high vs dollar) 
+                                    discouraged export sales, intensifying supply tightness concerns.
+                                </p>
+                                <div>
+                                    <span class="news-tag">Real Strength</span>
+                                    <span class="news-tag">Supply Tight</span>
+                                    <span class="news-tag">4-Week High</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">ICE Stock Composition: Brazil & Mexico Lead</h4>
+                                    <span class="news-card-date">Jan 6</span>
+                                </div>
+                                <p class="news-card-content">
+                                    ICE certified arabica stocks totaled 457K bags as of January 6, comprising coffee 
+                                    from Brazil (82K bags), Mexico (73K), Peru (69K), Tanzania (42K), and Honduras (38K). 
+                                    Most stocks (374K bags) are held in Antwerp, Belgium warehouses.
+                                </p>
+                                <div>
+                                    <span class="news-tag">ICE Stocks</span>
+                                    <span class="news-tag">Composition</span>
+                                    <span class="news-tag">Antwerp</span>
+                                </div>
+                            </div>
+
+                            <div class="news-card">
+                                <div class="news-card-header">
+                                    <h4 class="news-card-title">CFTC COT: Specs Net Long ~30K Contracts</h4>
+                                    <span class="news-card-date">Jan 10</span>
+                                </div>
+                                <p class="news-card-content">
+                                    The CFTC COT report (as of Jan 6) shows non-commercial (speculative) positions at 
+                                    56,382 contracts long and 25,846 short, for a net long of ~30.5K contracts. 
+                                    Week-over-week: longs +3,314, shorts -2,679.
+                                </p>
+                                <div>
+                                    <span class="news-tag">CFTC</span>
+                                    <span class="news-tag">Positioning</span>
+                                    <span class="news-tag">Net Long</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Scenario Outlook -->
+                    <section class="section" id="outlook">
+                        <div class="section-header">
+                            <h2 class="section-title">Scenario Outlook</h2>
+                            <span class="section-subtitle">Price Forecasts</span>
+                        </div>
+
+                        <div class="scenario-grid">
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">Base Case: Range-Bound Trading</h4>
+                                    <span class="scenario-prob">55% probability</span>
+                                </div>
+                                <p class="scenario-content">
+                                    <strong>Price Range: 350-365 cents</strong><br>
+                                    Brazil rain normalization and tariff removal effects offset each other, 
+                                    supporting range-bound trading. Low ICE stocks limit downside while 
+                                    2026/27 Brazil bumper crop expectations cap upside.
+                                </p>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">Bullish Case: Weather Deterioration</h4>
+                                    <span class="scenario-prob">25% probability</span>
+                                </div>
+                                <p class="scenario-content">
+                                    <strong>Price Range: 370-390 cents</strong><br>
+                                    Continued Brazil dryness or heatwave return intensifies 2026/27 crop concerns. 
+                                    Extended Indonesia flood damage disrupts arabica supply further. 
+                                    Additional real strength slows Brazilian exports and tightens supply.
+                                </p>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">Bearish Case: Supply Improvement</h4>
+                                    <span class="scenario-prob">20% probability</span>
+                                </div>
+                                <p class="scenario-content">
+                                    <strong>Price Range: 330-345 cents</strong><br>
+                                    Brazil rain normalization confirms 71M-bag bumper crop for 2026/27, 
+                                    triggering anticipatory selling. Heavy Vietnam farmer selling, continued 
+                                    real weakness accelerates Brazilian exports. Spec long liquidation possible.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Key Issues This Week</h3>
+                        <div class="news-item">
+                            <div class="news-date">Rain Forecast</div>
+                            <div class="news-title">Weekend rain expected in Brazil coffee regions, triggering profit-taking</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">Minas Drought</div>
+                            <div class="news-title">Rainfall at only 29% of average, moisture concerns during bean formation</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">ICE Stocks</div>
+                            <div class="news-title">462K bags at 2.5-month high but still 54% below year-ago</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">Tariff Removal</div>
+                            <div class="news-title">US fully removes 50% Brazil tariff, import normalization expected</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Watch Next Week</h3>
+                        <div class="news-item">
+                            <div class="news-title">Brazil rain pattern: Weekend precipitation realization and intensity</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">ICE stock movement: Monitor for breach below 450K bags</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">USD/BRL: Break below 5.90 could accelerate exports</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">CFTC positioning: Track changes in spec net long</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Analysis & Outlook</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 16px;">
+                            Coffee markets pulled back modestly this week on profit-taking triggered by Brazil 
+                            rain forecasts. While Minas Gerais drought conditions persist (29% of average), 
+                            weekend rain expectations pressured prices lower.
+                        </p>
+                        <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 16px;">
+                            Medium-term, StoneX and Safras forecasts of a 70-71M bag Brazil 2026/27 crop 
+                            support supply improvement expectations. However, low ICE stocks and weather 
+                            uncertainty should limit downside near-term. Range: 350-365 cents expected.
+                        </p>
+                        <div style="background: var(--steam); padding: 16px; border-radius: 8px; margin-top: 20px;">
+                            <div style="font-weight: 600; color: var(--roast); margin-bottom: 8px;">Base Outlook</div>
+                            <div style="font-size: 0.9rem; color: var(--ink);">
+                                <strong>Near-term (1 month):</strong> 350-365 cents range<br>
+                                <strong>Medium-term (3 months):</strong> Direction depends on Jan-Feb Brazil rain<br>
+                                <strong>Risks:</strong> Drought continuation → 380¢; Q2 supply pressure → 320s
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        In-depth analysis and insights on global coffee markets. 
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">ICE, Barchart, Trading Economics</span>
+                    <span class="footer-link" style="cursor: default;">ICO, Comunicaffe, VICOFA</span>
+                    <span class="footer-link" style="cursor: default;">StoneX, USDA FAS, Somar</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2026 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice. 
+                    All investment decisions should be made based on your own independent judgment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // Navigation scroll effect
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
