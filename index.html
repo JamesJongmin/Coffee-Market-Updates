@@ -2193,16 +2193,46 @@
                 
                 let csvText;
                 
-                // CORS 프록시 사용 (AllOrigins)
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                // 캐시 방지를 위한 타임스탬프 추가
+                const timestamp = new Date().getTime();
+                const urlWithCache = url + '&t=' + timestamp;
                 
-                const proxyResponse = await fetch(proxyUrl);
-                if (!proxyResponse.ok) {
-                    throw new Error(`Failed to fetch: ${proxyResponse.status}`);
+                // 여러 CORS 프록시 시도
+                const proxies = [
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(urlWithCache)}`,
+                    `https://corsproxy.io/?${encodeURIComponent(urlWithCache)}`
+                ];
+                
+                let success = false;
+                for (const proxyUrl of proxies) {
+                    try {
+                        const proxyResponse = await fetch(proxyUrl, { 
+                            cache: 'no-store',
+                            headers: { 'Cache-Control': 'no-cache' }
+                        });
+                        if (!proxyResponse.ok) continue;
+                        
+                        const contentType = proxyResponse.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const proxyData = await proxyResponse.json();
+                            csvText = proxyData.contents;
+                        } else {
+                            csvText = await proxyResponse.text();
+                        }
+                        
+                        if (csvText && csvText.length > 10) {
+                            success = true;
+                            console.log(`Successfully fetched via proxy: ${proxyUrl.substring(0, 30)}...`);
+                            break;
+                        }
+                    } catch (e) {
+                        console.log(`Proxy failed: ${e.message}`);
+                    }
                 }
                 
-                const proxyData = await proxyResponse.json();
-                csvText = proxyData.contents;
+                if (!success || !csvText) {
+                    throw new Error('All proxies failed');
+                }
                 
                 const data = parseCSV(csvText);
                 const dataRows = data.slice(1); // 헤더 제외
