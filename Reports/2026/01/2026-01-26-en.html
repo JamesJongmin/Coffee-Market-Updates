@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | January 26, 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "Weekly Market Analysis",
+    "date": "2026-01-26",
+    "type": "weekly",
+    "summary": "March Arabica (KCH26) closed at 350.90 cents, up +3.20 cents (+0.92%) on the week. Dollar index slumped to 3.5-month low triggering short covering across commodities. Brazil Dec exports down -18.4% y/y, Minas Gerais rainfall at only 53% of historical average raising supply concerns. ICE certified stocks recovered to 461,829 bags (2.5-month high) but remain 53% below year-ago levels. StoneX forecasts Brazil 2026/27 production at record 70.7M bags (+13.5% y/y), weighing on medium-term outlook. Short-term range expected at 345-360 cents.",
+    "tags": ["350.90 cents", "Dollar Weakness", "Short Covering", "Brazil Export Decline", "ICE Inventory Recovery", "2026/27 Bumper Crop", "Minas Drought", "Vietnam Record"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "Trading Economics", "ICO", "Comunicaffe", "Sucafina", "VICOFA", "Somar Meteorologia", "StoneX", "USDA FAS", "Cecafé"],
+    "price_current": "350.90",
+    "price_change": "+3.20¢ (+0.92%)"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--accent));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* Main Container */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* Hero Header */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--roast);
+            opacity: 0.8;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, var(--crema) 0%, var(--steam) 100%);
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        .card-label {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .card-change {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .card-change.positive {
+            color: var(--positive);
+        }
+
+        .card-change.negative {
+            color: var(--negative);
+        }
+
+        .card-change.neutral {
+            color: var(--roast);
+            opacity: 0.6;
+        }
+
+        /* Layout */
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 56px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.75rem, 3vw, 2.2rem);
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        /* Content */
+        .content p {
+            margin-bottom: 24px;
+            color: var(--ink);
+            font-size: 1.05rem;
+        }
+
+        .content strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        .content a {
+            color: var(--copper);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .content a:hover {
+            border-bottom-color: var(--copper);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(196, 165, 116, 0.08) 0%, rgba(196, 165, 116, 0.04) 100%);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-item {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .data-item:hover {
+            border-color: var(--copper);
+            box-shadow: 0 4px 20px rgba(184, 115, 51, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .data-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .data-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .data-change {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 32px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+        }
+
+        .data-table thead {
+            background: var(--roast);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 18px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 18px 16px;
+            border-bottom: 1px solid var(--steam);
+            color: var(--ink);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--crema);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--steam);
+        }
+
+        .news-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .news-date {
+            font-size: 0.75rem;
+            color: var(--copper);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+
+        .news-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--espresso);
+            line-height: 1.5;
+        }
+
+        /* Scenario Cards */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .scenario-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+        }
+
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .scenario-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .scenario-prob {
+            background: var(--steam);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--roast);
+        }
+
+        .scenario-content {
+            color: var(--ink);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px 0 40px;
+            border-top: 1px solid rgba(26, 15, 10, 0.08);
+            margin-top: 80px;
+            background: rgba(245, 240, 232, 0.5);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 12px;
+        }
+
+        .footer-desc {
+            color: var(--roast);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+            color: var(--copper);
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(26, 15, 10, 0.08);
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.4;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .market-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info/index-en.html" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#fundamentals" class="nav-link">Fundamentals</a>
+            <a href="#news" class="nav-link">Headlines</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+    
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- Hero Header -->
+            <header class="hero-header">
+                <div class="report-meta">
+                    <span class="meta-item">January 26, 2026</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">Weekly Report</span>
+                    <span class="meta-divider">·</span>
+                    <span class="meta-item">Align Commodities</span>
+                </div>
+                <h1>Coffee Futures Market Weekly Update</h1>
+                <p class="subtitle">Dollar Slump Triggers Short Covering; Brazil Export Decline & Drought Raise Supply Concerns</p>
+            </header>
+
+            <!-- Market Overview Cards -->
+            <section class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">March Arabica (KCH26)</div>
+                    <div class="card-value">350.90¢</div>
+                    <div class="card-change positive">▲ 3.20¢ (+0.92%) Friday Close</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">May Arabica (KCK26)</div>
+                    <div class="card-value">333.45¢</div>
+                    <div class="card-change positive">▲ 2.15¢ (+0.65%)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">ICE Certified Stocks</div>
+                    <div class="card-value">461.8K</div>
+                    <div class="card-change negative">-53% y/y</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Dollar Index (DXY)</div>
+                    <div class="card-value">98.45</div>
+                    <div class="card-change negative">3.5-Month Low</div>
+                </div>
+            </section>
+
+            <!-- Futures Price Table -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Futures Price Summary</h2>
+                    <span class="section-subtitle">ICE Futures US · As of January 23</span>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Contract</th>
+                            <th>Settle</th>
+                            <th>Change</th>
+                            <th>High</th>
+                            <th>Low</th>
+                            <th>Open Interest</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>KCY00 (Cash)</strong></td>
+                            <td>363.58¢</td>
+                            <td style="color: var(--positive);">+0.63¢</td>
+                            <td>363.58¢</td>
+                            <td>363.58¢</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCH26 (Mar)</strong></td>
+                            <td>350.90¢</td>
+                            <td style="color: var(--positive);">+3.20¢</td>
+                            <td>355.35¢</td>
+                            <td>346.85¢</td>
+                            <td>67,429</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCK26 (May)</strong></td>
+                            <td>333.45¢</td>
+                            <td style="color: var(--positive);">+2.15¢</td>
+                            <td>338.20¢</td>
+                            <td>330.55¢</td>
+                            <td>47,215</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCN26 (Jul)</strong></td>
+                            <td>327.05¢</td>
+                            <td style="color: var(--positive);">+2.25¢</td>
+                            <td>331.60¢</td>
+                            <td>324.25¢</td>
+                            <td>21,811</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCU26 (Sep)</strong></td>
+                            <td>321.10¢</td>
+                            <td style="color: var(--positive);">+2.25¢</td>
+                            <td>325.50¢</td>
+                            <td>318.45¢</td>
+                            <td>14,762</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KCZ26 (Dec)</strong></td>
+                            <td>315.95¢</td>
+                            <td style="color: var(--positive);">+2.25¢</td>
+                            <td>320.10¢</td>
+                            <td>313.45¢</td>
+                            <td>12,803</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Content Layout -->
+            <div class="content-layout">
+                <main class="content">
+                    <!-- Weekly Summary -->
+                    <section class="section" id="fundamentals">
+                        <div class="section-header">
+                            <h2 class="section-title">Weekly Market Summary</h2>
+                            <span class="section-subtitle">Key Developments</span>
+                        </div>
+                        
+                        <p>
+                            Coffee markets rallied this week as <strong>dollar weakness</strong> triggered broad-based short covering 
+                            across commodities. March arabica (KCH26) closed Friday at <strong>350.90 cents</strong>, up +3.20 cents (+0.92%), 
+                            while March robusta surged +116 (+2.88%) to post a 1.5-month high.
+                        </p>
+
+                        <div class="highlight-box">
+                            <p>
+                                <strong>Key Catalyst:</strong> The dollar index (DXY) slumped to 98.45 on Friday, marking a 3.5-month low. 
+                                The dollar weakness prompted short covering across most commodities, including coffee. 
+                                The Brazilian real also rallied to a 2.25-month high against the dollar, 
+                                discouraging export sales by Brazilian producers.
+                            </p>
+                        </div>
+
+                        <p>
+                            Shrinking Brazilian coffee exports are supportive of prices. According to Cecafé, Brazil's total 
+                            December green coffee exports fell <strong>-18.4% y/y</strong> to 2.86 million bags, with arabica 
+                            exports down -10% y/y to 2.6 million bags and robusta exports plunging <strong>-61% y/y</strong> 
+                            to 222,147 bags.
+                        </p>
+
+                        <p>
+                            However, the recovery in ICE coffee inventories is weighing on prices. ICE-monitored arabica 
+                            inventories fell to a 1.75-year low of 398,645 bags on November 20, but recovered to a 
+                            <strong>2.5-month high of 461,829 bags</strong> last Wednesday. ICE robusta inventories also 
+                            rose from a 1-year low of 4,012 lots on December 10 to 4,609 lots on Friday.
+                        </p>
+                    </section>
+
+                    <!-- Brazil Weather -->
+                    <section class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Brazil Weather Update</h2>
+                            <span class="section-subtitle">Crop Development Conditions</span>
+                        </div>
+                        
+                        <p>
+                            Below-average rainfall in Brazil, the world's largest arabica producer, continues to support prices. 
+                            Somar Meteorologia reported that Brazil's largest arabica coffee-growing area, <strong>Minas Gerais</strong>, 
+                            received 33.9 mm of rain during the week ended January 16, or <strong>53% of the historical average</strong>.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Minas Gerais Rainfall</div>
+                                <div class="data-value">33.9mm</div>
+                                <div class="data-change" style="color: var(--negative);">53% of Average</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">2026/27 Crop Stage</div>
+                                <div class="data-value">Bean Formation</div>
+                                <div class="data-change" style="color: var(--copper);">Critical Period</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            Itaú BBA highlighted that prices are likely to remain sensitive to erratic weather in Brazil 
+                            in the coming months, characterized by below-average rainfall and intense heat, alongside the 
+                            geopolitical environment. However, the 2026/27 crop has benefited from better weather than in 
+                            previous years, with milder temperatures supporting plant growth. The upcoming harvest also 
+                            falls within a <strong>"positive biennial cycle,"</strong> boosting optimism among growers.
+                        </p>
+
+                        <p>
+                            Cecafé reported that Brazilian coffee exports reached a record revenue of <strong>$15.6 billion</strong> 
+                            in 2025, even with a 21% drop in export volume compared to prior years—a testament to the 
+                            surge in global prices.
+                        </p>
+                    </section>
+
+                    <!-- Global Supply -->
+                    <section class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Global Supply Dynamics</h2>
+                            <span class="section-subtitle">Production & Export Trends</span>
+                        </div>
+                        
+                        <p>
+                            <strong>Vietnam</strong> posted record coffee export earnings in the 2024/25 crop year. 
+                            According to VICOFA, Vietnam's coffee export revenue reached <strong>$8.4 billion</strong>, 
+                            up 55.5% y/y. Export volume exceeded 1.5 million tonnes (+1.8% y/y), with the average 
+                            export price surging 52.7% y/y to $5,610 per tonne. More recently, VICOFA announced 
+                            that 2025 total exports reached a record <strong>$8.92 billion</strong>, up over 58% y/y.
+                        </p>
+
+                        <div class="highlight-box">
+                            <p>
+                                <strong>Vietnam 2025/26 Outlook:</strong> VICOFA projects production to increase 5-10% y/y 
+                                thanks to favorable weather and high domestic prices encouraging farmer investment. 
+                                USDA FAS forecasts Vietnam's 2025/26 output at 1.76 million tonnes (29.4 million bags), 
+                                a 4-year high.
+                            </p>
+                        </div>
+
+                        <p>
+                            Optimism prevails for <strong>Brazil's 2026/27 crop</strong>. StoneX forecasts Brazil's 
+                            coffee production at <strong>70.7 million bags</strong>, up 13.5% y/y to a record high. 
+                            Arabica is expected at 47.2 million bags (+29.3%), while robusta is seen at 23.5 million bags (-8.9%). 
+                            Rabobank projects a global surplus of 7-10 million bags in 2026/27, which could push 
+                            arabica prices down by approximately one-third by late 2026.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Brazil 2026/27</div>
+                                <div class="data-value">70.7M</div>
+                                <div class="data-change" style="color: var(--positive);">+13.5% y/y (StoneX)</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Vietnam 2025/26</div>
+                                <div class="data-value">29.4M</div>
+                                <div class="data-change" style="color: var(--positive);">+6% y/y</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Global 2025/26</div>
+                                <div class="data-value">178.8M</div>
+                                <div class="data-change" style="color: var(--positive);">+2.0% y/y (USDA)</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Global Ending Stocks</div>
+                                <div class="data-value">20.1M</div>
+                                <div class="data-change" style="color: var(--negative);">-5.4% y/y</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Key Headlines -->
+                    <section class="section" id="news">
+                        <div class="section-header">
+                            <h2 class="section-title">This Week's Key Headlines</h2>
+                            <span class="section-subtitle">Market-Moving News</span>
+                        </div>
+
+                        <div class="highlight-box">
+                            <p><strong>Jan 23 | Coffee Prices Gain as the Dollar Slumps</strong><br>
+                            Dollar index fell to 3.5-month low, triggering short covering across commodities. 
+                            March robusta posted a 1.5-month high.</p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <p><strong>Jan 21 | Arabica Futures Drop to One-Month Low on Brazil Weather Improvement</strong><br>
+                            Arabica eased below $3.45/lb, the lowest since December 19, on positive expectations 
+                            for Brazil's upcoming crop and ICE inventory recovery.</p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <p><strong>Jan 20 | Vietnam Posts Record $8.92 Billion Coffee Export Earnings in 2025</strong><br>
+                            VICOFA reports exports up over 58% y/y. Coffee becomes Vietnam's third-highest-value 
+                            agricultural export after seafood and timber.</p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <p><strong>Jan 19 | Cecafé Reports Brazil Dec Exports Down -18.4% y/y</strong><br>
+                            Arabica shipments -10%, robusta plunges -61%. Annual 2025 export revenue hits 
+                            record $15.6 billion despite volume decline.</p>
+                        </div>
+                    </section>
+
+                    <!-- Scenario Analysis -->
+                    <section class="section" id="outlook">
+                        <div class="section-header">
+                            <h2 class="section-title">Scenario Analysis</h2>
+                            <span class="section-subtitle">Forward-Looking Projections</span>
+                        </div>
+
+                        <div class="scenario-grid">
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">Base Case: Range-Bound</h4>
+                                    <span class="scenario-prob">50% Probability</span>
+                                </div>
+                                <p class="scenario-content">
+                                    <strong>Price Range: 345-360 cents</strong><br>
+                                    Dollar weakness and Brazil drought concerns support the downside, while ICE inventory 
+                                    recovery and 2026/27 bumper crop forecasts cap upside. Volatility to increase with 
+                                    Jan-Feb rainfall patterns in Brazil.
+                                </p>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">Bullish: Weather Deterioration</h4>
+                                    <span class="scenario-prob">25% Probability</span>
+                                </div>
+                                <p class="scenario-content">
+                                    <strong>Price Range: 365-385 cents</strong><br>
+                                    Intensifying drought or heat waves in Brazil raise 2026/27 crop concerns. 
+                                    Continued dollar weakness and real strength slow Brazilian exports, 
+                                    adding supply pressure.
+                                </p>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">Bearish: Supply Normalization</h4>
+                                    <span class="scenario-prob">25% Probability</span>
+                                </div>
+                                <p class="scenario-content">
+                                    <strong>Price Range: 330-345 cents</strong><br>
+                                    Brazil rainfall normalizes, confirming bumper crop and triggering pre-emptive selling. 
+                                    Heavy Vietnam exports, dollar rebound add downside pressure. 
+                                    Speculative long liquidation possible.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">This Week's Key Issues</h3>
+                        <div class="news-item">
+                            <div class="news-date">Dollar Weakness</div>
+                            <div class="news-title">DXY hits 3.5-month low, triggers short covering</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">Brazil Exports</div>
+                            <div class="news-title">Dec exports -18.4% y/y, robusta -61%</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">Minas Drought</div>
+                            <div class="news-title">Rainfall at 53% of average, bean formation at risk</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">ICE Stocks</div>
+                            <div class="news-title">Recovered to 461.8K bags, 2.5-month high</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Next Week's Watch Points</h3>
+                        <div class="news-item">
+                            <div class="news-title">Brazil Rainfall: Late January precipitation realization</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">Dollar Index: Watch for break below 98 support</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">ICE Stocks: Breach above 470K signals downside</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-title">CFTC Positioning: Track speculative net long changes</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget" style="background: linear-gradient(135deg, var(--crema) 0%, white 100%); border: 2px solid var(--copper);">
+                        <h3 class="widget-title" style="color: var(--copper); border-bottom-color: var(--copper);">📊 Analysis & Outlook</h3>
+                        
+                        <div style="background: white; border-radius: 10px; padding: 16px; margin-bottom: 16px; border-left: 4px solid var(--positive);">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--positive); font-weight: 700; margin-bottom: 8px;">▲ Bullish Factors</div>
+                            <ul style="font-size: 0.9rem; line-height: 1.6; color: var(--ink); padding-left: 16px; margin: 0;">
+                                <li>Dollar weakness (DXY testing 98)</li>
+                                <li>Brazil export decline (-18.4% y/y)</li>
+                                <li>Minas drought (53% of average)</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 10px; padding: 16px; margin-bottom: 16px; border-left: 4px solid var(--negative);">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--negative); font-weight: 700; margin-bottom: 8px;">▼ Bearish Factors</div>
+                            <ul style="font-size: 0.9rem; line-height: 1.6; color: var(--ink); padding-left: 16px; margin: 0;">
+                                <li>ICE stock recovery (461.8K bags)</li>
+                                <li>2026/27 bumper crop (70.7M bags)</li>
+                                <li>Rabobank: -33% price forecast</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, var(--espresso) 0%, var(--roast) 100%); border-radius: 12px; padding: 20px; color: white;">
+                            <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; margin-bottom: 12px;">💡 Core Outlook</div>
+                            
+                            <div style="display: grid; gap: 12px;">
+                                <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                                    <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 4px;">Short-Term (1 Month)</div>
+                                    <div style="font-size: 1.1rem; font-weight: 700;">345-360¢ Range</div>
+                                </div>
+                                
+                                <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                                    <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 4px;">Medium-Term (3 Months)</div>
+                                    <div style="font-size: 1.1rem; font-weight: 700;">Weather-Dependent</div>
+                                </div>
+                                
+                                <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);">
+                                    <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 4px;">⚠️ Risk Range</div>
+                                    <div style="font-size: 0.95rem;">
+                                        <span style="color: #7dcea0;">▲ 380¢</span> (Drought intensifies)<br>
+                                        <span style="color: #f1948a;">▼ 320¢</span> (Q2 supply pressure)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: 0.85rem; line-height: 1.6; color: var(--roast); opacity: 0.8; margin-top: 16px; text-align: center;">
+                            Brazil Jan-Feb rainfall pattern <br>is the key near-term variable
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        Delivering in-depth analysis and insights on global coffee markets. 
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">ICE, Barchart, Trading Economics</span>
+                    <span class="footer-link" style="cursor: default;">Cecafé, VICOFA, Somar</span>
+                    <span class="footer-link" style="cursor: default;">StoneX, USDA FAS, Rabobank</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2026 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice. 
+                    All investment decisions should be made based on your own independent judgment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // Navigation Scroll Effect
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
