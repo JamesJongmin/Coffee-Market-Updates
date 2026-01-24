@@ -2181,28 +2181,32 @@
             return new Date(dateValue);
         }
 
-        // 구글 시트에서 데이터 읽기 함수
+        // 구글 시트에서 데이터 읽기 (대시보드와 동일한 방식)
         async function readGoogleSheetData(sheetKey) {
             try {
                 const url = GOOGLE_SHEETS_URLS[sheetKey];
-                if (!url) {
-                    throw new Error(`Unknown sheet key: ${sheetKey}`);
-                }
+                if (!url) throw new Error(`Unknown sheet key: ${sheetKey}`);
 
                 console.log(`Fetching data from Google Sheets: ${sheetKey}`);
                 
                 let csvText;
                 
-                // CORS 프록시 사용 (AllOrigins)
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                
-                const proxyResponse = await fetch(proxyUrl);
-                if (!proxyResponse.ok) {
-                    throw new Error(`Failed to fetch: ${proxyResponse.status}`);
+                // 먼저 직접 접근 시도
+                try {
+                    const directResponse = await fetch(url);
+                    if (directResponse.ok) {
+                        csvText = await directResponse.text();
+                    } else {
+                        throw new Error('Direct access failed');
+                    }
+                } catch (directError) {
+                    // 직접 접근 실패시 CORS 프록시 사용
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                    const proxyResponse = await fetch(proxyUrl);
+                    if (!proxyResponse.ok) throw new Error(`Proxy failed: ${proxyResponse.status}`);
+                    const proxyData = await proxyResponse.json();
+                    csvText = proxyData.contents;
                 }
-                
-                const proxyData = await proxyResponse.json();
-                csvText = proxyData.contents;
                 
                 const data = parseCSV(csvText);
                 const dataRows = data.slice(1); // 헤더 제외
@@ -2222,6 +2226,13 @@
                 return null;
             }
         }
+        
+        // 6개월 데이터 필터링
+        function filterLast6Months(data) {
+            const sixMonthsAgo = new Date();
+            sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+            return data.filter(row => parseDate(row.date) >= sixMonthsAgo);
+        }
 
         // 날짜 포맷 함수 (MM/DD)
         function formatChartDate(date) {
@@ -2230,7 +2241,7 @@
             return `${month}/${day}`;
         }
 
-        // ========== 피처드 차트 생성 (최근 6개월 커피 선물 데이터) ==========
+        // ========== 피처드 차트 생성 (대시보드와 동일한 방식, 최근 6개월) ==========
         async function createFeaturedChart() {
             const featuredCtx = document.getElementById('featuredChart');
             const featuredLoading = document.getElementById('featuredLoading');
@@ -2238,29 +2249,36 @@
             if (!featuredCtx) return;
             
             try {
-                const data = await readGoogleSheetData('coffeefutures');
+                // 대시보드와 동일한 타임아웃 방식 사용
+                let data = await Promise.race([
+                    readGoogleSheetData('coffeefutures'),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+                ]);
                 
-                if (data && data.length > 0) {
-                    // 최근 6개월 (약 180일) 데이터만 사용
-                    const chartData = data.slice(-180).map((row) => ({
-                        x: parseDate(row.date),
-                        y: parseFloat(row.value)
-                    })).filter(point => !isNaN(point.y));
-                    
-                    const labels = chartData.map(d => formatChartDate(d.x));
-                    const values = chartData.map(d => d.y);
-                    
+                if (!data) throw new Error('No data received');
+                
+                // 6개월 데이터만 필터링
+                data = filterLast6Months(data);
+                
+                const chartData = data.map((row, index) => ({
+                    x: index,
+                    y: parseFloat(row.value),
+                    date: parseDate(row.date)
+                })).filter(point => !isNaN(point.y));
+                
+                if (chartData.length > 0) {
                     if (featuredLoading) featuredLoading.style.display = 'none';
                     featuredCtx.style.display = 'block';
                     
-                    new Chart(featuredCtx, {
+                    const ctx = featuredCtx.getContext('2d');
+                    new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: labels,
                             datasets: [{
-                                data: values,
+                                label: 'Coffee Futures Price',
+                                data: chartData,
                                 borderColor: '#b87333',
-                                backgroundColor: 'rgba(184, 115, 51, 0.1)',
+                                backgroundColor: 'rgba(184, 115, 51, 0.08)',
                                 borderWidth: 2,
                                 fill: true,
                                 tension: 0.3,
@@ -2272,39 +2290,39 @@
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            interaction: {
-                                intersect: false,
-                                mode: 'index'
-                            },
+                            interaction: { intersect: false, mode: 'index' },
                             plugins: {
                                 legend: { display: false },
                                 tooltip: {
-                                    enabled: true,
                                     backgroundColor: 'rgba(26, 15, 10, 0.9)',
                                     titleColor: '#fff',
                                     bodyColor: '#fff',
-                                    padding: 10,
+                                    padding: 12,
                                     displayColors: false,
                                     callbacks: {
-                                        title: function(tooltipItems) {
-                                            return labels[tooltipItems[0].dataIndex];
-                                        },
-                                        label: function(context) {
-                                            return `${context.parsed.y.toFixed(2)}¢/lb`;
-                                        }
+                                        title: (items) => chartData[items[0].dataIndex].date.toLocaleDateString('ko-KR'),
+                                        label: (context) => `${context.parsed.y.toFixed(2)} ¢/lb`
                                     }
                                 }
                             },
                             scales: {
-                                x: { 
-                                    display: true,
-                                    grid: { display: false },
+                                x: {
+                                    type: 'linear',
                                     ticks: {
+                                        callback: (value) => {
+                                            const index = Math.round(value);
+                                            if (chartData[index] && (index === 0 || index === chartData.length - 1 || index % Math.floor(chartData.length / 5) === 0)) {
+                                                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                                                const d = chartData[index].date;
+                                                return `${months[d.getMonth()]} '${String(d.getFullYear()).slice(-2)}`;
+                                            }
+                                            return '';
+                                        },
                                         color: 'rgba(44, 36, 32, 0.5)',
                                         font: { size: 10 },
-                                        maxTicksLimit: 6,
                                         maxRotation: 0
-                                    }
+                                    },
+                                    grid: { display: false }
                                 },
                                 y: { 
                                     display: true,
@@ -2326,69 +2344,7 @@
                         }
                     });
                 } else {
-                    // 데이터가 없으면 데모 데이터 사용
-                    const demoData = [380, 385, 392, 388, 395, 402, 398, 405, 410, 395, 388, 392, 401, 385, 378, 369];
-                    const demoLabels = [];
-                    for (let i = demoData.length - 1; i >= 0; i--) {
-                        const date = new Date();
-                        date.setDate(date.getDate() - i);
-                        demoLabels.push(formatChartDate(date));
-                    }
-                    
-                    if (featuredLoading) featuredLoading.style.display = 'none';
-                    featuredCtx.style.display = 'block';
-                    
-                    new Chart(featuredCtx, {
-                        type: 'line',
-                        data: {
-                            labels: demoLabels,
-                            datasets: [{
-                                data: demoData,
-                                borderColor: '#b87333',
-                                backgroundColor: 'rgba(184, 115, 51, 0.1)',
-                                borderWidth: 2,
-                                fill: true,
-                                tension: 0.3,
-                                pointRadius: 0
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { display: false },
-                                tooltip: { enabled: false }
-                            },
-                            scales: {
-                                x: { 
-                                    display: true,
-                                    grid: { display: false },
-                                    ticks: {
-                                        color: 'rgba(44, 36, 32, 0.5)',
-                                        font: { size: 10 },
-                                        maxTicksLimit: 6,
-                                        maxRotation: 0
-                                    }
-                                },
-                                y: { 
-                                    display: true,
-                                    position: 'right',
-                                    grid: { 
-                                        display: true,
-                                        color: 'rgba(44, 36, 32, 0.05)'
-                                    },
-                                    ticks: {
-                                        color: 'rgba(44, 36, 32, 0.5)',
-                                        font: { size: 10 },
-                                        maxTicksLimit: 4,
-                                        callback: function(value) {
-                                            return value.toFixed(0) + '¢';
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    throw new Error('No chart data available');
                 }
             } catch (error) {
                 console.error('Featured chart error:', error);
