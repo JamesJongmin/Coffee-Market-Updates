@@ -1247,7 +1247,7 @@
             coffee: '#b87333',
             usd: '#4a7c59',
             cftc: { positive: '#4a7c59', negative: '#c23a3a' },
-            nvdi: { range: 'rgba(184, 115, 51, 0.15)', y2024: '#c23a3a', y2025: '#3498db' }
+            nvdi: { range: 'rgba(184, 115, 51, 0.15)', y2024: '#c23a3a', y2025: '#3498db', y2026: '#27ae60' }
         };
 
         // Coffee Futures 차트
@@ -1623,20 +1623,23 @@
                         const minValue = allValues.length > 0 ? Math.min(...allValues) : null;
                         const maxValue = allValues.length > 0 ? Math.max(...allValues) : null;
                         
-                        let year2024Values = [], year2025Values = [];
+                        let year2024Values = [], year2025Values = [], year2026Values = [];
                         
                         for (const row of monthRows) {
                             const val2024 = yearColumns[2024] ? parseFloat(row[yearColumns[2024]]) : null;
                             const val2025 = yearColumns[2025] ? parseFloat(row[yearColumns[2025]]) : null;
+                            const val2026 = yearColumns[2026] ? parseFloat(row[yearColumns[2026]]) : null;
                             
                             if (!isNaN(val2024) && val2024 !== null) year2024Values.push(val2024);
                             if (!isNaN(val2025) && val2025 !== null) year2025Values.push(val2025);
+                            if (!isNaN(val2026) && val2026 !== null) year2026Values.push(val2026);
                         }
                         
                         const avg2024 = year2024Values.length > 0 ? year2024Values.reduce((sum, val) => sum + val, 0) / year2024Values.length : null;
                         const avg2025 = year2025Values.length > 0 ? year2025Values.reduce((sum, val) => sum + val, 0) / year2025Values.length : null;
+                        const avg2026 = year2026Values.length > 0 ? year2026Values.reduce((sum, val) => sum + val, 0) / year2026Values.length : null;
                         
-                        monthlyData.push({ month, minValue, maxValue, year2024: avg2024, year2025: avg2025 });
+                        monthlyData.push({ month, minValue, maxValue, year2024: avg2024, year2025: avg2025, year2026: avg2026 });
                     }
                 }
                 
@@ -1666,15 +1669,23 @@
                 const monthKR = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
                 const datasets = [];
 
-                // 최신 값 업데이트
+                // 최신 값 업데이트 (2026년 우선, 없으면 2025년)
                 const currentMonth = new Date().getMonth();
                 const currentData = nvdiData.find(d => d.month === currentMonth + 1);
-                if (currentData && currentData.year2025) {
-                    valueElement.textContent = currentData.year2025.toFixed(3);
-                    if (currentData.year2024) {
-                        const diff = ((currentData.year2025 - currentData.year2024) / currentData.year2024 * 100).toFixed(1);
-                        changeElement.textContent = diff >= 0 ? `+${diff}% vs 2024` : `${diff}% vs 2024`;
-                        changeElement.className = `card-change ${diff >= 0 ? 'positive' : 'negative'}`;
+                if (currentData) {
+                    // 2026년 데이터가 있으면 2026년 표시, 없으면 2025년 표시
+                    const latestValue = currentData.year2026 || currentData.year2025;
+                    const latestYear = currentData.year2026 ? 2026 : 2025;
+                    const compareValue = currentData.year2026 ? currentData.year2025 : currentData.year2024;
+                    const compareYear = currentData.year2026 ? 2025 : 2024;
+                    
+                    if (latestValue) {
+                        valueElement.textContent = latestValue.toFixed(3);
+                        if (compareValue) {
+                            const diff = ((latestValue - compareValue) / compareValue * 100).toFixed(1);
+                            changeElement.textContent = diff >= 0 ? `+${diff}% vs ${compareYear}` : `${diff}% vs ${compareYear}`;
+                            changeElement.className = `card-change ${diff >= 0 ? 'positive' : 'negative'}`;
+                        }
                     }
                 }
 
@@ -1737,6 +1748,25 @@
                         pointRadius: 3,
                         pointHoverRadius: 5,
                         pointBackgroundColor: chartColors.nvdi.y2025,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1.5
+                    });
+                }
+
+                // 2026년
+                const data2026 = nvdiData.map((item, index) => ({ x: index, y: item.year2026 })).filter(p => p.y !== null && !isNaN(p.y));
+                if (data2026.length > 0) {
+                    datasets.push({
+                        label: '2026',
+                        data: data2026,
+                        borderColor: chartColors.nvdi.y2026,
+                        backgroundColor: 'transparent',
+                        borderWidth: 2.5,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        pointBackgroundColor: chartColors.nvdi.y2026,
                         pointBorderColor: '#fff',
                         pointBorderWidth: 1.5
                     });
