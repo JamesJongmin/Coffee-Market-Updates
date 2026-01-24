@@ -609,32 +609,110 @@
             return new Date(dateValue);
         }
 
-        async function readGoogleSheetData(sheetKey) {
+        // CORS proxy list with fallbacks
+        const CORS_PROXIES = [
+            (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+            (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+            (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+        ];
+
+        // Fetch with timeout
+        async function fetchWithTimeout(url, timeout = 8000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
             try {
-                const url = GOOGLE_SHEETS_URLS[sheetKey];
-                if (!url) throw new Error(`Unknown sheet key: ${sheetKey}`);
-                let csvText;
-                try {
-                    const directResponse = await fetch(url);
-                    if (directResponse.ok) { csvText = await directResponse.text(); }
-                    else { throw new Error('Direct access failed'); }
-                } catch (directError) {
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    const proxyResponse = await fetch(proxyUrl);
-                    if (!proxyResponse.ok) throw new Error(`Proxy failed: ${proxyResponse.status}`);
-                    const proxyData = await proxyResponse.json();
-                    csvText = proxyData.contents;
-                }
-                const data = parseCSV(csvText);
-                const processedData = data.slice(1).map(row => ({
-                    date: row[0], value: row[1]
-                })).filter(row => row.date && row.value !== undefined && row.value !== '');
-                processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-                return processedData;
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                return response;
             } catch (error) {
-                console.error(`Error reading Google Sheet ${sheetKey}:`, error);
-                return null;
+                clearTimeout(timeoutId);
+                throw error;
             }
+        }
+
+        // Get cached data
+        function getCachedData(sheetKey) {
+            try {
+                const cached = localStorage.getItem(`chart_cache_${sheetKey}`);
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < 60 * 60 * 1000) {
+                        console.log(`Using cached data for ${sheetKey}`);
+                        return data;
+                    }
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        // Save to cache
+        function setCachedData(sheetKey, data) {
+            try {
+                localStorage.setItem(`chart_cache_${sheetKey}`, JSON.stringify({ data, timestamp: Date.now() }));
+            } catch (e) {}
+        }
+
+        async function readGoogleSheetData(sheetKey) {
+            const url = GOOGLE_SHEETS_URLS[sheetKey];
+            if (!url) { console.error(`Unknown sheet key: ${sheetKey}`); return null; }
+
+            const cachedData = getCachedData(sheetKey);
+            if (cachedData) return cachedData;
+
+            console.log(`Fetching data from Google Sheets: ${sheetKey}`);
+            
+            // Try direct access first
+            try {
+                const directResponse = await fetchWithTimeout(url, 5000);
+                if (directResponse.ok) {
+                    const csvText = await directResponse.text();
+                    if (csvText && csvText.length > 10) {
+                        const data = parseCSV(csvText);
+                        const processedData = data.slice(1).map(row => ({
+                            date: row[0], value: row[1]
+                        })).filter(row => row.date && row.value !== undefined && row.value !== '');
+                        processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                        setCachedData(sheetKey, processedData);
+                        return processedData;
+                    }
+                }
+            } catch (e) { console.log('Direct access failed, trying proxies...'); }
+            
+            // Try proxies
+            for (let i = 0; i < CORS_PROXIES.length; i++) {
+                try {
+                    const proxyUrl = CORS_PROXIES[i](url);
+                    const response = await fetchWithTimeout(proxyUrl, 8000);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    let csvText;
+                    if (proxyUrl.includes('allorigins.win')) {
+                        const proxyData = await response.json();
+                        csvText = proxyData.contents;
+                    } else {
+                        csvText = await response.text();
+                    }
+                    
+                    if (!csvText || csvText.length < 10) throw new Error('Empty response');
+                    
+                    const data = parseCSV(csvText);
+                    const processedData = data.slice(1).map(row => ({
+                        date: row[0], value: row[1]
+                    })).filter(row => row.date && row.value !== undefined && row.value !== '');
+                    processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+                    setCachedData(sheetKey, processedData);
+                    return processedData;
+                } catch (error) { console.warn(`Proxy ${i + 1} failed:`, error.message); }
+            }
+            
+            // Use stale cache if all failed
+            try {
+                const cached = localStorage.getItem(`chart_cache_${sheetKey}`);
+                if (cached) { const { data } = JSON.parse(cached); return data; }
+            } catch (e) {}
+            
+            console.error(`All proxies failed for ${sheetKey}`);
+            return null;
         }
 
         function filterLastYear(data) {
