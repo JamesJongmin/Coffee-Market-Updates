@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GX9R36120J');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biofuel Market Analysis | 바이오연료 시장 분석</title>
+    <meta name="description" content="UCO, Tallow, Biofuel, SAF 글로벌 및 아시아 시장 동향과 옥수수, 대두유 원자재 시장 분석.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --border: rgba(26, 15, 10, 0.08);
+            --green-primary: #2d6a4f;
+            --green-light: #40916c;
+            --green-bg: #f0fdf4;
+            --bio-accent: #52b788;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== 상단 네비게이션 ========== */
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 64px;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 56px; box-shadow: 0 1px 30px rgba(0,0,0,0.06); }
+
+        .nav-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            height: 100%; display: flex;
+            align-items: center; justify-content: space-between;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--espresso); letter-spacing: -0.02em;
+        }
+        .nav-menu { display: flex; align-items: center; gap: 28px; }
+        .nav-item { position: relative; }
+        .nav-link {
+            font-size: 0.9rem; font-weight: 500;
+            color: var(--ink); text-decoration: none;
+            opacity: 0.7; transition: all 0.2s;
+            letter-spacing: 0.01em; text-transform: uppercase;
+            cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active { opacity: 1; color: var(--copper); }
+        .nav-link.lang-switch {
+            background: rgba(184, 115, 51, 0.1);
+            padding: 6px 12px; border-radius: 6px;
+            border: 1px solid rgba(184, 115, 51, 0.2);
+            font-size: 0.8rem;
+        }
+        .nav-link.lang-switch:hover {
+            background: rgba(184, 115, 51, 0.2);
+            border-color: var(--copper);
+        }
+        .mobile-menu-link.lang-switch-mobile {
+            background: rgba(184, 115, 51, 0.08);
+            color: var(--copper); font-weight: 600;
+        }
+
+        /* ========== 모바일 메뉴 ========== */
+        .mobile-menu-btn {
+            display: none; flex-direction: column; justify-content: center;
+            gap: 5px; width: 40px; height: 40px;
+            background: none; border: none; cursor: pointer; padding: 8px; z-index: 1001;
+        }
+        .mobile-menu-btn span {
+            display: block; width: 24px; height: 2px;
+            background: var(--espresso); border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .mobile-menu-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 998;
+        }
+        .mobile-menu-overlay.active { display: block; }
+
+        .mobile-menu {
+            position: fixed; top: 0; right: -300px; width: 280px;
+            height: 100vh; background: var(--paper);
+            z-index: 999; transition: right 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+        }
+        .mobile-menu.active { right: 0; }
+
+        .mobile-menu-header {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .mobile-menu-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem; font-weight: 600;
+        }
+        .mobile-menu-close {
+            width: 36px; height: 36px; display: flex;
+            align-items: center; justify-content: center;
+            background: none; border: none; cursor: pointer;
+            font-size: 1.5rem; color: var(--ink); opacity: 0.6;
+        }
+        .mobile-menu-close:hover { opacity: 1; }
+        .mobile-menu-nav { padding: 16px 0; }
+        .mobile-menu-link {
+            display: block; padding: 16px 24px;
+            font-size: 1rem; font-weight: 500;
+            color: var(--ink); text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .mobile-menu-link:hover { background: var(--steam); color: var(--copper); }
+        .mobile-menu-link.active { color: var(--copper); background: rgba(184, 115, 51, 0.08); }
+
+        .scroll-progress {
+            position: fixed; top: 64px; left: 0; height: 2px;
+            background: var(--green-primary); z-index: 999;
+        }
+
+        /* ========== 페이지 헤더 ========== */
+        .page-header {
+            padding: 140px 0 60px;
+            background: linear-gradient(180deg, var(--paper) 0%, #ecfdf5 50%, var(--paper) 100%);
+            position: relative; overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(45, 106, 79, 0.06) 0%, transparent 70%);
+        }
+        .header-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+            position: relative; z-index: 1;
+        }
+        .header-tag {
+            display: inline-block;
+            font-size: 0.75rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--green-primary);
+            background: rgba(45, 106, 79, 0.08);
+            padding: 6px 16px; border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .header-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 600; color: var(--espresso);
+            letter-spacing: -0.02em; margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        .header-subtitle {
+            font-size: 1.05rem; color: var(--ink);
+            opacity: 0.6; max-width: 640px; line-height: 1.8;
+        }
+
+        /* ========== 메인 컨테이너 ========== */
+        .main-container {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 48px);
+        }
+
+        /* ========== 마켓 오버뷰 카드 ========== */
+        .market-overview {
+            padding: 60px 0 40px;
+        }
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .overview-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .overview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+        .overview-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 3px;
+        }
+        .overview-card.uco::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .overview-card.tallow::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .overview-card.biofuel::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+        .overview-card.saf::before { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .overview-card.corn::before { background: linear-gradient(90deg, #eab308, #ca8a04); }
+        .overview-card.soybean::before { background: linear-gradient(90deg, #84cc16, #65a30d); }
+
+        .card-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; margin-bottom: 16px;
+        }
+        .uco .card-icon { background: rgba(245, 158, 11, 0.1); }
+        .tallow .card-icon { background: rgba(239, 68, 68, 0.1); }
+        .biofuel .card-icon { background: rgba(34, 197, 94, 0.1); }
+        .saf .card-icon { background: rgba(59, 130, 246, 0.1); }
+        .corn .card-icon { background: rgba(234, 179, 8, 0.1); }
+        .soybean .card-icon { background: rgba(132, 204, 22, 0.1); }
+
+        .card-title {
+            font-size: 1.1rem; font-weight: 600;
+            color: var(--espresso); margin-bottom: 4px;
+        }
+        .card-subtitle {
+            font-size: 0.8rem; color: var(--ink);
+            opacity: 0.5; margin-bottom: 16px;
+        }
+        .card-price {
+            font-size: 1.6rem; font-weight: 700;
+            color: var(--espresso); margin-bottom: 4px;
+            font-feature-settings: 'tnum';
+        }
+        .card-change {
+            font-size: 0.85rem; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 10px; border-radius: 6px;
+        }
+        .card-change.up { color: var(--positive); background: rgba(74, 124, 89, 0.08); }
+        .card-change.down { color: var(--negative); background: rgba(194, 58, 58, 0.08); }
+
+        /* ========== 섹션 공통 ========== */
+        .content-section {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+        }
+        .section-header {
+            margin-bottom: 40px;
+        }
+        .section-tag {
+            display: inline-block;
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--green-primary); margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 600; color: var(--espresso);
+            letter-spacing: -0.02em; margin-bottom: 12px;
+        }
+        .section-desc {
+            font-size: 0.95rem; color: var(--ink);
+            opacity: 0.6; max-width: 600px; line-height: 1.8;
+        }
+
+        /* ========== 분석 카드 ========== */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+        .analysis-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        .analysis-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        }
+        .analysis-card.full-width {
+            grid-column: 1 / -1;
+        }
+        .analysis-card-title {
+            font-size: 1.15rem; font-weight: 600;
+            color: var(--espresso); margin-bottom: 8px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .analysis-card-title .badge {
+            font-size: 0.65rem; font-weight: 700;
+            padding: 3px 8px; border-radius: 4px;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .badge.global { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
+        .badge.asia { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+        .badge.commodity { background: rgba(234, 179, 8, 0.1); color: #ca8a04; }
+        .badge.green { background: rgba(34, 197, 94, 0.1); color: #16a34a; }
+
+        .analysis-card-desc {
+            font-size: 0.9rem; color: var(--ink);
+            opacity: 0.6; margin-bottom: 20px; line-height: 1.7;
+        }
+
+        /* ========== 데이터 테이블 ========== */
+        .data-table {
+            width: 100%; border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .data-table thead th {
+            text-align: left; padding: 12px 16px;
+            font-weight: 600; font-size: 0.78rem;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--ink); opacity: 0.5;
+            border-bottom: 2px solid var(--border);
+        }
+        .data-table tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--ink);
+        }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+        .data-table tbody tr:hover { background: rgba(0,0,0,0.01); }
+        .data-table .num { font-feature-settings: 'tnum'; font-weight: 500; }
+        .data-table .up { color: var(--positive); font-weight: 600; }
+        .data-table .down { color: var(--negative); font-weight: 600; }
+
+        /* ========== 키 포인트 ========== */
+        .key-points {
+            list-style: none; padding: 0;
+        }
+        .key-points li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.92rem;
+            color: var(--ink);
+            line-height: 1.7;
+            display: flex; align-items: flex-start; gap: 12px;
+        }
+        .key-points li:last-child { border-bottom: none; }
+        .key-points li::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green-primary);
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+
+        /* ========== 차트 래퍼 ========== */
+        .chart-wrapper {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .chart-title {
+            font-size: 1rem; font-weight: 600;
+            color: var(--espresso); margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* ========== 관련성 섹션 ========== */
+        .correlation-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #fef3c7 100%);
+            border-radius: 20px;
+            padding: 48px;
+            margin: 40px 0;
+        }
+        .correlation-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem; font-weight: 600;
+            color: var(--espresso); margin-bottom: 16px;
+        }
+        .correlation-desc {
+            font-size: 0.95rem; color: var(--ink);
+            opacity: 0.7; margin-bottom: 28px; line-height: 1.8;
+            max-width: 700px;
+        }
+        .correlation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .correlation-item {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(45, 106, 79, 0.12);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .correlation-item-title {
+            font-size: 0.95rem; font-weight: 600;
+            color: var(--green-primary); margin-bottom: 8px;
+        }
+        .correlation-item-text {
+            font-size: 0.85rem; color: var(--ink);
+            opacity: 0.65; line-height: 1.7;
+        }
+
+        /* ========== 인사이트 박스 ========== */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(45, 106, 79, 0.04) 0%, rgba(82, 183, 136, 0.04) 100%);
+            border: 1px solid rgba(45, 106, 79, 0.12);
+            border-left: 4px solid var(--green-primary);
+            border-radius: 0 12px 12px 0;
+            padding: 24px 28px;
+            margin: 24px 0;
+        }
+        .insight-box-title {
+            font-size: 0.85rem; font-weight: 600;
+            color: var(--green-primary); margin-bottom: 8px;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .insight-box-text {
+            font-size: 0.92rem; color: var(--ink);
+            line-height: 1.8;
+        }
+
+        /* ========== 푸터 ========== */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 48px; margin-bottom: 48px;
+        }
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem; font-weight: 600; margin-bottom: 16px;
+        }
+        .footer-desc {
+            font-size: 0.9rem; opacity: 0.5;
+            line-height: 1.7; max-width: 280px;
+        }
+        .footer-title {
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            opacity: 0.4; margin-bottom: 20px;
+        }
+        .footer-link {
+            display: block; font-size: 0.9rem;
+            color: var(--crema); text-decoration: none;
+            opacity: 0.6; margin-bottom: 12px;
+            transition: opacity 0.2s;
+        }
+        .footer-link:hover { opacity: 1; }
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex; justify-content: space-between;
+            align-items: center;
+        }
+        .footer-copyright { font-size: 0.8rem; opacity: 0.4; }
+        .footer-disclaimer {
+            font-size: 0.75rem; opacity: 0.35;
+            max-width: 480px; text-align: right; line-height: 1.5;
+        }
+
+        /* ========== 반응형 ========== */
+        @media (max-width: 1024px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .page-header { padding: 100px 0 40px; }
+            .header-title { font-size: 2rem; }
+            .analysis-grid { grid-template-columns: 1fr; }
+            .overview-grid { grid-template-columns: 1fr 1fr; }
+            .correlation-section { padding: 32px 24px; }
+            .correlation-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom {
+                flex-direction: column; gap: 16px; text-align: center;
+            }
+            .footer-disclaimer { text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .overview-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ========== 애니메이션 ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <span class="nav-logo">Coffee Market Info</span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-item"><a href="about.html" class="nav-link">About</a></div>
+                <div class="nav-item"><a href="weekly-report.html" class="nav-link">Weekly Report</a></div>
+                <div class="nav-item"><a href="in-depth-analysis.html" class="nav-link">In-Depth Analysis</a></div>
+                <div class="nav-item"><a href="fundamentals/fundamentals.html" class="nav-link">Fundamentals</a></div>
+                <div class="nav-item"><a href="dashboards.html" class="nav-link">Dashboards</a></div>
+                <div class="nav-item"><a href="biofuel.html" class="nav-link active">Biofuel</a></div>
+                <div class="nav-item"><a href="mailto:james.baek@aligncommodities.com" class="nav-link">Contact</a></div>
+                <div class="nav-item"><a href="biofuel-en.html" class="nav-link lang-switch" title="Switch to English">🌐 EN</a></div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="메뉴 열기">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 모바일 메뉴 오버레이 -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- 모바일 메뉴 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-title">Menu</span>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="메뉴 닫기">×</button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="about.html" class="mobile-menu-link">About</a>
+            <a href="weekly-report.html" class="mobile-menu-link">Weekly Report</a>
+            <a href="in-depth-analysis.html" class="mobile-menu-link">In-Depth Analysis</a>
+            <a href="fundamentals/fundamentals.html" class="mobile-menu-link">Fundamentals</a>
+            <a href="dashboards.html" class="mobile-menu-link">Dashboards</a>
+            <a href="biofuel.html" class="mobile-menu-link active">Biofuel</a>
+            <a href="mailto:james.baek@aligncommodities.com" class="mobile-menu-link">Contact</a>
+            <a href="biofuel-en.html" class="mobile-menu-link lang-switch-mobile">🌐 English Version</a>
+        </nav>
+    </div>
+
+    <!-- 페이지 헤더 -->
+    <header class="page-header">
+        <div class="header-container">
+            <div class="header-tag animate-in">Biofuel Market Intelligence</div>
+            <h1 class="header-title animate-in delay-1">바이오연료 시장 분석</h1>
+            <p class="header-subtitle animate-in delay-2">
+                UCO, Tallow, Biofuel, SAF 글로벌 및 아시아 시장 동향과<br>
+                관련 원자재(옥수수, 대두유) 시장을 종합적으로 분석합니다.
+            </p>
+        </div>
+    </header>
+
+    <!-- 마켓 오버뷰 -->
+    <section class="market-overview">
+        <div class="main-container">
+            <div class="overview-grid">
+                <div class="overview-card uco animate-in delay-1">
+                    <div class="card-icon">🛢️</div>
+                    <div class="card-title">UCO (폐식용유)</div>
+                    <div class="card-subtitle">Used Cooking Oil</div>
+                    <div class="card-price">$850-920/MT</div>
+                    <span class="card-change up">▲ 아시아 FOB 기준</span>
+                </div>
+                <div class="overview-card tallow animate-in delay-2">
+                    <div class="card-icon">🧴</div>
+                    <div class="card-title">Tallow (수지)</div>
+                    <div class="card-subtitle">Animal Fat / Tallow</div>
+                    <div class="card-price">$900-1,050/MT</div>
+                    <span class="card-change up">▲ 글로벌 평균</span>
+                </div>
+                <div class="overview-card biofuel animate-in delay-3">
+                    <div class="card-icon">⛽</div>
+                    <div class="card-title">바이오디젤</div>
+                    <div class="card-subtitle">FAME Biodiesel</div>
+                    <div class="card-price">$1,200-1,350/MT</div>
+                    <span class="card-change down">▼ EU 기준</span>
+                </div>
+                <div class="overview-card saf animate-in delay-4">
+                    <div class="card-icon">✈️</div>
+                    <div class="card-title">SAF (항공유)</div>
+                    <div class="card-subtitle">Sustainable Aviation Fuel</div>
+                    <div class="card-price">$1,800-2,500/MT</div>
+                    <span class="card-change up">▲ 프리미엄 확대</span>
+                </div>
+                <div class="overview-card corn animate-in delay-5">
+                    <div class="card-icon">🌽</div>
+                    <div class="card-title">옥수수</div>
+                    <div class="card-subtitle">CBOT Corn Futures</div>
+                    <div class="card-price">450-480 ¢/bu</div>
+                    <span class="card-change down">▼ 수확기 압력</span>
+                </div>
+                <div class="overview-card soybean animate-in delay-6">
+                    <div class="card-icon">🫘</div>
+                    <div class="card-title">대두유</div>
+                    <div class="card-subtitle">CBOT Soybean Oil</div>
+                    <div class="card-price">42-46 ¢/lb</div>
+                    <span class="card-change up">▲ 바이오디젤 수요</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UCO 시장 분석 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">UCO Market</div>
+                <h2 class="section-title">UCO (폐식용유) 시장 동향</h2>
+                <p class="section-desc">
+                    글로벌 바이오디젤 및 SAF 원료로 주목받는 UCO 시장의 공급·수요 구조와 가격 동향을 분석합니다.
+                </p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        글로벌 UCO 수급 현황
+                        <span class="badge global">Global</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        전 세계 UCO 수집량은 연간 약 700~900만 톤으로 추정되며, 중국, 동남아, 유럽이 주요 공급원입니다.
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>지역</th>
+                                <th>수집량 (만 톤/년)</th>
+                                <th>주요 특징</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>중국</td>
+                                <td class="num">350-500</td>
+                                <td>세계 최대 생산·수출국, 품질 규격화 진행</td>
+                            </tr>
+                            <tr>
+                                <td>동남아시아</td>
+                                <td class="num">120-180</td>
+                                <td>인도네시아·말레이시아 팜유 기반 UCO 증가</td>
+                            </tr>
+                            <tr>
+                                <td>유럽</td>
+                                <td class="num">100-150</td>
+                                <td>엄격한 수집 체계, RED III 규제 영향</td>
+                            </tr>
+                            <tr>
+                                <td>북미</td>
+                                <td class="num">60-80</td>
+                                <td>RFS·LCFS 정책 수요 기반</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        아시아 UCO 시장
+                        <span class="badge asia">Asia</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        아시아 UCO 시장은 중국 수출 정책과 동남아 수집 인프라 확대에 따라 빠르게 변화하고 있습니다.
+                    </div>
+                    <ul class="key-points">
+                        <li>중국: 정부의 '음식 쓰레기 자원화' 정책 강화로 UCO 수집률 상승, 수출 물량 변동성 확대</li>
+                        <li>인도네시아: 팜유 기반 UCO 수집 체계 구축 중, B40 바이오디젤 의무 혼합 정책 확대</li>
+                        <li>일본/한국: 고품질 UCO 프리미엄 형성, 일본 내 SAF 원료 수요 급증</li>
+                        <li>인도: 급성장하는 외식 산업 기반으로 UCO 수집 잠재량 증가</li>
+                        <li>가격 동인: EU RED III 원산지 규정 강화로 아시아산 UCO 가격 변동성 확대</li>
+                    </ul>
+                </div>
+
+                <div class="analysis-card full-width">
+                    <div class="insight-box">
+                        <div class="insight-box-title">UCO 시장 핵심 인사이트</div>
+                        <div class="insight-box-text">
+                            EU의 RED III(재생에너지 지침 III) 시행으로 UCO 원산지 추적·인증 요건이 대폭 강화되면서,
+                            중국산 UCO의 유럽 수출이 제한되고 있습니다. 이는 아시아 내 UCO 공급 과잉과 유럽 시장 가격 상승이라는
+                            양극화 현상을 초래하고 있습니다. 동시에 미국 시장에서는 RFS(재생연료 기준)와 캘리포니아 LCFS(저탄소 연료 기준) 정책이
+                            UCO 기반 바이오디젤 수요를 지속적으로 견인하고 있어, 글로벌 UCO 무역 흐름의 재편이 진행 중입니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tallow 시장 분석 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">Tallow Market</div>
+                <h2 class="section-title">Tallow (수지/동물성 지방) 시장 동향</h2>
+                <p class="section-desc">
+                    바이오디젤 및 SAF의 주요 원료인 Tallow의 글로벌 수급과 가격 동향을 분석합니다.
+                </p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        글로벌 Tallow 공급 구조
+                        <span class="badge global">Global</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        Tallow는 축산업 부산물로, 세계 연간 생산량은 약 900~1,000만 톤 수준입니다.
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>지역</th>
+                                <th>생산량 (만 톤/년)</th>
+                                <th>비고</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>미국</td>
+                                <td class="num">250-300</td>
+                                <td>세계 최대 Tallow 생산국, RD 원료 수요 급증</td>
+                            </tr>
+                            <tr>
+                                <td>브라질</td>
+                                <td class="num">120-150</td>
+                                <td>소 도축량 세계 1위, 수출 확대</td>
+                            </tr>
+                            <tr>
+                                <td>호주</td>
+                                <td class="num">80-100</td>
+                                <td>고품질 Tallow, 아시아 수출 중심</td>
+                            </tr>
+                            <tr>
+                                <td>유럽</td>
+                                <td class="num">150-180</td>
+                                <td>Cat 1/2/3 등급 분류, 규제 환경 복잡</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        아시아 Tallow 수입 동향
+                        <span class="badge asia">Asia</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        아시아 시장에서 Tallow는 전통적 식용·산업용 수요와 함께 바이오연료 원료 수요가 급증하고 있습니다.
+                    </div>
+                    <ul class="key-points">
+                        <li>싱가포르: 아시아 Tallow 트레이딩 허브, Neste·다수 정유사의 바이오 리파이너리 가동</li>
+                        <li>한국: HVO(수소화 식물성 오일) 설비 투자 확대, Tallow 수입 증가</li>
+                        <li>일본: SAF 생산 목표에 따른 Tallow 원료 확보 경쟁 심화</li>
+                        <li>중국: 전통적 비누·화학 원료 수요에 더해 바이오디젤 수요 새롭게 부상</li>
+                        <li>가격 프리미엄: 바이오연료 등급 Tallow는 일반 등급 대비 $50-100/MT 프리미엄</li>
+                    </ul>
+                </div>
+
+                <div class="analysis-card full-width">
+                    <div class="insight-box">
+                        <div class="insight-box-title">Tallow 시장 핵심 인사이트</div>
+                        <div class="insight-box-text">
+                            미국에서 Renewable Diesel(RD) 생산 설비가 급격히 확대되면서 Tallow 수요가 폭증하고 있습니다.
+                            2025년 기준 미국 RD 생산 능력은 약 60억 갤런/년에 달하며, 이 중 상당 부분이 Tallow를 원료로 사용합니다.
+                            이에 따라 미국 내 Tallow 가격이 역사적 고점 수준을 유지하고 있으며, 기존 비누·화학 산업에서의
+                            Tallow 원가 상승으로 대체 원료(팜유·UCO) 전환이 가속화되고 있습니다.
+                            아시아에서는 호주·뉴질랜드산 Tallow의 아시아향 수출이 증가하고 있으나,
+                            미국 시장과의 가격 경쟁으로 수급 긴축이 지속될 전망입니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 바이오연료 시장 분석 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">Biofuel Market</div>
+                <h2 class="section-title">바이오연료(Biofuel) 시장 동향</h2>
+                <p class="section-desc">
+                    바이오디젤(FAME), Renewable Diesel(HVO), 에탄올 등 바이오연료 시장의 글로벌·아시아 동향을 분석합니다.
+                </p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        글로벌 바이오디젤·RD 시장
+                        <span class="badge green">Biofuel</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        탈탄소 정책 강화로 바이오디젤과 Renewable Diesel 시장이 빠르게 성장하고 있습니다.
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>제품</th>
+                                <th>글로벌 생산량</th>
+                                <th>주요 동향</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>바이오디젤 (FAME)</td>
+                                <td class="num">~4,500만 톤/년</td>
+                                <td>EU 최대 시장, 인도네시아 B40 확대</td>
+                            </tr>
+                            <tr>
+                                <td>Renewable Diesel (HVO)</td>
+                                <td class="num">~1,500만 톤/년</td>
+                                <td>미국·유럽 급성장, 정유사 전환 가속</td>
+                            </tr>
+                            <tr>
+                                <td>바이오에탄올</td>
+                                <td class="num">~1.1억 kL/년</td>
+                                <td>미국·브라질 양대 시장, E15 확대 논의</td>
+                            </tr>
+                            <tr>
+                                <td>바이오메탄</td>
+                                <td class="num">급성장 중</td>
+                                <td>유럽 중심 폐기물 기반 생산 확대</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        아시아 바이오연료 정책 동향
+                        <span class="badge asia">Asia</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        아시아 주요국의 바이오연료 의무혼합 정책과 시장 성장 전략을 분석합니다.
+                    </div>
+                    <ul class="key-points">
+                        <li><strong>인도네시아:</strong> B40(디젤에 바이오디젤 40% 혼합) 시행 중, B50 목표 추진. 팜유 기반 세계 최대 바이오디젤 시장</li>
+                        <li><strong>말레이시아:</strong> B20 의무혼합 시행, 팜유 산업과 연계한 바이오디젤 확대</li>
+                        <li><strong>인도:</strong> E20(에탄올 20% 혼합) 목표 가속화, 사탕수수·곡물 기반 에탄올 생산 확대</li>
+                        <li><strong>한국:</strong> RFS(신재생연료 혼합 의무제) 강화, HVO 도입 본격화</li>
+                        <li><strong>일본:</strong> 2030 SAF 10% 혼합 목표, 바이오연료 인프라 투자 확대</li>
+                        <li><strong>싱가포르:</strong> 아시아 바이오연료 트레이딩·리파이닝 허브 역할 강화</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SAF 시장 분석 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">SAF Market</div>
+                <h2 class="section-title">SAF (지속가능항공유) 시장 동향</h2>
+                <p class="section-desc">
+                    항공 산업의 탈탄소화 핵심인 SAF(Sustainable Aviation Fuel) 시장의 글로벌·아시아 현황과 전망을 분석합니다.
+                </p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        글로벌 SAF 시장 현황
+                        <span class="badge global">Global</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        2025년 기준 글로벌 SAF 생산량은 전체 항공유 수요의 약 0.5~1%에 불과하나, 급성장이 예상됩니다.
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>항목</th>
+                                <th>수치</th>
+                                <th>비고</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>글로벌 SAF 생산량 (2025)</td>
+                                <td class="num">~200만 톤/년</td>
+                                <td>전년 대비 약 50% 증가</td>
+                            </tr>
+                            <tr>
+                                <td>목표 (2030, IATA)</td>
+                                <td class="num">항공유의 5.5%</td>
+                                <td>약 3,000만 톤/년 필요</td>
+                            </tr>
+                            <tr>
+                                <td>기존 항공유 대비 가격</td>
+                                <td class="num">2~4배</td>
+                                <td>프리미엄 축소 추세</td>
+                            </tr>
+                            <tr>
+                                <td>주요 원료</td>
+                                <td>UCO, Tallow, 농업 잔여물</td>
+                                <td>HEFA 공정 주도</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        아시아 SAF 시장 동향
+                        <span class="badge asia">Asia</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        아시아 각국의 SAF 의무혼합 정책과 생산 설비 투자 현황을 분석합니다.
+                    </div>
+                    <ul class="key-points">
+                        <li><strong>일본:</strong> 2030년까지 SAF 10% 혼합 의무화 법제화 완료. ENEOs, COSMO 등 정유사 SAF 생산 설비 투자 가속</li>
+                        <li><strong>한국:</strong> 2027년부터 SAF 혼합 의무화 추진, SK에너지·GS칼텍스 등 생산 준비 중</li>
+                        <li><strong>싱가포르:</strong> Neste의 아시아 최대 SAF 생산 설비 가동, 연 100만 톤 규모</li>
+                        <li><strong>중국:</strong> 자국 항공유 탄소배출 저감 목표에 따른 SAF 수요 증가, Sinopec 등 국영 정유사 참여</li>
+                        <li><strong>인도:</strong> 항공 산업 급성장에 따른 SAF 도입 초기 단계, 정부 인센티브 정책 준비 중</li>
+                    </ul>
+                </div>
+
+                <div class="analysis-card full-width">
+                    <div class="insight-box">
+                        <div class="insight-box-title">SAF 시장 핵심 인사이트</div>
+                        <div class="insight-box-text">
+                            EU의 ReFuelEU Aviation 규정(2025년 SAF 2%, 2030년 6%, 2050년 70% 의무혼합)이 시행되면서
+                            글로벌 SAF 수요가 구조적으로 증가하고 있습니다. 현재 SAF 생산의 대부분은 HEFA(Hydroprocessed Esters and Fatty Acids) 공정에 의존하며,
+                            이는 UCO와 Tallow를 주요 원료로 사용합니다. 따라서 SAF 시장의 성장은 UCO·Tallow 시장의 수급에 직접적인 영향을 미치며,
+                            장기적으로는 e-fuel(Power-to-Liquid), Alcohol-to-Jet 등 차세대 기술의 상용화 속도가 핵심 변수가 될 전망입니다.
+                            아시아에서는 일본이 SAF 정책 선도국으로 부상하고 있으며, 한국과 싱가포르가 뒤를 잇고 있습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UCO/Tallow과 옥수수·대두유의 상관관계 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="correlation-section">
+                <div class="correlation-title">UCO/Tallow와 옥수수·대두유의 상관관계</div>
+                <div class="correlation-desc">
+                    UCO와 Tallow는 옥수수·대두유 시장과 밀접한 상관관계를 가지고 있습니다.
+                    바이오연료 원료 시장에서의 대체 관계와 가격 연동 메커니즘을 분석합니다.
+                </div>
+                <div class="correlation-grid">
+                    <div class="correlation-item">
+                        <div class="correlation-item-title">대두유 → UCO 가격 연동</div>
+                        <div class="correlation-item-text">
+                            대두유는 바이오디젤의 주요 원료이며, 대두유 가격 상승 시 UCO가 대체 원료로 부상하면서
+                            UCO 수요·가격도 동반 상승합니다. 두 시장은 0.7~0.85의 높은 상관계수를 보입니다.
+                        </div>
+                    </div>
+                    <div class="correlation-item">
+                        <div class="correlation-item-title">옥수수 → 에탄올 → 바이오연료</div>
+                        <div class="correlation-item-text">
+                            옥수수는 미국 에탄올 생산의 핵심 원료입니다. 옥수수 가격 변동은 에탄올 수익성에 영향을 미치며,
+                            이는 바이오디젤·RD와의 수익성 비교를 통해 Tallow·UCO 수요에도 간접적으로 영향을 줍니다.
+                        </div>
+                    </div>
+                    <div class="correlation-item">
+                        <div class="correlation-item-title">RIN/LCFS 크레딧 연결</div>
+                        <div class="correlation-item-text">
+                            미국 RFS의 RIN(Renewable Identification Numbers) 가격과 캘리포니아 LCFS 크레딧 가격이
+                            바이오연료 원료(UCO, Tallow, 대두유, 옥수수) 전반의 가격 수준을 결정짓는 핵심 변수입니다.
+                        </div>
+                    </div>
+                    <div class="correlation-item">
+                        <div class="correlation-item-title">식량 vs 연료 경쟁</div>
+                        <div class="correlation-item-text">
+                            대두유·옥수수의 바이오연료 원료 사용 확대는 식량 가격 상승 우려를 야기합니다.
+                            이 '식량 vs 연료' 이슈는 UCO·Tallow 같은 폐유지 원료의 전략적 가치를 높이는 요인입니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 옥수수 시장 분석 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">Corn Market</div>
+                <h2 class="section-title">옥수수 원자재 시장 분석</h2>
+                <p class="section-desc">
+                    미국 에탄올 생산의 핵심 원료인 옥수수 시장의 수급 동향과 바이오연료 산업과의 연관성을 분석합니다.
+                </p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        옥수수 수급 현황
+                        <span class="badge commodity">Commodity</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        글로벌 옥수수 시장의 생산·소비·재고 동향과 에탄올 수요 비중을 분석합니다.
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>항목</th>
+                                <th>수치 (2024/25)</th>
+                                <th>전년 대비</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>글로벌 생산량</td>
+                                <td class="num">12.2억 톤</td>
+                                <td class="up">▲ 2.5%</td>
+                            </tr>
+                            <tr>
+                                <td>미국 생산량</td>
+                                <td class="num">3.84억 톤</td>
+                                <td class="up">▲ 3.1%</td>
+                            </tr>
+                            <tr>
+                                <td>미국 에탄올 소비</td>
+                                <td class="num">1.37억 톤</td>
+                                <td class="up">▲ 1.2%</td>
+                            </tr>
+                            <tr>
+                                <td>글로벌 기말재고율</td>
+                                <td class="num">25.8%</td>
+                                <td class="down">▼ 0.5%p</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        옥수수-에탄올-바이오연료 연결 고리
+                        <span class="badge green">Analysis</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        미국 옥수수 생산의 약 35~37%가 에탄올 생산에 사용되며, 이는 바이오연료 밸류 체인의 핵심입니다.
+                    </div>
+                    <ul class="key-points">
+                        <li><strong>에탄올 수익성:</strong> 옥수수 가격 하락 → 에탄올 마진 개선 → 생산량 증가 → E15 확대 논의 활성화</li>
+                        <li><strong>DDGS 부산물:</strong> 에탄올 생산 부산물인 DDGS(건조곡물 부산물)는 축산 사료로 활용, Tallow 생산과 간접 연결</li>
+                        <li><strong>옥수수유:</strong> 에탄올 생산 과정에서 추출되는 옥수수유는 바이오디젤 원료로 사용, UCO/Tallow와 경쟁 관계</li>
+                        <li><strong>정책 영향:</strong> RFS 의무량과 E15 연중 판매 허용 정책이 옥수수-에탄올 수요의 핵심 변수</li>
+                        <li><strong>작황 영향:</strong> 미국 Corn Belt 기상 조건은 옥수수 가격 → 에탄올 수익성 → 바이오연료 원료 수급 전체에 파급</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 대두유 시장 분석 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">Soybean Oil Market</div>
+                <h2 class="section-title">대두유 원자재 시장 분석</h2>
+                <p class="section-desc">
+                    바이오디젤·RD의 핵심 원료인 대두유 시장의 수급 동향과 UCO/Tallow와의 가격 연동성을 분석합니다.
+                </p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        대두유 수급 현황
+                        <span class="badge commodity">Commodity</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        글로벌 대두유 시장의 생산·소비 구조와 바이오연료 원료 수요 비중을 분석합니다.
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>항목</th>
+                                <th>수치 (2024/25)</th>
+                                <th>전년 대비</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>글로벌 대두유 생산량</td>
+                                <td class="num">6,200만 톤</td>
+                                <td class="up">▲ 3.0%</td>
+                            </tr>
+                            <tr>
+                                <td>미국 대두유 생산량</td>
+                                <td class="num">1,220만 톤</td>
+                                <td class="up">▲ 2.8%</td>
+                            </tr>
+                            <tr>
+                                <td>미국 RD/바이오디젤 사용</td>
+                                <td class="num">580만 톤</td>
+                                <td class="up">▲ 12%</td>
+                            </tr>
+                            <tr>
+                                <td>바이오연료 비중 (미국)</td>
+                                <td class="num">~47%</td>
+                                <td class="up">▲ 5%p</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        대두유-UCO-Tallow 가격 관계
+                        <span class="badge green">Analysis</span>
+                    </div>
+                    <div class="analysis-card-desc">
+                        대두유, UCO, Tallow는 바이오연료 원료 시장에서 대체 관계에 있으며, 가격이 긴밀하게 연동됩니다.
+                    </div>
+                    <ul class="key-points">
+                        <li><strong>대두유 크러시 마진:</strong> 대두 착유 마진(크러시 스프레드)이 대두유 공급량을 결정하며, 이는 UCO·Tallow 수요에 영향</li>
+                        <li><strong>바이오연료 전환율:</strong> 미국 대두유의 바이오연료 사용 비중이 47%까지 상승하면서 식용유 시장과의 경쟁 심화</li>
+                        <li><strong>수입 대두유:</strong> 남미(브라질·아르헨티나) 대두유 수입이 미국 바이오연료 원료 부족분을 보완</li>
+                        <li><strong>가격 스프레드:</strong> 대두유 vs UCO vs Tallow 가격 스프레드가 바이오연료 생산자의 원료 선택을 결정</li>
+                        <li><strong>CI(탄소 집약도) 점수:</strong> UCO·Tallow는 대두유 대비 낮은 CI 점수로 LCFS 크레딧 우위 → 프리미엄 원료로 선호</li>
+                    </ul>
+                </div>
+
+                <div class="analysis-card full-width">
+                    <div class="insight-box">
+                        <div class="insight-box-title">원자재 시장 종합 인사이트</div>
+                        <div class="insight-box-text">
+                            바이오연료 산업의 급성장으로 전통적 농산물(옥수수, 대두유) 시장의 수급 구조가 근본적으로 변화하고 있습니다.
+                            미국에서 대두유의 바이오연료 사용 비중이 47%에 달하면서, 대두유 가격이 식용 수요보다 에너지 정책에 더 민감하게
+                            반응하는 구조로 전환되었습니다. 이는 UCO와 Tallow의 전략적 가치를 더욱 부각시키는데,
+                            폐유지(UCO)와 축산 부산물(Tallow)은 '식량 vs 연료' 논쟁에서 자유로우며, 
+                            낮은 탄소 집약도(CI)로 인해 LCFS·RED III 등 탄소 규제 체계에서 더 높은 가치를 인정받기 때문입니다.
+                            향후 바이오연료 원료 시장은 대두유 → UCO·Tallow → 차세대 원료(조류, e-fuel)로의 
+                            점진적 전환이 예상되며, 이 과정에서 옥수수 에탄올의 역할도 재정립될 것으로 전망됩니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 주요 뉴스 및 이벤트 -->
+    <section class="content-section">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">Key Events & Outlook</div>
+                <h2 class="section-title">주요 이벤트 및 향후 전망</h2>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="analysis-card-title">주요 정책 일정</div>
+                    <div class="analysis-card-desc">바이오연료 시장에 영향을 미치는 주요 정책 이벤트</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>일정</th>
+                                <th>이벤트</th>
+                                <th>영향</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025 H1</td>
+                                <td>EU RED III 세부 시행규칙 확정</td>
+                                <td>UCO 원산지 규정, 아시아산 수입 영향</td>
+                            </tr>
+                            <tr>
+                                <td>2025 H2</td>
+                                <td>미국 EPA RFS 2026 의무량 발표</td>
+                                <td>RIN 가격 및 바이오연료 원료 수요</td>
+                            </tr>
+                            <tr>
+                                <td>2026</td>
+                                <td>EU ReFuelEU SAF 2% 혼합 시행</td>
+                                <td>SAF 원료(UCO/Tallow) 수요 증가</td>
+                            </tr>
+                            <tr>
+                                <td>2027</td>
+                                <td>한국 SAF 혼합 의무화 시행</td>
+                                <td>아시아 SAF 원료 수급 변화</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-card">
+                    <div class="analysis-card-title">시장 전망 핵심 포인트</div>
+                    <div class="analysis-card-desc">2025-2030 바이오연료 시장 주요 전망</div>
+                    <ul class="key-points">
+                        <li><strong>UCO:</strong> EU RED III 원산지 규제 강화로 아시아-유럽 가격 격차 확대 전망. 동남아 수집 인프라 투자 가속</li>
+                        <li><strong>Tallow:</strong> 미국 RD 생산 확대 지속으로 Tallow 수급 긴축 유지, 가격 고공행진 예상</li>
+                        <li><strong>SAF:</strong> 2030년까지 연간 3,000만 톤 이상 수요 예상, 원료 확보 경쟁 심화</li>
+                        <li><strong>옥수수:</strong> E15 정책 확대 여부가 에탄올 수요의 핵심, 미국 작황에 따른 변동성 지속</li>
+                        <li><strong>대두유:</strong> 바이오연료 원료 비중 50% 돌파 전망, 남미 수출 확대가 가격 안정 변수</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다. 
+                        Align Commodities X Yellowknife Roasters 발행.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Reports</div>
+                    <a href="weekly-report.html" class="footer-link">Weekly Updates</a>
+                    <a href="in-depth-analysis.html" class="footer-link">In-depth Analysis</a>
+                    <a href="about.html" class="footer-link">About</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data</div>
+                    <a href="dashboards.html" class="footer-link">Market Dashboard</a>
+                    <a href="fundamentals/fundamentals.html" class="footer-link">Fundamentals</a>
+                    <a href="biofuel.html" class="footer-link">Biofuel Analysis</a>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <span class="footer-link" style="cursor: default; opacity: 0.4;">
+                        Align Commodities
+                    </span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Align Commodities. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    본 사이트의 모든 콘텐츠는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ========== 스크롤 효과 ==========
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const topNav = document.getElementById('topNav');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            
+            const progress = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+            
+            if (scrollTop > 100) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+        });
+
+        // ========== 모바일 메뉴 ==========
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.add('active');
+            mobileMenuBtn.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+        mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+        // ========== 스크롤 애니메이션 ==========
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.analysis-card, .overview-card, .correlation-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
