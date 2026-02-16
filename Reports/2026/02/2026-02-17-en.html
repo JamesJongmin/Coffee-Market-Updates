@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta or Alpha: Structural Anatomy of the Coffee Price Decline | February 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Beta or Alpha: Structural Anatomy of the Coffee Price Decline",
+    "subtitle": "Composite Analysis of Soft Commodity Sector Weakness (Beta) and Coffee-Specific Supply Recovery (Alpha)",
+    "date": "2026-02-17",
+    "summary": "In-depth analysis of Arabica coffee futures retreating to 6-month lows around $3.00/lb in February 2026. The decline reflects both Beta factors (cocoa -63%, sugar at 5-year lows, broad soft commodity sector collapse) and Alpha factors (Brazil's record production forecast of 66.2 million bags, Vietnam exports surging +38.3%). CONAB projects Arabica output up 23.2%, with Minas Gerais rainfall at 113% of historical average, triggering a rapid narrative shift from 'deficit' to 'surplus'. ICE certified stocks recovering to 460K bags, while COT data shows sharp reduction in managed money net long positions. Rabobank forecasts 7-10 million bag surplus for 26/27 season, targeting $2.50-3.50/lb range. The 277.25 cents technical support level marks the pivotal point for medium-term trend direction.",
+    "tags": ["beta-analysis", "alpha-analysis", "supply-surplus", "brazil-production", "vietnam-exports", "cocoa-crash", "sugar-decline", "cot-report", "technical-analysis", "price-outlook"],
+    "author": "Coffee Market Info",
+    "sources": ["CONAB", "USDA FAS", "ICE Futures", "CFTC", "Rabobank", "World Bank", "Somar Meteorologia", "Barchart", "Trading Economics", "Vicofa"],
+    "report_type": "in-depth"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --beta: #6366f1;
+            --alpha: #059669;
+            --warning: #d4a017;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--beta), var(--alpha));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* Main Container */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* Hero Header */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--beta), var(--alpha));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--roast);
+            opacity: 0.8;
+            max-width: 680px;
+            line-height: 1.7;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 60px;
+            padding: clamp(40px, 6vh, 60px) 0;
+        }
+
+        @media (max-width: 1100px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        /* Article Content */
+        .article-content {
+            max-width: 720px;
+        }
+
+        .article-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin: 48px 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--steam);
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--roast);
+            margin: 32px 0 16px;
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .article-content strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        /* Highlight Boxes */
+        .highlight-box {
+            background: var(--crema);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box.beta {
+            border-left-color: var(--beta);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0.02));
+        }
+
+        .highlight-box.alpha {
+            border-left-color: var(--alpha);
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(5, 150, 105, 0.02));
+        }
+
+        .highlight-box.warning {
+            border-left-color: var(--warning);
+            background: linear-gradient(135deg, rgba(212, 160, 23, 0.08), rgba(212, 160, 23, 0.02));
+        }
+
+        .highlight-box.negative {
+            border-left-color: var(--negative);
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.08), rgba(194, 58, 58, 0.02));
+        }
+
+        .highlight-title {
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Data Card Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .data-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .data-card.beta-card {
+            border-top: 3px solid var(--beta);
+        }
+
+        .data-card.alpha-card {
+            border-top: 3px solid var(--alpha);
+        }
+
+        .data-label {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .data-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 4px;
+        }
+
+        .data-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .data-change.positive {
+            color: var(--positive);
+        }
+
+        .data-change.negative {
+            color: var(--negative);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 28px 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .comparison-table th {
+            background: var(--crema);
+            font-weight: 600;
+            color: var(--roast);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(184, 115, 51, 0.04);
+        }
+
+        .comparison-table .highlight-row {
+            background: rgba(5, 150, 105, 0.06);
+        }
+
+        /* Scenario Cards */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 28px 0;
+        }
+
+        .scenario-card {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .scenario-header {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, var(--crema), var(--steam));
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .scenario-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 4px;
+        }
+
+        .scenario-probability {
+            font-size: 0.85rem;
+            color: var(--copper);
+            font-weight: 500;
+        }
+
+        .scenario-body {
+            padding: 20px 24px;
+        }
+
+        .scenario-body p {
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .scenario-impact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px dashed var(--steam);
+        }
+
+        .impact-label {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .impact-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        /* Blockquote */
+        blockquote {
+            border-left: 3px solid var(--copper);
+            padding-left: 24px;
+            margin: 28px 0;
+            font-style: italic;
+            color: var(--roast);
+        }
+
+        blockquote cite {
+            display: block;
+            margin-top: 12px;
+            font-style: normal;
+            font-size: 0.9rem;
+            color: var(--copper);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 8px;
+        }
+
+        .toc-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            display: block;
+            padding: 6px 0;
+        }
+
+        .toc-link:hover {
+            color: var(--copper);
+        }
+
+        .key-point {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .key-point:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .key-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--crema);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .key-text {
+            font-size: 0.9rem;
+            color: var(--roast);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            opacity: 0.7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            opacity: 0.4;
+            max-width: 600px;
+        }
+
+        /* Tags */
+        .beta-tag {
+            display: inline-block;
+            background: var(--beta);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .alpha-tag {
+            display: inline-block;
+            background: var(--alpha);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            background: var(--crema);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 28px 0;
+        }
+
+        .flow-title {
+            text-align: center;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+        }
+
+        .flow-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: white;
+            border: 2px solid var(--steam);
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .flow-box.beta {
+            border-color: var(--beta);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), white);
+        }
+
+        .flow-box.alpha {
+            border-color: var(--alpha);
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), white);
+        }
+
+        .flow-box.result {
+            border-color: var(--copper);
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.1), white);
+        }
+
+        .flow-arrow {
+            color: var(--copper);
+            font-size: 1.5rem;
+        }
+
+        .flow-plus {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--roast);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="https://coffeemarket.info" class="nav-link">Home</a>
+            <a href="https://coffeemarket.info/weekly" class="nav-link">Weekly Report</a>
+            <a href="https://coffeemarket.info/indepth" class="nav-link">In-Depth</a>
+        </div>
+    </nav>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- Hero Header -->
+            <header class="hero-header">
+                <div class="report-badge">
+                    <span>📊</span>
+                    <span>In-Depth Analysis</span>
+                </div>
+                
+                <div class="report-meta">
+                    <span class="meta-item">February 17, 2026</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">12 min read</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">Coffee Market Info</span>
+                </div>
+                
+                <h1>Beta (β) or Alpha (α):<br>Structural Anatomy of the Coffee Price Decline</h1>
+                
+                <p class="hero-subtitle">
+                    Arabica coffee has retreated to 6-month lows in early 2026. 
+                    Understanding whether this decline stems from broad soft commodity sector weakness (Beta) 
+                    or coffee-specific supply recovery (Alpha) is essential for predicting market direction.
+                </p>
+            </header>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <main class="article-content">
+                    
+                    <!-- Executive Summary -->
+                    <section id="overview">
+                        <h2>Executive Summary</h2>
+                        
+                        <p>
+                            Arabica coffee prices, which at one point in 2025 exceeded <strong>$4.40 per pound</strong> 
+                            reaching 47-year highs, have sharply retreated to around <strong>$3.00</strong> in February 2026, 
+                            marking 6-month lows. The market that was discussing a 'supercycle' just months ago 
+                            has now begun pricing in a 'surplus' scenario.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-card">
+                                <div class="data-label">Arabica Futures</div>
+                                <div class="data-value">~300¢</div>
+                                <div class="data-change negative">6-month low</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">Monthly Decline</div>
+                                <div class="data-value">-17.4%</div>
+                                <div class="data-change negative">Sharp drop</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">Year-over-Year</div>
+                                <div class="data-value">-31.6%</div>
+                                <div class="data-change negative">YoY</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">52-Week Range</div>
+                                <div class="data-value">277-438¢</div>
+                                <div class="data-change">High volatility</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            This report analyzes the sharp price correction through two frameworks. 
+                            First, the <strong>'Beta'</strong> factor: broad weakness across the soft commodity sector 
+                            including cocoa and sugar. Second, the <strong>'Alpha'</strong> factor: 
+                            coffee-specific supply outlook changes from Brazil and Vietnam.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💡 Key Conclusion</div>
+                            <p>
+                                The recent coffee price decline can be defined as a result where 
+                                <strong>coffee-specific strong supply recovery (Alpha) delivered the decisive blow</strong> 
+                                within an environment of broad soft commodity sector weakness (Beta). 
+                                Brazil's record production forecast and Vietnam's export surge have completely 
+                                reversed the 'deficit' narrative that persisted for years into a 'surplus' story.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Beta Analysis -->
+                    <section id="beta">
+                        <h2>1. Sector-Wide Trends: Beta (β) Analysis</h2>
+                        
+                        <p>
+                            The recent coffee price decline is not an isolated phenomenon. It aligns with 
+                            broad capital outflows and fundamental weakness observed across the entire soft commodity sector. 
+                            The Bloomberg Commodity Total Return Index (BCOM) fell 5.3% in one week in early February 2026, 
+                            giving back a significant portion of its year-to-date gains.
+                        </p>
+
+                        <h3>🍫 Cocoa: Collapse to 27-Month Lows</h3>
+                        
+                        <p>
+                            The most dramatic decline within the soft commodity sector has been in cocoa. 
+                            Cocoa futures, which exceeded $10,000 per tonne in 2025, have crashed to the 
+                            <strong>$3,600-4,000</strong> range as of February 2026, marking 27-month lows.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-card beta-card">
+                                <div class="data-label">Cocoa</div>
+                                <div class="data-value">~$3,780/t</div>
+                                <div class="data-change negative">-62% YoY</div>
+                            </div>
+                            <div class="data-card beta-card">
+                                <div class="data-label">Sugar</div>
+                                <div class="data-value">5-Year Low</div>
+                                <div class="data-change negative">Global surplus</div>
+                            </div>
+                            <div class="data-card beta-card">
+                                <div class="data-label">Cotton</div>
+                                <div class="data-value">Downtrend</div>
+                                <div class="data-change negative">Demand concerns</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            The cocoa collapse occurred as demand destruction at peak prices coincided with 
+                            improving supply recovery prospects in West Africa. StoneX forecasts a global cocoa 
+                            surplus of <strong>287,000 tonnes</strong> for 2025/26 season and <strong>267,000 tonnes</strong> 
+                            for 2026/27. This has triggered a psychological cascade prompting speculative capital 
+                            to liquidate long positions across agricultural commodities.
+                        </p>
+
+                        <div class="highlight-box beta">
+                            <div class="highlight-title"><span class="beta-tag">BETA</span> Cocoa Demand Collapse</div>
+                            <p>
+                                European Q4 cocoa grindings fell <strong>-8.3%</strong> year-over-year to a 12-year low. 
+                                Asia also declined -4.8%. Barry Callebaut, the world's largest bulk chocolate maker, 
+                                reported cocoa division sales volume down <strong>-22%</strong>.
+                            </p>
+                        </div>
+
+                        <h3>🍬 Sugar: 5-Year Lows</h3>
+
+                        <p>
+                            Sugar markets have also extended their 5-month decline, hitting 5.25-year lows. 
+                            Large-scale global supply surpluses are expected for 2025/26 and 2026/27 seasons 
+                            due to production increases in India and Thailand, intensifying downward price pressure.
+                        </p>
+
+                        <p>
+                            The Indian Sugar Mills Association (ISMA) reported 2025/26 season production 
+                            will increase <strong>22%</strong> year-over-year, while Brazil's Center-South region 
+                            sugar production also increased 0.9%, maintaining record-high levels.
+                        </p>
+
+                        <h3>📉 Macro Environment: High Rates and Carrying Costs</h3>
+
+                        <p>
+                            The macro beta factor can be found in sustained high interest rates and dollar volatility. 
+                            In early 2026, the US 10-year Treasury yield stands at <strong>4.06%</strong> and 
+                            the 2-year at <strong>3.42%</strong>, raising the opportunity cost of holding commodity inventories—
+                            the 'carrying cost'.
+                        </p>
+
+                        <div class="flow-diagram">
+                            <div class="flow-title">Beta (β) Contagion Pathway</div>
+                            <div class="flow-row">
+                                <div class="flow-box beta">Cocoa -63%<br>Sugar 5yr Low</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">Ag Long<br>Liquidation</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">Coffee Market<br>Sentiment Weakens</div>
+                            </div>
+                            <div class="flow-row">
+                                <div class="flow-box beta">High Rates 4%+</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">Carrying Cost Rise<br>Inventory Aversion</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">Futures Buying<br>Weakens</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            Roasters and importers are minimizing inventory holdings due to high interest rate burdens, 
+                            adopting <strong>'hand-to-mouth'</strong> purchasing strategies, which structurally 
+                            weakens futures market buying pressure.
+                        </p>
+                    </section>
+
+                    <!-- Alpha Analysis -->
+                    <section id="alpha">
+                        <h2>2. Coffee-Specific Fundamentals: Alpha (α) Analysis</h2>
+
+                        <p>
+                            Despite sector-wide trends, the <strong>most critical driver</strong> explaining 
+                            coffee's steep decline is the 'Alpha' factor: supply outlook changes from the 
+                            two major producing countries, Brazil and Vietnam. The market has begun pricing 
+                            in the possibility of transitioning from years of supply deficits to a 
+                            potentially record-large surplus.
+                        </p>
+
+                        <h3>🇧🇷 Brazil: Record Production Forecast</h3>
+
+                        <p>
+                            Brazil's production outlook is the single largest variable determining coffee's 'Alpha'. 
+                            Brazil's National Supply Company (CONAB) forecast that Brazil's 2026 coffee production 
+                            will increase <strong>17.2%</strong> year-over-year to <strong>66.2 million bags</strong>, 
+                            setting an all-time record.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-card alpha-card">
+                                <div class="data-label">Brazil Total</div>
+                                <div class="data-value">66.2M</div>
+                                <div class="data-change positive">+17.2% YoY</div>
+                            </div>
+                            <div class="data-card alpha-card">
+                                <div class="data-label">Arabica</div>
+                                <div class="data-value">44.1M</div>
+                                <div class="data-change positive">+23.2% YoY</div>
+                            </div>
+                            <div class="data-card alpha-card">
+                                <div class="data-label">Robusta</div>
+                                <div class="data-value">22.1M</div>
+                                <div class="data-change positive">+6.3% YoY</div>
+                            </div>
+                            <div class="data-card alpha-card">
+                                <div class="data-label">Productivity</div>
+                                <div class="data-value">34.2 bags/ha</div>
+                                <div class="data-change positive">+12.4%</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            Behind this optimistic forecast is adequate rainfall in Brazil's key coffee-growing 
+                            regions in early 2026. According to Somar Meteorologia, Minas Gerais—Brazil's largest 
+                            Arabica-producing state—recorded 72.6mm of rainfall in early February, 
+                            <strong>113%</strong> of the historical average.
+                        </p>
+
+                        <div class="highlight-box alpha">
+                            <div class="highlight-title"><span class="alpha-tag">ALPHA</span> Biennial Plus Cycle</div>
+                            <p>
+                                Brazil follows a 'biennial' pattern alternating between high and low yield years. 
+                                2026 represents a <strong>plus (high-yield) cycle</strong>, with cultivated area 
+                                expected to expand 4.1% to nearly 1.9 million hectares. 
+                                Technology investment and improved farming practices are contributing to productivity gains.
+                            </p>
+                        </div>
+
+                        <h3>🇻🇳 Vietnam: Export Surge</h3>
+
+                        <p>
+                            Vietnam, the world's largest Robusta producer, is also presenting a strong Alpha factor 
+                            for price declines. After severe drought-induced production drops in 2024, 
+                            Vietnam has shown clear recovery entering the 2025/26 season.
+                        </p>
+
+                        <p>
+                            Vietnam's Statistics Office reported January 2026 coffee exports surged 
+                            <strong>38.3%</strong> year-over-year to <strong>198,000 tonnes</strong>. 
+                            Export revenue reached <strong>$1.1 billion</strong>, up 39.5%. 
+                            Throughout 2025, Vietnam achieved a record <strong>$8.92 billion</strong> in 
+                            coffee export revenue thanks to elevated prices.
+                        </p>
+
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Agency</th>
+                                    <th>Brazil Forecast (M bags)</th>
+                                    <th>Vietnam Forecast (M bags)</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight-row">
+                                    <td><strong>CONAB</strong></td>
+                                    <td>66.2 (Record)</td>
+                                    <td>-</td>
+                                    <td>Feb 2026 latest</td>
+                                </tr>
+                                <tr>
+                                    <td>USDA FAS</td>
+                                    <td>63.0</td>
+                                    <td>31.0</td>
+                                    <td>Conservative</td>
+                                </tr>
+                                <tr>
+                                    <td>VICOFA</td>
+                                    <td>-</td>
+                                    <td>+6-10% YoY</td>
+                                    <td>Weather favorable</td>
+                                </tr>
+                                <tr>
+                                    <td>Eisa</td>
+                                    <td>75.8</td>
+                                    <td>-</td>
+                                    <td>Most optimistic</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>📦 ICE Certified Stocks Recovery</h3>
+
+                        <p>
+                            The last pillar supporting coffee prices—'low certified stocks'—is also showing change. 
+                            ICE monitored inventories have been gradually recovering since hitting historical lows 
+                            at the end of 2025. Arabica certified stocks fell to 1.75-year lows of 396,000 bags 
+                            in November 2025 but recovered to a 3.25-month high of <strong>461,829 bags</strong> 
+                            by mid-January 2026.
+                        </p>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">⚠️ Narrative Shift</div>
+                            <p>
+                                The physical increase in inventories signals that <strong>supply tightness is easing</strong>—
+                                a powerful signal that suppresses speculative buying interest. 
+                                The market narrative is rapidly shifting from 'shortage' to 'surplus'.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Money Flow -->
+                    <section id="flow">
+                        <h2>3. Speculative Money Flow & COT Analysis</h2>
+
+                        <p>
+                            Coffee price volatility is amplified not just by fundamentals but by positioning changes 
+                            of speculative capital exploiting these fundamentals. The CFTC's Commitments of Traders (COT) 
+                            report clearly illustrates shifting money manager sentiment.
+                        </p>
+
+                        <h3>📉 Managed Money Long Liquidation</h3>
+
+                        <p>
+                            According to the COT report for the week ending February 3, 2026, 
+                            speculative net long positions in the Arabica coffee market have sharply declined. 
+                            The <strong>13.2%</strong> plunge in Arabica prices that week was driven by 
+                            this 'deleveraging' of speculative capital.
+                        </p>
+
+                        <p>
+                            Coupled with increased volatility in precious metals markets, risk-management driven 
+                            selling continued across commodities, primarily consisting of 
+                            <strong>profit-taking and stop-loss selling of existing long positions</strong> 
+                            rather than new short position building.
+                        </p>
+
+                        <h3>🔄 Index Fund Rebalancing</h3>
+
+                        <p>
+                            One characteristic of the coffee market in early 2026 is the capital flow changes 
+                            triggered by cocoa's re-inclusion in the Bloomberg Commodity Index. 
+                            Capital inflows to cocoa can entail relative outflows from other soft commodities 
+                            like coffee and sugar.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💰 Relative Value Trade Hypothesis</div>
+                            <p>
+                                Funds executing intra-sector relative value trades may have been 
+                                <strong>selling 'overvalued coffee'</strong> and <strong>buying 'undervalued (crashed) cocoa'</strong>. 
+                                As the futures market structure shows signs of transitioning from backwardation 
+                                toward contango, inventory holding profitability deteriorates.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Technical Analysis & Outlook -->
+                    <section id="outlook">
+                        <h2>4. Technical Analysis & Price Outlook</h2>
+
+                        <p>
+                            Financial institutions and professional analysts expect coffee prices to stabilize 
+                            lower into H2 2026. This view is based on the belief that 
+                            the supply surplus scenario will gradually materialize.
+                        </p>
+
+                        <div class="scenario-grid">
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">Rabobank Outlook</h4>
+                                    <p class="scenario-probability">End of 2026</p>
+                                </div>
+                                <div class="scenario-body">
+                                    <p>
+                                        Projects approximately 7-10 million bag global supply surplus for 26/27 season
+                                    </p>
+                                    <div class="scenario-impact">
+                                        <span class="impact-label">Target Range</span>
+                                        <span class="impact-value">$2.50 - 3.50/lb</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">World Bank Outlook</h4>
+                                    <p class="scenario-probability">2026-2027</p>
+                                </div>
+                                <div class="scenario-body">
+                                    <p>
+                                        Projects Arabica prices to fall -13% in 2026 and an additional -5% in 2027
+                                    </p>
+                                    <div class="scenario-impact">
+                                        <span class="impact-label">Correction Period</span>
+                                        <span class="impact-value">Extended</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>📐 Key Technical Support</h3>
+
+                        <p>
+                            From a technical analysis perspective, Arabica coffee futures are at a critical juncture. 
+                            On the weekly chart, coffee prices have formed a range between 437.95 and 277.25 cents per pound, 
+                            showing a potential <strong>'Double Top'</strong> reversal pattern.
+                        </p>
+
+                        <div class="highlight-box negative">
+                            <div class="highlight-title">🎯 Key Support: 277.25 cents</div>
+                            <p>
+                                This level serves as the <strong>'neckline'</strong> of the double top pattern. 
+                                If this support breaks, prices could face additional downside to <strong>197.45 cents</strong>. 
+                                Short-term, prices are testing support around 286.60 cents with attempted rebounds, 
+                                but all major moving averages positioned above current prices serve as strong resistance.
+                            </p>
+                        </div>
+
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Technical Indicator</th>
+                                    <th>Level</th>
+                                    <th>Interpretation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10-day MA</td>
+                                    <td>298.80¢</td>
+                                    <td>Short-term resistance</td>
+                                </tr>
+                                <tr>
+                                    <td>40-day MA</td>
+                                    <td>328.76¢</td>
+                                    <td>Medium-term resistance</td>
+                                </tr>
+                                <tr>
+                                    <td>100-day MA</td>
+                                    <td>355.32¢</td>
+                                    <td>Long-term resistance</td>
+                                </tr>
+                                <tr>
+                                    <td>Stochastic</td>
+                                    <td>16.49</td>
+                                    <td>Oversold territory</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- Industry Impact -->
+                    <section id="impact">
+                        <h2>5. Industry Impact: Roaster Cost Structure</h2>
+
+                        <p>
+                            Lower coffee prices represent margin pressure for producers but cost-saving opportunities 
+                            for roasters and consumers. However, there is a time lag before retail prices reflect 
+                            these changes, and the high-rate environment complicates matters.
+                        </p>
+
+                        <h3>💳 Carrying Cost Burden</h3>
+
+                        <p>
+                            The core financial challenge for coffee roasting businesses in 2026 is inventory management. 
+                            Despite green coffee prices declining from 2025 peaks, roasters are avoiding 
+                            large inventory holdings due to interest rates in the <strong>4-5%</strong> range.
+                        </p>
+
+                        <blockquote>
+                            "Carrying Cost (CC) can be derived from the formula: 
+                            <strong>CC = (Q × P × i) + (Q × S)</strong>. 
+                            Where Q is inventory quantity, P is purchase price, i is interest rate, 
+                            and S is storage and insurance cost. Even if P declines, 
+                            high i limits the reduction in total carrying costs."
+                        </blockquote>
+
+                        <h3>⏳ Supply Chain Lag Effect</h3>
+
+                        <p>
+                            As of February 2026, consumers still face high coffee prices at cafes and supermarkets. 
+                            This is because roasters are still working through forward contract volumes 
+                            secured at 2025's elevated prices.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">📅 Price Reflection Lag</div>
+                            <p>
+                                According to industry analysis, raw material price declines typically take 
+                                <strong>3-6 months</strong> to reflect in retail prices. Recent labor cost and 
+                                rent increases are offsetting coffee raw material cost declines, meaning 
+                                retail price reductions will likely fall short of futures price declines.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Conclusion -->
+                    <section id="conclusion">
+                        <h2>Conclusion & Outlook</h2>
+
+                        <div class="flow-diagram">
+                            <div class="flow-title">Beta + Alpha = Price Decline</div>
+                            <div class="flow-row">
+                                <div class="flow-box beta">
+                                    <strong>Beta Factors</strong><br>
+                                    Cocoa -63%<br>
+                                    Sugar 5yr Low<br>
+                                    High Rate Liquidity Drain
+                                </div>
+                                <span class="flow-plus">+</span>
+                                <div class="flow-box alpha">
+                                    <strong>Alpha Factors</strong><br>
+                                    Brazil 66.2M bags<br>
+                                    Vietnam +38.3% exports<br>
+                                    Weather Improvement
+                                </div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box result">
+                                    <strong>Result</strong><br>
+                                    6-Month Low<br>
+                                    ~300¢/lb<br>
+                                    Surplus Narrative
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>
+                            The recent coffee futures price decline can be defined as a result where 
+                            coffee-specific strong supply recovery (Alpha) delivered the decisive blow 
+                            within an environment of broad soft commodity sector weakness (Beta).
+                        </p>
+
+                        <h3>1️⃣ Beta Factors</h3>
+                        <p>
+                            The collapse of same-sector commodities including cocoa (-63%) and sugar (5-year lows) 
+                            dampened speculative buying sentiment in coffee markets. Additionally, 
+                            the high-rate environment induced broad liquidity contraction, 
+                            exerting downward pressure across commodities.
+                        </p>
+
+                        <h3>2️⃣ Alpha Factors</h3>
+                        <p>
+                            Brazil's 2026 record production forecast (66.2 million bags) and Vietnam's export surge 
+                            (January +38.3%) have completely reversed the 'deficit' narrative that persisted for years 
+                            into a 'surplus' story. Notably, the dramatic weather improvement has removed 
+                            production uncertainty.
+                        </p>
+
+                        <h3>3️⃣ Forward Outlook</h3>
+                        <p>
+                            Technically, <strong>whether the 277.25 cents support holds</strong> will determine 
+                            the long-term trend. Downward pressure is expected to dominate until Brazil's harvest 
+                            ramps up in mid-2026, with Rabobank's <strong>$2.50-3.50 band</strong> likely forming 
+                            the new trading range.
+                        </p>
+
+                        <div class="highlight-box alpha">
+                            <div class="highlight-title">🧭 Guidance for Market Participants</div>
+                            <p>
+                                The current decline reflects a process where <strong>coffee market fundamentals 
+                                are structurally improving</strong>, beyond mere sector contagion. 
+                                Investors and industry participants should monitor Brazil's actual harvest yields 
+                                and Vietnam's La Niña probability while formulating strategies to maximize 
+                                inventory efficiency under the high-rate environment.
+                            </p>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Contents</h3>
+                        <ul class="toc-list">
+                            <li class="toc-item"><a href="#overview" class="toc-link">Executive Summary</a></li>
+                            <li class="toc-item"><a href="#beta" class="toc-link">1. Beta (β) Analysis</a></li>
+                            <li class="toc-item"><a href="#alpha" class="toc-link">2. Alpha (α) Analysis</a></li>
+                            <li class="toc-item"><a href="#flow" class="toc-link">3. Money Flow & COT</a></li>
+                            <li class="toc-item"><a href="#outlook" class="toc-link">4. Technical & Outlook</a></li>
+                            <li class="toc-item"><a href="#impact" class="toc-link">5. Industry Impact</a></li>
+                            <li class="toc-item"><a href="#conclusion" class="toc-link">Conclusion</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Key Figures</h3>
+                        <div class="key-point">
+                            <div class="key-icon">📉</div>
+                            <div class="key-text"><strong>~300¢/lb</strong><br>Arabica 6-month low</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇧🇷</div>
+                            <div class="key-text"><strong>66.2M bags</strong><br>Brazil record forecast</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇻🇳</div>
+                            <div class="key-text"><strong>+38.3%</strong><br>Vietnam Jan exports</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🍫</div>
+                            <div class="key-text"><strong>-62% YoY</strong><br>Cocoa 27-month low</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📦</div>
+                            <div class="key-text"><strong>462K bags</strong><br>ICE certified stocks</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Price Outlook</h3>
+                        <div class="key-point">
+                            <div class="key-icon">🏦</div>
+                            <div class="key-text"><strong>Rabobank</strong><br>$2.50-3.50/lb (YE26)</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🌐</div>
+                            <div class="key-text"><strong>World Bank</strong><br>-13% (2026)</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🎯</div>
+                            <div class="key-text"><strong>Key Support</strong><br>277.25¢</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Beta vs Alpha</h3>
+                        <div class="key-point">
+                            <div class="key-icon" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));">β</div>
+                            <div class="key-text"><strong>Beta</strong><br>Sector weakness, high rates</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(5, 150, 105, 0.1));">α</div>
+                            <div class="key-text"><strong>Alpha</strong><br>Supply recovery, weather</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Sources</h3>
+                        <div class="key-point">
+                            <div class="key-icon">📄</div>
+                            <div class="key-text">CONAB Coffee Crop Survey</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📊</div>
+                            <div class="key-text">CFTC COT Reports</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🌍</div>
+                            <div class="key-text">Rabobank, World Bank</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📈</div>
+                            <div class="key-text">Trading Economics, Barchart</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        Providing in-depth analysis and insights on global coffee markets. 
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">CONAB, USDA FAS</span>
+                    <span class="footer-link" style="cursor: default;">ICE Futures, CFTC</span>
+                    <span class="footer-link" style="cursor: default;">Rabobank, World Bank</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2026 Coffee Market Info. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice. 
+                    All investment decisions should be made based on the reader's independent judgment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // Navigation scroll effect
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

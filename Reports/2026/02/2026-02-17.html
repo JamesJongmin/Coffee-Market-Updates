@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>베타인가, 알파인가: 커피 가격 하락의 구조적 해부 | 2026년 2월</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!--REPORT_META
+{
+    "title": "베타인가, 알파인가: 커피 가격 하락의 구조적 해부",
+    "subtitle": "소프트 원자재 섹터 동반 약세(Beta)와 커피 고유 공급 회복(Alpha)의 복합 분석",
+    "date": "2026-02-17",
+    "summary": "2026년 2월 아라비카 커피 선물이 6개월래 최저치인 $3.00/lb 수준으로 후퇴한 배경을 심층 분석. 코코아(-63%), 설탕(5년래 최저) 등 소프트 원자재 섹터 전반의 붕괴라는 베타(Beta) 요인과, 브라질 역대 최대 생산 전망(6,620만 포대), 베트남 수출 급증(+38.3%)이라는 알파(Alpha) 요인이 복합적으로 작용. CONAB의 아라비카 생산량 23.2% 증가 전망, 미나스제라이스 강우량 평균 113% 달성으로 '공급 부족'에서 '공급 과잉' 내러티브로 급격한 전환. ICE 인증 재고 46만 포대로 회복 조짐, COT 데이터상 머니 매니저 순매수 포지션 급감. 라보뱅크는 26/27 시즌 7-10백만 포대 과잉 전망하며 $2.50-3.50/lb 박스권 제시. 277.25센트 기술적 지지선이 중장기 추세의 분기점.",
+    "tags": ["베타분석", "알파분석", "공급과잉", "브라질생산", "베트남수출", "코코아폭락", "설탕하락", "COT리포트", "기술적분석", "가격전망"],
+    "author": "Coffee Market Info",
+    "sources": ["CONAB", "USDA FAS", "ICE Futures", "CFTC", "Rabobank", "World Bank", "Somar Meteorologia", "Barchart", "Trading Economics", "Vicofa"],
+    "report_type": "in-depth"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+            --beta: #6366f1;
+            --alpha: #059669;
+            --warning: #d4a017;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 상단 네비게이션 바 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--copper);
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--beta), var(--alpha));
+            width: 0%;
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* 메인 컨테이너 */
+        .page-wrapper {
+            padding-top: 56px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        /* 히어로 헤더 */
+        .hero-header {
+            padding: clamp(60px, 10vh, 100px) 0 clamp(40px, 8vh, 60px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        .report-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--beta), var(--alpha));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-divider {
+            color: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            color: var(--espresso);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--roast);
+            opacity: 0.8;
+            max-width: 680px;
+            line-height: 1.7;
+        }
+
+        /* 콘텐츠 그리드 */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 60px;
+            padding: clamp(40px, 6vh, 60px) 0;
+        }
+
+        @media (max-width: 1100px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        /* 본문 스타일 */
+        .article-content {
+            max-width: 720px;
+        }
+
+        .article-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin: 48px 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--steam);
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--roast);
+            margin: 32px 0 16px;
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+            text-align: justify;
+            word-break: keep-all;
+        }
+
+        .article-content strong {
+            color: var(--espresso);
+            font-weight: 600;
+        }
+
+        /* 하이라이트 박스 */
+        .highlight-box {
+            background: var(--crema);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box.beta {
+            border-left-color: var(--beta);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0.02));
+        }
+
+        .highlight-box.alpha {
+            border-left-color: var(--alpha);
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(5, 150, 105, 0.02));
+        }
+
+        .highlight-box.warning {
+            border-left-color: var(--warning);
+            background: linear-gradient(135deg, rgba(212, 160, 23, 0.08), rgba(212, 160, 23, 0.02));
+        }
+
+        .highlight-box.negative {
+            border-left-color: var(--negative);
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.08), rgba(194, 58, 58, 0.02));
+        }
+
+        .highlight-title {
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        /* 데이터 카드 그리드 */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .data-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .data-card.beta-card {
+            border-top: 3px solid var(--beta);
+        }
+
+        .data-card.alpha-card {
+            border-top: 3px solid var(--alpha);
+        }
+
+        .data-label {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .data-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--espresso);
+            margin-bottom: 4px;
+        }
+
+        .data-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .data-change.positive {
+            color: var(--positive);
+        }
+
+        .data-change.negative {
+            color: var(--negative);
+        }
+
+        /* 비교 테이블 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 28px 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .comparison-table th {
+            background: var(--crema);
+            font-weight: 600;
+            color: var(--roast);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(184, 115, 51, 0.04);
+        }
+
+        .comparison-table .highlight-row {
+            background: rgba(5, 150, 105, 0.06);
+        }
+
+        /* 시나리오 카드 */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 28px 0;
+        }
+
+        .scenario-card {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .scenario-header {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, var(--crema), var(--steam));
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .scenario-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 4px;
+        }
+
+        .scenario-probability {
+            font-size: 0.85rem;
+            color: var(--copper);
+            font-weight: 500;
+        }
+
+        .scenario-body {
+            padding: 20px 24px;
+        }
+
+        .scenario-body p {
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .scenario-impact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px dashed var(--steam);
+        }
+
+        .impact-label {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .impact-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        /* 인용 */
+        blockquote {
+            border-left: 3px solid var(--copper);
+            padding-left: 24px;
+            margin: 28px 0;
+            font-style: italic;
+            color: var(--roast);
+        }
+
+        blockquote cite {
+            display: block;
+            margin-top: 12px;
+            font-style: normal;
+            font-size: 0.9rem;
+            color: var(--copper);
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border: 1px solid var(--steam);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 8px;
+        }
+
+        .toc-link {
+            color: var(--roast);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            display: block;
+            padding: 6px 0;
+        }
+
+        .toc-link:hover {
+            color: var(--copper);
+        }
+
+        .key-point {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--steam);
+        }
+
+        .key-point:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .key-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--crema);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .key-text {
+            font-size: 0.9rem;
+            color: var(--roast);
+            line-height: 1.5;
+        }
+
+        /* 푸터 */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            opacity: 0.7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.8rem;
+            opacity: 0.4;
+            max-width: 600px;
+        }
+
+        /* 태그 스타일 */
+        .beta-tag {
+            display: inline-block;
+            background: var(--beta);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .alpha-tag {
+            display: inline-block;
+            background: var(--alpha);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        /* 플로우차트 스타일 */
+        .flow-diagram {
+            background: var(--crema);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 28px 0;
+        }
+
+        .flow-title {
+            text-align: center;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+        }
+
+        .flow-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: white;
+            border: 2px solid var(--steam);
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .flow-box.beta {
+            border-color: var(--beta);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), white);
+        }
+
+        .flow-box.alpha {
+            border-color: var(--alpha);
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), white);
+        }
+
+        .flow-box.result {
+            border-color: var(--copper);
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.1), white);
+        }
+
+        .flow-arrow {
+            color: var(--copper);
+            font-size: 1.5rem;
+        }
+
+        .flow-plus {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--roast);
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="https://coffeemarket.info" class="nav-link">홈</a>
+            <a href="https://coffeemarket.info/weekly" class="nav-link">주간 리포트</a>
+            <a href="https://coffeemarket.info/indepth" class="nav-link">인뎁스</a>
+        </div>
+    </nav>
+
+    <!-- 스크롤 프로그레스 -->
+    <div class="scroll-progress"></div>
+
+    <div class="page-wrapper">
+        <div class="main-container">
+            <!-- 히어로 헤더 -->
+            <header class="hero-header">
+                <div class="report-badge">
+                    <span>📊</span>
+                    <span>In-Depth Analysis</span>
+                </div>
+                
+                <div class="report-meta">
+                    <span class="meta-item">2026년 2월 17일</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">읽는 시간 약 12분</span>
+                    <span class="meta-divider">•</span>
+                    <span class="meta-item">Coffee Market Info</span>
+                </div>
+                
+                <h1>베타(β)인가, 알파(α)인가:<br>커피 가격 하락의 구조적 해부</h1>
+                
+                <p class="hero-subtitle">
+                    2026년 초 아라비카 커피가 6개월래 최저치로 후퇴했다. 
+                    이 하락이 소프트 원자재 섹터 전반의 동반 약세(Beta)인지, 
+                    아니면 커피 시장 고유의 공급 회복(Alpha)에 기인한 것인지를 
+                    규명하는 것은 향후 시장 방향성 예측의 핵심이다.
+                </p>
+            </header>
+
+            <!-- 콘텐츠 그리드 -->
+            <div class="content-grid">
+                <main class="article-content">
+                    
+                    <!-- Executive Summary -->
+                    <section id="overview">
+                        <h2>Executive Summary</h2>
+                        
+                        <p>
+                            2025년 한때 파운드당 <strong>$4.40</strong>를 상회하며 47년 만의 최고치를 기록했던 
+                            아라비카 커피 가격은 2026년 2월 들어 6개월 만의 최저치인 <strong>$3.00</strong> 수준으로 
+                            급격히 후퇴했다. 불과 수개월 전만 해도 '슈퍼사이클'을 논하던 시장은 이제 
+                            '공급 과잉(Surplus)' 시나리오를 가격에 반영하기 시작했다.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-card">
+                                <div class="data-label">아라비카 선물</div>
+                                <div class="data-value">~300¢</div>
+                                <div class="data-change negative">6개월래 최저</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">월간 하락률</div>
+                                <div class="data-value">-17.4%</div>
+                                <div class="data-change negative">급락</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">연간 대비</div>
+                                <div class="data-value">-31.6%</div>
+                                <div class="data-change negative">YoY</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">52주 레인지</div>
+                                <div class="data-value">277-438¢</div>
+                                <div class="data-change">고변동성</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            본 리포트는 이 급격한 가격 조정의 원인을 두 가지 프레임으로 분석한다.
+                            첫째, 코코아와 설탕 등 소프트 원자재 섹터 전반의 동반 하락이라는 
+                            <strong>'베타(Beta)'</strong> 요인. 둘째, 브라질과 베트남의 공급 전망 변화라는 
+                            커피 시장 고유의 <strong>'알파(Alpha)'</strong> 요인이다.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💡 핵심 결론</div>
+                            <p>
+                                최근의 커피 가격 하락은 소프트 원자재 섹터의 동반 약세라는 베타적 환경 속에서, 
+                                <strong>커피 시장만의 강력한 공급 회복이라는 알파적 요인이 결정타를 날린 결과</strong>로 정의할 수 있다. 
+                                브라질의 역대 최대 생산 전망과 베트남의 수출 급증은 
+                                지난 수년간 지속된 '공급 부족' 내러티브를 '공급 과잉'으로 완전히 뒤바꿨다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 베타 분석 -->
+                    <section id="beta">
+                        <h2>1. 섹터 전반의 흐름: 베타(β) 분석</h2>
+                        
+                        <p>
+                            최근 커피 가격의 하락은 고립된 현상이 아니다. 소프트 원자재 섹터 전반에서 
+                            관찰되는 광범위한 자금 이탈 및 펀더멘탈 약화와 궤를 같이하고 있다. 
+                            블룸버그 원자재 총수익 지수(BCOM)는 2026년 2월 초 한 주 동안 5.3% 하락하며 
+                            연초의 상승분을 상당 부분 반납했다.
+                        </p>
+
+                        <h3>🍫 코코아: 27개월래 최저치로 붕괴</h3>
+                        
+                        <p>
+                            소프트 원자재 섹터 내에서 가장 극적인 하락을 보인 것은 코코아 시장이다. 
+                            2025년 톤당 $10,000를 돌파했던 코코아 선물 가격은 2026년 2월 현재 
+                            <strong>$3,600~4,000</strong> 선으로 추락하며 27개월 만의 최저치를 기록했다.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-card beta-card">
+                                <div class="data-label">코코아</div>
+                                <div class="data-value">~$3,780/톤</div>
+                                <div class="data-change negative">-62% YoY</div>
+                            </div>
+                            <div class="data-card beta-card">
+                                <div class="data-label">설탕</div>
+                                <div class="data-value">5년래 최저</div>
+                                <div class="data-change negative">글로벌 과잉</div>
+                            </div>
+                            <div class="data-card beta-card">
+                                <div class="data-label">면화</div>
+                                <div class="data-value">하향 추세</div>
+                                <div class="data-change negative">수요 불안</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            코코아의 붕괴는 고점에서의 수요 위축과 서아프리카 지역의 공급 회복 전망이 
+                            맞물리면서 발생했다. StoneX는 2025/26 시즌 글로벌 코코아 과잉을 
+                            <strong>287,000톤</strong>, 2026/27 시즌은 <strong>267,000톤</strong>으로 전망했다. 
+                            이는 동일 섹터 내 투기 자금들이 농산물 전반에 대한 롱 포지션을 청산하게 만드는 
+                            심리적 트리거로 작용했다.
+                        </p>
+
+                        <div class="highlight-box beta">
+                            <div class="highlight-title"><span class="beta-tag">BETA</span> 코코아 시장의 수요 붕괴</div>
+                            <p>
+                                유럽 4분기 코코아 그라인딩이 전년 대비 <strong>-8.3%</strong> 감소하며 
+                                12년래 최저치를 기록. 아시아에서도 -4.8% 하락. 
+                                세계 최대 벌크 초콜릿 제조사 Barry Callebaut는 코코아 부문 판매량이 
+                                <strong>-22%</strong> 급감했다고 보고했다.
+                            </p>
+                        </div>
+
+                        <h3>🍬 설탕: 5년래 최저치 경신</h3>
+
+                        <p>
+                            설탕 시장 또한 5개월간의 장기 하락세를 이어가며 5.25년 만의 최저치를 경신하고 있다. 
+                            인도와 태국의 생산량 증가로 인해 2025/26 시즌과 2026/27 시즌에 걸쳐 
+                            대규모 글로벌 공급 과잉이 예상되면서 가격 하방 압력이 가중되고 있다.
+                        </p>
+
+                        <p>
+                            인도 설탕 밀 협회(ISMA)는 2025/26 시즌 생산량이 전년 대비 <strong>22%</strong> 증가할 것으로 
+                            보고했으며, 브라질 중남부 지역 설탕 생산량 또한 0.9% 증가하며 사상 최고 수준을 유지하고 있다.
+                        </p>
+
+                        <h3>📉 매크로 환경: 고금리와 캐리 비용</h3>
+
+                        <p>
+                            매크로 측면에서의 베타 요인은 고금리 유지와 달러화의 변동성에서 찾을 수 있다. 
+                            2026년 초 미국 국채 10년물 금리는 <strong>4.06%</strong>, 2년물 금리는 <strong>3.42%</strong> 수준에서 
+                            형성되어 있으며, 이는 원자재 재고를 보유하는 데 드는 기회비용인 
+                            '캐리 비용(Carrying Cost)'을 높이는 결과를 초래한다.
+                        </p>
+
+                        <div class="flow-diagram">
+                            <div class="flow-title">베타(β) 요인의 전염 경로</div>
+                            <div class="flow-row">
+                                <div class="flow-box beta">코코아 -63%<br>설탕 5년 최저</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">농산물 롱<br>포지션 청산</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">커피 시장<br>심리 위축</div>
+                            </div>
+                            <div class="flow-row">
+                                <div class="flow-box beta">고금리 4%+</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">캐리 비용 상승<br>재고 비축 기피</div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box beta">선물 매수세<br>약화</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            로스터와 임포터들은 높은 이자율 부담으로 인해 재고 비축을 최소화하고 
+                            필요할 때만 구매하는 <strong>'핸드 투 마우스(Hand-to-mouth)'</strong> 전략을 취하고 있으며, 
+                            이는 선물 시장의 매수세를 약화시키는 구조적 요인이 된다.
+                        </p>
+                    </section>
+
+                    <!-- 알파 분석 -->
+                    <section id="alpha">
+                        <h2>2. 커피 시장 고유의 펀더멘탈: 알파(α) 분석</h2>
+
+                        <p>
+                            섹터 전반의 흐름에도 불구하고, 최근 커피 가격의 가파른 하락을 설명하는 
+                            <strong>가장 핵심적인 동력</strong>은 브라질과 베트남이라는 양대 생산국의 
+                            공급 전망 변화라는 '알파' 요인에 있다. 시장은 지난 수년간의 
+                            공급 부족(Deficit) 국면이 종료되고 사상 최대 규모의 공급 과잉(Surplus) 국면으로 
+                            진입할 가능성을 가격에 반영하기 시작했다.
+                        </p>
+
+                        <h3>🇧🇷 브라질: 역대 최대 생산 전망</h3>
+
+                        <p>
+                            브라질의 생산 전망은 커피 시장의 '알파'를 결정짓는 가장 큰 변수다. 
+                            브라질 농산물 공급 공사(CONAB)는 2026년 브라질 커피 생산량이 
+                            전년 대비 <strong>17.2%</strong> 증가한 <strong>6,620만 포대</strong>에 달해 
+                            역대 최고 기록을 경신할 것으로 예측했다.
+                        </p>
+
+                        <div class="data-grid">
+                            <div class="data-card alpha-card">
+                                <div class="data-label">브라질 총 생산</div>
+                                <div class="data-value">6,620만</div>
+                                <div class="data-change positive">+17.2% YoY</div>
+                            </div>
+                            <div class="data-card alpha-card">
+                                <div class="data-label">아라비카</div>
+                                <div class="data-value">4,410만</div>
+                                <div class="data-change positive">+23.2% YoY</div>
+                            </div>
+                            <div class="data-card alpha-card">
+                                <div class="data-label">로부스타</div>
+                                <div class="data-value">2,210만</div>
+                                <div class="data-change positive">+6.3% YoY</div>
+                            </div>
+                            <div class="data-card alpha-card">
+                                <div class="data-label">생산성</div>
+                                <div class="data-value">34.2 백/ha</div>
+                                <div class="data-change positive">+12.4%</div>
+                            </div>
+                        </div>
+
+                        <p>
+                            이러한 낙관적인 전망의 배경에는 2026년 초 브라질 주요 커피 재배 지역에 내린 
+                            충분한 강우량이 있다. 소마르 메테오롤로지아(Somar Meteorologia)의 보고에 따르면, 
+                            브라질 최대 아라비카 산지인 미나스제라이스 지역은 2월 초 한 주 동안 
+                            역사적 평균의 <strong>113%</strong>에 해당하는 72.6mm의 비를 기록했다.
+                        </p>
+
+                        <div class="highlight-box alpha">
+                            <div class="highlight-title"><span class="alpha-tag">ALPHA</span> 바이엔니얼 플러스 사이클</div>
+                            <p>
+                                브라질은 격년으로 고수확/저수확이 반복되는 '바이엔니얼' 패턴을 따른다. 
+                                2026년은 <strong>플러스(고수확) 사이클</strong>에 해당하며, 
+                                재배 면적이 4.1% 확대되어 190만 헥타르에 달할 전망이다. 
+                                기술 투자와 개선된 영농 기법이 생산성 향상에 기여하고 있다.
+                            </p>
+                        </div>
+
+                        <h3>🇻🇳 베트남: 수출 급증</h3>
+
+                        <p>
+                            세계 최대 로부스타 생산국인 베트남의 공급 상황 또한 가격 하락의 
+                            강력한 알파 요인이다. 2024년 극심한 가뭄으로 생산량이 급감했던 베트남은 
+                            2025/26 시즌에 들어서며 뚜렷한 회복세를 보이고 있다.
+                        </p>
+
+                        <p>
+                            베트남 통계청은 2026년 1월 커피 수출이 전년 동기 대비 <strong>38.3%</strong> 급증한 
+                            <strong>198,000톤</strong>에 달했다고 발표했다. 수출 금액은 <strong>$11억</strong>으로 
+                            39.5% 증가했다. 2025년 한 해 동안 베트남은 높은 가격 덕분에 
+                            <strong>89억 2천만 달러</strong>라는 기록적인 수출 실적을 올렸다.
+                        </p>
+
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>기관</th>
+                                    <th>브라질 전망 (백만 포대)</th>
+                                    <th>베트남 전망 (백만 포대)</th>
+                                    <th>특이 사항</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight-row">
+                                    <td><strong>CONAB</strong></td>
+                                    <td>66.2 (역대 최대)</td>
+                                    <td>-</td>
+                                    <td>2026년 2월 최신</td>
+                                </tr>
+                                <tr>
+                                    <td>USDA FAS</td>
+                                    <td>63.0</td>
+                                    <td>31.0</td>
+                                    <td>보수적 전망</td>
+                                </tr>
+                                <tr>
+                                    <td>VICOFA</td>
+                                    <td>-</td>
+                                    <td>전년 대비 +6~10%</td>
+                                    <td>기상 조건 양호</td>
+                                </tr>
+                                <tr>
+                                    <td>Eisa</td>
+                                    <td>75.8</td>
+                                    <td>-</td>
+                                    <td>최대 낙관 전망</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>📦 ICE 인증 재고 회복 조짐</h3>
+
+                        <p>
+                            커피 가격을 지지하던 마지막 보루인 '낮은 인증 재고' 수치도 변화하고 있다. 
+                            ICE 모니터링 재고는 2025년 말 역사적 저점을 찍은 이후 서서히 회복 중이다. 
+                            아라비카 인증 재고는 2025년 11월 1.75년 만의 최저치인 39만 6천 포대까지 
+                            떨어졌으나, 2026년 1월 중순에는 3.25개월 만의 최고치인 
+                            <strong>46만 1,829포대</strong>까지 늘어났다.
+                        </p>
+
+                        <div class="highlight-box warning">
+                            <div class="highlight-title">⚠️ 내러티브의 전환</div>
+                            <p>
+                                재고의 물리적 증가는 <strong>수급 타이트함이 해소</strong>되고 있음을 시사하는 
+                                강력한 신호로 작용하며 투기적 매수세의 유입을 억제하고 있다. 
+                                시장의 스토리가 '부족'에서 '과잉'으로 급격히 전환되는 국면이다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 자금 흐름 -->
+                    <section id="flow">
+                        <h2>3. 투기적 자금 흐름 및 COT 분석</h2>
+
+                        <p>
+                            커피 가격의 변동성은 펀더멘탈뿐만 아니라 이를 이용하는 투기적 자금의 
+                            포지션 변화에 의해 증폭된다. CFTC가 발표하는 COT(Commitments of Traders) 
+                            보고서는 머니 매니저들의 심리 변화를 극명하게 보여준다.
+                        </p>
+
+                        <h3>📉 머니 매니저의 롱 포지션 청산</h3>
+
+                        <p>
+                            2026년 2월 3일로 종료된 주간의 COT 보고서에 따르면, 
+                            아라비카 커피 시장에서 투기 세력의 순매수(Net Long) 포지션이 급격히 줄어들었다. 
+                            아라비카 가격이 해당 주에만 <strong>13.2%</strong> 급락한 배경에는 
+                            이러한 투기 자금의 '디레버리징(Deleveraging)'이 자리 잡고 있다.
+                        </p>
+
+                        <p>
+                            특히 귀금속 시장의 변동성 확대와 맞물려 원자재 전반에 대한 
+                            위험 관리 차원의 매도세가 이어졌으며, 이는 새로운 숏 포지션 구축보다는 
+                            <strong>기존 롱 포지션의 이익 실현 및 손절매 물량</strong>이 주를 이루었다.
+                        </p>
+
+                        <h3>🔄 인덱스 펀드 리밸런싱</h3>
+
+                        <p>
+                            2026년 초 커피 시장의 특징 중 하나는 코코아가 블룸버그 원자재 지수에 
+                            재편입되면서 발생한 자금의 흐름 변화다. 코코아로의 자금 유입은 상대적으로 
+                            다른 소프트 원자재인 커피나 설탕에서의 자금 유출을 수반할 수 있다.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">💰 상대 가치 매매 가설</div>
+                            <p>
+                                섹터 내 상대 가치 매매를 수행하는 펀드들이 
+                                <strong>'고평가된 커피'를 매도</strong>하고 <strong>'저평가된(폭락한) 코코아'를 매수</strong>하는 
+                                전략을 취했을 가능성이 제기된다. 선물 시장의 구조가 
+                                백워데이션에서 점차 콘탱고로 전환될 조짐을 보이면서, 
+                                재고 보유에 따른 수익성이 악화되고 있다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 기술적 분석 및 전망 -->
+                    <section id="outlook">
+                        <h2>4. 기술적 분석 및 가격 전망</h2>
+
+                        <p>
+                            금융 기관들과 전문 분석가들은 2026년 하반기로 갈수록 
+                            커피 가격이 하향 안정화될 것으로 보고 있다. 
+                            이는 공급 과잉 시나리오가 점차 현실화될 것이라는 믿음에 근거한다.
+                        </p>
+
+                        <div class="scenario-grid">
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">라보뱅크 전망</h4>
+                                    <p class="scenario-probability">2026년 말 기준</p>
+                                </div>
+                                <div class="scenario-body">
+                                    <p>
+                                        26/27 시즌에 약 7~10백만 포대 규모의 대규모 글로벌 공급 과잉 발생 전망
+                                    </p>
+                                    <div class="scenario-impact">
+                                        <span class="impact-label">예상 가격대</span>
+                                        <span class="impact-value">$2.50 - 3.50/lb</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-card">
+                                <div class="scenario-header">
+                                    <h4 class="scenario-title">세계은행 전망</h4>
+                                    <p class="scenario-probability">2026-2027년</p>
+                                </div>
+                                <div class="scenario-body">
+                                    <p>
+                                        아라비카 가격이 2026년에 -13%, 2027년에 추가 -5% 하락 예상
+                                    </p>
+                                    <div class="scenario-impact">
+                                        <span class="impact-label">조정 기간</span>
+                                        <span class="impact-value">장기화 전망</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>📐 핵심 기술적 지지선</h3>
+
+                        <p>
+                            기술적 분석 측면에서 아라비카 커피 선물은 중대한 시험대에 올라 있다. 
+                            주간 차트상에서 커피 가격은 파운드당 437.95센트와 277.25센트 사이의 
+                            범위를 형성하며 잠재적인 <strong>'더블 탑(Double Top)'</strong> 반전 패턴을 보이고 있다.
+                        </p>
+
+                        <div class="highlight-box negative">
+                            <div class="highlight-title">🎯 핵심 지지선: 277.25센트</div>
+                            <p>
+                                이 가격대는 더블 탑 패턴의 <strong>'넥라인(Neckline)'</strong>으로 작용한다. 
+                                이 지지선이 무너질 경우 가격은 <strong>197.45센트</strong> 수준까지 
+                                추가 폭락할 가능성이 열려 있다. 단기적으로는 286.60센트 선에서 
+                                지지를 확인하며 반등을 시도하고 있으나, 
+                                주요 이동평균선들이 모두 현재 가격 위에 위치하며 강력한 저항선 역할을 하고 있다.
+                            </p>
+                        </div>
+
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>기술적 지표</th>
+                                    <th>수치</th>
+                                    <th>해석</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10일 이동평균</td>
+                                    <td>298.80¢</td>
+                                    <td>단기 저항</td>
+                                </tr>
+                                <tr>
+                                    <td>40일 이동평균</td>
+                                    <td>328.76¢</td>
+                                    <td>중기 저항</td>
+                                </tr>
+                                <tr>
+                                    <td>100일 이동평균</td>
+                                    <td>355.32¢</td>
+                                    <td>장기 저항</td>
+                                </tr>
+                                <tr>
+                                    <td>스토캐스틱</td>
+                                    <td>16.49</td>
+                                    <td>과매도 영역</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- 산업적 영향 -->
+                    <section id="impact">
+                        <h2>5. 산업적 영향: 로스터의 비용 구조</h2>
+
+                        <p>
+                            커피 가격의 하락은 생산자들에게는 수익 악화 요인이지만, 
+                            로스터와 소비자들에게는 비용 절감의 기회가 된다. 
+                            하지만 실제 소매 가격에 반영되기까지는 시차가 존재하며, 
+                            고금리 환경이 이를 복잡하게 만든다.
+                        </p>
+
+                        <h3>💳 재고 유지 비용 (Carrying Cost)</h3>
+
+                        <p>
+                            2026년 현재 커피 로스팅 사업의 핵심적인 재무적 과제는 원두 재고 관리다. 
+                            생두 가격이 2025년 고점 대비 하락했음에도 불구하고, 
+                            로스터들은 <strong>4~5%</strong>에 달하는 높은 금리 때문에 
+                            대규모 재고를 보유하는 것을 기피하고 있다.
+                        </p>
+
+                        <blockquote>
+                            "재고 유지 비용(CC)은 다음과 같은 산식으로 도출할 수 있다: 
+                            <strong>CC = (Q × P × i) + (Q × S)</strong>. 
+                            여기서 Q는 재고 수량, P는 구매 단가, i는 이자율, S는 보관 및 보험 비용이다. 
+                            P가 하락하더라도 i가 높게 유지되면 총 유지 비용의 하락 폭은 제한적이다."
+                        </blockquote>
+
+                        <h3>⏳ 유통망의 지연 효과 (Lag Effect)</h3>
+
+                        <p>
+                            2026년 2월 현재 소비자들은 여전히 카페와 마트에서 높은 커피 가격을 마주하고 있다. 
+                            이는 로스터들이 2025년의 높은 가격대에서 체결한 선도 계약 물량을 
+                            여전히 소진 중이기 때문이다.
+                        </p>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">📅 가격 반영 시차</div>
+                            <p>
+                                업계 분석에 따르면 원자재 가격 하락이 소매가에 반영되는 데는 보통 
+                                <strong>3~6개월</strong>의 시차가 발생한다. 최근의 인건비 및 임대료 상승분이 
+                                커피 원가 하락분을 상쇄하면서 소매 가격의 하락 폭은 
+                                선물 가격의 하락 폭에 미치지 못할 것으로 예상된다.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 결론 -->
+                    <section id="conclusion">
+                        <h2>종합 결론 및 향후 전망</h2>
+
+                        <div class="flow-diagram">
+                            <div class="flow-title">베타 + 알파 = 가격 하락</div>
+                            <div class="flow-row">
+                                <div class="flow-box beta">
+                                    <strong>Beta 요인</strong><br>
+                                    코코아 -63%<br>
+                                    설탕 5년 최저<br>
+                                    고금리 유동성 축소
+                                </div>
+                                <span class="flow-plus">+</span>
+                                <div class="flow-box alpha">
+                                    <strong>Alpha 요인</strong><br>
+                                    브라질 6,620만 포대<br>
+                                    베트남 +38.3% 수출<br>
+                                    기상 조건 개선
+                                </div>
+                                <span class="flow-arrow">→</span>
+                                <div class="flow-box result">
+                                    <strong>결과</strong><br>
+                                    6개월래 최저<br>
+                                    ~300¢/lb<br>
+                                    과잉 내러티브
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>
+                            최근의 커피 선물 가격 하락은 소프트 원자재 섹터의 동반 약세라는 '베타'적 환경 속에서, 
+                            커피 시장만의 강력한 공급 회복이라는 '알파'적 요인이 결정타를 날린 결과로 정의할 수 있다.
+                        </p>
+
+                        <h3>1️⃣ 베타(Beta) 요인</h3>
+                        <p>
+                            코코아(-63%), 설탕(5년래 최저) 등 동일 섹터 원자재의 붕괴는 
+                            커피 시장의 투기적 매수 심리를 위축시켰다. 
+                            또한 고금리 환경은 전반적인 유동성 축소를 유발하며 
+                            원자재 전반에 하방 압력을 가했다.
+                        </p>
+
+                        <h3>2️⃣ 알파(Alpha) 요인</h3>
+                        <p>
+                            브라질의 2026년 역대 최대 생산 전망(6,620만 포대)과 베트남의 수출 급증(1월 +38.3%)은 
+                            지난 수년간 지속된 '공급 부족' 내러티브를 '공급 과잉'으로 완전히 뒤바꿨다. 
+                            특히 기상 조건의 극적인 개선은 생산량에 대한 불확실성을 제거했다.
+                        </p>
+
+                        <h3>3️⃣ 향후 전망</h3>
+                        <p>
+                            기술적으로 <strong>277.25센트 지지 여부</strong>가 장기 추세를 결정할 것이다. 
+                            브라질의 수확이 본격화되는 2026년 중반까지는 하방 압력이 우세할 것으로 보이며, 
+                            라보뱅크가 제시한 <strong>$2.50~3.50 밴드</strong>가 새로운 박스권을 형성할 가능성이 높다.
+                        </p>
+
+                        <div class="highlight-box alpha">
+                            <div class="highlight-title">🧭 시장 참여자를 위한 권고</div>
+                            <p>
+                                현재의 하락세는 단순한 섹터 전염을 넘어 <strong>커피 시장의 펀더멘탈이 
+                                구조적으로 개선</strong>되고 있음을 반영하는 과정이다. 
+                                투자자와 산업 참여자들은 브라질의 실제 수확 수율과 
+                                베트남의 라니냐 발생 여부를 주시하며, 
+                                고금리 하에서의 재고 효율성을 극대화하는 전략을 수립해야 할 시점이다.
+                            </p>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- 사이드바 -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">목차</h3>
+                        <ul class="toc-list">
+                            <li class="toc-item"><a href="#overview" class="toc-link">Executive Summary</a></li>
+                            <li class="toc-item"><a href="#beta" class="toc-link">1. 베타(β) 분석</a></li>
+                            <li class="toc-item"><a href="#alpha" class="toc-link">2. 알파(α) 분석</a></li>
+                            <li class="toc-item"><a href="#flow" class="toc-link">3. 자금 흐름 및 COT</a></li>
+                            <li class="toc-item"><a href="#outlook" class="toc-link">4. 기술적 분석 및 전망</a></li>
+                            <li class="toc-item"><a href="#impact" class="toc-link">5. 산업적 영향</a></li>
+                            <li class="toc-item"><a href="#conclusion" class="toc-link">종합 결론</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">핵심 수치</h3>
+                        <div class="key-point">
+                            <div class="key-icon">📉</div>
+                            <div class="key-text"><strong>~300¢/lb</strong><br>아라비카 6개월래 최저</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇧🇷</div>
+                            <div class="key-text"><strong>6,620만 포대</strong><br>브라질 역대 최대 전망</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🇻🇳</div>
+                            <div class="key-text"><strong>+38.3%</strong><br>베트남 1월 수출 증가</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🍫</div>
+                            <div class="key-text"><strong>-62% YoY</strong><br>코코아 27개월래 최저</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📦</div>
+                            <div class="key-text"><strong>46.2만 포대</strong><br>ICE 인증 재고 회복</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">가격 전망</h3>
+                        <div class="key-point">
+                            <div class="key-icon">🏦</div>
+                            <div class="key-text"><strong>라보뱅크</strong><br>$2.50-3.50/lb (26년 말)</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🌐</div>
+                            <div class="key-text"><strong>세계은행</strong><br>-13% (2026년)</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🎯</div>
+                            <div class="key-text"><strong>핵심 지지선</strong><br>277.25¢</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">베타 vs 알파</h3>
+                        <div class="key-point">
+                            <div class="key-icon" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));">β</div>
+                            <div class="key-text"><strong>베타</strong><br>섹터 동반 하락, 고금리</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(5, 150, 105, 0.1));">α</div>
+                            <div class="key-text"><strong>알파</strong><br>공급 회복, 기상 개선</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">참고 자료</h3>
+                        <div class="key-point">
+                            <div class="key-icon">📄</div>
+                            <div class="key-text">CONAB Coffee Crop Survey</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📊</div>
+                            <div class="key-text">CFTC COT Reports</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">🌍</div>
+                            <div class="key-text">Rabobank, World Bank</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-icon">📈</div>
+                            <div class="key-text">Trading Economics, Barchart</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="main-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Coffee Market Info</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장의 심층 분석과 인사이트를 제공합니다. 
+                        트레이더, 로스터, 투자자를 위한 전문 시장 인텔리전스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">문의</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                        james.baek@aligncommodities.com
+                    </a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">데이터 출처</div>
+                    <span class="footer-link" style="cursor: default;">CONAB, USDA FAS</span>
+                    <span class="footer-link" style="cursor: default;">ICE Futures, CFTC</span>
+                    <span class="footer-link" style="cursor: default;">Rabobank, World Bank</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2026 Coffee Market Info. All rights reserved.
+                </p>
+                <p class="footer-disclaimer">
+                    본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 
+                    모든 투자 결정은 독자의 독립적인 판단 하에 이루어져야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 프로그레스 바
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+            
+            // 네비게이션 스크롤 효과
+            const nav = document.querySelector('.top-nav');
+            if (winScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
