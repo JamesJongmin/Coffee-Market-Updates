@@ -1482,29 +1482,86 @@
     <section class="content-section" id="uco-prices">
         <div class="main-container">
             <div class="section-header">
-                <div class="section-tag">Section 7 &middot; SE Asia / Asia UCO Export Prices &middot; 준비 중</div>
+                <div class="section-tag">Section 7 &middot; SE Asia / Asia UCO Export Prices &middot; UN Comtrade Data</div>
                 <h2 class="section-title">동남아/아시아 UCO 수출가격</h2>
                 <p class="section-desc">
-                    주요 아시아 공급국별 UCO FOB 수출가격을 비교하고, 월별 가격 추이와 프리미엄/디스카운트 구조를 분석합니다.
-                    ISCC 인증 여부, 품질(FFA/MIU), 목적지에 따른 가격 차이를 포함합니다.
+                    UN Comtrade 세관 데이터(HS 1518) 기반 주요국 UCO FOB 수출 단가입니다.
+                    단가 = 총 FOB 수출액 &divide; 순중량(MT). 월 500MT 이상 수출 실적이 있는 데이터만 표시합니다.
                 </p>
             </div>
 
-            <!-- 실제 데이터 확보 전까지 비활성화 안내 -->
-            <div style="background: rgba(255,193,7,0.08); border: 1px solid rgba(255,193,7,0.3); border-radius: 12px; padding: 40px 32px; text-align: center; margin-bottom: 24px;">
-                <div style="font-size: 48px; margin-bottom: 16px;">&#x1F6A7;</div>
-                <h3 style="color: #ffc107; font-size: 1.3rem; margin-bottom: 12px;">데이터 검증 중 &mdash; 곧 업데이트 예정</h3>
-                <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; max-width: 600px; margin: 0 auto; line-height: 1.7;">
-                    이 섹션의 UCO 수출가격 데이터는 현재 <strong>실제 시장 데이터(Argus, OPIS, Platts 등)</strong>와의 검증 작업을 진행 중입니다.
-                    <br>정확한 데이터가 확보되는 대로 차트와 테이블이 업데이트됩니다.
-                    <br><br>
-                    <span style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
-                        실시간 가격 데이터 연동을 위해 Argus/OPIS/Platts 구독 데이터가 필요합니다.
-                    </span>
-                </p>
+            <!-- 데이터 커버리지 안내 -->
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.6;">
+                <strong style="color: rgba(59,130,246,0.9);">&#x1F4CA; 데이터 커버리지</strong><br>
+                &#x1F1EF;&#x1F1F5; <strong>일본</strong>: 23/26개월 (가장 완전) &middot;
+                &#x1F1F0;&#x1F1F7; <strong>한국</strong>: 11개월 (2024년) &middot;
+                &#x1F1E8;&#x1F1F3; <strong>중국</strong>: 9개월 (2024년) &middot;
+                &#x1F1F2;&#x1F1FE; <strong>말레이시아</strong>: 10개월 &middot;
+                &#x1F1EE;&#x1F1E9; <strong>인도네시아</strong>: 10개월<br>
+                <span style="color: rgba(255,193,7,0.8);">&#9888; 베트남/태국은 Comtrade 보고 부족으로 미표시. 2025년 중국/한국은 Comtrade 데이터 지연으로 미수록.</span>
             </div>
 
-            <!-- [원본 가격 데이터 섹션 — 실제 데이터 확보 시 복원] -->
+            <!-- 실제 데이터 기반 스냅샷 카드 (최신 가용 데이터) -->
+            <div class="uco-price-snapshot">
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1EF;&#x1F1F5;</div>
+                    <div class="price-snap-country">일본 FOB</div>
+                    <div class="price-snap-value">$1,024</div>
+                    <div class="price-snap-change up">&#9650; Dec 2025</div>
+                    <div class="price-snap-spec">HS 1518 &middot; Comtrade</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1F0;&#x1F1F7;</div>
+                    <div class="price-snap-country">한국 FOB</div>
+                    <div class="price-snap-value">$1,038</div>
+                    <div class="price-snap-change up">&#9650; Dec 2024</div>
+                    <div class="price-snap-spec">HS 1518 &middot; Comtrade</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1E8;&#x1F1F3;</div>
+                    <div class="price-snap-country">중국 FOB</div>
+                    <div class="price-snap-value">$937</div>
+                    <div class="price-snap-change flat">&#9654; Dec 2024</div>
+                    <div class="price-snap-spec">HS 1518 &middot; Comtrade</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1EE;&#x1F1E9;</div>
+                    <div class="price-snap-country">인도네시아 FOB</div>
+                    <div class="price-snap-value">$1,000</div>
+                    <div class="price-snap-change flat">&#9654; Dec 2025</div>
+                    <div class="price-snap-spec">HS 1518 &middot; Comtrade</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1F2;&#x1F1FE;</div>
+                    <div class="price-snap-country">말레이시아 FOB</div>
+                    <div class="price-snap-value">$1,118</div>
+                    <div class="price-snap-change flat">&#9654; Oct 2025</div>
+                    <div class="price-snap-spec">HS 1518 &middot; Comtrade</div>
+                </div>
+            </div>
+
+            <!-- 메인 차트: 실제 Comtrade 데이터 -->
+            <div class="uco-price-chart-row">
+                <div class="uco-price-chart-panel full">
+                    <div class="uco-price-chart-title">아시아 주요국 HS 1518 FOB 수출 단가 추이 ($/MT, UN Comtrade 실제 세관 데이터)</div>
+                    <div class="uco-price-chart-wrap tall">
+                        <canvas id="comtradePriceTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 데이터 테이블 -->
+            <div class="uco-price-chart-panel full" style="margin-bottom: 20px;">
+                <div class="uco-price-chart-title">국가별 월별 HS 1518 FOB 수출 단가 ($/MT) &mdash; UN Comtrade 세관 데이터</div>
+                <div class="price-data-table-wrap">
+                    <table class="data-table" id="comtradePriceTable" style="font-size: 0.78rem;">
+                        <thead><tr id="comtradeTableHead"></tr></thead>
+                        <tbody id="comtradeTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- [기존 합성 데이터 섹션 — 보관용, 표시하지 않음] -->
             <div style="display:none;">
             <div class="uco-price-snapshot-hidden-original">
                 <div class="price-snap-card">
@@ -1765,7 +1822,13 @@
             </div><!-- end display:none -->
 
             <div class="uco-source-note">
-                이 섹션은 실제 시장 데이터 검증 완료 후 업데이트됩니다. 문의: 데이터팀
+                데이터 출처: UN Comtrade (comtradeapi.un.org) &middot; HS 1518 &middot; 수출 FOB 기준
+                &middot; 단가 = 총 FOB 수출액 &divide; 순중량(MT) &middot; 월 500MT 이상 수출 실적만 포함
+                &middot; 데이터 수집일: 2026-02-19
+                <br><span style="color: rgba(255,193,7,0.8); font-size: 0.8rem;">
+                &#9888; HS 1518은 UCO 포함 동식물성 유지류(화학적 변성) 전체를 포괄합니다. UCO 전용 가격과 차이가 있을 수 있습니다.
+                Argus/OPIS/Platts 구독 데이터로 보완 시 더 정밀한 UCO 전용 가격 제공이 가능합니다.
+                </span>
             </div>
         </div>
     </section>
@@ -2671,14 +2734,106 @@
     })();
     </script>
 
-    <!-- UCO Price Dashboard Script — DISABLED: 실제 데이터 확보 전까지 비활성화 -->
-    <!-- 아래 스크립트는 허구 데이터 기반이므로 실제 Argus/OPIS/Platts 데이터 확보 시 복원하세요 -->
+    <!-- UCO Price Dashboard Script — UN Comtrade Real Data -->
     <script>
     (function() {
-        /* === PRICE CHART INITIALIZATION DISABLED === */
-        /* Reason: Data in this section was illustrative/synthetic, not sourced from actual market data.
-           Re-enable when real Argus/OPIS/Platts subscription data is integrated. */
-        return;
+        var LABELS = [
+            'Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24',
+            'Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24',
+            'Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25',
+            'Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25',
+            'Jan 26','Feb 26'
+        ];
+
+        // === REAL DATA: UN Comtrade HS 1518 FOB unit prices ($/MT) ===
+        // Source: comtradeapi.un.org | Fetched: 2026-02-19
+        // null = no reliable data for that month (volume < 500MT or Comtrade not yet reported)
+        var REAL = {
+            japan:     { label: '일본',       color: '#fd79a8', data: [932,867,886,844,826,835,859,860,866,833,859,831,888,922,933,991,993,null,975,984,1011,1018,1042,1024,null,null] },
+            korea:     { label: '한국',       color: '#00cec9', data: [null,1145,981,964,964,1000,997,1005,1015,993,971,1038,null,null,null,null,null,null,null,null,null,null,null,null,null,null] },
+            china:     { label: '중국',       color: '#e74c3c', data: [901,863,null,884,null,895,null,897,914,902,882,937,null,null,null,null,null,null,null,null,null,null,null,null,null,null] },
+            indonesia: { label: '인도네시아', color: '#f1c40f', data: [null,null,null,920,null,null,null,null,null,null,941,null,null,703,706,1099,893,845,908,925,null,null,null,1000,null,null] },
+            malaysia:  { label: '말레이시아', color: '#2ecc71', data: [null,829,null,null,1498,953,1238,1006,null,972,null,null,null,1242,null,null,1476,null,null,null,1144,1118,null,null,null,null] }
+        };
+
+        var KEYS = ['japan','korea','china','indonesia','malaysia'];
+
+        function buildDatasets() {
+            return KEYS.map(function(k) {
+                return {
+                    label: REAL[k].label,
+                    data: REAL[k].data.slice(),
+                    borderColor: REAL[k].color,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: function(ctx) { return REAL[k].data[ctx.dataIndex] != null ? 3 : 0; },
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: REAL[k].color,
+                    tension: 0.3,
+                    spanGaps: true
+                };
+            });
+        }
+
+        var ctx = document.getElementById('comtradePriceTrendChart');
+        if (ctx) {
+            new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: { labels: LABELS, datasets: buildDatasets() },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: true, labels: { color:'rgba(255,255,255,0.7)', font:{size:10}, boxWidth:12, padding:8 } },
+                        tooltip: {
+                            backgroundColor:'rgba(0,0,0,0.88)', titleColor:'#fff', bodyColor:'#fff',
+                            borderColor:'rgba(255,255,255,0.1)', borderWidth:1, cornerRadius:8, padding:10,
+                            callbacks: {
+                                label: function(c) {
+                                    return c.parsed.y != null ? c.dataset.label + ': $' + c.parsed.y + '/MT' : '';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks:{ color:'rgba(255,255,255,0.5)', font:{size:9}, maxRotation:45 }, grid:{ color:'rgba(255,255,255,0.05)' } },
+                        y: {
+                            beginAtZero: false, min: 650,
+                            ticks:{ color:'rgba(255,255,255,0.5)', font:{size:10}, callback: function(v){ return '$'+v; } },
+                            grid:{ color:'rgba(255,255,255,0.08)' },
+                            title:{ display:true, text:'$/MT (FOB, Comtrade)', color:'rgba(255,255,255,0.5)', font:{size:10} }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Build data table
+        var thead = document.getElementById('comtradeTableHead');
+        var tbody = document.getElementById('comtradeTableBody');
+        if (thead && tbody) {
+            var headerRow = '<th style="position:sticky;left:0;background:#1a1a2e;z-index:2;">기간</th>';
+            KEYS.forEach(function(k) { headerRow += '<th>' + REAL[k].label + '</th>'; });
+            thead.innerHTML = headerRow;
+
+            LABELS.forEach(function(label, i) {
+                var hasAny = KEYS.some(function(k) { return REAL[k].data[i] != null; });
+                if (!hasAny) return;
+                var row = '<td style="position:sticky;left:0;background:#1a1a2e;z-index:1;font-weight:600;">' + label + '</td>';
+                KEYS.forEach(function(k) {
+                    var val = REAL[k].data[i];
+                    row += '<td class="num">' + (val != null ? '$' + val : '<span style="color:rgba(255,255,255,0.2);">&mdash;</span>') + '</td>';
+                });
+                tbody.innerHTML += '<tr>' + row + '</tr>';
+            });
+        }
+    })();
+    </script>
+
+    <!-- [Legacy synthetic price script — preserved for reference, not executed] -->
+    <script>
+    (function() {
+        return; // DISABLED: synthetic data below is NOT real
 
         var LABELS = [
             'Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24',
