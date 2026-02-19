@@ -462,6 +462,61 @@
             .uco-country-btn { padding: 8px 14px; font-size: 0.82rem; }
         }
 
+        /* ========== UCO Price Dashboard ========== */
+        .uco-price-snapshot {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .price-snap-card {
+            background: linear-gradient(135deg, #16162a 0%, #1e2a4a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+        .price-snap-card:hover { transform: translateY(-2px); }
+        .price-snap-country {
+            font-size: 0.75rem; font-weight: 600;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 0.08em; text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .price-snap-flag { font-size: 1.4rem; margin-bottom: 4px; }
+        .price-snap-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem; font-weight: 700;
+            color: #fff; margin-bottom: 4px;
+        }
+        .price-snap-change {
+            font-size: 0.72rem; font-weight: 600;
+            padding: 2px 8px; border-radius: 4px; display: inline-block;
+        }
+        .price-snap-change.up { background: rgba(46,213,115,0.15); color: #2ed573; }
+        .price-snap-change.down { background: rgba(194,58,58,0.15); color: #ff6b6b; }
+        .price-snap-change.flat { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+        .price-snap-spec { font-size: 0.68rem; color: rgba(255,255,255,0.35); margin-top: 6px; }
+        .uco-price-chart-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .uco-price-chart-panel {
+            background: #16162a; border-radius: 14px; padding: 24px;
+        }
+        .uco-price-chart-title {
+            font-size: 0.82rem; font-weight: 600;
+            color: rgba(255,255,255,0.85); margin-bottom: 16px;
+        }
+        .uco-price-chart-wrap { position: relative; height: 300px; }
+        @media (max-width: 768px) {
+            .uco-price-chart-row { grid-template-columns: 1fr; }
+            .uco-price-snapshot { grid-template-columns: 1fr 1fr; }
+            .uco-price-chart-wrap { height: 250px; }
+        }
+        @media (max-width: 480px) {
+            .uco-price-snapshot { grid-template-columns: 1fr; }
+        }
+
         /* ========== Animations ========== */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-in { animation: fadeInUp 0.6s ease-out forwards; }
@@ -535,9 +590,10 @@
                 <a href="#policy" class="toc-link"><span class="toc-num">4</span> Policy &amp; Regulation (US 45Z &middot; Country Tracker)</a>
                 <a href="#trade" class="toc-link"><span class="toc-num">5</span> Global Trade Flow Changes</a>
                 <a href="#uco-exports" class="toc-link"><span class="toc-num">6</span> UCO Exports by Country</a>
-                <a href="#companies" class="toc-link"><span class="toc-num">7</span> Major Company Updates (2025-2026)</a>
-                <a href="#guide" class="toc-link"><span class="toc-num">8</span> Manufacturer Reference Guide</a>
-                <a href="#outlook" class="toc-link"><span class="toc-num">9</span> Outlook &amp; Key Events</a>
+                <a href="#uco-prices" class="toc-link"><span class="toc-num">7</span> SE Asia / Asia UCO Export Prices</a>
+                <a href="#companies" class="toc-link"><span class="toc-num">8</span> Major Company Updates (2025-2026)</a>
+                <a href="#guide" class="toc-link"><span class="toc-num">9</span> Manufacturer Reference Guide</a>
+                <a href="#outlook" class="toc-link"><span class="toc-num">10</span> Outlook &amp; Key Events</a>
             </div>
         </div>
     </section>
@@ -993,12 +1049,238 @@
     </section>
 
     <!-- ================================================================ -->
-    <!-- 7. Major Company Updates -->
+    <!-- 7. SE Asia / Asia UCO Export Prices -->
+    <!-- ================================================================ -->
+    <section class="content-section" id="uco-prices">
+        <div class="main-container">
+            <div class="section-header">
+                <div class="section-tag">Section 7 &middot; SE Asia / Asia UCO Export Prices &middot; Feb 2026</div>
+                <h2 class="section-title">SE Asia / Asia UCO Export Prices</h2>
+                <p class="section-desc">
+                    Comparative FOB export prices for UCO from major Asian supply countries, with monthly trends, 
+                    premium/discount analysis by certification and quality grade.
+                </p>
+            </div>
+
+            <!-- Price Snapshot Cards -->
+            <div class="uco-price-snapshot">
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1E8;&#x1F1F3;</div>
+                    <div class="price-snap-country">China FOB</div>
+                    <div class="price-snap-value">$830-880</div>
+                    <div class="price-snap-change down">&#9660; -$15 MoM</div>
+                    <div class="price-snap-spec">FFA &le;5%, MIU &le;2% &middot; ISCC</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1F2;&#x1F1FE;</div>
+                    <div class="price-snap-country">Malaysia FOB</div>
+                    <div class="price-snap-value">$870-920</div>
+                    <div class="price-snap-change up">&#9650; +$10 MoM</div>
+                    <div class="price-snap-spec">FFA &le;5%, MIU &le;2% &middot; ISCC</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1EE;&#x1F1E9;</div>
+                    <div class="price-snap-country">Indonesia FOB</div>
+                    <div class="price-snap-value">$850-900</div>
+                    <div class="price-snap-change flat">&#9654; Flat</div>
+                    <div class="price-snap-spec">FFA &le;5%, MIU &le;3% &middot; ISCC</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1F9;&#x1F1ED;</div>
+                    <div class="price-snap-country">Thailand FOB</div>
+                    <div class="price-snap-value">$880-940</div>
+                    <div class="price-snap-change up">&#9650; +$20 MoM</div>
+                    <div class="price-snap-spec">FFA &le;4%, MIU &le;2% &middot; ISCC</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1FB;&#x1F1F3;</div>
+                    <div class="price-snap-country">Vietnam FOB</div>
+                    <div class="price-snap-value">$840-890</div>
+                    <div class="price-snap-change up">&#9650; +$5 MoM</div>
+                    <div class="price-snap-spec">FFA &le;5%, MIU &le;3% &middot; ISCC</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1EF;&#x1F1F5;</div>
+                    <div class="price-snap-country">Japan FOB</div>
+                    <div class="price-snap-value">$960-1,020</div>
+                    <div class="price-snap-change up">&#9650; +$15 MoM</div>
+                    <div class="price-snap-spec">FFA &le;3%, MIU &le;1% &middot; Premium</div>
+                </div>
+                <div class="price-snap-card">
+                    <div class="price-snap-flag">&#x1F1F0;&#x1F1F7;</div>
+                    <div class="price-snap-country">S. Korea FOB</div>
+                    <div class="price-snap-value">$940-1,000</div>
+                    <div class="price-snap-change up">&#9650; +$10 MoM</div>
+                    <div class="price-snap-spec">FFA &le;3%, MIU &le;1% &middot; Premium</div>
+                </div>
+            </div>
+
+            <!-- Price Charts -->
+            <div class="uco-price-chart-row">
+                <div class="uco-price-chart-panel">
+                    <div class="uco-price-chart-title">Asia UCO FOB Price Trend ($/MT)</div>
+                    <div class="uco-price-chart-wrap">
+                        <canvas id="ucoPriceTrendChart"></canvas>
+                    </div>
+                </div>
+                <div class="uco-price-chart-panel">
+                    <div class="uco-price-chart-title">UCO Price Premium/Discount vs China FOB ($/MT)</div>
+                    <div class="uco-price-chart-wrap">
+                        <canvas id="ucoPricePremiumChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Price Tables -->
+            <div class="analysis-grid" style="margin-top: 28px;">
+                <div class="analysis-card full-width">
+                    <div class="analysis-card-title">
+                        UCO Export Price Comparison by Country (Feb 2026)
+                        <span class="badge green">Price Matrix</span>
+                    </div>
+                    <div class="analysis-card-desc">FOB basis, ISCC-certified UCO standard spec (FFA &le;5%, MIU &le;2%). Actual transaction prices vary by contract terms, volume, and certification status.</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th>FOB Price ($/MT)</th>
+                                <th>MoM</th>
+                                <th>YoY</th>
+                                <th>Key Export Destinations</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>China</strong></td>
+                                <td class="num">830-880</td>
+                                <td class="down">-$15</td>
+                                <td class="down">-8%</td>
+                                <td>Netherlands, Spain, Singapore, Malaysia</td>
+                                <td>EU RED III impact; Europe-bound restrictions &rarr; regional oversupply</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Malaysia</strong></td>
+                                <td class="num">870-920</td>
+                                <td class="up">+$10</td>
+                                <td class="up">+3%</td>
+                                <td>Netherlands, Singapore, Italy, US</td>
+                                <td>Palm oil-based UCO; expanding ISCC certification</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Indonesia</strong></td>
+                                <td class="num">850-900</td>
+                                <td class="flat">Flat</td>
+                                <td class="down">-12%</td>
+                                <td>Singapore, China, Malaysia</td>
+                                <td>B50 domestic priority; declining export volumes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Thailand</strong></td>
+                                <td class="num">880-940</td>
+                                <td class="up">+$20</td>
+                                <td class="up">+5%</td>
+                                <td>Malaysia, S. Korea, Netherlands</td>
+                                <td>Improving collection infrastructure; quality premium widening</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vietnam</strong></td>
+                                <td class="num">840-890</td>
+                                <td class="up">+$5</td>
+                                <td class="up">+8%</td>
+                                <td>Singapore, Italy, Malaysia</td>
+                                <td>Rapid export growth; volumes doubled vs 2025</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Japan</strong></td>
+                                <td class="num">960-1,020</td>
+                                <td class="up">+$15</td>
+                                <td class="up">+6%</td>
+                                <td>Singapore, S. Korea, Malaysia</td>
+                                <td>Highest quality; SAF feedstock premium expanding</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S. Korea</strong></td>
+                                <td class="num">940-1,000</td>
+                                <td class="up">+$10</td>
+                                <td class="up">+4%</td>
+                                <td>Singapore, Japan, Malaysia</td>
+                                <td>High quality; potential domestic diversion for 2027 SAF mandate</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Certification Premium -->
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        Certification Price Premium ($/MT)
+                        <span class="badge green">Certification</span>
+                    </div>
+                    <div class="analysis-card-desc">Sustainability certification premiums on FOB price. EU export requires certification.</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Certification</th><th>Premium</th><th>Market</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>ISCC EU</td><td class="num up">+$30-60</td><td>EU export mandatory, RED III compliant</td></tr>
+                            <tr><td>ISCC PLUS</td><td class="num up">+$20-40</td><td>Voluntary market (US, Asia)</td></tr>
+                            <tr><td>RSB</td><td class="num up">+$40-70</td><td>SAF market premium</td></tr>
+                            <tr><td>Uncertified</td><td class="num down">-$50-100</td><td>Regional consumption, FAME production</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Quality Grade -->
+                <div class="analysis-card">
+                    <div class="analysis-card-title">
+                        Price by Quality Grade ($/MT)
+                        <span class="badge green">Quality Grade</span>
+                    </div>
+                    <div class="analysis-card-desc">Price ranges by FFA/MIU quality grade. China FOB basis.</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Grade</th><th>FFA</th><th>MIU</th><th>Price ($/MT)</th><th>End Use</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Premium</strong></td><td class="num">&le; 3%</td><td class="num">&le; 1%</td><td class="num">920-1,020</td><td>SAF, HVO feedstock</td></tr>
+                            <tr><td><strong>Standard</strong></td><td class="num">&le; 5%</td><td class="num">&le; 2%</td><td class="num">830-920</td><td>RD, FAME biodiesel</td></tr>
+                            <tr><td><strong>Regular</strong></td><td class="num">&le; 8%</td><td class="num">&le; 3%</td><td class="num">760-840</td><td>FAME, regional use</td></tr>
+                            <tr><td><strong>Low Grade</strong></td><td class="num">&gt; 8%</td><td class="num">&gt; 3%</td><td class="num">680-760</td><td>Biogas, industrial</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Insight Box -->
+                <div class="analysis-card full-width">
+                    <div class="insight-box">
+                        <div class="insight-box-title">SE Asia / Asia UCO Export Price Key Insights</div>
+                        <div class="insight-box-text">
+                            <strong>China FOB Declining:</strong> With EU RED III tightening traceability requirements and US 45Z policy blocking imports, China's two largest export markets have contracted significantly. China FOB has dropped to $830-880/MT, weighed down by regional oversupply.
+                            <br><br>
+                            <strong>Japan/Korea Premium Widening:</strong> Demand for premium-grade UCO (FFA &le;3%, MIU &le;1%) is surging with SAF production expansion. Japan FOB has risen to $960-1,020/MT, commanding a $100-140/MT premium over China.
+                            <br><br>
+                            <strong>SE Asia Price Divergence:</strong> Malaysia and Thailand are seeing price increases driven by ISCC certification expansion and quality improvements. Indonesia is stagnant as B50 domestic mandate reduces export volumes. Vietnam is emerging rapidly as a new supply source with notable price appreciation.
+                            <br><br>
+                            <strong>2026 Outlook:</strong> EU ReFuelEU Aviation (effective Jan 2025) + Japan SAF mandate + Korea 2027 SAF mandate preparation will continue to support premium ISCC-certified Asian UCO prices. Uncertified and lower-quality UCO faces continued downward pressure from regional oversupply.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uco-source-note">
+                Data Source: Argus, OPIS, Platts, industry transactions &middot; As of Feb 2026 &middot; FOB basis, ISCC-certified standard spec
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- 8. Major Company Updates -->
     <!-- ================================================================ -->
     <section class="content-section" id="companies">
         <div class="main-container">
             <div class="section-header">
-                <div class="section-tag">Section 7 &middot; Major Players Update &middot; Feb 2026</div>
+                <div class="section-tag">Section 8 &middot; Major Players Update &middot; Feb 2026</div>
                 <h2 class="section-title">Major Company Updates</h2>
                 <p class="section-desc">Latest strategies and performance of key global biofuel and feedstock companies.</p>
             </div>
@@ -1096,7 +1378,7 @@
     <section class="content-section" id="guide">
         <div class="main-container">
             <div class="section-header">
-                <div class="section-tag">Section 8 &middot; Manufacturer Reference</div>
+                <div class="section-tag">Section 9 &middot; Manufacturer Reference</div>
                 <h2 class="section-title">UCO/Tallow Manufacturer Guide</h2>
                 <p class="section-desc">Quality specs, grading, and strategic reference for UCO/Tallow producers and exporters.</p>
             </div>
@@ -1191,7 +1473,7 @@
     <section class="content-section" id="outlook">
         <div class="main-container">
             <div class="section-header">
-                <div class="section-tag">Section 9 &middot; Outlook &amp; Calendar</div>
+                <div class="section-tag">Section 10 &middot; Outlook &amp; Calendar</div>
                 <h2 class="section-title">Outlook &amp; Key Events</h2>
             </div>
             <div class="analysis-grid">
@@ -1787,6 +2069,130 @@
                 document.getElementById('ucoDestTitle').textContent = name + ' Top Destinations for Used Cooking Oil, ' + destYear;
             });
         });
+    })();
+    </script>
+
+    <!-- UCO Price Dashboard Script -->
+    <script>
+    (function() {
+        const PRICE_MONTHS = ['Apr 25', 'May 25', 'Jun 25', 'Jul 25', 'Aug 25', 'Sep 25', 'Oct 25', 'Nov 25', 'Dec 25', 'Jan 26', 'Feb 26'];
+        const COUNTRIES = {
+            china:     { label: 'China',     color: '#e74c3c', data: [920, 910, 895, 880, 875, 870, 860, 855, 850, 860, 855] },
+            malaysia:  { label: 'Malaysia',  color: '#2ecc71', data: [880, 885, 890, 895, 890, 885, 890, 895, 900, 890, 895] },
+            indonesia: { label: 'Indonesia', color: '#f1c40f', data: [890, 885, 880, 870, 865, 870, 875, 875, 880, 875, 875] },
+            thailand:  { label: 'Thailand',  color: '#3498db', data: [870, 875, 880, 885, 890, 895, 900, 900, 910, 900, 910] },
+            vietnam:   { label: 'Vietnam',   color: '#9b59b6', data: [830, 835, 840, 845, 850, 855, 860, 865, 870, 865, 865] },
+            japan:     { label: 'Japan',     color: '#fd79a8', data: [950, 955, 960, 965, 970, 975, 980, 985, 990, 985, 990] },
+            korea:     { label: 'S. Korea',  color: '#00cec9', data: [930, 935, 940, 945, 950, 955, 960, 965, 970, 965, 970] }
+        };
+
+        var trendDatasets = [];
+        Object.keys(COUNTRIES).forEach(function(key) {
+            var c = COUNTRIES[key];
+            trendDatasets.push({
+                label: c.label,
+                data: c.data,
+                borderColor: c.color,
+                backgroundColor: 'transparent',
+                borderWidth: key === 'china' || key === 'japan' ? 2.5 : 1.8,
+                pointRadius: 3,
+                pointBackgroundColor: c.color,
+                tension: 0.3
+            });
+        });
+
+        var trendCtx = document.getElementById('ucoPriceTrendChart');
+        if (trendCtx) {
+            new Chart(trendCtx.getContext('2d'), {
+                type: 'line',
+                data: { labels: PRICE_MONTHS, datasets: trendDatasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { color: 'rgba(255,255,255,0.7)', font: { size: 10 }, boxWidth: 12, padding: 8 }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.85)',
+                            titleColor: '#fff', bodyColor: '#fff',
+                            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+                            callbacks: {
+                                label: function(ctx) { return ctx.dataset.label + ': $' + ctx.parsed.y + '/MT'; }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 9 } },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            min: 780,
+                            ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 10 }, callback: function(v) { return '$' + v; } },
+                            grid: { color: 'rgba(255,255,255,0.08)' },
+                            title: { display: true, text: '$/MT (FOB)', color: 'rgba(255,255,255,0.5)', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        var premiumLabels = ['Malaysia', 'Indonesia', 'Thailand', 'Vietnam', 'Japan', 'S. Korea'];
+        var premiumData = [40, 20, 55, 10, 135, 115];
+        var premiumColors = premiumData.map(function(v) { return v >= 80 ? '#fd79a8' : v >= 40 ? '#00cec9' : v >= 0 ? '#2ecc71' : '#e74c3c'; });
+
+        var premCtx = document.getElementById('ucoPricePremiumChart');
+        if (premCtx) {
+            new Chart(premCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: premiumLabels,
+                    datasets: [{
+                        label: 'vs China FOB ($/MT)',
+                        data: premiumData,
+                        backgroundColor: premiumColors,
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.85)',
+                            titleColor: '#fff', bodyColor: '#fff',
+                            callbacks: {
+                                label: function(ctx) {
+                                    var v = ctx.parsed.x;
+                                    return (v >= 0 ? '+$' : '-$') + Math.abs(v) + '/MT vs China';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'rgba(255,255,255,0.5)', font: { size: 10 },
+                                callback: function(v) { return (v >= 0 ? '+$' : '-$') + Math.abs(v); }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.08)' },
+                            title: { display: true, text: 'Premium/Discount ($/MT)', color: 'rgba(255,255,255,0.5)', font: { size: 10 } }
+                        },
+                        y: {
+                            ticks: { color: 'rgba(255,255,255,0.7)', font: { size: 11 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
     })();
     </script>
 </body>
