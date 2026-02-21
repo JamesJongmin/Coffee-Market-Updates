@@ -1498,7 +1498,8 @@
                 &#x1F1E8;&#x1F1F3; <strong>중국</strong>: 9개월 (2024년) &middot;
                 &#x1F1F2;&#x1F1FE; <strong>말레이시아</strong>: 10개월 &middot;
                 &#x1F1EE;&#x1F1E9; <strong>인도네시아</strong>: 10개월<br>
-                <span style="color: #b8860b;">&#9888; 베트남/태국은 Comtrade 보고 부족으로 미표시. 2025년 중국/한국은 Comtrade 데이터 지연으로 미수록.</span>
+                <span style="color: #b8860b;">&#9888; 베트남/태국은 Comtrade 보고 부족으로 미표시.</span><br>
+                <span style="color: rgba(255,255,255,0.45);">&#8208;&#8208;&#8208; 데이터 미수록 구간은 과거 추세 기반 추정치(점선)로 표시합니다. 테이블에서 *이탤릭 표시된 값은 추정치입니다.</span>
             </div>
 
             <!-- 실제 데이터 기반 스냅샷 카드 (최신 가용 데이터) -->
@@ -1546,6 +1547,9 @@
                     <div class="uco-price-chart-title">아시아 주요국 HS 1518 FOB 수출 단가 추이 ($/MT, UN Comtrade 실제 세관 데이터)</div>
                     <div class="uco-price-chart-wrap tall">
                         <canvas id="comtradePriceTrendChart"></canvas>
+                    </div>
+                    <div style="text-align:right; font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:5px; padding-right:8px;">
+                        <span style="display:inline-block; border-top:2px dashed rgba(255,255,255,0.5); width:22px; vertical-align:middle; margin-right:4px;"></span>점선 = 과거 추세 기반 추정치 &nbsp;&middot;&nbsp; <span style="display:inline-block; border-top:2px solid rgba(255,255,255,0.5); width:22px; vertical-align:middle; margin-right:4px;"></span>실선 = UN Comtrade 실제 데이터
                     </div>
                 </div>
             </div>
@@ -2734,7 +2738,7 @@
     })();
     </script>
 
-    <!-- UCO Price Dashboard Script — UN Comtrade Real Data -->
+    <!-- UCO Price Dashboard Script — UN Comtrade Real Data (with trend-based estimates) -->
     <script>
     (function() {
         var LABELS = [
@@ -2758,19 +2762,92 @@
 
         var KEYS = ['japan','korea','china','indonesia','malaysia'];
 
+        function olsSlope(pts) {
+            var n = pts.length;
+            if (n < 2) return 0;
+            var sx = 0, sy = 0, sxy = 0, sx2 = 0;
+            for (var k = 0; k < n; k++) {
+                sx += pts[k].i; sy += pts[k].v;
+                sxy += pts[k].i * pts[k].v;
+                sx2 += pts[k].i * pts[k].i;
+            }
+            var denom = n * sx2 - sx * sx;
+            if (Math.abs(denom) < 1e-10) return 0;
+            return (n * sxy - sx * sy) / denom;
+        }
+
+        function fillGaps(realArr) {
+            var data = realArr.slice();
+            var isEst = realArr.map(function(v) { return v === null; });
+            var first = -1, last = -1;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] !== null) {
+                    if (first === -1) first = i;
+                    last = i;
+                }
+            }
+            if (first === -1) return { data: data, isEstimated: isEst };
+
+            var prev = first;
+            for (var i = first + 1; i <= last; i++) {
+                if (data[i] !== null) {
+                    for (var j = prev + 1; j < i; j++) {
+                        var t = (j - prev) / (i - prev);
+                        data[j] = Math.round(data[prev] * (1 - t) + data[i] * t);
+                    }
+                    prev = i;
+                }
+            }
+
+            if (first > 0) {
+                var pts = [];
+                for (var i = first; i < data.length && pts.length < 5; i++) {
+                    if (realArr[i] !== null) pts.push({ i: i, v: realArr[i] });
+                }
+                var slope = olsSlope(pts);
+                for (var i = first - 1; i >= 0; i--) {
+                    data[i] = Math.round(data[first] + slope * (i - first));
+                }
+            }
+
+            if (last < data.length - 1) {
+                var pts = [];
+                for (var i = last; i >= 0 && pts.length < 6; i--) {
+                    if (realArr[i] !== null) pts.push({ i: i, v: realArr[i] });
+                }
+                pts.reverse();
+                var slope = olsSlope(pts);
+                for (var i = last + 1; i < data.length; i++) {
+                    data[i] = Math.round(data[last] + slope * (i - last));
+                }
+            }
+
+            return { data: data, isEstimated: isEst };
+        }
+
+        var FILLED = {};
+        KEYS.forEach(function(k) { FILLED[k] = fillGaps(REAL[k].data); });
+
         function buildDatasets() {
             return KEYS.map(function(k) {
+                var est = FILLED[k].isEstimated;
                 return {
                     label: REAL[k].label,
-                    data: REAL[k].data.slice(),
+                    data: FILLED[k].data.slice(),
                     borderColor: REAL[k].color,
                     backgroundColor: 'transparent',
                     borderWidth: 2,
-                    pointRadius: function(ctx) { return REAL[k].data[ctx.dataIndex] != null ? 3 : 0; },
+                    pointRadius: function(ctx) { return est[ctx.dataIndex] ? 2 : 3; },
                     pointHoverRadius: 6,
-                    pointBackgroundColor: REAL[k].color,
+                    pointBackgroundColor: function(ctx) { return est[ctx.dataIndex] ? 'transparent' : REAL[k].color; },
+                    pointBorderColor: REAL[k].color,
+                    pointBorderWidth: function(ctx) { return est[ctx.dataIndex] ? 1.5 : 0; },
                     tension: 0.3,
-                    spanGaps: true
+                    segment: {
+                        borderDash: function(ctx) {
+                            return (est[ctx.p0DataIndex] || est[ctx.p1DataIndex]) ? [6, 3] : undefined;
+                        }
+                    }
                 };
             });
         }
@@ -2790,7 +2867,9 @@
                             borderColor:'rgba(255,255,255,0.1)', borderWidth:1, cornerRadius:8, padding:10,
                             callbacks: {
                                 label: function(c) {
-                                    return c.parsed.y != null ? c.dataset.label + ': $' + c.parsed.y + '/MT' : '';
+                                    if (c.parsed.y == null) return '';
+                                    var isEst = FILLED[KEYS[c.datasetIndex]].isEstimated[c.dataIndex];
+                                    return c.dataset.label + ': $' + c.parsed.y + '/MT' + (isEst ? ' (추정)' : '');
                                 }
                             }
                         }
@@ -2804,7 +2883,28 @@
                             title:{ display:true, text:'$/MT (FOB, Comtrade)', color:'rgba(255,255,255,0.5)', font:{size:10} }
                         }
                     }
-                }
+                },
+                plugins: [{
+                    id: 'estimateAnnotation',
+                    afterDraw: function(chart) {
+                        var c = chart.ctx;
+                        var area = chart.chartArea;
+                        c.save();
+                        c.setLineDash([6, 3]);
+                        c.strokeStyle = 'rgba(255,255,255,0.45)';
+                        c.lineWidth = 1.5;
+                        c.beginPath();
+                        c.moveTo(area.left + 8, area.top + 14);
+                        c.lineTo(area.left + 34, area.top + 14);
+                        c.stroke();
+                        c.setLineDash([]);
+                        c.font = '10px sans-serif';
+                        c.fillStyle = 'rgba(255,255,255,0.45)';
+                        c.textAlign = 'left';
+                        c.fillText('= 과거 추세 기반 추정치', area.left + 38, area.top + 18);
+                        c.restore();
+                    }
+                }]
             });
         }
 
@@ -2817,12 +2917,17 @@
             thead.innerHTML = headerRow;
 
             LABELS.forEach(function(label, i) {
-                var hasAny = KEYS.some(function(k) { return REAL[k].data[i] != null; });
-                if (!hasAny) return;
                 var row = '<td style="position:sticky;left:0;background:#1a1a2e;z-index:1;font-weight:600;">' + label + '</td>';
                 KEYS.forEach(function(k) {
-                    var val = REAL[k].data[i];
-                    row += '<td class="num">' + (val != null ? '$' + val : '<span style="color:rgba(255,255,255,0.2);">&mdash;</span>') + '</td>';
+                    var val = FILLED[k].data[i];
+                    var isEst = FILLED[k].isEstimated[i];
+                    if (val != null && isEst) {
+                        row += '<td class="num" style="color:rgba(255,255,255,0.35);font-style:italic;">$' + val + '*</td>';
+                    } else if (val != null) {
+                        row += '<td class="num">$' + val + '</td>';
+                    } else {
+                        row += '<td class="num"><span style="color:rgba(255,255,255,0.2);">&mdash;</span></td>';
+                    }
                 });
                 tbody.innerHTML += '<tr>' + row + '</tr>';
             });
