@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 | 2026년 2월 23일</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!--REPORT_META
+{
+    "title": "커피 선물 시장 주간 동향",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2026-02-23",
+    "type": "weekly",
+    "summary": "5월물 아라비카(KCK26) 285.70¢ 마감 — 3주 연속 하락, 주간 약 −4%, 15개월 최저치. 핵심 약세 요인: CONAB 2026 기록 생산 전망(6,620만백, +17.2%), 베트남 1월 수출 +38.3%. 이번 주 신규 뉴스: ①Cecafé 1월 수출 −31% y/y(2.78백만백)(2/19), ②미나스·상파울루 과잉 강우로 잎녹병(leaf rust) 위험 경고(2/19), ③USDA 전문 작물 10억달러 지원 프로그램 발표(2/19), ④실물-선물 스프레드 확대로 선물 과매도 가능성 제기. 달러 약세로 금요일 단기 반등. 277~280¢ 주요 지지선, 295~300¢ 저항선.",
+    "tags": ["285.70센트", "15개월최저", "CONAB기록생산", "브라질잎녹병경보", "Cecafe수출급감", "베트남수출급증", "USDA지원프로그램", "실물선물스프레드", "달러약세반등"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "CONAB", "Somar Meteorologia", "Cecafé", "Perfect Daily Grind", "Vietnam GSO", "Colombia FNC", "CFTC", "USDA FAS", "Sucafina", "Coffee Trading Academy", "Trading Economics", "MercoPress"],
+    "price_current": "285.70",
+    "price_change": "금요일 +0.30¢ (+0.11%) / 주간 약 −4%"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            background: rgba(250,248,245,0.94); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26,15,10,0.07);
+            z-index: 1000; display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px,5vw,60px); transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.05); }
+        .nav-brand { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; color:var(--roast); text-decoration:none; letter-spacing:0.02em; }
+        .nav-links { display:flex; gap:28px; align-items:center; }
+        .nav-link { font-size:0.86rem; color:var(--roast); text-decoration:none; opacity:0.65; transition:opacity 0.2s; font-weight:500; }
+        .nav-link:hover { opacity:1; }
+
+        .container { max-width:800px; margin:0 auto; padding:120px 24px 80px; }
+
+        header { margin-bottom:56px; padding-bottom:40px; border-bottom:1px solid var(--steam); }
+        .report-type {
+            display:inline-flex; align-items:center; gap:8px;
+            background:var(--roast); color:white;
+            font-size:0.73rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+            padding:6px 16px; border-radius:6px; margin-bottom:24px;
+        }
+        .report-type::before { content:''; width:6px; height:6px; background:var(--accent); border-radius:50%; }
+        .report-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.2rem,5vw,3.2rem); font-weight:700; color:var(--espresso); line-height:1.15; margin-bottom:13px; letter-spacing:-0.01em; }
+        .report-subtitle { font-size:1.05rem; color:var(--roast); opacity:0.6; margin-bottom:26px; }
+        .report-meta-row { display:flex; flex-wrap:wrap; gap:16px; align-items:center; font-size:0.83rem; color:var(--roast); opacity:0.6; }
+        .meta-divider { opacity:0.3; }
+
+        .price-hero {
+            background:linear-gradient(135deg,var(--espresso) 0%,var(--roast) 100%);
+            border-radius:20px; padding:clamp(32px,5vw,48px); margin-bottom:56px; color:white;
+        }
+        .price-hero-label { font-size:0.77rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; opacity:0.55; margin-bottom:12px; }
+        .price-hero-main { display:flex; align-items:flex-end; gap:18px; flex-wrap:wrap; margin-bottom:30px; }
+        .price-hero-value { font-family:'Cormorant Garamond',serif; font-size:clamp(3.5rem,8vw,5rem); font-weight:700; line-height:1; letter-spacing:-0.02em; }
+        .price-hero-unit { font-size:1.35rem; opacity:0.65; padding-bottom:0.8rem; }
+        .price-hero-badge { font-size:1.05rem; font-weight:600; padding:7px 16px; border-radius:8px; padding-bottom:0.8rem; }
+        .badge-pos { background:rgba(74,124,89,0.25); color:#7dd6a0; }
+        .badge-neg { background:rgba(194,58,58,0.25); color:#ff8080; }
+        .price-hero-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:18px; }
+        .stat-label { font-size:0.7rem; opacity:0.5; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px; }
+        .stat-value { font-size:0.98rem; font-weight:600; opacity:0.9; }
+
+        /* Breaking News */
+        .news-banner {
+            background:linear-gradient(135deg,#2a1a14,#3d2314);
+            border-radius:14px; padding:22px 28px; margin-bottom:52px;
+            border-left:4px solid var(--copper);
+        }
+        .news-banner-title { font-size:0.72rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:16px; }
+        .news-banner-items { display:grid; gap:12px; }
+        .news-banner-item { display:flex; align-items:flex-start; gap:14px; color:rgba(245,240,232,0.85); font-size:0.9rem; line-height:1.55; }
+        .news-banner-date { font-size:0.71rem; font-weight:700; color:var(--copper); white-space:nowrap; padding-top:3px; min-width:44px; }
+
+        .section { margin-bottom:50px; }
+        .section-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+        .section-number { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:700; color:var(--accent); line-height:1; opacity:0.45; min-width:36px; }
+        .section-title { font-family:'Cormorant Garamond',serif; font-size:1.65rem; font-weight:700; color:var(--espresso); line-height:1.2; }
+
+        p { margin-bottom:18px; }
+        p:last-child { margin-bottom:0; }
+        h3.sub { font-size:1.12rem; font-weight:700; color:var(--espresso); margin-bottom:13px; margin-top:30px; }
+        h3.sub:first-of-type { margin-top:0; }
+
+        .data-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:13px; margin:24px 0; }
+        .data-card { background:white; border:1px solid rgba(26,15,10,0.07); border-radius:12px; padding:17px; transition:all 0.2s ease; }
+        .data-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+        .dc-label { font-size:0.71rem; font-weight:600; color:var(--copper); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px; }
+        .dc-value { font-size:1.2rem; font-weight:700; color:var(--espresso); margin-bottom:4px; }
+        .dc-sub { font-size:0.78rem; font-weight:500; }
+        .neg { color:var(--negative); }
+        .pos { color:var(--positive); }
+        .neu { color:var(--copper); }
+
+        .data-table { width:100%; border-collapse:collapse; margin:24px 0; background:white; border-radius:12px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,0.04); }
+        .data-table thead { background:var(--roast); color:white; }
+        .data-table th { padding:14px 16px; text-align:left; font-weight:600; font-size:0.79rem; text-transform:uppercase; letter-spacing:0.05em; }
+        .data-table td { padding:14px 16px; border-bottom:1px solid var(--steam); font-size:0.92rem; }
+        .data-table tbody tr:hover { background:var(--crema); }
+        .data-table tbody tr:last-child td { border-bottom:none; }
+
+        .hi-box { background:linear-gradient(135deg,var(--crema),white); border:1px solid rgba(196,165,116,0.3); border-left:4px solid var(--copper); border-radius:12px; padding:22px 26px; margin:22px 0; }
+        .hi-box-title { font-size:0.73rem; font-weight:700; color:var(--copper); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+
+        .al-box { background:rgba(194,58,58,0.05); border:1px solid rgba(194,58,58,0.2); border-left:4px solid var(--negative); border-radius:12px; padding:22px 26px; margin:22px 0; }
+        .al-box-title { font-size:0.73rem; font-weight:700; color:var(--negative); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+
+        .scenario-grid { display:grid; gap:16px; margin:24px 0; }
+        .sc-card { background:white; border:1px solid rgba(26,15,10,0.08); border-radius:12px; padding:24px 28px; transition:all 0.3s ease; }
+        .sc-card:hover { box-shadow:0 8px 24px rgba(0,0,0,0.08); transform:translateY(-2px); }
+        .sc-card.bear { border-left:4px solid var(--negative); }
+        .sc-card.base { border-left:4px solid var(--copper); }
+        .sc-card.bull { border-left:4px solid var(--positive); }
+        .sc-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+        .sc-title { font-size:1.02rem; font-weight:700; color:var(--espresso); }
+        .sc-prob { font-size:1.4rem; font-weight:700; font-family:'Cormorant Garamond',serif; }
+        .bear .sc-prob { color:var(--negative); }
+        .base .sc-prob { color:var(--copper); }
+        .bull .sc-prob { color:var(--positive); }
+        .sc-range { font-size:0.78rem; font-weight:600; color:var(--roast); opacity:0.55; margin-bottom:9px; text-transform:uppercase; letter-spacing:0.05em; }
+        .sc-desc { font-size:0.91rem; line-height:1.68; color:var(--ink); }
+
+        .section-divider { border:none; border-top:1px solid var(--steam); margin:42px 0; }
+
+        .sources-section { background:white; border:1px solid rgba(26,15,10,0.07); border-radius:12px; padding:22px 26px; margin-top:40px; }
+        .sources-title { font-size:0.73rem; font-weight:700; color:var(--roast); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:13px; opacity:0.6; }
+        .sources-list { display:flex; flex-wrap:wrap; gap:8px; }
+        .source-tag { display:inline-block; padding:4px 12px; background:var(--steam); color:var(--roast); font-size:0.77rem; font-weight:500; border-radius:6px; }
+
+        .footer { background:var(--espresso); color:var(--crema); padding:48px 0 30px; margin-top:80px; }
+        .footer-inner { max-width:800px; margin:0 auto; padding:0 24px; }
+        .footer-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:40px; margin-bottom:32px; }
+        .footer-brand { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:600; margin-bottom:11px; }
+        .footer-desc { font-size:0.85rem; line-height:1.7; opacity:0.6; }
+        .footer-col-title { font-weight:600; margin-bottom:11px; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.65; }
+        .footer-link { display:block; color:var(--crema); text-decoration:none; font-size:0.85rem; opacity:0.5; margin-bottom:8px; transition:opacity 0.2s; }
+        .footer-link:hover { opacity:1; }
+        .footer-bottom { padding-top:22px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; }
+        .footer-copyright { font-size:0.79rem; opacity:0.4; margin-bottom:8px; }
+        .footer-disclaimer { font-size:0.75rem; opacity:0.3; max-width:600px; margin:0 auto; line-height:1.6; }
+
+        @media(max-width:600px){
+            .price-hero-main { flex-direction:column; align-items:flex-start; gap:10px; }
+            .nav-links { display:none; }
+            .sc-hdr { flex-direction:column; align-items:flex-start; gap:4px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="top-nav" id="topNav">
+    <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+    <div class="nav-links">
+        <a href="#news" class="nav-link">주간 뉴스</a>
+        <a href="#market" class="nav-link">시장 동향</a>
+        <a href="#fundamentals" class="nav-link">펀더멘털</a>
+        <a href="#technical" class="nav-link">기술적 분석</a>
+        <a href="#scenario" class="nav-link">시나리오</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Header -->
+    <header>
+        <div class="report-type">Weekly Update</div>
+        <h1 class="report-title">커피 선물 시장<br>주간 동향</h1>
+        <p class="report-subtitle">Coffee Futures Market Weekly Update</p>
+        <div class="report-meta-row">
+            <span>2026년 2월 23일</span>
+            <span class="meta-divider">|</span>
+            <span>Align Commodities</span>
+            <span class="meta-divider">|</span>
+            <span>대상 기간: 2026.02.14 – 02.20</span>
+        </div>
+    </header>
+
+    <!-- Price Hero -->
+    <div class="price-hero">
+        <div class="price-hero-label">ICE 아라비카 5월물 (KCK26) — 2026.02.20 종가 · Barchart</div>
+        <div class="price-hero-main">
+            <div class="price-hero-value">285.70</div>
+            <div class="price-hero-unit">¢/lb</div>
+            <div class="price-hero-badge badge-pos">금요일 +0.30¢ (+0.11%)</div>
+            <div class="price-hero-badge badge-neg">주간 약 −4%</div>
+        </div>
+        <div class="price-hero-stats">
+            <div><div class="stat-label">주간 추세</div><div class="stat-value" style="color:#ff8080;">3주 연속 하락</div></div>
+            <div><div class="stat-label">기간 내 저점</div><div class="stat-value">15개월 최저 (목요일)</div></div>
+            <div><div class="stat-label">현물 (Cash)</div><div class="stat-value">326.34¢</div></div>
+            <div><div class="stat-label">현물-선물 스프레드</div><div class="stat-value">+40.64¢ (백워데이션)</div></div>
+            <div><div class="stat-label">52주 고점</div><div class="stat-value">437.95¢</div></div>
+        </div>
+    </div>
+
+    <!-- 이번 주 주요 뉴스 -->
+    <div class="news-banner" id="news">
+        <div class="news-banner-title">📰 이번 주(2/14–2/20) 주요 뉴스 — 최신 검색 기반</div>
+        <div class="news-banner-items">
+            <div class="news-banner-item">
+                <span class="news-banner-date">2/17</span>
+                <span>아라비카 <strong>7개월 최저</strong>, 로부스타 <strong>6개월 최저</strong> 동반 하락 — 브라질 풍작 전망 및 미나스 제라이스 강우 호조가 약세 유발 (Perfect Daily Grind)</span>
+            </div>
+            <div class="news-banner-item">
+                <span class="news-banner-date">2/19</span>
+                <span><strong>Cecafé 월간 보고서</strong> 발표: 1월 브라질 생두 수출 <strong>2.78백만백(−31% y/y)</strong>, 수출액 11.75억달러(−11.7%) — 풍작 기대에 따른 가격 하락으로 국제 거래 위축 (MercoPress / Cecafé)</span>
+            </div>
+            <div class="news-banner-item">
+                <span class="news-banner-date">2/19</span>
+                <span>미나스 제라이스·상파울루 과잉 강우로 <strong>커피 잎녹병(Leaf Rust, Hemileia vastatrix) 위험 상승</strong> — 아라비카 재배 농가 집중 모니터링 촉구 (Perfect Daily Grind)</span>
+            </div>
+            <div class="news-banner-item">
+                <span class="news-banner-date">2/19</span>
+                <span>USDA, <strong>전문 작물 10억달러($1B) 지원 프로그램</strong> 발표 — 하와이·푸에르토리코·캘리포니아 커피 농가 대상, 시장 교란·수입 비용 상승 보전 목적 (USDA)</span>
+            </div>
+            <div class="news-banner-item">
+                <span class="news-banner-date">2/20</span>
+                <span>미 달러 인덱스(DXY) 약세 전환 → 단기 숏커버링 유입, 아라비카 +0.30¢ 소폭 반등 마감 (Barchart)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 1: 시장 동향 -->
+    <section class="section" id="market">
+        <div class="section-header">
+            <div class="section-number">01</div>
+            <h2 class="section-title">이번 주 시장 동향</h2>
+        </div>
+
+        <p>이번 주 커피 선물 시장은 <strong>3주 연속 하락</strong>이 이어졌습니다. 2월 19일(목) 아라비카(KCK26)는 <strong>15개월 만의 최저치</strong>를, 로부스타(RMK26)는 <strong>6.25개월 최저치</strong>를 각각 기록했습니다. 2월 5일 CONAB의 기록적 브라질 생산 전망 발표 이후 공급 개선 심리가 시장 전반에 퍼지며, CFTC 투기 세력의 롱 청산이 연쇄적으로 출회되는 구도가 지속되고 있습니다.</p>
+
+        <p>금요일(2/20)에는 미 달러 인덱스(DXY) 약세를 빌미로 단기 숏커버링 수요가 유입되며 아라비카는 +0.30¢(+0.11%)로 소폭 반등 마감했습니다. 그러나 주간 기준으로는 약 4% 하락에 그쳐 추세 전환의 에너지는 아직 부족합니다.</p>
+
+        <div class="hi-box">
+            <div class="hi-box-title">⚡ 주간 핵심 메시지</div>
+            <p>현물(326¢)과 5월물(286¢) 간 약 40¢의 백워데이션은 근월물 실물 공급 타이트니스가 여전히 살아 있음을 보여줍니다. 반면 2027년물은 255~269¢대에 거래되며 시장이 중장기 공급 개선을 이미 반영하고 있습니다. 선물 시장은 과매도 신호를 발산하지만, 브라질 신작 기대가 해소되지 않는 한 반등 촉매는 제한적입니다.</p>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>계약</th>
+                    <th>종가 (¢/lb)</th>
+                    <th>전일대비</th>
+                    <th>오픈 인터레스트</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>현물 (Cash)</td><td>326.34</td><td class="pos">+1.80</td><td>—</td></tr>
+                <tr><td>KCH26 (3월)</td><td>288.30</td><td class="pos">+0.90</td><td>977</td></tr>
+                <tr><td><strong>KCK26 (5월) ★</strong></td><td><strong>285.70</strong></td><td class="pos">+0.30</td><td>78,701</td></tr>
+                <tr><td>KCN26 (7월)</td><td>281.10</td><td class="pos">+0.05</td><td>33,686</td></tr>
+                <tr><td>KCU26 (9월)</td><td>276.70</td><td class="neg">−0.25</td><td>20,252</td></tr>
+                <tr><td>KCZ26 (12월)</td><td>272.35</td><td class="neg">−0.60</td><td>17,165</td></tr>
+                <tr><td>KCH27 (2027.3월)</td><td>269.20</td><td class="neg">−0.80</td><td>4,783</td></tr>
+                <tr><td>KCZ27 (2027.12월)</td><td>255.25</td><td class="neg">−0.60</td><td>1,226</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Section 2: 펀더멘털 -->
+    <section class="section" id="fundamentals">
+        <div class="section-header">
+            <div class="section-number">02</div>
+            <h2 class="section-title">공급·수요 펀더멘털</h2>
+        </div>
+
+        <h3 class="sub">🇧🇷 브라질 — 기록 생산 전망과 잎녹병이라는 역설</h3>
+
+        <p>2월 5일 CONAB의 2026년 브라질 생산 전망(6,620만백, +17.2% y/y)이 이번 하락 사이클의 핵심 촉매입니다. 아라비카 4,410만백(+23.2%), 로부스타 2,210만백(+6.3%)으로 세분화됩니다. 중개업체 Eisa는 7,580만백, Sucafina 현지 조사팀은 세르라도·론도니아 기록 생산을 포함해 7,560만백을 전망합니다.</p>
+
+        <div class="al-box">
+            <div class="al-box-title">⚠️ 2월 19일 신규 위험 — 잎녹병(Leaf Rust) 경보</div>
+            <p>Perfect Daily Grind는 2월 19일(목) 미나스 제라이스와 상파울루 지역의 <strong>과잉 강우가 커피 잎녹병(Hemileia vastatrix) 위험을 증가시키고 있다</strong>고 보도했습니다. 전문가들은 아라비카 재배 농가의 집중 모니터링 필요성을 경고했습니다. 잎녹병이 대규모로 확산될 경우 현재의 약세 전망에 대한 상방 리스크로 작용할 수 있습니다.</p>
+        </div>
+
+        <p>한편 2026/27년 브라질 신작 선도 판매율은 약 8%에 불과해 역사 평균(17%)을 대폭 하회 중입니다. 선물 가격이 현물보다 낮아 생산자들의 선물 매도 유인이 제한되기 때문입니다. 이는 5월 수확 시즌 이후 대규모 공급 물량이 시장에 출회될 잠재적 압력 요인입니다.</p>
+
+        <div class="data-cards">
+            <div class="data-card">
+                <div class="dc-label">CONAB 2026 전망</div>
+                <div class="dc-value">66.2M 백</div>
+                <div class="dc-sub neg">+17.2% y/y (기록)</div>
+            </div>
+            <div class="data-card">
+                <div class="dc-label">Cecafé 1월 수출 <span style="font-size:0.65rem;color:var(--negative)">2/19 발표</span></div>
+                <div class="dc-value">2.78M 백</div>
+                <div class="dc-sub neg">−31% y/y</div>
+            </div>
+            <div class="data-card">
+                <div class="dc-label">1월 수출액</div>
+                <div class="dc-value">$11.75억</div>
+                <div class="dc-sub neg">−11.7% y/y</div>
+            </div>
+            <div class="data-card">
+                <div class="dc-label">신작 선도 판매율</div>
+                <div class="dc-value">8%</div>
+                <div class="dc-sub neg">역사 평균 17% 대폭 하회</div>
+            </div>
+        </div>
+
+        <h3 class="sub">🇻🇳 베트남 — 로부스타 수출 급증</h3>
+        <p>세계 최대 로부스타 생산국 베트남의 1월 수출량이 <strong>198,000톤(+38.3% y/y)</strong>을 기록했습니다. 2025년 연간 수출도 158만 MT(+17.5% y/y)로 확대됐으며, 2025/26 생산량은 176만 MT(+6%, 4년 최고)로 전망됩니다. 베트남의 강한 공급이 로부스타 가격 약세의 주요 구조적 요인입니다.</p>
+
+        <h3 class="sub">🇨🇴 콜롬비아 — 공급 차질 (부분적 지지)</h3>
+        <p>콜롬비아 FNC에 따르면, 1월 생산량이 <strong>89.3만백(−34% y/y)</strong>에 그쳤습니다. 세계 2위 아라비카 생산국의 공급 차질이 아라비카 가격의 추가 하락을 일부 제어하는 역할을 하고 있습니다.</p>
+
+        <h3 class="sub">📦 ICE 인증 재고 & 실물시장</h3>
+        <p>ICE 아라비카 재고는 11월 최저(396,513백)에서 1월 최고(461,829백)로 회복 후, 최근 약 426,321백 수준으로 안정화되고 있습니다. 재고의 89.6%가 유럽에 보관 중입니다. 주목할 점은 <strong>실물-선물 스프레드(원산지 프리미엄) 확대</strong>입니다. Reuters에 따르면, 이 확대는 선물 가격의 급락이 실물 시장의 과잉 공급을 반영하지 않을 수 있음을 시사합니다. 즉, 선물은 과매도 상태이나 실물 아라비카는 여전히 타이트할 수 있습니다.</p>
+
+        <h3 class="sub">🇺🇸 USDA 전문 작물 $10억 지원 프로그램 (2/19)</h3>
+        <p>미 농무부(USDA)는 2월 19일 하와이·푸에르토리코·캘리포니아 커피 농가를 포함한 전문 작물 생산자 대상 <strong>10억달러 지원 프로그램</strong>을 발표했습니다. 시장 교란·투입 비용 상승·외국 경쟁으로 인한 손실 보전을 목적으로 합니다. 단기 가격 영향은 제한적이나, 미국의 커피 공급 다변화 정책 신호로 해석됩니다.</p>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Section 3: 기술적 분석 & CFTC -->
+    <section class="section" id="technical">
+        <div class="section-header">
+            <div class="section-number">03</div>
+            <h2 class="section-title">기술적 분석 & CFTC 포지셔닝</h2>
+        </div>
+
+        <h3 class="sub">기술적 분석</h3>
+        <p>아라비카는 <strong>330¢ 지지선 하향 돌파</strong>를 기점으로 스노볼 매도세가 발생했습니다. Coffee Trading Academy에 따르면 이 레벨은 2025년 8~9월 랠리를 구축한 롱 포지션의 진입 기준선으로, 돌파 후 롱 청산 1만 1,200계약 + 신규 숏 7,000계약이 집중 출회됐습니다.</p>
+
+        <p>주간 차트 기준 <strong>이중 천장(Double Top) 패턴</strong> 진행 중이며, 넥라인은 277.25¢입니다. 이탈 시 기술적 목표치는 197¢로 측정됩니다. 일간·주간·월간 모멘텀은 Strong Sell을 유지하고 있습니다.</p>
+
+        <div class="data-cards">
+            <div class="data-card">
+                <div class="dc-label">핵심 지지선</div>
+                <div class="dc-value">277~280¢</div>
+                <div class="dc-sub neu">52주 저점: 275.65¢</div>
+            </div>
+            <div class="data-card">
+                <div class="dc-label">근접 저항선</div>
+                <div class="dc-value">295~300¢</div>
+                <div class="dc-sub neu">지지 → 저항 전환</div>
+            </div>
+            <div class="data-card">
+                <div class="dc-label">이중천장 넥라인</div>
+                <div class="dc-value">277.25¢</div>
+                <div class="dc-sub neg">이탈 시 197¢ 목표</div>
+            </div>
+            <div class="data-card">
+                <div class="dc-label">모멘텀 (일·주·월)</div>
+                <div class="dc-value">Strong Sell</div>
+                <div class="dc-sub neg">월간 Sell 전환</div>
+            </div>
+        </div>
+
+        <h3 class="sub">CFTC 투기 포지셔닝</h3>
+        <p>330¢ 이탈 이후 투기 세력은 총 <strong>1만 8,300계약 순매도</strong>를 단행했습니다(롱 청산 1.12만 + 신규 숏 0.70만). 전주 대비로는 6개월 저점 부근에서 1만 595계약의 숏 커버링이 발생, 과매도 해소의 초기 신호가 감지됩니다.</p>
+
+        <div class="hi-box">
+            <div class="hi-box-title">📊 백워데이션 구조 해석</div>
+            <p>현물(326.34¢) – 5월물(285.70¢) = <strong>약 40¢ 프리미엄</strong>이 유지되고 있어 근월물 실물 부족은 현존합니다. 그러나 ICE 재고 완만한 회복, EUDR 1년 시행 연기, 브라질 신작 기대의 3중 요인이 이 구조를 점진적으로 축소시키는 방향으로 작용 중입니다.</p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Section 4: 시나리오 -->
+    <section class="section" id="scenario">
+        <div class="section-header">
+            <div class="section-number">04</div>
+            <h2 class="section-title">향후 시나리오 분석</h2>
+        </div>
+
+        <div class="scenario-grid">
+            <div class="sc-card bear">
+                <div class="sc-hdr">
+                    <div class="sc-title">🐻 베어 — 하락 지속</div>
+                    <div class="sc-prob">45%</div>
+                </div>
+                <div class="sc-range">목표 범위: 260~277¢</div>
+                <div class="sc-desc">CONAB 추가 상향, 베트남 수출 강세, ICE 재고 반등 확대. 277.25¢ 넥라인 이탈 시 기술적 매도 심화. 신작 선도 판매율 저조로 수확 이후 물량 출회 위험. CFTC 숏 확대 재개.</div>
+            </div>
+            <div class="sc-card base">
+                <div class="sc-hdr">
+                    <div class="sc-title">⚖️ 베이스 — 박스권 횡보</div>
+                    <div class="sc-prob">38%</div>
+                </div>
+                <div class="sc-range">목표 범위: 275~300¢</div>
+                <div class="sc-desc">잎녹병 위험 + 콜롬비아 공급 차질이 하방 제한. 실물-선물 스프레드 괴리로 단기 반등 가능. 달러 약세 지속 시 숏커버 유발. 5월 수확 결과 확인까지 방향성 모색 구간.</div>
+            </div>
+            <div class="sc-card bull">
+                <div class="sc-hdr">
+                    <div class="sc-title">🐂 불 — 반등 전환</div>
+                    <div class="sc-prob">17%</div>
+                </div>
+                <div class="sc-range">목표 범위: 300~320¢</div>
+                <div class="sc-desc">잎녹병 확산으로 브라질 작황 전망 하향 조정. 달러 급격한 추가 약세. 로스터 커버리지 수요 급증. CFTC 숏 대규모 스퀴즈. 실물 프리미엄 확대가 선물 반등 촉발.</div>
+            </div>
+        </div>
+
+        <div class="hi-box" style="margin-top:24px;">
+            <div class="hi-box-title">💡 커피 수입·로스터 업체를 위한 시사점</div>
+            <p><strong>현재 가격(285~290¢)은 2025년 고점 대비 약 35% 할인 수준</strong>입니다. 베이스 시나리오 기준으로 6~12개월 커버리지의 분할 매수를 고려할 시점입니다. 단, 브라질 잎녹병 동향 및 5월 수확 초기 데이터 확인 전까지는 일괄 매입보다 단계적 접근이 권장됩니다. ICE 아라비카 1계약(37,500파운드) 기준 증거금 확인 후 하나증권 선물 창구를 통한 헤지 실행을 검토하시기 바랍니다.</p>
+        </div>
+    </section>
+
+    <!-- Sources -->
+    <div class="sources-section">
+        <div class="sources-title">데이터 출처 · 참고 자료 (2026.02.14–02.20 기간 내 자료 우선)</div>
+        <div class="sources-list">
+            <span class="source-tag">Barchart (2026.02.20)</span>
+            <span class="source-tag">CONAB (2026.02.05)</span>
+            <span class="source-tag">Cecafé 월간 보고서 (2026.02.19)</span>
+            <span class="source-tag">Perfect Daily Grind (2026.02.17, 19, 20)</span>
+            <span class="source-tag">MercoPress (2026.02.10)</span>
+            <span class="source-tag">Somar Meteorologia</span>
+            <span class="source-tag">ICE Futures U.S.</span>
+            <span class="source-tag">Vietnam GSO</span>
+            <span class="source-tag">Colombia FNC</span>
+            <span class="source-tag">USDA FAS (2026.02.19)</span>
+            <span class="source-tag">CFTC COT Report</span>
+            <span class="source-tag">Coffee Trading Academy (2026.02.19)</span>
+            <span class="source-tag">Sucafina Market Report</span>
+            <span class="source-tag">Trading Economics</span>
+            <span class="source-tag">I&amp;M Smith Coffee Reports</span>
+        </div>
+    </div>
+
+</div><!-- /container -->
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Coffee Market Info</div>
+                <p class="footer-desc">Align Commodities가 제공하는 커피 선물 시장 주간 인텔리전스. 실무 트레이딩 경험 기반의 데이터 중심 분석.</p>
+            </div>
+            <div>
+                <div class="footer-col-title">Reports</div>
+                <a href="#" class="footer-link">주간 위클리 업데이트</a>
+                <a href="#" class="footer-link">인뎁스 분석</a>
+                <a href="#" class="footer-link">헤징 가이드</a>
+            </div>
+            <div>
+                <div class="footer-col-title">Align Commodities</div>
+                <a href="#" class="footer-link">커피 그린빈 수입</a>
+                <a href="#" class="footer-link">비철금속 브로커리지</a>
+                <a href="#" class="footer-link">구독 서비스 문의</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copyright">© 2026 Align Commodities · Coffee Market Info</div>
+            <div class="footer-disclaimer">본 보고서는 정보 제공 목적으로만 작성되었으며 투자 권유가 아닙니다. 커피 선물 거래는 원금 손실의 위험이 있으며, 투자 결정 전 전문가와 상담하시기 바랍니다.</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const nav = document.getElementById('topNav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+</script>
+
+</body>
+</html>

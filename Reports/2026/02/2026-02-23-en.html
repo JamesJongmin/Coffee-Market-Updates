@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | February 23, 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "커피 선물 시장 주간 동향",
+    "date": "2026-02-23",
+    "type": "weekly",
+    "summary": "May arabica (KCK26) settled at 285.70¢ — down ~4% w/w, 15-month low hit Thursday. Bearish drivers: CONAB record Brazil crop forecast (+17.2% y/y, 66.2M bags), Vietnam Jan exports +38.3% y/y. This week's key news: ① Cecafé Jan exports -31% y/y (2.78M bags) (Feb 19); ② Leaf rust risk warning for Minas Gerais / São Paulo from excessive rainfall (Feb 19); ③ USDA $1B specialty crop assistance program announced (Feb 19); ④ Physical-futures spread widening flags potential futures oversell. USD weakness triggered Friday short-covering (+0.30¢). Key support 277–280¢, resistance 295–300¢.",
+    "tags": ["285.70cents", "15-month-low", "brazil-record-crop", "leaf-rust-warning", "cecafe-export-slump", "vietnam-surge", "USDA-1B-program", "physical-futures-spread", "usd-weakness-bounce"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "CONAB", "Somar Meteorologia", "Cecafé", "Perfect Daily Grind", "Vietnam GSO", "Colombia FNC", "CFTC", "USDA FAS", "Sucafina", "Coffee Trading Academy", "Trading Economics", "MercoPress"],
+    "price_current": "285.70",
+    "price_change": "Fri +0.30¢ (+0.11%) / Week ~-4%"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Nav */
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            background: rgba(250,248,245,0.94);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26,15,10,0.07);
+            z-index: 1000; display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px,5vw,60px);
+            transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.05); }
+        .nav-brand { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; color:var(--roast); text-decoration:none; letter-spacing:0.02em; }
+        .nav-links { display:flex; gap:28px; align-items:center; }
+        .nav-link { font-size:0.86rem; color:var(--roast); text-decoration:none; opacity:0.65; transition:opacity 0.2s; font-weight:500; }
+        .nav-link:hover { opacity:1; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 112px 24px 80px; }
+
+        /* Header */
+        header {
+            margin-bottom: 52px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(26,15,10,0.08);
+        }
+
+        .report-meta {
+            display: flex; gap: 14px; flex-wrap: wrap;
+            margin-bottom: 20px;
+            font-size: 0.84rem; color: var(--roast); opacity: 0.7;
+            align-items: center;
+        }
+        .meta-item { font-weight: 600; }
+        .meta-dot { color: var(--copper); }
+
+        .report-badge {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: var(--roast); color: white;
+            font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            padding: 5px 14px; border-radius: 5px;
+            margin-bottom: 22px;
+        }
+        .report-badge::before { content:''; width:6px; height:6px; background:var(--accent); border-radius:50%; }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4.5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .deck {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--roast);
+            opacity: 0.75;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        /* Stat Cards Row */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+            gap: 14px;
+            margin: 32px 0 0;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid rgba(26,15,10,0.08);
+            border-radius: 12px;
+            padding: 18px 20px;
+            transition: all 0.25s ease;
+        }
+        .stat-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.06); transform: translateY(-2px); }
+        .stat-card-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--roast); opacity: 0.6; margin-bottom: 7px; font-weight: 600; }
+        .stat-card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 700; color: var(--espresso); line-height: 1.1; }
+        .stat-card-sub { font-size: 0.82rem; margin-top: 4px; font-weight: 600; }
+        .pos { color: var(--positive); }
+        .neg { color: var(--negative); }
+        .neu { color: var(--copper); }
+
+        /* Price Hero (light style) */
+        .price-hero {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26,15,10,0.06);
+            border-radius: 18px;
+            padding: clamp(28px,4vw,44px);
+            margin: 44px 0;
+        }
+        .ph-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--roast); opacity: 0.6; margin-bottom: 10px; }
+        .ph-main { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+        .ph-price { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem,7vw,4.5rem); font-weight: 700; line-height: 1; color: var(--espresso); letter-spacing: -0.02em; }
+        .ph-unit { font-size: 1.3rem; color: var(--roast); opacity: 0.6; padding-bottom: 0.65rem; }
+        .ph-badge { font-size: 1rem; font-weight: 600; padding: 6px 15px; border-radius: 8px; padding-bottom: 0.65rem; }
+        .ph-badge.p { background: rgba(74,124,89,0.12); color: var(--positive); }
+        .ph-badge.n { background: rgba(194,58,58,0.1); color: var(--negative); }
+        .ph-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(26,15,10,0.08);
+        }
+        .ph-item-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--roast); opacity: 0.55; margin-bottom: 3px; font-weight: 600; }
+        .ph-item-value { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--espresso); }
+
+        /* This Week Ticker */
+        .ticker-box {
+            background: var(--espresso);
+            border-radius: 14px;
+            padding: 22px 28px;
+            margin: 40px 0;
+        }
+        .ticker-title { font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 16px; }
+        .ticker-items { display: grid; gap: 11px; }
+        .ticker-item { display: flex; align-items: flex-start; gap: 14px; color: rgba(245,240,232,0.82); font-size: 0.89rem; line-height: 1.55; }
+        .ticker-date { font-size: 0.69rem; font-weight: 700; color: var(--copper); white-space: nowrap; padding-top: 3px; min-width: 46px; }
+
+        /* Sections */
+        section { margin-bottom: 52px; }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+        .section-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--accent); opacity: 0.4; line-height: 1; min-width: 32px; }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 700; color: var(--espresso); letter-spacing: -0.01em; line-height: 1.2; }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--espresso); margin: 28px 0 13px; }
+        h3:first-of-type { margin-top: 0; }
+        p { margin-bottom: 18px; }
+        p:last-child { margin-bottom: 0; }
+
+        /* Data table */
+        .futures-table {
+            width: 100%; border-collapse: collapse;
+            margin: 22px 0; background: white;
+            border-radius: 12px; overflow: hidden;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+        }
+        .futures-table thead { background: var(--roast); color: white; }
+        .futures-table th { padding: 13px 16px; text-align: left; font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .futures-table td { padding: 13px 16px; border-bottom: 1px solid var(--steam); font-size: 0.91rem; }
+        .futures-table tbody tr:hover { background: var(--crema); }
+        .futures-table tbody tr:last-child td { border-bottom: none; }
+
+        /* Data cards */
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 13px; margin: 22px 0; }
+        .dc { background: white; border: 1px solid rgba(26,15,10,0.07); border-radius: 11px; padding: 17px; transition: all 0.2s; }
+        .dc:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .dc-l { font-size: 0.7rem; font-weight: 600; color: var(--copper); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+        .dc-v { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 700; color: var(--espresso); margin-bottom: 3px; line-height: 1.1; }
+        .dc-s { font-size: 0.78rem; font-weight: 600; }
+
+        /* Boxes */
+        .hi-box {
+            background: linear-gradient(135deg, var(--crema), white);
+            border: 1px solid rgba(196,165,116,0.3);
+            border-left: 4px solid var(--copper);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 20px 0;
+        }
+        .hi-box-label { font-size: 0.7rem; font-weight: 700; color: var(--copper); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 9px; }
+
+        .al-box {
+            background: rgba(194,58,58,0.04);
+            border: 1px solid rgba(194,58,58,0.18);
+            border-left: 4px solid var(--negative);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 20px 0;
+        }
+        .al-box-label { font-size: 0.7rem; font-weight: 700; color: var(--negative); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 9px; }
+
+        /* Scenario */
+        .scenario-grid { display: grid; gap: 14px; margin: 20px 0; }
+        .sc { background: white; border: 1px solid rgba(26,15,10,0.08); border-radius: 12px; padding: 22px 26px; transition: all 0.3s; }
+        .sc:hover { box-shadow: 0 6px 22px rgba(0,0,0,0.07); transform: translateY(-2px); }
+        .sc.bear { border-left: 4px solid var(--negative); }
+        .sc.base { border-left: 4px solid var(--copper); }
+        .sc.bull { border-left: 4px solid var(--positive); }
+        .sc-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+        .sc-title { font-size: 1rem; font-weight: 700; color: var(--espresso); }
+        .sc-prob { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; }
+        .bear .sc-prob { color: var(--negative); }
+        .base .sc-prob { color: var(--copper); }
+        .bull .sc-prob { color: var(--positive); }
+        .sc-range { font-size: 0.77rem; font-weight: 600; color: var(--roast); opacity: 0.55; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .sc-desc { font-size: 0.9rem; line-height: 1.68; }
+
+        /* Divider */
+        .divider { border: none; border-top: 1px solid var(--steam); margin: 44px 0; }
+
+        /* Sources */
+        .sources { background: white; border: 1px solid rgba(26,15,10,0.07); border-radius: 12px; padding: 20px 24px; margin-top: 40px; }
+        .sources-label { font-size: 0.7rem; font-weight: 700; color: var(--roast); opacity: 0.55; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .sources-list { display: flex; flex-wrap: wrap; gap: 7px; }
+        .src { display: inline-block; padding: 3px 11px; background: var(--steam); color: var(--roast); font-size: 0.76rem; font-weight: 500; border-radius: 5px; }
+
+        /* Footer */
+        .footer { background: var(--espresso); color: var(--crema); padding: 48px 0 30px; margin-top: 80px; }
+        .footer-inner { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 40px; margin-bottom: 32px; }
+        .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 11px; }
+        .footer-desc { font-size: 0.84rem; line-height: 1.7; opacity: 0.6; }
+        .footer-col-title { font-weight: 600; margin-bottom: 11px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.65; }
+        .footer-link { display: block; color: var(--crema); text-decoration: none; font-size: 0.84rem; opacity: 0.5; margin-bottom: 8px; transition: opacity 0.2s; }
+        .footer-link:hover { opacity: 1; }
+        .footer-bottom { padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; }
+        .footer-copyright { font-size: 0.79rem; opacity: 0.4; margin-bottom: 7px; }
+        .footer-disclaimer { font-size: 0.74rem; opacity: 0.3; max-width: 620px; margin: 0 auto; line-height: 1.6; }
+
+        @media (max-width: 600px) {
+            .ph-main { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .nav-links { display: none; }
+            .sc-hdr { flex-direction: column; align-items: flex-start; gap: 3px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="top-nav" id="topNav">
+    <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+    <div class="nav-links">
+        <a href="#news" class="nav-link">This Week</a>
+        <a href="#market" class="nav-link">Market</a>
+        <a href="#fundamentals" class="nav-link">Fundamentals</a>
+        <a href="#technical" class="nav-link">Technicals</a>
+        <a href="#scenario" class="nav-link">Outlook</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Header -->
+    <header>
+        <div class="report-badge">Weekly Update</div>
+        <div class="report-meta">
+            <span class="meta-item">February 23, 2026</span>
+            <span class="meta-dot">•</span>
+            <span class="meta-item">Align Commodities</span>
+            <span class="meta-dot">•</span>
+            <span class="meta-item">Coverage: Feb 14–20, 2026</span>
+        </div>
+        <h1>Coffee Futures Market<br>Weekly Update</h1>
+        <p class="deck">Brazil's Record Crop vs. Leaf Rust Risk — Futures Hit 15-Month Low as Physical Market Tells a Different Story</p>
+
+        <!-- Key Stat Cards -->
+        <div class="stat-row">
+            <div class="stat-card">
+                <div class="stat-card-label">ICE Arabica May '26</div>
+                <div class="stat-card-value">285.70¢</div>
+                <div class="stat-card-sub pos">Fri +0.30¢ (+0.11%)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">Week Performance</div>
+                <div class="stat-card-value">~−4%</div>
+                <div class="stat-card-sub neg">3rd Consecutive Week Down</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">Brazil 2026 Crop</div>
+                <div class="stat-card-value">66.2M</div>
+                <div class="stat-card-sub neg">bags · +17.2% y/y (CONAB)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">Cash–May Spread</div>
+                <div class="stat-card-value">+40.6¢</div>
+                <div class="stat-card-sub neu">Backwardation persists</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Price Hero -->
+    <div class="price-hero">
+        <div class="ph-label">ICE Arabica Coffee — May '26 (KCK26) · Barchart · Feb 20, 2026</div>
+        <div class="ph-main">
+            <div class="ph-price">285.70</div>
+            <div class="ph-unit">¢/lb</div>
+            <div class="ph-badge p">Fri +0.30¢ (+0.11%)</div>
+            <div class="ph-badge n">Week ~−4%</div>
+        </div>
+        <div class="ph-grid">
+            <div>
+                <div class="ph-item-label">Cash (Spot)</div>
+                <div class="ph-item-value">326.34¢</div>
+            </div>
+            <div>
+                <div class="ph-item-label">15-Month Low</div>
+                <div class="ph-item-value">Hit Thursday</div>
+            </div>
+            <div>
+                <div class="ph-item-label">52-Week High</div>
+                <div class="ph-item-value">437.95¢</div>
+            </div>
+            <div>
+                <div class="ph-item-label">52-Week Low</div>
+                <div class="ph-item-value">275.65¢</div>
+            </div>
+            <div>
+                <div class="ph-item-label">Robusta May '26</div>
+                <div class="ph-item-value" style="color:var(--negative);">6.25-Mo. Low</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- This Week's News -->
+    <div class="ticker-box" id="news">
+        <div class="ticker-title">📰 This Week's Key Developments — Feb 14–20, 2026</div>
+        <div class="ticker-items">
+            <div class="ticker-item">
+                <span class="ticker-date">Feb 17</span>
+                <span>Arabica drops to <strong>7-month low</strong>, robusta to <strong>6-month low</strong> — Brazil's bumper crop outlook and Minas Gerais rainfall improvement cited as key bearish drivers (Perfect Daily Grind)</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-date">Feb 19</span>
+                <span><strong>Cecafé Monthly Report:</strong> Brazil Jan green coffee exports fell <strong>−31% y/y to 2.78M bags</strong>; export revenue −11.7% y/y to $1.175B — lower international prices amid record crop expectations discouraged trade (MercoPress / Cecafé)</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-date">Feb 19</span>
+                <span>Excessive rainfall in Minas Gerais &amp; São Paulo raises <strong>coffee leaf rust (Hemileia vastatrix) risk</strong> — experts urge intensified monitoring of arabica farms (Perfect Daily Grind)</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-date">Feb 19</span>
+                <span>USDA announces <strong>$1 billion Specialty Crop Assistance Program</strong> — includes U.S. coffee growers in Hawaii, Puerto Rico &amp; California to offset market disruptions and elevated input costs (USDA)</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-date">Feb 20</span>
+                <span>USD weakness (DXY lower) triggers short-covering in coffee futures — arabica closes up +0.30¢ to partially recover week's losses (Barchart)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 1: Market Overview -->
+    <section id="market">
+        <div class="section-header">
+            <div class="section-num">01</div>
+            <h2>Market Overview</h2>
+        </div>
+
+        <p>Coffee futures extended their slide for a <strong>third consecutive week</strong>. May arabica (KCK26) struck a <strong>15-month low</strong> on Thursday February 19, while ICE robusta hit a <strong>6.25-month low</strong>. The sustained sell-off began after CONAB's February 5 record crop forecast and accelerated through speculative long liquidation once prices breached the critical 330¢ level.</p>
+
+        <p>Friday's (Feb 20) session brought a modest reprieve: a weaker US Dollar Index (DXY) triggered short-covering inflows, lifting arabica +0.30¢ (+0.11%) off Thursday's lows. Despite the bounce, the week's damage stood at approximately −4%, leaving the market vulnerable to further downside.</p>
+
+        <div class="hi-box">
+            <div class="hi-box-label">⚡ Weekly Headline</div>
+            <p>The 40¢ spot–futures spread (cash at 326¢ vs. May at 286¢) signals that near-term physical supply remains tight even as the futures market prices in Brazil's coming harvest. The two markets are telling different stories — a divergence that cannot persist indefinitely.</p>
+        </div>
+
+        <table class="futures-table">
+            <thead>
+                <tr>
+                    <th>Contract</th>
+                    <th>Settle (¢/lb)</th>
+                    <th>Day Change</th>
+                    <th>Open Interest</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Cash (Spot)</td><td>326.34</td><td class="pos">+1.80</td><td>—</td></tr>
+                <tr><td>KCH26 (Mar '26)</td><td>288.30</td><td class="pos">+0.90</td><td>977</td></tr>
+                <tr><td><strong>KCK26 (May '26) ★</strong></td><td><strong>285.70</strong></td><td class="pos">+0.30</td><td>78,701</td></tr>
+                <tr><td>KCN26 (Jul '26)</td><td>281.10</td><td class="pos">+0.05</td><td>33,686</td></tr>
+                <tr><td>KCU26 (Sep '26)</td><td>276.70</td><td class="neg">−0.25</td><td>20,252</td></tr>
+                <tr><td>KCZ26 (Dec '26)</td><td>272.35</td><td class="neg">−0.60</td><td>17,165</td></tr>
+                <tr><td>KCH27 (Mar '27)</td><td>269.20</td><td class="neg">−0.80</td><td>4,783</td></tr>
+                <tr><td>KCZ27 (Dec '27)</td><td>255.25</td><td class="neg">−0.60</td><td>1,226</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Section 2: Fundamentals -->
+    <section id="fundamentals">
+        <div class="section-header">
+            <div class="section-num">02</div>
+            <h2>Supply &amp; Demand Fundamentals</h2>
+        </div>
+
+        <h3>🇧🇷 Brazil — Record Crop Meets Leaf Rust Warning</h3>
+
+        <p>CONAB's February 5 crop survey — forecasting 2026 production at <strong>66.2 million bags (+17.2% y/y)</strong>, a new record — remains the dominant bearish catalyst. Arabica is pegged at 44.1M bags (+23.2%), robusta at 22.1M bags (+6.3%). Independent estimates run even higher: broker Eisa projects 75.8M bags, while Sucafina's Brazil crop tour points to 75.6M bags (49.7M arabica + 25.9M robusta), with both Cerrado and Rondônia on track for record output.</p>
+
+        <div class="al-box">
+            <div class="al-box-label">⚠️ New Risk — Leaf Rust Alert (Feb 19)</div>
+            <p>Perfect Daily Grind reported Thursday that excessive rainfall across Minas Gerais and São Paulo has elevated the risk of <strong>coffee leaf rust (Hemileia vastatrix)</strong>. Experts are urging arabica farmers to intensify crop monitoring. If leaf rust spreads significantly, the current bearish production outlook could be revised downward — representing a key upside risk to the bear case.</p>
+        </div>
+
+        <p>On the positive weather side, Somar Meteorologia confirmed that Minas Gerais — Brazil's largest arabica-producing state — received 72.6mm of rain in the week ended February 6, equivalent to <strong>113% of the historical average</strong>, supporting bean-filling at a critical stage of development.</p>
+
+        <p>However, the 2026/27 forward sales rate sits at only ~<strong>8% of estimated production</strong>, far below the historical average of 17%. With futures trading below spot, producers face limited incentive to lock in forward sales — storing potential supply pressure for post-harvest market impact.</p>
+
+        <div class="data-grid">
+            <div class="dc">
+                <div class="dc-l">CONAB 2026 Forecast</div>
+                <div class="dc-v">66.2M</div>
+                <div class="dc-s neg">bags · +17.2% y/y (record)</div>
+            </div>
+            <div class="dc">
+                <div class="dc-l">Cecafé Jan Exports <small style="font-size:0.62rem;color:var(--negative)">Feb 19</small></div>
+                <div class="dc-v">2.78M</div>
+                <div class="dc-s neg">bags · −31% y/y</div>
+            </div>
+            <div class="dc">
+                <div class="dc-l">Jan Export Revenue</div>
+                <div class="dc-v">$1.18B</div>
+                <div class="dc-s neg">−11.7% y/y</div>
+            </div>
+            <div class="dc">
+                <div class="dc-l">Forward Sales (2026/27)</div>
+                <div class="dc-v">~8%</div>
+                <div class="dc-s neg">vs. 17% hist. avg.</div>
+            </div>
+        </div>
+
+        <h3>🇻🇳 Vietnam — Robusta Export Surge Continues</h3>
+        <p>Vietnam's January coffee exports surged to <strong>198,000 MT (+38.3% y/y)</strong>, maintaining sustained downward pressure on robusta prices. Full-year 2025 exports reached 1.58M MT (+17.5% y/y), and the 2025/26 crop is projected at 1.76M MT (+6% y/y), a 4-year high.</p>
+
+        <h3>🇨🇴 Colombia — Supply Disruption Offers Partial Support</h3>
+        <p>Colombia's National Federation of Coffee Growers (FNC) reported January production of <strong>893,000 bags (−34% y/y)</strong>. As the world's second-largest arabica producer, Colombia's sustained shortfall is limiting the downside in arabica prices and widening origin differentials.</p>
+
+        <h3>📦 ICE Inventories &amp; Physical Market Dynamics</h3>
+        <p>ICE-certified arabica inventories recovered from a 1.75-year low of 396,513 bags (Nov 18) to a 3.75-month high of 461,829 bags (Jan 7), before settling around ~426,000 bags currently, with 89.6% held in European warehouses. Robusta inventories also rebounded from a 14-month low.</p>
+
+        <div class="hi-box">
+            <div class="hi-box-label">💡 Physical vs. Futures Divergence</div>
+            <p>A notable development this week: <strong>physical-market premiums (differentials) are widening relative to futures</strong>. According to Reuters, this suggests the futures sell-off may have overshot the actual physical supply situation. In other words — futures look oversold while nearby arabica physical supply remains relatively tight.</p>
+        </div>
+
+        <h3>🇺🇸 USDA $1B Specialty Crop Assistance (Feb 19)</h3>
+        <p>The USDA announced a <strong>$1 billion Specialty Crop Assistance Program</strong> covering U.S. coffee farmers in Hawaii, Puerto Rico, and California, designed to offset market disruptions, elevated input costs, and import competition. Near-term price impact is limited, but the policy signals a strategic push to expand domestic U.S. coffee production infrastructure.</p>
+
+        <h3>🌐 Global Supply Outlook</h3>
+        <p>USDA FAS projects 2025/26 world coffee production at <strong>178.85 million bags (+2.0% y/y)</strong>, with arabica down 4.7% to 95.5M bags and robusta up 10.9% to 83.3M bags. Ending stocks are forecast at 20.15M bags (−5.4% y/y), remaining historically low.</p>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Section 3: Technical & CFTC -->
+    <section id="technical">
+        <div class="section-header">
+            <div class="section-num">03</div>
+            <h2>Technical Analysis &amp; CFTC Positioning</h2>
+        </div>
+
+        <h3>Technical Picture</h3>
+        <p>The breach of <strong>330¢ support</strong> acted as the technical trigger for accelerated selling. That level represented the approximate cost basis for long positions built during the Aug–Sep 2025 rally. Once prices slipped below it, stop-loss selling cascaded through the market in a classic snowball pattern (Coffee Trading Academy analysis).</p>
+
+        <p>On the weekly chart, a potential <strong>Double Top reversal pattern</strong> is forming, with the neckline at <strong>277.25¢</strong>. A confirmed break below that level projects a measured-move target near 197¢. Daily, weekly, and monthly momentum indicators all read Strong Sell.</p>
+
+        <div class="data-grid">
+            <div class="dc">
+                <div class="dc-l">Key Support</div>
+                <div class="dc-v">277–280¢</div>
+                <div class="dc-s neu">52-wk low: 275.65¢</div>
+            </div>
+            <div class="dc">
+                <div class="dc-l">Near Resistance</div>
+                <div class="dc-v">295–300¢</div>
+                <div class="dc-s neu">Prior support → resistance</div>
+            </div>
+            <div class="dc">
+                <div class="dc-l">Double Top Neckline</div>
+                <div class="dc-v">277.25¢</div>
+                <div class="dc-s neg">Break → 197¢ target</div>
+            </div>
+            <div class="dc">
+                <div class="dc-l">Momentum (D/W/M)</div>
+                <div class="dc-v">Strong Sell</div>
+                <div class="dc-s neg">Monthly turned Sell</div>
+            </div>
+        </div>
+
+        <h3>CFTC Speculative Positioning</h3>
+        <p>Since the 330¢ breach, speculators net sold <strong>18,300 contracts</strong> — comprising 11,200 long liquidations and 7,100 new shorts. This "snowball effect" drove the acceleration in the sell-off. That said, the most recent COT data showed 10,595 contracts of short-covering near 6-month lows, signaling tentative oversold relief.</p>
+
+        <div class="hi-box">
+            <div class="hi-box-label">📊 Backwardation Structure</div>
+            <p>The <strong>~40¢ cash-to-May spread</strong> (326¢ vs. 286¢) confirms that nearby physical supply remains constrained. However, with ICE inventory recovery underway, EUDR enforcement delayed one year, and Brazil's harvest approaching, this premium is expected to narrow progressively through 2026.</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Section 4: Scenarios -->
+    <section id="scenario">
+        <div class="section-header">
+            <div class="section-num">04</div>
+            <h2>Scenario Outlook</h2>
+        </div>
+
+        <div class="scenario-grid">
+            <div class="sc bear">
+                <div class="sc-hdr">
+                    <div class="sc-title">🐻 Bear — Continued Decline</div>
+                    <div class="sc-prob">45%</div>
+                </div>
+                <div class="sc-range">Target Range: 260–277¢</div>
+                <div class="sc-desc">CONAB further upgrades Brazil crop; Vietnam exports remain strong; ICE stocks rebuild. Technical break below 277.25¢ neckline triggers momentum selling. Low forward sales rate (~8%) suggests heavy post-harvest supply. CFTC shorts re-expand.</div>
+            </div>
+            <div class="sc base">
+                <div class="sc-hdr">
+                    <div class="sc-title">⚖️ Base — Range-Bound Consolidation</div>
+                    <div class="sc-prob">38%</div>
+                </div>
+                <div class="sc-range">Target Range: 275–300¢</div>
+                <div class="sc-desc">Leaf rust concerns and Colombia's supply shortfall limit downside. Physical-futures divergence drives periodic bounces. USD weakness sustains short-covering bids. Direction remains unclear until May harvest data arrives.</div>
+            </div>
+            <div class="sc bull">
+                <div class="sc-hdr">
+                    <div class="sc-title">🐂 Bull — Upside Reversal</div>
+                    <div class="sc-prob">17%</div>
+                </div>
+                <div class="sc-range">Target Range: 300–320¢</div>
+                <div class="sc-desc">Leaf rust spreads materially, triggering crop downgrade. Sharp USD weakness. Roaster short-covering demand surges. Large CFTC short squeeze. Physical premiums pull futures sharply higher.</div>
+            </div>
+        </div>
+
+        <div class="hi-box" style="margin-top:22px;">
+            <div class="hi-box-label">💡 Implications for Roasters &amp; Importers</div>
+            <p>At 285–290¢, prices are approximately <strong>35% below the September 2025 peak</strong>. Under the base scenario, staged purchasing over 6–12 months offers a reasonable entry framework. However, the leaf rust situation and May harvest early data should be monitored before committing fully. ICE arabica contracts (37,500 lbs each) offer hedging precision — consult your broker on margin requirements at current price levels.</p>
+        </div>
+    </section>
+
+    <!-- Sources -->
+    <div class="sources">
+        <div class="sources-label">Data Sources — Priority: Feb 14–20, 2026 publications</div>
+        <div class="sources-list">
+            <span class="src">Barchart (Feb 20, 2026)</span>
+            <span class="src">CONAB (Feb 5, 2026)</span>
+            <span class="src">Cecafé Monthly Report (Feb 19, 2026)</span>
+            <span class="src">Perfect Daily Grind (Feb 17, 19, 20)</span>
+            <span class="src">MercoPress (Feb 10, 2026)</span>
+            <span class="src">Somar Meteorologia</span>
+            <span class="src">ICE Futures U.S.</span>
+            <span class="src">Vietnam GSO</span>
+            <span class="src">Colombia FNC</span>
+            <span class="src">USDA FAS (Feb 19, 2026)</span>
+            <span class="src">CFTC COT Report</span>
+            <span class="src">Coffee Trading Academy (Feb 19, 2026)</span>
+            <span class="src">Sucafina Market Report</span>
+            <span class="src">Trading Economics</span>
+            <span class="src">I&amp;M Smith Coffee Reports</span>
+        </div>
+    </div>
+
+</div><!-- /container -->
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Coffee Market Info</div>
+                <p class="footer-desc">Weekly coffee futures market intelligence by Align Commodities — data-driven analysis grounded in real trading experience.</p>
+            </div>
+            <div>
+                <div class="footer-col-title">Reports</div>
+                <a href="#" class="footer-link">Weekly Update</a>
+                <a href="#" class="footer-link">In-Depth Analysis</a>
+                <a href="#" class="footer-link">Hedging Guide</a>
+            </div>
+            <div>
+                <div class="footer-col-title">Align Commodities</div>
+                <a href="#" class="footer-link">Coffee Green Bean Imports</a>
+                <a href="#" class="footer-link">Non-Ferrous Metals Brokerage</a>
+                <a href="#" class="footer-link">Subscription Inquiry</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copyright">© 2026 Align Commodities · Coffee Market Info · coffeemarket.info</div>
+            <div class="footer-disclaimer">This report is provided for informational purposes only and does not constitute investment advice. Coffee futures trading involves substantial risk of loss. Please consult a qualified advisor before making any investment decisions.</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const nav = document.getElementById('topNav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+</script>
+
+</body>
+</html>
