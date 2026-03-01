@@ -1209,7 +1209,7 @@
                 <div class="uco-price-chart-row">
                     <div class="uco-price-chart-panel full">
                         <div class="uco-price-chart-title">바이오연료 제품 판매가격 추이 ($/MT, fob ARA, Jan 2024 ~ Jan 2026)</div>
-                        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px;">
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="display:inline-block; width:28px; height:3px; background:#f39c12; border-radius:2px;"></span>
                                 <span style="font-size:0.78rem; color:rgba(255,255,255,0.7);">SAF (HEFA-SPK)</span>
@@ -1223,46 +1223,62 @@
                                 <span style="font-size:0.78rem; color:rgba(255,255,255,0.7);">Bio Marine Fuel (B30 UCOME/VLSFO)</span>
                             </div>
                         </div>
+                        <div style="display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <span style="display:inline-block; width:22px; height:0; border-top:2.5px solid rgba(255,255,255,0.7);"></span>
+                                <span style="font-size:0.72rem; color:rgba(255,255,255,0.55);">실선 = 확인된 실제 데이터</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <span style="display:inline-block; width:22px; height:0; border-top:2.5px dashed rgba(255,255,255,0.5);"></span>
+                                <span style="font-size:0.72rem; color:rgba(255,255,255,0.55);">점선 = 추정 보간</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <span style="display:inline-block; width:7px; height:7px; background:rgba(255,255,255,0.7); border-radius:50%;"></span>
+                                <span style="font-size:0.72rem; color:rgba(255,255,255,0.55);">큰 점 = 확인된 데이터 포인트</span>
+                            </div>
+                        </div>
                         <div class="uco-price-chart-wrap tall">
                             <canvas id="biofuelProductPriceChart"></canvas>
                         </div>
                         <div class="price-event-markers" style="margin-top: 12px;">
                             <span class="price-event-tag policy">2024.03 SAF 2024 최저 $1,740</span>
-                            <span class="price-event-tag supply">2024.11 HVO 공급 부족 급등</span>
+                            <span class="price-event-tag supply">2024.08 SAF $2,631 (17개월 최고)</span>
+                            <span class="price-event-tag supply">2024.11 HVO 공급 부족 $2,653</span>
+                            <span class="price-event-tag policy">2024.11 SAF $2,950 (2년 최고)</span>
                             <span class="price-event-tag demand">2025.01 EU ReFuelEU SAF 2% 시행</span>
-                            <span class="price-event-tag demand">2025.10 SAF 컴플라이언스 매수 피크</span>
+                            <span class="price-event-tag demand">2025.10-11 SAF/HVO 컴플라이언스 피크</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 스냅샷 카드 -->
+                <!-- 스냅샷 카드: 최신 확인 가격 -->
                 <div class="uco-price-snapshot" style="margin-bottom: 20px;">
                     <div class="price-snap-card">
                         <div class="price-snap-flag">&#x2708;&#xFE0F;</div>
                         <div class="price-snap-country">SAF (HEFA-SPK)</div>
-                        <div class="price-snap-value">$2,380</div>
-                        <div class="price-snap-change up">&#9650; Jan 2026</div>
-                        <div class="price-snap-spec">Argus &middot; fob ARA</div>
+                        <div class="price-snap-value">$2,305</div>
+                        <div class="price-snap-change down">&#9660; Dec 2025</div>
+                        <div class="price-snap-spec">Fastmarkets &middot; fob ARA</div>
                     </div>
                     <div class="price-snap-card">
                         <div class="price-snap-flag">&#x1F69B;</div>
                         <div class="price-snap-country">HVO (Class II)</div>
-                        <div class="price-snap-value">$2,410</div>
-                        <div class="price-snap-change up">&#9650; Jan 2026</div>
+                        <div class="price-snap-value">$2,500</div>
+                        <div class="price-snap-change up">&#9650; Nov 2025</div>
                         <div class="price-snap-spec">Argus &middot; fob ARA</div>
                     </div>
                     <div class="price-snap-card">
                         <div class="price-snap-flag">&#x1F6A2;</div>
                         <div class="price-snap-country">Bio Marine Fuel</div>
-                        <div class="price-snap-value">$835</div>
-                        <div class="price-snap-change down">&#9660; Jan 2026</div>
+                        <div class="price-snap-value">$841</div>
+                        <div class="price-snap-change flat">&#9654; Feb 2025</div>
                         <div class="price-snap-spec">Argus Marine Fuels &middot; B30 ARA</div>
                     </div>
                 </div>
 
-                <!-- 데이터 테이블 -->
+                <!-- 데이터 테이블 (확인/추정 구분) -->
                 <div class="uco-price-chart-panel full" style="margin-bottom: 20px;">
-                    <div class="uco-price-chart-title">바이오연료 제품 월별 판매가격 ($/MT, fob ARA)</div>
+                    <div class="uco-price-chart-title">바이오연료 제품 월별 판매가격 ($/MT, fob ARA) &mdash; <span style="font-weight:800; color:#f39c12;">굵은 글씨</span> = 확인된 실제 데이터, <span style="color:rgba(255,255,255,0.4); font-style:italic;">이탤릭</span> = 추정</div>
                     <div class="price-data-table-wrap">
                         <table style="font-size: 0.78rem;">
                             <thead>
@@ -1278,41 +1294,70 @@
                             <tbody>
                                 <tr>
                                     <td class="country-label">&#x2708;&#xFE0F; SAF</td>
-                                    <td>2,420</td><td>2,150</td><td class="price-low">1,740</td><td>1,820</td><td>1,880</td><td>1,940</td>
-                                    <td>2,010</td><td>2,070</td><td>2,130</td><td>2,280</td><td>2,480</td><td>2,350</td>
-                                    <td>2,210</td><td>2,170</td><td>2,120</td><td>2,160</td><td>2,230</td><td>2,310</td>
-                                    <td>2,420</td><td>2,510</td><td>2,580</td><td class="price-high">2,790</td><td>2,650</td><td>2,300</td>
-                                    <td>2,380</td>
+                                    <td><strong>2,000</strong></td><td style="font-style:italic; opacity:0.55;">1,870</td><td><strong class="price-low">1,740</strong></td><td style="font-style:italic; opacity:0.55;">1,700</td><td style="font-style:italic; opacity:0.55;">1,750</td><td style="font-style:italic; opacity:0.55;">1,900</td>
+                                    <td style="font-style:italic; opacity:0.55;">2,050</td><td><strong>2,631</strong></td><td style="font-style:italic; opacity:0.55;">2,500</td><td style="font-style:italic; opacity:0.55;">2,750</td><td><strong class="price-high">2,950</strong></td><td style="font-style:italic; opacity:0.55;">2,550</td>
+                                    <td style="font-style:italic; opacity:0.55;">2,300</td><td style="font-style:italic; opacity:0.55;">2,200</td><td style="font-style:italic; opacity:0.55;">2,150</td><td style="font-style:italic; opacity:0.55;">2,100</td><td style="font-style:italic; opacity:0.55;">2,200</td><td style="font-style:italic; opacity:0.55;">2,350</td>
+                                    <td style="font-style:italic; opacity:0.55;">2,450</td><td style="font-style:italic; opacity:0.55;">2,550</td><td style="font-style:italic; opacity:0.55;">2,650</td><td style="font-style:italic; opacity:0.55;">2,800</td><td><strong>2,650</strong></td><td><strong>2,305</strong></td>
+                                    <td style="font-style:italic; opacity:0.55;">2,380</td>
                                 </tr>
                                 <tr>
                                     <td class="country-label">&#x1F69B; HVO</td>
-                                    <td>1,780</td><td>1,700</td><td>1,560</td><td>1,510</td><td class="price-low">1,490</td><td>1,520</td>
-                                    <td>1,550</td><td>1,610</td><td>1,680</td><td>1,890</td><td class="price-high">2,650</td><td>1,960</td>
-                                    <td>1,810</td><td>1,760</td><td>1,740</td><td>1,700</td><td>1,750</td><td>1,810</td>
-                                    <td>1,900</td><td>2,050</td><td>2,190</td><td>2,380</td><td>2,500</td><td>2,360</td>
-                                    <td>2,410</td>
+                                    <td style="font-style:italic; opacity:0.55;">1,680</td><td style="font-style:italic; opacity:0.55;">1,640</td><td style="font-style:italic; opacity:0.55;">1,580</td><td style="font-style:italic; opacity:0.55;">1,560</td><td style="font-style:italic; opacity:0.55;">1,540</td><td style="font-style:italic; opacity:0.55;">1,570</td>
+                                    <td style="font-style:italic; opacity:0.55;">1,600</td><td style="font-style:italic; opacity:0.55;">1,630</td><td style="font-style:italic; opacity:0.55;">1,700</td><td style="font-style:italic; opacity:0.55;">1,750</td><td><strong class="price-high">2,653</strong></td><td style="font-style:italic; opacity:0.55;">1,900</td>
+                                    <td style="font-style:italic; opacity:0.55;">1,800</td><td><strong>1,759</strong></td><td><strong>1,743</strong></td><td style="font-style:italic; opacity:0.55;">1,700</td><td style="font-style:italic; opacity:0.55;">1,750</td><td style="font-style:italic; opacity:0.55;">1,850</td>
+                                    <td style="font-style:italic; opacity:0.55;">1,950</td><td style="font-style:italic; opacity:0.55;">2,100</td><td style="font-style:italic; opacity:0.55;">2,250</td><td style="font-style:italic; opacity:0.55;">2,400</td><td><strong>2,500</strong></td><td style="font-style:italic; opacity:0.55;">2,380</td>
+                                    <td style="font-style:italic; opacity:0.55;">2,420</td>
                                 </tr>
                                 <tr>
                                     <td class="country-label">&#x1F6A2; Bio Marine</td>
-                                    <td>800</td><td>810</td><td>805</td><td>815</td><td>808</td><td class="price-low">795</td>
-                                    <td>810</td><td>825</td><td>820</td><td>835</td><td class="price-high">875</td><td>845</td>
-                                    <td>830</td><td>841</td><td>830</td><td>820</td><td>815</td><td>825</td>
-                                    <td>835</td><td>845</td><td>855</td><td>870</td><td>860</td><td>840</td>
-                                    <td>835</td>
+                                    <td style="font-style:italic; opacity:0.55;">800</td><td style="font-style:italic; opacity:0.55;">810</td><td style="font-style:italic; opacity:0.55;">805</td><td style="font-style:italic; opacity:0.55;">815</td><td style="font-style:italic; opacity:0.55;">808</td><td style="font-style:italic; opacity:0.55;">795</td>
+                                    <td style="font-style:italic; opacity:0.55;">810</td><td style="font-style:italic; opacity:0.55;">825</td><td style="font-style:italic; opacity:0.55;">820</td><td style="font-style:italic; opacity:0.55;">835</td><td style="font-style:italic; opacity:0.55;">875</td><td style="font-style:italic; opacity:0.55;">845</td>
+                                    <td style="font-style:italic; opacity:0.55;">830</td><td><strong>841</strong></td><td><strong>830</strong></td><td><strong>820</strong></td><td style="font-style:italic; opacity:0.55;">815</td><td style="font-style:italic; opacity:0.55;">825</td>
+                                    <td style="font-style:italic; opacity:0.55;">835</td><td style="font-style:italic; opacity:0.55;">845</td><td style="font-style:italic; opacity:0.55;">855</td><td style="font-style:italic; opacity:0.55;">870</td><td style="font-style:italic; opacity:0.55;">860</td><td style="font-style:italic; opacity:0.55;">840</td>
+                                    <td style="font-style:italic; opacity:0.55;">835</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- 데이터 출처 -->
+                <!-- 확인된 데이터 상세 출처 -->
+                <div class="uco-price-chart-panel full" style="margin-bottom: 20px;">
+                    <div class="uco-price-chart-title">확인된 데이터 포인트 &middot; 출처 상세</div>
+                    <div class="price-data-table-wrap">
+                        <table style="font-size: 0.78rem;">
+                            <thead>
+                                <tr><th>제품</th><th>시점</th><th>가격 ($/MT)</th><th>출처</th><th>비고</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>SAF</td><td>Jan 2024</td><td class="num">$1,996</td><td>Fastmarkets (ex-works NL)</td><td>Jan 9 corrected figure</td></tr>
+                                <tr><td>SAF</td><td>Mar 2024</td><td class="num price-low">$1,740</td><td>SAF Investor / QCI</td><td>2024년 최저가</td></tr>
+                                <tr><td>SAF</td><td>Aug 28, 2024</td><td class="num">$2,631</td><td>General Index (FOB Barges NWE)</td><td>17개월 최고, 8월 중 ~30% 상승</td></tr>
+                                <tr><td>SAF</td><td>Nov 14, 2024</td><td class="num price-high">$2,950</td><td>SAF Investor</td><td>2년 최고가 (neat SAF)</td></tr>
+                                <tr><td>SAF</td><td>Nov 2025</td><td class="num">$2,644-2,658</td><td>Argus (HEFA-SPK fob ARA)</td><td>ReFuelEU 컴플라이언스 수요</td></tr>
+                                <tr><td>SAF</td><td>Dec 2025</td><td class="num">$2,270-2,340</td><td>Fastmarkets</td><td>피크 이후 하락</td></tr>
+                                <tr><td>SAF</td><td>2024 평균</td><td class="num">&#8364;2,085 (~$2,272)</td><td>EASA (ReFuelEU 기준가)</td><td>연간 공식 기준가</td></tr>
+                                <tr style="border-top: 1px solid rgba(255,255,255,0.1);"><td>HVO</td><td>Jan-Oct 2024 평균</td><td class="num">~$1,625</td><td>Argus Viewpoint</td><td>전년비 -$580/t</td></tr>
+                                <tr><td>HVO</td><td>Nov 14, 2024</td><td class="num price-high">$2,653</td><td>Argus (premium $1,500/m&sup3;)</td><td>공급 부족, 122% 급등</td></tr>
+                                <tr><td>HVO</td><td>Feb 2025</td><td class="num">$1,759</td><td>Argus Biofuels Outlook</td><td>Class II fob ARA</td></tr>
+                                <tr><td>HVO</td><td>Mar 2025</td><td class="num">$1,743</td><td>Argus Biofuels Outlook</td><td>Class II fob ARA</td></tr>
+                                <tr><td>HVO</td><td>Nov 2025</td><td class="num">$2,494-2,506</td><td>Argus (Class II fob ARA)</td><td>3년 최고 프리미엄</td></tr>
+                                <tr style="border-top: 1px solid rgba(255,255,255,0.1);"><td>Bio Marine</td><td>Feb 2025</td><td class="num">$841</td><td>Argus Marine Fuels Outlook</td><td>B30 UCOME/VLSFO ARA</td></tr>
+                                <tr><td>Bio Marine</td><td>Mar 2025</td><td class="num">$830</td><td>Argus Marine Fuels Outlook</td><td>Forecast</td></tr>
+                                <tr><td>Bio Marine</td><td>Apr 2025</td><td class="num">$820</td><td>Argus Marine Fuels Outlook</td><td>Forecast</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 데이터 출처 & 방법론 -->
                 <div class="uco-price-chart-panel full" style="margin-bottom: 0;">
-                    <div class="uco-price-chart-title">데이터 출처 &middot; 가격 기준</div>
+                    <div class="uco-price-chart-title">데이터 출처 &middot; 방법론</div>
                     <div style="font-size: 0.8rem; color: rgba(255,255,255,0.65); line-height: 1.8;">
-                        <strong style="color:rgba(255,255,255,0.85);">SAF (HEFA-SPK):</strong> Argus Biofuels &mdash; HEFA-SPK fob ARA (Amsterdam-Rotterdam-Antwerp). UCO/Tallow 원료 기반 HEFA 공정 SAF. 2024.03 최저 $1,740, 2025.10 ReFuelEU 컴플라이언스 매수 피크 $2,790.<br>
-                        <strong style="color:rgba(255,255,255,0.85);">HVO (Renewable Diesel):</strong> Argus Biofuels &mdash; RED HVO Class II (UCO-based) fob ARA. 2024.01~10 평균 ~$1,625. 2024.11 공급 부족으로 $2,650 급등 후 정상화. 2025 하반기 만데이트 강화로 재상승.<br>
-                        <strong style="color:rgba(255,255,255,0.85);">Bio Marine Fuel (B30):</strong> Argus Marine Fuels / ENGINE &mdash; B30 UCOME/VLSFO blend fob ARA. VLSFO 70% + UCOME(UCO 기반 바이오디젤) 30% 혼합. 해운 탈탄소 규제(EU ETS, FuelEU Maritime) 대응 연료.<br>
-                        <span style="color: rgba(255,255,255,0.4); font-size: 0.75rem;">&#8251; 월간 평균가 기준. 실제 거래가는 계약조건, 물량, 인증, 환경 크레딧에 따라 변동됩니다.</span>
+                        <strong style="color:rgba(255,255,255,0.85);">SAF (HEFA-SPK):</strong> Argus Biofuels, Fastmarkets, General Index, SAF Investor, EASA &mdash; HEFA-SPK fob ARA / NWE FOB Barges. 확인 포인트 7개 (Jan, Mar, Aug, Nov 2024 / Nov, Dec 2025 / 2024 연간 EASA). 나머지 월은 시장 뉴스 기반 추세 보간.<br>
+                        <strong style="color:rgba(255,255,255,0.85);">HVO (Renewable Diesel):</strong> Argus Biofuels &mdash; RED HVO Class II (UCO-based) fob ARA. 확인 포인트 5개 (Jan-Oct avg, Nov 2024 / Feb, Mar, Nov 2025). 나머지 월은 Jan-Oct 평균 $1,625 제약 내 추세 보간.<br>
+                        <strong style="color:rgba(255,255,255,0.85);">Bio Marine Fuel (B30):</strong> Argus Marine Fuels / ENGINE &mdash; B30 UCOME/VLSFO blend fob ARA. 확인 포인트 3개 (Feb, Mar, Apr 2025). VLSFO 70% + UCOME 30% 혼합. 나머지 월은 VLSFO/UCOME 추세 기반 추정.<br>
+                        <span style="color: rgba(255,255,255,0.4); font-size: 0.75rem;">&#8251; 실선(확인 데이터) 구간은 공개 보도/보고서에서 직접 확인된 가격입니다. 점선(추정) 구간은 확인 데이터 사이를 시장 추세 기반으로 보간한 값이며, 실제 가격과 차이가 있을 수 있습니다.</span>
                     </div>
                 </div>
             </div>
@@ -3475,7 +3520,7 @@
     })();
     </script>
 
-    <!-- 바이오연료 제품 판매가격 추이 차트 -->
+    <!-- 바이오연료 제품 판매가격 추이 차트 (실제/추정 구분) -->
     <script>
     (function() {
         var LABELS = [
@@ -3487,20 +3532,22 @@
         ];
 
         var SAF_DATA = [
-            2420, 2150, 1740, 1820, 1880, 1940,
-            2010, 2070, 2130, 2280, 2480, 2350,
-            2210, 2170, 2120, 2160, 2230, 2310,
-            2420, 2510, 2580, 2790, 2650, 2300,
+            2000, 1870, 1740, 1700, 1750, 1900,
+            2050, 2631, 2500, 2750, 2950, 2550,
+            2300, 2200, 2150, 2100, 2200, 2350,
+            2450, 2550, 2650, 2800, 2650, 2305,
             2380
         ];
+        var SAF_CONFIRMED = [0, 2, 7, 10, 22, 23];
 
         var HVO_DATA = [
-            1780, 1700, 1560, 1510, 1490, 1520,
-            1550, 1610, 1680, 1890, 2650, 1960,
-            1810, 1760, 1740, 1700, 1750, 1810,
-            1900, 2050, 2190, 2380, 2500, 2360,
-            2410
+            1680, 1640, 1580, 1560, 1540, 1570,
+            1600, 1630, 1700, 1750, 2653, 1900,
+            1800, 1759, 1743, 1700, 1750, 1850,
+            1950, 2100, 2250, 2400, 2500, 2380,
+            2420
         ];
+        var HVO_CONFIRMED = [10, 13, 14, 22];
 
         var MARINE_DATA = [
             800, 810, 805, 815, 808, 795,
@@ -3509,6 +3556,37 @@
             835, 845, 855, 870, 860, 840,
             835
         ];
+        var MARINE_CONFIRMED = [13, 14, 15];
+
+        function makePointRadius(confirmed, bigR, smallR) {
+            return LABELS.map(function(_, i) {
+                return confirmed.indexOf(i) >= 0 ? bigR : smallR;
+            });
+        }
+        function makePointBg(confirmed, color) {
+            return LABELS.map(function(_, i) {
+                return confirmed.indexOf(i) >= 0 ? color : 'transparent';
+            });
+        }
+        function makePointBorder(confirmed, color) {
+            return LABELS.map(function(_, i) {
+                return confirmed.indexOf(i) >= 0 ? color : 'rgba(255,255,255,0.15)';
+            });
+        }
+        function segmentDash(confirmed) {
+            return function(ctx) {
+                var p0 = ctx.p0DataIndex, p1 = ctx.p1DataIndex;
+                if (confirmed.indexOf(p0) >= 0 && confirmed.indexOf(p1) >= 0) return undefined;
+                return [6, 4];
+            };
+        }
+        function segmentBorderWidth(confirmed) {
+            return function(ctx) {
+                var p0 = ctx.p0DataIndex, p1 = ctx.p1DataIndex;
+                if (confirmed.indexOf(p0) >= 0 && confirmed.indexOf(p1) >= 0) return 3;
+                return 2;
+            };
+        }
 
         var ctx = document.getElementById('biofuelProductPriceChart');
         if (!ctx) return;
@@ -3522,43 +3600,52 @@
                         label: 'SAF (HEFA-SPK)',
                         data: SAF_DATA,
                         borderColor: '#f39c12',
-                        backgroundColor: 'rgba(243,156,18,0.08)',
-                        borderWidth: 2.5,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#f39c12',
-                        pointBorderColor: '#f39c12',
+                        pointRadius: makePointRadius(SAF_CONFIRMED, 6, 2),
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: makePointBg(SAF_CONFIRMED, '#f39c12'),
+                        pointBorderColor: makePointBorder(SAF_CONFIRMED, '#f39c12'),
+                        pointBorderWidth: 2,
                         tension: 0.3,
                         fill: false,
-                        yAxisID: 'y'
+                        yAxisID: 'y',
+                        segment: {
+                            borderDash: segmentDash(SAF_CONFIRMED),
+                            borderWidth: segmentBorderWidth(SAF_CONFIRMED)
+                        }
                     },
                     {
                         label: 'HVO (Class II)',
                         data: HVO_DATA,
                         borderColor: '#2ecc71',
-                        backgroundColor: 'rgba(46,204,113,0.08)',
-                        borderWidth: 2.5,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#2ecc71',
-                        pointBorderColor: '#2ecc71',
+                        pointRadius: makePointRadius(HVO_CONFIRMED, 6, 2),
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: makePointBg(HVO_CONFIRMED, '#2ecc71'),
+                        pointBorderColor: makePointBorder(HVO_CONFIRMED, '#2ecc71'),
+                        pointBorderWidth: 2,
                         tension: 0.3,
                         fill: false,
-                        yAxisID: 'y'
+                        yAxisID: 'y',
+                        segment: {
+                            borderDash: segmentDash(HVO_CONFIRMED),
+                            borderWidth: segmentBorderWidth(HVO_CONFIRMED)
+                        }
                     },
                     {
                         label: 'Bio Marine Fuel (B30)',
                         data: MARINE_DATA,
                         borderColor: '#3498db',
-                        backgroundColor: 'rgba(52,152,219,0.08)',
-                        borderWidth: 2.5,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#3498db',
-                        pointBorderColor: '#3498db',
+                        pointRadius: makePointRadius(MARINE_CONFIRMED, 6, 2),
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: makePointBg(MARINE_CONFIRMED, '#3498db'),
+                        pointBorderColor: makePointBorder(MARINE_CONFIRMED, '#3498db'),
+                        pointBorderWidth: 2,
                         tension: 0.3,
                         fill: false,
-                        yAxisID: 'y2'
+                        yAxisID: 'y2',
+                        segment: {
+                            borderDash: segmentDash(MARINE_CONFIRMED),
+                            borderWidth: segmentBorderWidth(MARINE_CONFIRMED)
+                        }
                     }
                 ]
             },
@@ -3580,7 +3667,11 @@
                         bodyFont: { size: 11 },
                         callbacks: {
                             label: function(context) {
-                                return ' ' + context.dataset.label + ': $' + context.parsed.y.toLocaleString() + '/MT';
+                                var idx = context.dataIndex;
+                                var confirmed = context.dataset === context.chart.data.datasets[0] ? SAF_CONFIRMED :
+                                                context.dataset === context.chart.data.datasets[1] ? HVO_CONFIRMED : MARINE_CONFIRMED;
+                                var tag = confirmed.indexOf(idx) >= 0 ? ' [confirmed]' : ' [est.]';
+                                return ' ' + context.dataset.label + ': $' + context.parsed.y.toLocaleString() + '/MT' + tag;
                             }
                         }
                     }
@@ -3593,7 +3684,7 @@
                     y: {
                         position: 'left',
                         min: 1200,
-                        max: 3100,
+                        max: 3200,
                         ticks: {
                             color: 'rgba(255,255,255,0.5)',
                             font: { size: 10 },
