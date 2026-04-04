@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>호르무즈 해협 봉쇄와 글로벌 커피 공급망 위기 | 2026년 4월 4일</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "호르무즈 해협 봉쇄와 글로벌 커피 공급망 위기",
+    "subtitle": "Strait of Hormuz Blockade and the Global Coffee Supply Chain Crisis",
+    "date": "2026-04-04",
+    "type": "in-depth",
+    "summary": "2026년 2월 28일 Operation Epic Fury 이후 이란의 호르무즈 해협 봉쇄가 글로벌 커피 공급망에 미치는 다층적 영향을 심층 분석. 에너지 가격 급등(브렌트유 $126/bbl), 해상 운임 폭등(TEU당 $2,000~4,000 상승), 전쟁위험보험료 4~5배 인상 등으로 커피 물류비용이 급증. 베트남·인도네시아산 로부스타의 유럽향 수송 최대 21일 지연. ICE 로부스타 재고 3.5개월 저점 하락. 브라질 사상 최대 풍작(75.9M bags) 전망에도 불구, 물류 혼란이 물리적 공급을 제약. 한국 커피 산업에 대한 시사점과 리스크 관리 전략 제시.",
+    "tags": ["hormuz-blockade", "supply-chain-crisis", "shipping-disruption", "freight-cost-surge", "war-risk-premium", "energy-price-spike", "robusta-logistics", "vietnam-shipping-delay", "suez-reroute", "cape-of-good-hope", "insurance-premium", "container-shortage", "roaster-inventory", "hedging-strategy", "korea-coffee-import"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "ICE", "CFTC", "Maersk", "Drewry", "Lloyd's List", "Reuters", "NPR", "Conab", "Cecafe", "Rabobank", "USDA", "Vietnam Customs", "ABIC"],
+    "price_current": "295.40",
+    "price_change": "-2.40¢ (-0.81%)"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            font-weight: 500;
+        }
+
+        .meta-divider {
+            color: var(--copper);
+        }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .card-change {
+            font-size: 0.9rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .card-change.positive {
+            color: var(--positive);
+        }
+
+        .card-change.negative {
+            color: var(--negative);
+        }
+
+        /* Price Box */
+        .price-box {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .price-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .price-change {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .price-change.positive {
+            color: var(--positive);
+        }
+
+        .price-change.negative {
+            color: var(--negative);
+        }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26, 15, 10, 0.1);
+        }
+
+        .price-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .price-item-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .price-item-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 56px;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--roast);
+            margin-top: 36px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 12px;
+        }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .data-card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        .data-card-change {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .data-card-change.positive {
+            color: var(--positive);
+        }
+
+        .data-card-change.negative {
+            color: var(--negative);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.06) 0%, rgba(196, 165, 116, 0.06) 100%);
+            border-left: 3px solid var(--copper);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Alert Box */
+        .alert-box {
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.06) 0%, rgba(194, 58, 58, 0.03) 100%);
+            border-left: 3px solid var(--negative);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .alert-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            margin: 28px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--copper);
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.05);
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--copper);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--copper);
+            margin-bottom: 4px;
+        }
+
+        .timeline-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th {
+            background: var(--steam);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--roast);
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .comparison-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(184, 115, 51, 0.03);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--espresso);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer .container {
+            padding: 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--crema);
+            margin-bottom: 12px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            color: var(--crema);
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        .footer-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--copper);
+            margin-bottom: 16px;
+        }
+
+        .footer-link {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--crema);
+            opacity: 0.7;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(245, 240, 232, 0.1);
+            padding-top: 24px;
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            color: var(--crema);
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 20px 60px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .price-main {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 8px 12px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .top-nav {
+                display: none;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 40px;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#crisis-overview" class="nav-link">위기 개요</a>
+            <a href="#supply-chain" class="nav-link">공급망 영향</a>
+            <a href="#market-impact" class="nav-link">시장 영향</a>
+            <a href="#outlook" class="nav-link">전망</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">In-Depth Report</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">2026&#xB144; 4&#xC6D4; 4&#xC77C;</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>&#xD638;&#xB974;&#xBB34;&#xC988; &#xD574;&#xD611; &#xBD09;&#xC1C4;&#xC640; &#xAE00;&#xB85C;&#xBC8C; &#xCEE4;&#xD53C; &#xACF5;&#xAE09;&#xB9DD; &#xC704;&#xAE30;</h1>
+            <p class="subtitle">Strait of Hormuz Blockade and the Global Coffee Supply Chain Crisis</p>
+            <p class="headline">Operation Epic Fury &#xC774;&#xD6C4; 35&#xC77C; &#x2014; &#xC5D0;&#xB108;&#xC9C0; &#xAC00;&#xACA9; &#xAE09;&#xB4F1;, &#xD574;&#xC0C1; &#xC6B4;&#xC784; &#xD3ED;&#xB4F1;, &#xBCF4;&#xD5D8;&#xB8CC; 4~5&#xBC30; &#xC778;&#xC0C1;&#xC774; &#xCEE4;&#xD53C; &#xBB3C;&#xB958; &#xBE44;&#xC6A9;&#xC744; &#xAE09;&#xBCC0;&#xC2DC;&#xD0A4;&#xBA70;, &#xBE0C;&#xB77C;&#xC9C8; &#xD48D;&#xC791;&#xC5D0;&#xB3C4; &#xBD88;&#xAD6C;&#xD558;&#xACE0; &#xBB3C;&#xB9AC;&#xC801; &#xACF5;&#xAE09;&#xC744; &#xC81C;&#xC57D;</p>
+
+            <!-- Key Impact Metrics -->
+            <div class="market-overview" id="crisis-overview">
+                <div class="overview-card">
+                    <div class="card-label">&#xBE0C;&#xB80C;&#xD2B8;&#xC720;</div>
+                    <div class="card-value">$126/bbl</div>
+                    <div class="card-change negative">&#xC704;&#xAE30; &#xC804; &#xB300;&#xBE44; +60%</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">&#xCEE8;&#xD14C;&#xC774;&#xB108; &#xC6B4;&#xC784;</div>
+                    <div class="card-value">+$3,000/TEU</div>
+                    <div class="card-change negative">&#xD3C9;&#xADE0; &#xC0C1;&#xC2B9;&#xD3ED;</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">&#xC218;&#xC1A1; &#xC9C0;&#xC5F0;</div>
+                    <div class="card-value">+21&#xC77C;</div>
+                    <div class="card-change negative">&#xB3D9;&#xB0A8;&#xC544;&#x2192;&#xC720;&#xB7FD;</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">&#xC804;&#xC7C1;&#xC704;&#xD5D8;&#xBCF4;&#xD5D8;&#xB8CC;</div>
+                    <div class="card-value">4~5&#xBC30;</div>
+                    <div class="card-change negative">&#xC778;&#xC0C1;</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Executive Summary -->
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <p>2026년 2월 28일, 미국과 이스라엘의 이란 공습(Operation Epic Fury)에 대한 보복으로 이란 혁명수비대(IRGC)가 호르무즈 해협을 사실상 봉쇄한 지 35일이 경과했다. 세계 원유의 약 20%, LNG의 20%가 통과하는 이 전략적 수로의 차단은 에너지 시장을 넘어 <strong>글로벌 원자재 물류 체계 전반</strong>에 구조적 충격을 가하고 있다.</p>
+
+            <p>커피는 호르무즈 해협을 직접 통과하는 품목이 아니다. 그러나 이번 봉쇄의 영향은 <strong>에너지 가격 급등 &rarr; 해상 운임 폭등 &rarr; 보험료 인상 &rarr; 수에즈 우회 &rarr; 수송 기간 연장</strong>이라는 연쇄 경로를 통해 커피 공급망의 모든 단계에 침투하고 있다. 본 보고서는 이 다층적 영향을 체계적으로 분석하고, 한국 커피 산업에 대한 시사점을 제시한다.</p>
+
+            <div class="alert-box">
+                <p><strong>핵심 판단:</strong> 호르무즈 위기는 단순한 일시적 물류 교란이 아니라, 2023~2025년 공급 부족 사이클에서 2026년 공급 과잉 사이클로의 전환을 <strong>구조적으로 지연</strong>시키는 요인이다. 브라질의 사상 최대 풍작(75.9M bags)에도 불구하고, 물류 병목이 물리적 공급의 시장 유입을 제약하면서 가격 하락의 시점과 속도를 늦추고 있다.</p>
+            </div>
+        </section>
+
+        <!-- Crisis Timeline -->
+        <section id="timeline">
+            <h2>위기 전개 타임라인</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2026년 2월 28일</div>
+                    <div class="timeline-content">미국-이스라엘 합동군, 이란 핵시설 및 군사시설에 대한 대규모 공습(Operation Epic Fury) 개시. 이란 혁명수비대(IRGC), 호르무즈 해협에 기뢰 부설 및 해군 봉쇄 선언.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">3월 1~3일</div>
+                    <div class="timeline-content">브렌트유 $95&rarr;$110/bbl 급등. 주요 해운사(Maersk, MSC, CMA CGM) 페르시아만 항로 운항 중단. 전쟁위험보험료(War Risk Premium) 즉시 4~5배 인상.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">3월 5~10일</div>
+                    <div class="timeline-content">수에즈 운하 경유 선박의 희망봉(Cape of Good Hope) 우회 시작. 아시아&rarr;유럽 항로 평균 12~21일 추가 소요. 컨테이너 운임 TEU당 $2,000~4,000 상승.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">3월 15일</div>
+                    <div class="timeline-content">브렌트유 $120/bbl 돌파. 약 2,000척의 상선이 페르시아만 역내에 체류 중. 글로벌 컨테이너 가용량 약 15% 감소 추정.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">3월 24일</div>
+                    <div class="timeline-content">아라비카 5월물 319.50&cent;로 7주 고점 기록(전일 대비 +3.96%). CFTC 비상업 순매수 +25,424계약으로 급증, 호르무즈 리스크 프리미엄 본격 반영.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">4월 초 (현재)</div>
+                    <div class="timeline-content">브렌트유 $126/bbl. 봉쇄 35일 경과, 외교적 해결 기미 불투명. ICE 로부스타 재고 3.5개월 저점, 동남아시아발 물류 차질 심화. 5월물 아라비카 295.40&cent;, 풍작 전망과 물류 리스크 사이에서 교착.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Supply Chain Impact Analysis -->
+        <section id="supply-chain">
+            <h2>커피 공급망에 대한 다층적 영향</h2>
+
+            <h3>1. 에너지 가격 경로: 직접적 비용 상승</h3>
+
+            <p>호르무즈 해협은 세계 원유 해상 운송의 약 20~25%가 통과하는 최대 에너지 초크포인트다. 봉쇄 이후 브렌트유는 위기 전 약 $78/bbl에서 $126/bbl까지 <strong>약 60% 급등</strong>했다. 이는 선박 연료비(벙커유) 직접 상승으로 이어지며, 해상 운임의 핵심 구성 요소인 연료 할증료(Bunker Adjustment Factor, BAF)를 크게 끌어올리고 있다.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">브렌트유 (위기 전)</div>
+                    <div class="data-card-value">~$78/bbl</div>
+                    <div class="data-card-change">2026년 2월 중순</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">브렌트유 (현재)</div>
+                    <div class="data-card-value">$126/bbl</div>
+                    <div class="data-card-change negative">+61.5% 상승</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">VLSFO 벙커유</div>
+                    <div class="data-card-value">~$780/mt</div>
+                    <div class="data-card-change negative">+45% 상승</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">BAF 할증</div>
+                    <div class="data-card-value">+35~50%</div>
+                    <div class="data-card-change negative">주요 항로 기준</div>
+                </div>
+            </div>
+
+            <p>에너지 가격 상승은 운송비 외에도 비료 가격(천연가스 기반 질소비료), 건조·가공 공정의 에너지 비용, 국내 내륙 운송비 등에 연쇄적으로 영향을 미친다. 특히 브라질의 경우, 생두 수출항(산토스, 리우데자네이루)까지의 내륙 트럭 운송비가 디젤 가격 상승으로 10~15% 인상된 것으로 보고되고 있다.</p>
+
+            <h3>2. 해상 운임 폭등: 구조적 비용 증가</h3>
+
+            <p>Drewry의 World Container Index에 따르면, 주요 컨테이너 항로의 운임이 호르무즈 봉쇄 이후 급등했다. 이는 단순히 에너지 비용 상승뿐 아니라, <strong>선박 가용량 감소</strong>와 <strong>항로 우회</strong>에 따른 구조적 요인이 복합적으로 작용한 결과다.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>항로</th>
+                        <th>위기 전</th>
+                        <th>현재</th>
+                        <th>변동</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>아시아&rarr;북유럽</td>
+                        <td>$2,800/FEU</td>
+                        <td>$5,600/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+100%</td>
+                    </tr>
+                    <tr>
+                        <td>아시아&rarr;지중해</td>
+                        <td>$3,100/FEU</td>
+                        <td>$6,400/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+106%</td>
+                    </tr>
+                    <tr>
+                        <td>브라질&rarr;유럽</td>
+                        <td>$1,900/FEU</td>
+                        <td>$3,200/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+68%</td>
+                    </tr>
+                    <tr>
+                        <td>베트남&rarr;유럽</td>
+                        <td>$3,200/FEU</td>
+                        <td>$6,800/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+113%</td>
+                    </tr>
+                    <tr>
+                        <td>브라질&rarr;한국</td>
+                        <td>$2,400/FEU</td>
+                        <td>$3,800/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+58%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>특히 베트남&rarr;유럽 항로의 운임 상승이 두드러진다. 이 항로의 선박 상당수가 수에즈 운하를 경유했는데, 호르무즈 봉쇄로 인한 안보 우려와 보험료 인상으로 희망봉 우회가 불가피해졌기 때문이다. Maersk에 따르면 이 우회로 인해 <strong>운항 시간이 12~21일 추가</strong>되며, 이는 곧 같은 수의 선박으로 연간 처리할 수 있는 항차 수가 줄어든다는 것을 의미한다.</p>
+
+            <h3>3. 전쟁위험보험료(War Risk Premium): 숨겨진 비용</h3>
+
+            <p>Lloyd's List에 따르면, 페르시아만 인근 수역의 전쟁위험보험료가 선체 가치의 0.05~0.1%에서 <strong>0.5~1.0%</strong>로 약 4~5배 인상되었다. 대형 컨테이너선(선체 가치 $1.5~2억)의 경우 단일 항차당 보험료가 $75만~$200만으로 급증했으며, 이 비용은 궁극적으로 화주(수출입업체)에게 전가된다.</p>
+
+            <div class="highlight-box">
+                <p><strong>커피 1컨테이너(FCL 20ft) 기준 물류비용 영향 추정:</strong></p>
+                <p>베트남&rarr;유럽: 위기 전 총 물류비 $4,500~5,500 &rarr; 현재 $8,500~10,500 (약 +90% 상승)</p>
+                <p>브라질&rarr;한국: 위기 전 총 물류비 $3,500~4,500 &rarr; 현재 $5,500~7,000 (약 +55% 상승)</p>
+                <p>생두 1백(60kg) 기준으로 환산하면, 운송비 상승분이 lb당 약 3~8&cent;에 해당한다. 현재 아라비카 선물가(295&cent;/lb) 대비 약 1~3%의 추가 비용이다.</p>
+            </div>
+
+            <h3>4. 항로 우회와 수송 기간 연장</h3>
+
+            <p>호르무즈 봉쇄의 간접 효과 중 가장 실질적인 것은 <strong>수에즈 운하 경유 선박의 희망봉 우회</strong>다. 직접적으로 호르무즈를 통과하지 않는 선박도, 페르시아만 인근 해역의 안보 불안과 보험료 급등으로 인해 수에즈 경유를 기피하는 현상이 확산되고 있다.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>항로</th>
+                        <th>수에즈 경유</th>
+                        <th>희망봉 우회</th>
+                        <th>추가 소요</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>호치민&rarr;로테르담</td>
+                        <td>~25일</td>
+                        <td>~42일</td>
+                        <td style="font-weight: 600;">+17일</td>
+                    </tr>
+                    <tr>
+                        <td>호치민&rarr;함부르크</td>
+                        <td>~28일</td>
+                        <td>~49일</td>
+                        <td style="font-weight: 600;">+21일</td>
+                    </tr>
+                    <tr>
+                        <td>산토스&rarr;로테르담</td>
+                        <td>~18일</td>
+                        <td>~22일</td>
+                        <td style="font-weight: 600;">+4일</td>
+                    </tr>
+                    <tr>
+                        <td>산토스&rarr;부산</td>
+                        <td>~35일</td>
+                        <td>~40일</td>
+                        <td style="font-weight: 600;">+5일</td>
+                    </tr>
+                    <tr>
+                        <td>몸바사&rarr;로테르담</td>
+                        <td>~22일</td>
+                        <td>~32일</td>
+                        <td style="font-weight: 600;">+10일</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>수송 기간 연장은 단순한 '지연'을 넘어 <strong>공급망 전체의 재고 순환 속도</strong>를 떨어뜨린다. 같은 수의 선박으로 더 긴 항로를 운항해야 하므로 실질적인 글로벌 해운 용량이 감소하고, 이는 다시 운임 상승으로 이어지는 악순환 구조를 형성한다. Drewry에 따르면 희망봉 우회로 인해 글로벌 컨테이너 실효 용량이 약 <strong>12~15% 감소</strong>한 것으로 추정된다.</p>
+        </section>
+
+        <!-- Origin-Specific Impact -->
+        <section id="origin-impact">
+            <h2>산지별 영향 분석</h2>
+
+            <h3>1. 베트남 &middot; 인도네시아: 로부스타 물류의 직격탄</h3>
+
+            <p>호르무즈 위기의 가장 직접적인 피해는 <strong>동남아시아산 로부스타</strong>의 유럽 수출 경로에서 나타나고 있다. 베트남(세계 최대 로부스타 생산국)과 인도네시아의 로부스타 수출은 대부분 수에즈 운하를 경유해 유럽으로 향하는데, 이 항로가 사실상 차단되면서 물류 비용과 시간이 급증했다.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">베트남 2월 수출</div>
+                    <div class="data-card-value">235만 백</div>
+                    <div class="data-card-change negative">-16.55% y/y</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE 로부스타 재고</div>
+                    <div class="data-card-value">4,093 lots</div>
+                    <div class="data-card-change negative">3.5개월 저점</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">수송 지연</div>
+                    <div class="data-card-value">+17~21일</div>
+                    <div class="data-card-change negative">유럽행 기준</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">운임 상승</div>
+                    <div class="data-card-value">+113%</div>
+                    <div class="data-card-change negative">베트남&rarr;유럽</div>
+                </div>
+            </div>
+
+            <p>ICE 로부스타 인증 재고가 4,093 lots로 3.5개월 저점을 기록한 것은 이러한 물류 차질이 실제 재고 수준에 반영되기 시작했음을 보여준다. 베트남의 2025/26 생산량은 전년 대비 +6% 증가한 176만 톤(2,940만 백)으로 견조하지만, <strong>생산의 풍족함이 소비지 재고로 전환되는 속도</strong>가 크게 둔화된 상황이다.</p>
+
+            <p>인도네시아의 경우, 수마트라 만델링과 자바 로부스타의 유럽 수출이 유사한 물류 장애에 직면해 있다. 일부 수출업체는 대안 항로를 모색하고 있으나, 희망봉 우회 외에 실질적인 대안이 부재한 상황이다.</p>
+
+            <h3>2. 브라질: 풍작의 역설</h3>
+
+            <p>브라질 커피의 주요 수출 항로(산토스&rarr;유럽, 산토스&rarr;아시아)는 호르무즈 해협과 직접적 관련이 적다. 그러나 <strong>간접적 영향</strong>은 간과할 수 없다.</p>
+
+            <div class="highlight-box">
+                <p><strong>브라질 풍작의 역설:</strong> Marex는 2026/27 브라질 커피 생산량을 사상 최대 75.9M bags로 전망하고 있다. 그러나 이 기록적 공급이 시장에 미치는 약세 압력이 완전히 실현되려면, 수확된 커피가 산지에서 소비지까지 원활하게 이동해야 한다. 현재의 글로벌 물류 혼란은 이 과정을 구조적으로 지연시키고 있다.</p>
+            </div>
+
+            <ul>
+                <li><strong>내륙 운송비 상승:</strong> 디젤 가격 상승으로 미나스제라이스&rarr;산토스항 트럭 운송비 10~15% 인상. 수확기(5~6월) 물량 급증 시 추가 상승 가능.</li>
+                <li><strong>산토스항 체선 우려:</strong> 글로벌 선복 부족으로 산토스항에서의 체선(Demurrage) 시간이 증가 추세. 수확기 물량 집중 시 항만 적체 심화 가능성.</li>
+                <li><strong>생산자 판매 유보:</strong> Safras &amp; Mercados에 따르면 2026/27 작물의 사전 판매율은 생산 잠재량의 약 8%에 불과(역사 평균 17%). 물류 불확실성이 생산자의 포워드 판매 의사결정을 더욱 신중하게 만들고 있다.</li>
+                <li><strong>비료 공급 리스크:</strong> 호르무즈 봉쇄로 중동산 천연가스 공급이 차질을 빚으면서, 질소비료 가격이 상승하고 있다. 이는 2027년 작황에 영향을 미칠 수 있는 중기 리스크 요인이다.</li>
+            </ul>
+
+            <h3>3. 동아프리카: 이중 타격</h3>
+
+            <p>에티오피아, 케냐, 탄자니아 등 동아프리카 산지는 호르무즈 위기의 <strong>이중 타격</strong>을 받고 있다. 이 지역의 커피 수출은 주로 지부티, 몸바사 등의 항구에서 수에즈 운하를 경유해 유럽으로 향하는데, 수에즈 경유 기피 현상으로 운임과 수송 시간이 크게 증가했다. 동시에, 이 지역은 에너지 수입 의존도가 높아 국내 연료비 급등으로 내륙 운송비와 가공 비용도 상승하고 있다.</p>
+
+            <p>특히 에티오피아 시다마, 예가체프 등 스페셜티 커피 산지의 경우, 높은 운송비가 프리미엄 마진을 잠식하면서 소농들의 수익성이 악화되고 있다는 보고가 있다.</p>
+        </section>
+
+        <!-- Market Impact -->
+        <section id="market-impact">
+            <h2>선물 시장 및 가격 영향</h2>
+
+            <h3>1. 아라비카 선물: 풍작 vs 물류 리스크의 교착</h3>
+
+            <p>ICE 아라비카 5월물은 호르무즈 위기 이후 <strong>280~320&cent;</strong>의 넓은 레인지에서 거래되고 있다. 3월 24일에는 7주 고점 319.50&cent;를 기록한 후, 브라질 풍작 전망 재확인과 함께 295&cent; 수준으로 조정되었다.</p>
+
+            <div class="price-box" id="market">
+                <div class="price-header">
+                    <span class="price-label">ICE 아라비카 5월물 (KCK26)</span>
+                    <span class="price-label">2026.04.02 종가</span>
+                </div>
+                <div class="price-main">295.40&cent;/lb</div>
+                <div class="price-change negative">&blacktriangledown; 2.40&cent; (-0.81%) 일간</div>
+
+                <div class="price-table">
+                    <div class="price-item">
+                        <span class="price-item-label">호르무즈 위기 전 (2/27)</span>
+                        <span class="price-item-value">~285&cent;</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-item-label">위기 후 고점 (3/24)</span>
+                        <span class="price-item-value">319.50&cent;</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-item-label">3월 평균</span>
+                        <span class="price-item-value">297.68&cent;</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-item-label">호르무즈 프리미엄 추정</span>
+                        <span class="price-item-value">+10~15&cent;</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>현재 시장 가격에는 약 <strong>10~15&cent;/lb의 '호르무즈 프리미엄'</strong>이 내재되어 있는 것으로 추정된다. 이는 위기 전 가격 수준(~285&cent;)과 현재 가격(295&cent;)의 차이, 그리고 브라질 풍작 전망이 더 강화되었음에도 가격이 위기 전 수준으로 회귀하지 못하는 점에서 유추할 수 있다.</p>
+
+            <h3>2. CFTC 포지셔닝: 투기 자금의 방향 전환</h3>
+
+            <p>CFTC 데이터(3월 24일 기준)에 따르면, 비상업(투기) 거래자의 순매수 포지션은 <strong>+25,424계약</strong>으로 전주(+18,594) 대비 36.7% 급증했다. 이는 2월의 대규모 롱 포지션 청산(약 27억 달러) 이후, 호르무즈 리스크 프리미엄이 투기 자금을 다시 커피 시장으로 유인하고 있음을 보여준다.</p>
+
+            <div class="highlight-box">
+                <p><strong>포지셔닝 해석:</strong> 투기 세력의 순매수 확대는 펀더멘털(풍작=약세)과 상충하는 움직임이다. 이는 (1) 호르무즈 위기의 장기화 가능성에 대한 베팅, (2) 물류 비용 상승의 가격 전가 기대, (3) 단기 공급 교란에 따른 변동성 트레이딩의 복합적 결과로 해석된다. 다만, 호르무즈 해협이 재개될 경우 이 포지션의 급격한 청산이 가격 하락을 가속화할 수 있다는 점은 유의해야 한다.</p>
+            </div>
+
+            <h3>3. 선물 커브 구조: 백워데이션 심화</h3>
+
+            <p>현재 아라비카 선물 커브는 뚜렷한 <strong>백워데이션(Backwardation)</strong> 구조를 보이고 있다. 5월물(295.40&cent;) 대비 12월물(266.55&cent;)은 약 29&cent; 할인 거래 중이다.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">5월물 (KCK26)</div>
+                    <div class="data-card-value">295.40&cent;</div>
+                    <div class="data-card-change">근월물</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">7월물 (KCN26)</div>
+                    <div class="data-card-value">289.40&cent;</div>
+                    <div class="data-card-change negative">-6.00&cent;</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">12월물 (KCZ26)</div>
+                    <div class="data-card-value">266.55&cent;</div>
+                    <div class="data-card-change negative">-28.85&cent;</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">3월물 (KCH27)</div>
+                    <div class="data-card-value">262.55&cent;</div>
+                    <div class="data-card-change negative">-32.85&cent;</div>
+                </div>
+            </div>
+
+            <p>이 백워데이션 구조는 시장이 <strong>단기적으로는 공급이 타이트하지만, 중기적으로는 브라질 풍작에 의한 공급 개선을 기대</strong>하고 있음을 반영한다. 호르무즈 위기는 이 백워데이션을 더 심화시키는 요인으로 작용하고 있는데, 현재의 물류 차질로 당장의 물리적 공급이 제약되면서 근월물에 프리미엄이 가중되기 때문이다.</p>
+
+            <h3>4. 로부스타 시장: 더 직접적인 영향</h3>
+
+            <p>ICE 로부스타(런던) 시장은 호르무즈 위기의 영향을 아라비카보다 더 직접적으로 받고 있다. 로부스타의 주요 수출 경로(베트남/인도네시아&rarr;유럽)가 수에즈 우회 대상이 되면서, ICE 로부스타 인증 재고는 <strong>4,093 lots로 3.5개월 저점</strong>까지 하락했다.</p>
+
+            <p>이는 아라비카 인증 재고가 585,621백으로 6.25개월 고점을 기록한 것과 대조적이다. 아라비카 재고 증가는 주로 브라질·중남미산 커피의 유럽 항구 인증 확대에 기인하며, 이 항로는 호르무즈의 직접적 영향권 밖에 있다. 반면 로부스타 재고 감소는 동남아시아발 물류 차질을 반영하는 것으로, <strong>호르무즈 위기가 아라비카와 로부스타 간의 수급 격차를 확대</strong>시키고 있음을 보여준다.</p>
+        </section>
+
+        <!-- Korea Impact -->
+        <section id="korea-impact">
+            <h2>한국 커피 산업에 대한 시사점</h2>
+
+            <h3>1. 수입 구조와 취약성</h3>
+
+            <p>한국은 연간 약 <strong>18~20만 톤</strong>의 생두를 수입하는 세계 7위 커피 수입국이다. 수입원은 브라질(약 30%), 베트남(약 25%), 콜롬비아(약 15%), 에티오피아(약 8%) 등으로 다변화되어 있으나, 베트남과 에티오피아 등 호르무즈 영향권 산지에 대한 의존도가 약 35%에 달한다.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">연간 생두 수입량</div>
+                    <div class="data-card-value">~19만 톤</div>
+                    <div class="data-card-change">세계 7위</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">호르무즈 영향권 비중</div>
+                    <div class="data-card-value">~35%</div>
+                    <div class="data-card-change negative">베트남+에티오피아</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">예상 수입원가 상승</div>
+                    <div class="data-card-value">+8~15%</div>
+                    <div class="data-card-change negative">산지별 차등</div>
+                </div>
+            </div>
+
+            <h3>2. 비용 영향 추정</h3>
+
+            <p>한국의 주요 커피 수입 항로별 물류비용 상승 영향을 추정하면 다음과 같다.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>수입 항로</th>
+                        <th>비중</th>
+                        <th>운임 상승</th>
+                        <th>수송 지연</th>
+                        <th>영향도</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>브라질&rarr;부산</td>
+                        <td>~30%</td>
+                        <td>+50~60%</td>
+                        <td>+3~5일</td>
+                        <td style="color: var(--copper); font-weight: 600;">중간</td>
+                    </tr>
+                    <tr>
+                        <td>베트남&rarr;부산</td>
+                        <td>~25%</td>
+                        <td>+30~40%</td>
+                        <td>+1~3일</td>
+                        <td style="color: var(--copper); font-weight: 600;">중간</td>
+                    </tr>
+                    <tr>
+                        <td>콜롬비아&rarr;부산</td>
+                        <td>~15%</td>
+                        <td>+40~55%</td>
+                        <td>+3~5일</td>
+                        <td style="color: var(--copper); font-weight: 600;">중간</td>
+                    </tr>
+                    <tr>
+                        <td>에티오피아&rarr;부산</td>
+                        <td>~8%</td>
+                        <td>+80~100%</td>
+                        <td>+10~15일</td>
+                        <td style="color: var(--negative); font-weight: 600;">높음</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>종합적으로, 한국의 생두 수입 원가는 호르무즈 위기로 인해 평균 <strong>+8~15%</strong> 상승한 것으로 추정된다. 이 중 순수 운송비 상승분이 약 60%, 보험료 인상분이 약 25%, 기타(체선료, 재고 비용 등)가 약 15%를 차지한다.</p>
+
+            <h3>3. 소비자 가격 전가 시차</h3>
+
+            <p>생두 수입 원가 상승이 소비자 가격에 전가되기까지는 일반적으로 <strong>3~6개월</strong>의 시차가 존재한다. 대형 로스터(동서식품, 매일유업 등)는 선도 계약과 재고 보유분의 버퍼로 즉시적 가격 인상을 피하는 경향이 있으나, 호르무즈 위기가 Q2까지 지속될 경우 2026년 하반기 소비자 가격 인상이 불가피할 전망이다.</p>
+
+            <p>스페셜티 커피 로스터와 소규모 수입업체의 경우, 재고 보유 규모가 작아 물류비용 상승의 영향을 더 즉각적으로 받는다. 일부 소규모 로스터들은 이미 원두 소매가를 5~10% 인상한 것으로 보고되고 있다.</p>
+        </section>
+
+        <!-- Scenarios and Outlook -->
+        <section id="outlook">
+            <h2>시나리오 분석 및 전망</h2>
+
+            <h3>시나리오 1: 조기 해결 (확률 20%)</h3>
+
+            <div class="highlight-box">
+                <p><strong>조건:</strong> 4~5월 중 외교적 해결 또는 호르무즈 부분 재개</p>
+                <p><strong>시장 영향:</strong> 브렌트유 $85~95/bbl로 급락. 해상 운임 4~6주 내 50% 이상 정상화. 아라비카 5월물 265~280&cent;로 하락. 브라질 풍작 효과 본격 반영. 투기 롱 포지션 급격한 청산 예상.</p>
+                <p><strong>주의점:</strong> NPR에 따르면 해협 재개 후에도 기뢰 제거, 보험료 정상화, 선박 재배치에 수개월 소요. 공급망 완전 정상화까지 3~6개월 추가 필요.</p>
+            </div>
+
+            <h3>시나리오 2: 장기 교착 (확률 55%)</h3>
+
+            <div class="alert-box">
+                <p><strong>조건:</strong> 봉쇄가 Q2~Q3 2026까지 지속, 부분적 해운 재개만 이루어짐</p>
+                <p><strong>시장 영향:</strong> 브렌트유 $110~130/bbl 레인지. 해상 운임 현 수준 유지 또는 소폭 추가 상승. 아라비카 280~310&cent; 레인지 거래 지속. 브라질 수확기(5~6월) 물량 유입으로 하방 압력 점진적 강화, 그러나 물류 병목으로 하락 속도 제한.</p>
+                <p><strong>핵심 변수:</strong> 브라질 수확 진행 속도, 산토스항 체선 상황, 로부스타 재고 추가 감소 여부, 에너지 가격 추세.</p>
+            </div>
+
+            <h3>시나리오 3: 위기 확대 (확률 25%)</h3>
+
+            <div class="alert-box">
+                <p><strong>조건:</strong> 군사적 충돌 확대, 추가 해상 초크포인트(바브엘만데브 등) 봉쇄</p>
+                <p><strong>시장 영향:</strong> 브렌트유 $150+/bbl. 글로벌 해운 용량 25%+ 감소. 아라비카 320~380&cent; 재돌파. 물류비용 lb당 10~15&cent; 추가 상승. 로부스타 공급 위기 심화, 아라비카-로부스타 차등화 가격 급변.</p>
+                <p><strong>2차 효과:</strong> 비료 가격 폭등으로 2027년 작황 리스크 증가. 수요 파괴(Demand Destruction) 본격화. 글로벌 경기 침체 가능성 확대.</p>
+            </div>
+
+            <h3>가격 전망 요약</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Q2 2026 전망</div>
+                    <div class="data-card-value">280~310&cent;</div>
+                    <div class="data-card-change">물류 리스크 + 풍작 교착</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">H2 2026 전망 (기본)</div>
+                    <div class="data-card-value">250~285&cent;</div>
+                    <div class="data-card-change positive">풍작 반영 + 물류 정상화</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">H2 2026 전망 (위기)</div>
+                    <div class="data-card-value">310~380&cent;</div>
+                    <div class="data-card-change negative">위기 확대 시</div>
+                </div>
+            </div>
+
+            <p>Reuters 애널리스트 폴 컨센서스는 연말 아라비카 가격을 225&cent;로 전망하고 있으나, 이는 호르무즈 위기의 장기화 가능성을 충분히 반영하지 않은 것으로 판단된다. Rabobank의 2026/27 글로벌 생산량 전망(1.8억 백, 864만 백 잉여)이 실현되더라도, 물류 정상화 시점에 따라 가격 하락의 속도와 폭이 크게 달라질 것이다.</p>
+        </section>
+
+        <!-- Risk Management -->
+        <section id="risk-management">
+            <h2>리스크 관리 전략</h2>
+
+            <h3>수입업체 &middot; 로스터를 위한 제언</h3>
+
+            <ol>
+                <li><strong>재고 전략 재검토:</strong> 평상시 4~6주 수준의 안전 재고를 8~12주로 확대 검토. 특히 베트남/에티오피아산 원두의 경우 수송 지연을 감안한 추가 버퍼 필요.</li>
+                <li><strong>산지 다변화:</strong> 호르무즈 영향권 밖의 대체 산지(브라질, 콜롬비아, 중미) 비중 확대. 단, 품질 특성과 블렌딩 레시피 변경에 따른 소비자 반응을 고려해야 함.</li>
+                <li><strong>운송 계약 장기화:</strong> 스팟 운임 변동 리스크를 줄이기 위해 6~12개월 장기 운송 계약(Service Contract) 체결 검토. 선사와의 협상력이 관건.</li>
+                <li><strong>헤징 전략 조정:</strong> 브라질 풍작에 따른 중기 하락 전망에도 불구, 호르무즈 리스크를 감안한 단기 풋 옵션 보유 검토. 280~310&cent; 레인지 내에서의 단계적 매수(Scale-in) 전략이 유효.</li>
+                <li><strong>물류 모니터링 강화:</strong> 호르무즈 해협 상황, 브렌트유 가격, 주요 항로 운임, 보험료 동향을 일일 단위로 모니터링. 위기 확대 시그널(바브엘만데브 봉쇄, 브렌트유 $140+ 등)에 대한 대응 계획 수립.</li>
+            </ol>
+
+            <h3>주요 모니터링 지표</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">브렌트유 가격</div>
+                    <div class="data-card-value">$126/bbl</div>
+                    <div class="data-card-change negative">$140 돌파 시 경고</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">SCFI 운임지수</div>
+                    <div class="data-card-value">모니터링</div>
+                    <div class="data-card-change">주간 추적</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE 로부스타 재고</div>
+                    <div class="data-card-value">4,093 lots</div>
+                    <div class="data-card-change negative">3,500 이하 시 경고</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">CFTC 순매수</div>
+                    <div class="data-card-value">+25,424</div>
+                    <div class="data-card-change">청산 신호 주시</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section id="conclusion">
+            <h2>결론</h2>
+
+            <p>호르무즈 해협 봉쇄는 커피 시장에 <strong>직접적이 아닌, 그러나 구조적이고 광범위한</strong> 영향을 미치고 있다. 에너지 가격 급등, 해상 운임 폭등, 보험료 인상, 항로 우회라는 4중 충격이 커피 물류 비용을 급증시키고, 특히 동남아시아산 로부스타의 유럽 수급을 교란하고 있다.</p>
+
+            <p>브라질의 사상 최대 풍작(75.9M bags) 전망은 중기적으로 확고한 약세 요인이나, 호르무즈 위기가 이 풍작의 물리적 시장 유입을 구조적으로 지연시키면서, <strong>'공급 과잉 사이클로의 전환'이라는 시장의 기대가 현실화되는 시점</strong>을 늦추고 있다.</p>
+
+            <div class="highlight-box">
+                <p><strong>핵심 메시지:</strong> 커피 시장은 현재 '풍작 기대에 의한 중기 약세'와 '지정학적 물류 혼란에 의한 단기 비용 상승'이 길항하는 이중 구조에 놓여 있다. 이 구조는 호르무즈 해협의 운명에 의해 결정될 것이며, 그 시점과 방식에 따라 2026년 하반기 커피 가격의 궤적이 크게 달라질 것이다.</p>
+            </div>
+
+            <p>한국 커피 산업 참여자들에게는 <strong>단기 리스크 관리와 중기 기회 포착의 균형</strong>이 요구되는 시점이다. 물류비용 상승에 대한 방어적 대응(재고 확대, 산지 다변화, 운송 계약 장기화)과 함께, 브라질 풍작에 따른 중기 가격 하락 국면에서의 전략적 매수 기회를 준비하는 이중 전략이 필요하다.</p>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <div class="footer-brand">Align Commodities</div>
+                        <p class="footer-desc">
+                            글로벌 커피 시장에 대한 심층 분석과 인사이트를 제공합니다.
+                            트레이더, 로스터, 투자자를 위한 전문 시장 정보 서비스.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="footer-title">Contact</div>
+                        <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                            james.baek@aligncommodities.com
+                        </a>
+                        <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                    </div>
+                    <div>
+                        <div class="footer-title">Data Sources</div>
+                        <span class="footer-link" style="cursor: default;">Barchart, ICE, CFTC</span>
+                        <span class="footer-link" style="cursor: default;">Maersk, Drewry, Lloyd's List</span>
+                        <span class="footer-link" style="cursor: default;">Conab, Cecafe, Rabobank</span>
+                        <span class="footer-link" style="cursor: default;">Reuters, NPR, USDA</span>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="footer-copyright">
+                        &copy; 2026 Align Commodities. All rights reserved.
+                    </p>
+                    <p class="footer-disclaimer">
+                        본 보고서는 정보 제공 목적으로만 작성되었으며, 투자 권유나 조언을 구성하지 않습니다.
+                        모든 투자 결정은 독립적인 판단에 기초하여야 합니다.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Scroll navigation bar style change
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

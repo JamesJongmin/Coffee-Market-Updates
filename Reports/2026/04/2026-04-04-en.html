@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strait of Hormuz Blockade and the Global Coffee Supply Chain Crisis | April 4, 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Strait of Hormuz Blockade and the Global Coffee Supply Chain Crisis",
+    "subtitle": "호르무즈 해협 봉쇄와 글로벌 커피 공급망 위기",
+    "date": "2026-04-04",
+    "type": "in-depth",
+    "lang": "en",
+    "summary": "In-depth analysis of the multi-layered impact of Iran's Strait of Hormuz blockade (since Feb 28, 2026) on global coffee supply chains. Energy price surge (Brent $126/bbl), container freight explosion (+$2,000-4,000/TEU), war risk premiums up 4-5x, and Cape of Good Hope rerouting adding up to 21 days to Southeast Asia-Europe transit. ICE robusta stocks at 3.5-month low. Despite Brazil's record crop forecast (75.9M bags), logistics bottlenecks constrain physical supply flow. Scenario analysis and risk management strategies for industry participants.",
+    "tags": ["hormuz-blockade", "supply-chain-crisis", "shipping-disruption", "freight-cost-surge", "war-risk-premium", "energy-price-spike", "robusta-logistics", "vietnam-shipping-delay", "suez-reroute", "cape-of-good-hope", "insurance-premium", "container-shortage", "roaster-inventory", "hedging-strategy"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "ICE", "CFTC", "Maersk", "Drewry", "Lloyd's List", "Reuters", "NPR", "Conab", "Cecafe", "Rabobank", "USDA", "Vietnam Customs", "ABIC"],
+    "price_current": "295.40",
+    "price_change": "-2.40¢ (-0.81%)"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000; display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
+        .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--roast); text-decoration: none; letter-spacing: 0.02em; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-link { font-size: 0.9rem; color: var(--roast); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; font-weight: 500; }
+        .nav-link:hover { opacity: 1; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 120px 24px 80px; }
+
+        header { margin-bottom: 64px; padding-bottom: 48px; border-bottom: 1px solid rgba(26, 15, 10, 0.08); }
+        h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 600; line-height: 1.2; margin-bottom: 16px; color: var(--espresso); letter-spacing: -0.02em; }
+        .subtitle { font-size: 1.1rem; color: var(--roast); opacity: 0.6; font-weight: 500; font-style: italic; font-family: 'Cormorant Garamond', serif; margin-bottom: 8px; }
+        .headline { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 600; line-height: 1.5; color: var(--roast); margin-top: 16px; margin-bottom: 0; }
+        .report-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; font-size: 0.85rem; color: var(--roast); opacity: 0.7; }
+        .meta-item { font-weight: 500; }
+        .meta-divider { color: var(--copper); }
+
+        .market-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 32px 0; }
+        .overview-card { background: white; border: 1px solid rgba(26, 15, 10, 0.08); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
+        .overview-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+        .card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--roast); opacity: 0.6; margin-bottom: 8px; font-weight: 600; }
+        .card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--espresso); line-height: 1.2; }
+        .card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        .price-box { background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%); border: 1px solid rgba(26, 15, 10, 0.06); border-radius: 16px; padding: 32px; margin: 48px 0; box-shadow: 0 2px 20px rgba(0,0,0,0.02); }
+        .price-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+        .price-label { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--roast); opacity: 0.7; }
+        .price-main { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700; line-height: 1; color: var(--espresso); margin-bottom: 8px; }
+        .price-change { font-size: 1.3rem; font-weight: 600; margin-top: 8px; }
+        .price-change.positive { color: var(--positive); }
+        .price-change.negative { color: var(--negative); }
+        .price-table { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(26, 15, 10, 0.1); }
+        .price-item { display: flex; flex-direction: column; gap: 4px; }
+        .price-item-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--roast); opacity: 0.6; font-weight: 600; }
+        .price-item-value { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--espresso); }
+
+        section { margin-bottom: 56px; }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; color: var(--espresso); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--copper); }
+        h3 { font-size: 1.15rem; font-weight: 700; color: var(--roast); margin-top: 36px; margin-bottom: 16px; }
+        p { margin-bottom: 16px; }
+        ul, ol { margin-bottom: 16px; padding-left: 24px; }
+        li { margin-bottom: 12px; }
+
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin: 24px 0; }
+        .data-card { background: white; border: 1px solid rgba(26, 15, 10, 0.08); border-radius: 12px; padding: 20px; }
+        .data-card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--roast); opacity: 0.6; font-weight: 600; margin-bottom: 8px; }
+        .data-card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: var(--espresso); }
+        .data-card-change { font-size: 0.85rem; margin-top: 4px; font-weight: 600; }
+        .data-card-change.positive { color: var(--positive); }
+        .data-card-change.negative { color: var(--negative); }
+
+        .highlight-box { background: linear-gradient(135deg, rgba(184, 115, 51, 0.06) 0%, rgba(196, 165, 116, 0.06) 100%); border-left: 3px solid var(--copper); padding: 24px 28px; margin: 28px 0; border-radius: 0 12px 12px 0; }
+        .highlight-box p:last-child { margin-bottom: 0; }
+        .alert-box { background: linear-gradient(135deg, rgba(194, 58, 58, 0.06) 0%, rgba(194, 58, 58, 0.03) 100%); border-left: 3px solid var(--negative); padding: 24px 28px; margin: 28px 0; border-radius: 0 12px 12px 0; }
+        .alert-box p:last-child { margin-bottom: 0; }
+
+        .timeline { position: relative; padding-left: 32px; margin: 28px 0; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--copper); opacity: 0.3; }
+        .timeline-item { position: relative; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(26, 15, 10, 0.05); }
+        .timeline-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .timeline-item::before { content: ''; position: absolute; left: -28px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--copper); }
+        .timeline-date { font-size: 0.85rem; font-weight: 700; color: var(--copper); margin-bottom: 4px; }
+        .timeline-content { font-size: 0.95rem; line-height: 1.7; }
+
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 0.95rem; }
+        .comparison-table th { background: var(--steam); padding: 12px 16px; text-align: left; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--roast); border-bottom: 2px solid var(--copper); }
+        .comparison-table td { padding: 12px 16px; border-bottom: 1px solid rgba(26, 15, 10, 0.06); }
+        .comparison-table tr:hover { background: rgba(184, 115, 51, 0.03); }
+
+        .footer { background: var(--espresso); padding: 60px 0 40px; margin-top: 80px; }
+        .footer .container { padding: 0 24px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--crema); margin-bottom: 12px; }
+        .footer-desc { font-size: 0.9rem; color: var(--crema); opacity: 0.7; line-height: 1.6; }
+        .footer-title { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--copper); margin-bottom: 16px; }
+        .footer-link { display: block; font-size: 0.9rem; color: var(--crema); opacity: 0.7; text-decoration: none; margin-bottom: 8px; transition: opacity 0.2s; }
+        .footer-link:hover { opacity: 1; }
+        .footer-bottom { border-top: 1px solid rgba(245, 240, 232, 0.1); padding-top: 24px; }
+        .footer-copyright { font-size: 0.8rem; color: var(--crema); opacity: 0.5; margin-bottom: 8px; }
+        .footer-disclaimer { font-size: 0.85rem; opacity: 0.85; line-height: 1.7; max-width: 800px; margin: 0 auto; color: var(--crema); }
+
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .price-main { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.85rem; }
+            .comparison-table th, .comparison-table td { padding: 8px 12px; }
+        }
+
+        @media print {
+            .top-nav { display: none; }
+            .container { max-width: 100%; padding: 40px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#crisis-overview" class="nav-link">Crisis Overview</a>
+            <a href="#supply-chain" class="nav-link">Supply Chain</a>
+            <a href="#market-impact" class="nav-link">Market Impact</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">In-Depth Report</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">April 4, 2026</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>Strait of Hormuz Blockade and the Global Coffee Supply Chain Crisis</h1>
+            <p class="subtitle">An in-depth analysis of geopolitical disruption in coffee logistics</p>
+            <p class="headline">35 days after Operation Epic Fury &mdash; energy price surges, freight explosions, and insurance premium spikes are fundamentally reshaping coffee logistics costs, constraining physical supply despite Brazil's record crop</p>
+
+            <div class="market-overview" id="crisis-overview">
+                <div class="overview-card">
+                    <div class="card-label">Brent Crude</div>
+                    <div class="card-value">$126/bbl</div>
+                    <div class="card-change negative">+60% vs pre-crisis</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Container Freight</div>
+                    <div class="card-value">+$3,000/TEU</div>
+                    <div class="card-change negative">Average increase</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Transit Delay</div>
+                    <div class="card-value">+21 days</div>
+                    <div class="card-change negative">SE Asia&rarr;Europe</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">War Risk Premium</div>
+                    <div class="card-value">4&ndash;5x</div>
+                    <div class="card-change negative">Increase</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Executive Summary -->
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <p>Thirty-five days have passed since Iran's Islamic Revolutionary Guard Corps (IRGC) effectively blockaded the Strait of Hormuz on February 28, 2026, in retaliation for the US-Israeli strikes on Iranian nuclear and military facilities (Operation Epic Fury). The closure of this strategic waterway&mdash;through which approximately 20% of the world's oil and 20% of LNG transits&mdash;has sent shockwaves far beyond energy markets, delivering a <strong>structural blow to the entire global commodity logistics system</strong>.</p>
+
+            <p>Coffee does not directly transit the Strait of Hormuz. However, the blockade's impact has permeated every stage of the coffee supply chain through a cascading transmission mechanism: <strong>energy price surge &rarr; freight rate explosion &rarr; insurance premium spikes &rarr; Suez Canal avoidance &rarr; extended transit times</strong>. This report systematically analyzes these multi-layered effects and their implications for the global coffee industry.</p>
+
+            <div class="alert-box">
+                <p><strong>Key Assessment:</strong> The Hormuz crisis is not a temporary logistics disruption but a factor that is <strong>structurally delaying</strong> the market's transition from the 2023&ndash;2025 supply deficit cycle to the anticipated 2026 surplus cycle. Despite Brazil's record crop forecast (75.9M bags), logistics bottlenecks are constraining the physical flow of supply into the market, slowing the timing and pace of price declines.</p>
+            </div>
+        </section>
+
+        <!-- Crisis Timeline -->
+        <section id="timeline">
+            <h2>Crisis Timeline</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">February 28, 2026</div>
+                    <div class="timeline-content">US-Israeli joint forces launch massive strikes on Iranian nuclear and military facilities (Operation Epic Fury). IRGC deploys naval mines and declares blockade of the Strait of Hormuz.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 1&ndash;3</div>
+                    <div class="timeline-content">Brent crude surges from $95 to $110/bbl. Major carriers (Maersk, MSC, CMA CGM) suspend Persian Gulf route operations. War risk premiums immediately increase 4&ndash;5x.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 5&ndash;10</div>
+                    <div class="timeline-content">Suez Canal-transiting vessels begin rerouting via Cape of Good Hope. Asia&rarr;Europe routes add 12&ndash;21 days average. Container freight rises $2,000&ndash;4,000/TEU.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 15</div>
+                    <div class="timeline-content">Brent crude breaks $120/bbl. Approximately 2,000 merchant vessels stranded in the Persian Gulf region. Global effective container capacity estimated to have fallen ~15%.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 24</div>
+                    <div class="timeline-content">Arabica May futures hit 7-week high of 319.50&cent; (+3.96% daily). CFTC non-commercial net longs surge to +25,424 contracts, reflecting Hormuz risk premium.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Early April (Current)</div>
+                    <div class="timeline-content">Brent at $126/bbl. Blockade 35 days and counting, diplomatic resolution unclear. ICE robusta stocks at 3.5-month low as Southeast Asian logistics deteriorate further. May arabica at 295.40&cent;, deadlocked between bumper crop outlook and logistics risk.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Supply Chain Impact -->
+        <section id="supply-chain">
+            <h2>Multi-Layered Supply Chain Impact</h2>
+
+            <h3>1. Energy Price Channel: Direct Cost Escalation</h3>
+
+            <p>The Strait of Hormuz is the world's largest energy chokepoint, handling approximately 20&ndash;25% of global seaborne oil trade. Since the blockade, Brent crude has surged roughly <strong>60% from ~$78/bbl to $126/bbl</strong>. This directly translates into higher bunker fuel costs, significantly increasing the Bunker Adjustment Factor (BAF)&mdash;a core component of ocean freight rates.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Brent (Pre-Crisis)</div>
+                    <div class="data-card-value">~$78/bbl</div>
+                    <div class="data-card-change">Mid-February 2026</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Brent (Current)</div>
+                    <div class="data-card-value">$126/bbl</div>
+                    <div class="data-card-change negative">+61.5% increase</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">VLSFO Bunker</div>
+                    <div class="data-card-value">~$780/mt</div>
+                    <div class="data-card-change negative">+45% increase</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">BAF Surcharge</div>
+                    <div class="data-card-value">+35&ndash;50%</div>
+                    <div class="data-card-change negative">Major routes</div>
+                </div>
+            </div>
+
+            <p>Beyond transportation, energy price increases cascade into fertilizer costs (natural gas-based nitrogen fertilizers), drying and processing energy expenses, and domestic inland transport. In Brazil, trucking costs from Minas Gerais to the port of Santos have reportedly risen 10&ndash;15% due to diesel price increases.</p>
+
+            <h3>2. Ocean Freight Explosion: Structural Cost Increases</h3>
+
+            <p>According to Drewry's World Container Index, freight rates on major container routes have surged since the Hormuz blockade. This reflects not only higher energy costs but also a <strong>reduction in effective vessel capacity</strong> and <strong>route diversions</strong>.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Route</th>
+                        <th>Pre-Crisis</th>
+                        <th>Current</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Asia&rarr;North Europe</td>
+                        <td>$2,800/FEU</td>
+                        <td>$5,600/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+100%</td>
+                    </tr>
+                    <tr>
+                        <td>Asia&rarr;Mediterranean</td>
+                        <td>$3,100/FEU</td>
+                        <td>$6,400/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+106%</td>
+                    </tr>
+                    <tr>
+                        <td>Brazil&rarr;Europe</td>
+                        <td>$1,900/FEU</td>
+                        <td>$3,200/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+68%</td>
+                    </tr>
+                    <tr>
+                        <td>Vietnam&rarr;Europe</td>
+                        <td>$3,200/FEU</td>
+                        <td>$6,800/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+113%</td>
+                    </tr>
+                    <tr>
+                        <td>Brazil&rarr;South Korea</td>
+                        <td>$2,400/FEU</td>
+                        <td>$3,800/FEU</td>
+                        <td style="color: var(--negative); font-weight: 600;">+58%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>The Vietnam&rarr;Europe route stands out with a 113% increase. Many vessels on this route previously transited the Suez Canal, and security concerns plus insurance costs near the Persian Gulf have forced a Cape of Good Hope reroute. Per Maersk, this adds <strong>12&ndash;21 days to transit times</strong>, meaning the same fleet can handle fewer annual voyages.</p>
+
+            <h3>3. War Risk Premiums: The Hidden Cost</h3>
+
+            <p>According to Lloyd's List, war risk insurance premiums for waters near the Persian Gulf have surged from 0.05&ndash;0.1% to <strong>0.5&ndash;1.0% of hull value</strong>&mdash;approximately a 4&ndash;5x increase. For large container vessels (hull value $150&ndash;200M), single-voyage premiums have skyrocketed to $750K&ndash;$2M, costs ultimately passed through to shippers.</p>
+
+            <div class="highlight-box">
+                <p><strong>Estimated logistics cost impact per coffee container (20ft FCL):</strong></p>
+                <p>Vietnam&rarr;Europe: Pre-crisis total logistics $4,500&ndash;5,500 &rarr; Current $8,500&ndash;10,500 (~+90%)</p>
+                <p>Brazil&rarr;South Korea: Pre-crisis total logistics $3,500&ndash;4,500 &rarr; Current $5,500&ndash;7,000 (~+55%)</p>
+                <p>Converted to a per-bag (60kg) basis, the freight cost increase equates to approximately 3&ndash;8&cent;/lb&mdash;about 1&ndash;3% on top of the current arabica futures price (295&cent;/lb).</p>
+            </div>
+
+            <h3>4. Route Diversions and Extended Transit Times</h3>
+
+            <p>The most tangible indirect effect of the Hormuz blockade is the <strong>Cape of Good Hope rerouting of Suez-transiting vessels</strong>. Even vessels not directly passing through Hormuz are avoiding the Suez Canal due to security concerns and insurance cost spikes in nearby waters.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Route</th>
+                        <th>Via Suez</th>
+                        <th>Via Cape</th>
+                        <th>Additional Days</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ho Chi Minh&rarr;Rotterdam</td>
+                        <td>~25 days</td>
+                        <td>~42 days</td>
+                        <td style="font-weight: 600;">+17 days</td>
+                    </tr>
+                    <tr>
+                        <td>Ho Chi Minh&rarr;Hamburg</td>
+                        <td>~28 days</td>
+                        <td>~49 days</td>
+                        <td style="font-weight: 600;">+21 days</td>
+                    </tr>
+                    <tr>
+                        <td>Santos&rarr;Rotterdam</td>
+                        <td>~18 days</td>
+                        <td>~22 days</td>
+                        <td style="font-weight: 600;">+4 days</td>
+                    </tr>
+                    <tr>
+                        <td>Santos&rarr;Busan</td>
+                        <td>~35 days</td>
+                        <td>~40 days</td>
+                        <td style="font-weight: 600;">+5 days</td>
+                    </tr>
+                    <tr>
+                        <td>Mombasa&rarr;Rotterdam</td>
+                        <td>~22 days</td>
+                        <td>~32 days</td>
+                        <td style="font-weight: 600;">+10 days</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Extended transit times go beyond simple "delays"&mdash;they reduce the <strong>inventory turnover velocity of the entire supply chain</strong>. Fewer voyages per vessel per year means effective global shipping capacity declines, feeding back into higher freight rates in a self-reinforcing cycle. Drewry estimates the Cape reroute has reduced global effective container capacity by approximately <strong>12&ndash;15%</strong>.</p>
+        </section>
+
+        <!-- Origin-Specific Impact -->
+        <section id="origin-impact">
+            <h2>Origin-Specific Impact Analysis</h2>
+
+            <h3>1. Vietnam &amp; Indonesia: Robusta Logistics Under Direct Fire</h3>
+
+            <p>The most direct casualty of the Hormuz crisis is the <strong>European export route for Southeast Asian robusta</strong>. Vietnam (the world's largest robusta producer) and Indonesia primarily ship to Europe via the Suez Canal&mdash;a route now effectively disrupted, causing logistics costs and transit times to soar.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Vietnam Feb Exports</div>
+                    <div class="data-card-value">2.35M bags</div>
+                    <div class="data-card-change negative">-16.55% y/y</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE Robusta Stocks</div>
+                    <div class="data-card-value">4,093 lots</div>
+                    <div class="data-card-change negative">3.5-month low</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Transit Delay</div>
+                    <div class="data-card-value">+17&ndash;21 days</div>
+                    <div class="data-card-change negative">To Europe</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Freight Increase</div>
+                    <div class="data-card-value">+113%</div>
+                    <div class="data-card-change negative">Vietnam&rarr;Europe</div>
+                </div>
+            </div>
+
+            <p>ICE robusta certified stocks falling to 4,093 lots (3.5-month low) signals that logistics disruptions are beginning to show up in physical inventory data. Vietnam's 2025/26 production is projected at 1.76 million metric tons (29.4M bags, +6% y/y)&mdash;robust output, yet the <strong>speed at which production abundance converts to destination inventory</strong> has slowed dramatically.</p>
+
+            <h3>2. Brazil: The Paradox of Abundance</h3>
+
+            <p>Brazil's primary export routes (Santos&rarr;Europe, Santos&rarr;Asia) have limited direct exposure to Hormuz. However, <strong>indirect effects</strong> are substantial.</p>
+
+            <div class="highlight-box">
+                <p><strong>The Bumper Crop Paradox:</strong> Marex forecasts Brazil's 2026/27 coffee production at a record 75.9M bags. Yet for this historic supply to exert its full bearish pressure on prices, the harvested coffee must move smoothly from origin to destination. The current global logistics crisis is structurally impeding this process.</p>
+            </div>
+
+            <ul>
+                <li><strong>Inland transport costs rising:</strong> Diesel price increases have pushed Minas Gerais&rarr;Santos trucking costs up 10&ndash;15%. Further escalation likely during harvest season (May&ndash;June) volume concentration.</li>
+                <li><strong>Santos port congestion risk:</strong> Global vessel shortages are increasing demurrage times at Santos. Risk of severe port congestion when harvest volumes peak.</li>
+                <li><strong>Producer selling holdback:</strong> Per Safras &amp; Mercados, forward sales for the 2026/27 crop stand at just 8% of production potential (vs. 17% historical average). Logistics uncertainty is making producers even more cautious about forward commitments.</li>
+                <li><strong>Fertilizer supply risk:</strong> The Hormuz blockade has disrupted Middle Eastern natural gas supply, driving up nitrogen fertilizer prices&mdash;a medium-term risk factor for the 2027 crop.</li>
+            </ul>
+
+            <h3>3. East Africa: Double Impact</h3>
+
+            <p>Ethiopia, Kenya, and Tanzania face a <strong>double impact</strong>. Their coffee exports primarily route through Djibouti and Mombasa via the Suez Canal to Europe&mdash;now disrupted. Simultaneously, these energy-import-dependent nations face surging domestic fuel costs, raising inland transport and processing expenses. Specialty coffee producers in Ethiopia's Sidama and Yirgacheffe regions report that elevated shipping costs are eroding premium margins.</p>
+        </section>
+
+        <!-- Market Impact -->
+        <section id="market-impact">
+            <h2>Futures Market and Price Impact</h2>
+
+            <h3>1. Arabica Futures: Bumper Crop vs. Logistics Risk Deadlock</h3>
+
+            <p>ICE arabica May futures have traded in a wide <strong>280&ndash;320&cent; range</strong> since the Hormuz crisis. After hitting a 7-week high of 319.50&cent; on March 24, prices corrected to the 295&cent; level as Brazil's record crop forecasts were reaffirmed.</p>
+
+            <div class="price-box" id="market">
+                <div class="price-header">
+                    <span class="price-label">ICE Arabica May (KCK26)</span>
+                    <span class="price-label">Close: April 2, 2026</span>
+                </div>
+                <div class="price-main">295.40&cent;/lb</div>
+                <div class="price-change negative">&blacktriangledown; 2.40&cent; (-0.81%) daily</div>
+
+                <div class="price-table">
+                    <div class="price-item">
+                        <span class="price-item-label">Pre-Hormuz (2/27)</span>
+                        <span class="price-item-value">~285&cent;</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-item-label">Post-Crisis High (3/24)</span>
+                        <span class="price-item-value">319.50&cent;</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-item-label">March Average</span>
+                        <span class="price-item-value">297.68&cent;</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-item-label">Est. Hormuz Premium</span>
+                        <span class="price-item-value">+10&ndash;15&cent;</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>An estimated <strong>10&ndash;15&cent;/lb "Hormuz premium"</strong> is currently embedded in market prices, inferred from the gap between pre-crisis levels (~285&cent;) and current prices (295&cent;), and the fact that prices haven't returned to pre-crisis levels despite even stronger bearish fundamentals from Brazil.</p>
+
+            <h3>2. CFTC Positioning: Speculative Capital Pivot</h3>
+
+            <p>Per CFTC data (as of March 24), non-commercial net long positions surged to <strong>+25,424 contracts</strong>, up 36.7% from +18,594 the prior week. This follows February's massive long liquidation (~$2.7 billion), suggesting the Hormuz risk premium is drawing speculative capital back into coffee.</p>
+
+            <div class="highlight-box">
+                <p><strong>Positioning Interpretation:</strong> The expansion of speculative net longs contradicts fundamentals (bumper crop = bearish). This likely reflects: (1) bets on prolonged Hormuz disruption, (2) expectations of freight cost pass-through to prices, and (3) volatility trading around near-term supply disruptions. However, any Hormuz resolution could trigger rapid position unwinding, accelerating price declines.</p>
+            </div>
+
+            <h3>3. Forward Curve: Deepening Backwardation</h3>
+
+            <p>The arabica futures curve displays a pronounced <strong>backwardation</strong>. The May contract (295.40&cent;) trades at a ~29&cent; premium to December (266.55&cent;).</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">May (KCK26)</div>
+                    <div class="data-card-value">295.40&cent;</div>
+                    <div class="data-card-change">Front month</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Jul (KCN26)</div>
+                    <div class="data-card-value">289.40&cent;</div>
+                    <div class="data-card-change negative">-6.00&cent;</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Dec (KCZ26)</div>
+                    <div class="data-card-value">266.55&cent;</div>
+                    <div class="data-card-change negative">-28.85&cent;</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Mar 27 (KCH27)</div>
+                    <div class="data-card-value">262.55&cent;</div>
+                    <div class="data-card-change negative">-32.85&cent;</div>
+                </div>
+            </div>
+
+            <p>This backwardation reflects the market's expectation of <strong>near-term tightness but medium-term supply improvement</strong> via Brazil's bumper crop. The Hormuz crisis deepens this structure by constraining current physical supply, adding a premium to front-month contracts.</p>
+
+            <h3>4. Robusta: More Direct Exposure</h3>
+
+            <p>ICE robusta (London) is more directly impacted. With the primary robusta export route (Vietnam/Indonesia&rarr;Europe) requiring Suez transit, ICE robusta certified stocks have fallen to <strong>4,093 lots&mdash;a 3.5-month low</strong>. This contrasts sharply with arabica certified stocks at 585,621 bags (6.25-month high), as arabica supply from Brazil and Central America flows through routes largely outside Hormuz's impact zone. <strong>The crisis is widening the supply gap between arabica and robusta.</strong></p>
+        </section>
+
+        <!-- Scenarios and Outlook -->
+        <section id="outlook">
+            <h2>Scenario Analysis and Outlook</h2>
+
+            <h3>Scenario 1: Early Resolution (Probability 20%)</h3>
+
+            <div class="highlight-box">
+                <p><strong>Conditions:</strong> Diplomatic resolution or partial Hormuz reopening by April&ndash;May</p>
+                <p><strong>Market Impact:</strong> Brent crude drops to $85&ndash;95/bbl. Ocean freight normalizes 50%+ within 4&ndash;6 weeks. Arabica May falls to 265&ndash;280&cent;. Brazil bumper crop effect fully reflected. Rapid speculative long liquidation expected.</p>
+                <p><strong>Caveat:</strong> Per NPR, post-reopening mine clearance, insurance normalization, and fleet redeployment will take months. Full supply chain normalization requires an additional 3&ndash;6 months.</p>
+            </div>
+
+            <h3>Scenario 2: Prolonged Stalemate (Probability 55%)</h3>
+
+            <div class="alert-box">
+                <p><strong>Conditions:</strong> Blockade persists through Q2&ndash;Q3 2026 with only partial shipping resumption</p>
+                <p><strong>Market Impact:</strong> Brent crude in $110&ndash;130/bbl range. Ocean freight at current levels or marginally higher. Arabica trades in 280&ndash;310&cent; range. Brazil harvest (May&ndash;June) supply gradually increases downward pressure, but logistics bottlenecks limit decline pace.</p>
+                <p><strong>Key Variables:</strong> Brazil harvest pace, Santos port congestion, further robusta stock declines, energy price trajectory.</p>
+            </div>
+
+            <h3>Scenario 3: Crisis Escalation (Probability 25%)</h3>
+
+            <div class="alert-box">
+                <p><strong>Conditions:</strong> Military escalation, additional chokepoint blockades (Bab el-Mandeb, etc.)</p>
+                <p><strong>Market Impact:</strong> Brent crude $150+/bbl. Global shipping capacity &ndash;25%+. Arabica retests 320&ndash;380&cent;. Logistics costs add 10&ndash;15&cent;/lb. Robusta supply crisis intensifies, arabica-robusta arbitrage dynamics shift dramatically.</p>
+                <p><strong>Second-Order Effects:</strong> Fertilizer price spikes threaten 2027 crop. Demand destruction accelerates. Global recession risk rises.</p>
+            </div>
+
+            <h3>Price Outlook Summary</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Q2 2026 Outlook</div>
+                    <div class="data-card-value">280&ndash;310&cent;</div>
+                    <div class="data-card-change">Logistics risk + bumper crop deadlock</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">H2 2026 (Base Case)</div>
+                    <div class="data-card-value">250&ndash;285&cent;</div>
+                    <div class="data-card-change positive">Crop reflected + logistics normalization</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">H2 2026 (Risk Case)</div>
+                    <div class="data-card-value">310&ndash;380&cent;</div>
+                    <div class="data-card-change negative">Crisis escalation</div>
+                </div>
+            </div>
+
+            <p>The Reuters analyst poll consensus for year-end arabica at 225&cent; appears to insufficiently account for prolonged Hormuz disruption. Even if Rabobank's 2026/27 global production forecast (180M bags, 8.64M bag surplus) materializes, the pace and magnitude of price declines will depend critically on when logistics normalize.</p>
+        </section>
+
+        <!-- Risk Management -->
+        <section id="risk-management">
+            <h2>Risk Management Strategies</h2>
+
+            <h3>Recommendations for Importers &amp; Roasters</h3>
+
+            <ol>
+                <li><strong>Reassess inventory strategy:</strong> Consider expanding safety stock from the typical 4&ndash;6 weeks to 8&ndash;12 weeks. Particularly for Vietnamese and East African origins, additional buffer for transit delays is essential.</li>
+                <li><strong>Diversify sourcing:</strong> Increase allocation to origins outside the Hormuz impact zone (Brazil, Colombia, Central America). However, quality profile changes and blending recipe adjustments must account for consumer response.</li>
+                <li><strong>Extend freight contracts:</strong> To mitigate spot rate volatility, consider 6&ndash;12 month service contracts with carriers. Negotiating leverage with shipping lines is key.</li>
+                <li><strong>Adjust hedging strategies:</strong> Despite the medium-term bearish outlook from Brazil's bumper crop, consider short-term put options given Hormuz risk. Scale-in buying within the 280&ndash;310&cent; range remains viable.</li>
+                <li><strong>Strengthen logistics monitoring:</strong> Track Hormuz situation, Brent crude, major route freight rates, and insurance premiums on a daily basis. Develop contingency plans for escalation triggers (Bab el-Mandeb blockade, Brent $140+).</li>
+            </ol>
+
+            <h3>Key Monitoring Indicators</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Brent Crude</div>
+                    <div class="data-card-value">$126/bbl</div>
+                    <div class="data-card-change negative">Alert at $140+</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">SCFI Index</div>
+                    <div class="data-card-value">Monitor</div>
+                    <div class="data-card-change">Weekly tracking</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE Robusta Stocks</div>
+                    <div class="data-card-value">4,093 lots</div>
+                    <div class="data-card-change negative">Alert below 3,500</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">CFTC Net Longs</div>
+                    <div class="data-card-value">+25,424</div>
+                    <div class="data-card-change">Watch for liquidation</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section id="conclusion">
+            <h2>Conclusion</h2>
+
+            <p>The Strait of Hormuz blockade is exerting an <strong>indirect yet structural and pervasive</strong> impact on the coffee market. The quadruple shock of energy price surges, freight rate explosions, insurance premium spikes, and route diversions has dramatically increased coffee logistics costs, particularly disrupting Southeast Asian robusta supply to Europe.</p>
+
+            <p>Brazil's record crop forecast (75.9M bags) remains a firm medium-term bearish factor. However, the Hormuz crisis is structurally delaying the physical market absorption of this bumper crop, <strong>pushing back the timeline for the market's anticipated transition to a surplus cycle</strong>.</p>
+
+            <div class="highlight-box">
+                <p><strong>Key Message:</strong> The coffee market is caught between two opposing forces&mdash;medium-term bearishness from record supply expectations and near-term cost escalation from geopolitical logistics disruption. This structure will be resolved by the fate of the Strait of Hormuz, and the timing and manner of that resolution will critically determine the trajectory of coffee prices in H2 2026.</p>
+            </div>
+
+            <p>For global coffee industry participants, this is a moment requiring <strong>balance between short-term risk management and medium-term opportunity capture</strong>. Defensive measures against rising logistics costs (inventory expansion, origin diversification, extended freight contracts) must be paired with preparation for strategic buying opportunities as Brazil's bumper crop eventually pressures prices lower.</p>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <div class="footer-brand">Align Commodities</div>
+                        <p class="footer-desc">
+                            Providing in-depth analysis and insights on global coffee markets.
+                            Professional market intelligence for traders, roasters, and investors.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="footer-title">Contact</div>
+                        <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                            james.baek@aligncommodities.com
+                        </a>
+                        <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                    </div>
+                    <div>
+                        <div class="footer-title">Data Sources</div>
+                        <span class="footer-link" style="cursor: default;">Barchart, ICE, CFTC</span>
+                        <span class="footer-link" style="cursor: default;">Maersk, Drewry, Lloyd's List</span>
+                        <span class="footer-link" style="cursor: default;">Conab, Cecafe, Rabobank</span>
+                        <span class="footer-link" style="cursor: default;">Reuters, NPR, USDA</span>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="footer-copyright">
+                        &copy; 2026 Align Commodities. All rights reserved.
+                    </p>
+                    <p class="footer-disclaimer">
+                        This report is prepared for informational purposes only and does not constitute investment advice or solicitation.
+                        All investment decisions should be based on independent judgment.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
