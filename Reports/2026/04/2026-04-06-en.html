@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | April 6, 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "주간 커피 선물 시장 동향",
+    "date": "2026-04-06",
+    "type": "weekly",
+    "summary": "May arabica (KCK26) settled at 295.40¢ (Apr 2), pressured by dollar strength and record Brazil crop forecasts (Marex 75.9M, StoneX 75.3M bags). The Strait of Hormuz closure has disrupted global shipping, driving freight costs sharply higher and tightening coffee logistics. Minas Gerais rainfall dropped to 47% of historical average, providing near-term price support. ICE robusta inventories fell to 3.5-month low of 4,093 lots while ICE arabica stocks rose to 6.25-month high of 585K bags. CFTC non-commercial net long expanded to +25,424 contracts, reflecting geopolitical risk premium. Near-term range 280–310¢ expected.",
+    "tags": ["295cents", "dollar-strength", "brazil-record-crop", "marex-75.9M", "stonex-75.3M", "hormuz-closure", "shipping-disruption", "minas-gerais-dry", "robusta-inventory-low", "arabica-inventory-high", "cftc-net-long-expand", "geopolitical-risk"],
+    "author": "Align Commodities",
+    "sources": ["Barchart", "CFTC", "ICE", "Marex", "StoneX", "Sucafina", "Somar Meteorologia", "Conab", "Cecafe", "Rabobank", "Perfect Daily Grind", "Reuters"],
+    "price_current": "295.40",
+    "price_change": "-2.40¢ (-0.81%)"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            font-weight: 500;
+        }
+
+        .meta-divider {
+            color: var(--copper);
+        }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .card-change {
+            font-size: 0.9rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .card-change.positive {
+            color: var(--positive);
+        }
+
+        .card-change.negative {
+            color: var(--negative);
+        }
+
+        /* Price Box */
+        .price-box {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .price-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .price-change {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .price-change.positive {
+            color: var(--positive);
+        }
+
+        .price-change.negative {
+            color: var(--negative);
+        }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26, 15, 10, 0.1);
+        }
+
+        .price-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .price-item-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .price-item-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        /* Sections */
+        section {
+            margin: 56px 0;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--espresso);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--roast);
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--ink);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--steam);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Alert Box */
+        .alert-box {
+            background: #fdf2f2;
+            border-left: 4px solid var(--negative);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .alert-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Lists */
+        ul {
+            margin: 24px 0;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--ink);
+        }
+
+        li strong {
+            color: var(--roast);
+            font-weight: 600;
+        }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .data-card-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .data-card-change {
+            font-size: 0.9rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .data-card-change.positive {
+            color: var(--positive);
+        }
+
+        .data-card-change.negative {
+            color: var(--negative);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 48px 0 32px;
+            margin-top: 80px;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            opacity: 0.95;
+            color: var(--crema);
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.95;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.15);
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin-bottom: 12px;
+            color: var(--crema);
+        }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 20px 60px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .price-main {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .top-nav {
+                display: none;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 40px;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#fundamentals" class="nav-link">Fundamentals</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">Weekly Report</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">April 6, 2026</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>Coffee Futures Market Weekly Update</h1>
+            <p class="subtitle">주간 커피 선물 시장 동향</p>
+            <p class="headline">Dollar Strength and Record Brazil Crop Outlook Maintain Downward Pressure — Strait of Hormuz Closure Emerges as Major Logistics Variable</p>
+
+            <!-- Market Overview Cards -->
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">KCK26 (May)</div>
+                    <div class="card-value">295.40&cent;</div>
+                    <div class="card-change negative">-2.40 (-0.81%)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">RMK26 (Robusta)</div>
+                    <div class="card-value">$3,453/t</div>
+                    <div class="card-change negative">-73 (-2.07%)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Weekly Range</div>
+                    <div class="card-value">292&ndash;301&cent;</div>
+                    <div class="card-change negative">Downtrend persists</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">ICE Robusta Stocks</div>
+                    <div class="card-value">4,093 lots</div>
+                    <div class="card-change negative">3.5-month low</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Price Box -->
+        <div class="price-box" id="market">
+            <div class="price-header">
+                <span class="price-label">ICE Arabica May (KCK26)</span>
+                <span class="price-label">Settled Apr 2, 2026</span>
+            </div>
+            <div class="price-main">295.40&cent;/lb</div>
+            <div class="price-change negative">&blacktriangledown; 2.40&cent; (-0.81%) daily</div>
+
+            <div class="price-table">
+                <div class="price-item">
+                    <span class="price-item-label">Jul '26 (KCN26)</span>
+                    <span class="price-item-value">289.40&cent;</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Sep '26 (KCU26)</span>
+                    <span class="price-item-value">276.65&cent;</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Dec '26 (KCZ26)</span>
+                    <span class="price-item-value">266.55&cent;</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Mar '27 (KCH27)</span>
+                    <span class="price-item-value">262.55&cent;</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">52-Week Range</span>
+                    <span class="price-item-value">275&ndash;438&cent;</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Open Interest</span>
+                    <span class="price-item-value">174,861</span>
+                </div>
+            </div>
+        </div>
+
+        <section id="weekly-summary">
+            <h2>Weekly Market Summary</h2>
+
+            <p>Coffee futures remained under pressure this week, weighed down by <strong>dollar strength</strong> and <strong>record Brazilian crop forecasts</strong>. May arabica settled at 295.40&cent; on April 2, down 2.40&cent; (-0.81%), while May ICE robusta fell $73 (-2.07%).</p>
+
+            <p>Price action was characterised by elevated volatility as two opposing forces collided. On one hand, upwardly revised Brazil crop estimates from Marex (75.9M bags) and StoneX (75.3M bags) reinforced the medium-term bearish narrative. On the other, the <strong>Strait of Hormuz closure</strong> disrupted global shipping lanes, driving freight costs sharply higher and creating near-term supply logistics concerns. On March 24, arabica surged +12.15&cent; (+3.96%) to a 7-week high as Brazilian farmer withholding and the Hormuz risk premium converged to trigger aggressive short-covering.</p>
+
+            <div class="alert-box">
+                <p><strong>Strait of Hormuz Crisis:</strong> Following US-Israeli strikes on Iran (Operation Epic Fury) on February 28, the IRGC effectively blockaded the Strait of Hormuz. Approximately 20% of global crude oil and 20% of LNG transits this waterway. Brent crude surged to $126/bbl, war risk insurance premiums increased 4&ndash;5x, and major carriers including Maersk, MSC, and Hapag-Lloyd suspended all transits. According to Maersk, transit times for Southeast Asian coffee to Europe have extended by up to 21 days. Approximately 2,000 vessels remain stranded in the region.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>Key Theme:</strong> The market sits at the intersection of two powerful but opposing forces: medium-term bearish pressure from the approaching record Brazil harvest, and near-term cost inflation from the worst maritime logistics crisis in modern history. While the physical supply of coffee beans is set to improve significantly from Q2 2026, the cost of moving those beans across the globe has risen dramatically.</p>
+            </div>
+        </section>
+
+        <section id="fundamentals">
+            <h2>Fundamental Analysis</h2>
+
+            <h3>1. Brazil: Record Crop Estimates Continue to Rise</h3>
+
+            <p>Multiple agencies have projected Brazil&rsquo;s 2026/27 coffee production at <strong>all-time record levels</strong>, with estimates continuing to be revised upward.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Marex Forecast</div>
+                    <div class="data-card-value">75.9M bags</div>
+                    <div class="data-card-change positive">+15.5% y/y (highest)</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Sucafina Forecast</div>
+                    <div class="data-card-value">75.4M bags</div>
+                    <div class="data-card-change positive">Arabica 49.7M</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">StoneX Forecast</div>
+                    <div class="data-card-value">75.3M bags</div>
+                    <div class="data-card-change positive">Up from Nov est.</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Conab Official</div>
+                    <div class="data-card-value">66.2M bags</div>
+                    <div class="data-card-change positive">+17.2% y/y</div>
+                </div>
+            </div>
+
+            <p>Marex Group projected on March 26 a record Brazil 2026/27 coffee crop of <strong>75.9 million bags</strong>, the highest estimate among major forecasters. This exceeds Sucafina&rsquo;s 75.4M bags (49.7M arabica, 25.9M robusta) and StoneX&rsquo;s 75.3M bags (revised up from a November estimate of 70.7M). Sucafina&rsquo;s crop tour concluded that both the Cerrado and Rondonia regions are expected to produce record volumes.</p>
+
+            <p>From late December 2025 through February 2026, Minas Gerais received 400&ndash;600mm (16&ndash;24 inches) of rainfall, securing the fruit-setting stage. However, the most recent week saw rainfall drop to just 47% of the historical average (11.7mm), according to Somar Meteorologia. Sustained dryness could become a supportive factor for prices.</p>
+
+            <h3>2. Strait of Hormuz: A New Crisis for Coffee Logistics</h3>
+
+            <p>While coffee does not directly transit the Strait of Hormuz, the blockade is having a <strong>broad and indirect</strong> impact on the coffee supply chain.</p>
+
+            <div class="highlight-box">
+                <p><strong>Transmission Channels:</strong> Surging energy prices (Brent above $126/bbl) are driving up bunker fuel costs and ocean freight rates. War risk insurance premiums have increased 4&ndash;5x. Major container lines have suspended Suez Canal transits, forcing Cape of Good Hope rerouting &mdash; adding transit time and costs. Container freight rates have risen by $2,000&ndash;4,000 per TEU, and approximately 2,000 ships are stranded in the region. NPR reports that even after the strait reopens, normalisation of supply chains will take months.</p>
+            </div>
+
+            <p>These cost increases directly affect coffee importers and roasters, particularly impacting Vietnamese and Indonesian robusta shipments to Europe. Extended transit times are also disrupting roasters&rsquo; inventory replenishment schedules.</p>
+
+            <h3>3. Brazil Exports: Decline Continues</h3>
+
+            <p>According to Cecafe, Brazil&rsquo;s February green coffee exports fell <strong>-27% y/y</strong> to 2.3 million bags. Brazil&rsquo;s Trade Ministry separately reported February coffee exports down -17.4% y/y at 142,000 MT. Deepening backwardation &mdash; where futures trade below spot prices &mdash; continues to discourage forward sales. According to Safras &amp; Mercados, advance sales of the 2026/27 crop stand at just 8% of production potential, below the prior year&rsquo;s 9% and the historical average of 17%.</p>
+
+            <h3>4. Vietnam: Exports Remain Solid</h3>
+
+            <p>Vietnam&rsquo;s coffee exports remain robust. According to Vietnam Customs, <strong>February exports fell -16.55% y/y</strong> to 2.35 million bags, though this reflects the exceptionally high base effect from the prior year. Vietnam&rsquo;s 2025/26 production is projected to increase +6% y/y to 1.76 MMT (29.4 million bags), a 4-year high.</p>
+
+            <h3>5. ICE Certified Inventory Trends</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">ICE Arabica</div>
+                    <div class="data-card-value">585K bags</div>
+                    <div class="data-card-change positive">6.25-month high</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE Robusta</div>
+                    <div class="data-card-value">4,093 lots</div>
+                    <div class="data-card-change negative">3.5-month low</div>
+                </div>
+            </div>
+
+            <p>ICE arabica certified stocks rose to 585,621 bags as of March 18, a <strong>6.25-month high</strong>, continuing their recovery trend. In contrast, ICE robusta inventories declined to 4,093 lots, a <strong>3.5-month low</strong>, presenting a divergent picture. The arabica stock recovery is attributed to expanded grading activity at European ports and the EUDR postponement, while the robusta drawdown likely reflects Hormuz-related logistics disruptions affecting Southeast Asian shipments.</p>
+
+            <h3>6. CFTC Speculative Positioning</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Non-Comm Long</div>
+                    <div class="data-card-value">53,346</div>
+                    <div class="data-card-change positive">+1,999 contracts</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Non-Comm Short</div>
+                    <div class="data-card-value">27,922</div>
+                    <div class="data-card-change positive">-4,831 contracts</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Net Position</div>
+                    <div class="data-card-value">+25,424</div>
+                    <div class="data-card-change positive">+6,830 expansion</div>
+                </div>
+            </div>
+
+            <p>CFTC data as of March 24 shows non-commercial net longs at <strong>+25,424 contracts</strong>, up sharply from +18,594 the prior week (+6,830). Longs increased by 1,999 contracts while shorts decreased by 4,831 contracts. According to I&amp;M Smith, the non-commercial speculative sector increased their net long position by +50.37% during the week ending March 24.</p>
+
+            <p>This marks a significant reversal from the February liquidation (estimated at approximately $2.7 billion in long positions) and suggests that <strong>speculative capital is rebuilding long exposure</strong>, driven by the geopolitical risk premium from the Hormuz crisis. Open interest stood at 174,861 contracts, marginally higher week-over-week.</p>
+
+            <h3>7. Other Notable Developments</h3>
+
+            <p><strong>CMN Approves Funcaf&eacute; 2026&ndash;27 Funding:</strong> Brazil&rsquo;s National Monetary Council approved $1.41 billion for the Funcaf&eacute; 2026&ndash;27 cycle, up 2.5% from the prior year, providing critical liquidity for harvesting, storage, and coffee acquisition by producers and cooperatives.</p>
+
+            <p><strong>Keurig Dr Pepper Completes JDE Peet&rsquo;s Acquisition:</strong> KDP completed its acquisition of JDE Peet&rsquo;s and appointed CEO Rafael Oliveira to lead the combined coffee business, signalling further consolidation in the global coffee industry.</p>
+
+            <p><strong>Esp&iacute;rito Santo Conilon Exports Surge:</strong> Conilon (robusta) exports from Brazil&rsquo;s Esp&iacute;rito Santo state rose 28% in Q1, driven by global robusta shortages and increased demand in the specialty and soluble sectors.</p>
+
+            <p><strong>Cooxup&eacute; Forecasts Export Decline:</strong> The world&rsquo;s largest coffee cooperative projected lower 2026 exports, citing logistical hurdles and reduced stock availability.</p>
+        </section>
+
+        <section id="outlook">
+            <h2>Market Outlook &amp; Risks</h2>
+
+            <h3>Near-Term Market Structure</h3>
+
+            <p>The market is caught between <strong>medium-term supply surplus expectations</strong> and <strong>geopolitical logistics risk</strong>. From a technical standpoint, May futures show a &lsquo;Strong Sell&rsquo; signal on Investing.com, but heightened volatility saw prices rally to a 7-week high of 319.50&cent; in mid-March. The March trading range for the May contract was 277.55&ndash;319.50&cent;, with an average of 297.68&cent;.</p>
+
+            <div class="highlight-box">
+                <p><strong>Scenario Analysis:</strong></p>
+                <p><strong>Bull Case (25% probability):</strong> Prolonged Hormuz closure (3+ months) drives further freight cost escalation and inventory hoarding, pushing prices above 320&ndash;340&cent;. April&ndash;May dryness in Brazil would add upside pressure.</p>
+                <p><strong>Base Case (50% probability):</strong> Partial Hormuz reopening coincides with confirmation of the Brazil bumper crop, keeping prices range-bound at 280&ndash;310&cent;. Freight cost increases are gradually priced in.</p>
+                <p><strong>Bear Case (25% probability):</strong> Early Hormuz resolution + Q2 onset of Brazil new-crop inflows pushes prices down to 260&ndash;280&cent;. Speculative long liquidation could accelerate the move lower.</p>
+            </div>
+
+            <h3>Demand Dynamics</h3>
+
+            <p>Signs of demand destruction from prolonged high prices are emerging. Brazil&rsquo;s coffee roasters association (ABIC) reported domestic consumption down -2.3% y/y to 21.4 million bags. JDE Peet&rsquo;s reported raw material costs up approximately 27%, with volumes declining -4.3% despite organic revenue rising +15.3%.</p>
+
+            <p>However, roasters are actively replenishing inventories on price dips, with particular buying interest concentrated in the 280&ndash;300&cent; range.</p>
+
+            <h3>Medium-Term Outlook</h3>
+
+            <p>The H2 2026 outlook remains dominated by <strong>supply improvement</strong>. Rabobank projects record 2026/27 global coffee production of 180 million bags and forecasts a surplus of 8.64 million bags. Brazil&rsquo;s 2026/27 harvest begins in earnest from May&ndash;June, and its supply impact will begin to be felt from Q2 onward.</p>
+
+            <p>However, the low inventory base &mdash; following three consecutive years of deficit (cumulative 14.6M bags from 2021/22&ndash;2023/24) &mdash; continues to support price floors. Factoring in the Hormuz crisis, it will take time for the physical abundance of new-crop supply to be fully reflected in prices.</p>
+
+            <h3>Key Risks</h3>
+
+            <ul>
+                <li><strong>Strait of Hormuz:</strong> Prolonged closure risks further energy price escalation ($10&ndash;15/bbl per additional month), fertiliser supply disruptions affecting 2027 crops, and months-long supply chain normalisation even after reopening.</li>
+                <li><strong>Brazil Weather:</strong> Recent Minas Gerais rainfall at just 47% of average. Sustained dryness through April&ndash;May could impact harvest quality and yields. Conversely, late-February flooding caused localised farm damage.</li>
+                <li><strong>Speculative Volatility:</strong> CFTC net longs surged to +25,424 contracts, reflecting Hormuz risk premium. Any shift in geopolitical conditions could trigger rapid position adjustment.</li>
+                <li><strong>Currency:</strong> Sustained dollar strength (DXY ~$99.8) pressures dollar-denominated commodities. A weaker Brazilian real, however, could encourage export selling.</li>
+                <li><strong>Industry Consolidation:</strong> KDP&rsquo;s completed acquisition of JDE Peet&rsquo;s accelerates global coffee market concentration, potentially shifting buyer pricing power dynamics.</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>Conclusion</h2>
+
+            <p>The coffee market is navigating between the <strong>gravitational pull of record supply</strong> and the <strong>disruptive force of geopolitical logistics upheaval</strong>. Brazil&rsquo;s unprecedented crop forecasts (Marex 75.9M, StoneX 75.3M bags) represent an unambiguous medium-term bearish factor, yet the Hormuz blockade has introduced a powerful near-term cost inflation variable that is driving freight rates, insurance premiums, and transit times to crisis levels.</p>
+
+            <p>CFTC positioning data reveals that speculative capital is rebuilding long exposure following February&rsquo;s $2.7 billion liquidation, reflecting the market&rsquo;s repricing of geopolitical risk. ICE inventory trends are diverging &mdash; arabica stocks recovering to a 6.25-month high while robusta falls to a 3.5-month low &mdash; underscoring the differing supply chain dynamics between the two varieties.</p>
+
+            <div class="highlight-box">
+                <p><strong>Trading View:</strong> Near-term range of 280&ndash;310&cent; expected. The trajectory of the Hormuz crisis is the key near-term directional variable. Upside resistance at 320&cent;; downside support at 275&cent;. Key monitoring points: Hormuz reopening progress, Brazil April&ndash;May weather and harvest progression, ICE inventory trends (especially robusta), CFTC positioning changes, and energy price dynamics.</p>
+            </div>
+
+            <p>For roasters and green bean importers, the logistics cost escalation is the most immediate concern. Extended transit times and surging freight rates from the Hormuz crisis are directly impacting import costs, particularly for Southeast Asian robusta. Brazilian arabica shipments are also affected by Cape of Good Hope rerouting. While the medium-term outlook points to price relief from Brazil&rsquo;s bumper crop, prudent hedging strategies should account for the uncertain timeline of logistics normalisation.</p>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <div class="footer-brand">Align Commodities</div>
+                        <p class="footer-desc">
+                            In-depth analysis and insights on global coffee markets.
+                            Professional market intelligence for traders, roasters, and investors.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="footer-title">Contact</div>
+                        <a href="mailto:james.baek@aligncommodities.com" class="footer-link">
+                            james.baek@aligncommodities.com
+                        </a>
+                        <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                    </div>
+                    <div>
+                        <div class="footer-title">Data Sources</div>
+                        <span class="footer-link" style="cursor: default;">Barchart, ICE, CFTC</span>
+                        <span class="footer-link" style="cursor: default;">Marex, StoneX, Sucafina</span>
+                        <span class="footer-link" style="cursor: default;">Conab, Somar Meteorologia</span>
+                        <span class="footer-link" style="cursor: default;">Rabobank, Cecafe, Reuters</span>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="footer-copyright">
+                        &copy; 2026 Align Commodities. All rights reserved.
+                    </p>
+                    <p class="footer-disclaimer">
+                        This report is prepared for informational purposes only and does not constitute investment advice or solicitation.
+                        All investment decisions should be based on independent judgment.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Scroll navigation bar style change
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
