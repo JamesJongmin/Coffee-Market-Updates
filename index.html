@@ -2226,6 +2226,20 @@
             return result;
         }
 
+        // CSV 응답 검증 (HTML 로그인 페이지 등이 아닌 실제 CSV인지 확인)
+        function isValidCSV(text) {
+            if (!text || text.length < 10) return false;
+            const trimmed = text.trim();
+            if (trimmed.startsWith('<') || trimmed.startsWith('<!')) return false;
+            const firstLine = trimmed.split('\n')[0];
+            return firstLine.includes(',');
+        }
+
+        // export URL → gviz URL 변환 (CORS 더 안정적)
+        function getGvizUrl(exportUrl) {
+            return exportUrl.replace('/export?format=csv&', '/gviz/tq?tqx=out:csv&');
+        }
+
         // 날짜 변환 함수
         function parseDate(dateValue) {
             if (typeof dateValue === 'number') {
@@ -2290,6 +2304,30 @@
             }
         }
 
+        // CSV 텍스트를 파싱하여 processedData 반환
+        function processCSVToData(csvText, sheetKey, source) {
+            if (!isValidCSV(csvText)) {
+                throw new Error('Response is not valid CSV');
+            }
+            const data = parseCSV(csvText);
+            const dataRows = data.slice(1);
+
+            const processedData = dataRows.map(row => ({
+                date: row[0],
+                value: row[1]
+            })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
+
+            if (processedData.length === 0) {
+                throw new Error('No valid data rows found');
+            }
+
+            processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+
+            console.log(`Loaded ${processedData.length} data points from ${sheetKey} (${source})`);
+            setCachedData(sheetKey, processedData);
+            return processedData;
+        }
+
         // 구글 시트에서 데이터 읽기 함수 (개선된 버전)
         async function readGoogleSheetData(sheetKey) {
             const url = GOOGLE_SHEETS_URLS[sheetKey];
@@ -2305,69 +2343,74 @@
             }
 
             console.log(`Fetching data from Google Sheets: ${sheetKey}`);
-            
-            // 여러 프록시로 순차적으로 시도
-            for (let i = 0; i < CORS_PROXIES.length; i++) {
-                const proxyFn = CORS_PROXIES[i];
-                const proxyUrl = proxyFn(url);
-                
-                try {
-                    console.log(`Trying proxy ${i + 1}/${CORS_PROXIES.length}...`);
-                    const response = await fetchWithTimeout(proxyUrl, 8000);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
+            const gvizUrl = getGvizUrl(url);
+
+            // 1단계: 직접 접근 시도 (export URL)
+            try {
+                const directResponse = await fetchWithTimeout(url, 5000);
+                if (directResponse.ok) {
+                    const csvText = await directResponse.text();
+                    return processCSVToData(csvText, sheetKey, 'direct');
+                }
+            } catch (e) {
+                console.log('Direct export access failed, trying gviz...');
+            }
+
+            // 2단계: Google Visualization API (CORS 더 안정적)
+            try {
+                const gvizResponse = await fetchWithTimeout(gvizUrl, 5000);
+                if (gvizResponse.ok) {
+                    const csvText = await gvizResponse.text();
+                    return processCSVToData(csvText, sheetKey, 'gviz');
+                }
+            } catch (e) {
+                console.log('Gviz access failed, trying proxies...');
+            }
+
+            // 3단계: 여러 프록시로 순차적으로 시도
+            const proxyUrls = [url, gvizUrl];
+            for (const targetUrl of proxyUrls) {
+                for (let i = 0; i < CORS_PROXIES.length; i++) {
+                    const proxyFn = CORS_PROXIES[i];
+                    const proxyUrl = proxyFn(targetUrl);
+
+                    try {
+                        console.log(`Trying proxy ${i + 1}/${CORS_PROXIES.length}...`);
+                        const response = await fetchWithTimeout(proxyUrl, 8000);
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+
+                        let csvText;
+
+                        // AllOrigins는 JSON으로 래핑하므로 특별 처리
+                        if (proxyUrl.includes('allorigins.win')) {
+                            const proxyData = await response.json();
+                            csvText = proxyData.contents;
+                        } else {
+                            csvText = await response.text();
+                        }
+
+                        return processCSVToData(csvText, sheetKey, `proxy ${i + 1}`);
+
+                    } catch (error) {
+                        console.warn(`Proxy ${i + 1} failed:`, error.message);
                     }
-                    
-                    let csvText;
-                    const contentType = response.headers.get('content-type') || '';
-                    
-                    // AllOrigins는 JSON으로 래핑하므로 특별 처리
-                    if (proxyUrl.includes('allorigins.win')) {
-                        const proxyData = await response.json();
-                        csvText = proxyData.contents;
-                    } else {
-                        csvText = await response.text();
-                    }
-                    
-                    if (!csvText || csvText.length < 10) {
-                        throw new Error('Empty response');
-                    }
-                    
-                    const data = parseCSV(csvText);
-                    const dataRows = data.slice(1); // 헤더 제외
-                    
-                    const processedData = dataRows.map(row => ({
-                        date: row[0],
-                        value: row[1]
-                    })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
-                    
-                    processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-                    
-                    console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey} (proxy ${i + 1})`);
-                    
-                    // 성공시 캐시에 저장
-                    setCachedData(sheetKey, processedData);
-                    
-                    return processedData;
-                    
-                } catch (error) {
-                    console.warn(`Proxy ${i + 1} failed:`, error.message);
-                    // 다음 프록시 시도
                 }
             }
-            
-            // 모든 프록시 실패시 만료된 캐시라도 사용
+
+            // 모든 방법 실패시 만료된 캐시라도 사용
             try {
                 const cached = localStorage.getItem(`chart_cache_${sheetKey}`);
                 if (cached) {
                     const { data } = JSON.parse(cached);
-                    console.log(`All proxies failed, using stale cache for ${sheetKey}`);
+                    console.log(`All methods failed, using stale cache for ${sheetKey}`);
                     return data;
                 }
             } catch (e) {}
-            
-            console.error(`All proxies failed for ${sheetKey}`);
+
+            console.error(`All methods failed for ${sheetKey}`);
             return null;
         }
 
