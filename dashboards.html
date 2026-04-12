@@ -1068,6 +1068,20 @@
             return result;
         }
 
+        // CSV 응답 검증 (HTML 로그인 페이지 등이 아닌 실제 CSV인지 확인)
+        function isValidCSV(text) {
+            if (!text || text.length < 10) return false;
+            const trimmed = text.trim();
+            if (trimmed.startsWith('<') || trimmed.startsWith('<!')) return false;
+            const firstLine = trimmed.split('\n')[0];
+            return firstLine.includes(',');
+        }
+
+        // export URL → gviz URL 변환 (CORS 더 안정적)
+        function getGvizUrl(exportUrl) {
+            return exportUrl.replace('/export?format=csv&', '/gviz/tq?tqx=out:csv&');
+        }
+
         // 날짜 변환 함수
         function parseDate(dateValue) {
             if (typeof dateValue === 'number') {
@@ -1132,6 +1146,30 @@
             }
         }
 
+        // CSV 텍스트를 파싱하여 processedData 반환
+        function processCSVToData(csvText, sheetKey, source) {
+            if (!isValidCSV(csvText)) {
+                throw new Error('Response is not valid CSV');
+            }
+            const data = parseCSV(csvText);
+            const dataRows = data.slice(1);
+
+            const processedData = dataRows.map(row => ({
+                date: row[0],
+                value: row[1]
+            })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
+
+            if (processedData.length === 0) {
+                throw new Error('No valid data rows found');
+            }
+
+            processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+
+            console.log(`Loaded ${processedData.length} data points from ${sheetKey} (${source})`);
+            setCachedData(sheetKey, processedData);
+            return processedData;
+        }
+
         // 구글 시트에서 데이터 읽기 (개선된 버전)
         async function readGoogleSheetData(sheetKey) {
             const url = GOOGLE_SHEETS_URLS[sheetKey];
@@ -1147,89 +1185,74 @@
             }
 
             console.log(`Fetching data from Google Sheets: ${sheetKey}`);
-            
-            // 먼저 직접 접근 시도 (타임아웃 포함)
+            const gvizUrl = getGvizUrl(url);
+
+            // 1단계: 직접 접근 시도 (export URL)
             try {
                 const directResponse = await fetchWithTimeout(url, 5000);
                 if (directResponse.ok) {
                     const csvText = await directResponse.text();
-                    if (csvText && csvText.length > 10) {
-                        const data = parseCSV(csvText);
-                        const dataRows = data.slice(1);
-                        
-                        const processedData = dataRows.map(row => ({
-                            date: row[0],
-                            value: row[1]
-                        })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
-                        
-                        processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-                        
-                        console.log(`Loaded ${processedData.length} data points from ${sheetKey} (direct)`);
-                        setCachedData(sheetKey, processedData);
-                        return processedData;
+                    return processCSVToData(csvText, sheetKey, 'direct');
+                }
+            } catch (e) {
+                console.log('Direct export access failed, trying gviz...');
+            }
+
+            // 2단계: Google Visualization API (CORS 더 안정적)
+            try {
+                const gvizResponse = await fetchWithTimeout(gvizUrl, 5000);
+                if (gvizResponse.ok) {
+                    const csvText = await gvizResponse.text();
+                    return processCSVToData(csvText, sheetKey, 'gviz');
+                }
+            } catch (e) {
+                console.log('Gviz access failed, trying proxies...');
+            }
+
+            // 3단계: 여러 프록시로 순차적으로 시도
+            const proxyUrls = [url, gvizUrl];
+            for (const targetUrl of proxyUrls) {
+                for (let i = 0; i < CORS_PROXIES.length; i++) {
+                    const proxyFn = CORS_PROXIES[i];
+                    const proxyUrl = proxyFn(targetUrl);
+
+                    try {
+                        console.log(`Trying proxy ${i + 1}/${CORS_PROXIES.length}...`);
+                        const response = await fetchWithTimeout(proxyUrl, 8000);
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+
+                        let csvText;
+
+                        // AllOrigins는 JSON으로 래핑하므로 특별 처리
+                        if (proxyUrl.includes('allorigins.win')) {
+                            const proxyData = await response.json();
+                            csvText = proxyData.contents;
+                        } else {
+                            csvText = await response.text();
+                        }
+
+                        return processCSVToData(csvText, sheetKey, `proxy ${i + 1}`);
+
+                    } catch (error) {
+                        console.warn(`Proxy ${i + 1} failed:`, error.message);
                     }
                 }
-            } catch (directError) {
-                console.log('Direct access failed, trying proxies...');
             }
-            
-            // 여러 프록시로 순차적으로 시도
-            for (let i = 0; i < CORS_PROXIES.length; i++) {
-                const proxyFn = CORS_PROXIES[i];
-                const proxyUrl = proxyFn(url);
-                
-                try {
-                    console.log(`Trying proxy ${i + 1}/${CORS_PROXIES.length}...`);
-                    const response = await fetchWithTimeout(proxyUrl, 8000);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-                    
-                    let csvText;
-                    
-                    // AllOrigins는 JSON으로 래핑하므로 특별 처리
-                    if (proxyUrl.includes('allorigins.win')) {
-                        const proxyData = await response.json();
-                        csvText = proxyData.contents;
-                    } else {
-                        csvText = await response.text();
-                    }
-                    
-                    if (!csvText || csvText.length < 10) {
-                        throw new Error('Empty response');
-                    }
-                    
-                    const data = parseCSV(csvText);
-                    const dataRows = data.slice(1);
-                    
-                    const processedData = dataRows.map(row => ({
-                        date: row[0],
-                        value: row[1]
-                    })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
-                    
-                    processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-                    
-                    console.log(`Loaded ${processedData.length} data points from ${sheetKey} (proxy ${i + 1})`);
-                    setCachedData(sheetKey, processedData);
-                    return processedData;
-                    
-                } catch (error) {
-                    console.warn(`Proxy ${i + 1} failed:`, error.message);
-                }
-            }
-            
-            // 모든 프록시 실패시 만료된 캐시라도 사용
+
+            // 모든 방법 실패시 만료된 캐시라도 사용
             try {
                 const cached = localStorage.getItem(`chart_cache_${sheetKey}`);
                 if (cached) {
                     const { data } = JSON.parse(cached);
-                    console.log(`All proxies failed, using stale cache for ${sheetKey}`);
+                    console.log(`All methods failed, using stale cache for ${sheetKey}`);
                     return data;
                 }
             } catch (e) {}
-            
-            console.error(`All proxies failed for ${sheetKey}`);
+
+            console.error(`All methods failed for ${sheetKey}`);
             return null;
         }
 
@@ -1353,7 +1376,7 @@
                 });
             } catch (error) {
                 console.error('Coffee chart error:', error);
-                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span><br><button onclick="localStorage.removeItem(\'chart_cache_coffeefutures\');createCoffeeChart()" style="margin-top:8px;padding:4px 16px;border:1px solid #b87333;background:transparent;color:#b87333;border-radius:4px;cursor:pointer;font-size:12px;">재시도</button>';
             }
         }
 
@@ -1455,7 +1478,7 @@
                 });
             } catch (error) {
                 console.error('USD chart error:', error);
-                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span><br><button onclick="localStorage.removeItem(\'chart_cache_usdbrl\');createUSDChart()" style="margin-top:8px;padding:4px 16px;border:1px solid #b87333;background:transparent;color:#b87333;border-radius:4px;cursor:pointer;font-size:12px;">재시도</button>';
             }
         }
 
@@ -1560,7 +1583,7 @@
                 });
             } catch (error) {
                 console.error('CFTC chart error:', error);
-                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span><br><button onclick="localStorage.removeItem(\'chart_cache_cftcpositions\');createCFTCChart()" style="margin-top:8px;padding:4px 16px;border:1px solid #b87333;background:transparent;color:#b87333;border-radius:4px;cursor:pointer;font-size:12px;">재시도</button>';
             }
         }
 
@@ -1568,22 +1591,50 @@
         async function readNVDIGoogleSheet() {
             try {
                 const url = GOOGLE_SHEETS_URLS.nvdi;
+                const gvizUrl = getGvizUrl(url);
                 let csvText;
-                
+
+                // 직접 접근 → gviz → 프록시 순서로 시도
                 try {
-                    const directResponse = await fetch(url);
+                    const directResponse = await fetchWithTimeout(url, 5000);
                     if (directResponse.ok) {
-                        csvText = await directResponse.text();
+                        const text = await directResponse.text();
+                        if (isValidCSV(text)) { csvText = text; } else { throw new Error('Invalid CSV'); }
                     } else {
                         throw new Error('Direct access failed');
                     }
                 } catch (directError) {
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                    const proxyResponse = await fetch(proxyUrl);
-                    if (!proxyResponse.ok) throw new Error(`Proxy failed: ${proxyResponse.status}`);
-                    const proxyData = await proxyResponse.json();
-                    csvText = proxyData.contents;
+                    try {
+                        const gvizResponse = await fetchWithTimeout(gvizUrl, 5000);
+                        if (gvizResponse.ok) {
+                            const text = await gvizResponse.text();
+                            if (isValidCSV(text)) { csvText = text; } else { throw new Error('Invalid CSV'); }
+                        } else {
+                            throw new Error('Gviz access failed');
+                        }
+                    } catch (gvizError) {
+                        for (let i = 0; i < CORS_PROXIES.length; i++) {
+                            try {
+                                const proxyUrl = CORS_PROXIES[i](url);
+                                const proxyResponse = await fetchWithTimeout(proxyUrl, 8000);
+                                if (!proxyResponse.ok) throw new Error(`HTTP ${proxyResponse.status}`);
+                                let text;
+                                if (proxyUrl.includes('allorigins.win')) {
+                                    const proxyData = await proxyResponse.json();
+                                    text = proxyData.contents;
+                                } else {
+                                    text = await proxyResponse.text();
+                                }
+                                if (isValidCSV(text)) { csvText = text; break; }
+                                else { throw new Error('Invalid CSV from proxy'); }
+                            } catch (proxyError) {
+                                console.warn(`NVDI proxy ${i + 1} failed:`, proxyError.message);
+                            }
+                        }
+                    }
                 }
+
+                if (!csvText) throw new Error('All NVDI data sources failed');
                 
                 const data = parseCSV(csvText);
                 const headers = data[0];
@@ -1862,7 +1913,7 @@
                 
             } catch (error) {
                 console.error('NVDI chart error:', error);
-                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span>';
+                loadingElement.innerHTML = '<span style="color: #c23a3a;">데이터 로딩 실패</span><br><button onclick="localStorage.removeItem(\'chart_cache_nvdi\');createNVDIChart()" style="margin-top:8px;padding:4px 16px;border:1px solid #b87333;background:transparent;color:#b87333;border-radius:4px;cursor:pointer;font-size:12px;">재시도</button>';
             }
         }
 

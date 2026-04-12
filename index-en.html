@@ -2166,6 +2166,17 @@
             return result;
         }
 
+        function isValidCSV(text) {
+            if (!text || text.length < 10) return false;
+            const trimmed = text.trim();
+            if (trimmed.startsWith('<') || trimmed.startsWith('<!')) return false;
+            return trimmed.split('\n')[0].includes(',');
+        }
+
+        function getGvizUrl(exportUrl) {
+            return exportUrl.replace('/export?format=csv&', '/gviz/tq?tqx=out:csv&');
+        }
+
         function parseDate(dateValue) {
             if (typeof dateValue === 'number') {
                 const date = new Date((dateValue - 25569) * 86400 * 1000);
@@ -2176,7 +2187,6 @@
             return new Date(dateValue);
         }
 
-        // CORS proxy list with fallbacks
         const CORS_PROXIES = [
             (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
             (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
@@ -2219,6 +2229,19 @@
             } catch (e) {}
         }
 
+        function processCSVToData(csvText, sheetKey, source) {
+            if (!isValidCSV(csvText)) throw new Error('Response is not valid CSV');
+            const data = parseCSV(csvText);
+            const processedData = data.slice(1).map(row => ({
+                date: row[0], value: row[1]
+            })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
+            if (processedData.length === 0) throw new Error('No valid data rows found');
+            processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+            console.log(`Loaded ${processedData.length} data points from ${sheetKey} (${source})`);
+            setCachedData(sheetKey, processedData);
+            return processedData;
+        }
+
         async function readGoogleSheetData(sheetKey) {
             const url = GOOGLE_SHEETS_URLS[sheetKey];
             if (!url) { console.error(`Unknown sheet key: ${sheetKey}`); return null; }
@@ -2227,53 +2250,50 @@
             if (cachedData) return cachedData;
 
             console.log(`Fetching data from Google Sheets: ${sheetKey}`);
-            
-            // Try proxies with timeout
-            for (let i = 0; i < CORS_PROXIES.length; i++) {
-                try {
-                    console.log(`Trying proxy ${i + 1}/${CORS_PROXIES.length}...`);
-                    const proxyUrl = CORS_PROXIES[i](url);
-                    const response = await fetchWithTimeout(proxyUrl, 8000);
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    
-                    let csvText;
-                    if (proxyUrl.includes('allorigins.win')) {
-                        const proxyData = await response.json();
-                        csvText = proxyData.contents;
-                    } else {
-                        csvText = await response.text();
-                    }
-                    
-                    if (!csvText || csvText.length < 10) throw new Error('Empty response');
-                    
-                    const data = parseCSV(csvText);
-                    const dataRows = data.slice(1);
-                    
-                    const processedData = dataRows.map(row => ({
-                        date: row[0],
-                        value: row[1]
-                    })).filter(row => row.date && row.value !== undefined && row.value !== null && row.value !== '');
-                    
-                    processedData.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-                    
-                    console.log(`Successfully loaded ${processedData.length} data points from ${sheetKey}`);
-                    setCachedData(sheetKey, processedData);
-                    return processedData;
-                    
-                } catch (error) { console.warn(`Proxy ${i + 1} failed:`, error.message); }
+            const gvizUrl = getGvizUrl(url);
+
+            // 1. Try direct export
+            try {
+                const directResponse = await fetchWithTimeout(url, 5000);
+                if (directResponse.ok) return processCSVToData(await directResponse.text(), sheetKey, 'direct');
+            } catch (e) { console.log('Direct access failed, trying gviz...'); }
+
+            // 2. Try Google Visualization API
+            try {
+                const gvizResponse = await fetchWithTimeout(gvizUrl, 5000);
+                if (gvizResponse.ok) return processCSVToData(await gvizResponse.text(), sheetKey, 'gviz');
+            } catch (e) { console.log('Gviz access failed, trying proxies...'); }
+
+            // 3. Try proxies
+            const proxyUrls = [url, gvizUrl];
+            for (const targetUrl of proxyUrls) {
+                for (let i = 0; i < CORS_PROXIES.length; i++) {
+                    try {
+                        const proxyUrl = CORS_PROXIES[i](targetUrl);
+                        const response = await fetchWithTimeout(proxyUrl, 8000);
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        let csvText;
+                        if (proxyUrl.includes('allorigins.win')) {
+                            csvText = (await response.json()).contents;
+                        } else {
+                            csvText = await response.text();
+                        }
+                        return processCSVToData(csvText, sheetKey, `proxy ${i + 1}`);
+                    } catch (error) { console.warn(`Proxy ${i + 1} failed:`, error.message); }
+                }
             }
-            
+
             // Use stale cache if all failed
             try {
                 const cached = localStorage.getItem(`chart_cache_${sheetKey}`);
                 if (cached) {
                     const { data } = JSON.parse(cached);
-                    console.log(`All proxies failed, using stale cache for ${sheetKey}`);
+                    console.log(`All methods failed, using stale cache for ${sheetKey}`);
                     return data;
                 }
             } catch (e) {}
-            
-            console.error(`All proxies failed for ${sheetKey}`);
+
+            console.error(`All methods failed for ${sheetKey}`);
             return null;
         }
 
