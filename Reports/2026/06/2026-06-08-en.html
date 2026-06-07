@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Niño 2026-27: The Asymmetric Risk the Coffee Market Isn't Pricing | June 8, 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "El Niño 2026-27: The Asymmetric Risk the Coffee Market Isn't Pricing",
+    "subtitle": "El Niño 2026-27: The Asymmetric Risk the Coffee Market Isn't Pricing",
+    "date": "2026-06-08",
+    "type": "in-depth",
+    "summary": "NOAA puts El Niño odds at 82%, with 67% odds of a 'Super El Niño' — yet a market at 19-month lows prices none of it. We map the flowering mechanism, three precedents, and three scenario price paths.",
+    "tags": [
+        "el-nino-2026",
+        "noaa-82pct",
+        "super-el-nino-67pct",
+        "brazil-flowering-aug-oct",
+        "2027-28-crop-risk",
+        "vietnam-drought-precedent",
+        "ecmwf-nino34-2.5c",
+        "asymmetric-hedge",
+        "scenario-analysis",
+        "kcn26-246.50"
+    ],
+    "author": "Align Commodities",
+    "sources": [
+        "NOAA CPC",
+        "WMO",
+        "IRI",
+        "ECMWF",
+        "StoneX CoffeeNetwork",
+        "USDA FAS",
+        "Barchart",
+        "Trading Economics",
+        "Reuters",
+        "Coffee Trading Academy",
+        "DRWakefield",
+        "Volcafe",
+        "Vicofa",
+        "Somar Meteorologia",
+        "Ubilava (2012)"
+    ],
+    "price_current": "246.50",
+    "price_change": "-19.10¢ (-7.19%) weekly"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000; display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
+        .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--roast); text-decoration: none; letter-spacing: 0.02em; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-link { font-size: 0.9rem; color: var(--roast); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; font-weight: 500; }
+        .nav-link:hover { opacity: 1; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 120px 24px 80px; }
+
+        header { margin-bottom: 64px; padding-bottom: 48px; border-bottom: 1px solid rgba(26, 15, 10, 0.08); }
+        h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 600; line-height: 1.2; margin-bottom: 16px; color: var(--espresso); letter-spacing: -0.02em; }
+        .subtitle { font-size: 1.1rem; color: var(--roast); opacity: 0.6; font-weight: 500; font-style: italic; font-family: 'Cormorant Garamond', serif; margin-bottom: 8px; }
+        .headline { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 600; line-height: 1.5; color: var(--roast); margin-top: 16px; margin-bottom: 0; }
+        .report-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; font-size: 0.85rem; color: var(--roast); opacity: 0.7; }
+        .meta-item { font-weight: 500; }
+        .meta-divider { color: var(--copper); }
+
+        .market-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 32px 0; }
+        .overview-card { background: white; border: 1px solid rgba(26, 15, 10, 0.08); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
+        .overview-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+        .card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--roast); opacity: 0.6; margin-bottom: 8px; font-weight: 600; }
+        .card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--espresso); line-height: 1.2; }
+        .card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        .price-box { background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%); border: 1px solid rgba(26, 15, 10, 0.06); border-radius: 16px; padding: 32px; margin: 48px 0; box-shadow: 0 2px 20px rgba(0,0,0,0.02); }
+        .price-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+        .price-label { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--roast); opacity: 0.7; }
+        .price-main { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700; line-height: 1; color: var(--espresso); margin-bottom: 8px; }
+        .price-change { font-size: 1.3rem; font-weight: 600; margin-top: 8px; }
+        .price-change.positive { color: var(--positive); }
+        .price-change.negative { color: var(--negative); }
+        .price-table { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(26, 15, 10, 0.1); }
+        .price-item { display: flex; flex-direction: column; gap: 4px; }
+        .price-item-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--roast); opacity: 0.6; font-weight: 600; }
+        .price-item-value { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--espresso); }
+
+        section { margin-bottom: 56px; }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; color: var(--espresso); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--copper); }
+        h3 { font-size: 1.15rem; font-weight: 700; color: var(--roast); margin-top: 36px; margin-bottom: 16px; }
+        p { margin-bottom: 16px; }
+        ul, ol { margin-bottom: 16px; padding-left: 24px; }
+        li { margin-bottom: 12px; }
+
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin: 24px 0; }
+        .data-card { background: white; border: 1px solid rgba(26, 15, 10, 0.08); border-radius: 12px; padding: 20px; }
+        .data-card-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--roast); opacity: 0.6; font-weight: 600; margin-bottom: 8px; }
+        .data-card-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: var(--espresso); }
+        .data-card-change { font-size: 0.85rem; margin-top: 4px; font-weight: 600; }
+        .data-card-change.positive { color: var(--positive); }
+        .data-card-change.negative { color: var(--negative); }
+
+        .highlight-box { background: linear-gradient(135deg, rgba(184, 115, 51, 0.06) 0%, rgba(196, 165, 116, 0.06) 100%); border-left: 3px solid var(--copper); padding: 24px 28px; margin: 28px 0; border-radius: 0 12px 12px 0; }
+        .highlight-box p:last-child { margin-bottom: 0; }
+        .alert-box { background: linear-gradient(135deg, rgba(194, 58, 58, 0.06) 0%, rgba(194, 58, 58, 0.03) 100%); border-left: 3px solid var(--negative); padding: 24px 28px; margin: 28px 0; border-radius: 0 12px 12px 0; }
+        .alert-box p:last-child { margin-bottom: 0; }
+
+        .timeline { position: relative; padding-left: 32px; margin: 28px 0; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--copper); opacity: 0.3; }
+        .timeline-item { position: relative; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(26, 15, 10, 0.05); }
+        .timeline-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .timeline-item::before { content: ''; position: absolute; left: -28px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--copper); }
+        .timeline-date { font-size: 0.85rem; font-weight: 700; color: var(--copper); margin-bottom: 4px; }
+        .timeline-content { font-size: 0.95rem; line-height: 1.7; }
+
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 0.95rem; }
+        .comparison-table th { background: var(--steam); padding: 12px 16px; text-align: left; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--roast); border-bottom: 2px solid var(--copper); }
+        .comparison-table td { padding: 12px 16px; border-bottom: 1px solid rgba(26, 15, 10, 0.06); }
+        .comparison-table tr:hover { background: rgba(184, 115, 51, 0.03); }
+
+        .footer { background: var(--espresso); padding: 60px 0 40px; margin-top: 80px; }
+        .footer .container { padding: 0 24px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--crema); margin-bottom: 12px; }
+        .footer-desc { font-size: 0.9rem; color: var(--crema); opacity: 0.7; line-height: 1.6; }
+        .footer-title { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--copper); margin-bottom: 16px; }
+        .footer-link { display: block; font-size: 0.9rem; color: var(--crema); opacity: 0.7; text-decoration: none; margin-bottom: 8px; transition: opacity 0.2s; }
+        .footer-link:hover { opacity: 1; }
+        .footer-bottom { border-top: 1px solid rgba(245, 240, 232, 0.1); padding-top: 24px; }
+        .footer-copyright { font-size: 0.8rem; color: var(--crema); opacity: 0.5; margin-bottom: 8px; }
+        .footer-disclaimer { font-size: 0.85rem; opacity: 0.85; line-height: 1.7; max-width: 800px; margin: 0 auto; color: var(--crema); }
+
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .price-main { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.85rem; }
+            .comparison-table th, .comparison-table td { padding: 8px 12px; }
+        }
+
+        @media print {
+            .top-nav { display: none; }
+            .container { max-width: 100%; padding: 40px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#timeline" class="nav-link">Timeline</a>
+            <a href="#mechanism" class="nav-link">Mechanism</a>
+            <a href="#history" class="nav-link">Precedents</a>
+            <a href="#outlook" class="nav-link">Scenarios</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">In-Depth Report</span>
+                <span class="meta-divider">•</span>
+                <span class="meta-item">June 8, 2026</span>
+                <span class="meta-divider">•</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>El Niño 2026-27: The Asymmetric Risk the Coffee Market Isn't Pricing</h1>
+            <p class="subtitle">NOAA odds at 82%, "Super El Niño" odds at 67% — and a market at 19-month lows pricing none of it</p>
+            <p class="headline">The bumper crop is today's fact; El Niño is tomorrow's probability. The market has priced the fact and ignored the probability.</p>
+
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">NOAA El Niño Probability</div>
+                    <div class="card-value">82%</div>
+                    <div class="card-change negative">May–Jul emergence → year-end</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">"Super El Niño" Odds</div>
+                    <div class="card-value">67%</div>
+                    <div class="card-change negative">ECMWF Niño3.4 &gt;+2.5°C (Oct)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Critical Risk Window</div>
+                    <div class="card-value">Aug–Oct</div>
+                    <div class="card-change negative">Brazil flowering → 27/28 crop</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">KCN26 (6/5)</div>
+                    <div class="card-value">246.50¢</div>
+                    <div class="card-change negative">19-month low — risk unpriced</div>
+                </div>
+            </div>
+        </header>
+
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <p>The coffee market stands on two contradictory signals. On one side: a USDA-confirmed record Brazil crop (71.9M bags) and 19-month-low prices. On the other: an El Niño that NOAA assigns an 82% probability of emerging — with 67% odds of a "Super El Niño." The market has put all of its weight on the former.</p>
+
+            <p>This report dissects that asymmetry. Three conclusions. <strong>First</strong>, El Niño is unlikely to dent the 2026/27 headline surplus directly — Brazil's arabica is already being harvested, which is the rational core of the market's indifference. <strong>Second</strong>, the exposure lies elsewhere: Vietnam's robusta and Brazil's conilon (26/27, harvested from October), and Brazil's arabica 2027/28, which is decided by the August–October flowering window. <strong>Third</strong>, as the 2023–25 cycle showed, El Niño supply shocks move prices non-linearly in a low-inventory world — Vietnam's -20% crop was the starting point of the all-time high of 440.85¢.</p>
+
+            <div class="highlight-box">
+                <p><strong>One-line takeaway:</strong> The crop is a present fact; El Niño is a future probability. The market has priced the fact and ignored the probability — which is why calls are cheap, and why now is the window for asymmetric hedges.</p>
+            </div>
+        </section>
+
+        <section id="timeline">
+            <h2>ENSO Timeline — An Escalation of Probabilities</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">February 12, 2026</div>
+                    <div class="timeline-content">NOAA ENSO diagnostic: the long-running La Niña is officially fading. 60% odds of neutral by Feb–Apr; 50–60% odds of El Niño developing by late summer into fall. Marked subsurface Pacific warming — a classic precursor of an ENSO phase change. NOAA adopts the Relative Oceanic Niño Index (RONI) for a warming world.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">March 2026</div>
+                    <div class="timeline-content">NOAA CPC issues an <strong>El Niño Watch</strong>: 62% probability of emergence in Jun–Aug, persisting through year-end. The IRI multi-model ensemble puts Jul–Sep-onward odds at 72–80%.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">April–May 2026</div>
+                    <div class="timeline-content">WMO: 80% likelihood for Jun–Aug, near/above 90% through November. Model consensus upgraded to "at least moderate, possibly strong." ECMWF projects Niño3.4 anomalies potentially exceeding +2.5°C by October — 1997/98 and 2015/16 "very strong" territory.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">May 2026</div>
+                    <div class="timeline-content">NOAA lifts May–Jul emergence odds to <strong>82%</strong> and "Super El Niño" odds to <strong>67%</strong>. El Niño fears spark a brief short-covering rally — the market's first sensitivity signal (Barchart). Reuters (5/20): a Brazilian trading house flags record exports with "El Niño in focus."</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">June 3, 2026</div>
+                    <div class="timeline-content">USDA FAS Brazil Annual: a record 71.9M-bag forecast — <strong>and</strong>, in the same document, exporters "holding back on deals amid low stocks and uncertainties around a possible El Niño event." El Niño caution enters official literature.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Now (second week of June)</div>
+                    <div class="timeline-content">KCN26 at 246.50¢, a 19-month low; -13.2% over four weeks. Speculators have withdrawn ~$2.7B of long exposure YTD (Comunicaffe, single source). The market's El Niño premium has converged to roughly zero.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanism">
+            <h2>Mechanism — How El Niño Moves Coffee</h2>
+
+            <h3>1. The physiology of flowering: why Sep–Oct rains decide everything</h3>
+
+            <p>Brazilian arabica flowers en masse with the <strong>first substantial rains of August–October</strong>, as the dry season breaks. Flowering is an event of days, not months; moisture stress at that moment desiccates blossoms and fails fruit set. The pinhead-stage fruit that follows is equally sensitive to November–December rains. In short, <strong>the timing and distribution of September–October rainfall effectively caps the 2027/28 crop</strong> — and El Niño's signature effects in Brazil (delayed, irregular Southeast rainfall plus heat) target precisely that window.</p>
+
+            <h3>2. The climate-change baseline: trees already weakened</h3>
+
+            <p>Analyses cited by StoneX CoffeeNetwork show global coffee regions now endure roughly <strong>47 extra days of harmful heat per year</strong> — about 57 days across top producers, and <strong>~70 additional heat-stress days annually in Brazil alone</strong>. With flower desiccation, premature cherry development, erratic drying, and expanding pest ranges already routine, an El Niño lands not as an addition but as an amplifier. As CoffeeNetwork puts it: "Climate change sets the stage. ENSO plays the script."</p>
+
+            <h3>3. Origin-by-origin teleconnection matrix</h3>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Origin</th>
+                        <th>Typical El Niño pattern</th>
+                        <th>Key risk</th>
+                        <th>Impact timing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Brazil arabica</td>
+                        <td>Heat + irregular SE rainfall</td>
+                        <td>Fractured Aug–Oct bloom, uneven fruit set, quality dispersion</td>
+                        <td style="font-weight:600;">2027/28</td>
+                    </tr>
+                    <tr>
+                        <td>Brazil conilon</td>
+                        <td>Dryness</td>
+                        <td>Smaller beans, more defects; immediate drought sensitivity</td>
+                        <td>Late 26/27–27/28</td>
+                    </tr>
+                    <tr>
+                        <td>Vietnam</td>
+                        <td>Intensified dry, hot conditions</td>
+                        <td>Soil-moisture depletion, irrigation cost spikes, black beans / smaller screens</td>
+                        <td style="font-weight:600;">26/27 harvest (from Oct) · 27/28</td>
+                    </tr>
+                    <tr>
+                        <td>Indonesia</td>
+                        <td>Hotter, drier</td>
+                        <td>Double-digit robusta yield losses possible under sustained drought</td>
+                        <td>26/27–27/28</td>
+                    </tr>
+                    <tr>
+                        <td>East Africa</td>
+                        <td>Wetter than normal</td>
+                        <td>Yield-supportive, but CBD/leaf-rust surge and drying failures</td>
+                        <td>2026/27</td>
+                    </tr>
+                    <tr>
+                        <td>Colombia</td>
+                        <td>Wetter (in parts)</td>
+                        <td>Rust pressure, drying disruption, compressed harvest timing</td>
+                        <td>26/27–27/28</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>In sum: El Niño puts the <strong>most direct downside yield risk on the robusta belt</strong> (Vietnam, Indonesia, conilon), flowering fragility on Brazilian arabica, and "volume holds, quality wobbles" volatility on East Africa and Colombia. No pillar of global supply is fully sheltered.</p>
+        </section>
+
+        <section id="history">
+            <h2>Historical Precedents — Three El Niños, Three Lessons</h2>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">1997/98 (strongest on record)</div>
+                    <div class="data-card-value">Brazil spared</div>
+                    <div class="data-card-change">Colombia / C. America hit</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">2015/16 (very strong)</div>
+                    <div class="data-card-value">-10%</div>
+                    <div class="data-card-change negative">2016 global production</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">2023/24 (strong)</div>
+                    <div class="data-card-value">-20%</div>
+                    <div class="data-card-change negative">Vietnam 23/24 crop (24.5M bags)</div>
+                </div>
+            </div>
+
+            <h3>1997/98 — intensity isn't everything</h3>
+
+            <p>In the strongest El Niño on record, Brazilian arabica was largely spared — and at times even benefited. The damage concentrated in Colombia and Central America through heat stress and moisture deficits. Yet the price response was muted, because the world was in a <strong>supply glut</strong> driven by Brazil and Vietnam. Lesson: <strong>El Niño's price effect depends less on its strength than on the inventory backdrop.</strong> Today's backdrop — ICE stocks at a 5.75-month low, historically thin global ending stocks — is the opposite of 1997's.</p>
+
+            <h3>2015/16 — direct hit on the robusta belt</h3>
+
+            <p>The 2015/16 event brought drought to Vietnam and Indonesia, cutting <strong>global coffee production by roughly 10% in 2016</strong>. Brazilian arabica largely held, but conilon suffered — a cycle of violent arabica–robusta spread swings.</p>
+
+            <h3>2023/24 — the nearest rehearsal</h3>
+
+            <p>The El Niño that began in late 2023 delivered back-to-back drought and heatwaves to Vietnam's Central Highlands. Per Vicofa, the <strong>2023/24 harvest fell -20% to 24.5M bags</strong>, among the smallest in a decade; Central Highlands robusta prices surged ~44% y/y, and 2024/25 failed to recover at ~22M bags. That supply shock, compounding into chronically low stocks, fed directly into <strong>February 2025's all-time arabica high of 440.85¢</strong>. Academic work (Ubilava 2012, on ENSO and coffee price dynamics) likewise finds arabica prices respond asymmetrically to El Niño phases.</p>
+
+            <div class="alert-box">
+                <p><strong>Synthesis:</strong> A super El Niño (1997/98) couldn't move prices in a high-stock world; a merely "strong" one (2023/24) helped trigger all-time highs in a low-stock world. 2026's inventory backdrop resembles the latter.</p>
+            </div>
+        </section>
+
+        <section id="market-impact">
+            <h2>Market Impact — Why the Market Ignores It, and Whether That's Right</h2>
+
+            <h3>1. The timing asymmetry: the 26/27 surplus is already "locked"</h3>
+
+            <p>The indifference has a rational core. Brazil's 26/27 arabica is <strong>already being harvested</strong> — if El Niño develops now, harvest-season dryness actually helps fieldwork. El Niño therefore cannot easily unwind the 9.5–10M-bag surplus projections from USDA, Rabobank, and StoneX. That is why May's short-covering bounce faded quickly.</p>
+
+            <p>But the logic stops at two borders. <strong>① Vietnam's 26/27 robusta, harvested from October</strong> — an intensified dry season can hit final cherry filling, with conilon in the same exposure zone. <strong>② Brazil's 27/28, decided by Aug–Oct flowering</strong> — if flowering disruption becomes visible, the market must reprice an entirely different multi-year path: one bumper year followed by one deficit year.</p>
+
+            <h3>2. Positioning: a match in a dry forest</h3>
+
+            <p>Speculators have withdrawn roughly $2.7B of length YTD (Comunicaffe, single source), with the net position shrinking toward a possible net-short flip. Paradoxically, that builds <strong>fuel for short-covering to amplify any El Niño trigger</strong> — May's brief El Niño-driven rally was the preview.</p>
+
+            <h3>3. Options: asymmetry has gotten cheap</h3>
+
+            <p>Six straight weeks of decline have compressed out-of-the-money call premiums. Against 67% super-El Niño odds and a defined Sep–Oct risk window, <strong>Q4 2026–Q1 2027 call structures offer their best risk-reward of the year</strong>.</p>
+        </section>
+
+        <section id="outlook">
+            <h2>Scenario Analysis (Align Commodities estimates)</h2>
+
+            <p>The probabilities below are our own estimates, combining NOAA's emergence (82%) and super-El Niño (67%) odds with the conditional probability that flowering rains are actually impaired. The crux: <strong>El Niño occurring ≠ crop damage</strong> — even a strong event is benign if September–October rains arrive on time.</p>
+
+            <h3>Scenario 1: No event / weak El Niño (~20%)</h3>
+
+            <p>ENSO stalls at neutral-to-weak and flowering rains are normal. The bumper-crop/surplus narrative remains the sole driver; Rabobank's path (arabica roughly another third lower by end-2026) plays out, with a <strong>test below 200¢</strong> plausible. Robusta follows under new Vietnamese supply.</p>
+
+            <h3>Scenario 2: Moderate-to-strong El Niño, flowering rains adequate (~40%)</h3>
+
+            <p>El Niño develops but Brazil's Sep–Oct rains arrive without major delay. 27/28 worries produce intermittent short-covering rallies — <strong>higher volatility within a bearish trend, a 220–280¢ band</strong>. Robusta outperforms on Vietnam dry-season damage. Base case.</p>
+
+            <h3>Scenario 3: Super El Niño + visible flowering disruption (~40%)</h3>
+
+            <p>Niño3.4 tracks toward +2.5°C and delayed Minas rains plus heat are confirmed in observed data. The 27/28 outlook flips — surplus year followed by deficit re-entry — and the market reprices toward <strong>300¢+</strong>. If Vietnamese drought compounds, the 2023–25 cycle re-runs: a robusta-led surge with short-covering as the amplifier, and low stocks making the move non-linear.</p>
+
+            <div class="highlight-box">
+                <p><strong>Price outlook summary:</strong> For the next ~3 months (harvest season) the path of least resistance stays lower in every scenario. The pivot is <strong>late August–October: the first flowering rains in Minas Gerais</strong>. Until that data prints, the market's indifference can persist; once it prints, the hedge is no longer cheap.</p>
+            </div>
+        </section>
+
+        <section id="risk-management">
+            <h2>Risk Management</h2>
+
+            <h3>Roasters &amp; importers</h3>
+
+            <ul>
+                <li><strong>Staggered physical buying + call overlay:</strong> keep the 230–260¢ laddered-buying band, and use compressed premiums to add Q4 2026–Q1 2027 OTM calls (e.g., 280–300¢ strikes) against 27/28 risk. In the bumper-crop case, the cost is only the premium.</li>
+                <li><strong>Audit robusta exposure:</strong> El Niño's first target is the robusta belt. Blends heavy in robusta warrant higher coverage ratios before Vietnam's October harvest.</li>
+                <li><strong>Revisit quality clauses:</strong> the wet East Africa/Colombia scenario is a quality-and-logistics risk more than a volume risk — check spec and substitution clauses.</li>
+            </ul>
+
+            <h3>Producers &amp; exporters</h3>
+
+            <ul>
+                <li>Prices sit at 19-month lows — rather than chasing sales, <strong>defined-risk put structures</strong> cover Scenario 1 while keeping the El Niño upside open.</li>
+            </ul>
+
+            <h3>Key monitoring indicators</h3>
+
+            <ul>
+                <li><strong>NOAA monthly ENSO diagnostic</strong> (second Thursday) — emergence/strength probability path</li>
+                <li><strong>Niño3.4 SST / RONI weeklies</strong> — tracking the ECMWF +2.5°C trajectory</li>
+                <li><strong>Sep–Oct Minas Gerais rainfall</strong> (Somar, Climatempo) — timing and volume of the flowering trigger rains</li>
+                <li><strong>Vietnam Central Highlands dry-season rainfall and reservoir levels</strong> — final 26/27 cherry filling</li>
+                <li><strong>ICE certified stocks</strong> — the thickness of the shock-absorber</li>
+                <li><strong>CFTC non-commercial net position</strong> — the short-covering fuel gauge (watch for a net-short flip)</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>Conclusion</h2>
+
+            <p>The biggest risk in the 2026 coffee market is not the bumper crop — it is <strong>the probability being ignored behind it</strong>. NOAA's 82% emergence and 67% super-El Niño odds are among the loudest advance warnings a commodity market has received, and the target windows (Brazil's Aug–Oct flowering, Vietnam's dry season) are well defined. 1997 teaches that El Niño doesn't always lift prices; 2024 teaches that in a low-stock world, one origin's -20% can end at all-time highs. Today's inventory backdrop looks like 2024's.</p>
+
+            <p>Bearish inertia can persist through the next two to three months of harvest. But from late August, the market's gaze inevitably turns to the skies over Minas. <strong>Hedges are only cheap before it rains.</strong></p>
+        </section>
+    </div>
+
+    <!-- Footer: full-width brown background, outside .container -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        In-depth analysis and insights on the global coffee market.
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">james.baek@aligncommodities.com</a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">NOAA CPC, WMO, IRI, ECMWF</span>
+                    <span class="footer-link" style="cursor: default;">StoneX CoffeeNetwork, USDA FAS</span>
+                    <span class="footer-link" style="cursor: default;">Barchart, Trading Economics, Reuters</span>
+                    <span class="footer-link" style="cursor: default;">Somar, Vicofa, Ubilava (2012)</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice.
+                    All investment decisions should be made independently.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

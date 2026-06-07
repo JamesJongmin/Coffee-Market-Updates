@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엘니뇨 2026-27: 시장이 외면하는 비대칭 리스크 | 2026년 6월 8일</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "엘니뇨 2026-27: 시장이 외면하는 비대칭 리스크",
+    "subtitle": "El Niño 2026-27: The Asymmetric Risk the Coffee Market Isn't Pricing",
+    "date": "2026-06-08",
+    "type": "in-depth",
+    "summary": "NOAA가 엘니뇨 발생 확률 82%, 슈퍼 엘니뇨 확률 67%를 제시했지만 19개월 저점의 커피 시장은 이를 사실상 반영하지 않고 있다. 브라질 8~10월 개화기 메커니즘, 산지별 텔레커넥션, 1997/98·2015/16·2023/24 전례를 분석하고 3가지 시나리오별 가격 경로와 헤지 전략을 제시한다.",
+    "tags": [
+        "el-nino-2026",
+        "noaa-82pct",
+        "super-el-nino-67pct",
+        "brazil-flowering-aug-oct",
+        "2027-28-crop-risk",
+        "vietnam-drought-precedent",
+        "ecmwf-nino34-2.5c",
+        "asymmetric-hedge",
+        "scenario-analysis",
+        "kcn26-246.50"
+    ],
+    "author": "Align Commodities",
+    "sources": [
+        "NOAA CPC",
+        "WMO",
+        "IRI",
+        "ECMWF",
+        "StoneX CoffeeNetwork",
+        "USDA FAS",
+        "Barchart",
+        "Trading Economics",
+        "Reuters",
+        "Coffee Trading Academy",
+        "DRWakefield",
+        "Volcafe",
+        "Vicofa",
+        "Somar Meteorologia",
+        "Ubilava (2012)"
+    ],
+    "price_current": "246.50",
+    "price_change": "-19.10¢ (-7.19%) weekly"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled {
+            height: 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item {
+            font-weight: 500;
+        }
+
+        .meta-divider {
+            color: var(--copper);
+        }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .card-change {
+            font-size: 0.9rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .card-change.positive {
+            color: var(--positive);
+        }
+
+        .card-change.negative {
+            color: var(--negative);
+        }
+
+        /* Price Box */
+        .price-box {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .price-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .price-change {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .price-change.positive {
+            color: var(--positive);
+        }
+
+        .price-change.negative {
+            color: var(--negative);
+        }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26, 15, 10, 0.1);
+        }
+
+        .price-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .price-item-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .price-item-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 56px;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--roast);
+            margin-top: 36px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 12px;
+        }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .data-card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+
+        .data-card-change {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .data-card-change.positive {
+            color: var(--positive);
+        }
+
+        .data-card-change.negative {
+            color: var(--negative);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.06) 0%, rgba(196, 165, 116, 0.06) 100%);
+            border-left: 3px solid var(--copper);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Alert Box */
+        .alert-box {
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.06) 0%, rgba(194, 58, 58, 0.03) 100%);
+            border-left: 3px solid var(--negative);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .alert-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            margin: 28px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--copper);
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.05);
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--copper);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--copper);
+            margin-bottom: 4px;
+        }
+
+        .timeline-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th {
+            background: var(--steam);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--roast);
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .comparison-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(184, 115, 51, 0.03);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--espresso);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer .container {
+            padding: 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--crema);
+            margin-bottom: 12px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            color: var(--crema);
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        .footer-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--copper);
+            margin-bottom: 16px;
+        }
+
+        .footer-link {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--crema);
+            opacity: 0.7;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(245, 240, 232, 0.1);
+            padding-top: 24px;
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            color: var(--crema);
+            opacity: 0.5;
+            margin-bottom: 8px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 20px 60px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .price-main {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 8px 12px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .top-nav {
+                display: none;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 40px;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#timeline" class="nav-link">전개 과정</a>
+            <a href="#mechanism" class="nav-link">메커니즘</a>
+            <a href="#history" class="nav-link">역사적 전례</a>
+            <a href="#outlook" class="nav-link">시나리오</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">In-Depth Report</span>
+                <span class="meta-divider">•</span>
+                <span class="meta-item">2026년 6월 8일</span>
+                <span class="meta-divider">•</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>엘니뇨 2026-27: 시장이 외면하는 비대칭 리스크</h1>
+            <p class="subtitle">El Niño 2026-27: The Asymmetric Risk the Coffee Market Isn't Pricing</p>
+            <p class="headline">발생 확률 82%, 슈퍼 엘니뇨 확률 67% — 그러나 19개월 저점의 시장은 아직 아무것도 반영하지 않았다</p>
+
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">NOAA 엘니뇨 발생 확률</div>
+                    <div class="card-value">82%</div>
+                    <div class="card-change negative">5~7월 발생 → 연말까지 지속</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">슈퍼 엘니뇨 확률</div>
+                    <div class="card-value">67%</div>
+                    <div class="card-change negative">ECMWF Niño3.4 +2.5°C↑ (10월)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">핵심 리스크 윈도우</div>
+                    <div class="card-value">8~10월</div>
+                    <div class="card-change negative">브라질 개화기 → 27/28 작황</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">KCN26 현재가 (6/5)</div>
+                    <div class="card-value">246.50¢</div>
+                    <div class="card-change negative">19개월 저점 — 리스크 미반영</div>
+                </div>
+            </div>
+        </header>
+
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <p>커피 시장은 지금 두 개의 상반된 신호 위에 서 있다. 한쪽에는 USDA가 공식 확인한 브라질 사상 최대 작황(71.9M 백)과 19개월래 최저가가 있고, 다른 한쪽에는 NOAA가 82% 확률로 예고한 엘니뇨 — 그것도 67% 확률의 '슈퍼 엘니뇨' — 가 있다. 시장은 전자에 모든 가중치를 두고 있다.</p>
+
+            <p>본 리포트는 이 비대칭의 구조를 분석한다. 핵심 결론은 세 가지다. <strong>첫째</strong>, 엘니뇨가 2026/27 헤드라인 잉여를 직접 줄이기는 어렵다 — 브라질 아라비카는 이미 수확 중이기 때문이며, 이것이 시장이 리스크를 무시하는 합리적 이유다. <strong>둘째</strong>, 그러나 영향권은 따로 있다. 10월부터 수확하는 베트남 로부스타·브라질 코닐론(26/27)과, 8~10월 개화가 결정하는 브라질 아라비카 27/28이다. <strong>셋째</strong>, 2023~25년 사이클이 보여주듯 엘니뇨발 공급 충격은 저재고 환경에서 가격을 비선형적으로 움직인다 — 베트남 작황 -20%가 사상 최고가 440.85¢의 출발점이었다.</p>
+
+            <div class="highlight-box">
+                <p><strong>한 줄 요약:</strong> 풍작은 현재의 사실이고 엘니뇨는 미래의 확률이다. 시장은 사실을 가격에 반영했고 확률은 외면하고 있다 — 그래서 콜옵션이 싸고, 그래서 지금이 비대칭 헤지의 적기다.</p>
+            </div>
+        </section>
+
+        <section id="timeline">
+            <h2>ENSO 전개 타임라인 — 확률의 에스컬레이션</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2026년 2월 12일</div>
+                    <div class="timeline-content">NOAA ENSO 진단: 장기 라니냐 약화 공식화. 2~4월 중립 전환 확률 60%, 늦여름~가을 엘니뇨 발달 확률 50~60% 제시. 태평양 아표층 수온의 뚜렷한 온난화 — 전형적인 ENSO 위상 전환 전조. RONI(상대 해양 니뇨 지수) 도입으로 온난화 시대의 ENSO 판정 정확도 개선.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2026년 3월</div>
+                    <div class="timeline-content">NOAA CPC, <strong>엘니뇨 Watch 발령</strong>. 6~8월 발생 확률 62%, 연말까지 지속 전망. IRI 멀티모델 앙상블은 7~9월 이후 구간 확률을 72~80%로 제시.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2026년 4~5월</div>
+                    <div class="timeline-content">WMO: 6~8월 발생 가능성 80%, 11월까지 지속 확률 90% 내외. 모델 컨센서스 '최소 중간급, 강할 가능성'으로 상향. ECMWF는 Niño3.4 해수온 편차가 10월까지 +2.5°C를 넘을 수 있다고 전망 — 1997/98·2015/16급 '매우 강' 영역.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2026년 5월</div>
+                    <div class="timeline-content">NOAA, 5~7월 발생 확률 <strong>82%</strong>, '슈퍼 엘니뇨' 확률 <strong>67%</strong>로 상향. 5월 중 엘니뇨 우려발 숏커버링이 일시적 가격 반등을 만드는 등 시장 민감도 첫 신호(Barchart). 로이터(5/20): 브라질 무역회사, 사상 최대 수출 전망 속 "다음 변수는 엘니뇨" 지목.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2026년 6월 3일</div>
+                    <div class="timeline-content">USDA FAS 브라질 연례 보고서: 사상 최대 71.9M 백 전망과 <strong>동시에</strong> "낮은 재고와 엘니뇨 가능성에 대한 불확실성으로 수출업자들이 신중한 태도"라고 명시 — 공식 기관 문서에 엘니뇨 경계가 등장.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">현재 (6월 둘째 주)</div>
+                    <div class="timeline-content">KCN26 246.50¢, 19개월 저점. 4주 -13.2%. 투기 자금은 연초 이후 약 $2.7B 매수 청산(Comunicaffe, 단일 출처). 시장의 엘니뇨 프리미엄은 사실상 0에 수렴.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanism">
+            <h2>메커니즘 — 엘니뇨는 어떻게 커피를 움직이나</h2>
+
+            <h3>1. 개화의 생리학: 왜 9~10월 강우가 모든 것을 결정하는가</h3>
+
+            <p>브라질 아라비카는 건기가 끝나는 <strong>8~10월, 첫 본격 강우와 함께 일제히 개화</strong>한다. 개화는 며칠 만에 끝나는 이벤트이며, 이때 수분(水分) 스트레스가 걸리면 꽃이 마르고 착과가 실패한다. 개화 직후 핀헤드(pinhead) 단계의 어린 열매 역시 11~12월 강우에 민감하다. 즉, <strong>9~10월의 강우 시점·분포가 이듬해(2027/28) 작황의 상한선을 사실상 결정</strong>한다. 엘니뇨의 전형적 효과 — 브라질 남동부의 강우 지연·불규칙화와 고온 — 가 정확히 이 윈도우를 겨냥한다.</p>
+
+            <h3>2. 기후변화 베이스라인: 이미 약화된 나무들</h3>
+
+            <p>StoneX CoffeeNetwork가 인용한 최신 기후 분석에 따르면 글로벌 커피 산지는 이미 연평균 <strong>약 47일의 추가 유해 폭염일</strong>에 노출되어 있으며, 주요 생산국 기준으로는 약 57일, <strong>브라질 단독으로는 연 약 70일</strong>에 달한다. 꽃의 조기 건조, 체리 조숙, 건조 공정 불안정, 병해충 확산이 일상화된 상태에서 엘니뇨가 겹치면 그 효과는 가산이 아니라 증폭으로 작동한다. "기후변화가 무대를 만들고, ENSO가 각본을 연기한다"는 것이 CoffeeNetwork의 표현이다.</p>
+
+            <h3>3. 산지별 텔레커넥션 매트릭스</h3>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>산지</th>
+                        <th>엘니뇨 전형 패턴</th>
+                        <th>핵심 리스크</th>
+                        <th>영향 시점</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>브라질 아라비카</td>
+                        <td>고온 + 남동부 강우 불규칙</td>
+                        <td>8~10월 개화 분절·불균일 착과, 품질 변동성</td>
+                        <td style="font-weight:600;">2027/28</td>
+                    </tr>
+                    <tr>
+                        <td>브라질 코닐론</td>
+                        <td>건조</td>
+                        <td>두립 축소·결점두 증가, 즉각적 가뭄 민감</td>
+                        <td>26/27 후반~27/28</td>
+                    </tr>
+                    <tr>
+                        <td>베트남</td>
+                        <td>건조·고온 강화</td>
+                        <td>토양수분 고갈, 관개비 급등, 블랙빈·스크린 축소</td>
+                        <td style="font-weight:600;">26/27 수확(10월~)·27/28</td>
+                    </tr>
+                    <tr>
+                        <td>인도네시아</td>
+                        <td>고온·건조</td>
+                        <td>지속 가뭄 시 로부스타 두 자릿수 감산 가능</td>
+                        <td>26/27~27/28</td>
+                    </tr>
+                    <tr>
+                        <td>동아프리카</td>
+                        <td>다우(多雨)</td>
+                        <td>수확량엔 우호적이나 CBD·녹병·건조 차질</td>
+                        <td>2026/27</td>
+                    </tr>
+                    <tr>
+                        <td>콜롬비아</td>
+                        <td>일부 지역 다우</td>
+                        <td>녹병 압력, 건조 차질, 수확 시기 압축</td>
+                        <td>26/27~27/28</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>요컨대 엘니뇨는 <strong>로부스타 산지(베트남·인도네시아·코닐론)에 가장 직접적인 하방 수확 리스크</strong>를, 브라질 아라비카에는 개화기 취약성을, 동아프리카·콜롬비아에는 '수량은 지키되 품질이 흔들리는' 변동성을 가한다. 글로벌 공급의 어느 한 축도 무풍지대가 아니다.</p>
+        </section>
+
+        <section id="history">
+            <h2>역사적 전례 — 세 번의 엘니뇨, 세 가지 교훈</h2>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">1997/98 (사상 최강급)</div>
+                    <div class="data-card-value">브라질 무풍</div>
+                    <div class="data-card-change">콜롬비아·중미 타격</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">2015/16 (매우 강)</div>
+                    <div class="data-card-value">-10%</div>
+                    <div class="data-card-change negative">2016 글로벌 생산 감소</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">2023/24 (강)</div>
+                    <div class="data-card-value">-20%</div>
+                    <div class="data-card-change negative">베트남 23/24 작황 (24.5M 백)</div>
+                </div>
+            </div>
+
+            <h3>1997/98 — 강도가 전부는 아니다</h3>
+
+            <p>관측 사상 최강급이었던 1997/98 엘니뇨에서 브라질 아라비카는 상대적으로 무풍이었고 일부 혜택까지 봤다. 타격은 콜롬비아와 중미(온두라스·과테말라)의 열 스트레스·수분 부족에 집중됐다. 그러나 당시는 브라질·베트남발 <strong>공급 과잉 국면</strong>이어서 가격 반응은 제한적이었다. 교훈: <strong>엘니뇨의 가격 효과는 강도보다 재고·수급 상태에 좌우된다.</strong> 지금은 ICE 재고 5.75개월 저점, 글로벌 기말재고 역사적 저수준 — 1997년과 정반대 환경이다.</p>
+
+            <h3>2015/16 — 로부스타 벨트의 직격</h3>
+
+            <p>2015/16 엘니뇨는 베트남·인도네시아에 가뭄을 일으켜 <strong>2016년 글로벌 커피 생산을 약 10% 감소</strong>시켰다. 브라질 아라비카는 대체로 견뎠지만 코닐론은 가뭄 피해를 입었다 — 아라비카-로부스타 스프레드가 요동친 사이클이었다.</p>
+
+            <h3>2023/24 — 가장 가까운 리허설</h3>
+
+            <p>2023년 말 시작된 엘니뇨는 베트남 중부 고원에 2년 연속 가뭄과 폭염을 안겼다. Vicofa 기준 <strong>23/24 작황은 -20% 감소한 24.5M 백</strong>으로 10년래 최소 수준이었고, 중부 고원 로부스타 현지 가격은 전년 대비 +44% 급등했다. 24/25 작황 역시 약 22M 백으로 회복에 실패했다. 이 공급 충격이 누적 저재고와 결합해 <strong>2025년 2월 아라비카 사상 최고가 440.85¢</strong>로 이어진 것이 바로 직전 사이클이다. 학술 연구(Ubilava 2012, ENSO와 커피 가격 동학)도 엘니뇨 국면에서 아라비카 가격의 상방 반응 경향을 확인한다.</p>
+
+            <div class="alert-box">
+                <p><strong>전례의 종합:</strong> 슈퍼 엘니뇨(1997/98)도 고재고 환경에선 가격을 못 움직였고, '강' 등급(2023/24)도 저재고 환경에선 사상 최고가의 방아쇠가 됐다. 2026년의 재고 환경은 후자에 가깝다.</p>
+            </div>
+        </section>
+
+        <section id="market-impact">
+            <h2>시장 영향 — 왜 시장은 무시하고 있으며, 그것은 옳은가</h2>
+
+            <h3>1. 시점의 비대칭: 26/27 잉여는 이미 '확정 영역'</h3>
+
+            <p>시장의 무시에는 합리적 근거가 있다. 브라질 26/27 아라비카는 <strong>이미 수확 중</strong>이다. 엘니뇨가 지금 발달해도 수확기 건조는 오히려 작업을 돕는다. 즉 엘니뇨는 USDA·Rabobank·StoneX가 제시한 9.5~10M 백 잉여 전망 자체를 단기에 무너뜨리기 어렵다. 5월 숏커버링 반등이 금세 소멸된 이유도 여기 있다.</p>
+
+            <p>그러나 이 논리는 두 영역에서 멈춘다. <strong>① 10월부터 수확이 시작되는 베트남 26/27 로부스타</strong> — 건기 강화가 막바지 체리 비대를 직격할 수 있고, 코닐론도 같은 영향권이다. <strong>② 8~10월 개화가 결정하는 브라질 27/28</strong> — 만약 개화 차질이 가시화되면, 시장이 반영해야 할 것은 '1년 풍작 뒤 1년 흉작'이라는 완전히 다른 다년 수급 경로다.</p>
+
+            <h3>2. 포지셔닝: 마른 숲에 성냥</h3>
+
+            <p>투기 자금은 연초 이후 약 $2.7B의 매수 포지션을 회수했고(Comunicaffe, 단일 출처), 순포지션은 순매도 전환 가능성이 거론되는 수준까지 축소됐다. 이는 역설적으로 <strong>엘니뇨 트리거 발생 시 숏커버링이 상승을 증폭시킬 연료</strong>가 쌓이고 있음을 뜻한다. 5월의 엘니뇨발 숏커버링 반등은 그 예고편이었다.</p>
+
+            <h3>3. 옵션 시장: 비대칭이 싸졌다</h3>
+
+            <p>6주 연속 하락으로 아웃 오브 더 머니 콜옵션 프리미엄은 크게 압축됐다. 67% 확률의 슈퍼 엘니뇨와 9~10월 개화 리스크를 감안하면, <strong>Q4 2026~Q1 2027 만기 콜 구조의 리스크-리워드는 올해 들어 가장 매력적인 구간</strong>에 들어섰다.</p>
+        </section>
+
+        <section id="outlook">
+            <h2>시나리오 분석 (Align Commodities 자체 추정)</h2>
+
+            <p>아래 확률은 NOAA 발생 확률(82%)·슈퍼 엘니뇨 확률(67%)에 '개화기 강우가 실제로 훼손될 조건부 확률'을 결합한 당사 자체 추정이다. <strong>엘니뇨 발생 ≠ 작황 피해</strong>라는 점이 핵심이다 — 강한 엘니뇨에서도 9~10월 강우가 제때 오면 가격 영향은 제한된다.</p>
+
+            <h3>시나리오 1: 불발 또는 약한 엘니뇨 (확률 ~20%)</h3>
+
+            <p>ENSO가 중립~약한 엘니뇨에 머물고 개화기 강우 정상. 풍작·잉여 내러티브가 유일한 동인으로 남는다. Rabobank 경로(2026년 말까지 아라비카 추가 약 1/3 하락)가 작동하며 <strong>200¢ 하회 테스트</strong> 가능. 로부스타도 베트남 신작 압력에 동반 약세.</p>
+
+            <h3>시나리오 2: 중간~강 엘니뇨, 개화기 강우 양호 (확률 ~40%)</h3>
+
+            <p>엘니뇨는 발달하지만 브라질 9~10월 강우가 큰 지연 없이 도착. 27/28 우려가 간헐적 숏커버 랠리를 만들며 <strong>변동성은 커지되 추세는 약세 유지 — 220~280¢ 밴드</strong>. 베트남 건기 피해 정도에 따라 로부스타가 상대 강세. 기본 시나리오.</p>
+
+            <h3>시나리오 3: 슈퍼 엘니뇨 + 개화 차질 현실화 (확률 ~40%)</h3>
+
+            <p>Niño3.4 +2.5°C급 진행과 함께 9~10월 미나스 강우 지연·고온이 실측 확인. 27/28 전망 급반전 → 잉여 1년 뒤 적자 재진입 경로가 가격에 반영되며 <strong>300¢+ 복귀 리스크</strong>. 베트남 가뭄 중첩 시 2023~25 사이클 재연 — 로부스타 주도 급등에 숏커버가 증폭기로 작동. 저재고가 상승 탄력을 비선형으로 키운다.</p>
+
+            <div class="highlight-box">
+                <p><strong>가격 전망 요약:</strong> 향후 3개월(수확기)은 시나리오와 무관하게 하방 우위가 유지될 공산이 크다. 분기점은 <strong>8월 말~10월: 미나스제라이스 첫 개화 강우</strong>다. 이 데이터가 나오기 전까지 시장의 엘니뇨 무시는 지속될 수 있으며, 나온 뒤에는 더 이상 싸게 헤지할 수 없다.</p>
+            </div>
+        </section>
+
+        <section id="risk-management">
+            <h2>리스크 관리 전략</h2>
+
+            <h3>로스터 · 수입업체</h3>
+
+            <ul>
+                <li><strong>현물 분할 매수 + 콜 오버레이:</strong> 230~260¢ 분할 매수 밴드를 유지하되, 압축된 프리미엄을 활용해 Q4 2026~Q1 2027 만기 OTM 콜(예: 280~300¢ 행사가)로 27/28 리스크를 커버. 풍작 시 잃는 것은 프리미엄뿐이다.</li>
+                <li><strong>로부스타 비중 점검:</strong> 엘니뇨의 1차 타깃은 로부스타 벨트다. 블렌드의 로부스타 의존도가 높다면 10월 베트남 수확 전 커버 비율을 높이는 것이 합리적.</li>
+                <li><strong>품질 조항 재점검:</strong> 동아프리카·콜롬비아 다우 시나리오는 수량보다 품질·선적 지연 리스크 — 계약의 품질 스펙·대체 조항 확인.</li>
+            </ul>
+
+            <h3>생산자 · 수출업체</h3>
+
+            <ul>
+                <li>현 가격은 19개월 저점 — 추격 매도보다는 <strong>풋 스프레드 등 하방 한정 구조</strong>로 시나리오 1에 대비하면서, 엘니뇨 상방 시나리오의 이익을 열어두는 접근이 유효.</li>
+            </ul>
+
+            <h3>주요 모니터링 지표</h3>
+
+            <ul>
+                <li><strong>NOAA 월간 ENSO 진단</strong> (매월 둘째 목요일) — 발생·강도 확률 경로</li>
+                <li><strong>Niño3.4 SST / RONI 주간 수치</strong> — ECMWF +2.5°C 경로 추적</li>
+                <li><strong>9~10월 미나스제라이스 강우</strong> (Somar, Climatempo) — 개화 트리거 강우의 시점·양</li>
+                <li><strong>베트남 중부 고원 건기 강수·저수율</strong> — 26/27 로부스타 막바지 비대</li>
+                <li><strong>ICE 인증 재고</strong> — 충격 흡수 버퍼의 두께</li>
+                <li><strong>CFTC 비상업 순포지션</strong> — 숏커버 연료 게이지 (순매도 전환 여부)</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>결론</h2>
+
+            <p>2026년 커피 시장의 가장 큰 리스크는 풍작이 아니라, <strong>풍작에 가려진 확률의 무시</strong>다. NOAA 82%·슈퍼 엘니뇨 67%라는 숫자는 상품 시장 역사상 손에 꼽히게 높은 사전 경고이며, 그 타깃 윈도우(브라질 8~10월 개화, 베트남 건기)는 명확하다. 1997년의 교훈은 엘니뇨가 항상 가격을 올리진 않는다는 것이고, 2024년의 교훈은 저재고 환경에서는 한 산지의 -20%가 사상 최고가로 이어질 수 있다는 것이다. 지금의 재고 환경은 2024년에 가깝다.</p>
+
+            <p>수확기인 향후 2~3개월은 약세 관성이 이어질 수 있다. 그러나 8월 말부터 시장의 시선은 필연적으로 미나스의 하늘로 이동한다. <strong>헤지는 비가 오기 전에만 싸다.</strong></p>
+        </section>
+    </div>
+
+    <!-- Footer: full-width brown background, outside .container -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장에 대한 심층 분석과 인사이트를 제공합니다.
+                        트레이더, 로스터, 투자자를 위한 전문 시장 정보 서비스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">james.baek@aligncommodities.com</a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">NOAA CPC, WMO, IRI, ECMWF</span>
+                    <span class="footer-link" style="cursor: default;">StoneX CoffeeNetwork, USDA FAS</span>
+                    <span class="footer-link" style="cursor: default;">Barchart, Trading Economics, Reuters</span>
+                    <span class="footer-link" style="cursor: default;">Somar, Vicofa, Ubilava (2012)</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    본 보고서는 정보 제공 목적으로만 작성되었으며, 투자 권유나 조언을 구성하지 않습니다.
+                    모든 투자 결정은 독립적인 판단에 기초하여야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
