@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>브라질 밸류 트랩: 사상 최대 작황과 무너지지 않는 가격 | 2026년 6월 12일</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "브라질 밸류 트랩: 사상 최대 작황과 무너지지 않는 가격",
+    "subtitle": "Brazil's Value Trap: The Record Harvest That Won't Crash the Price",
+    "date": "2026-06-12",
+    "type": "in-depth",
+    "summary": "USDA가 브라질 26/27 사상 최대 71.9M 백을 전망하고 선물은 19개월래 저점이지만, ICE 재고는 6.5개월 저점이고 브라질 5월 수출은 -20.4%다. 풍작은 미래의 약속이고 현물은 농가 보류로 묶여 있다. 보류의 경제학, 출하 데이터, 백워데이션 메커니즘과 함정의 해소 경로를 분석한다.",
+    "tags": [
+        "brazil-value-trap",
+        "farmer-withholding",
+        "record-harvest-71.9M",
+        "cecafe-exports-minus20pct",
+        "ice-stocks-6.5month-low",
+        "backwardation",
+        "brl-real-incentive",
+        "2026-tax-year-deferral",
+        "fertilizer-cost-squeeze",
+        "scenario-analysis"
+    ],
+    "author": "Align Commodities",
+    "sources": [
+        "Rio Times",
+        "USDA FAS",
+        "Cecafe",
+        "StoneX",
+        "MercoPress",
+        "Comunicaffe",
+        "Conab",
+        "IndexBox",
+        "Barchart",
+        "Trading Economics",
+        "Daily Coffee News",
+        "Global Coffee Report",
+        "ING",
+        "Rabobank"
+    ],
+    "price_current": "253.45",
+    "price_change": "ICE arabica stocks 402,709 bags (6.5-month low); Brazil May exports -20.4% y/y"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+        .nav-link:hover { opacity: 1; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 120px 24px 80px; }
+
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+        .headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+        .meta-item { font-weight: 500; }
+        .meta-divider { color: var(--copper); }
+
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .overview-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+        .card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        section { margin-bottom: 56px; }
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--espresso);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--copper);
+        }
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--roast);
+            margin-top: 36px;
+            margin-bottom: 16px;
+        }
+        p { margin-bottom: 16px; }
+        ul, ol { margin-bottom: 16px; padding-left: 24px; }
+        li { margin-bottom: 12px; }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .data-card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+        .data-card-change { font-size: 0.85rem; margin-top: 4px; font-weight: 600; }
+        .data-card-change.positive { color: var(--positive); }
+        .data-card-change.negative { color: var(--negative); }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(184, 115, 51, 0.06) 0%, rgba(196, 165, 116, 0.06) 100%);
+            border-left: 3px solid var(--copper);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .highlight-box p:last-child { margin-bottom: 0; }
+
+        .alert-box {
+            background: linear-gradient(135deg, rgba(194, 58, 58, 0.06) 0%, rgba(194, 58, 58, 0.03) 100%);
+            border-left: 3px solid var(--negative);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .alert-box p:last-child { margin-bottom: 0; }
+
+        .timeline { position: relative; padding-left: 32px; margin: 28px 0; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px; top: 0; bottom: 0;
+            width: 2px;
+            background: var(--copper);
+            opacity: 0.3;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.05);
+        }
+        .timeline-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -28px; top: 8px;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--copper);
+        }
+        .timeline-date { font-size: 0.85rem; font-weight: 700; color: var(--copper); margin-bottom: 4px; }
+        .timeline-content { font-size: 0.95rem; line-height: 1.7; }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.95rem;
+        }
+        .comparison-table th {
+            background: var(--steam);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--roast);
+            border-bottom: 2px solid var(--copper);
+        }
+        .comparison-table td { padding: 12px 16px; border-bottom: 1px solid rgba(26, 15, 10, 0.06); }
+        .comparison-table tr:hover { background: rgba(184, 115, 51, 0.03); }
+
+        .footer { background: var(--espresso); padding: 60px 0 40px; margin-top: 80px; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 60px); }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--crema);
+            margin-bottom: 12px;
+        }
+        .footer-desc { font-size: 0.9rem; color: var(--crema); opacity: 0.7; line-height: 1.6; }
+        .footer-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--copper);
+            margin-bottom: 16px;
+        }
+        .footer-link {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--crema);
+            opacity: 0.7;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: opacity 0.2s;
+        }
+        .footer-link:hover { opacity: 1; }
+        .footer-bottom { border-top: 1px solid rgba(245, 240, 232, 0.1); padding-top: 24px; }
+        .footer-copyright { font-size: 0.8rem; color: var(--crema); opacity: 0.5; margin-bottom: 8px; }
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.85rem; }
+            .comparison-table th, .comparison-table td { padding: 8px 12px; }
+        }
+
+        @media print {
+            .top-nav { display: none; }
+            .container { max-width: 100%; padding: 40px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#anatomy" class="nav-link">함정의 해부</a>
+            <a href="#economics" class="nav-link">보류의 경제학</a>
+            <a href="#exports" class="nav-link">출하 데이터</a>
+            <a href="#outlook" class="nav-link">시나리오</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">In-Depth Report</span>
+                <span class="meta-divider">•</span>
+                <span class="meta-item">2026년 6월 12일</span>
+                <span class="meta-divider">•</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>브라질 밸류 트랩: 사상 최대 작황과 무너지지 않는 가격</h1>
+            <p class="subtitle">Brazil's Value Trap: The Record Harvest That Won't Crash the Price</p>
+            <p class="headline">선물은 풍작을 가격에 넣었지만, 현물은 농가의 창고에 묶여 있다 — 재고와 가격이 함께 빠지는 시장의 역설</p>
+
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">USDA 브라질 26/27</div>
+                    <div class="card-value">71.9M bags</div>
+                    <div class="card-change positive">+14% 사상 최대 (미래)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">ICE 아라비카 재고</div>
+                    <div class="card-value">402,709</div>
+                    <div class="card-change negative">6.5개월 저점 (현재)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">브라질 5월 수출</div>
+                    <div class="card-value">-20.4%</div>
+                    <div class="card-change negative">y/y, 그린 (Cecafe)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">2025 수출액</div>
+                    <div class="card-value">~$15.6B</div>
+                    <div class="card-change positive">사상 최대 — 농가 현금 쿠션</div>
+                </div>
+            </div>
+        </header>
+
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <p>커피 시장은 지금 하나의 모순 위에 서 있다. 한쪽에는 USDA가 공식 확인한 브라질 2026/27 사상 최대 작황(71.9M 백, +14%)과 19개월래 저점의 선물 가격이 있다. 다른 한쪽에는 6.5개월 저점까지 빠진 ICE 인증 재고와 전년 대비 두 자릿수 감소한 브라질 수출이 있다. <strong>풍작 전망이 사실이라면 재고는 왜 빠지고 있으며, 가격은 왜 200¢ 밑으로 무너지지 않는가?</strong></p>
+
+            <p>본 리포트는 이 역설을 '밸류 트랩(value trap)'의 틀로 분석한다. 핵심 결론은 세 가지다. <strong>첫째</strong>, 선물 가격은 '아직 따지도, 가공하지도, 선적하지도 않은' 미래의 공급을 반영하지만, 현물 시장은 그 공급이 실제로 흘러야 움직인다 — 지금 그 흐름이 막혀 있다. <strong>둘째</strong>, 막은 주체는 브라질 농가다. 2025년 사상 최대 수출액(약 $15.6~16.1B)으로 두둑해진 현금, 2026 과세연도로의 매출 이연, 19개월래 저점에서 팔지 않으려는 가격 기대, 그리고 비료비 급등이 결합해 <strong>보류의 유보가격(reservation price)을 끌어올렸다.</strong> <strong>셋째</strong>, 이 함정은 영원하지 않다 — 신작 수확의 현금 수요, 헤알 약세의 판매 인센티브, 시장점유율 상실 압력이 결국 보류를 풀게 한다. 문제는 '풀리느냐'가 아니라 '언제·얼마나 질서 있게'다.</p>
+
+            <div class="highlight-box">
+                <p><strong>한 줄 요약:</strong> 풍작은 미래의 약속이고 보류는 현재의 사실이다. 시장은 약속을 선물 가격에 넣었고, 현물은 사실에 묶여 있다 — 그 간극이 '재고 저점 + 가격 저점'이라는 이례적 동행을 만들고, 백워데이션을 떠받친다.</p>
+            </div>
+        </section>
+
+        <section id="anatomy">
+            <h2>함정의 해부 — 싼데 안 빠지는 이유</h2>
+
+            <p>상품 시장에서 '밸류 트랩'은 들어올 공급을 기준으로는 싸 보이지만, 단기적 힘 — 물류, 농가 행동, 지정학 — 이 그 공급의 시장 도달을 막아 가격이 교정되지 않는 상태를 말한다(Rio Times). 2026년 6월의 커피가 바로 이 자리에 있다. <strong>기록적 수확은 오고 있지만, 아직 따지도·가공하지도·선적하지도·인도하지도 않았다.</strong></p>
+
+            <p>핵심은 <strong>선물과 현물의 시간 지평 차이</strong>다. ICE 선물은 본질적으로 미래를 거래한다 — 7월물 가격은 7~9월 수확 피크에 쏟아질 신작 물량을 선반영한다. 반면 ICE 인증 재고와 산지 현물은 '지금 이 순간 시장에 나와 있는 콩'만을 센다. 풍작이 확실해도 그 콩이 농가 창고에 있는 한, 현물은 타이트하고 선물은 약하다. 이 괴리가 <strong>백워데이션(근월 > 원월)</strong>으로 표출된다.</p>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">선물이 보는 것</div>
+                    <div class="data-card-value">미래 공급</div>
+                    <div class="data-card-change negative">71.9M 풍작 · 9.5~10M 잉여</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">현물이 보는 것</div>
+                    <div class="data-card-value">실제 흐름</div>
+                    <div class="data-card-change negative">재고 6.5개월 저점 · 수출 -20%</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">결과 구조</div>
+                    <div class="data-card-value">백워데이션</div>
+                    <div class="data-card-change">스팟 타이트 + 선물 약세 공존</div>
+                </div>
+            </div>
+
+            <p>지난주(6/9~11)의 +2.8% 반등은 이 구조의 직접적 산물이다. 브라질 강우 예보가 수확 지연(=현물 흐름 추가 지연) 우려를 자극하자, 가장 약했던 근월물이 가장 강하게 반등했다. <strong>현물이 묶여 있는 시장에서는 작은 공급 차질 신호도 비대칭적으로 증폭된다</strong> — 이것이 밸류 트랩의 가격 동학이다.</p>
+        </section>
+
+        <section id="economics">
+            <h2>보류의 경제학 — 농가는 왜 팔지 않는가</h2>
+
+            <p>밸류 트랩의 엔진은 브라질 농가의 보류(withholding)다. 이는 비합리적 고집이 아니라, 네 가지 인센티브가 만든 합리적 유보가격 상승의 결과다.</p>
+
+            <h3>1. 현금 쿠션 — 사상 최대 수출액의 유산</h3>
+
+            <p>브라질은 2025년 수출 <strong>물량은 줄었으되 수출액은 사상 최대인 약 $15.6~16.1B</strong>(외화 수입 +54%)를 기록했다(Global Coffee Report·Rio Times). 사상 최고가 사이클에서 두둑해진 현금 덕에, 상당수 농가는 <strong>"무기한 보유가 가능한"</strong> 재무 상태다(Rio Times). 당장 팔아야 할 절박함이 없다는 것 자체가 보류의 1차 토대다.</p>
+
+            <h3>2. 세제 이연 — 2026 과세연도로의 매출 미루기</h3>
+
+            <p>다수 농가가 <strong>매출을 2026 과세연도로 기록하기 위해 콩을 묶어두고 있다</strong>(Rio Times). 브라질 무역부에 따르면 2월 커피 수출은 전년 대비 -17.4%(142,000톤)로, 일부는 이 과세연도 이연이 원인으로 지목됐다. 회계적 동기가 실물 흐름의 시점을 뒤로 미루는 것이다.</p>
+
+            <h3>3. 가격 기대 — 19개월래 저점에서 팔 이유가 없다</h3>
+
+            <p>현 선물가는 19개월래 저점이고, 국내 아라비카 현물은 <strong>4월 기준 1자루(60kg)당 약 BRL 1,811.87로 전년比 -28%</strong> 수준이다(Conab·IndexBox). 사상 최고가를 경험한 농가에게 이 가격은 '팔 가격'이 아니라 '기다릴 가격'이다. 풋옵션·선도 헤지로 하방을 막아둔 농가일수록 현물 매도를 더 미룰 여력이 크다.</p>
+
+            <h3>4. 비용 압박 — 유보가격을 끌어올리는 투입비</h3>
+
+            <p>가격은 내렸지만 비용은 올랐다. <strong>아라비카-비료 교환비율</strong>은 비료 1톤을 사기 위해 필요한 아라비카가 <strong>2025년 4월 2.25자루에서 2026년 4월 4.97자루로 두 배 이상 악화</strong>됐다(Conab·IndexBox). 투입비가 오르면 농가의 손익분기 유보가격도 함께 오른다 — 같은 가격이라도 '팔 만한 가격'의 기준선이 높아진 것이다. 비싼 농촌 신용에 대한 제한적 접근도 보류 여력을 좌우한다.</p>
+
+            <div class="alert-box">
+                <p><strong>보류의 종합:</strong> 현금 쿠션(팔 필요 없음) + 세제 이연(미룰 이유 있음) + 가격 기대(팔 가격 아님) + 비용 압박(유보가격 상승)이 겹쳤다. 네 요인 모두 <strong>"지금은 아니다"</strong>를 가리킨다. 그래서 사상 최대 작황 전망에도 현물은 흐르지 않고, 선물만 홀로 약해진다.</p>
+            </div>
+        </section>
+
+        <section id="exports">
+            <h2>출하 데이터 — 보류의 물증</h2>
+
+            <p>보류는 추상이 아니라 출하 통계로 측정된다. 2026년 들어 브라질 그린커피 수출은 풍작 전망과 정반대로 두 자릿수 감소를 이어가고 있으며, 감소는 특히 아라비카에 집중된다.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>기간</th>
+                        <th>그린 수출 (y/y)</th>
+                        <th>세부</th>
+                        <th>출처</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026년 2월</td>
+                        <td style="color:#c23a3a;font-weight:600;">-17.4% (142,000톤)</td>
+                        <td>과세연도 이연 일부 원인</td>
+                        <td>브라질 무역부</td>
+                    </tr>
+                    <tr>
+                        <td>2026년 1분기</td>
+                        <td style="color:#c23a3a;font-weight:600;">약 -21%</td>
+                        <td>풍작 전망과 정반대 흐름</td>
+                        <td>MercoPress</td>
+                    </tr>
+                    <tr>
+                        <td>2026년 4월</td>
+                        <td style="color:#c23a3a;font-weight:600;">-1.3% (2,757,415백)</td>
+                        <td>아라비카 -15.9% (2,260,396백)</td>
+                        <td>Cecafe</td>
+                    </tr>
+                    <tr>
+                        <td>2026년 5월</td>
+                        <td style="color:#c23a3a;font-weight:600;">-20.4%</td>
+                        <td>그린커피 기준</td>
+                        <td>Cecafe / StoneX</td>
+                    </tr>
+                    <tr>
+                        <td>2026년 1~4월 누적</td>
+                        <td style="color:#c23a3a;font-weight:600;">약 -22.5% (~11.5M백)</td>
+                        <td>아라비카 주도 감소</td>
+                        <td>Rio Times</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>4월의 일시적 회복(-1.3%)을 제외하면 2월·5월 모두 두 자릿수 감소이며, 1~4월 누적으로 약 -22.5%다. 핵심은 <strong>감소가 아라비카에 집중</strong>(4월 아라비카 -15.9%)된다는 점 — 아라비카는 ICE 선물의 인도 대상이자 농가 보류의 핵심 품목이다. 즉 출하 데이터의 형태가 <strong>"풍작이 없어서 못 파는 것이 아니라, 풍작이 와도 안 파는 것"</strong>이라는 보류 가설과 정확히 일치한다.</p>
+
+            <div class="highlight-box">
+                <p><strong>재고 연결고리:</strong> 브라질 아라비카 수출 감소는 곧 ICE 인증 재고의 보충 지연을 의미한다. 인증 재고가 2.5개월 연속 빠져 6.5개월 저점(402,709백)에 이른 것은, 산지의 보류가 거래소 창고 단계까지 그대로 전이된 결과다. <strong>수출 -20%와 재고 6.5개월 저점은 같은 현상의 두 측면이다.</strong></p>
+            </div>
+        </section>
+
+        <section id="mechanism">
+            <h2>시장 메커니즘 — 재고와 가격이 같이 빠지는 구조</h2>
+
+            <p>정상적 시장이라면 풍작 전망은 재고 증가와 가격 하락을 동반한다. 그런데 2026년은 <strong>가격 하락과 재고 하락이 동시에</strong> 일어난다. 이 비정상의 메커니즘은 세 단계로 작동한다.</p>
+
+            <h3>1단계: 선물의 선반영 — 풍작이 가격을 누른다</h3>
+            <p>USDA 71.9M·Rabobank 잉여 9.5M·StoneX 잉여 10M 등 풍작·잉여 컨센서스가 선물에 그대로 반영되며 6주 연속 약세, 19개월래 저점을 만들었다. 이 단계는 교과서적이다.</p>
+
+            <h3>2단계: 현물의 보류 — 콩이 안 나온다</h3>
+            <p>그러나 그 가격에 농가는 팔지 않는다(보류의 경제학). 산지 현물과 거래소 인증 재고는 보충되지 않고 오히려 소진된다. 선물이 누른 가격이 거꾸로 보류를 강화하는 <strong>음의 피드백</strong>이 형성된다 — 낮은 가격일수록 농가는 더 기다린다.</p>
+
+            <h3>3단계: 백워데이션 — 두 시간 지평의 충돌</h3>
+            <p>그 결과 근월물(현물 타이트 반영)이 원월물(신작 유입 반영)보다 비싼 백워데이션이 고착된다. 백워데이션은 <strong>"지금 콩이 부족하지만 미래엔 넘친다"</strong>는 시장의 메시지이자, 동시에 농가에게 '지금 팔고 나중에 되사는' 캐리 인센티브를 약화시켜 보류를 더 부추기는 구조다.</p>
+
+            <div class="alert-box">
+                <p><strong>왜 200¢가 안 깨지나:</strong> 풍작만 보면 가격은 더 내려야 한다. 그러나 ICE 재고 6.5개월 저점이라는 현물 타이트가 '지금 당장의 숏 스퀴즈' 리스크를 만들어, 투기적 숏의 공격적 추가 매도를 억제한다. <strong>현물의 바닥이 선물의 바닥을 떠받치는 것</strong> — 이것이 19개월래 저점에서도 가격이 200¢로 직행하지 못하는 미시 구조다.</p>
+            </div>
+        </section>
+
+        <section id="resolution">
+            <h2>함정의 해소 경로 — 무엇이 보류를 풀까</h2>
+
+            <p>밸류 트랩은 정의상 일시적이다. 막힌 공급은 언젠가 흐른다. 보류를 푸는 트리거는 네 가지이며, 이들이 겹칠수록 해소는 빠르고 가파르다.</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">트리거 1 — 신작의 현금 수요 (7~9월)</div>
+                    <div class="timeline-content">수확이 피크에 들면 농가는 노동·건조·운송·창고 비용을 현금으로 지출해야 한다. 비싼 농촌 신용 접근이 제한된 상황에서, <strong>운영자금 마련을 위한 강제적 현물 매도</strong>가 보류를 푸는 가장 확실한 메커니즘이다. 신작 물량 자체가 창고 공간을 압박하는 점도 구작 방출을 자극한다.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">트리거 2 — 헤알 약세 (진행 중)</div>
+                    <div class="timeline-content">USD/BRL이 5.18 약세 박스에 있다. 헤알 약세는 <strong>달러 표시 선물가가 같아도 농가의 헤알 수취액을 높여</strong> 판매 인센티브를 키운다. 5.30 이상으로 연장되면 환율발 매도가 보류 물량을 시장으로 끌어낼 수 있다 — 강우발 반등과 반대 방향의 힘.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">트리거 3 — 시장점유율 상실 압력</div>
+                    <div class="timeline-content">브라질이 계속 묶어두면 그 공백을 <strong>베트남(로부스타)·콜롬비아(워시드 아라비카)가 메운다</strong>(Rio Times·StoneX). "다음 수확 진입 전까지 보류가 이어지며 브라질의 점유율 상실로 이어질 것"이라는 경고는, 장기 보류가 농가·수출업체에 비용으로 되돌아옴을 시사한다. 점유율 방어 동기가 보류를 제약한다.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">트리거 4 — 과세연도 전환 & 가격 항복</div>
+                    <div class="timeline-content">2026 과세연도로의 이연 동기는 시간이 지나며 소진된다. 또한 보류가 길어질수록 '더 오를 것'이라는 기대가 신작 압력에 부딪혀 무너지면, 누적 보류 물량의 <strong>일시적 항복성 매도(capitulation)</strong>가 가격을 비선형으로 끌어내릴 수 있다.</div>
+                </div>
+            </div>
+
+            <p>반대로, 해소를 <strong>지연·역전</strong>시키는 변수도 있다. ① 9~10월 엘니뇨 개화기 리스크가 현실화되면 농가의 보류 명분이 강해진다. ② 호르무즈 등 물류 차질은 흐름을 물리적으로 막는다. ③ 강우에 의한 수확 지연은 현물 타이트를 연장한다. 즉 <strong>해소 트리거(현금 수요·헤알·점유율·항복)와 지연 트리거(엘니뇨·물류·강우)의 줄다리기</strong>가 향후 가격 경로를 결정한다.</p>
+        </section>
+
+        <section id="outlook">
+            <h2>시나리오 분석 (Align Commodities 자체 추정)</h2>
+
+            <p>아래는 보류 해소의 속도·질서에 따른 당사 자체 시나리오다. <strong>핵심 변수는 가격 방향이 아니라 "현물이 언제, 얼마나 질서 있게 풀리느냐"</strong>다.</p>
+
+            <h3>시나리오 1: 질서 있는 방출 (확률 ~40%, 기본)</h3>
+            <p>수확 피크의 현금 수요와 헤알 약세가 보류를 점진적으로 푼다. 현물이 단계적으로 흐르며 재고가 바닥을 다지고, 선물은 풍작 펀더멘털을 따라 <strong>완만한 계단식 하락 — 220~250¢ 밴드</strong>로 이동. 백워데이션은 점차 완화. 밸류 트랩이 '정상적으로' 해소되는 경로.</p>
+
+            <h3>시나리오 2: 장기 보류·고변동 (확률 ~35%)</h3>
+            <p>농가가 가격 기대·세제·헤지를 근거로 보류를 지속. 현물 타이트가 장기화되며 <strong>240~280¢ 박스 + 날씨·물류 헤드라인에 따른 ±급변동</strong>. 백워데이션 고착. 브라질 점유율은 베트남·콜롬비아로 일부 이전. 가격은 '싸 보이지만 안 빠지는' 밸류 트랩이 연장되는 경로.</p>
+
+            <h3>시나리오 3: 항복성 방출 또는 공급 충격 (확률 ~25%, 양꼬리)</h3>
+            <p><strong>하방 꼬리:</strong> 누적 보류 물량이 신작 압력 속에 한꺼번에 풀리면(capitulation) 단기 <strong>200¢ 하회</strong> 가능. <strong>상방 꼬리:</strong> 9~10월 엘니뇨 개화 차질이 실측되면 보류 명분이 강화되고 27/28 우려가 겹쳐 <strong>290¢+ 복귀</strong>. 저재고가 어느 방향이든 움직임을 비선형으로 증폭한다.</p>
+
+            <div class="highlight-box">
+                <p><strong>가격 전망 요약:</strong> 향후 2~3개월(수확기)은 현물 방출 속도가 방향타다. 분수령은 <strong>① 7~9월 출하·Cecafe 수출 데이터의 회복 여부 ② USD/BRL 5.30 돌파 ③ ICE 재고의 바닥 확인</strong>이다. 재고가 돌아서기 전까지 백워데이션과 '저가 비붕괴'는 유지될 공산이 크며, 보류가 풀리는 순간이 진짜 하락의 시작점이 된다.</p>
+            </div>
+        </section>
+
+        <section id="strategy">
+            <h2>시사점 & 전략</h2>
+
+            <h3>로스터 · 수입업체</h3>
+            <ul>
+                <li><strong>"기록적 작황 = 즉시 싼 현물"이 아니다:</strong> 선물 19개월 저점에 현혹돼 현물 조달을 미루면, 보류발 디퍼렌셜 확대와 선적 지연에 노출된다. <strong>차익(differential)·근월 프리미엄</strong>을 별도로 모니터링해야 한다.</li>
+                <li><strong>원산지 다변화:</strong> 브라질 보류가 길어지면 베트남·콜롬비아가 공백을 메운다. 워시드 아라비카·로부스타 비중 조정으로 브라질 단일 의존을 낮추는 것이 보류 리스크의 헤지다.</li>
+                <li><strong>분할 + 콜 오버레이:</strong> 220~250¢ 분할 매수를 유지하되, 보류 장기화·엘니뇨 상방 시나리오에 대비한 OTM 콜로 상방을 커버.</li>
+            </ul>
+
+            <h3>트레이더 · 헤지펀드</h3>
+            <ul>
+                <li><strong>캘린더 스프레드:</strong> 백워데이션은 보류의 함수다. 현물 방출 속도(Cecafe·재고)를 트래킹하며 근월-원월 스프레드의 완화/고착에 베팅하는 것이 순방향 플랫 포지션보다 리스크-리워드가 우월할 수 있다.</li>
+                <li><strong>다이버전스 트레이드:</strong> '선물 약세 vs 현물 타이트'의 괴리가 극단화되면, 재고 반전 신호를 트리거로 한 평균회귀 접근이 가능. 단, 항복성 방출의 하방 꼬리에 대한 손절 규율 필수.</li>
+            </ul>
+
+            <h3>주요 모니터링 지표</h3>
+            <ul>
+                <li><strong>Cecafe 월간 수출</strong> — 보류 해소의 1차 게이지 (y/y 감소율 축소 여부)</li>
+                <li><strong>ICE 인증 재고</strong> — 현물 흐름의 바닥·반전 신호</li>
+                <li><strong>USD/BRL</strong> — 5.30 돌파 시 환율발 매도 인센티브</li>
+                <li><strong>근월-원월 스프레드(백워데이션 폭)</strong> — 보류 강도의 실시간 척도</li>
+                <li><strong>9~10월 미나스 개화 강우</strong> — 보류 명분 강화/해소의 분기점</li>
+                <li><strong>국내 현물가(BRL/자루)·비료 교환비율</strong> — 농가 유보가격의 변화</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>결론</h2>
+
+            <p>2026년 커피 시장의 진짜 이야기는 '사상 최대 작황'이라는 헤드라인이 아니라, <strong>그 작황이 아직 시장에 도달하지 않았다는 사실</strong>에 있다. 선물은 미래의 풍요를 가격에 넣어 19개월래 저점을 만들었지만, 현물은 농가의 보류에 묶여 재고를 6.5개월 저점으로, 수출을 -20%로 끌어내렸다. 재고와 가격의 동반 하락, 그리고 깨지지 않는 200¢ — 이 모든 역설의 뿌리는 하나, <strong>'풍작의 약속'과 '현물의 부재' 사이의 시차</strong>다.</p>
+
+            <p>밸류 트랩은 풀린다. 신작의 현금 수요, 헤알 약세, 점유율 압력이 결국 창고 문을 연다. 그러나 엘니뇨·물류·강우가 그 시점을 늦출 수 있다. 투자자에게 중요한 질문은 "풍작이 가격을 내릴까"가 아니라 <strong>"보류가 언제 풀리고, 그때 시장은 질서 있을까 항복할까"</strong>다. 재고가 돌아서는 그날이, 밸류 트랩의 끝이자 진짜 하락의 시작이다.</p>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장에 대한 심층 분석과 인사이트를 제공합니다.
+                        트레이더, 로스터, 투자자를 위한 전문 시장 정보 서비스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">james.baek@aligncommodities.com</a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">Rio Times, USDA FAS, Cecafe</span>
+                    <span class="footer-link" style="cursor: default;">StoneX, MercoPress, Conab</span>
+                    <span class="footer-link" style="cursor: default;">IndexBox, Comunicaffe, Barchart</span>
+                    <span class="footer-link" style="cursor: default;">Global Coffee Report, ING, Rabobank</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    본 보고서는 정보 제공 목적으로만 작성되었으며, 투자 권유나 조언을 구성하지 않습니다.
+                    모든 투자 결정은 독립적인 판단에 기초하여야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
