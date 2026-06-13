@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | June 13, 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2026-06-13",
+    "type": "weekly",
+    "summary": "July arabica (KCN26) closed Friday ~252.40c, up +2.39% on the week — a rebound off Tuesday's 19-month low (243.90c) on Brazil rain/harvest-delay fears. ICE stocks at a 6.5-mo low; real firmer ~5.10.",
+    "tags": [
+        "KCN26-252.40",
+        "weekly-plus-2.4pct",
+        "rebound-from-19month-low",
+        "brazil-rain-harvest-delay",
+        "harvest-35pct-complete",
+        "ice-arabica-402709-6.5month-low",
+        "robusta-rebound",
+        "cftc-net-long-19624",
+        "brl-strengthens-5.10",
+        "rabobank-9.5M-surplus",
+        "usda-brazil-71.9M-record"
+    ],
+    "author": "Align Commodities",
+    "sources": [
+        "Barchart", "Rich Asplund", "Trading Economics", "USDA FAS", "Rabobank",
+        "Comunicaffe", "Vaisala", "Somar Meteorologia", "Safras & Mercado",
+        "Japan Meteorological Agency", "NOAA", "CFTC", "ICE", "Conab", "Cecafe",
+        "Vietnam National Statistics Office", "StoneX", "Marex", "Sucafina", "Volcafe", "Investing.com"
+    ],
+    "price_current": "252.40",
+    "price_change": "+5.90c (+2.39%) week-over-week (Fri 6/12 close vs Fri 6/5)"
+}
+REPORT_META-->
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover { opacity: 1; }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item { font-weight: 500; }
+        .meta-divider { color: var(--copper); }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        /* Price Box */
+        .price-box {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .price-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .price-change { font-size: 1.3rem; font-weight: 600; margin-top: 8px; }
+        .price-change.positive { color: var(--positive); }
+        .price-change.negative { color: var(--negative); }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26, 15, 10, 0.1);
+        }
+
+        .price-item { display: flex; flex-direction: column; gap: 4px; }
+
+        .price-item-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .price-item-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.65;
+            margin-top: 20px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Sections */
+        section { margin: 56px 0; }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--espresso);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--roast);
+            letter-spacing: -0.01em;
+        }
+
+        p { margin-bottom: 20px; color: var(--ink); }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--steam);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p:last-child { margin-bottom: 0; }
+
+        /* Alert Box (red border for risk/implication) */
+        .alert-box {
+            background: #faf0f0;
+            border-left: 4px solid var(--negative);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .alert-box p:last-child { margin-bottom: 0; }
+
+        /* Lists */
+        ul { margin: 24px 0; padding-left: 24px; }
+        li { margin-bottom: 12px; color: var(--ink); }
+        li strong { color: var(--roast); font-weight: 600; }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .data-card-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .data-card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .data-card-change.positive { color: var(--positive); }
+        .data-card-change.negative { color: var(--negative); }
+
+        /* Footer — full-width brown background, outside .container */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 48px 0 32px;
+            margin-top: 80px;
+            width: 100%;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .footer-desc { font-size: 0.9rem; line-height: 1.6; opacity: 0.95; color: var(--crema); }
+
+        .footer-title { font-weight: 600; margin-bottom: 16px; color: var(--accent); }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.95;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover { opacity: 1; }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.15);
+            text-align: center;
+        }
+
+        .footer-copyright { font-size: 0.9rem; opacity: 0.85; margin-bottom: 12px; color: var(--crema); }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .price-main { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .top-nav { display: none; }
+            .container { max-width: 100%; padding: 40px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#fundamentals" class="nav-link">Fundamentals</a>
+            <a href="#implications" class="nav-link">Implications</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">Weekly Report</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">June 13, 2026</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>Coffee Futures Market Weekly Update</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <p class="headline">Brazil rain-driven harvest-delay fears drove a rebound off the 19-month low &mdash; up +2.4% on the week, recovering part of the prior week's -7.2% plunge; Friday eased modestly. The real strengthened from 5.18 to ~5.10.</p>
+
+            <!-- Market Overview Cards -->
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">KCN26 (July)</div>
+                    <div class="card-value">~252.40c</div>
+                    <div class="card-change positive">+5.90 (+2.39%) wk</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Weekly Low</div>
+                    <div class="card-value">6/9</div>
+                    <div class="card-change negative">19-month low 243.90c</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">RMN26 Robusta</div>
+                    <div class="card-value">~$3,463</div>
+                    <div class="card-change positive">Thu +3.25% rebound</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">ICE Arabica Stocks</div>
+                    <div class="card-value">402.7K bags</div>
+                    <div class="card-change negative">6.5-month low</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Price Box -->
+        <div class="price-box" id="market">
+            <div class="price-header">
+                <span class="price-label">ICE Arabica July (KCN26)</span>
+                <span class="price-label">Close, Fri 2026.06.12</span>
+            </div>
+            <div class="price-main">~252.40c/lb</div>
+            <div class="price-change positive">&#9650; ~5.90c (+2.39%) on the week | Friday &#9660; ~1.05c (-0.38%)</div>
+
+            <div class="price-table">
+                <div class="price-item">
+                    <span class="price-item-label">Fri 6/5 Close</span>
+                    <span class="price-item-value">246.50c</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Tue 6/9 Low</span>
+                    <span class="price-item-value">~243.90c</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Thu 6/11 Close</span>
+                    <span class="price-item-value">~253.45c</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">RMN26 Robusta</span>
+                    <span class="price-item-value">~$3,463/MT</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">ICE Robusta Stocks</span>
+                    <span class="price-item-value">3,713 lots</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">USD/BRL</span>
+                    <span class="price-item-value">~5.10</span>
+                </div>
+            </div>
+
+            <p class="price-note">Note: This is the regular Saturday (KST) edition; the <strong>reference close is the prior day's New York ICE settlement of Friday, June 12</strong>. Weekly change is measured against the prior Friday close (6/5, 246.50c). Intraday absolute levels (Thu ~253.45c, Fri ~252.40c) are reconstructed by chaining Barchart's reported daily percentage moves onto the verified 6/5 close and may carry a rounding error of ~0.5-1c. All other figures (percentage changes, stocks, positioning, FX) are on a direct-source basis.</p>
+        </div>
+
+        <section id="weekly-summary">
+            <h2>Weekly Market Summary</h2>
+
+            <p>Coffee futures <strong>rebounded off the prior week's 19-month low to close the week net higher</strong>. July arabica (KCN26) slid to ~243.90c on Tuesday (6/9), its lowest since November 2024, but rallied Wednesday and Thursday to recover a one-week high of ~253.45c, before easing ~1.05c (-0.38%) on Friday (6/12) to settle near <strong>252.40c</strong>. Against the prior Friday close (246.50c), that is a <strong>weekly gain of ~+5.90c (+2.39%)</strong>, clawing back part of the prior week's -7.2% slide.</p>
+
+            <p>The direct trigger was a <strong>reversal in the weather narrative</strong>. The "dry weather, faster harvest" story that had pressured prices flipped to "rain, harvest delay" after forecaster Vaisala called for <strong>moderate-to-heavy rainfall across Brazil's coffee belt, potentially extending into next week</strong>. The <strong>Japan Meteorological Agency (JMA) officially confirmed El Nino</strong> in the equatorial Pacific on Wednesday, pushing the September-October flowering risk to the front of market attention. Safras & Mercado reported Brazil's 2025/26 harvest at <strong>35% complete as of June 11</strong> (vs 37% a year ago; five-year average 35%), confirming fieldwork is tracking a normal pace despite the rain.</p>
+
+            <p>Robusta (RMN26) also rallied hard on Thursday, up +109 (+3.25%) to ~$3,463/MT. ICE certified arabica stocks fell further to a 6.5-month low of 402,709 bags on Wednesday (6/10), a 2.5-month declining streak that kept spot tightness supportive. Meanwhile the <strong>real strengthened from USD/BRL 5.18 toward ~5.10</strong>, breaking out of the prior week's weak range and lending side support by reducing Brazilian farmers' incentive to sell.</p>
+
+            <div class="highlight-box">
+                <p><strong>Key dynamic of the week:</strong> The same Brazil-weather variable that produced last week's -7.2% crash <strong>flipped sign again within a single week &mdash; from bearish (dry, faster harvest) to bullish (rain, harvest delay)</strong> &mdash; delivering a +2.4% rebound, reinforced by a stronger real (5.18&rarr;5.10) that blunted one of last week's bearish drivers. Yet the structural bearish picture (record Brazil crop, 9.5-10M-bag surplus) is intact, so the short-term drivers remain "harvest pace, weather headlines, and FX."</p>
+            </div>
+
+            <h3>Key News Briefing</h3>
+
+            <ul>
+                <li><strong>(6/11, Barchart/Vaisala)</strong> Vaisala forecast <strong>moderate-to-heavy rainfall across Brazil's coffee regions, potentially extending into next week</strong> &mdash; on harvest-delay fears, Thursday arabica jumped +2.23% and robusta +3.25% to a one-week high.</li>
+                <li><strong>(6/11, Safras &amp; Mercado)</strong> Brazil's 2025/26 harvest <strong>35% complete</strong> (vs 37% LY; 5-yr avg 35%) &mdash; robusta 49%, arabica 26%. Fieldwork at a normal pace despite rain; structural supply pressure ongoing.</li>
+                <li><strong>(6/10, JMA)</strong> The Japan Meteorological Agency <strong>officially confirmed El Nino</strong> in the equatorial Pacific. NOAA puts super-El Nino odds at 67% &mdash; a delay in Sept-Oct Brazil flowering rains would be negative for the 2027/28 crop, a near-term price support.</li>
+                <li><strong>(6/10, ICE)</strong> ICE certified arabica stocks fell to a <strong>6.5-month low of 402,709 bags</strong> (down from 412,422 on Monday). A 2.5-month declining streak &mdash; old-crop spot supply stays tight even amid bumper-crop forecasts.</li>
+                <li><strong>(6/12, FX)</strong> <strong>USD/BRL fell to ~5.10 (a stronger real)</strong>, breaking out of the prior 5.18 range &mdash; a firmer real lowers farmers' FX-driven selling incentive, supportive of the rebound. Tariff and Iran-talks policy uncertainty remains.</li>
+            </ul>
+        </section>
+
+        <section id="fundamentals">
+            <h2>Fundamental Analysis</h2>
+
+            <h3>1. Weather &mdash; "Rain Delay" Momentum and El Nino Confirmation</h3>
+
+            <p>The core driver of the rebound was the change in the weather forecast. Forecaster Vaisala said <strong>moderate-to-heavy rainfall is forecast across Brazil's coffee belt and could extend into next week</strong>. June rain during the harvest peak can delay fieldwork and affect drying and quality, triggering immediate short-covering in a market that had built a bearish "faster harvest" thesis. That said, as Safras & Mercado's 35% progress (a normal pace) shows, the harvest itself is largely on schedule &mdash; a short-lived support that could fade quickly if the rain proves temporary and fieldwork resumes.</p>
+
+            <div class="alert-box">
+                <p><strong>JMA confirms El Nino (6/10):</strong> El Nino, previously framed as a <strong>probability</strong> (NOAA super-El Nino odds 67%), moved to the <strong>"fact" stage</strong> with the JMA's official confirmation. A delay in Sept-Oct Brazil flowering rains would be negative for the 2027/28 crop &mdash; raising the realism of an <strong>asymmetric upside risk</strong> the current bumper-crop/surplus consensus is overlooking.</p>
+            </div>
+
+            <h3>2. ICE Certified Stocks &mdash; Price Rebound Alongside Falling Inventories</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">ICE Arabica (6/10)</div>
+                    <div class="data-card-value">402,709 bags</div>
+                    <div class="data-card-change negative">6.5-month low</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">vs Start of Week (6/8)</div>
+                    <div class="data-card-value">412,422 bags</div>
+                    <div class="data-card-change negative">further drawdown</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE Robusta</div>
+                    <div class="data-card-value">3,713 lots</div>
+                    <div class="data-card-change negative">just above 2-yr low (3,631)</div>
+                </div>
+            </div>
+
+            <p>ICE certified arabica stocks fell further to a 6.5-month low of 402,709 bags, extending a <strong>2.5-month declining streak</strong>. The unusual combination of falling stocks amid bumper-crop expectations shows <strong>old-crop spot supply remains tight ahead of new-crop inflows</strong>. During this week's rebound, the inventory drawdown acted as a second floor alongside the rain momentum.</p>
+
+            <h3>3. Production Outlook &mdash; Structural Bearish Consensus Intact</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">USDA FAS Brazil 26/27</div>
+                    <div class="data-card-value">71.9M bags</div>
+                    <div class="data-card-change positive">+14% y/y record</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">USDA Arabica</div>
+                    <div class="data-card-value">47.5M bags</div>
+                    <div class="data-card-change positive">+25% y/y</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Conab (official)</div>
+                    <div class="data-card-value">66.7M bags</div>
+                    <div class="data-card-change positive">+18% y/y</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Rabobank Surplus</div>
+                    <div class="data-card-value">9.5M bags</div>
+                    <div class="data-card-change positive">raised 7.0M&rarr;9.5M</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">StoneX 2026 Surplus</div>
+                    <div class="data-card-value">10M bags</div>
+                    <div class="data-card-change positive">6-year high</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Marex Brazil</div>
+                    <div class="data-card-value">75.9M bags</div>
+                    <div class="data-card-change positive">record</div>
+                </div>
+            </div>
+
+            <p>Despite this week's rebound, <strong>the medium-term balance of fundamentals still tilts to oversupply</strong>. The USDA FAS record Brazil 2026/27 forecast of 71.9M bags (+14%, arabica 47.5M +25%), Rabobank's upgraded global arabica surplus (7.0M&rarr;9.5M bags, incl. 5.9M arabica), and StoneX's 2026 global surplus of 10M bags (6-year high) anchor the bearish consensus. Consultancy forecasts from Marex (75.9M) and Sucafina (75.4M) also converge on records. Meanwhile Volcafe cut its <strong>2025/26</strong> Brazil arabica estimate to 34.4M bags on drought damage, leaving a temporal asymmetry &mdash; tight old crop (25/26) vs abundant new crop (26/27) &mdash; that underpins the backwardation.</p>
+
+            <h3>4. Vietnam / Exports &mdash; Robusta Supply Pressure Persists</h3>
+
+            <p>Per Vietnam's statistics office, <strong>Jan-May coffee exports rose +7.9% y/y to 922,000 MT</strong>. The USDA FAS projects Vietnam's 2025/26 output up +6.9% y/y to <strong>31 million bags</strong>. Rising supply from the world's largest robusta producer is a structural drag on robusta prices, suggesting this week's robusta rebound (+3.25%) was driven more by arabica sympathy and short-covering than by improving fundamentals. On the Brazil side, Cecafe reported April green-coffee exports down -1.3% y/y to 2.76M bags.</p>
+
+            <h3>5. CFTC Speculative Positioning</h3>
+
+            <p>The latest confirmed reading (as of 6/2, released 6/5) shows <strong>managed money net long in Coffee C at 19,624 contracts</strong> (42,530 long minus 22,906 short). Net length has been partly rebuilt off the recent trough, meaning funds are <strong>not fully short</strong>. This implies two-way vulnerability: when weather headlines turn bullish, short-covering and momentum buying can amplify rebounds; when the harvest resumes, positions are exposed to liquidation. The new COT (as of 6/9, released 6/12) was not yet reflected in aggregated data at the time of writing, so this week's positioning shift needs confirmation next week <em>(single-source / pending update)</em>.</p>
+
+            <h3>6. Macro &mdash; Real Strengthens, El Nino</h3>
+
+            <p><strong>USD/BRL:</strong> ~5.10 on June 12, a <strong>shift to a stronger real</strong> from the prior week's 5.18 weak range. A firmer real lowers Brazilian farmers' selling incentive (in real-denominated proceeds), curbing the release of withheld supply and lending support to this week's rebound. That said, the US tariff proposal on Brazil and US-Iran negotiation uncertainty remain two-way FX risks <em>(FX level is single-source)</em>.</p>
+
+            <p><strong>El Nino:</strong> JMA confirmation plus NOAA super-El Nino odds of 67%. Sept-Oct Brazil flowering is the first watershed. Normal flowering rains would extend the bearish 27/28 bumper-crop narrative; a delay would push asymmetric upside risk into prices from late Q3. Brazil's late-June to July frost season is a parallel monitoring item.</p>
+        </section>
+
+        <section id="implications">
+            <h2>Implications</h2>
+
+            <div class="highlight-box">
+                <p><strong>1. A weather-headline tape &mdash; absence of directional conviction:</strong> The same Brazil-weather variable flipping sign two weeks running (-7.2% then +2.4%) and whipsawing prices both ways shows a market in "equilibrium-seeking" mode near the 19-month low &mdash; <strong>structural bearishness largely priced, but no conviction in further downside</strong>. Expect a high-volatility range hypersensitive to harvest pace, rain forecasts, stocks, and FX headlines.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>2. El Nino from "probability" to "fact" &mdash; asymmetric risk made real:</strong> The JMA confirmation upgrades the overlooked Sept-Oct flowering risk <strong>from tail risk to a base-case variable</strong>. In a bumper-crop/surplus consensus, the value of call options and upside hedges structurally rises; combined with the lower vol premium after the sell-off, this creates a <strong>cheap asymmetric hedge</strong> opportunity.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>3. A stronger real &mdash; the rebound's new ally:</strong> In last week's report a weak real (5.18) was a bearish driver stoking farmer selling; this week's move to 5.10 blunted that force. A further move toward 5.0 would reinforce farmer withholding and support the rebound, whereas a reversal back above 5.20 could revive selling pressure &mdash; making <strong>FX the key short-term swing factor</strong>.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>4. Twin lows in stocks and price persist:</strong> Stocks at a 6.5-month low with price at a 19-month low means the market is heavily pre-pricing new-crop inflows while physical remains tight. A harvest or logistics disruption could trigger a <strong>spot squeeze</strong> and a sharp backwardation widening &mdash; which buffered the downside during this week's rebound.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>5. Roasters / importers &mdash; reactivating scaled hedges:</strong> The rebound from the 243c washout to 252c offers a chance to <strong>execute part of the upper-mid band of a 230-260c scaled-buy program</strong>. Given the structural surplus, chasing the full size is risky; pairing with call-option coverage for El Nino / rain optionality is the sensible approach.</p>
+            </div>
+        </section>
+
+        <section id="outlook">
+            <h2>Market Outlook & Risks</h2>
+
+            <h3>Short-Term Structure (1-3 months)</h3>
+
+            <p>The trend is still down, but this week's rebound <strong>re-confirmed a near-term floor around 243c</strong>. First resistance is 255-256c, then 262-265c (prior-week highs). Support sits at 247c, then 243c &rarr; 240c on a break. While rain momentum and a firmer real hold, a retest of 255c is possible, but until 263c is reclaimed all rebounds are best read as <strong>countertrend bounces within a bear market</strong>.</p>
+
+            <div class="highlight-box">
+                <p><strong>Technical view:</strong> On the July daily, a rebound off Tuesday's 19-month low (243.90c), with Friday a mild pullback from the one-week high. Holding 247c support and clearing 255c is the near-term rudder. Backwardation persists &mdash; spot tightness coexisting with futures weakness. High dependence on rain / El Nino / FX headlines keeps volatility elevated.</p>
+            </div>
+
+            <h3>Medium-Term Outlook (3-12 months)</h3>
+
+            <p>Brazil's harvest moves into its July-September peak (currently 35% done), bringing new-crop inflows in earnest. If the large surplus jointly projected by USDA, Rabobank, and StoneX (9.5-10M bags) materializes, further downside pressure dominates into Q4 2026. However, three buffers temper the pace of decline: (1) historically low stocks, (2) the Sept-Oct flowering risk from the JMA-confirmed El Nino, and (3) farmer withholding amplified by the firmer real. The base case is therefore <strong>"stair-step lower with intermittent weather- and FX-driven spikes"</strong> rather than a crash.</p>
+
+            <h3>Key Risk Factors</h3>
+
+            <ul>
+                <li><strong>Brazil harvest / rain (biggest short-term swing):</strong> Sustained rain &rarr; harvest delay &rarr; further rebound. Return to dry weather and resumed harvest (35% &rarr; faster) &rarr; rebound fades and prices fall again. Two-way, high volatility.</li>
+                <li><strong>El Nino / frost (Sept-Oct; late-June-July; upside):</strong> JMA-confirmed, NOAA super-El Nino 67%. A flowering-rain delay or a frost event would make the 27/28 crop an asymmetric upside risk.</li>
+                <li><strong>Brazilian real (two-way swing factor):</strong> Strengthening from 5.10 toward 5.0 reinforces farmer withholding and supports the rebound; a reversal above 5.20 accelerates selling and offsets it.</li>
+                <li><strong>Speculative positioning (two-way):</strong> Managed money net long 19,624 contracts (6/2). Next week's COT will show this week's rebound impact &mdash; accelerating short-covering is upside, re-liquidation is downside.</li>
+                <li><strong>Spot squeeze (upside):</strong> With stocks at a 6.5-month low plus farmer withholding, a harvest or logistics disruption could sharply widen the backwardation.</li>
+                <li><strong>Structural supply (downside):</strong> Record Brazil crop, 9.5-10M-bag surplus, rising Vietnam exports &mdash; the root driver of medium-term bearishness is unchanged.</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>Overall Analysis</h2>
+
+            <p>This was a week of <strong>a weather- and FX-driven technical rebound</strong> within a structurally bearish cycle. KCN26 rebounded from Tuesday's 19-month low (243.90c) to ~253.45c on Thursday and, despite Friday's mild pullback, settled near 252.40c for a <strong>weekly gain of +2.39%</strong>, recovering part of the prior week's -7.2% plunge. The drivers were Vaisala's Brazil rain forecast (harvest delay), the JMA's El Nino confirmation, and a shift to a firmer real (5.18&rarr;5.10). ICE stocks at a 6.5-month low supported the downside in the background.</p>
+
+            <p>The key is the <strong>separation of structure (bearish) from short-term momentum (rebound)</strong>. The medium-term picture &mdash; record Brazil crop and a 9.5-10M-bag surplus &mdash; is unchanged, yet with bearish conviction thin near the 19-month low, +2.4% moved on weather and FX headlines. Notably, the real &mdash; last week's bearish driver &mdash; turned supportive, shifting the weight of the short-term swing factor toward FX, while El Nino's move from "probability" to "fact" builds upside optionality into the flowering season.</p>
+
+            <div class="alert-box">
+                <p><strong>Trading view in brief:</strong> A 243-263c range with elevated volatility. 247c support and 255c resistance are the first watershed; the bearish structure holds until 263c is reclaimed. <strong>Key monitors:</strong> (1) sustained Brazil rain and harvest progress (Vaisala / Safras / Somar), (2) ICE stock trajectory, (3) next week's COT (this week's rebound impact), (4) USD/BRL 5.0-5.20, (5) El Nino / frost / Sept-Oct flowering updates.</p>
+            </div>
+
+            <p>For roasters and importers, executing the upper-mid of a 230-260c scaled-buy band after the 243c washout, paired with call-option-based asymmetric hedges made cheaper by the El Nino confirmation, is the sensible course. <strong>The supply outlook is heavy, but stocks are light, the weather risk has become real, and the real has turned stronger</strong> &mdash; until this asymmetric mix resolves, one-way bets warrant caution.</p>
+        </section>
+    </div>
+
+    <!-- Footer: full-width brown background, outside .container -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        In-depth analysis and insight on global coffee markets.
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">james.baek@aligncommodities.com</a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">Barchart, Trading Economics</span>
+                    <span class="footer-link" style="cursor: default;">USDA FAS, Rabobank, Vaisala, Safras</span>
+                    <span class="footer-link" style="cursor: default;">JMA, NOAA, Somar, Conab, Cecafe</span>
+                    <span class="footer-link" style="cursor: default;">CFTC, ICE, StoneX, Marex, Volcafe</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice or a solicitation.
+                    All investment decisions should be made on an independent basis.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
