@@ -47,6 +47,7 @@
             background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
             overflow-x: hidden;
             word-break: keep-all;
+            word-wrap: break-word;
         }
         
         /* Hero Section */
@@ -140,21 +141,26 @@
         }
         
         .hero h1 {
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-size: clamp(1.8rem, 5vw, 3.8rem);
             font-weight: 800;
             color: white;
             margin-bottom: 1.5rem;
             line-height: 1.3;
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
         
         .hero-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
             color: rgba(255, 255, 255, 0.9);
             margin: 0 auto 2rem auto;
             max-width: 650px;
             font-weight: 300;
             line-height: 1.6;
+            padding: 0 1rem;
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
         
         .hero-stats {
@@ -177,7 +183,7 @@
         }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: 700;
             color: var(--accent);
             margin-bottom: 0.5rem;
@@ -197,16 +203,18 @@
             border-bottom: 1px solid var(--border);
             z-index: 90;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow-x: auto;
         }
         
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1rem 2rem;
+            padding: 1rem;
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
             overflow-x: auto;
-            scrollbar-width: none;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
         }
         
         .nav-container::-webkit-scrollbar {
@@ -214,7 +222,7 @@
         }
         
         .nav-item {
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 100px;
             background: var(--bg-light);
             color: var(--text-secondary);
@@ -223,6 +231,8 @@
             white-space: nowrap;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            font-size: 0.875rem;
+            flex-shrink: 0;
         }
         
         .nav-item:hover {
@@ -240,7 +250,7 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 4rem 1rem;
         }
         
         .section {
@@ -264,26 +274,32 @@
         }
         
         .section-title {
-            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             font-weight: 800;
             color: var(--primary);
             margin-bottom: 1rem;
             line-height: 1.3;
+            padding: 0 1rem;
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
         
         .section-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
             color: var(--text-secondary);
             font-weight: 300;
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
+            padding: 0 1rem;
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
         
         /* Content Cards */
         .content-card {
             background: white;
-            padding: 3rem;
+            padding: 2rem 1.5rem;
             border-radius: 24px;
             box-shadow: var(--shadow);
             margin-bottom: 2rem;
@@ -303,12 +319,15 @@
         }
         
         .content-card h3 {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             color: var(--primary);
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
         
         .content-card p {
@@ -407,10 +426,15 @@
             width: 100%;
             background: white;
             border-radius: 16px;
-            overflow: hidden;
+            overflow-x: auto;
             box-shadow: var(--shadow);
             margin: 2rem 0;
             border: 1px solid var(--border);
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .data-table thead {
@@ -419,18 +443,39 @@
         }
         
         .data-table th {
-            padding: 1.5rem 1rem;
+            padding: 1rem 0.75rem;
             text-align: left;
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         
         .data-table td {
-            padding: 1.5rem 1rem;
+            padding: 1rem 0.75rem;
             border-bottom: 1px solid var(--border);
             color: var(--text-primary);
+            font-size: 0.875rem;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        
+        @media (max-width: 768px) {
+            .data-table {
+                font-size: 0.75rem;
+            }
+            
+            .data-table th {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            
+            .data-table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.75rem;
+                line-height: 1.4;
+            }
         }
         
         .data-table tbody tr:hover {
@@ -695,26 +740,168 @@
         
         /* Responsive */
         @media (max-width: 768px) {
+            .home-button {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .hero-content {
+                padding: 1rem;
+            }
+            
             .hero-stats {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+                margin-top: 2rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
             }
             
             .analysis-grid {
                 grid-template-columns: 1fr;
             }
             
+            .data-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            
+            .data-card {
+                padding: 1.5rem 1rem;
+            }
+            
+            .data-value {
+                font-size: 1.8rem;
+            }
+            
             .content-card {
-                padding: 2rem 1.5rem;
+                padding: 1.5rem 1rem;
+            }
+            
+            .insight-highlight {
+                padding: 1.5rem 1rem;
+                margin: 1.5rem -0.5rem;
+            }
+            
+            .insight-title {
+                font-size: 1.1rem;
+            }
+            
+            .insight-text {
+                font-size: 1rem;
+            }
+            
+            .price-chart {
+                height: 250px;
+                padding: 1rem;
+            }
+            
+            .price-value {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.3rem;
+            }
+            
+            .price-label {
+                font-size: 0.65rem;
+                bottom: -25px;
+            }
+            
+            .analysis-card {
+                padding: 1.5rem;
+            }
+            
+            .analysis-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .analysis-title {
+                font-size: 1.1rem;
+            }
+            
+            .cta-section {
+                padding: 3rem 1.5rem;
+                margin: 2rem 0;
+            }
+            
+            .cta-title {
+                font-size: 1.8rem;
+            }
+            
+            .cta-text {
+                font-size: 1.1rem;
             }
             
             .data-table {
-                font-size: 0.875rem;
+                font-size: 0.75rem;
             }
             
-            .data-table th,
+            .data-table th {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            
             .data-table td {
-                padding: 1rem 0.75rem;
+                padding: 0.75rem 0.5rem;
+                font-size: 0.75rem;
+                line-height: 1.4;
+            }
+            
+            /* 긴 텍스트 처리 */
+            .data-table td strong {
+                display: block;
+                margin-bottom: 0.25rem;
+            }
+            
+            /* 차트 제목 모바일 처리 */
+            .chart-title {
+                font-size: 1.2rem;
+                line-height: 1.4;
+            }
+            
+            .chart-subtitle {
+                font-size: 0.8rem;
+            }
+            
+            /* 섹션 패딩 조정 */
+            .section {
+                margin-bottom: 2rem;
+            }
+            
+            .section-header {
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-item {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .section-subtitle {
+                font-size: 0.9rem;
             }
         }
         
@@ -950,6 +1137,7 @@
                     이 계약의 구조적 특성이 최근 가격 급등에 중요한 역할을 했습니다.
                 </p>
                 
+                <div class="table-wrapper">
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -991,6 +1179,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 
                 <div class="insight-highlight" style="margin-top: 2rem;">
                     <h4 class="insight-title">월물별 거래 활성도와 대표성</h4>
@@ -1012,6 +1201,7 @@
                     프리미엄(differentials)을 상향 조정했습니다. 이는 단순한 계약 규칙 변경을 넘어 시장에 강력한 구조적 신호를 전달했습니다.
                 </p>
                 
+                <div class="table-wrapper">
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -1054,6 +1244,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 
                 <div class="insight-highlight">
                     <h4 class="insight-title">프리미엄 조정의 시장 시그널</h4>
@@ -1074,49 +1265,49 @@
                 
                 <div class="chart-container">
                     <div class="chart-header">
-                        <h4 class="chart-title">커피 선물 월물별 가격 구조 (2025년 8월 22일 기준)</h4>
+                        <h4 class="chart-title">커피 선물 월물별 가격 구조<br/><span style="font-size: 0.8em; font-weight: 400;">(2025년 8월 22일 기준)</span></h4>
                         <p class="chart-subtitle">현재 백워데이션 상태 - 근월물이 원월물보다 비싼 구조</p>
                     </div>
-                    <div style="height: 300px; position: relative; background: linear-gradient(to bottom, rgba(212, 165, 116, 0.05) 0%, transparent 100%); border-radius: 15px; padding: 2rem;">
-                        <div style="position: relative; height: 100%; display: flex; align-items: end; justify-content: space-around; padding: 0 1rem;">
+                    <div style="height: 300px; position: relative; background: linear-gradient(to bottom, rgba(212, 165, 116, 0.05) 0%, transparent 100%); border-radius: 15px; padding: 1.5rem; overflow-x: auto;">
+                        <div style="position: relative; height: 100%; display: flex; align-items: end; justify-content: space-around; padding: 0 0.5rem; min-width: 320px;">
                             <!-- Sep '25 -->
-                            <div style="position: relative; text-align: center;">
-                                <div style="height: 190px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">390.65¢</div>
+                            <div style="position: relative; text-align: center; flex: 1;">
+                                <div style="height: 190px; width: 40px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.75rem; white-space: nowrap;">390.65¢</div>
                                 </div>
-                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Sep '25</div>
+                                <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-primary); font-weight: 600;">Sep '25</div>
                             </div>
                             
                             <!-- Dec '25 -->
-                            <div style="position: relative; text-align: center;">
-                                <div style="height: 155px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">378.30¢</div>
+                            <div style="position: relative; text-align: center; flex: 1;">
+                                <div style="height: 155px; width: 40px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.75rem; white-space: nowrap;">378.30¢</div>
                                 </div>
-                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Dec '25</div>
+                                <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-primary); font-weight: 600;">Dec '25</div>
                             </div>
                             
                             <!-- Mar '26 -->
-                            <div style="position: relative; text-align: center;">
-                                <div style="height: 135px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">368.50¢</div>
+                            <div style="position: relative; text-align: center; flex: 1;">
+                                <div style="height: 135px; width: 40px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.75rem; white-space: nowrap;">368.50¢</div>
                                 </div>
-                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Mar '26</div>
+                                <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-primary); font-weight: 600;">Mar '26</div>
                             </div>
                             
                             <!-- May '26 -->
-                            <div style="position: relative; text-align: center;">
-                                <div style="height: 115px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">359.40¢</div>
+                            <div style="position: relative; text-align: center; flex: 1;">
+                                <div style="height: 115px; width: 40px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.75rem; white-space: nowrap;">359.40¢</div>
                                 </div>
-                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">May '26</div>
+                                <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-primary); font-weight: 600;">May '26</div>
                             </div>
                             
                             <!-- Jul '26 -->
-                            <div style="position: relative; text-align: center;">
-                                <div style="height: 95px; width: 50px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                                    <div style="position: absolute; top: -35px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.9rem;">348.60¢</div>
+                            <div style="position: relative; text-align: center; flex: 1;">
+                                <div style="height: 95px; width: 40px; background: linear-gradient(to top, #d4a574, #b8860b); border-radius: 6px 6px 0 0; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: var(--primary); font-weight: 700; font-size: 0.75rem; white-space: nowrap;">348.60¢</div>
                                 </div>
-                                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-primary); font-weight: 600;">Jul '26</div>
+                                <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-primary); font-weight: 600;">Jul '26</div>
                             </div>
                         </div>
                         
@@ -1267,6 +1458,7 @@
                     </p>
                 </div>
                 
+                <div class="table-wrapper">
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -1278,15 +1470,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>상업적(Commercial)</strong></td>
-                            <td>Net-long (순매수)</td>
-                            <td>Net-long (순매수)</td>
+                            <td><strong>상업적<br/>(Commercial)</strong></td>
+                            <td>Net-long<br/>(순매수)</td>
+                            <td>Net-long<br/>(순매수)</td>
                             <td>헤징 목적의 일관성 유지</td>
                         </tr>
                         <tr>
-                            <td><strong>비상업적(Non-commercial)</strong></td>
-                            <td class="negative">Net-short (순매도)</td>
-                            <td class="positive">Net-long (순매수)</td>
+                            <td><strong>비상업적<br/>(Non-commercial)</strong></td>
+                            <td class="negative">Net-short<br/>(순매도)</td>
+                            <td class="positive">Net-long<br/>(순매수)</td>
                             <td>숏 커버링 및 신규 롱 진입</td>
                         </tr>
                         <tr>
@@ -1297,6 +1489,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </div>
         </section>
         
