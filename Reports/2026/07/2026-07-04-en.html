@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | July 4, 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2026-07-04",
+    "type": "weekly",
+    "summary": "September arabica (KCU26) ~300.60¢ Thu 7/2, +10.2% on the week as torrential Minas rain halted Brazil's harvest and a JMA-confirmed El Nino stoked flowering fears. ICE stocks at a 2.25-yr low.",
+    "tags": [
+        "KCU26-300.60",
+        "weekly-plus-10.2pct",
+        "tuesday-plus-6.71pct-since-2022",
+        "minas-rain-1956pct-of-avg",
+        "harvest-halted",
+        "jma-el-nino-confirmed",
+        "noaa-67pct",
+        "ice-arabica-375K-2.25yr-low",
+        "rabobank-9.5M-arabica-surplus",
+        "thursday-minus-2.81pct-profit-taking",
+        "usdbrl-5.22"
+    ],
+    "author": "Align Commodities",
+    "sources": [
+        "Barchart",
+        "Investing.com",
+        "Trading Economics",
+        "Perfect Daily Grind",
+        "Reuters",
+        "Yahoo Finance",
+        "StoneX",
+        "Rabobank",
+        "USDA FAS",
+        "Conab",
+        "Cecafe",
+        "Somar Meteorologia",
+        "Vietnam GSO",
+        "ICE",
+        "CFTC",
+        "JMA",
+        "NOAA"
+    ],
+    "price_current": "300.60",
+    "price_change": "Thu 7/2 KCU26 -8.70c (-2.81%) from a fresh 4.75-month high; +27.95c (+10.2%) on the week vs prior 272.65c; ICE closed Fri 7/3 (US Independence Day observed)"
+}
+REPORT_META-->
+
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover { opacity: 1; }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item { font-weight: 500; }
+        .meta-divider { color: var(--copper); }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        /* Price Box */
+        .price-box {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .price-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .price-change { font-size: 1.3rem; font-weight: 600; margin-top: 8px; }
+        .price-change.positive { color: var(--positive); }
+        .price-change.negative { color: var(--negative); }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26, 15, 10, 0.1);
+        }
+
+        .price-item { display: flex; flex-direction: column; gap: 4px; }
+
+        .price-item-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .price-item-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.65;
+            margin-top: 20px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Sections */
+        section { margin: 56px 0; }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--espresso);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--roast);
+            letter-spacing: -0.01em;
+        }
+
+        p { margin-bottom: 20px; color: var(--ink); }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--steam);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p:last-child { margin-bottom: 0; }
+
+        /* Alert Box (red border for risk/implication) */
+        .alert-box {
+            background: #faf0f0;
+            border-left: 4px solid var(--negative);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .alert-box p:last-child { margin-bottom: 0; }
+
+        /* Lists */
+        ul { margin: 24px 0; padding-left: 24px; }
+        li { margin-bottom: 12px; color: var(--ink); }
+        li strong { color: var(--roast); font-weight: 600; }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .data-card-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .data-card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .data-card-change.positive { color: var(--positive); }
+        .data-card-change.negative { color: var(--negative); }
+
+        /* Footer — full-width brown background, outside .container */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 48px 0 32px;
+            margin-top: 80px;
+            width: 100%;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .footer-desc { font-size: 0.9rem; line-height: 1.6; opacity: 0.95; color: var(--crema); }
+
+        .footer-title { font-weight: 600; margin-bottom: 16px; color: var(--accent); }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.95;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover { opacity: 1; }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.15);
+            text-align: center;
+        }
+
+        .footer-copyright { font-size: 0.9rem; opacity: 0.85; margin-bottom: 12px; color: var(--crema); }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .price-main { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .top-nav { display: none; }
+            .container { max-width: 100%; padding: 40px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#fundamentals" class="nav-link">Fundamentals</a>
+            <a href="#implications" class="nav-link">Implications</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">Weekly Report</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">July 4, 2026</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>Coffee Futures Market Weekly Update</h1>
+            <p class="subtitle">Weekly Market Intelligence</p>
+            <p class="headline">Torrential rain in Minas Gerais — Brazil's top growing state — at 1,956% of the historical average halted the harvest and raised quality concerns, while the Japan Meteorological Agency's confirmation of El Niño ignited 2026/27 flowering risk. September arabica (KCU26) surged to ~309¢ midweek (a 4.75-month high), including a +6.71% single-day jump on Tuesday (the biggest since 2022), before a -2.81% pre-holiday pullback to ~300.60¢ on Thursday (7/2) — still <strong>up +10.2% on the week</strong>. ICE was closed Friday (7/3) for the observed U.S. Independence Day holiday.</p>
+
+            <!-- Market Overview Cards -->
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">KCU26 (September)</div>
+                    <div class="card-value">~300.60¢</div>
+                    <div class="card-change positive">Week +27.95 (+10.2%)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Midweek high (7/1)</div>
+                    <div class="card-value">~309¢</div>
+                    <div class="card-change positive">4.75-month high</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">El Niño</div>
+                    <div class="card-value">JMA confirmed</div>
+                    <div class="card-change positive">flowering risk in focus</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">ICE Arabica Stocks</div>
+                    <div class="card-value">~375K bags</div>
+                    <div class="card-change negative">2.25-yr low</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Price Box -->
+        <div class="price-box" id="market">
+            <div class="price-header">
+                <span class="price-label">ICE Arabica September (KCU26)</span>
+                <span class="price-label">Close Thu, July 2, 2026 · 7/3 closed</span>
+            </div>
+            <div class="price-main">~300.60¢/lb</div>
+            <div class="price-change positive">▲ ~+27.95¢ (+10.2%) on the week | Thursday -8.70¢ (-2.81%) · ICE closed Friday (7/3)</div>
+
+            <div class="price-table">
+                <div class="price-item">
+                    <span class="price-item-label">Wed 7/1 close</span>
+                    <span class="price-item-value">~309.30¢</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Thu 7/2 close</span>
+                    <span class="price-item-value">~300.60¢</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Midweek high (7/1)</span>
+                    <span class="price-item-value">~309¢ (4.75-mo)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Tuesday daily gain</span>
+                    <span class="price-item-value">+6.71% (biggest since 2022)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">ICE Arabica Stocks</span>
+                    <span class="price-item-value">~375,079 bags</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">USD/BRL</span>
+                    <span class="price-item-value">~5.22</span>
+                </div>
+            </div>
+
+            <p class="price-note">※ This is the regular Saturday (KST) edition; the headline and overview anchor on the <strong>Thursday July 2 NY ICE close</strong>. <strong>ICE's coffee market was closed on Friday (7/3) for the observed U.S. Independence Day holiday</strong> (July 4 falls on Saturday), so Thursday was the week's final session. The front month remains September (KCU26), and all weekly comparisons are on the September basis. September rallied for three straight sessions (Mon–Wed) to ~309.30¢ Wednesday (+36.65¢ from the prior 272.65¢ close), a 4.75-month high, before a -8.70¢ (-2.81%) pullback Thursday on pre-holiday profit-taking and long liquidation. The weekly close change is +27.95¢ (+10.2%) versus the prior Friday's 272.65¢. The stock figure (375,079 bags, Wed 7/1) and Tuesday's +6.71% (biggest since 2022) are cross-checked across Barchart, Perfect Daily Grind and Yahoo Finance. The June 30 CFTC COT was delayed by the 7/3 holiday (expected 7/6), so this report uses the June 23 reading.</p>
+        </div>
+
+        <section id="weekly-summary">
+            <h2>Weekly Market Summary</h2>
+
+            <p>Coffee futures <strong>staged a V-shaped surge, reversing the prior week's weakness</strong>. September arabica (KCU26) opened the week +4.60¢ (+1.68%) Monday, jumped <strong>+6.71% Tuesday alone (the biggest daily gain since 2022)</strong>, and rose another +13.45¢ (+4.54%) Wednesday to reach <strong>~309.30¢, a 4.75-month high</strong>. On Thursday (7/2) it fell -8.70¢ (-2.81%) to ~300.60¢ on pre-holiday profit-taking and long liquidation — but the week still closed <strong>up +27.95¢ (+10.2%)</strong> versus the prior Friday's 272.65¢. Friday (7/3) was a holiday closure, so the week ran to just four sessions.</p>
+
+            <p>The core trigger was a <strong>rain-driven halt to Brazil's harvest</strong>. Per Somar Meteorologia, Minas Gerais — the top arabica state — received 31.3 mm of rain in the week through June 28, or <strong>1,956% of the historical average</strong>, an extraordinary total. Heavy rain in the heart of the harvest window <strong>stopped fieldwork and raised drying/sorting quality concerns</strong>, immediately spurring buying.</p>
+
+            <p>The <strong>Japan Meteorological Agency's confirmation of El Niño</strong> then poured fuel on the upside. When the JMA confirmed on Wednesday that an El Niño pattern had formed across the equatorial Pacific, short covering emerged, and the U.S. NOAA put the odds of persistence at <strong>67%</strong>. El Niño can <strong>delay Brazil's September–October flowering rains, threatening the 2026/27 crop</strong>, extending the market's focus from the immediate harvest disruption to next season's risk. ICE arabica certified stocks falling further to a <strong>2.25-year low of 375,079 bags</strong> reaffirmed spot tightness and underpinned the advance.</p>
+
+            <div class="highlight-box">
+                <p><strong>Key dynamic of the week:</strong> the three upside pillars that had collapsed last week (rain → harvest delay, weather risk, low stocks) were <strong>all rebuilt in a single week</strong> — rain halted the harvest again, the JMA's El Niño confirmation revived flowering risk, and stocks set another 2.25-year low. Yet Thursday's -2.81% pre-holiday pullback was a reminder that <strong>this surge rests on weather and sentiment, while the structural surplus (StoneX 10M / Rabobank arabica 9.5M) still looms overhead</strong>. The near term is a tight standoff between weather-driven upside and structural oversupply.</p>
+            </div>
+
+            <h3>News Briefing</h3>
+
+            <ul>
+                <li><strong>(6/30, PDG/Yahoo/Barchart)</strong> Arabica <strong>+6.71% — the biggest daily gain since 2022</strong>. Torrential Minas Gerais rain (1,956% of average, Somar) halted the harvest, and ICE arabica stocks fell to a 2.25-year low.</li>
+                <li><strong>(7/1, Barchart)</strong> September arabica <strong>+13.45 (+4.54%)</strong>, robusta +113 (+3.09%) — short covering emerged after the <strong>JMA confirmed El Niño</strong>. A second straight surge lifted prices to a 4.75-month high.</li>
+                <li><strong>(7/2, Barchart)</strong> September arabica <strong>-8.70 (-2.81%)</strong> — retreating from the 4.75-month high on pre-holiday <strong>profit-taking and long liquidation</strong>. Robusta edged up +12 (+0.32%). <strong>ICE closed 7/3 for the observed Independence Day holiday.</strong></li>
+                <li><strong>(this week, Rabobank)</strong> Raised its <strong>2026/27 global arabica surplus estimate to 9.5M bags</strong> (from 7.0M) — reaffirming the structural-oversupply narrative.</li>
+                <li><strong>(this week, NOAA)</strong> Put the odds of El Niño persistence at <strong>67%</strong>. A delay to Sept–Oct flowering rain could hurt Brazil's 2026/27 crop. Brazilian farmers are holding back sales on hopes of higher prices.</li>
+                <li><strong>(this week, PDG)</strong> New World Coffee Champions crowned in Brussels. Ethiopia unveiled a <strong>national coffee initiative</strong> to lift yields from 9 to 21 quintals/ha and double exports (a US$6bn goal) over five years.</li>
+            </ul>
+        </section>
+
+        <section id="fundamentals">
+            <h2>Fundamental Analysis</h2>
+
+            <h3>1. Weather & Harvest — extraordinary rain halts the harvest</h3>
+
+            <p>The biggest driver of the week's surge was a <strong>rain-driven halt to Brazil's harvest</strong>. Somar Meteorologia reported that Minas Gerais received <strong>31.3 mm (1,956% of average)</strong> in the week through June 28. May–August is normally a dry harvest window, but the exceptional downpour <strong>stopped fieldwork and raised concerns over cherry drying and sorting quality</strong>. It was a precise reversal of last week's "dry return → harvest resumes" narrative — a reminder of how sensitive near-term prices are to Brazil weather headlines.</p>
+
+            <div class="alert-box">
+                <p><strong>The dual nature of harvest disruption:</strong> heavy rain brings not only immediate logistics/fieldwork disruption (upside) but also <strong>defect and mold risk from higher humidity that can degrade quality grades (upside)</strong>. But if the rain clears and dryness returns, resumption hopes could swing prices back down quickly — as they did last week — leaving weather the <strong>key wildcard for two-way volatility</strong>.</p>
+            </div>
+
+            <h3>2. El Niño — flowering risk officially ignited</h3>
+
+            <p>If the harvest disruption was the near-term trigger, the <strong>JMA's confirmation of El Niño</strong> was the structural catalyst that extended the market's gaze to next season. The JMA confirmed El Niño formation across the equatorial Pacific on Wednesday, and NOAA put persistence odds at <strong>67%</strong>. Perfect Daily Grind noted some traders are watching what they call a <strong>"Godzilla" El Niño</strong>. The core concern is that El Niño could <strong>delay Brazil's Sept–Oct flowering rains</strong> and impair the 2026/27 (and some 27/28) crop. Combined with Brazilian farmers holding back sales on higher-price hopes, El Niño has emerged as a lingering upside risk that counters the record-surplus consensus.</p>
+
+            <h3>3. ICE Certified Stocks — fresh lows keep spot supply tight</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">ICE Arabica (7/1)</div>
+                    <div class="data-card-value">375,079 bags</div>
+                    <div class="data-card-change negative">2.25-yr low</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Tue 6/30</div>
+                    <div class="data-card-value">377,465 bags</div>
+                    <div class="data-card-change negative">continued decline</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE Robusta (Mon)</div>
+                    <div class="data-card-value">4,053 lots</div>
+                    <div class="data-card-change positive">2.75-month high</div>
+                </div>
+            </div>
+
+            <p>ICE arabica certified stocks set another <strong>2.25-year low of 375,079 bags</strong> Wednesday, down from 377,465 Tuesday and further below the prior week (~385K). Despite the record-crop outlook, it reaffirms that old-crop spot supply stays tight until new-crop coffee is certified — adding weight to this week's rain/El Niño upside. Robusta stocks, by contrast, rebounded from a 2-year low of 3,631 lots on May 15 to 4,053 lots (a 2.75-month high) Monday, easing robusta's spot tightness somewhat.</p>
+
+            <h3>4. Production & Balance — the structural surplus still looms</h3>
+
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Rabobank Arabica Surplus</div>
+                    <div class="data-card-value">9.5M bags</div>
+                    <div class="data-card-change positive">up from 7.0M</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">StoneX Global Surplus</div>
+                    <div class="data-card-value">~10M bags</div>
+                    <div class="data-card-change positive">6-year high</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">StoneX Global Prod. 26/27</div>
+                    <div class="data-card-value">182.5M bags</div>
+                    <div class="data-card-change positive">record</div>
+                </div>
+            </div>
+
+            <p>Even amid the weather-driven surge, the <strong>structural-oversupply outlook strengthened</strong>. Rabobank raised its 2026/27 global arabica surplus estimate to <strong>9.5M bags from 7.0M</strong>. That aligns with StoneX's prior-week projection of record 182.5M-bag global production and a ~10M-bag surplus (a 6-year high), and it is likely to re-price into the market once new-crop volume begins converting into certified stocks. In other words, <strong>this week's upside was a weather/sentiment rebound, while the medium-term fundamental weight still sits to the downside</strong>. The timing asymmetry between old-crop tightness (low stocks) and new-crop abundance (widening surplus) remains the basis for backwardation and intermittent spikes.</p>
+
+            <h3>5. Exports — Brazil & Vietnam supply pressure persists</h3>
+
+            <p>Brazil's export association Cecafé reported on June 11 that <strong>May green coffee exports rose +4.2% y/y to 2.73M bags</strong>. Exports from Vietnam, the world's largest robusta producer, maintained a firm pace, a structural drag on robusta. That robusta rose more modestly than arabica this week (Wed +3.09%, Thu +0.32%) while robusta stocks rebounded to a 2.75-month high is not unrelated to Vietnamese supply pressure. New-crop inflows and export pace are medium-term downside factors for both arabica and robusta.</p>
+
+            <h3>6. Macro & Positioning — real modestly weaker, COT delayed</h3>
+
+            <p><strong>USD/BRL:</strong> The real closed at <strong>~5.22</strong> on July 2, trading in a 5.16 (6/30 low) – 5.21 (7/2) range and ending <strong>modestly weaker</strong> versus the prior week's 5.17. A weaker real tends to encourage Brazilian export sales and is typically bearish for arabica, but this week the rain/El Niño upside overwhelmed the currency. FX was a cushion to the rally, not a primary driver.</p>
+
+            <p><strong>CFTC speculative positioning:</strong> The latest published reading (as of June 23) showed managed-money net longs in Coffee C at <strong>20,918 contracts</strong> (44,184 long / 23,266 short; open interest 186,617), <strong>up</strong> from the prior cross-checked 11,863 (as of 6/9). The June 30 COT — which would capture this week's surge — was <strong>delayed by the 7/3 holiday (expected 7/6)</strong> and is not reflected here; it will be confirmed next week <em>(no premature estimation)</em>.</p>
+        </section>
+
+        <section id="implications">
+            <h2>Implications</h2>
+
+            <div class="alert-box">
+                <p><strong>1. Weather headlines dominate — two-way, high volatility:</strong> last week's "dry → harvest resumes (downside)" flipped to this week's "downpour → harvest halts (upside)" — <strong>a full reversal in seven days</strong>. Near-term prices are governed by Brazil weather and El Niño headlines more than fundamentals, a <strong>high-volatility regime</strong>. Managing two-way volatility via options is more sensible than a directional bet; if the rain clears, a fast retracement — as last week — is a real risk.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>2. El Niño confirmed — a lingering upside made real:</strong> with JMA confirmation and NOAA at 67%, El Niño has moved <strong>from assumption to fact</strong>. If Sept–Oct flowering rains are delayed, 27/28 crop concerns could resurface and unsettle the record-surplus consensus. In a market fixated on a big crop, <strong>cheap call-option-based asymmetric upside hedges</strong> arguably offer better value now.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>3. The structural surplus is intact — rallies are a hedging opportunity:</strong> Rabobank's arabica surplus of 9.5M (raised) and StoneX's 10M show the <strong>medium-term downside weight has, if anything, grown heavier</strong>. Because this week's +10.2% surge is a weather-driven bounce, roasters and traders can use <strong>elevated levels to rebalance sales/hedges</strong>. Avoid chasing above 300¢.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>4. Stocks at a 2.25-year low — a floor against sharp drops:</strong> stocks down to 375K (still around half of a year ago) suggest that until new-crop coffee is certified, <strong>spot tightness supports the floor</strong>. This both amplified the week's surge and argues for a <strong>"stair-step" retracement</strong> rather than a crash on any correction.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>5. Roasters & importers — hedging discipline in a spike:</strong> a +36¢ move over three sessions followed by Thursday's pullback signals <strong>rising volatility</strong>. Physical buyers needing coverage should <strong>cap the upside with calls/call spreads</strong> during spikes and manage average cost via scaled buying on pullbacks, given the structural surplus.</p>
+            </div>
+        </section>
+
+        <section id="outlook">
+            <h2>Market Outlook & Risks</h2>
+
+            <h3>Near-term structure (1–3 months)</h3>
+
+            <p>The trend flipped to a <strong>weather-driven near-term rally</strong>, and Wednesday's ~309¢ high <strong>reset near-term resistance to 309¢</strong>. First resistance is 309¢ (this week's high, a 4.75-month high); support runs 300¢ → 290¢ → 277¢ (Monday's close). With the downpour, harvest halt, El Niño confirmation and low stocks lifting the ceiling, and the structural surplus (Rabobank/StoneX) and a weaker real capping it, a <strong>high-volatility regime</strong> is likely. Whether 300¢ support holds is the first test; if the weather calms, a fast retracement — as last week — must be kept open.</p>
+
+            <div class="highlight-box">
+                <p><strong>Technical view:</strong> a +36¢ move over three sessions then Thursday's -2.81% pullback signals near-term overheating and profit-taking. 309¢ resistance vs 300¢ support is the first pivot; a break of 300¢ opens 290¢/277¢. Both ceiling and floor are sensitive to weather/El Niño headlines; expect elevated volatility. Watch backwardation and roll structure.</p>
+            </div>
+
+            <h3>Medium-term outlook (3–12 months)</h3>
+
+            <p>As Brazil's harvest resumes and progresses, new-crop inflows will accelerate. If the record-scale surplus flagged by Rabobank (arabica 9.5M, raised) and StoneX (10M surplus, 182.5M production) materializes, downside pressure should dominate into Q4 2026. But ① 2.25-year-low stocks, ② <strong>the JMA-confirmed El Niño's Sept–Oct flowering risk</strong>, and ③ whether Brazil's heavy rain persists act as cushions, making <strong>"structural decline + intermittent weather/El Niño-driven spikes"</strong> the base case rather than a trending collapse. This week's surge is a textbook example of such a spike.</p>
+
+            <h3>Key risk factors</h3>
+
+            <ul>
+                <li><strong>Brazil weather (two-way, key):</strong> persistent rain supports via harvest disruption/quality loss; a dry return and resuming harvest is a fast downside — as last week. The highest-volatility variable, flipping within a single week.</li>
+                <li><strong>El Niño / flowering (Sept–Oct, upside):</strong> JMA confirmed, NOAA 67%. Delayed flowering rain would make 27/28 crop concerns an asymmetric upside risk — a lingering upside made real.</li>
+                <li><strong>Structural supply (downside):</strong> Rabobank arabica surplus 9.5M (raised), StoneX 10M, record Brazil crop, rising Vietnam exports — the core medium-term bearish driver persists.</li>
+                <li><strong>ICE stocks (floor cushion):</strong> 2.25-year low (375K). Spot tightness restrains sharp drops until new-crop conversion — and amplifies spikes.</li>
+                <li><strong>FX (downside):</strong> USD/BRL ~5.22, a modestly weaker real. Further weakness would encourage Brazilian sales, a downside factor.</li>
+                <li><strong>Speculative positioning (two-way):</strong> managed-money net long 20,918 (6/23), expanded. The 6/30 COT (capturing the surge) was delayed by the 7/3 holiday (expected 7/6) — confirm next week.</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>Overall Analysis</h2>
+
+            <p>This week was a <strong>weather-driven V-shaped surge that precisely reversed last week's weakness</strong>. September arabica (KCU26) rallied for three straight sessions (Mon–Wed), including Tuesday's +6.71% (the biggest daily gain since 2022), reaching ~309.30¢ Wednesday (a 4.75-month high). It closed Thursday (7/2) at ~300.60¢, down -8.70¢ (-2.81%) on pre-holiday profit-taking, but still <strong>up +27.95¢ (+10.2%) on the week</strong>. Friday (7/3) was a holiday closure for the observed U.S. Independence Day.</p>
+
+            <p>The drivers were <strong>the harvest halt from Minas Gerais's extraordinary rain (1,956% of average), the JMA's confirmation of El Niño, and ICE stocks at a 2.25-year low</strong> — the three upside pillars that had collapsed last week, all rebuilt within a week. Yet Thursday's pullback was a reminder that this surge rests on <strong>weather and sentiment, while the structural surplus of Rabobank's 9.5M (raised) and StoneX's 10M still looms overhead</strong>. In short, <strong>near-term upside (weather, El Niño, stocks) squarely confronts medium-term downside (a record-scale surplus)</strong>.</p>
+
+            <div class="alert-box">
+                <p><strong>Trading takeaway:</strong> a near-term 277–309¢ high-volatility range. 300¢ support and 309¢ resistance are the first pivot; a break of 300¢ opens 290¢/277¢. <strong>Key monitors:</strong> ① Brazil rain persistence / harvest resumption ② El Niño flowering signals (JMA/NOAA) ③ ICE stock trend ④ the 6/30 COT (released 7/6, capturing the surge) ⑤ USD/BRL 5.15–5.25 ⑥ surplus-estimate updates from Rabobank, StoneX and others.</p>
+            </div>
+
+            <p>For roasters and importers, capping the upside with calls during spikes while managing average cost via scaled buying on pullbacks — given the structural surplus — is the sensible combined strategy. <strong>The weather/El Niño upside has become real (downpour, JMA confirmation), yet the structural surplus has widened (Rabobank raised to 9.5M), and stocks sit at a 2.25-year low</strong> — until this upside-downside tension resolves, directional bets warrant caution. In particular, if the weather calms, a fast retracement — as last week — is possible.</p>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        In-depth analysis and insight on global coffee markets.
+                        Professional market intelligence for traders, roasters, and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">james.baek@aligncommodities.com</a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">Barchart, Trading Economics, Investing.com</span>
+                    <span class="footer-link" style="cursor: default;">USDA FAS, StoneX, Rabobank, Conab, Safras</span>
+                    <span class="footer-link" style="cursor: default;">Hedgepoint, Cecafe, ICE, CFTC</span>
+                    <span class="footer-link" style="cursor: default;">Reuters, NBC, CNN, JMA, NOAA, BOM</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice or a solicitation.
+                    All investment decisions should be made on an independent basis.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
