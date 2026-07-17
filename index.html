@@ -2729,7 +2729,7 @@
             if (calendarMonth) {
                 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                                    'July', 'August', 'September', 'October', 'November', 'December'];
-                calendarMonth.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()} ~ June 2026`;
+                calendarMonth.textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()} ~ September 2026`;
             }
             
             // 2025년 11월부터 2026년 6월까지의 모든 이벤트 생성
@@ -2824,6 +2824,24 @@
                 { date: new Date(2026, 5, 11), type: 'macro', title: '미국 CPI', desc: '5월 소비자물가지수', forecast: '2.3%', unit: 'YoY' },
                 { date: new Date(2026, 5, 17), type: 'macro', title: 'FOMC 금리 결정', desc: '6월 정책 금리 발표', important: true, forecast: '3.50-3.75%' },
                 { date: new Date(2026, 5, 26), type: 'macro', title: '미국 PCE 물가지수', desc: '5월 개인소비지출', forecast: '2.0%', unit: 'YoY' },
+
+                // 2026년 7월
+                { date: new Date(2026, 6, 2), type: 'macro', title: '미국 고용보고서', desc: '6월 비농업 고용 — 큰 폭 둔화(실업률 4.2%)', important: true, forecast: '+110K', actual: '+57K', unit: '', actualBetter: false },
+                { date: new Date(2026, 6, 14), type: 'macro', title: '미국 CPI', desc: '6월 소비자물가지수 — 예상 하회(인하 기대 강화)', important: true, forecast: '3.8%', actual: '3.5%', unit: 'YoY', actualBetter: true },
+                { date: new Date(2026, 6, 29), type: 'macro', title: 'FOMC 금리 결정', desc: '7월 정책 금리 발표 — CPI 둔화로 인하 기대', important: true, forecast: '3.50-3.75%' },
+                { date: new Date(2026, 6, 31), type: 'macro', title: '미국 PCE 물가지수', desc: '6월 개인소비지출', forecast: '2.0%', unit: 'YoY' },
+
+                // 2026년 8월
+                { date: new Date(2026, 7, 7), type: 'macro', title: '미국 고용보고서', desc: '7월 비농업 고용 발표', important: true, forecast: '+90K' },
+                { date: new Date(2026, 7, 12), type: 'macro', title: '미국 CPI', desc: '7월 소비자물가지수', important: true, forecast: '3.4%', unit: 'YoY' },
+                { date: new Date(2026, 7, 21), type: 'macro', title: '잭슨홀 심포지엄', desc: '연준 연례 경제정책 심포지엄 — 정책 신호 주목', important: true },
+                { date: new Date(2026, 7, 28), type: 'macro', title: '미국 PCE 물가지수', desc: '7월 개인소비지출', forecast: '1.9%', unit: 'YoY' },
+
+                // 2026년 9월
+                { date: new Date(2026, 8, 4), type: 'macro', title: '미국 고용보고서', desc: '8월 비농업 고용 발표', important: true, forecast: '+95K' },
+                { date: new Date(2026, 8, 11), type: 'macro', title: '미국 CPI', desc: '8월 소비자물가지수', important: true, forecast: '3.2%', unit: 'YoY' },
+                { date: new Date(2026, 8, 16), type: 'macro', title: 'FOMC 금리 결정', desc: '9월 정책 금리 발표 + 점도표(SEP)', important: true, forecast: '3.25-3.50%' },
+                { date: new Date(2026, 8, 25), type: 'macro', title: '미국 PCE 물가지수', desc: '8월 개인소비지출', forecast: '1.9%', unit: 'YoY' },
             ];
             
             // ========== 커피 시장 이벤트 ==========
@@ -2886,6 +2904,31 @@
                 { date: new Date(2026, 5, 15), type: 'coffee', title: '베트남 수출 데이터', desc: '5월 로부스타 수출 실적', forecast: '75K', unit: 'tons' },
                 { date: new Date(2026, 5, 18), type: 'coffee', title: 'CONAB 6월 보고서', desc: '브라질 26/27 수확 중간 전망', important: true, forecast: '63M', unit: 'bags' },
                 { date: new Date(2026, 5, 25), type: 'coffee', title: '브라질 수확 진행', desc: '26/27 아라비카 수확 50% 완료', important: true },
+
+                // 2026년 7월 (급등 · 지나간 이벤트)
+                { date: new Date(2026, 6, 1), type: 'coffee', title: 'Safras & Mercado 수확 진행', desc: '브라질 26/27 수확률 — 전년 60%·5년평균 55% 대비 지연', important: true, forecast: '55%', actual: '52%', unit: '', actualBetter: false },
+                { date: new Date(2026, 6, 6), type: 'coffee', title: '아라비카 사상급 급등 · COT', desc: '월 +16.19%(2000년래 최대 단일세션), 비상업 순매수 +201%', important: true, forecast: '', actual: '+16.19%', unit: '' },
+                { date: new Date(2026, 6, 7), type: 'coffee', title: 'ICE 증거금 인상 · 재고 저점', desc: '증거금 인상發 유동성 고갈; 아라비카 인증재고 2.25년래 저점', important: true, forecast: '', actual: '346K', unit: 'bags', actualBetter: false },
+                { date: new Date(2026, 6, 9), type: 'coffee', title: '브라질 서리 · 조기 개화', desc: '세하도 파트로시니우 1.9°C 경미한 서리 — 개화기 저온 리스크', important: true },
+                { date: new Date(2026, 6, 10), type: 'coffee', title: '베트남 상반기 수출', desc: '2026년 1~6월 커피 수출 (1.05 MMT)', important: true, forecast: '+5%', actual: '+7.3%', unit: 'YoY', actualBetter: true },
+                { date: new Date(2026, 6, 11), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true, forecast: '168M', unit: 'bags' },
+                { date: new Date(2026, 6, 13), type: 'coffee', title: '브라질 Cecafé 6월 수출', desc: '6월 그린커피 수출 실적', forecast: '3.0M', unit: 'bags' },
+
+                // 2026년 7월 (예정)
+                { date: new Date(2026, 6, 20), type: 'coffee', title: '브라질 수확 진행', desc: '26/27 수확 ~70% 목표 — 7월 중하순 강우 예보로 지연 리스크', important: true },
+
+                // 2026년 8월
+                { date: new Date(2026, 7, 5), type: 'coffee', title: 'ICO 월간 보고서', desc: '7월 글로벌 수급 분석 — 아라비카 적자 vs 잉여 논쟁', important: true },
+                { date: new Date(2026, 7, 12), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', important: true, forecast: '167M', unit: 'bags' },
+                { date: new Date(2026, 7, 13), type: 'coffee', title: '베트남 7월 수출', desc: '7월 로부스타 수출 실적', forecast: '70K', unit: 'tons' },
+                { date: new Date(2026, 7, 15), type: 'coffee', title: '브라질 서리 리스크 구간 종료', desc: '고지대 서리 확률 50~70% 구간(~8/15) 종료 주시', important: true },
+                { date: new Date(2026, 7, 25), type: 'coffee', title: '브라질 수확 진행', desc: '26/27 수확 ~90% 목표', important: true },
+
+                // 2026년 9월
+                { date: new Date(2026, 8, 8), type: 'coffee', title: 'ICO 월간 보고서', desc: '8월 글로벌 수급 분석', important: true },
+                { date: new Date(2026, 8, 11), type: 'coffee', title: 'USDA WASDE 보고서', desc: '세계 커피 수급 업데이트', forecast: '167M', unit: 'bags' },
+                { date: new Date(2026, 8, 15), type: 'coffee', title: 'CONAB 3차 작황 조사', desc: '브라질 26/27 3차 survey — 민간(75M) vs 공식 수렴 주목', important: true, forecast: '66-67M', unit: 'bags' },
+                { date: new Date(2026, 8, 20), type: 'coffee', title: '브라질 27/28 개화기', desc: '9~10월 개화 — 엘니뇨 강우 교란 리스크(핵심 상방)', important: true },
             ];
             
             // 모든 이벤트 합치기
