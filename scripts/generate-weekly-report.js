@@ -167,6 +167,140 @@ function loadCssTemplate() {
   `;
 }
 
+// 프롬프트 템플릿 로드 함수
+function loadPromptTemplate(filename) {
+  const promptPath = path.join(__dirname, "prompts", filename);
+  if (fs.existsSync(promptPath)) {
+    return fs.readFileSync(promptPath, "utf8");
+  }
+  console.warn(`⚠️ Prompt file not found: ${filename}`);
+  return null;
+}
+
+// 템플릿 변수 치환 함수
+function replaceTemplateVariables(template, variables) {
+  let result = template;
+  for (const [key, value] of Object.entries(variables)) {
+    const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
+    result = result.replace(regex, value);
+  }
+  return result;
+}
+
+// 시스템 프롬프트 로드
+function loadSystemPrompt(activeContract) {
+  const template = loadPromptTemplate("system-prompt.md");
+  
+  if (template) {
+    return replaceTemplateVariables(template, {
+      CONTRACT_SYMBOL: activeContract.symbol,
+      CONTRACT_NAME: activeContract.name,
+    });
+  }
+  
+  // 폴백: 기본 시스템 프롬프트
+  return `당신은 커피 선물 시장 전문 애널리스트이자 Coffee Market Info의 시니어 리서치 담당입니다.
+매주 기관 투자자 및 업계 전문가를 위한 프리미엄 커피 시장 주간 동향 리포트를 작성합니다.
+주력 분석 대상: ${activeContract.symbol} (${activeContract.name})`;
+}
+
+// 사용자 프롬프트 로드
+function loadUserPrompt(date, weekRange, activeContract, cssTemplate) {
+  const variables = {
+    KOREAN_DATE: date.koreanDate,
+    DATE_STR: date.dateStr,
+    YEAR: date.year.toString(),
+    MONTH: date.month,
+    WEEK_START: weekRange.start,
+    WEEK_END: weekRange.end,
+    CONTRACT_SYMBOL: activeContract.symbol,
+    CONTRACT_NAME: activeContract.name,
+    CONTRACT_SHORT_NAME: activeContract.shortName,
+    CSS_TEMPLATE: cssTemplate,
+  };
+  
+  // 각 프롬프트 파일 로드
+  const userPromptTemplate = loadPromptTemplate("user-prompt-template.md");
+  const reportStructure = loadPromptTemplate("report-structure.md");
+  const htmlOutputFormat = loadPromptTemplate("html-output-format.md");
+  
+  // 모든 파일이 존재하면 결합
+  if (userPromptTemplate && reportStructure && htmlOutputFormat) {
+    const combinedPrompt = `${userPromptTemplate}\n\n---\n\n# 리포트 구조\n\n${reportStructure}\n\n---\n\n# 출력 형식\n\n${htmlOutputFormat}`;
+    return replaceTemplateVariables(combinedPrompt, variables);
+  }
+  
+  // 폴백: 파일이 없으면 null 반환 (기존 인라인 프롬프트 사용)
+  console.log("📝 Using inline prompts (prompt files not found)");
+  return null;
+}
+
+// 인라인 사용자 프롬프트 빌드 (폴백용)
+function buildInlineUserPrompt(date, weekRange, activeContract, cssTemplate) {
+  return `오늘 날짜: ${date.koreanDate}
+데이터 수집 기간: ${weekRange.start} ~ ${weekRange.end}
+주력 계약: ${activeContract.symbol} (${activeContract.name})
+
+## 필수 수행 작업
+
+### 1단계: 가격 데이터 수집 (웹 검색 필수)
+다음 검색을 수행하여 **실제 가격 데이터**를 확인하세요:
+1. "site:barchart.com coffee futures KC" - Barchart에서 아라비카 선물 가격
+2. "ICE arabica coffee ${activeContract.symbol} price" - 주력 계약 가격  
+3. "ICE robusta coffee futures price RC" - 로부스타 가격
+4. "USD BRL exchange rate" - 브라질 환율
+5. "ICE certified coffee stocks inventory" - 인증 재고
+6. "coffee COT report CFTC" - 선물 포지션 데이터
+
+**중요**: ${activeContract.name} 가격이 300센트 이상인지 확인하세요. 최근 커피 가격은 역사적 고점 수준입니다.
+
+### 2단계: 뉴스 및 펀더멘털 수집 (발행일 기준 최근 1주일만)
+**중요**: 반드시 ${weekRange.start} ~ ${weekRange.end} 기간 내 뉴스만 검색하고 분석하세요.
+발행일(${date.dateStr}) 기준으로 최근 7일 이내의 기사만 포함해야 합니다.
+
+다음 키워드로 검색:
+- "coffee market news ${weekRange.end}" - 최신 커피 시장 뉴스
+- "coffee price ${date.year} ${date.month}" - 이번 달 커피 가격 뉴스
+- "Brazil coffee ${weekRange.end}" - 브라질 최신 뉴스
+- "Vietnam robusta coffee ${date.year}" - 베트남 로부스타 뉴스
+- "Colombia coffee exports"
+- "Volcafe coffee"
+- "StoneX coffee"
+- "EUDR coffee regulation ${date.year}"
+- "coffee tariff ${date.year}"
+
+### 3단계: 종합 분석 및 전망 작성
+수집한 정보를 바탕으로 시장 구조, 수급 밸런스, 가격 전망, 투자 시사점을 분석하세요.
+
+## 리포트 구조
+체계적이고 종합적인 HTML 리포트를 생성하세요:
+1. 히어로 섹션, 2. 핵심 지표 카드 (4개), 3. 시장 개요, 4. 가격 동향, 
+5. 주간 핵심 뉴스, 6. 산지별 동향, 7. 수급 분석, 7.5. 종합 분석,
+8. 가격 전망 (시나리오 그리드), 9. 리스크 요인, 10. 투자 전략, 
+10.5. 한국 로스터리 전략 가이드, 11. 출처, 12. 푸터
+
+## 출력 형식
+완전한 HTML 파일을 생성해주세요.
+
+### HTML 헤더:
+<!DOCTYPE html>로 시작, Google Analytics (G-GX9R36120J) 포함, Pretendard 폰트 로드
+
+### 메타데이터 블록:
+<!--REPORT_META { ... } REPORT_META--> 형식으로 date, title, summary, tags, price_current, price_change 등 포함
+
+### CSS:
+\`\`\`css
+${cssTemplate}
+\`\`\`
+
+### 가격 표시:
+- 아라비카: XXX.XX센트/파운드
+- 로부스타: $X,XXX/MT
+- 환율: X.XXXX
+
+**HTML 코드만 출력하세요. 반드시 <!DOCTYPE html>로 시작해야 합니다.**`;
+}
+
 // Claude API로 웹 검색 및 리포트 생성 (agentic loop with web search)
 async function generateReport() {
   const date = getToday();
@@ -178,277 +312,19 @@ async function generateReport() {
   console.log(`Analysis period: ${weekRange.start} to ${weekRange.end}`);
   console.log(`Active contract: ${activeContract.symbol} (${activeContract.name})`);
 
-  const systemPrompt = `당신은 커피 선물 시장 전문 애널리스트이자 Coffee Market Info의 시니어 리서치 담당입니다.
-매주 기관 투자자 및 업계 전문가를 위한 프리미엄 커피 시장 주간 동향 리포트를 작성합니다.
+  // 외부 파일에서 시스템 프롬프트 로드
+  const systemPrompt = loadSystemPrompt(activeContract);
+  console.log("📄 System prompt loaded from external file");
 
-## 핵심 원칙
-
-### 1. 정확한 데이터 수집 (필수)
-- 주력 분석 대상: ${activeContract.symbol} (${activeContract.name})
-- 가격 출처: Barchart, ICE, Investing.com
-- 가격 단위: 아라비카 센트/파운드, 로부스타 USD/톤
-- 모든 수치는 웹 검색으로 확인된 실제 데이터만 사용
-
-### 2. 체계적 분석 프레임워크 (반드시 모든 항목 포함)
-- **매크로 환경**: 글로벌 경제, 달러 강세/약세, 원자재 전반, 금리 정책, 인플레이션 동향
-- **펀더멘털**: 수급 균형, 재고, 산지별 작황, 수출입 동향, 생산량 전망, 비용 구조 변화
-- **테크니컬**: 주요 지지/저항선, 이동평균, 거래량, 차트 패턴, RSI/MACD 등 기술적 지표
-- **센티먼트**: COT 포지션, 투기자 동향, 시장 심리, 옵션 시장 분석, 스프레드 구조
-- **구조적 변화 분석**: 기후변화 영향, EUDR 규제, 소비 트렌드 변화, 아라비카/로부스타 대체 등
-- **종합 분석**: 모든 요인을 통합한 다면적 시장 진단, 핵심 동인 순위, 시장 컨센서스 vs 독자 견해
-
-### 3. 균형 잡힌 시각
-- 강세/약세 요인을 균형 있게 분석
-- 과장된 표현 지양: "폭등/폭락" 대신 "강세/약세", "상승/하락" 사용
-- 불확실성 인정: "~할 것으로 예상됨", "~가능성" 등 적절한 표현 사용
-
-### 4. 전문성과 신뢰성
-- 모든 정보에 출처 명시
-- 주요 기관 전망 인용 (USDA, ICO, Volcafe, StoneX, Rabobank, CONAB, Euromonitor)
-- 산지 현지 정보 반영 (Cepea, Cecafé, ICO 보고서, 식약처 수입 통계)
-- 다양한 시나리오 분석 및 확률 기반 전망 제시
-- Bloomberg, Reuters 등 주요 뉴스 출처 활용
-
-### 5. 한국 시장 특화 분석 (중요)
-- 한국 로스터리 및 트레이더 관점의 투자 전략 포함
-- USD/KRW 환율 동향 및 환헤지 전략
-- 한국 커피 수입 동향 및 소비 트렌드
-- 산지 다변화 전략 (브라질 의존도 조정)
-- 분할 매수 및 계약 시점 권고`;
-
-  const userPrompt = `오늘 날짜: ${date.koreanDate}
-데이터 수집 기간: ${weekRange.start} ~ ${weekRange.end}
-주력 계약: ${activeContract.symbol} (${activeContract.name})
-
-## 필수 수행 작업
-
-### 1단계: 가격 데이터 수집 (웹 검색 필수)
-
-다음 검색을 수행하여 **실제 가격 데이터**를 확인하세요:
-
-1. "site:barchart.com coffee futures KC" - Barchart에서 아라비카 선물 가격
-2. "ICE arabica coffee ${activeContract.symbol} price" - 주력 계약 가격  
-3. "ICE robusta coffee futures price RC" - 로부스타 가격
-4. "USD BRL exchange rate" - 브라질 환율
-5. "ICE certified coffee stocks inventory" - 인증 재고
-6. "coffee COT report CFTC" - 선물 포지션 데이터
-
-**중요**: ${activeContract.name} 가격이 300센트 이상인지 확인하세요. 최근 커피 가격은 역사적 고점 수준입니다.
-
-### 2단계: 뉴스 및 펀더멘털 수집 (발행일 기준 최근 1주일만)
-
-**중요**: 반드시 ${weekRange.start} ~ ${weekRange.end} 기간 내 뉴스만 검색하고 분석하세요.
-발행일(${date.dateStr}) 기준으로 최근 7일 이내의 기사만 포함해야 합니다.
-오래된 뉴스(1주일 이상 지난 기사)는 제외하세요.
-
-다음 키워드로 검색 (날짜 범위 포함):
-- "coffee market news ${weekRange.end}" - 최신 커피 시장 뉴스
-- "coffee price ${date.year} ${date.month}" - 이번 달 커피 가격 뉴스
-- "Brazil coffee ${weekRange.end}" - 브라질 최신 뉴스
-- "Vietnam robusta coffee ${date.year}" - 베트남 로부스타 뉴스
-- "Colombia coffee exports"
-- "Volcafe coffee"
-- "StoneX coffee"
-- "EUDR coffee regulation ${date.year}"
-- "coffee tariff ${date.year}"
-
-**검색 결과 필터링**: 
-- 각 뉴스 항목의 날짜를 확인하고, ${weekRange.start} 이전의 기사는 제외
-- 리포트에 포함하는 뉴스는 반드시 해당 주간(${weekRange.start} ~ ${weekRange.end}) 내 발행된 것만 선택
-
-### 3단계: 종합 분석 및 전망 작성
-
-수집한 정보를 바탕으로 다음을 체계적으로 분석하세요:
-
-1. **시장 구조 분석**
-   - 주력 계약과 차월물 스프레드 (백워데이션/콘탱고)
-   - 거래량 및 미결제약정 변화
-   - COT 포지션 (상업적/비상업적 참여자)
-
-2. **수급 밸런스**
-   - 글로벌 수급 전망 (USDA, ICO, Volcafe, StoneX)
-   - ICE 인증재고 추이
-   - 산지별 작황 및 수출 동향
-
-3. **가격 전망**
-   - 단기 (1-3개월): 지지/저항선, 예상 레인지
-   - 시나리오별 가격 전망 (낙관/기본/비관)
-   - 리스크 요인 (상방/하방)
-
-4. **투자 시사점**
-   - 로스터/트레이더 헤지 전략
-   - 포지션 권고
-
-## 리포트 구조
-
-다음 구조로 **체계적이고 종합적인** HTML 리포트를 생성하세요:
-
-### 1. 히어로 섹션 (Hero)
-- 리포트 라벨: "WEEKLY MARKET UPDATE"
-- 메인 타이틀: "커피 선물 시장 주간 동향"
-- 서브타이틀: "Coffee Futures Market Weekly Update"
-- 날짜, 분석 기간
-
-### 2. 핵심 지표 카드 (Key Stats)
-4개 카드로 구성:
-- ${activeContract.name} 가격 (센트/파운드) + 주간변동률
-- ICE 인증재고 (만 백) + 변동
-- USD/BRL 환율 + 변동
-- 로부스타 가격 (USD/톤) + 변동
-
-### 3. 시장 개요 (Market Overview)
-- 3-4문장의 핵심 요약
-- 주요 가격 동인 설명
-- 이번 주 핵심 이슈 (highlight-box 사용)
-
-### 4. 가격 동향 (Price Action)
-- 계약월별 가격 테이블 (${activeContract.name} 포함 3-4개 계약월)
-- 주간/월간/연간 변동률
-- 기술적 분석: 지지/저항선, 이동평균
-
-### 5. 주간 핵심 뉴스 (Weekly News)
-- 5-7개 뉴스 (news-item 클래스 사용)
-- 각 뉴스: 날짜, 제목, 2-3문장 요약, 출처 링크
-
-### 6. 산지별 동향 (Origin Updates)
-각 산지별 상세 분석:
-- **브라질**: 기상, 작황, 수확 진행률, 환율, 수출
-- **베트남**: 로부스타 수확, 가격 동향, 수출
-- **콜롬비아**: 아라비카 생산, FNC 보고, 수출
-
-### 7. 수급 분석 (Supply & Demand)
-- 주요 기관 전망치 비교 테이블 (USDA, ICO, StoneX, Volcafe)
-- 재고 동향 분석
-- 글로벌 수출입 동향
-
-### 7.5. 종합 분석 (Comprehensive Analysis)
-이 섹션은 리포트의 핵심으로, 모든 분석을 통합하여 시장의 전체 그림을 제시합니다:
-- **시장 구조 진단**: 현재 시장이 강세/약세/중립 국면인지 구조적 평가
-- **핵심 동인 순위**: 가격에 영향을 미치는 요인들의 상대적 중요도 (1위~5위)
-- **상관관계 분석**: USD/BRL, 달러지수, 재고 수준과 가격의 상관관계
-- **시장 컨센서스 vs 독자 견해**: 시장의 일반적 전망과 분석가의 차별화된 시각
-- **핵심 변수 모니터링**: 향후 1-2주 주목해야 할 데이터/이벤트
-- analysis-grid 또는 comprehensive-box 클래스 사용
-
-### 8. 가격 전망 (Price Outlook)
-- **시나리오 그리드** (scenario-grid 사용):
-  - 낙관 시나리오: 확률, 예상 가격, 조건
-  - 기본 시나리오: 확률, 예상 가격, 조건
-  - 비관 시나리오: 확률, 예상 가격, 조건
-- 1개월/3개월 예상 레인지
-- 공정가치 추정 근거
-
-### 9. 리스크 요인 (Risk Factors)
-- **상방 리스크** (3개): opportunity-section 사용
-- **하방 리스크** (3개): risk-section 사용
-
-### 10. 투자 전략 (Trading Strategy)
-- strategy-grid 사용
-- **로스터 전략**: 헤지 타이밍, 커버 권고
-- **트레이더 전략**: 포지션, 진입/청산 레벨
-
-### 10.5. 🇰🇷 한국 로스터리 & 트레이더를 위한 전략 가이드 (korea-strategy 섹션)
-이 섹션은 한국 시장 참여자를 위한 맞춤형 전략 가이드입니다:
-
-**A. 구매 전략 (Purchase Strategy)**
-- 분할 매수 권고: 현재 가격 대비 적정 매수 비중 (%)
-- 계약 시점: 단기(1-3개월) vs 장기(6개월+) 계약 비중 권고
-- 환율 고려사항: USD/KRW 동향과 결제 타이밍
-
-**B. 산지 다변화 전략**
-- 브라질 의존도 조정 권고
-- 콜롬비아/에티오피아 등 대체 산지 확대 검토
-- 베트남 로부스타 블렌딩 비중 조정 (원가 절감)
-
-**C. 환헤지 전략 (Currency Hedging)**
-- USD/KRW 환율 모니터링 포인트
-- 선물환/옵션 활용 시점
-- 결제 시기 분산 전략
-
-**D. 재고 관리**
-- 적정 재고 수준 (주간/월간)
-- 가격 변동성 대비 안전재고 권고
-- 계절별 수요 대응
-
-**E. 한국 시장 특수 고려사항**
-- 국내 소비 트렌드 (스페셜티 vs 상업용)
-- 관세/통관 이슈
-- 한국 수입업체 동향 (식약처 수입 통계 참조)
-
-highlight-box 또는 korea-strategy-grid 클래스 사용
-
-### 11. 출처 (References)
-- 모든 참조 URL 목록
-
-### 12. 푸터 (Footer)
-- Coffee Market Info 브랜드 (by Align Commodities)
-- 문의: james.baek@aligncommodities.com
-- 웹사이트: https://www.coffeemarket.info
-- 면책조항: "본 리포트는 정보 제공 목적으로 작성되었으며, 투자 권유가 아닙니다. 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다."
-
-## 출력 형식
-
-완전한 HTML 파일을 생성해주세요. 다음 조건을 충족해야 합니다:
-
-### HTML 헤더 필수 요소:
-\`\`\`html
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>커피 시장 주간 동향 | ${date.koreanDate}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GX9R36120J"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-GX9R36120J');
-    </script>
-</head>
-\`\`\`
-
-### 네비게이션 바:
-\`\`\`html
-<nav class="top-nav">
-    <a href="https://www.coffeemarket.info" class="nav-brand">☕ Coffee Market Info</a>
-    <a href="https://www.coffeemarket.info" class="home-btn">← 홈으로</a>
-</nav>
-\`\`\`
-
-### 메타데이터 블록 (HTML 최상단에 포함):
-\`\`\`html
-<!--REPORT_META
-{
-    "title": "커피 선물 시장 주간 동향",
-    "subtitle": "Coffee Futures Market Weekly Update",
-    "date": "${date.dateStr}",
-    "displayDate": "${date.koreanDate}",
-    "summary": "실제 수집한 데이터 기반 핵심 요약 2-3문장",
-    "tags": ["주간동향", "${activeContract.shortName}", "아라비카", "관련키워드들"],
-    "type": "weekly",
-    "price_current": "XXX.XX",
-    "price_change": "+X.XX (+X.X%)",
-    "fair_value": "XXX-XXX",
-    "analysis_period": "${weekRange.start} ~ ${weekRange.end}"
-}
-REPORT_META-->
-\`\`\`
-
-### 엘레강스 라이트 테마 CSS (아래 스타일을 그대로 <style> 태그에 포함):
-\`\`\`css
-${cssTemplate}
-\`\`\`
-
-### 가격 표시 규칙:
-- 아라비카: XXX.XX센트/파운드 또는 XXX.XX¢/lb
-- 로부스타: $X,XXX/MT
-- 환율: X.XXXX
-
-**HTML 코드만 출력하세요. 설명이나 마크다운 코드블록 없이 순수 HTML만 출력합니다. 반드시 <!DOCTYPE html>로 시작해야 합니다.**`;
+  // 외부 파일에서 사용자 프롬프트 로드 시도
+  let userPrompt = loadUserPrompt(date, weekRange, activeContract, cssTemplate);
+  
+  // 외부 파일이 없으면 기본 인라인 프롬프트 사용
+  if (!userPrompt) {
+    userPrompt = buildInlineUserPrompt(date, weekRange, activeContract, cssTemplate);
+  } else {
+    console.log("📄 User prompt loaded from external files");
+  }
 
   try {
     // 웹 검색 도구를 사용한 agentic loop
