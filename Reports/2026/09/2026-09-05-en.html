@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Futures Market Weekly Update | September 5, 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "Coffee Futures Market Weekly Update",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2026-09-05",
+    "type": "weekly",
+    "summary": "KCZ26 settled at 297.45 cents, down 4.92% on the week and below 300 cents for the first time since late June, as StoneX confirmed a record 77.2m-bag Brazil crop and Minas rain hit 127% of normal.",
+    "tags": [
+        "kcz26-weekly-minus4.92pct-297.45c",
+        "sub-300c-break-first-since-late-june",
+        "stonex-brazil-77.2m-bags-record",
+        "arabica-51.8m-plus41.9pct-alltime-high",
+        "somar-minas-8.9mm-127pct-normal",
+        "rabobank-surplus-8.9m-bags-2026-27",
+        "ice-arabica-223911-bags-27yr-low",
+        "robusta-nov-3374-lowest-since-june",
+        "cepea-worst-quality-crop-recent-years",
+        "vietnam-jan-aug-1.33mmt-plus13.7pct",
+        "usdbrl-5.10-5.13-real-firmer"
+    ],
+    "author": "Align Commodities",
+    "sources": [
+        "Comunicaffe",
+        "Trading Economics",
+        "Barchart",
+        "StoneX",
+        "Rabobank",
+        "Cepea",
+        "Safras & Mercado",
+        "Cecafé",
+        "Somar Meteorologia",
+        "ICE",
+        "ICO",
+        "USDA FAS",
+        "CONAB",
+        "Vietnam Customs",
+        "Banco Central do Brasil",
+        "Reuters",
+        "Sucafina",
+        "Global Coffee Report"
+    ],
+    "price_current": "297.45c (Fri 9/4 KCZ26, Trading Economics benchmark quote, +2.10c/+0.71%). Chain-verified against Comunicaffe's Thursday 9/3 settlement of 295.35c: 295.35 x 1.0071 = 297.45, so the two independent sources reconcile exactly. Prior report baseline was 312.85c (Fri 8/28).",
+    "price_change": "Weekly -15.40c / -4.92% (312.85c on Aug 28 to 297.45c on Sep 4), same December contract, no roll this week. Daily path cross-checked across Comunicaffe and Barchart/Trading Economics: Mon 8/31 311.50c (-1.35/-0.43%, London closed for UK Summer Bank Holiday); Tue 9/1 309.45c (-2.05/-0.66%, intraday low 299.20c); Wed 9/2 298.10c (-11.35/-3.7%, first close below 300c since late June); Thu 9/3 295.35c (-2.75/-0.92%, lowest since June); Fri 9/4 297.45c (+2.10/+0.71%). Week's high close 311.50c, low close 295.35c, close-to-close range 16.15c. Robusta November (RMX26) fell from 3,529 USD/t (Aug 28) to 3,461 (Sep 1, -68/-1.93%), 3,406 (Sep 2, -55/-1.6%) and 3,374 (Sep 3, -32/-0.94%), a 3-month low; that is -155/-4.39% versus the prior Friday, but the Friday 9/4 London settlement could not be confirmed by two independent sources and is therefore not quoted. ICE certified arabica stocks were unchanged at 223,976 bags on Aug 31 and fell to 223,911 bags on Sep 1, the lowest since 1999; the Friday 9/4 print was not confirmed. ICE robusta stocks remain at a 9-month high (4,943 lots, late August; Rabobank independently describes London certified stocks at a 9-month high). CFTC COT positioning as of Sep 1 could not be confirmed by two independent sources and is deliberately omitted. USD/BRL sources ranged 5.101 (Trading Economics) to 5.125 (Banco Central do Brasil) on Sep 4, so the report cites a 5.10-5.13 band rather than a point estimate."
+}
+REPORT_META-->
+
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover { opacity: 1; }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item { font-weight: 500; }
+        .meta-divider { color: var(--copper); }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        /* Price Box */
+        .price-box {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .price-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .price-change { font-size: 1.3rem; font-weight: 600; margin-top: 8px; }
+        .price-change.positive { color: var(--positive); }
+        .price-change.negative { color: var(--negative); }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26, 15, 10, 0.1);
+        }
+
+        .price-item { display: flex; flex-direction: column; gap: 4px; }
+
+        .price-item-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .price-item-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.65;
+            margin-top: 20px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Sections */
+        section { margin: 56px 0; }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--espresso);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--roast);
+            letter-spacing: -0.01em;
+        }
+
+        p { margin-bottom: 20px; color: var(--ink); }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--steam);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p:last-child { margin-bottom: 0; }
+
+        /* Alert Box (red border for risk/implication) */
+        .alert-box {
+            background: #faf0f0;
+            border-left: 4px solid var(--negative);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .alert-box p:last-child { margin-bottom: 0; }
+
+        /* Lists */
+        ul { margin: 24px 0; padding-left: 24px; }
+        li { margin-bottom: 12px; color: var(--ink); }
+        li strong { color: var(--roast); font-weight: 600; }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .data-card-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .data-card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .data-card-change.positive { color: var(--positive); }
+        .data-card-change.negative { color: var(--negative); }
+
+        /* Footer — full-width brown background, outside .container */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 48px 0 32px;
+            margin-top: 80px;
+            width: 100%;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .footer-desc { font-size: 0.9rem; line-height: 1.6; opacity: 0.95; color: var(--crema); }
+
+        .footer-title { font-weight: 600; margin-bottom: 16px; color: var(--accent); }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.95;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover { opacity: 1; }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.15);
+            text-align: center;
+        }
+
+        .footer-copyright { font-size: 0.9rem; opacity: 0.85; margin-bottom: 12px; color: var(--crema); }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .price-main { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .top-nav { display: none; }
+            .container { max-width: 100%; padding: 40px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">Overview</a>
+            <a href="#fundamentals" class="nav-link">Fundamentals</a>
+            <a href="#implications" class="nav-link">Implications</a>
+            <a href="#outlook" class="nav-link">Outlook</a>
+        </div>
+    </nav>
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">Weekly Report</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">September 5, 2026</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>Coffee Futures Market Weekly Update</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <p class="headline">This was the week the market <strong>dismantled its own last bullish argument</strong>. December arabica (KCZ26) fell in <strong>four of five sessions</strong>, closing Wednesday at <strong>298.10c</strong> &mdash; its <strong>first settlement below 300 cents since late June</strong> &mdash; then printing a June low of <strong>295.35c</strong> on Thursday before a <strong>+0.71%</strong> Friday bounce to <strong>297.45c</strong>. The week finished at <strong>-15.40c (-4.92%)</strong>. Two triggers did the damage: <strong>StoneX raised Brazil's 2026/27 crop to a record 77.2 million bags</strong>, and <strong>Somar reported Minas Gerais rainfall at 127% of normal</strong>, which <strong>erased the September-October flowering risk premium</strong>. ICE certified stocks remain at a <strong>27-year low of 223,911 bags</strong> &mdash; and the market ignored them entirely.</p>
+
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">KCZ26 Weekly</div>
+                    <div class="card-value">-4.92%</div>
+                    <div class="card-change negative">297.45c (-15.40c vs 312.85c on 8/28)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Week's Low Close (9/3)</div>
+                    <div class="card-value">295.35c</div>
+                    <div class="card-change negative">Lowest since June &middot; 300c broken</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">StoneX Brazil 2026/27</div>
+                    <div class="card-value">77.2 M bags</div>
+                    <div class="card-change negative">All-time record &middot; +23.9% y/y &middot; +2.6% vs March</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Somar Minas Rain (to 8/30)</div>
+                    <div class="card-value">8.9 mm</div>
+                    <div class="card-change negative">127% of normal &middot; up from 0.6mm (11%)</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="price-box" id="market">
+            <div class="price-header">
+                <span class="price-label">ICE Arabica December (KCZ26)</span>
+                <span class="price-label">Week of Aug 31 &ndash; Sep 4, 2026</span>
+            </div>
+            <div class="price-main">-4.92% &#9660;</div>
+            <div class="price-change negative">Settled 297.45c | Week's high close 311.50c (8/31) &middot; low close 295.35c (9/3) &middot; close-to-close range 16.15c</div>
+
+            <div class="price-table">
+                <div class="price-item">
+                    <span class="price-item-label">Friday (9/4) Close</span>
+                    <span class="price-item-value">297.45c (+2.10c/+0.71%)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Wednesday (9/2) Close</span>
+                    <span class="price-item-value">298.10c (-3.7%, broke 300c)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Thursday (9/3) Close</span>
+                    <span class="price-item-value">295.35c (lowest since June)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Prior Friday (8/28)</span>
+                    <span class="price-item-value">312.85c (baseline)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">Robusta (Nov, RMX26)</span>
+                    <span class="price-item-value">$3,374 (9/3, 3-month low)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">USD/BRL</span>
+                    <span class="price-item-value">5.10&ndash;5.13 (real firmer)</span>
+                </div>
+            </div>
+
+            <p class="price-note">&#8251; <strong>There was again no front-month roll this week.</strong> The comparison is the same December contract (KCZ26) as the prior report, so 312.85c &rarr; 297.45c is a <strong>pure same-contract price move</strong>. The Friday close of <strong>297.45c</strong> is the Trading Economics benchmark quote; applying the reported <strong>+0.71%</strong> to Comunicaffe's Thursday settlement of <strong>295.35c</strong> reproduces <strong>297.45c exactly</strong>, so the two independent sources cross-check. Monday through Thursday settlements (311.50 / 309.45 / 298.10 / 295.35c) were <strong>reported identically and independently by Comunicaffe and Barchart/Trading Economics</strong>. Robusta is confirmed only through <strong>Thursday's $3,374</strong>; the <strong>Friday London settlement could not be verified by two sources and is not quoted</strong>. ICE certified stocks are likewise confirmed only through <strong>223,911 bags on September 1</strong>. <strong>CFTC COT positioning as of September 1 could not be confirmed by two independent sources and is excluded</strong>. USD/BRL differed by source (Trading Economics 5.101, Banco Central do Brasil 5.125), so a <strong>5.10&ndash;5.13 band</strong> is cited rather than a point estimate.</p>
+        </div>
+
+        <section id="weekly-summary">
+            <h2>Weekly Market Summary</h2>
+
+            <p>Last week's report concluded that <strong>&ldquo;the bearish drivers are structural and the only bullish driver left is September-October flowering weather.&rdquo;</strong> <strong>This week that single driver disappeared.</strong> New York opened quietly on Monday (8/31) at 311.50c (-0.43%) with London shut for the UK Summer Bank Holiday, then fell three sessions in a row by <strong>-2.05 / -11.35 / -2.75c</strong>. Wednesday's <strong>298.10c (-3.7%)</strong> was the <strong>first sub-$3 settlement since late June</strong>, and Tuesday's intraday print of <strong>299.20c</strong> had already flagged that the psychological line was under test.</p>
+
+            <p>The knockout blow was <strong>StoneX's Wednesday production upgrade</strong>. With harvesting essentially finished, StoneX incorporated field yield sampling and put Brazil's 2026/27 crop at <strong>77.2 million bags</strong> &mdash; <strong>+2.6% versus its March estimate, +23.9% versus last season's 62.3 million</strong>, and <strong>14.2% above the previous all-time record of 67.6 million bags in 2020/21</strong>. Arabica alone at <strong>51.8 million bags (+41.9%)</strong> is an <strong>all-time high</strong>. &ldquo;Record crop&rdquo; is no longer a forecast; it is a <strong>post-harvest measurement</strong>.</p>
+
+            <p>The second blow was <strong>weather</strong>. Somar Meteorologia reported <strong>8.9mm of rain in Minas Gerais in the week ended August 30 &mdash; 127% of the historical average</strong>. Against the <strong>0.6mm (11% of normal)</strong> figure the prior report was forced to cite, that is a <strong>complete regime change</strong>. StoneX added that <strong>&ldquo;El Ni&ntilde;o has brought rainier-than-usual weather, which encouraged early flowering as early as August,&rdquo;</strong> and that conditions <strong>should allow a good main flowering for the 2027/28 crop</strong>. The <strong>flowering-failure risk premium that had been embedded in price for two months was removed wholesale</strong>.</p>
+
+            <div class="highlight-box">
+                <p><strong>Core dynamic of the week:</strong> This decline came not from a new bearish shock but from <strong>the disappearance of the bullish option</strong>. Certified stocks are still at a <strong>27-year low (223,911 bags)</strong> and essentially unchanged from last week. What changed is that <strong>the market has stopped paying for that number</strong>. The <strong>&ldquo;the certified-stock signal has outlived its usefulness&rdquo;</strong> thesis raised in last week's report was decisively confirmed: a <strong>27-year stock low and a break of 300c happened in the same week</strong>.</p>
+            </div>
+
+            <h3>Key News Briefing</h3>
+
+            <ul>
+                <li><strong>(Mon 8/31, Rabobank)</strong> In its quarterly report Rabobank put the <strong>2026/27 global surplus at 8.9 million bags</strong>. It cautioned that the path to balance is longer and harder than expected because of <strong>slow commercialisation of Brazil's new crop and disruption from the Colombian earthquake</strong>, and that <strong>ICE arabica certified stocks will stay extremely low for several more weeks with meaningful replenishment unlikely before November</strong>. By contrast it confirmed <strong>London certified stocks are already at a nine-month high</strong>.</li>
+                <li><strong>(Mon 8/31, Cecaf&eacute;)</strong> Brazil's exporters council corrected a <strong>technical error</strong> in its provisional export statistics, revising the figure from 1.71 million bags as of August 24 up to <strong>2.94 million bags as of August 26</strong>. The feared collapse in August shipments was a <strong>statistical artefact</strong>.</li>
+                <li><strong>(Wed 9/2, StoneX)</strong> Brazil 2026/27 at a record <strong>77.2 million bags (+23.9% y/y)</strong>. <strong>Arabica 51.8 million (+41.9%, all-time high)</strong>; robusta 25.4 million (down from 25.8 million). By region: southern Minas arabica <strong>18.1 million (+27.5%)</strong>, Matas de Minas <strong>10.4 million (+60%)</strong>, Cerrado Mineiro <strong>8.8 million (+57.1%)</strong>, S&atilde;o Paulo <strong>7.6 million (+85.4%)</strong>. The upgrade rests on field samples showing <strong>high specific weight lifting processing yields above expectations</strong>.</li>
+                <li><strong>(Wed 9/2, Safras &amp; Mercado)</strong> Brazil's harvest was <strong>97% complete as of August 26</strong>, with its own crop estimate at <strong>75.65 million bags (arabica 49.95m, robusta 25.7m)</strong>. Reports of <strong>logistical bottlenecks and port congestion</strong> continued to slow shipments of coffee and other commodities.</li>
+                <li><strong>(9/3&ndash;4, Somar/StoneX weather)</strong> <strong>Minas Gerais rainfall of 8.9mm in the week to August 30, 127% of normal.</strong> Above-normal rain across Brazil is now widely read as <strong>favourable for the main 2027/28 flowering</strong> that begins in a few weeks. The key observation is StoneX's: El Ni&ntilde;o has <strong>added rain and pulled flowering forward into August</strong>.</li>
+                <li><strong>(Fri 9/4, Vietnam)</strong> January&ndash;August 2026 exports reached <strong>1.33 million tonnes (21.17 million bags), +13.7% y/y</strong>, keeping robusta supply pressure in place ahead of the October new crop.</li>
+                <li><strong>(Fri 9/4, CEPEA)</strong> The arabica harvest was near completion in most regions in late August &mdash; <strong>southern Minas 90% (from 65% in early August), Cerrado Mineiro 85&ndash;90% (from 50%), Zona da Mata ~97%</strong>. However, <strong>above-average winter rainfall impaired cup quality</strong>, and CEPEA reaffirmed that <strong>2026/27 will be one of the poorest-quality crops of recent years with a high incidence of inferior cup</strong>. Robusta harvesting is complete in Esp&iacute;rito Santo and Rond&ocirc;nia, with <strong>flowering already observed in some plots</strong>.</li>
+                <li><strong>(Tue 9/1, ICO)</strong> The August ICO composite indicator (I-CIP) averaged <strong>287.29 cents</strong>, effectively unchanged from July (287.34). The daily series, however, swung from <strong>301.97 cents on August 25 to 279.38 cents on August 27</strong> &mdash; <strong>22.6 cents in two days</strong>.</li>
+            </ul>
+        </section>
+
+        <section id="fundamentals">
+            <h2>Fundamental Analysis</h2>
+
+            <h3>1. Production &mdash; the record crop moved from forecast to measurement</h3>
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">StoneX Brazil 2026/27</div>
+                    <div class="data-card-value">77.2 M</div>
+                    <div class="data-card-change negative">All-time record &middot; +23.9% y/y</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Of which arabica</div>
+                    <div class="data-card-value">51.8 M</div>
+                    <div class="data-card-change negative">+41.9% y/y &middot; all-time high</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Safras &amp; Mercado</div>
+                    <div class="data-card-value">75.65 M</div>
+                    <div class="data-card-change negative">Harvest 97% complete (8/26)</div>
+                </div>
+            </div>
+            <p>One number moved the market this week: <strong>77.2 million bags</strong>. What matters is not its size but its <strong>character</strong>. Until now Brazil's record crop was a <strong>projection built on satellite, weather and crop models</strong>. StoneX's figure comes from <strong>physical samples collected across southern Minas Gerais, Matas de Minas, Cerrado Mineiro and northern Esp&iacute;rito Santo after the harvest, then measured for weight, yield and average screen size</strong>. Analyst Leonardo Rossetti said the <strong>yield study showed results better than initially forecast</strong>, noting that even where screen size was unexceptional, <strong>high specific weight lifted processing yields</strong>.</p>
+            <p>Estimates still diverge &mdash; <strong>StoneX 77.2m, Safras &amp; Mercado 75.65m, USDA FAS 71.9m, CONAB 66.7m</strong>. But <strong>every revision has been upward</strong>, and the post-harvest, measurement-based numbers now carry more weight. USDA FAS sees <strong>global 2026/27 output up 6.0% to a record 189.7 million bags</strong>; Rabobank sees an <strong>8.9 million bag surplus</strong>.</p>
+
+            <div class="alert-box">
+                <p><strong>Implication:</strong> For six months the market has been trading the <strong>gap between &ldquo;record crop forecast&rdquo; and &ldquo;actual coffee&rdquo;</strong>. With the harvest done and measured, <strong>that gap trade is over</strong>. The remaining question is not <strong>how much</strong> but <strong>how fast, and at what grade, it reaches the market</strong>. For buyers this means price risk has <strong>migrated from volume risk to logistics and quality risk</strong>, and hedging structures should shift accordingly &mdash; <strong>from defending flat price to managing basis and timing</strong>.</p>
+            </div>
+
+            <h3>2. Weather &mdash; the last bullish argument was removed</h3>
+            <p>Last week's report concluded that <strong>&ldquo;the downside is structural and the upside is flowering weather, full stop,&rdquo;</strong> and flagged that <strong>the absence of fresh Somar data made the next rainfall report an asymmetrically large event</strong>. The data arrived this week, and it was <strong>unambiguously bearish</strong>. <strong>Minas Gerais rainfall of 8.9mm in the week to August 30 is 127% of the historical average</strong>. Against the last confirmed figure of <strong>0.6mm (11% of normal)</strong>, the dryness concern was <strong>eliminated in two weeks</strong>.</p>
+            <p>More important is the <strong>reversal of the El Ni&ntilde;o narrative</strong>. For two months the market traded the chain <strong>&ldquo;strongest El Ni&ntilde;o in 75 years &rarr; delayed September-October rain &rarr; failed flowering&rdquo;</strong> as a bullish story. StoneX now observes that <strong>El Ni&ntilde;o has brought rainier-than-usual weather that pulled flowering forward into August</strong>, and judges conditions <strong>favourable for good main flowering of the 2027/28 crop in early southern spring</strong>. CEPEA likewise reports <strong>flowering already visible in some robusta plots</strong> and expects it to <strong>intensify over the coming weeks</strong>. <strong>The same weather phenomenon flipped sign from bullish to bearish</strong> &mdash; that is the week's central shift.</p>
+
+            <div class="alert-box">
+                <p><strong>Implication:</strong> The <strong>asymmetry has inverted</strong>. Until last week the market was &ldquo;bearish bias plus a low-probability, high-magnitude upside.&rdquo; With flowering rain normalised, <strong>that upside tail has thinned materially</strong>. But note: <strong>flowering has started, not finished</strong>. As CEPEA emphasises, <strong>temperature governs flower set and initial fruit formation as much as rainfall does</strong>, and StoneX explicitly makes <strong>January&ndash;March summer temperature and rainfall</strong> the deciding variable. The honest reading is that <strong>the September-October risk was postponed, not resolved</strong>. Cheap optionality on the upside remains sensible &mdash; but the <strong>expiry should be rolled into Q1</strong>.</p>
+            </div>
+
+            <h3>3. Stocks &mdash; a 27-year low, and 300c broke anyway</h3>
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">ICE Arabica (9/1)</div>
+                    <div class="data-card-value">223,911 bags</div>
+                    <div class="data-card-change negative">Lowest since 1999</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">Weekly change</div>
+                    <div class="data-card-value">-65 bags</div>
+                    <div class="data-card-change negative">223,976 &rarr; 223,911 (effectively flat)</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">ICE Robusta</div>
+                    <div class="data-card-value">4,943 lots</div>
+                    <div class="data-card-change positive">Holding a 9-month high</div>
+                </div>
+            </div>
+            <p>The certified-stock narrative was effectively <strong>pronounced dead</strong> this week. Stocks went <strong>223,976 bags (Aug 28) &rarr; 223,976 (Aug 31, unchanged) &rarr; 223,911 (Sep 1)</strong> &mdash; a weekly change of <strong>-65 bags, or -0.03%</strong>. Against draws of -8,438 and -4,016 bags in the two preceding weeks, <strong>the decline has simply stopped</strong>. And in exactly that week price fell <strong>-4.92%</strong> and <strong>broke the 300c line</strong>.</p>
+            <p>Rabobank's diagnosis explains the paradox precisely: <strong>stocks are low not because coffee is absent but because Brazilian commercialisation is slow and Colombian logistics are disrupted</strong>. Consequently stocks will <strong>stay extremely low for several more weeks, with meaningful replenishment unlikely before November</strong>. In other words, <strong>low certified stocks are an indicator of delayed arrival, not of shortage</strong>. Safras &amp; Mercado's report of <strong>Brazilian port congestion</strong> tells the same story.</p>
+            <p>Robusta is the mirror image. <strong>ICE robusta certified stocks are holding a nine-month high</strong>, and Rabobank confirms that <strong>&ldquo;conditions have already improved in London.&rdquo;</strong></p>
+
+            <h3>4. Robusta &mdash; a three-month low as Vietnam keeps pushing</h3>
+            <p>London robusta November was <strong>shut on Monday for the UK bank holiday</strong>, then fell three straight sessions: <strong>Tue $3,461 (-1.93%) &rarr; Wed $3,406 (-1.6%) &rarr; Thu $3,374 (-0.94%)</strong>, its <strong>lowest since early June</strong>. Versus the prior Friday's $3,529 that is <strong>-$155 (-4.39%) through Thursday</strong>.</p>
+            <p>The source of pressure is unambiguous. <strong>Vietnam's January&ndash;August exports reached 1.33 million tonnes (21.17 million bags), +13.7% y/y</strong>, with the <strong>October new crop</strong> still ahead and <strong>ICE robusta stocks at a nine-month high</strong>. StoneX goes further, noting that <strong>2027/28 robusta flowering has already taken place</strong> and that under favourable conditions the crop <strong>could match or exceed the 2025/26 record</strong>.</p>
+
+            <div class="highlight-box">
+                <p><strong>Stock divergence update:</strong> The extreme contrast &mdash; arabica at a <strong>27-year low</strong> versus robusta at a <strong>nine-month high</strong> &mdash; is now in its third week. Yet this week <strong>arabica (-4.92%) fell harder than robusta (-4.39% through Thursday)</strong>, confirming for the <strong>third consecutive week that the divergence is not transmitting into the price spread</strong>. The empirical conclusion is that <strong>trading a widening arabica-robusta spread off the certified-stock divergence has failed</strong>.</p>
+            </div>
+
+            <h3>5. Quality &mdash; the one fundamental still supporting the bull case</h3>
+            <p>CEPEA reaffirmed this week that <strong>Brazil's 2026/27 crop is among the poorest-quality of recent years, with a high incidence of inferior cup quality</strong>, caused by <strong>above-average winter rainfall</strong>. The same rain that <strong>damaged quality during harvest is now a tailwind for flowering</strong>. StoneX added its own caveat: the <strong>negative impact of out-of-season rains on average quality remains to be assessed</strong>.</p>
+            <p>Harvest progress by region stands at <strong>southern Minas 90%, Cerrado Mineiro 85&ndash;90%, Zona da Mata ~97%</strong>. The point to watch is <strong>market concern over the quality of the late-harvested lots</strong> &mdash; the later the pick, the higher the over-ripening and fermentation risk, so the <strong>final 10&ndash;15% of the crop may drag deliverable quality down further</strong>.</p>
+
+            <div class="highlight-box">
+                <p><strong>Implication:</strong> <strong>Exchange-gradable coffee and warehouse coffee are different commodities.</strong> A 77.2 million bag headline is overwhelmingly bearish for <strong>commercial and lower grades</strong>, but it creates <strong>scarcity value in washed top grades and specialty</strong>. Last week's judgement that <strong>&ldquo;the quality spread is the real game&rdquo;</strong> is strengthened by CEPEA's reaffirmation. A futures hedge tracks the low grades; it does <strong>not</strong> protect a top-grade basis.</p>
+            </div>
+
+            <h3>6. Exports &mdash; a statistical mirage cleared, revealing the real flow</h3>
+            <p>A quiet but important correction landed this week. Cecaf&eacute; revised Brazil's provisional exports from <strong>1.71 million bags as of August 24</strong> up to <strong>2.94 million bags as of August 26</strong>, attributing the discrepancy to a <strong>technical error</strong>. The apparent <strong>collapse in August shipments was a data problem</strong>.</p>
+            <p>Per CEPEA, Brazil's <strong>2026/27 exports started the season at a faster pace than the previous one</strong>. July 2026, the season's first month, saw shipments of <strong>3.03 million 60-kg bags, +9.9% versus 2.76 million in July 2025</strong>, and market participants believe the figure <strong>would have been stronger had June&ndash;July rain not hampered harvesting and drying</strong>.</p>
+
+            <h3>7. FX &mdash; a firmer real, the only cushion</h3>
+            <p>USD/BRL moved to <strong>5.10&ndash;5.13</strong> (Trading Economics 5.101, Banco Central do Brasil 5.125) from roughly 5.19 the prior week, a <strong>real appreciation of about 1.5%</strong>. Directionally this is the <strong>only bullish input</strong> in the week: a stronger real <strong>reduces the local-currency proceeds</strong> a Brazilian grower receives for dollar-priced coffee, which <strong>weakens the incentive to sell</strong>.</p>
+            <p>The effect was limited. <strong>Full warehouses acting as a physical selling constraint</strong> and <strong>StoneX's measured record crop</strong> were far stronger forces, and a <strong>1.5% currency move did not prevent a 4.92% price decline</strong>. FX has been <strong>demoted to a second-order variable</strong> in the current regime.</p>
+        </section>
+
+        <section id="implications">
+            <h2>Implications</h2>
+
+            <div class="alert-box">
+                <p><strong>1. A market without upside optionality trades differently:</strong> For two months coffee carried an embedded <strong>&ldquo;failed flowering&rdquo; call premium</strong>. <strong>Minas rainfall at 127% of normal</strong> and StoneX's <strong>&ldquo;favourable flowering conditions&rdquo;</strong> removed it. The practical conclusion is clear: <strong>restart forward buying that was deferred on weather risk</strong>, but <strong>scale in rather than fill in one go</strong>. When there is no bullish catalyst, <strong>the opportunity cost of waiting falls sharply</strong>.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>2. Certified stocks are now a logistics indicator, not a procurement indicator:</strong> Price fell <strong>4.92%</strong> in a week when stocks sat at a 27-year low and moved <strong>-0.03%</strong>. Rabobank spelled out why: <strong>low stocks reflect delay, not shortage</strong>, and <strong>rebuild is unlikely before November</strong>. Research that cites certified stocks as a bullish argument will therefore be <strong>repeatedly wrong over the next four to eight weeks</strong>. Use <strong>Brazilian port queues, shipping lead times and weekly Cecaf&eacute; data</strong> as the primary indicators instead.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>3. November is the inflection point of this cycle:</strong> Rabobank's <strong>&ldquo;no meaningful rebuild before November&rdquo;</strong> also means <strong>rebuild begins in November</strong>. Layer on the <strong>October Vietnamese new crop</strong> and the <strong>certification and shipping rush ahead of EUDR in January 2027</strong>, and <strong>Q4 becomes the quarter in which three separate supply pressures arrive together</strong>. Calendar logic: <strong>buyers should treat Q4 as the concentrated scale-in window; sellers should treat end-Q3 as the deadline for completing hedges</strong>.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>4. The quality spread widened further this week:</strong> The headline volume is <strong>77.2 million bags</strong> while CEPEA calls it the <strong>worst cup quality in recent years</strong>. That combination makes <strong>grade-level price divergence inevitable</strong>: <strong>commercial grades will track the futures decline, while washed top grades and specialty defend themselves through wider differentials</strong>. <strong>The assumption that a short futures hedge protects top-grade procurement cost breaks down in this cycle</strong> &mdash; manage physical contracts separately by specification.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>5. Consensus has already been overtaken &mdash; the risk of chasing shorts:</strong> Two weeks ago the Reuters poll put <strong>year-end arabica near 300c</strong>. Friday's close of <strong>297.45c is already through that target</strong>. In other words, <strong>the decline consensus expected has been delivered</strong>. New shorts here are a <strong>bet beyond consensus</strong> and a <strong>sale at a three-month low</strong>. Meanwhile <strong>demand recovery</strong> (lower prices &rarr; retail price cuts &rarr; higher consumption) and <strong>logistics bottlenecks lasting into November</strong> remain live short-squeeze fuel. <strong>The direction is still down, but the entry point has deteriorated</strong> &mdash; that is this week's practical conclusion.</p>
+            </div>
+        </section>
+
+        <section id="outlook">
+            <h2>Market Outlook &amp; Risks</h2>
+
+            <h3>Near-term structure (1&ndash;3 months)</h3>
+            <p>The December contract has shifted into a <strong>bearish range capped by 300c</strong>. Resistance runs <strong>300c (former support, now resistance) &middot; 309.45c (9/1 close) &middot; 311.50c (week's high close)</strong>; support runs <strong>295.35c (Thursday's low close) &middot; 290c &middot; 285c</strong>. Friday's <strong>+0.71%</strong> defended Thursday's low but <strong>failed to reclaim 300c</strong> &mdash; a close below the psychological line <strong>keeps the technical bias down</strong>.</p>
+
+            <div class="highlight-box">
+                <p><strong>Technical view:</strong> The week's close-to-close range of <strong>295.35&ndash;311.50c (16.15c)</strong> is <strong>half</strong> the prior week's 32.00c. A <strong>decline accompanied by contracting volatility</strong> is characteristic of <strong>trend repricing rather than panic selling</strong>, which argues against a fast rebound. <strong>Repeated failure at 300c points to a test of 290c</strong>; conversely <strong>two or more closes above 300c</strong> would open 309&ndash;311c. With August's low of <strong>304.70c already broken</strong>, there is a <strong>wide chart gap below</strong>.</p>
+            </div>
+
+            <h3>Medium-term outlook (3&ndash;12 months)</h3>
+            <p>The medium-term picture <strong>tilted one notch further down</strong> this week. New this week: (1) <strong>StoneX's measurement-based 77.2 million bags</strong> &mdash; fact rather than forecast; (2) <strong>the disappearance of the flowering risk premium</strong> (Minas rain at 127%); and (3) <strong>Rabobank's 8.9 million bag surplus</strong>. Behind these sits <strong>USDA's global output forecast of +6.0% to 189.7 million bags</strong>.</p>
+            <p>The offsets have narrowed to three: (1) <strong>the quality deterioration CEPEA confirmed</strong>, which may limit gradable volume; (2) <strong>logistics bottlenecks lasting into November</strong> (explicit in Rabobank); and (3) <strong>demand recovery responding to lower prices</strong>. The base case is <strong>&ldquo;continued downward pressure until Q4 arrivals, then a search for the floor once the November stock rebuild is visible.&rdquo;</strong> But as StoneX notes that <strong>January&ndash;March Brazilian summer weather</strong> will decide the 2027/28 crop, <strong>Q1 2027 is the next upside event window</strong>.</p>
+
+            <h3>Key risk factors</h3>
+            <ul>
+                <li><strong>Brazil's record crop confirmed by measurement (bearish, top priority):</strong> StoneX 77.2m bags (+23.9% y/y), arabica 51.8m (+41.9%, all-time high). Being post-harvest sample-based, there is <strong>little room for downward revision</strong>.</li>
+                <li><strong>Flowering rainfall normalised (upside removed):</strong> Minas 8.9mm, 127% of normal. StoneX judges conditions <strong>favourable for 2027/28 main flowering</strong>. <strong>The largest bullish driver of the past two months has flipped sign.</strong></li>
+                <li><strong>ICE certified stocks (signal value now confirmed dead):</strong> 223,911 bags is a 27-year low but the weekly draw was <strong>-0.03%</strong>. Rabobank states <strong>no rebuild before November</strong> and attributes the level to <strong>logistics delay</strong>.</li>
+                <li><strong>Crop quality (bullish/structural):</strong> Worst in recent years per CEPEA, now compounded by <strong>quality risk in late-harvested lots</strong>. A driver of wider grade spreads.</li>
+                <li><strong>Robusta (bearish):</strong> $3,374 (9/3, three-month low), stocks at a nine-month high, Vietnam Jan&ndash;Aug exports +13.7%, October new crop. StoneX sees <strong>2027/28 robusta flowering already complete and a record repeat possible</strong>.</li>
+                <li><strong>Triple Q4 arrival (bearish):</strong> November stock rebuild, October Vietnamese new crop and the pre-EUDR shipping rush <strong>all land in the same quarter</strong>.</li>
+                <li><strong>USD/BRL (bullish/limited):</strong> 5.19 &rarr; 5.10&ndash;5.13, a firmer real. It weakens grower selling incentive but had minimal effect this week.</li>
+                <li><strong>Decline beyond consensus (short risk):</strong> Already <strong>through</strong> the Reuters poll's ~300c year-end target. Further shorts are a bet beyond consensus with <strong>rising squeeze vulnerability</strong>.</li>
+            </ul>
+
+            <h3>What to watch next week</h3>
+            <ul>
+                <li><strong>Somar weekly rainfall (Monday)</strong> &mdash; whether the 127% reading repeats for a <strong>second consecutive week</strong>. Flower set needs <strong>sustained</strong>, not one-off, rain.</li>
+                <li><strong>Any attempt to reclaim 300c</strong> &mdash; two or more closes above the line is the dividing point between <strong>a short-term bounce and a trending decline</strong>.</li>
+                <li><strong>ICE certified stocks turning net positive</strong> &mdash; a shift from -0.03% to net builds would <strong>pull Rabobank's November timeline forward</strong>.</li>
+                <li><strong>Cecaf&eacute;'s final August exports</strong> &mdash; confirmation of the provisional 2.94 million bags (to Aug 26) and whether July's <strong>+9.9%</strong> pace held.</li>
+                <li><strong>CFTC COT (Sep 1 and Sep 8)</strong> &mdash; the figure unavailable this week, plus <strong>the scale of fresh shorts added through the 300c break</strong>. Watch for oversold signals.</li>
+                <li><strong>ICO August monthly report</strong> &mdash; the composition behind the 287.29-cent I-CIP and <strong>export statistics</strong>.</li>
+                <li><strong>Pace of Brazilian port congestion clearing</strong> &mdash; easing bottlenecks would <strong>accelerate the certified-stock rebuild</strong>.</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>Overall Analysis</h2>
+            <p>This was the week the market <strong>let go of the last bullish argument it was holding</strong>. Last week's report wrote that <strong>&ldquo;the bearish drivers are physical and structural while the upside is flowering weather alone,&rdquo;</strong> and flagged that <strong>the missing Somar data made the next rainfall print an asymmetrically large event</strong>. That data came in at <strong>127% of normal</strong>, and in the same week <strong>StoneX confirmed a record 77.2 million bag crop from post-harvest measurement</strong>. <strong>With both landing together, 300c gave way in two sessions.</strong></p>
+            <p>Structurally, the pricing variable has <strong>moved from &ldquo;uncertainty&rdquo; to &ldquo;confirmed volume.&rdquo;</strong> What supported coffee for the past year was not a shortage of coffee but <strong>uncertainty about coffee</strong> &mdash; how large the harvest would be, whether flowering would fail, how much further stocks would fall. This week <strong>the harvest finished at 97%, the yield was measured, and the flowering rain arrived</strong>. <strong>The uncertainty premium has paid out.</strong> What remains is a <strong>logistics and quality question: when, and at what grade, does 77.2 million bags get absorbed</strong>.</p>
+            <div class="alert-box">
+                <p><strong>Trading summary:</strong> December contract <strong>285&ndash;309c range</strong>, with the first test being whether <strong>300c has genuinely flipped to resistance</strong>. <strong>Key monitors:</strong> (1) whether Somar rainfall holds at ~127% for a <strong>second week</strong>; (2) the timing of a <strong>net build</strong> in certified stocks (November per Rabobank); (3) the pace of Brazilian port congestion clearing; (4) the width of grade differentials; (5) robusta support at $3,374; (6) the scale of fresh short accumulation below 300c.</p>
+            </div>
+            <p>For roasters and importers there are three practical conclusions. First, <strong>restart the forward buying deferred on weather risk, but scale in</strong> &mdash; with no bullish catalyst the cost of waiting is low, yet <strong>297c is already below the consensus target</strong>, so the margin of safety in bottom-fishing is thin. Second, <strong>separate procurement fully by specification</strong> &mdash; wait for Q4 arrivals on commercial grades, but <strong>lock washed top grades early on the strength of CEPEA's quality warning</strong>. Third, <strong>reset the next upside window to Q1 2027</strong> &mdash; StoneX identifies <strong>January&ndash;March Brazilian summer temperature and rainfall</strong> as the determinant of the 2027/28 crop and the off-cycle. <strong>The optionality that sat on September-October has not vanished; it has moved out one quarter.</strong></p>
+        </section>
+    </div>
+
+<footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        In-depth analysis and insight on the global coffee market.
+                        Professional market intelligence for traders, roasters and investors.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">james.baek@aligncommodities.com</a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                    <span class="footer-link" style="cursor: default;">Comunicaffe, Trading Economics, Barchart, StoneX, Rabobank, Reuters</span>
+                    <span class="footer-link" style="cursor: default;">Cecaf&eacute;, Cepea, Safras &amp; Mercado, USDA FAS, CONAB, ICO, Sucafina</span>
+                    <span class="footer-link" style="cursor: default;">ICE, Somar Meteorologia, Vietnam Customs, Banco Central do Brasil</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    This report is for informational purposes only and does not constitute investment advice or a solicitation.
+                    All investment decisions should be based on independent judgment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) { nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+    </script>
+</body>
+</html>
