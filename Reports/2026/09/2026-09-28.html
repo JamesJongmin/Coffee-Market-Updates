@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 선물 시장 주간 동향 | 2026년 9월 28일</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--REPORT_META
+{
+    "title": "커피 선물 시장 주간 동향",
+    "subtitle": "Coffee Futures Market Weekly Update",
+    "date": "2026-09-28",
+    "type": "weekly",
+    "summary": "KCZ26은 수요일 장중 269.75센트로 3개월 저점을 찍은 뒤 숏커버링으로 반등해 278.60센트, 주간 -0.68%로 마감했다. Conab이 사상 최대 6,760만 백을 제시했지만 브라질산 등급 탈락으로 ICE 인증재고 재건은 25.4만 백에서 멈췄고, 개화기 폭염 경보가 새 변수로 부상했다.",
+    "tags": [
+        "kcz26-weekly-minus0.68pct-278.60c",
+        "three-month-low-269.75c-intraday",
+        "ice-arabica-rebuild-stalls-254k-bags",
+        "brazil-grading-rejection-over-50pct",
+        "conab-record-67.6m-bags",
+        "cecafe-sept-2.30m-bags-plus39pct",
+        "inmet-red-heatwave-alert-flowering",
+        "somar-minas-33.4mm-242pct",
+        "robusta-ice-stocks-10month-high",
+        "usdbrl-5.19-real-weaker",
+        "stonex-surplus-10m-bags-2026"
+    ],
+    "author": "Align Commodities",
+    "sources": [
+        "Trading Economics",
+        "Barchart",
+        "CocoaIntel",
+        "Safras & Mercado",
+        "Reuters",
+        "CNN Brasil",
+        "NC News",
+        "Cal's Coffee",
+        "ICE",
+        "Conab",
+        "Cecafé",
+        "ABIC",
+        "Procafé",
+        "Somar Meteorologia",
+        "INMET",
+        "StoneX",
+        "Perfect Daily Grind",
+        "O Tempo"
+    ],
+    "price_current": "278.60c (Fri 9/25 KCZ26 settle, +3.25c/+1.18%). Triple-verified: Trading Economics (prior close 275.35c), Barchart (+3.25/+1.18%), CNN Brasil (+1.18%, US$2.78).",
+    "price_change": "Weekly -1.90c / -0.68% (280.50c on Sep 18 to 278.60c on Sep 25), same December contract, no roll. Daily path: Mon 9/21 276.40c (-4.10/-1.46%, CocoaIntel+Safras+Barchart); Tue 9/22 272.30c (-4.10/-1.48%, CocoaIntel; range 271.30-278.50c); Wed 9/23 275.90c (+3.60/+1.3%, Safras+Reuters; intraday low 269.75c, ~3-month low per Reuters); Thu 9/24 275.35c (-0.55/-0.20%, CocoaIntel+Barchart); Fri 9/25 278.60c (+3.25/+1.18%). Sum of daily changes equals -1.90c. Drawdown from Aug 25 close 335.50c: -19.6% at the Wednesday intraday low, -17.0% at Friday settle. Cumulative since Sep 5 report baseline 297.45c: -18.85c/-6.34%. Robusta Nov (RMX26): $3,396 (Sep 18, Cal's) -> $3,337 Mon -> $3,260 Tue -> $3,317 Wed (intraday $3,218) -> $3,290 Thu -> ~$3,367 Fri (derived: Thu settle + Barchart-reported +$77), week ~-$29/-0.85%. ICE certified arabica: 258,415 (Sep 18, Barchart+Cal's) -> 253,355 (Sep 21) -> 256,678 (Sep 22; 4,771 bags passed, 5,212 Brazilian bags rejected) -> 254,480 (Sep 23, Reuters) -> ~254,300 (Sep 24, -176); Friday print not confirmed. ICE robusta stocks 5,398 lots (Sep 24, 10-month high). USD/BRL ~5.19 on Sep 25 (NC News) vs 5.1419 on Sep 18 (Trading Economics). CFTC COT as of Sep 22 omitted (single source conflicts with Brazilian reports of spec net short)."
+}
+REPORT_META-->
+
+
+
+    <style>
+        :root {
+            --espresso: #1a0f0a;
+            --crema: #f5f0e8;
+            --roast: #3d2314;
+            --copper: #b87333;
+            --steam: #e8e2d9;
+            --ink: #2c2420;
+            --paper: #faf8f5;
+            --accent: #c4a574;
+            --negative: #c23a3a;
+            --positive: #4a7c59;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(250, 248, 245, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26, 15, 10, 0.06);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(20px, 5vw, 60px);
+            transition: all 0.3s ease;
+        }
+
+        .top-nav.scrolled { height: 48px; box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--roast);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+
+        .nav-link {
+            font-size: 0.9rem;
+            color: var(--roast);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover { opacity: 1; }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(26, 15, 10, 0.08);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--espresso);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 8px;
+        }
+
+        .headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--roast);
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .meta-item { font-weight: 500; }
+        .meta-divider { color: var(--copper); }
+
+        /* Market Overview Cards */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .overview-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .overview-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .card-change.positive { color: var(--positive); }
+        .card-change.negative { color: var(--negative); }
+
+        /* Price Box */
+        .price-box {
+            background: linear-gradient(135deg, var(--steam) 0%, var(--crema) 100%);
+            border: 1px solid rgba(26, 15, 10, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--roast);
+            opacity: 0.7;
+        }
+
+        .price-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .price-change { font-size: 1.3rem; font-weight: 600; margin-top: 8px; }
+        .price-change.positive { color: var(--positive); }
+        .price-change.negative { color: var(--negative); }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(26, 15, 10, 0.1);
+        }
+
+        .price-item { display: flex; flex-direction: column; gap: 4px; }
+
+        .price-item-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .price-item-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--espresso);
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--roast);
+            opacity: 0.65;
+            margin-top: 20px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Sections */
+        section { margin: 56px 0; }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--espresso);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--roast);
+            letter-spacing: -0.01em;
+        }
+
+        p { margin-bottom: 20px; color: var(--ink); }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--steam);
+            border-left: 4px solid var(--copper);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p:last-child { margin-bottom: 0; }
+
+        /* Alert Box (red border for risk/implication) */
+        .alert-box {
+            background: #faf0f0;
+            border-left: 4px solid var(--negative);
+            padding: 24px 28px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .alert-box p:last-child { margin-bottom: 0; }
+
+        /* Lists */
+        ul { margin: 24px 0; padding-left: 24px; }
+        li { margin-bottom: 12px; color: var(--ink); }
+        li strong { color: var(--roast); font-weight: 600; }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .data-card {
+            background: white;
+            border: 1px solid rgba(26, 15, 10, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+        .data-card-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--roast);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .data-card-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--espresso);
+            line-height: 1.2;
+        }
+
+        .data-card-change { font-size: 0.9rem; margin-top: 4px; font-weight: 600; }
+        .data-card-change.positive { color: var(--positive); }
+        .data-card-change.negative { color: var(--negative); }
+
+        /* Footer — full-width brown background, outside .container */
+        .footer {
+            background: var(--espresso);
+            color: var(--crema);
+            padding: 48px 0 32px;
+            margin-top: 80px;
+            width: 100%;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 5vw, 60px);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .footer-desc { font-size: 0.9rem; line-height: 1.6; opacity: 0.95; color: var(--crema); }
+
+        .footer-title { font-weight: 600; margin-bottom: 16px; color: var(--accent); }
+
+        .footer-link {
+            display: block;
+            color: var(--crema);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.95;
+            transition: opacity 0.2s;
+        }
+
+        .footer-link:hover { opacity: 1; }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(245, 240, 232, 0.15);
+            text-align: center;
+        }
+
+        .footer-copyright { font-size: 0.9rem; opacity: 0.85; margin-bottom: 12px; color: var(--crema); }
+
+        .footer-disclaimer {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--crema);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 2rem; }
+            .price-main { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .data-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .top-nav { display: none; }
+            .container { max-width: 100%; padding: 40px; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="https://coffeemarket.info" class="nav-brand">Coffee Market Info</a>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link">시장 개요</a>
+            <a href="#fundamentals" class="nav-link">펀더멘털</a>
+            <a href="#implications" class="nav-link">시사점</a>
+            <a href="#outlook" class="nav-link">전망</a>
+        </div>
+    </nav>
+    <div class="container">
+        <header>
+            <div class="report-meta">
+                <span class="meta-item">Weekly Report</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">2026년 9월 28일</span>
+                <span class="meta-divider">&bull;</span>
+                <span class="meta-item">Align Commodities</span>
+            </div>
+            <h1>커피 선물 시장 주간 동향</h1>
+            <p class="subtitle">Coffee Futures Market Weekly Update</p>
+            <p class="headline">지난주 리포트가 &lsquo;인증재고 재건의 시작&rsquo;을 핵심 사건으로 꼽았다면, 이번 주의 핵심은 <strong>그 재건이 멈췄다는 것</strong>이다. ICE 인증 아라비카 재고는 <strong>9/18 258,415백에서 9/24 약 254,300백으로 오히려 줄었고</strong>, 화요일 등급 심사에서는 <strong>브라질산 5,212백이 탈락(통과 4,771백)</strong>했다. 12월물(KCZ26)은 Conab의 <strong>사상 최대 6,760만 백</strong> 추정 속에 수요일 장중 <strong>269.75&cent;로 3개월 저점</strong>을 찍었으나, 금요일 달러 약세발 숏커버링으로 <strong>278.60&cent;</strong>에 마감했다. 주간 <strong>-1.90&cent;(-0.68%)</strong>로 4주 연속 하락이지만 낙폭은 크게 줄었다. 동시에 INMET이 <strong>남미나스 개화 지역에 적색 폭염 경보(9/26~30)</strong>를 발령하며, 시장의 무게중심이 &lsquo;지금의 공급&rsquo;에서 &lsquo;2027년 작황&rsquo;으로 옮겨가기 시작했다.</p>
+
+            <div class="market-overview" id="overview">
+                <div class="overview-card">
+                    <div class="card-label">KCZ26 주간</div>
+                    <div class="card-value">-0.68%</div>
+                    <div class="card-change negative">278.60&cent; (9/18 280.50&cent; 대비 -1.90&cent;)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">주간 장중 저점 (9/23)</div>
+                    <div class="card-value">269.75&cent;</div>
+                    <div class="card-change negative">약 3개월래 최저 · 8/25 고점 대비 -19.6%</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">ICE 인증 아라비카 (9/24)</div>
+                    <div class="card-value">~254,300 bags</div>
+                    <div class="card-change positive">9/18 258,415백 대비 -1.6% · 재건 정체</div>
+                </div>
+                <div class="overview-card">
+                    <div class="card-label">Conab 2026 브라질 생산 (3차)</div>
+                    <div class="card-value">67.6 M bags</div>
+                    <div class="card-change negative">+19.6% y/y · 사상 최대 · 아라비카 +34.8%</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="price-box" id="market">
+            <div class="price-header">
+                <span class="price-label">ICE 아라비카 12월물 (KCZ26)</span>
+                <span class="price-label">주간 (2026.09.21~09.25)</span>
+            </div>
+            <div class="price-main">-0.68% ▼</div>
+            <div class="price-change negative">278.60&cent; 마감 | 주중 최고 종가 278.60&cent;(9/25) · 최저 종가 272.30&cent;(9/22) · 종가 기준 진폭 6.30&cent;(전주 14.00&cent;)</div>
+
+            <div class="price-table">
+                <div class="price-item">
+                    <span class="price-item-label">금요일(9/25) 종가</span>
+                    <span class="price-item-value">278.60&cent; (+3.25&cent;/+1.18%)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">목요일(9/24) 종가</span>
+                    <span class="price-item-value">275.35&cent; (-0.55&cent;/-0.20%)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">수요일(9/23) 종가</span>
+                    <span class="price-item-value">275.90&cent; (+3.60&cent;, 장중 269.75&cent;)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">화요일(9/22) 종가</span>
+                    <span class="price-item-value">272.30&cent; (-4.10&cent;/-1.48%)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">월요일(9/21) 종가</span>
+                    <span class="price-item-value">276.40&cent; (-4.10&cent;/-1.46%)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">직전 금요일(9/18)</span>
+                    <span class="price-item-value">280.50&cent; (기준)</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">로부스타(11월, RMX26)</span>
+                    <span class="price-item-value">~$3,367 (9/25, +$77/+2.34%) · 주간 -$29</span>
+                </div>
+                <div class="price-item">
+                    <span class="price-item-label">USD/BRL</span>
+                    <span class="price-item-value">~5.19 (9/25) · 전주 5.14 대비 헤알 약세</span>
+                </div>
+            </div>
+
+            <p class="price-note">※ <strong>근월물 롤오버는 없었다.</strong> 직전 리포트와 동일한 12월물(KCZ26) 기준이다. <strong>금요일 종가 278.60&cent;(+3.25&cent;/+1.18%)</strong>는 Trading Economics(직전 종가 275.35&cent; 명시)·Barchart(+3.25&cent;/+1.18%)·CNN Brasil(+1.18%, US$2.78)의 세 소스가 일치한다. 일간 종가는 <strong>월 276.40&cent;(CocoaIntel·Safras·Barchart), 화 272.30&cent;(CocoaIntel), 수 275.90&cent;(Safras·Reuters), 목 275.35&cent;(CocoaIntel·Barchart)</strong>이며, 일간 변동의 합(-4.10 -4.10 +3.60 -0.55 +3.25 = <strong>-1.90&cent;</strong>)이 주간 변동과 정확히 일치한다. 수요일 장중 저점 269.75&cent;는 Reuters 기준이다. <strong>로부스타 금요일 수준 $3,367은 CocoaIntel 목요일 정산가($3,290)에 Barchart 보도 일간 상승폭(+$77)을 더한 산출치</strong>이며, 직전 금요일 $3,396은 Cal&rsquo;s Coffee 기준이다. <strong>9월 22일 기준 CFTC COT는 단일 소스(IndexBox) 수치가 &ldquo;투기 순매도 복귀&rdquo;라는 브라질 현지 보도와 상충해 본문에서 제외</strong>했고, <strong>금요일(9/25) ICE 인증재고도 복수 소스로 확인하지 못해 제외</strong>했다. 한 브라질 매체가 보도한 12월물 &lsquo;287.10&cent;&rsquo;는 다른 모든 소스와 불일치하는 오기로 판단해 채택하지 않았다. 직전 발행 리포트 이전 기준(9/5, 297.45&cent;) 대비 누적은 <strong>-18.85&cent;(-6.34%)</strong>다.</p>
+        </div>
+
+        <section id="weekly-summary">
+            <h2>금주 시장 요약</h2>
+
+            <p>지난주 리포트는 &ldquo;<strong>인증재고 증가는 일회성 이벤트가 아니라 수 주간 지속될 흐름</strong>&rdquo;일 가능성이 높다고 보고, 약 49,000백의 심사 대기 물량을 근거로 들었다. <strong>이번 주 데이터는 그 가설을 절반만 확인했다.</strong> 대기 물량은 실제로 소화됐지만(9/16 약 49,000백 &rarr; 9/23 약 18,000백), 그 상당 부분이 <strong>재고로 편입되지 못하고 탈락</strong>했다. 화요일 한 차례 심사에서만 <strong>통과 4,771백, 브라질산 탈락 5,212백</strong> &mdash; 제출 물량의 절반 이상이 떨어졌다. 그 결과 인증재고는 9/18 258,415백에서 월 253,355백, 화 256,678백, 수 254,480백, 목 약 254,300백으로 <strong>제자리걸음</strong>을 했다.</p>
+
+            <p>가격은 반대 방향의 재료를 동시에 소화했다. 월요일 <strong>-4.10&cent;</strong>(Somar 강우 평년 242%, Cecafé 선적 급증), 화요일 또 <strong>-4.10&cent;</strong>로 272.30&cent;까지 밀렸고, 수요일에는 장중 <strong>269.75&cent;로 약 3개월 저점</strong>을 찍었다. 8월 25일 335.50&cent; 대비 장중 드로다운은 <strong>-19.6%</strong>로 -20% 문턱 바로 앞이었다. 그러나 수요일 종가는 과매도 신호에 따른 펀드 숏커버링으로 <strong>+3.60&cent;(+1.3%) 반전</strong>했다. 목요일 Conab의 사상 최대 작황 발표에도 <strong>-0.55&cent;</strong>에 그쳤고, 금요일 달러지수 하락이 추가 숏커버링을 부르며 <strong>+3.25&cent;</strong>로 1주 고점에 마감했다.</p>
+
+            <p>이번 주의 본질은 <strong>&ldquo;나쁜 뉴스에 덜 빠지는 시장&rdquo;</strong>이다. 사상 최대 브라질 작황(Conab 6,760만 백), 9월 선적 전월 대비 +39%, 로부스타 인증재고 10개월 최고 &mdash; 전형적인 약세 재료가 한 주에 몰렸지만, 12월물의 주간 낙폭은 전주(-1.82%)의 3분의 1 수준인 <strong>-0.68%</strong>에 그쳤고 종가 기준 변동폭도 14.00&cent;에서 <strong>6.30&cent;</strong>로 절반 이하로 줄었다. 한 달간 60&cent; 넘게 빠진 가격이 공급 뉴스를 이미 상당 부분 반영했다는 신호다.</p>
+
+            <div class="highlight-box">
+                <p><strong>금주의 핵심 동학:</strong> 지난주 시장은 &lsquo;<strong>커피가 도착했다</strong>&rsquo;에 반응했다. 이번 주 시장은 &lsquo;<strong>도착한 커피가 전부 거래소 등급은 아니다</strong>&rsquo;를 배웠다. 브라질 총 공급(Conab 6,760만 백)과 <strong>거래소 인도 가능 공급(인증재고 25만 백대)</strong> 사이의 괴리가 이번 주에 가장 선명해졌다. Procafé가 보고한 <strong>푸사리움(Fusarium concolor) 발생 증가</strong>와 <strong>낙과(varrição) 물량 비중 확대</strong>가 그 괴리의 원인이다 &mdash; 기록적 풍작이지만 품질은 최근 수년 중 가장 불균일하다.</p>
+            </div>
+
+            <h3>주요 뉴스 브리핑</h3>
+
+            <ul>
+                <li><strong>(9/21 월, Somar Meteorologia)</strong> 9월 20일까지 한 주간 미나스제라이스 강우 <strong>33.4mm, 평년의 242%</strong>. 전주 59.4mm(1,212%)보다 줄었지만 여전히 평년을 크게 웃돌아 <strong>개화 개시와 착화(pegamento)에 우호적</strong>이라는 평가가 이어졌다.</li>
+                <li><strong>(9/21 월, Reuters/CocoaIntel)</strong> 겨울철 이례적 다습으로 브라질 여러 산지에서 <strong>2027년 작황의 첫 주요 개화가 평년보다 약 한 달 일찍</strong> 발생했다. 농학자들은 순조로우면 <strong>2027년 아라비카 일부 수확이 5월경 조기 시작</strong>될 수 있다고 봤다. 다만 2027년은 <strong>격년주기상 약세 해(off-year)</strong>다.</li>
+                <li><strong>(9/22 화, ICE)</strong> 인증 아라비카 등급 심사에서 <strong>4,771백 통과, 브라질산 5,212백 탈락</strong>. 인증재고 256,678백, 심사 대기 20,157백. 전주 수요일(16,210백 통과, 2,960백 탈락)과 비교하면 <strong>탈락률이 약 15%에서 50% 이상으로 급등</strong>했다.</li>
+                <li><strong>(9/22 화, Cecafé)</strong> 9월 22일까지 브라질 선적 <strong>230만 4,002백</strong>(아라비카 168만 7,181, 코닐론 45만 2,374, 인스턴트 16만 4,447백), 전월 동기 대비 <strong>약 +39%</strong>, 일평균 104,727백. <strong>원산지증명 297만 4,000백</strong>으로 선적 대비 약 67만 백의 대기 파이프라인이 남아 있다.</li>
+                <li><strong>(9/22 화, ABIC/Reuters)</strong> 브라질 내수 소비 1~8월 <strong>1,369만 백, +2.29%</strong>. 5~8월만 보면 +4.65%. 소매가는 전년 대비 <strong>Traditional/Extra Forte -21.22%</strong>, 인스턴트 -19.31%로 하락해 2025년 고가 국면의 수요 위축(-5.4%)이 되돌려지고 있다.</li>
+                <li><strong>(9/23 수, ICE/Reuters)</strong> 12월물 장중 <strong>269.75&cent;(약 3개월 저점)</strong> 후 <strong>275.90&cent;(+3.60&cent;)</strong> 반전 마감. 인증재고 <strong>254,480백</strong>(1년 전 643,341백), 심사 대기 <strong>약 18,000백</strong>으로 축소. 런던 로부스타는 장중 <strong>$3,218(3.5개월 저점)</strong> 후 $3,317로 반등.</li>
+                <li><strong>(9/24 목, Conab 3차 조사)</strong> 브라질 2026 생산 <strong>6,760만 백(+19.6%, 2차 6,670만 백에서 상향)</strong> &mdash; 사상 최대. <strong>아라비카 4,821만 백(+34.8%)</strong>, 로부스타/코닐론 <strong>1,939만 백(-6.6%)</strong>. 수확 면적 195만 ha(+5.1%), 단수 34.6백/ha(+13.8%). 에스피리투산투 코닐론은 저온 개화 피해로 <strong>1,210만 백(-14.3%)</strong>.</li>
+                <li><strong>(9/24 목, Procafé/시장 코멘터리)</strong> 2026 수확기 <strong>푸사리움 발생 증가</strong>로 적갈색 변색·Rio/Riado 판정 원두가 늘었다. 비공식적으로 <strong>아라비카 수확 손실 최소 10%, 낙과 물량 약 35%</strong>가 거론되나 검증되지 않은 수치다. 저품질 낙과와 우량 로트 간 가격차는 <strong>백당 R$1,000 이상</strong>, 남미나스 우량품 호가는 약 <strong>R$1,700/백</strong>.</li>
+                <li><strong>(9/24 목, ICE/Barchart)</strong> 런던 로부스타 인증재고 <strong>5,398롯, 10개월 최고</strong>. StoneX는 9월 1~23일 로부스타 인증재고가 <strong>3,020톤 증가</strong>했다고 집계했다.</li>
+                <li><strong>(9/25 금, INMET)</strong> <strong>9/26~30 적색(최고 단계) 폭염 경보</strong>. 미나스제라이스 190개 시군 &mdash; <strong>Varginha, Lavras, Poços de Caldas, Passos</strong> 등 남미나스 핵심 산지 포함 &mdash; 에서 기온이 평년보다 최대 5&deg;C 높을 전망이다.</li>
+                <li><strong>(9/25 금, StoneX/Perfect Daily Grind)</strong> StoneX Specialty Coffee는 <strong>2026년 세계 커피 수급이 1,000만 백 공급과잉</strong>(2025년 180만 백)으로 전환될 것으로 전망했다. ICO도 2025/26 <strong>300만 백 잉여(5년 만의 첫 잉여)</strong>를 제시한 바 있다.</li>
+            </ul>
+        </section>
+
+        <section id="fundamentals">
+            <h2>펀더멘털 분석</h2>
+
+            <h3>1. 재고 &mdash; 재건은 &lsquo;물량&rsquo;이 아니라 &lsquo;등급&rsquo;에서 막혔다</h3>
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">ICE 아라비카 (9/24)</div>
+                    <div class="data-card-value">~254,300 bags</div>
+                    <div class="data-card-change positive">9/18 대비 약 -4,100백 (-1.6%)</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">화요일 심사 탈락률</div>
+                    <div class="data-card-value">~52%</div>
+                    <div class="data-card-change positive">통과 4,771 vs 탈락 5,212백 (전주 ~15%)</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">심사 대기 물량</div>
+                    <div class="data-card-value">~18&ndash;21k bags</div>
+                    <div class="data-card-change negative">9/16 ~49,000백에서 급감</div>
+                </div>
+            </div>
+            <p>지난주 인증재고는 3거래일 만에 +13.9% 뛰며 &lsquo;27년래 최저 재고&rsquo; 서사를 무너뜨렸다. 이번 주 그 추세는 <strong>멈췄다</strong>. 9/18 258,415백(1.5개월 최고)에서 월요일 <strong>-5,060백 &rarr; 253,355백</strong>, 화요일 256,678백, 수요일 254,480백, 목요일 약 254,300백(-176백)이다. 중요한 것은 <strong>대기 물량이 줄었는데도 재고가 늘지 않았다</strong>는 점이다. 대기 물량은 49,000백에서 약 18,000~21,000백으로 3만 백 가까이 소화됐지만, 인증재고 순증은 사실상 0이었다. 줄 선 커피의 상당 부분이 <strong>등급 심사를 통과하지 못했다</strong>.</p>
+            <p>이는 Procafé가 보고한 품질 문제와 정확히 맞물린다. 올해 브라질은 수확기 겨울이 이례적으로 습했고 수확이 지연되면서 <strong>나무와 땅에 오래 머문 열매에 푸사리움이 번졌다</strong>. 적갈색 변색과 Rio/Riado 판정 원두는 ICE 인증 기준(결점수·컵 품질)을 통과하기 어렵다. 지난주 Expocacer가 보고한 세하두 <strong>낙과 물량 약 30%, 선별률 약 21%</strong>도 같은 방향이다. 즉 <strong>&lsquo;브라질 커피가 거래소로 온다&rsquo;는 명제는 맞지만, &lsquo;거래소 등급 커피가 충분히 온다&rsquo;는 명제는 아직 증명되지 않았다</strong>.</p>
+
+            <div class="alert-box">
+                <p><strong>함의:</strong> 인증재고 25만 백대는 1년 전(643,341백)의 <strong>약 40%</strong>에 불과하다. 재건이 등급에서 막히면 <strong>12월물 근월 프리미엄(인버전)이 예상보다 오래 유지</strong>될 수 있다. 실제로 12월/3월 스프레드는 전주 8.20&cent;에서 화요일 7.60&cent;까지 좁혀진 뒤 목요일 <strong>7.65&cent;</strong>로 하락을 멈췄고, 12월/5월은 10.05&cent; &rarr; <strong>10.20&cent;</strong>로 오히려 소폭 확대됐다. 지난주 리포트가 &ldquo;근월 프리미엄 지불 전략의 가치가 급격히 떨어졌다&rdquo;고 썼다면, 이번 주의 수정 판단은 <strong>&ldquo;평탄화는 진행 중이나 속도가 느려졌다&rdquo;</strong>다. 조달 측면에서는 <strong>거래소 등급(우량) 물량과 비등급 물량의 가격 괴리 확대</strong>에 대비해야 한다.</p>
+            </div>
+
+            <h3>2. 생산 전망 &mdash; Conab 6,760만 백, 증가분은 전부 아라비카</h3>
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Conab 2026 총생산</div>
+                    <div class="data-card-value">67.6 M bags</div>
+                    <div class="data-card-change negative">+19.6% · 2차 66.7M에서 상향</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">아라비카</div>
+                    <div class="data-card-value">48.2 M bags</div>
+                    <div class="data-card-change negative">+34.8% y/y</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">로부스타/코닐론</div>
+                    <div class="data-card-value">19.4 M bags</div>
+                    <div class="data-card-change positive">-6.6% y/y · ES -14.3%</div>
+                </div>
+            </div>
+            <p>Conab 3차 조사는 수확 면적 99% 시점에서 나온 사실상의 확정치다. 총 6,760만 백은 Conab 시계열 사상 최대이며, 증가분은 <strong>전적으로 아라비카</strong>다 &mdash; 아라비카 4,821만 백(+34.8%)이 전체의 약 71%를 차지한다. 미나스제라이스 아라비카만 <strong>3,496만 백</strong>(남미나스·중서부 1,593만 백)이다. 반면 로부스타는 에스피리투산투 코닐론이 개화기 저온 피해로 <strong>1,210만 백(-14.3%)</strong>에 그치며 전체 -6.6%를 기록했다. 론도니아(288만 백, +24%)가 일부만 상쇄했다.</p>
+            <p>다만 Conab 수치는 다른 기관 대비 <strong>여전히 보수적</strong>이다. USDA FAS는 7,190만 백, StoneX는 약 7,530만 백을 제시한 바 있다. 시장은 이미 7,000만 백 이상을 가격에 반영해왔기 때문에, Conab 상향이 목요일 -0.20%에 그친 것은 <strong>&lsquo;뉴스가 아니라 확인&rsquo;</strong>으로 받아들여졌다는 뜻이다.</p>
+
+            <div class="alert-box">
+                <p><strong>함의:</strong> 공급 측의 &lsquo;양(量)&rsquo;에 관한 불확실성은 이번 발표로 사실상 해소됐다. 이제 남은 변수는 ① <strong>그 물량 중 수출·거래소 등급으로 전환되는 비율(품질)</strong>과 ② <strong>2027년 작황(기상)</strong>이다. 둘 다 이번 주에 새로운 신호가 나왔다 &mdash; 품질은 심사 탈락률, 기상은 폭염 경보다. <strong>2026년 작황은 약세 재료로서의 수명을 거의 다했다</strong>고 보는 것이 합리적이다.</p>
+            </div>
+
+            <h3>3. 기후 &mdash; 강우 뒤에 온 첫 번째 폭염 시험대</h3>
+            <p>개화기 날씨는 이번 주 명확하게 <strong>두 번째 국면</strong>으로 넘어갔다. 1국면(9월 초~중순)은 &lsquo;<strong>비가 너무 많이 온다</strong>&rsquo;였다 &mdash; Somar 기준 미나스 강우는 9/13주 59.4mm(1,212%), 9/20주 <strong>33.4mm(242%)</strong>로 평년을 크게 웃돌았고, 겨울 다습은 <strong>평년보다 한 달 빠른 첫 개화</strong>를 촉발했다. 2국면은 &lsquo;<strong>그 다음에 더위가 온다</strong>&rsquo;다. INMET은 9/26~30 <strong>적색 폭염 경보</strong>를 발령했고, 대상에 Varginha·Lavras·Poços de Caldas 등 남미나스 핵심 산지가 포함됐다. 브라질 당국은 9~11월 <strong>&lsquo;매우 강한 엘니뇨&rsquo; 확률을 90% 이상</strong>으로 보고, INMET 봄철 전망도 10~12월 기온 평년 상회를 예상한다.</p>
+            <p>농학적으로 가장 위험한 조합은 <strong>&lsquo;개화를 촉발한 비 &rarr; 이어지는 고온·건조&rsquo;</strong>다. 꽃이 핀 직후 고온은 증발산을 높여 <strong>착과(fruit set)를 떨어뜨리고 꽃을 마르게(estrelinha)</strong> 할 수 있다. 다만 균형 있게 보면, INMET-INPE 공식 전망은 10~12월 <strong>중남부 미나스 강우도 평년 이상</strong>으로 본다. 위험은 &lsquo;총량 부족&rsquo;이 아니라 <strong>&lsquo;분포와 온도&rsquo;</strong>다. 북·중부 미나스는 수분 스트레스 위험이 더 크고, 남미나스는 총 강우는 충분해도 비가 불규칙하면 피해가 날 수 있다.</p>
+
+            <div class="alert-box">
+                <p><strong>함의:</strong> 9/26~30 폭염의 결과는 <strong>10월 첫째~둘째 주</strong>에 현장 보고로 나온다. 조기 개화(9월 초·중순) 물량이 이미 착과 단계에 들어서고 있어 타이밍이 나쁘다. 여기에 지난주 우박 피해(남미나스·세하두 최소 10개 시군)와 다습에 따른 <strong>병해 압력</strong>이 겹친다. 2027년은 격년주기 약세 해여서 손실 흡수 여력도 작다. <strong>시장은 지금 2027년 리스크에 거의 프리미엄을 붙이지 않고 있다</strong> &mdash; 지난주 &ldquo;2027년 상방 옵션이 가장 싸졌다&rdquo;는 판단은 이번 주 폭염 경보로 더 강화됐다.</p>
+            </div>
+
+            <h3>4. 브라질 수출 &mdash; 9월 선적 전월 대비 +39%, 파이프라인은 여전히 두껍다</h3>
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-card-label">Cecafé 선적 (~9/22)</div>
+                    <div class="data-card-value">2.30 M bags</div>
+                    <div class="data-card-change negative">전월 동기 대비 약 +39%</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">원산지증명 (~9/22)</div>
+                    <div class="data-card-value">2.97 M bags</div>
+                    <div class="data-card-change negative">선적 대비 +약 67만 백 대기</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-label">MDIC 8월 수출</div>
+                    <div class="data-card-value">3.8 M bags</div>
+                    <div class="data-card-change negative">8월 사상 최대 · +43.2% y/y</div>
+                </div>
+            </div>
+            <p>Cecafé 9월 선적은 9/16 약 145만 백 &rarr; 9/18 182만 백 &rarr; 9/21 205만 백(+28.2%) &rarr; 9/22 <strong>230만 백</strong>으로 가파르게 늘었다. 원산지증명은 <strong>297만 백</strong>까지 쌓여 9월 전체 선적은 전년을 크게 웃돌 것이 확실시된다. MDIC 기준 8월 수출도 <strong>380만 백으로 8월 사상 최대(+43.2%)</strong>였다. 다만 1~8월 누계는 <strong>2,460만 백으로 전년 대비 여전히 -6.6%</strong> &mdash; 상반기의 공백이 아직 다 메워지지 않았다.</p>
+
+            <div class="highlight-box">
+                <p><strong>수출 vs 인증재고의 괴리:</strong> 선적은 폭증하는데 인증재고는 정체다. 두 데이터가 동시에 말하는 것은 <strong>&ldquo;브라질 커피는 거래소가 아니라 실수요자에게 직접 가고 있다&rdquo;</strong>는 것이다. 로스터들이 1년 넘게 미뤄온 재고를 채우는 과정에서 우량 물량은 직거래로 소화되고, 거래소에는 심사 탈락 위험이 큰 물량이 주로 제출되는 구조로 볼 수 있다. 이는 <strong>유통 재고(가시 재고)는 늘지만 거래소 재고는 더디게 느는</strong> 이중 구조를 연장시킨다.</p>
+            </div>
+
+            <h3>5. 로부스타 &mdash; 재고 10개월 최고, 근월 프리미엄 급속 축소</h3>
+            <p>런던 로부스타 11월물은 직전 금요일 $3,396에서 월 $3,337(-59) &rarr; 화 <strong>$3,260(-77)</strong> &rarr; 수 $3,317(장중 <strong>$3,218, 3.5개월 저점</strong>) &rarr; 목 $3,290(-27) &rarr; 금 약 <strong>$3,367(+77, +2.34%)</strong>으로 주간 약 <strong>-$29(-0.85%)</strong>를 기록했다. 아라비카(-0.68%)와 비슷한 낙폭이다.</p>
+            <p>구조적으로는 로부스타가 더 약하다. ICE 로부스타 인증재고는 <strong>5,398롯(10개월 최고)</strong>로 늘었고, StoneX 집계로 9월 1~23일에만 <strong>3,020톤</strong> 증가했다. 근월 스프레드도 빠르게 무너졌다: 11월/1월은 <strong>$25 &rarr; $11(화) &rarr; $18(목)</strong>, 11월/3월은 $33 &rarr; $16 &rarr; $30로 크게 흔들렸다. 공급 측에서는 Vaisala가 <strong>베트남 중부 고원의 풍부한 강우로 토양 수분이 개선</strong>됐다고 평가했고, 베트남 신곡은 10월 말~11월부터 본격 출하된다. 반면 브라질 코닐론은 Conab 기준 -6.6%로 줄어, 로부스타 약세는 <strong>브라질이 아니라 베트남·재고 요인</strong>에 기댄다.</p>
+            <p>뉴욕-런던 차익(12월 아라비카 &minus; 11월 로부스타)은 화요일 약 124.4&cent;에서 목요일 <strong>약 126.1&cent;/lb</strong>로 소폭 확대됐다. 역사적으로 여전히 매우 넓은 수준이다.</p>
+
+            <div class="highlight-box">
+                <p><strong>재고 다이버전스 업데이트:</strong> 지난주 &lsquo;아라비카 최저 vs 로부스타 고점&rsquo;의 재고 격차가 해소 국면에 들어갔다고 판단했다. 이번 주 그 해소는 <strong>한쪽에서만</strong> 진행됐다 &mdash; 로부스타 재고는 계속 늘었고(10개월 최고), 아라비카 재고는 정체했다. 즉 두 품종의 <strong>거래소 수급 격차는 이번 주 다시 벌어졌다</strong>. 블렌드 비중 조정을 고려하는 로스터에게는 로부스타 쪽의 조달 여건이 상대적으로 더 우호적이다.</p>
+            </div>
+
+            <h3>6. 포지셔닝과 기술적 구조 &mdash; 과매도 해소의 첫 신호</h3>
+            <p>12월물은 8/25 335.50&cent;에서 수요일 장중 269.75&cent;까지 <strong>-65.75&cent;(-19.6%)</strong> 밀렸다가, 금요일 278.60&cent;로 저점 대비 <strong>+8.85&cent;(+3.3%)</strong> 반등했다. 수요일과 금요일의 상승은 모두 <strong>&lsquo;과매도 + 달러 약세 &rarr; 펀드 숏커버링&rsquo;</strong>으로 설명됐다(Safras, Barchart). 브라질 현지(Notícias Agrícolas 인용)는 투기 세력이 <strong>다시 순매도 포지션</strong>을 쌓아왔다고 전했다. 숏이 쌓인 상태에서 날씨 재료가 등장하면 반등 탄력이 커질 수 있다는 점이 이번 주 달라진 지점이다.</p>
+            <p>기술적으로 CocoaIntel은 목요일 기준 <strong>저항 278.97 / 282.58 / 286.07&cent;</strong>, <strong>지지 271.87 / 268.38 / 264.77&cent;</strong>를 제시했다. 금요일 종가 278.60&cent;는 1차 저항 바로 아래이며, <strong>280&cent; 회복·안착</strong>이 반등 확인의 첫 조건이다. 수요일 저점(269.75&cent;)은 268&cent;대 지지와 겹쳐 <strong>이중 바닥 후보</strong>가 됐다.</p>
+            <p class="price-note">※ <strong>9월 22일 기준 CFTC COT</strong>는 단일 집계 소스(IndexBox)의 관리자금 수치(롱 33,136 / 숏 17,330)가 브라질 현지의 &ldquo;투기 순매도 복귀&rdquo; 보도와 상충해 <strong>수치 인용을 보류</strong>한다.</p>
+
+            <h3>7. 환율과 매크로 &mdash; 헤알 약세는 수출을, 달러 약세는 가격을 지지</h3>
+            <p>USD/BRL은 전주 금요일 5.14대(Trading Economics 5.1419, Cal&rsquo;s 5.1450)에서 이번 주 상승해 목요일 <strong>헤알이 3.5주 최저</strong>(Barchart)를 기록했고, 금요일은 <strong>약 5.19</strong>(-0.06%, NC News)로 마감했다. 헤알 약세는 브라질 생산자의 달러 기준 매도 유인을 높여 선물에 부담이다. 반대로 금요일에는 <strong>달러지수(DXY) 하락</strong>이 커피를 포함한 소프트 원자재 전반의 숏커버링을 불렀다.</p>
+            <div class="alert-box">
+                <p><strong>함의:</strong> 이번 주 커피 가격은 &lsquo;<strong>헤알 약세(약세 재료) vs 글로벌 달러 약세(강세 재료)</strong>&rsquo;의 줄다리기였다. 헤알 환산 12월물 가격은 278.60&cent; &times; 132.276lb &times; 5.19 기준 <strong>약 R$1,913/백</strong>으로 전주(Cal&rsquo;s 산정 R$1,909)와 거의 같다. 달러 가격 하락을 헤알 약세가 정확히 상쇄한 셈이며, 이는 <strong>생산자 매도가 급증하지 않은</strong>(StoneX: &ldquo;제한적 상업 활동&rdquo;) 배경이다. 10월 브라질 대선 1차 투표(10/4)를 앞두고 헤알 변동성 확대 가능성은 다음 주 변수다.</p>
+            </div>
+        </section>
+
+        <section id="implications">
+            <h2>시사점 (Implications)</h2>
+
+            <div class="alert-box">
+                <p><strong>1. &lsquo;총 공급&rsquo;과 &lsquo;인도 가능 공급&rsquo;을 분리해서 봐야 한다.</strong> 브라질 작황은 사상 최대지만 거래소 등급 커피는 여전히 희소하다. 인증재고는 1년 전의 40% 수준이고, 이번 주 재건은 등급 심사에서 멈췄다. 가격 하락이 주로 <strong>저품질·비등급 물량의 할인 확대</strong>로 나타나고, 우량·인증 가능 물량은 상대적으로 덜 빠지는 <strong>품질 차등화</strong>가 진행될 가능성이 크다.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>2. 약세 재료의 한계효용이 떨어지고 있다.</strong> 사상 최대 Conab, 선적 +39%, 로부스타 재고 10개월 최고가 한 주에 나왔는데 주간 낙폭은 -0.68%였다. 4주간 -17%(종가 기준) 조정이 공급 뉴스를 상당 부분 선반영했다는 뜻이다. <strong>추가 하락에는 &lsquo;새로운&rsquo; 약세 재료</strong> &mdash; 예컨대 폭염 이후 순조로운 착과 확인이나 인증재고의 본격 순증 &mdash; 가 필요하다.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>3. 리스크의 비대칭이 상방으로 기울기 시작했다.</strong> 하방 재료(작황 양)는 확정됐고, 상방 재료(2027년 기상·엘니뇨·품질)는 아직 미확정이다. 투기 세력이 순매도로 돌아선 상태에서 개화기 폭염이 실제 피해로 이어지면 <strong>숏커버링이 가격을 빠르게 밀어올릴</strong> 수 있다. 수요일·금요일의 반등이 모두 숏커버링이었다는 점은 그 연료가 존재함을 보여준다.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>4. 조달 담당자: 분할 매수 구간 진입, 단 품질 스펙을 좁혀라.</strong> 12월물은 고점 대비 약 17% 낮은 270~280&cent; 박스에 있다. 하방 여지(264~268&cent;대 지지)와 상방 리스크(폭염·엘니뇨)를 모두 고려하면, 한 번에 전량을 확정하기보다 <strong>2026년 4분기~2027년 1분기 소요분의 일부를 단계적으로 고정</strong>하고 나머지는 옵션 등으로 상방을 헤지하는 구조가 합리적이다. 브라질산은 <strong>푸사리움·낙과 비중이 높은 로트의 컵 품질 리스크</strong>가 커 스펙과 샘플 승인 절차를 강화할 필요가 있다.</p>
+            </div>
+
+            <div class="alert-box">
+                <p><strong>5. 로부스타는 상대적으로 편안하다.</strong> 로부스타 재고 증가·근월 스프레드 축소·베트남 신곡 임박으로 조달 여건은 아라비카보다 우호적이다. 아라비카-로부스타 차익이 126&cent;/lb대로 여전히 넓어 <strong>블렌드 내 로부스타 비중 확대</strong>의 비용 절감 효과가 크다. 다만 브라질 코닐론 감산(-6.6%)은 베트남 공급 차질 시 완충 여력이 작다는 뜻이기도 하다.</p>
+            </div>
+        </section>
+
+        <section id="outlook">
+            <h2>시장 전망 &amp; 리스크</h2>
+
+            <h3>단기 시장 구조 (1~3개월)</h3>
+            <p>단기적으로 12월물은 <strong>268~286&cent; 레인지</strong>에서 방향을 탐색할 가능성이 높다. 하단은 수요일 저점(269.75&cent;)과 CocoaIntel 2차 지지(268.38&cent;)가, 상단은 3차 저항(286.07&cent;)과 지난주 월요일 고점권(283.50&cent;)이 제한한다. 방향을 가를 변수는 순서대로 ① <strong>9/26~30 폭염 이후 착과 현장 보고</strong>(10월 초), ② <strong>ICE 인증재고 순증 재개 여부</strong>와 심사 탈락률, ③ <strong>10월 Cecafé 선적 속도</strong>, ④ 헤알(10/4 대선 1차 투표)이다.</p>
+
+            <div class="highlight-box">
+                <p><strong>기본 시나리오 (확률 약 55%): 270~285&cent; 박스권 횡보.</strong> 폭염 피해가 국지적으로 확인되되 광범위하지 않고, 인증재고는 완만히 늘며, 브라질 선적은 강세를 유지한다. 가격은 숏커버링과 공급 압력 사이에서 등락한다.<br>
+                <strong>상방 시나리오 (약 25%): 290&cent; 이상 반등.</strong> 폭염 이후 건조가 길어지며 착과 불량·꽃 고사(estrelinha) 보고가 확산되고, 인증재고 심사 탈락이 이어져 근월 인버전이 다시 확대된다. 투기 순매도의 급격한 청산이 동반된다.<br>
+                <strong>하방 시나리오 (약 20%): 265&cent; 이하 하락.</strong> 10월 초 규칙적인 강우로 착과가 양호하게 확인되고, 인증재고가 26만 백을 넘어 순증 추세를 회복하며, 헤알 약세가 생산자 매도를 자극한다.</p>
+            </div>
+
+            <h3>중기 전망 (3~12개월)</h3>
+            <p>중기적으로 세계 수급은 명확히 <strong>잉여 전환</strong> 국면이다 &mdash; ICO 2025/26 300만 백, StoneX 2026년 1,000만 백 잉여, USDA 2026/27 세계 생산 1억 8,970만 백(사상 최대). Trading Economics의 모델은 12개월 후 <strong>약 241.7&cent;</strong>를 제시한다. 다만 2027년 브라질은 <strong>격년주기 약세 해 + 강한 엘니뇨 + 조기·다중 개화</strong>라는 세 가지 불확실성을 동시에 안고 있다. 조기 개화가 순조로우면 <strong>2027년 5월 조기 수확</strong>으로 공급 공백이 짧아지는 약세 요인이 되지만, 착과가 부진하면 2027/28 공급 전망 전체가 재조정된다. 중기 추세는 하방이되, <strong>경로의 변동성은 높게 유지</strong>될 것으로 본다.</p>
+
+            <h3>주요 리스크 요인</h3>
+            <ul>
+                <li><strong>상방 &mdash; 개화기 폭염·건조:</strong> INMET 적색 경보(9/26~30) 지역이 남미나스 핵심 산지와 겹친다. 조기 개화분의 착과 실패가 확인되면 2027년 작황 추정치 하향이 불가피하다.</li>
+                <li><strong>상방 &mdash; 인증재고 등급 병목:</strong> 푸사리움·낙과 물량으로 심사 탈락률이 높게 유지되면 거래소 인도 가능 공급이 계속 제약된다.</li>
+                <li><strong>상방 &mdash; 숏커버링:</strong> 투기 세력의 순매도 복귀(브라질 현지 보도)는 날씨 이벤트 시 급반등의 연료가 된다.</li>
+                <li><strong>상방 &mdash; 병해:</strong> 겨울 다습과 우박 상처로 병원균 침입 경로가 늘어 신초 병해 위험이 커졌다.</li>
+                <li><strong>하방 &mdash; 수출 파이프라인:</strong> 원산지증명 297만 백은 9월 말~10월 선적 급증을 예고한다.</li>
+                <li><strong>하방 &mdash; 로부스타 공급:</strong> 베트남 신곡(10월 말~), 로부스타 재고 10개월 최고.</li>
+                <li><strong>하방 &mdash; 헤알 약세:</strong> 10/4 대선 1차 투표 전후 헤알 약세가 심화되면 생산자 매도가 늘 수 있다.</li>
+                <li><strong>하방 &mdash; 조기 수확:</strong> 조기 개화가 순조로우면 2027년 5월 조기 수확으로 공급 공백이 단축된다.</li>
+            </ul>
+
+            <h3>이번주 핵심 이슈</h3>
+            <ul>
+                <li><strong>인증재고 재건 정체:</strong> 대기 물량 약 3만 백이 소화됐지만 순증은 사실상 0 &mdash; 브라질산 절반 이상 심사 탈락.</li>
+                <li><strong>Conab 사상 최대 6,760만 백:</strong> 증가분 전부 아라비카(+34.8%). 시장은 &lsquo;확인&rsquo;으로 소화(-0.20%).</li>
+                <li><strong>3개월 저점 후 반등:</strong> 장중 269.75&cent;(고점 대비 -19.6%) 후 숏커버링으로 278.60&cent; 마감, 주간 낙폭 -0.68%로 축소.</li>
+                <li><strong>개화기 폭염 경보:</strong> 9/26~30 남미나스 적색 경보 &mdash; 2027년 작황의 첫 실질 기상 시험.</li>
+            </ul>
+
+            <h3>다음 주 주목 포인트</h3>
+            <ul>
+                <li><strong>폭염 영향 현장 보고 (9/30 이후):</strong> 남미나스·세하두 착과율, 꽃 고사(estrelinha) 여부, 한랭전선 통과 후 강우량.</li>
+                <li><strong>Somar 주간 강우 (9/28, 10/5 월요일):</strong> 9/27주 미나스 강우가 평년을 밑돌면 폭염과 겹쳐 강세 재료가 된다.</li>
+                <li><strong>ICE 인증재고:</strong> 26만 백 회복 여부와 등급 심사 통과율. 통과율 회복 시 약세, 탈락 지속 시 강세.</li>
+                <li><strong>Cecafé 9월 최종 수출 (10월 초):</strong> 원산지증명 297만 백의 선적 전환 속도.</li>
+                <li><strong>CFTC COT (10/2 발표, 9/29 기준):</strong> 투기 순매도 규모 확인 &mdash; 숏커버링 연료의 크기.</li>
+                <li><strong>브라질 대선 1차 투표 (10/4) 전후 헤알:</strong> 5.20 상향 돌파 시 생산자 매도 증가 가능.</li>
+                <li><strong>기술적 레벨:</strong> 12월물 280&cent; 회복·안착 여부(상방), 268&cent; 지지 유지 여부(하방).</li>
+            </ul>
+        </section>
+
+        <section id="conclusion">
+            <h2>종합 분석</h2>
+            <div class="alert-box">
+                <p>이번 주 커피 시장은 <strong>&lsquo;양의 문제&rsquo;에서 &lsquo;질과 날씨의 문제&rsquo;로 무게중심을 옮겼다</strong>. Conab의 사상 최대 6,760만 백 추정은 2026년 공급의 양에 관한 마지막 불확실성을 지웠고, 시장은 이를 -0.20%로 담담하게 받아들였다. 대신 두 개의 새로운 질문이 떠올랐다. 첫째, <strong>그 기록적 작황 중 얼마가 거래소 등급인가</strong> &mdash; 인증재고 재건이 심사 탈락으로 멈춘 것은 푸사리움과 낙과 물량이 만든 품질 병목을 드러냈다. 둘째, <strong>2027년 작황은 폭염을 견딜 수 있는가</strong> &mdash; 한 달 빠른 개화 직후 적색 폭염 경보가 내려졌다.</p>
+                <p>가격은 4주 연속 하락했지만 그 속도는 뚜렷이 둔화됐다(주간 -1.82% &rarr; -0.68%, 종가 진폭 14.00&cent; &rarr; 6.30&cent;). 수요일 269.75&cent;의 3개월 저점에서 시작된 숏커버링은 약세 재료의 한계효용이 떨어지고 있음을 보여준다. <strong>기본 판단은 270~285&cent; 박스권 속 방향 탐색</strong>이며, 다음 방향은 10월 초 착과 보고와 인증재고 통과율이 결정할 것이다. 중기 잉여 구도는 유효하지만, <strong>지금 가격은 2027년 기상 리스크를 거의 반영하지 않고 있다</strong> &mdash; 조달 측면에서는 하락을 기다리며 전량을 미루기보다, 박스 하단에서 분할 확정과 상방 헤지를 병행하는 것이 리스크 대비 합리적인 선택이다.</p>
+            </div>
+        </section>
+    </div>
+
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Align Commodities</div>
+                    <p class="footer-desc">
+                        글로벌 커피 시장에 대한 심층 분석과 인사이트를 제공합니다.
+                        트레이더, 로스터, 투자자를 위한 전문 시장 정보 서비스.
+                    </p>
+                </div>
+                <div>
+                    <div class="footer-title">Contact</div>
+                    <a href="mailto:james.baek@aligncommodities.com" class="footer-link">james.baek@aligncommodities.com</a>
+                    <a href="https://coffeemarket.info" class="footer-link">coffeemarket.info</a>
+                </div>
+                <div>
+                    <div class="footer-title">Data Sources</div>
+                        <span class="footer-link" style="cursor: default;">ICE, Trading Economics, Barchart, CocoaIntel, Reuters, StoneX</span>
+                        <span class="footer-link" style="cursor: default;">Conab, Cecaf&eacute;, ABIC, Procaf&eacute;, Safras &amp; Mercado, Cal&rsquo;s Coffee</span>
+                        <span class="footer-link" style="cursor: default;">Somar Meteorologia, INMET, CNN Brasil, NC News, Perfect Daily Grind</span>
+                    </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Align Commodities. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    본 보고서는 정보 제공 목적으로만 작성되었으며, 투자 권유나 조언을 구성하지 않습니다.
+                    모든 투자 결정은 독립적인 판단에 기초하여야 합니다.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.top-nav');
+            if (window.scrollY > 50) { nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+    </script>
+</body>
+</html>
